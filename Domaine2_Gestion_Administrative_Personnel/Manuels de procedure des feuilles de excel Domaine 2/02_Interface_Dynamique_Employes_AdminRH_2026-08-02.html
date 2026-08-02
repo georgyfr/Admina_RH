@@ -1,0 +1,354 @@
+test
+
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-logo"><div class="li">A</div>Admina_RH</div>
+  <div class="breadcrumb">Domaine 2 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg><span>Employes</span></div>
+  <div class="topbar-r">
+    <div class="mode-wrap">
+      <select class="mode-sel" id="modeSelect" onchange="switchMode(this.value)">
+        <option value="lecture">LECTURE</option>
+        <option value="lecture-ecriture" selected>LECTURE-ECRITURE</option>
+        <option value="ecriture">ECRITURE</option>
+      </select>
+      <span class="mode-arr">&#9662;</span>
+    </div>
+    <span class="mbadge lect-ecr" id="modeBadge">LECTURE-ECRITURE</span>
+    <div class="tuser"><div class="uav">DR</div><div class="uinfo"><span class="uname">Dr. Nganou</span><span class="urole">Administrateur RH</span></div></div>
+  </div>
+</header>
+
+<div class="app-lay">
+<button class="sb-tog" onclick="toggleSB()" title="Menu"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+
+<nav class="sidebar" id="sidebar">
+  <div class="sb-sec">Navigation</div>
+  <div class="sb-item" onclick=""><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Tableau de Bord</div>
+  <div class="sb-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Employes</div>
+  <div class="sb-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Contrats</div>
+  <div class="sb-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Avenants</div>
+  <div class="sb-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>Documents</div>
+  <div class="sb-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Bancaires</div>
+  <div class="sb-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Mutuelle</div>
+  <div class="sb-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>Permis</div>
+  <div class="sb-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Conges</div>
+  <div class="sb-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>Absences</div>
+  <div class="sb-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Heures Sup.</div>
+  <div class="sb-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Pointage</div>
+  <div class="sb-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>Planning</div>
+  <div class="sb-sec">Gestion</div>
+  <div class="sb-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Paie</div>
+  <div class="sb-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Declarations</div>
+  <div class="sb-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Prets</div>
+  <div class="sb-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Sanctions</div>
+  <div class="sb-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>Visites</div>
+  <div class="sb-sec">Sortie</div>
+  <div class="sb-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Departs</div>
+  <div class="sb-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/></svg>Archivage</div>
+  <div class="sb-sec">Pilotage</div>
+  <div class="sb-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>Rappels</div>
+  <div class="sb-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>PDCA</div>
+  <div class="sb-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>Non-Conformites</div>
+</nav>
+
+<main class="main-c">
+  <div class="abar" id="actionBar">
+    <div class="srch-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input type="text" class="srch" placeholder="Rechercher un employe..." oninput="filterTable(this.value)"></div>
+    <select class="fsel" onchange="filterDept(this.value)"><option value="">Tous les departements</option><option value="RH">Ressources Humaines</option><option value="INFO">Informatique</option><option value="COMPTA">Comptabilite</option><option value="COMM">Commercial</option><option value="LOG">Logistique</option><option value="PROD">Production</option></select>
+    <select class="fsel" onchange="filterContrat(this.value)"><option value="">Tous les contrats</option><option value="CDI">CDI</option><option value="CDD">CDD</option><option value="Stage">Stage</option><option value="Interim">Interim</option></select>
+    <button class="btn btn-o" onclick="toast('Export CSV en cours...','success')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export CSV</button>
+    <button class="btn btn-o" onclick="toast('Export PDF en cours...','success')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export PDF</button>
+    <button class="btn btn-s write-only" onclick="openModal('createModal')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Nouvel Employe</button>
+    <button class="btn btn-w write-only" onclick="openModal('csvModal')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Import Masse CSV</button>
+  </div>
+
+  <div class="tcon">
+    <div class="twrap">
+      <table>
+        <thead><tr><th>Matricule</th><th>Nom</th><th>Prenom</th><th>Date Naiss.</th><th>Departement</th><th>Poste</th><th>Contrat</th><th>Statut</th><th class="act-col">Actions</th></tr></thead>
+        <tbody id="empTable"></tbody>
+      </table>
+    </div>
+    <div class="pagi">
+      <span>Affichage 1-10 sur 15 employes</span>
+      <div class="pagi-btns">
+        <button class="pbtn" disabled>&laquo;</button>
+        <button class="pbtn active">1</button>
+        <button class="pbtn" onclick="toast('Page 2','warning')">2</button>
+        <button class="pbtn" onclick="toast('Page 2','warning')">&raquo;</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="kpi-row">
+    <div class="kpi-card"><div class="kpi-ic blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div><div><div class="kpi-lbl">Effectif Total</div><div class="kpi-val">142</div><div class="kpi-chg">+3 ce mois</div></div></div>
+    <div class="kpi-card"><div class="kpi-ic green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><div><div class="kpi-lbl">Contrats Actifs</div><div class="kpi-val">128</div><div class="kpi-chg">4 a echeance</div></div></div>
+    <div class="kpi-card"><div class="kpi-ic orange"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div><div><div class="kpi-lbl">Nouvelles Entrees</div><div class="kpi-val">5</div><div class="kpi-chg">ce mois</div></div></div>
+  </div>
+</main>
+</div>
+<!-- MODAL 1: VOIR FICHE -->
+<div class="modal-ov" id="viewModal">
+  <div class="modal">
+    <div class="modal-hd"><div class="modal-tt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>Fiche Employe</div><button class="modal-x" onclick="closeModal("viewModal")">&times;</button></div>
+    <div class="modal-bd">
+      <div class="avsec"><div class="avc">NK</div><div class="avinfo"><h3>NKOULOU Mbarga</h3><p>Chef de Service Informatique | EMP-2024-0001</p></div></div>
+      <div class="tabs"><button class="tbtn active" onclick="switchTab(event,"vtab1")">Infos Personnelles</button><button class="tbtn" onclick="switchTab(event,"vtab2")">Infos Professionnelles</button><button class="tbtn" onclick="switchTab(event,"vtab3")">Documents</button><button class="tbtn" onclick="switchTab(event,"vtab4")">Historique</button></div>
+      <div class="tc active" id="vtab1">
+        <div class="vsec"><div class="vsec-tt">Informations Personnelles</div><div class="vgrid">
+          <div class="vf"><div class="vf-lbl">Matricule</div><div class="vf-val">EMP-2024-0001</div></div>
+          <div class="vf"><div class="vf-lbl">Nom</div><div class="vf-val">NKOULOU</div></div>
+          <div class="vf"><div class="vf-lbl">Prenom</div><div class="vf-val">Mbarga</div></div>
+          <div class="vf"><div class="vf-lbl">Date de Naissance</div><div class="vf-val">15/03/1985</div></div>
+          <div class="vf"><div class="vf-lbl">Lieu de Naissance</div><div class="vf-val">Douala, Cameroun</div></div>
+          <div class="vf"><div class="vf-lbl">Sexe</div><div class="vf-val">Masculin</div></div>
+          <div class="vf"><div class="vf-lbl">Nationalite</div><div class="vf-val">Camerounaise</div></div>
+          <div class="vf"><div class="vf-lbl">Situation Familiale</div><div class="vf-val">Marie(e)</div></div>
+          <div class="vf"><div class="vf-lbl">Nb Enfants</div><div class="vf-val">2</div></div>
+          <div class="vf"><div class="vf-lbl">Telephone</div><div class="vf-val">+237 6 99 88 77 66</div></div>
+          <div class="vf"><div class="vf-lbl">Email</div><div class="vf-val">n.mbarga@admina-rh.cm</div></div>
+          <div class="vf"><div class="vf-lbl">N. CNPS</div><div class="vf-val">CNPS-2024-00156</div></div>
+          <div class="vf fw"><div class="vf-lbl">Adresse</div><div class="vf-val">Quartier Bonapriso, Rue 3.456, Douala</div></div>
+        </div></div>
+      </div>
+      <div class="tc" id="vtab2">
+        <div class="vsec"><div class="vsec-tt">Informations Professionnelles</div><div class="vgrid">
+          <div class="vf"><div class="vf-lbl">Departement</div><div class="vf-val">Informatique</div></div>
+          <div class="vf"><div class="vf-lbl">Poste</div><div class="vf-val">Chef de Service</div></div>
+          <div class="vf"><div class="vf-lbl">Date d'Embauche</div><div class="vf-val">01/01/2020</div></div>
+          <div class="vf"><div class="vf-lbl">Type de Contrat</div><div class="vf-val">CDI</div></div>
+          <div class="vf"><div class="vf-lbl">Statut</div><div class="vf-val"><span class="sbadge actif"><span class="dot"></span>Actif</span></div></div>
+          <div class="vf"><div class="vf-lbl">Manager Direct</div><div class="vf-val">Dr. Nganou (DRH)</div></div>
+          <div class="vf"><div class="vf-lbl">Salaire Brut</div><div class="vf-val masked" id="viewSalary">*** *** FCFA</div></div>
+          <div class="vf"><div class="vf-lbl">Categorie</div><div class="vf-val">A1</div></div>
+          <div class="vf"><div class="vf-lbl">Echelon</div><div class="vf-val">Echelon 5</div></div>
+        </div></div>
+      </div>
+      <div class="tc" id="vtab3">
+        <div class="vsec"><div class="vsec-tt">Documents Associes</div><div class="dlist">
+          <div class="ditem"><div class="dinfo"><div class="dic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg></div><div><div class="dname">Acte_de_naissance_NKOULOU.pdf</div><div class="ddate">Upload le 15/01/2024 - 245 KB</div></div></div><button class="btn btn-g">Telecharger</button></div>
+          <div class="ditem"><div class="dinfo"><div class="dic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg></div><div><div class="dname">CV_NKOULOU_Mbarga_2024.pdf</div><div class="ddate">Upload le 15/01/2024 - 380 KB</div></div></div><button class="btn btn-g">Telecharger</button></div>
+          <div class="ditem"><div class="dinfo"><div class="dic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg></div><div><div class="dname">Diplome_Master_Informatique.pdf</div><div class="ddate">Upload le 16/01/2024 - 1.2 MB</div></div></div><button class="btn btn-g">Telecharger</button></div>
+        </div></div>
+      </div>
+      <div class="tc" id="vtab4">
+        <div class="vsec"><div class="vsec-tt">Historique des Modifications</div><div class="tl">
+          <div class="tl-item"><div class="tl-txt">Promotion au poste de Chef de Service</div><div class="tl-meta">01/03/2025 par Dr. Nganou</div></div>
+          <div class="tl-item"><div class="tl-txt">Modification du salaire (revalorisation)</div><div class="tl-meta">01/01/2025 par Gestionnaire Paie</div></div>
+          <div class="tl-item"><div class="tl-txt">Renouvellement de contrat CDI</div><div class="tl-meta">15/12/2024 par DRH</div></div>
+          <div class="tl-item"><div class="tl-txt">Ajout document: Certificat de travail</div><div class="tl-meta">10/09/2024 par Admin RH</div></div>
+          <div class="tl-item"><div class="tl-txt">Creation de la fiche employe</div><div class="tl-meta">01/01/2020 par Admin RH</div></div>
+        </div></div>
+      </div>
+    </div>
+    <div class="modal-ft"><button class="btn btn-o le-only" style="display:none" onclick="openModal("docModal");closeModal("viewModal")">+ Ajouter un Document</button><button class="btn btn-o" onclick="closeModal("viewModal")">Fermer</button></div>
+  </div>
+</div>
+<!-- MODAL 2: MODIFIER EMPLOYE -->
+<div class="modal-ov" id="editModal">
+  <div class="modal">
+    <div class="modal-hd"><div class="modal-tt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Modifier Employe</div><button class="modal-x" onclick="closeModal("editModal")">&times;</button></div>
+    <div class="modal-bd">
+      <div class="fgrid">
+        <div class="fg"><div class="flbl">Matricule <span class="req">*</span></div><input class="finp" value="EMP-2024-0001" readonly></div>
+        <div class="fg"><div class="flbl">Statut</div><select class="fsel"><option>Actif</option><option>En conge</option><option>Suspendu</option></select></div>
+        <div class="fg"><div class="flbl">Nom <span class="req">*</span></div><input class="finp" value="NKOULOU"></div>
+        <div class="fg"><div class="flbl">Prenom <span class="req">*</span></div><input class="finp" value="Mbarga"></div>
+        <div class="fg"><div class="flbl">Date de Naissance <span class="req">*</span></div><input class="finp" type="date" value="1985-03-15"></div>
+        <div class="fg"><div class="flbl">Lieu de Naissance</div><input class="finp" value="Douala, Cameroun"></div>
+        <div class="fg"><div class="flbl">Sexe</div><select class="fsel"><option selected>Masculin</option><option>Feminin</option></select></div>
+        <div class="fg"><div class="flbl">Nationalite</div><input class="finp" value="Camerounaise"></div>
+        <div class="fg"><div class="flbl">Situation Familiale</div><select class="fsel"><option>Celibataire</option><option selected>Marie(e)</option><option>Divorce(e)</option><option>Veuf(ve)</option></select></div>
+        <div class="fg"><div class="flbl">Nb Enfants</div><input class="finp" type="number" value="2"></div>
+        <div class="fg"><div class="flbl">Telephone <span class="req">*</span></div><input class="finp" value="+237 6 99 88 77 66"></div>
+        <div class="fg"><div class="flbl">Email <span class="req">*</span></div><input class="finp" type="email" value="n.mbarga@admina-rh.cm"></div>
+        <div class="fg"><div class="flbl">N. CNPS <span class="req">*</span></div><input class="finp" value="CNPS-2024-00156"></div>
+        <div class="fg fw"><div class="flbl">Adresse</div><input class="finp" value="Quartier Bonapriso, Rue 3.456, Douala"></div>
+        <div class="fg"><div class="flbl">Departement <span class="req">*</span></div><select class="fsel"><option>Ressources Humaines</option><option selected>Informatique</option><option>Comptabilite</option><option>Commercial</option><option>Logistique</option><option>Production</option></select></div>
+        <div class="fg"><div class="flbl">Poste <span class="req">*</span></div><input class="finp" value="Chef de Service"></div>
+        <div class="fg"><div class="flbl">Type de Contrat</div><select class="fsel"><option selected>CDI</option><option>CDD</option><option>Stage</option><option>Interim</option></select></div>
+        <div class="fg"><div class="flbl">Manager Direct</div><input class="finp" value="Dr. Nganou"></div>
+        <div class="fg"><div class="flbl">Salaire Brut (FCFA)</div><input class="finp" type="number" value="485000"></div>
+      </div>
+    </div>
+    <div class="modal-ft"><button class="btn btn-o" onclick="closeModal("editModal")">Annuler</button><button class="btn btn-s" onclick="closeModal("editModal");toast("Modifications enregistrees avec succes","success")">Enregistrer</button></div>
+  </div>
+</div>
+<!-- MODAL 3: NOUVEL EMPLOYE -->
+<div class="modal-ov" id="createModal">
+  <div class="modal">
+    <div class="modal-hd"><div class="modal-tt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Nouvel Employe</div><button class="modal-x" onclick="closeModal("createModal")">&times;</button></div>
+    <div class="modal-bd">
+      <div style="background:#fffbeb;padding:10px 14px;border-radius:var(--r);border:1px solid #fde68a;margin-bottom:16px;font-size:12px;color:#92400e">Matricule auto-genere: <strong>EMP-2026-0143</strong></div>
+      <div class="fgrid">
+        <div class="fg"><div class="flbl">Nom <span class="req">*</span></div><input class="finp" placeholder="Ex: FOTSO" id="newNom"><div class="ferr"></div></div>
+        <div class="fg"><div class="flbl">Prenom <span class="req">*</span></div><input class="finp" placeholder="Ex: Jean Pierre" id="newPrenom"><div class="ferr"></div></div>
+        <div class="fg"><div class="flbl">Date de Naissance <span class="req">*</span></div><input class="finp" type="date" id="newDob"><div class="ferr"></div></div>
+        <div class="fg"><div class="flbl">Lieu de Naissance</div><input class="finp" placeholder="Ex: Douala"></div>
+        <div class="fg"><div class="flbl">Sexe</div><select class="fsel"><option value="">-- Selectionner --</option><option>Masculin</option><option>Feminin</option></select></div>
+        <div class="fg"><div class="flbl">Nationalite</div><input class="finp" placeholder="Camerounaise" value="Camerounaise"></div>
+        <div class="fg"><div class="flbl">Situation Familiale</div><select class="fsel"><option>Celibataire</option><option>Marie(e)</option><option>Divorce(e)</option><option>Veuf(ve)</option></select></div>
+        <div class="fg"><div class="flbl">Nb Enfants</div><input class="finp" type="number" value="0"></div>
+        <div class="fg"><div class="flbl">Telephone <span class="req">*</span></div><input class="finp" placeholder="+237 6 XX XX XX XX" id="newTel"><div class="ferr"></div></div>
+        <div class="fg"><div class="flbl">Email <span class="req">*</span></div><input class="finp" type="email" placeholder="email@exemple.cm" id="newEmail"><div class="ferr"></div></div>
+        <div class="fg"><div class="flbl">N. CNPS <span class="req">*</span></div><input class="finp" placeholder="CNPS-XXXX-XXXXX" id="newCnps"><div class="ferr"></div></div>
+        <div class="fg fw"><div class="flbl">Adresse</div><textarea class="ftxt" placeholder="Adresse complete..."></textarea></div>
+        <div class="fg"><div class="flbl">Departement <span class="req">*</span></div><select class="fsel"><option value="">-- Selectionner --</option><option>Ressources Humaines</option><option>Informatique</option><option>Comptabilite</option><option>Commercial</option><option>Logistique</option><option>Production</option></select></div>
+        <div class="fg"><div class="flbl">Poste <span class="req">*</span></div><input class="finp" placeholder="Ex: Developpeur Senior"></div>
+        <div class="fg"><div class="flbl">Type de Contrat <span class="req">*</span></div><select class="fsel"><option value="">-- Selectionner --</option><option>CDI</option><option>CDD</option><option>Stage</option><option>Interim</option></select></div>
+        <div class="fg"><div class="flbl">Date d'Embauche <span class="req">*</span></div><input class="finp" type="date"></div>
+        <div class="fg"><div class="flbl">Manager Direct</div><input class="finp" placeholder="Nom du manager"></div>
+      </div>
+    </div>
+    <div class="modal-ft"><button class="btn btn-o" onclick="closeModal("createModal")">Annuler</button><button class="btn btn-s" onclick="validateCreate()">Creer l'employe</button></div>
+  </div>
+</div>
+<!-- MODAL 4: SUPPRIMER -->
+<div class="modal-ov" id="deleteModal">
+  <div class="modal sm">
+    <div class="modal-hd"><div class="modal-tt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>Confirmer la Suppression</div><button class="modal-x" onclick="closeModal("deleteModal")">&times;</button></div>
+    <div class="modal-bd">
+      <div class="del-w">
+        <div class="del-w-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+        <h3>Etes-vous sur de vouloir supprimer cet employe ?</h3>
+        <p>NKOULOU Mbarga (<span class="dtxt">EMP-2024-0001</span>)</p>
+        <p style="margin-top:12px"><strong class="dtxt">Attention:</strong> Cette action est irreversible. Toutes les donnees associees seront archivees.</p>
+        <div style="margin-top:16px;text-align:left">
+          <div class="flbl">Tapez <strong>SUPPRIMER</strong> pour confirmer</div>
+          <input class="finp" id="delConfirm" placeholder="SUPPRIMER" oninput="checkDelConfirm(this.value)" style="margin-top:4px">
+        </div>
+      </div>
+    </div>
+    <div class="modal-ft"><button class="btn btn-o" onclick="closeModal("deleteModal")">Annuler</button><button class="btn btn-d" id="delBtn" disabled onclick="closeModal("deleteModal");toast("Employe supprime et archive","error")">Supprimer definitivement</button></div>
+  </div>
+</div>
+<!-- MODAL 5: IMPORT CSV -->
+<div class="modal-ov" id="csvModal">
+  <div class="modal">
+    <div class="modal-hd"><div class="modal-tt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Import Masse CSV</div><button class="modal-x" onclick="closeModal("csvModal")">&times;</button></div>
+    <div class="modal-bd">
+      <div class="dz" id="dropZone" onclick="document.getElementById("csvFile").click()" ondragover="event.preventDefault();this.classList.add("over")" ondragleave="this.classList.remove("over")" ondrop="event.preventDefault();this.classList.remove("over");toast("Fichier charge avec succes","success")">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        <p>Glissez votre fichier CSV ici ou cliquez pour parcourir</p>
+        <p class="hint">Format accepte: .csv (max 5 MB)</p>
+      </div>
+      <input type="file" id="csvFile" accept=".csv" style="display:none">
+      <div style="margin-top:12px;text-align:center"><span class="dz-link">Telecharger le modele CSV</span></div>
+      <div class="csv-sum" style="margin-top:16px">
+        <span>Lignes valides: <span class="val">12</span></span>
+        <span>Erreurs detectees: <span class="err-c">2</span></span>
+        <span>Total: <strong>14</strong></span>
+      </div>
+      <div class="tcon" style="margin-top:12px"><div class="twrap"><table class="csv-ptable"><thead><tr><th>Matricule</th><th>Nom</th><th>Prenom</th><th>Departement</th><th>Statut</th></tr></thead><tbody><tr><td>EMP-2026-0144</td><td>FOTSO</td><td>Andre</td><td>Production</td><td style="color:var(--success)">Valide</td></tr><tr><td>EMP-2026-0145</td><td>TCHINDA</td><td>Paul</td><td>Commercial</td><td style="color:var(--success)">Valide</td></tr><tr><td>EMP-2026-0146</td><td>MBARGA</td><td>Sophie</td><td>LOG</td><td style="color:var(--danger)">Dept. invalide</td></tr></tbody></table></div></div>
+    </div>
+    <div class="modal-ft"><button class="btn btn-o" onclick="closeModal("csvModal")">Annuler</button><button class="btn btn-s" onclick="closeModal("csvModal");toast("12 employes importes avec succes","success")">Importer 12 employes</button></div>
+  </div>
+</div>
+<!-- MODAL 6: AJOUTER DOCUMENT -->
+<div class="modal-ov" id="docModal">
+  <div class="modal sm">
+    <div class="modal-hd"><div class="modal-tt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="11" x2="12" y2="17"/><line x1="8" y1="11" x2="8" y2="17"/><line x1="16" y1="11" x2="16" y2="17"/></svg>Ajouter un Document</div><button class="modal-x" onclick="closeModal("docModal")">&times;</button></div>
+    <div class="modal-bd">
+      <div class="dz" onclick="document.getElementById("docFile").click()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        <p>Glissez votre fichier ici ou cliquez pour parcourir</p>
+        <p class="hint">PDF, JPG, PNG (max 10 MB)</p>
+      </div>
+      <input type="file" id="docFile" style="display:none">
+      <div class="fg" style="margin-top:16px"><div class="flbl">Type de Document <span class="req">*</span></div><select class="fsel"><option value="">-- Selectionner --</option><option>Acte de naissance</option><option>CV</option><option>Diplome</option><option>Certificat de travail</option><option>Casier judiciaire</option><option>Autre</option></select></div>
+      <div class="fg" style="margin-top:12px"><div class="flbl">Description</div><textarea class="ftxt" placeholder="Description du document..."></textarea></div>
+    </div>
+    <div class="modal-ft"><button class="btn btn-o" onclick="closeModal("docModal")">Annuler</button><button class="btn btn-s" onclick="closeModal("docModal");toast("Document uploade avec succes","success")">Uploader</button></div>
+  </div>
+</div>
+
+<!-- TOAST CONTAINER -->
+<div class="toast-c" id="toastContainer"></div>
+<script>
+const emps=[
+{m:'EMP-2024-0001',n:'NKOULOU',p:'Mbarga',dn:'15/03/1985',d:'Informatique',po:'Chef de Service',c:'CDI',s:'Actif'},
+{m:'EMP-2024-0002',n:'FOTSO',p:'Jean Pierre',dn:'22/07/1990',d:'Commercial',po:'Responsable Ventes',c:'CDI',s:'Actif'},
+{m:'EMP-2024-0003',n:'NGANOU',p:'Aline',dn:'05/11/1988',d:'RH',po:'Chargee de Recrutement',c:'CDI',s:'Actif'},
+{m:'EMP-2024-0004',n:'TCHINDA',p:'Emmanuel',dn:'18/02/1992',d:'Production',po:'Technicien',c:'CDD',s:'Actif'},
+{m:'EMP-2024-0005',n:'MBARGA',p:'Sylvie',dn:'30/09/1986',d:'Comptabilite',po:'Comptable Senior',c:'CDI',s:'En conge'},
+{m:'EMP-2025-0006',n:'KAMGA',p:'Patrick',dn:'12/04/1994',d:'Logistique',po:'Magasinier',c:'CDI',s:'Actif'},
+{m:'EMP-2025-0007',n:'NDONGO',p:'Carine',dn:'08/06/1991',d:'RH',po:'Assistante RH',c:'CDD',s:'Actif'},
+{m:'EMP-2025-0008',n:'FOMBAD',p:'Alain',dn:'25/12/1987',d:'Informatique',po:'Developpeur',c:'CDI',s:'Actif'},
+{m:'EMP-2025-0009',n:'ESSOMBA',p:'Grace',dn:'14/08/1993',d:'Commercial',po:'Chargee de Clientele',c:'Stage',s:'Actif'},
+{m:'EMP-2025-0010',n:'ATANGANA',p:'Samuel',dn:'03/01/1989',d:'Production',po:'Chef d\'Equipe',c:'CDI',s:'Suspendu'},
+{m:'EMP-2025-0011',n:'BEYALA',p:'Nathalie',dn:'19/10/1985',d:'Comptabilite',po:'Directrice Financiere',c:'CDI',s:'Actif'},
+{m:'EMP-2025-0012',n:'NGASSA',p:'Herve',dn:'07/03/1996',d:'Logistique',po:'Chauffeur',c:'CDD',s:'Actif'},
+{m:'EMP-2026-0013',n:'MPACKO',p:'Blaise',dn:'29/05/1990',d:'Informatique',po:'Administrateur Systeme',c:'CDI',s:'Actif'},
+{m:'EMP-2026-0014',n:'EYOUM',p:'Estelle',dn:'11/09/1992',d:'RH',po:'Gestionnaire Paie',c:'CDI',s:'Actif'},
+{m:'EMP-2026-0015',n:'ZANG',p:'Thierry',dn:'22/04/1995',d:'Production',po:'Stagiaire',c:'Stage',s:'Actif'}
+];
+
+function renderTable(){
+const tb=document.getElementById('empTable');
+const mode=document.getElementById('modeSelect').value;
+tb.innerHTML='';
+emps.forEach((e,i)=>{
+const sc=e.s==='Actif'?'actif':e.s==='En conge'?'conge':'suspendu';
+const dot='<span class="sbadge '+sc+'"><span class="dot"></span>'+e.s+'</span>';
+let act='';
+if(mode==='lecture'){
+act='<button class="aib vw" title="Voir" onclick="openModal(\x27viewModal\x27)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>';
+}else if(mode==='lecture-ecriture'){
+act='<button class="aib vw" title="Voir" onclick="openModal(\x27viewModal\x27)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button><button class="aib ed" title="Modifier" onclick="openModal(\x27editModal\x27)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>';
+}else{
+act='<button class="aib vw" title="Voir" onclick="openModal(\x27viewModal\x27)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button><button class="aib ed" title="Modifier" onclick="openModal(\x27editModal\x27)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button><button class="aib dl" title="Supprimer" onclick="openModal(\x27deleteModal\x27)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>';
+}
+tb.innerHTML+='<tr><td><strong>'+e.m+'</strong></td><td>'+e.n+'</td><td>'+e.p+'</td><td>'+e.dn+'</td><td>'+e.d+'</td><td>'+e.po+'</td><td>'+e.c+'</td><td>'+dot+'</td><td><div class="acts">'+act+'</div></td></tr>';
+});
+}
+function switchMode(m){
+const b=document.getElementById('modeBadge');
+const ab=document.getElementById('actionBar');
+b.className='mbadge '+(m==='lecture'?'lect':m==='lecture-ecriture'?'lect-ecr':'ecr');
+b.textContent=m==='lecture'?'LECTURE':m==='lecture-ecriture'?'LECTURE-ECRITURE':'ECRITURE';
+if(m==='lecture'){ab.classList.add('hid');}
+else{ab.classList.remove('hid');}
+document.querySelectorAll('.write-only').forEach(el=>{el.style.display=m==='ecriture'?'inline-flex':'none';});
+document.querySelectorAll('.le-only').forEach(el=>{el.style.display=(m==='lecture-ecriture'||m==='ecriture')?'inline-flex':'none';});
+const vs=document.getElementById('viewSalary');
+if(vs)vs.textContent=m==='ecriture'?'485 000 FCFA':'*** *** FCFA';
+if(vs)vs.className='vf-val'+(m==='ecriture'?'':' masked');
+renderTable();
+}
+function openModal(id){document.getElementById(id).classList.add('on');document.body.style.overflow='hidden';}
+function closeModal(id){document.getElementById(id).classList.remove('on');document.body.style.overflow='';}
+function switchTab(e,id){e.target.parentElement.querySelectorAll('.tbtn').forEach(b=>b.classList.remove('active'));e.target.classList.add('active');e.target.closest('.modal-bd').querySelectorAll('.tc').forEach(t=>t.classList.remove('active'));document.getElementById(id).classList.add('active');}
+function toggleSB(){document.getElementById('sidebar').classList.toggle('collapsed');}
+function toast(msg,type){
+const c=document.getElementById('toastContainer');
+const icons={success:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>',error:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>',warning:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>'};
+const t=document.createElement('div');
+t.className='toast '+type;
+t.innerHTML=(icons[type]||'')+msg+'<button class="toast-x" onclick="this.parentElement.remove()">&times;</button>';
+c.appendChild(t);
+setTimeout(()=>t.classList.add('show'),50);
+setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.remove(),300);},3000);
+}
+function checkDelConfirm(v){document.getElementById('delBtn').disabled=v!=='SUPPRIMER';}
+function validateCreate(){
+let valid=true;
+['newNom','newPrenom','newDob','newTel','newEmail','newCnps'].forEach(id=>{
+const el=document.getElementById(id);
+if(el&&!el.value.trim()){el.classList.add('err');valid=false;}else if(el)el.classList.remove('err');
+});
+if(!valid){toast('Veuillez corriger les erreurs dans le formulaire','warning');return;}
+closeModal('createModal');toast('Employe cree avec succes','success');
+}
+function filterTable(q){
+const rows=document.querySelectorAll('#empTable tr');
+q=q.toLowerCase();
+rows.forEach(r=>{r.style.display=r.textContent.toLowerCase().includes(q)?'':'none';});
+}
+function filterDept(v){}
+function filterContrat(v){}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){document.querySelectorAll('.modal-ov.on').forEach(m=>{m.classList.remove('on');});document.body.style.overflow='';}});
+window.addEventListener('DOMContentLoaded',()=>{renderTable();switchMode('lecture-ecriture');});
+</script>
+</body></html>
