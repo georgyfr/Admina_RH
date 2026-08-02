@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admina_RH - Contrats</title>
+<style>
+:root{
+--bg:#f1f5f9;--white:#fff;--text:#1e293b;--text2:#64748b;--border:#e2e8f0;
+--primary:#0f766e;--primary-l:#14b8a6;--primary-ll:#ccfbf1;
+--success:#16a34a;--success-l:#dcfce7;
+--danger:#dc2626;--danger-l:#fee2e2;
+--warning:#d97706;--warning-l:#fef3c7;
+--info:#2563eb;--info-l:#dbeafe;
+--gray:#6b7280;--gray-l:#f3f4f6;
+--r:8px;--sh:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);
+--sh-lg:0 10px 15px -3px rgba(0,0,0,.1),0 4px 6px -4px rgba(0,0,0,.1);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'WenQuanYi Zen Hei','Noto Sans CJK SC',system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:13px;line-height:1.5;}
+/* TOPBAR */
+.topbar{background:var(--white);border-bottom:1px solid var(--border);padding:0 20px;height:56px;display:flex;align-items:center;gap:20px;position:sticky;top:0;z-index:100;box-shadow:var(--sh);}
+.topbar-logo{display:flex;align-items:center;gap:8px;font-weight:700;font-size:18px;color:var(--primary);white-space:nowrap;}
+.li{width:32px;height:32px;background:var(--primary);color:#fff;border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;}
+.breadcrumb{display:flex;align-items:center;gap:6px;color:var(--text2);font-size:13px;}
+.breadcrumb span{color:var(--text);font-weight:600;}
+.topbar-r{margin-left:auto;display:flex;align-items:center;gap:12px;}
+.mode-wrap{position:relative;}
+.mode-sel{appearance:none;background:var(--gray-l);border:1px solid var(--border);border-radius:var(--r);padding:6px 32px 6px 12px;font-size:12px;font-weight:600;cursor:pointer;color:var(--text);font-family:inherit;}
+.mode-arr{position:absolute;right:8px;top:50%;transform:translateY(-50%);pointer-events:none;font-size:10px;color:var(--text2);}
+.mbadge{padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:.5px;white-space:nowrap;}
+.mbadge.lect{background:#dbeafe;color:#1e40af;}
+.mbadge.lect-ecr{background:#d1fae5;color:#065f46;}
+.mbadge.ecr{background:#fee2e2;color:#991b1b;}
+.tuser{display:flex;align-items:center;gap:10px;padding-left:12px;border-left:1px solid var(--border);}
+.uav{width:34px;height:34px;background:var(--primary);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;}
+.uinfo{display:flex;flex-direction:column;}
+.uname{font-weight:600;font-size:13px;}
+.urole{font-size:11px;color:var(--text2);}
+/* LAYOUT */
+.app-lay{display:flex;min-height:calc(100vh - 56px);}
+.sb-tog{position:fixed;top:64px;left:8px;z-index:90;width:28px;height:28px;background:var(--white);border:1px solid var(--border);border-radius:var(--r);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text2);box-shadow:var(--sh);}
+.sidebar{width:220px;background:var(--white);border-right:1px solid var(--border);padding:12px 0;overflow-y:auto;transition:width .2s;flex-shrink:0;}
+.sidebar.collapsed{width:56px;}
+.sidebar.collapsed .sb-sec,.sidebar.collapsed .sb-item span,.sidebar.collapsed .sb-item svg{display:none;}
+.sidebar.collapsed .sb-item{justify-content:center;padding:10px 8px;}
+.sb-sec{padding:8px 16px 4px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-top:8px;}
+.sb-item{display:flex;align-items:center;gap:10px;padding:9px 16px;cursor:pointer;color:var(--text2);font-size:13px;transition:all .15s;border-left:3px solid transparent;}
+.sb-item:hover{background:var(--gray-l);color:var(--text);}
+.sb-item.active{background:var(--primary-ll);color:var(--primary);border-left-color:var(--primary);font-weight:600;}
+.sb-item svg{width:18px;height:18px;flex-shrink:0;}
+/* MAIN */
+.main-c{flex:1;padding:20px;overflow-x:hidden;}
+.abar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:16px;}
+.abar.hid{display:none;}
+.srch-wrap{position:relative;display:flex;align-items:center;}
+.srch-wrap svg{position:absolute;left:10px;width:16px;height:16px;color:var(--text2);pointer-events:none;}
+.srch{padding:8px 12px 8px 34px;border:1px solid var(--border);border-radius:var(--r);font-size:13px;width:240px;outline:none;font-family:inherit;background:var(--white);}
+.srch:focus{border-color:var(--primary-l);box-shadow:0 0 0 3px rgba(20,184,166,.15);}
+.fsel{padding:8px 12px;border:1px solid var(--border);border-radius:var(--r);font-size:13px;outline:none;font-family:inherit;background:var(--white);cursor:pointer;}
+.fsel:focus{border-color:var(--primary-l);}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:var(--r);font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .15s;font-family:inherit;white-space:nowrap;}
+.btn svg{width:16px;height:16px;}
+.btn-o{background:var(--white);border:1px solid var(--border);color:var(--text);}
+.btn-o:hover{background:var(--gray-l);}
+.btn-s{background:var(--primary);color:#fff;}
+.btn-s:hover{background:var(--primary-l);}
+.btn-w{background:var(--warning);color:#fff;}
+.btn-w:hover{background:#b45309;}
+.btn-d{background:var(--danger);color:#fff;}
+.btn-d:hover{background:#b91c1c;}
+.btn-g{background:transparent;color:var(--primary);border:1px solid var(--primary);padding:5px 12px;font-size:12px;}
+.btn-g:hover{background:var(--primary-ll);}
+.write-only{display:none;}
+.le-only{display:none;}
+/* TABLE */
+.tcon{background:var(--white);border-radius:var(--r);box-shadow:var(--sh);overflow:hidden;margin-bottom:20px;}
+.twrap{overflow-x:auto;}
+.twrap table{width:100%;border-collapse:collapse;min-width:900px;}
+.twrap th{background:var(--gray-l);padding:10px 14px;text-align:left;font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid var(--border);white-space:nowrap;}
+.twrap td{padding:10px 14px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:middle;}
+.twrap tr:hover{background:#f8fafc;}
+.twrap .act-col{width:140px;}
+.acts{display:flex;gap:6px;}
+.aib{width:30px;height:30px;border-radius:6px;border:1px solid var(--border);background:var(--white);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text2);transition:all .15s;}
+.aib svg{width:15px;height:15px;}
+.aib.vw:hover{color:var(--info);border-color:var(--info);background:var(--info-l);}
+.aib.ed:hover{color:var(--warning);border-color:var(--warning);background:var(--warning-l);}
+.aib.rn:hover{color:var(--success);border-color:var(--success);background:var(--success-l);}
+.aib.rt:hover{color:var(--danger);border-color:var(--danger);background:var(--danger-l);}
+.pagi{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-top:1px solid var(--border);font-size:13px;color:var(--text2);}
+.pagi-btns{display:flex;gap:4px;}
+.pbtn{width:32px;height:32px;border:1px solid var(--border);background:var(--white);border-radius:6px;cursor:pointer;font-size:13px;font-family:inherit;display:flex;align-items:center;justify-content:center;color:var(--text);}
+.pbtn.active{background:var(--primary);color:#fff;border-color:var(--primary);}
+.pbtn:disabled{opacity:.4;cursor:default;}
+/* STATUS BADGES */
+.sbadge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600;white-space:nowrap;}
+.sbadge .dot{width:7px;height:7px;border-radius:50%;}
+.sbadge.actif{background:var(--success-l);color:#166534;}.sbadge.actif .dot{background:var(--success);}
+.sbadge.expire{background:var(--danger-l);color:#991b1b;}.sbadge.expire .dot{background:var(--danger);}
+.sbadge.suspendu{background:var(--warning-l);color:#92400e;}.sbadge.suspendu .dot{background:var(--warning);}
+.sbadge.attente{background:var(--info-l);color:#1e40af;}.sbadge.attente .dot{background:var(--info);}
+.sbadge.resilie{background:var(--gray-l);color:#374151;}.sbadge.resilie .dot{background:var(--gray);}
+/* ECHEANCE BADGES */
+.ebadge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600;white-space:nowrap;}
+.ebadge.urgent{background:var(--danger-l);color:#991b1b;}
+.ebadge.warning{background:var(--warning-l);color:#92400e;}
+.ebadge.caution{background:#fef9c3;color:#854d0e;}
+.ebadge.none{background:var(--gray-l);color:var(--gray);}
+/* KPI CARDS */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+.kpi-card{background:var(--white);border-radius:var(--r);padding:20px;box-shadow:var(--sh);display:flex;align-items:center;gap:16px;}
+.kpi-ic{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.kpi-ic svg{width:24px;height:24px;}
+.kpi-ic.blue{background:var(--info-l);color:var(--info);}
+.kpi-ic.green{background:var(--success-l);color:var(--success);}
+.kpi-ic.orange{background:var(--warning-l);color:var(--warning);}
+.kpi-ic.purple{background:#ede9fe;color:#7c3aed;}
+.kpi-lbl{font-size:12px;color:var(--text2);font-weight:500;}
+.kpi-val{font-size:28px;font-weight:700;color:var(--text);line-height:1.2;}
+.kpi-chg{font-size:12px;color:var(--success);font-weight:500;margin-top:2px;}
+/* MODALS */
+.modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s;}
+.modal-ov.on{opacity:1;pointer-events:all;}
+.modal{background:var(--white);border-radius:12px;box-shadow:var(--sh-lg);width:90%;max-width:780px;max-height:90vh;display:flex;flex-direction:column;transform:translateY(20px);transition:transform .2s;}
+.modal-ov.on .modal{transform:translateY(0);}
+.modal.sm{max-width:520px;}
+.modal-hd{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border);flex-shrink:0;}
+.modal-tt{display:flex;align-items:center;gap:8px;font-weight:700;font-size:15px;}
+.modal-tt svg{width:20px;height:20px;color:var(--primary);}
+.modal-x{width:32px;height:32px;border:none;background:var(--gray-l);border-radius:var(--r);cursor:pointer;font-size:20px;color:var(--text2);display:flex;align-items:center;justify-content:center;}
+.modal-x:hover{background:var(--danger-l);color:var(--danger);}
+.modal-bd{padding:20px;overflow-y:auto;flex:1;}
+.modal-ft{display:flex;justify-content:flex-end;gap:10px;padding:16px 20px;border-top:1px solid var(--border);flex-shrink:0;}
+/* AVATAR SECTION */
+.avsec{display:flex;align-items:center;gap:16px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--border);}
+.avc{width:56px;height:56px;background:var(--primary);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:20px;flex-shrink:0;}
+.avinfo h3{font-size:16px;font-weight:700;}
+.avinfo p{font-size:13px;color:var(--text2);}
+/* TABS */
+.tabs{display:flex;gap:4px;margin-bottom:16px;border-bottom:2px solid var(--border);padding-bottom:0;}
+.tbtn{padding:10px 16px;border:none;background:none;cursor:pointer;font-size:13px;font-weight:600;color:var(--text2);border-bottom:2px solid transparent;margin-bottom:-2px;font-family:inherit;transition:all .15s;white-space:nowrap;}
+.tbtn:hover{color:var(--text);}
+.tbtn.active{color:var(--primary);border-bottom-color:var(--primary);}
+.tc{display:none;}.tc.active{display:block;}
+/* VIEW FIELDS */
+.vsec{margin-bottom:16px;}
+.vsec-tt{font-weight:700;font-size:14px;margin-bottom:12px;padding-bottom:6px;border-bottom:1px solid var(--border);color:var(--text);}
+.vgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.vf{display:flex;flex-direction:column;gap:2px;}
+.vf.fw{grid-column:1/-1;}
+.vf-lbl{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--text2);}
+.vf-val{font-size:14px;font-weight:500;color:var(--text);}
+.vf-val.masked{color:var(--text2);letter-spacing:2px;}
+/* DOCUMENT LIST */
+.dlist{display:flex;flex-direction:column;gap:10px;}
+.ditem{display:flex;align-items:center;justify-content:space-between;padding:12px;border:1px solid var(--border);border-radius:var(--r);}
+.dinfo{display:flex;align-items:center;gap:12px;}
+.dic{width:36px;height:36px;background:var(--primary-ll);border-radius:var(--r);display:flex;align-items:center;justify-content:center;color:var(--primary);}
+.dic svg{width:18px;height:18px;}
+.dname{font-weight:600;font-size:13px;}
+.ddate{font-size:11px;color:var(--text2);}
+/* TIMELINE */
+.tl{position:relative;padding-left:20px;}
+.tl::before{content:'';position:absolute;left:6px;top:4px;bottom:4px;width:2px;background:var(--border);}
+.tl-item{position:relative;padding-bottom:16px;padding-left:16px;}
+.tl-item::before{content:'';position:absolute;left:-17px;top:6px;width:10px;height:10px;border-radius:50%;background:var(--primary);border:2px solid var(--white);}
+.tl-txt{font-size:13px;font-weight:500;}
+.tl-meta{font-size:11px;color:var(--text2);margin-top:2px;}
+/* DELETE WARNING */
+.del-w{text-align:center;padding:12px 0;}
+.del-w-ic{width:64px;height:64px;background:var(--danger-l);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;color:var(--danger);}
+.del-w-ic svg{width:32px;height:32px;}
+.del-w h3{font-size:16px;margin-bottom:8px;}
+.del-w p{color:var(--text2);font-size:13px;}
+.dtxt{color:var(--danger);font-weight:700;}
+/* DRAG ZONE */
+.dz{border:2px dashed var(--border);border-radius:12px;padding:40px 20px;text-align:center;cursor:pointer;transition:all .15s;color:var(--text2);}
+.dz:hover,.dz.over{border-color:var(--primary-l);background:var(--primary-ll);}
+.dz svg{width:40px;height:40px;margin:0 auto 12px;color:var(--primary);}
+.dz .hint{font-size:12px;color:var(--text2);margin-top:8px;}
+.dz-link{color:var(--primary);cursor:pointer;font-weight:600;font-size:13px;}
+.dz-link:hover{text-decoration:underline;}
+.csv-sum{display:flex;gap:20px;justify-content:center;font-size:13px;}
+.csv-sum .val{color:var(--success);font-weight:700;}
+.csv-sum .err-c{color:var(--danger);font-weight:700;}
+.csv-ptable{width:100%;border-collapse:collapse;font-size:12px;}
+.csv-ptable th{background:var(--gray-l);padding:8px 12px;text-align:left;font-weight:700;}
+.csv-ptable td{padding:8px 12px;border-bottom:1px solid var(--border);}
+/* FORM */
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.fg{display:flex;flex-direction:column;gap:4px;}
+.fg.fw{grid-column:1/-1;}
+.flbl{font-size:12px;font-weight:600;color:var(--text);}
+.req{color:var(--danger);}
+.finp{padding:8px 12px;border:1px solid var(--border);border-radius:var(--r);font-size:13px;outline:none;font-family:inherit;background:var(--white);}
+.finp:focus{border-color:var(--primary-l);box-shadow:0 0 0 3px rgba(20,184,166,.15);}
+.finp.err{border-color:var(--danger);box-shadow:0 0 0 3px rgba(220,38,38,.15);}
+.ftxt{padding:8px 12px;border:1px solid var(--border);border-radius:var(--r);font-size:13px;outline:none;font-family:inherit;resize:vertical;min-height:70px;background:var(--white);}
+.ftxt:focus{border-color:var(--primary-l);}
+.ferr{font-size:11px;color:var(--danger);min-height:14px;}
+/* TOAST */
+.toast-c{position:fixed;top:70px;right:20px;z-index:300;display:flex;flex-direction:column;gap:8px;}
+.toast{display:flex;align-items:center;gap:8px;padding:12px 16px;border-radius:var(--r);box-shadow:var(--sh-lg);font-size:13px;font-weight:500;transform:translateX(120%);transition:transform .3s;max-width:380px;}
+.toast.show{transform:translateX(0);}
+.toast svg{width:18px;height:18px;flex-shrink:0;}
+.toast.success{background:var(--success-l);color:#166534;border-left:4px solid var(--success);}
+.toast.error{background:var(--danger-l);color:#991b1b;border-left:4px solid var(--danger);}
+.toast.warning{background:var(--warning-l);color:#92400e;border-left:4px solid var(--warning);}
+.toast-x{margin-left:auto;background:none;border:none;cursor:pointer;font-size:18px;color:inherit;opacity:.6;}
+.toast-x:hover{opacity:1;}
+/* INFO BOX */
+.info-box{padding:12px 16px;border-radius:var(--r);font-size:12px;margin-bottom:16px;display:flex;gap:10px;align-items:flex-start;}
+.info-box svg{width:18px;height:18px;flex-shrink:0;margin-top:1px;}
+.info-box.warn{background:#fffbeb;border:1px solid #fde68a;color:#92400e;}
+.info-box.info{background:var(--info-l);border:1px solid #93c5fd;color:#1e40af;}
+.info-box.danger{background:var(--danger-l);border:1px solid #fca5a5;color:#991b1b;}
+.info-box.success{background:var(--success-l);border:1px solid #86efac;color:#166534;}
+/* RESPONSIVE */
+@media(max-width:1024px){.kpi-row{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:768px){.kpi-row{grid-template-columns:1fr;}.fgrid{grid-template-columns:1fr;}.vgrid{grid-template-columns:1fr;}.abar{flex-direction:column;align-items:stretch;}.srch{width:100%;}.sidebar{position:fixed;left:-220px;z-index:95;height:calc(100vh - 56px);top:56px;}.sidebar.collapsed{left:-56px;}}
+/* SCROLLBAR */
+::-webkit-scrollbar{width:6px;height:6px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:3px;}
+::-webkit-scrollbar-thumb:hover{background:#94a3b8;}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-logo"><div class="li">A</div>Admina_RH</div>
+  <div class="breadcrumb">Domaine 2 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg><span>Contrats</span></div>
+  <div class="topbar-r">
+    <div class="mode-wrap">
+      <select class="mode-sel" id="modeSelect" onchange="switchMode(this.value)">
+        <option value="lecture">LECTURE</option>
+        <option value="lecture-ecriture" selected>LECTURE-ECRITURE</option>
+        <option value="ecriture">ECRITURE</option>
+      </select>
+      <span class="mode-arr">&#9662;</span>
+    </div>
+    <span class="mbadge lect-ecr" id="modeBadge">LECTURE-ECRITURE</span>
+    <div class="tuser"><div class="uav">DR</div><div class="uinfo"><span class="uname">Dr. Nganou</span><span class="urole">Administrateur RH</span></div></div>
+  </div>
+</header>
+
+<div class="app-lay">
+<button class="sb-tog" onclick="toggleSB()" title="Menu"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+
+<nav class="sidebar" id="sidebar">
+  <div class="sb-sec">Navigation</div>
+  <div class="sb-item" onclick=""><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Tableau de Bord</div>
+  <div class="sb-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Employes</div>
+  <div class="sb-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Contrats</div>
+  <div class="sb-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Avenants</div>
+  <div class="sb-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>Documents</div>
+  <div class="sb-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Bancaires</div>
+  <div class="sb-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Mutuelle</div>
+  <div class="sb-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>Permis</div>
+  <div class="sb-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Conges</div>
+  <div class="sb-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>Absences</div>
+  <div class="sb-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Heures Sup.</div>
+  <div class="sb-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Pointage</div>
+  <div class="sb-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>Planning</div>
+  <div class="sb-sec">Gestion</div>
+  <div class="sb-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Paie</div>
+  <div class="sb-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Declarations</div>
+  <div class="sb-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Prets</div>
+  <div class="sb-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Sanctions</div>
+  <div class="sb-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>Visites</div>
+  <div class="sb-sec">Sortie</div>
+  <div class="sb-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Departs</div>
+  <div class="sb-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/></svg>Archivage</div>
+  <div class="sb-sec">Pilotage</div>
+  <div class="sb-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>Rappels</div>
+  <div class="sb-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>PDCA</div>
+  <div class="sb-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>Non-Conformites</div>
+</nav>
+
+<main class="main-c">
+  <div class="abar" id="actionBar">
+    <div class="srch-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input type="text" class="srch" placeholder="Rechercher un contrat..." id="searchInput" oninput="filterTable()"></div>
+    <select class="fsel" id="filterType" onchange="filterTable()"><option value="">Tous les types</option><option value="CDI">CDI</option><option value="CDD">CDD</option><option value="Stage">Stage</option><option value="Interim">Interim</option></select>
+    <select class="fsel" id="filterDept" onchange="filterTable()"><option value="">Tous les departements</option><option value="Informatique">Informatique</option><option value="Commercial">Commercial</option><option value="Production">Production</option><option value="Comptabilite">Comptabilite</option><option value="RH">RH</option><option value="Logistique">Logistique</option></select>
+    <select class="fsel" id="filterStatut" onchange="filterTable()"><option value="">Tous les statuts</option><option value="Actif">Actif</option><option value="Expire">Expire</option><option value="Suspendu">Suspendu</option><option value="En attente">En attente</option><option value="Resilie">Resilie</option></select>
+    <select class="fsel" id="filterEcheance" onchange="filterTable()"><option value="">Toute echeance</option><option value="urgent">Urgent (J-15)</option><option value="warning">Attention (J-30)</option><option value="caution">A surveiller (J-90)</option><option value="none">Aucune echeance</option></select>
+    <button class="btn btn-o" onclick="toast('Export PDF en cours...','success')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Export PDF</button>
+    <button class="btn btn-o" onclick="toast('Export Excel en cours...','success')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export Excel</button>
+    <button class="btn btn-s write-only" onclick="openModal('createModal')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Nouveau Contrat</button>
+    <button class="btn btn-w write-only" onclick="openModal('csvModal')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Import Masse</button>
+  </div>
+
+  <div class="kpi-row">
+    <div class="kpi-card"><div class="kpi-ic green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><div><div class="kpi-lbl">Contrats Actifs</div><div class="kpi-val">128</div><div class="kpi-chg">+5 ce trimestre</div></div></div>
+    <div class="kpi-card"><div class="kpi-ic orange"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div><div class="kpi-lbl">A Echeance 30j</div><div class="kpi-val">8</div><div class="kpi-chg" style="color:var(--warning)">3 urgents</div></div></div>
+    <div class="kpi-card"><div class="kpi-ic blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div><div><div class="kpi-lbl">Renouvellements en attente</div><div class="kpi-val">6</div><div class="kpi-chg" style="color:var(--info)">a traiter</div></div></div>
+    <div class="kpi-card"><div class="kpi-ic purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><div><div class="kpi-lbl">Taux conformite</div><div class="kpi-val">94.7%</div><div class="kpi-chg" style="color:var(--success)">+1.2% vs T-1</div></div></div>
+  </div>
+
+  <div class="tcon">
+    <div class="twrap">
+      <table>
+        <thead><tr><th>N. Contrat</th><th>Employe</th><th>Matricule</th><th>Type</th><th>Departement</th><th>Date Debut</th><th>Date Fin</th><th>Statut</th><th>Echeance</th><th class="act-col">Actions</th></tr></thead>
+        <tbody id="contratTable"></tbody>
+      </table>
+    </div>
+    <div class="pagi">
+      <span id="pagiInfo">Affichage 1-12 sur 12 contrats</span>
+      <div class="pagi-btns">
+        <button class="pbtn" disabled>&laquo;</button>
+        <button class="pbtn active">1</button>
+        <button class="pbtn" disabled>&raquo;</button>
+      </div>
+    </div>
+  </div>
+</main>
+</div><!-- MODAL 1: VOIR CONTRAT -->
+<div class="modal-ov" id="viewModal">
+  <div class="modal">
+    <div class="modal-hd"><div class="modal-tt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>Fiche Contrat</div><button class="modal-x" onclick="closeModal('viewModal')">&times;</button></div>
+    <div class="modal-bd">
+      <div class="avsec"><div class="avc">NM</div><div class="avinfo"><h3 id="viewEmpName">NKOULOU Mbarga</h3><p id="viewContractInfo">CTR-2024-0001 | EMP-2024-0001</p></div></div>
+      <div class="tabs"><button class="tbtn active" onclick="switchTab(event,'vtab1')">Informations Generales</button><button class="tbtn" onclick="switchTab(event,'vtab2')">Clauses & Salaires</button><button class="tbtn" onclick="switchTab(event,'vtab3')">Avenants</button><button class="tbtn" onclick="switchTab(event,'vtab4')">Historique</button></div>
+      <div class="tc active" id="vtab1">
+        <div class="vsec"><div class="vsec-tt">Informations du Contrat</div><div class="vgrid">
+          <div class="vf"><div class="vf-lbl">N. Contrat</div><div class="vf-val" id="vContrat">CTR-2024-0001</div></div>
+          <div class="vf"><div class="vf-lbl">Employe</div><div class="vf-val" id="vEmploye">NKOULOU Mbarga</div></div>
+          <div class="vf"><div class="vf-lbl">Matricule</div><div class="vf-val" id="vMatricule">EMP-2024-0001</div></div>
+          <div class="vf"><div class="vf-lbl">Type de Contrat</div><div class="vf-val" id="vType">CDI</div></div>
+          <div class="vf"><div class="vf-lbl">Departement</div><div class="vf-val" id="vDept">Informatique</div></div>
+          <div class="vf"><div class="vf-lbl">Statut</div><div class="vf-val"><span class="sbadge actif"><span class="dot"></span>Actif</span></div></div>
+          <div class="vf"><div class="vf-lbl">Date Debut</div><div class="vf-val" id="vDebut">01/01/2020</div></div>
+          <div class="vf"><div class="vf-lbl">Date Fin</div><div class="vf-val" id="vFin">31/12/2025</div></div>
+          <div class="vf"><div class="vf-lbl">Manager Direct</div><div class="vf-val">Dr. Nganou (DRH)</div></div>
+          <div class="vf"><div class="vf-lbl">Clause d'Essai</div><div class="vf-val">Oui - 3 mois</div></div>
+          <div class="vf"><div class="vf-lbl">Debut Periode Essai</div><div class="vf-val">01/01/2020</div></div>
+          <div class="vf"><div class="vf-lbl">Fin Periode Essai</div><div class="vf-val">31/03/2020</div></div>
+          <div class="vf"><div class="vf-lbl">Salaire Brut</div><div class="vf-val masked" id="viewSalary">*** *** FCFA</div></div>
+          <div class="vf"><div class="vf-lbl">Classification</div><div class="vf-val">Categorie A1 - Echelon 5</div></div>
+          <div class="vf"><div class="vf-lbl">Convention Collective</div><div class="vf-val">CCGI (Convention Collective du Commerce et de l'Industrie)</div></div>
+          <div class="vf"><div class="vf-lbl">Affiliation CNPS</div><div class="vf-val">CNPS-2024-00156</div></div>
+        </div></div>
+      </div>
+      <div class="tc" id="vtab2">
+        <div class="vsec"><div class="vsec-tt">Clauses Contractuelles</div><div class="vgrid">
+          <div class="vf"><div class="vf-lbl">Duree de Travail</div><div class="vf-val">40 heures / semaine</div></div>
+          <div class="vf"><div class="vf-lbl">Conges Annuels</div><div class="vf-val">30 jours ouvrables</div></div>
+          <div class="vf"><div class="vf-lbl">Preavis (Depart volontaire)</div><div class="vf-val">1 mois</div></div>
+          <div class="vf"><div class="vf-lbl">Preavis (Licenciement)</div><div class="vf-val">3 mois</div></div>
+          <div class="vf"><div class="vf-lbl">Motif de Rupture</div><div class="vf-val">-</div></div>
+          <div class="vf"><div class="vf-lbl">Clause Non-Concurrence</div><div class="vf-val">Non applicable</div></div>
+          <div class="vf"><div class="vf-lbl">Clause de Mobilite</div><div class="vf-val">Oui - perimetre national</div></div>
+        </div></div>
+        <div class="vsec" style="margin-top:16px"><div class="vsec-tt">Avantages en Nature</div><div class="vgrid">
+          <div class="vf"><div class="vf-lbl">Logement</div><div class="vf-val">Non</div></div>
+          <div class="vf"><div class="vf-lbl">Vehicule de fonction</div><div class="vf-val">Non</div></div>
+          <div class="vf"><div class="vf-lbl">Telephone</div><div class="vf-val">Oui - forfait 15 000 FCFA/mois</div></div>
+          <div class="vf"><div class="vf-lbl">Indemnite repas</div><div class="vf-val">Oui - 50 000 FCFA/mois</div></div>
+        </div></div>
+      </div>
+      <div class="tc" id="vtab3">
+        <div class="vsec"><div class="vsec-tt">Avenants au Contrat</div><div class="dlist">
+          <div class="ditem"><div class="dinfo"><div class="dic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><line x1="16" y1="13" x2="8" y2="13"/></svg></div><div><div class="dname">AVN-2025-001 - Revalorisation salariale</div><div class="ddate">01/01/2025 | Augmentation de 8% du salaire de base</div></div></div><span class="sbadge actif"><span class="dot"></span>Actif</span></div>
+          <div class="ditem"><div class="dinfo"><div class="dic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><line x1="16" y1="13" x2="8" y2="13"/></svg></div><div><div class="dname">AVN-2023-003 - Changement de poste</div><div class="ddate">01/03/2023 | Promotion au poste de Chef de Service</div></div></div><span class="sbadge actif"><span class="dot"></span>Actif</span></div>
+          <div class="ditem"><div class="dinfo"><div class="dic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><line x1="16" y1="13" x2="8" y2="13"/></svg></div><div><div class="dname">AVN-2021-001 - Modification horaire</div><div class="ddate">15/06/2021 | Passage a 40h/semaine</div></div></div><span class="sbadge resilie"><span class="dot"></span>Remplace</span></div>
+        </div></div>
+      </div>
+      <div class="tc" id="vtab4">
+        <div class="vsec"><div class="vsec-tt">Historique des Modifications</div><div class="tl">
+          <div class="tl-item"><div class="tl-txt">Avenant de revalorisation salariale (+8%)</div><div class="tl-meta">01/01/2025 par Dr. Nganou</div></div>
+          <div class="tl-item"><div class="tl-txt">Renouvellement du contrat CDI (3 ans)</div><div class="tl-meta">01/01/2023 par DRH</div></div>
+          <div class="tl-item"><div class="tl-txt">Avenant de promotion - Chef de Service</div><div class="tl-meta">01/03/2023 par Dr. Nganou</div></div>
+          <div class="tl-item"><div class="tl-txt">Creation du contrat initial CDD</div><div class="tl-meta">01/01/2020 par Admin RH</div></div>
+          <div class="tl-item"><div class="tl-txt">Transformation CDD vers CDI</div><div class="tl-meta">01/01/2021 par DRH</div></div>
+        </div></div>
+      </div>
+    </div>
+    <div class="modal-ft"><button class="btn btn-o le-only" style="display:none" onclick="closeModal('viewModal');openModal('editModal')">Modifier</button><button class="btn btn-o" onclick="closeModal('viewModal')">Fermer</button></div>
+  </div>
+</div>
+<!-- MODAL 2: MODIFIER CONTRAT -->
+<div class="modal-ov" id="editModal">
+  <div class="modal">
+    <div class="modal-hd"><div class="modal-tt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Modifier Contrat</div><button class="modal-x" onclick="closeModal('editModal')">&times;</button></div>
+    <div class="modal-bd">
+      <div class="fgrid">
+        <div class="fg"><div class="flbl">N. Contrat</div><input class="finp" value="CTR-2024-0001" readonly style="background:var(--gray-l)"></div>
+        <div class="fg"><div class="flbl">Employe</div><input class="finp" value="NKOULOU Mbarga" readonly style="background:var(--gray-l)"></div>
+        <div class="fg"><div class="flbl">Matricule</div><input class="finp" value="EMP-2024-0001" readonly style="background:var(--gray-l)"></div>
+        <div class="fg"><div class="flbl">Type de Contrat <span class="req">*</span></div><select class="fsel" id="editType"><option selected>CDI</option><option>CDD</option><option>Stage</option><option>Interim</option></select></div>
+        <div class="fg"><div class="flbl">Departement <span class="req">*</span></div><select class="fsel"><option selected>Informatique</option><option>Commercial</option><option>Production</option><option>Comptabilite</option><option>RH</option><option>Logistique</option></select></div>
+        <div class="fg"><div class="flbl">Statut <span class="req">*</span></div><select class="fsel"><option selected>Actif</option><option>Suspendu</option><option>En attente</option><option>Resilie</option></select></div>
+        <div class="fg"><div class="flbl">Date Debut <span class="req">*</span></div><input class="finp" type="date" value="2020-01-01" id="editDebut"></div>
+        <div class="fg"><div class="flbl">Date Fin</div><input class="finp" type="date" value="2025-12-31" id="editFin"></div>
+        <div class="fg"><div class="flbl">Clause d'Essai</div><select class="fsel"><option selected>Oui</option><option>Non</option></select></div>
+        <div class="fg"><div class="flbl">Duree Periode Essai</div><input class="finp" placeholder="Ex: 3 mois" value="3 mois"></div>
+        <div class="fg"><div class="flbl">Salaire Brut (FCFA) <span class="req">*</span></div><input class="finp" type="number" value="485000" id="editSalaire"></div>
+        <div class="fg"><div class="flbl">Categorie</div><select class="fsel"><option selected>A1</option><option>A2</option><option>B1</option><option>B2</option><option>C1</option><option>C2</option><option>D1</option></select></div>
+        <div class="fg"><div class="flbl">Echelon</div><input class="finp" value="5" type="number" min="1" max="10"></div>
+        <div class="fg"><div class="flbl">Convention Collective</div><select class="fsel"><option selected>CCGI</option><option>CCM</option><option>Autre</option></select></div>
+        <div class="fg"><div class="flbl">Affiliation CNPS</div><input class="finp" value="CNPS-2024-00156"></div>
+        <div class="fg fw"><div class="flbl">Motif de Rupture</div><textarea class="ftxt" placeholder="Motif de rupture le cas echeant..."></textarea></div>
+      </div>
+    </div>
+    <div class="modal-ft"><button class="btn btn-o" onclick="closeModal('editModal')">Annuler</button><button class="btn btn-s" onclick="closeModal('editModal');toast('Contrat modifie avec succes','success')">Enregistrer</button></div>
+  </div>
+</div>
+<!-- MODAL 3: NOUVEAU CONTRAT -->
+<div class="modal-ov" id="createModal">
+  <div class="modal">
+    <div class="modal-hd"><div class="modal-tt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Nouveau Contrat</div><button class="modal-x" onclick="closeModal('createModal')">&times;</button></div>
+    <div class="modal-bd">
+      <div style="background:#ecfdf5;padding:10px 14px;border-radius:var(--r);border:1px solid #86efac;margin-bottom:16px;font-size:12px;color:#166534">N. Contrat auto-genere: <strong>CTR-2026-0013</strong></div>
+      <div class="info-box info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg><div><strong>Code du Travail Camerounais - Regles de duree:</strong><br>- <strong>CDI:</strong> Pas de date de fin obligatoire (convention 3 ans renouvelable)<br>- <strong>CDD:</strong> Duree max 24 mois (renouvellement 1 fois, 18 mois max pour le renouvellement)<br>- <strong>Stage:</strong> Duree max 6 mois, non renouvelable</div></div>
+      <div class="fgrid">
+        <div class="fg fw"><div class="flbl">Employe <span class="req">*</span></div>
+          <select class="fsel" id="newEmploye" onchange="onEmployeSelect(this)"><option value="">-- Rechercher un employe --</option><option value="EMP-2024-0001|NKOULOU Mbarga">EMP-2024-0001 - NKOULOU Mbarga</option><option value="EMP-2024-0002|FOTSO Jean Pierre">EMP-2024-0002 - FOTSO Jean Pierre</option><option value="EMP-2024-0003|NGANOU Aline">EMP-2024-0003 - NGANOU Aline</option><option value="EMP-2025-0006|KAMGA Patrick">EMP-2025-0006 - KAMGA Patrick</option><option value="EMP-2025-0008|FOMBAD Alain">EMP-2025-0008 - FOMBAD Alain</option></select><div class="ferr"></div>
+        </div>
+        <div class="fg"><div class="flbl">Type de Contrat <span class="req">*</span></div><select class="fsel" id="newType" onchange="onTypeChange(this.value)"><option value="">-- Selectionner --</option><option value="CDI">CDI</option><option value="CDD">CDD</option><option value="Stage">Stage</option><option value="Interim">Interim</option></select><div class="ferr" id="errType"></div></div>
+        <div class="fg"><div class="flbl">Departement <span class="req">*</span></div><select class="fsel" id="newDept"><option value="">-- Selectionner --</option><option>Informatique</option><option>Commercial</option><option>Production</option><option>Comptabilite</option><option>RH</option><option>Logistique</option></select><div class="ferr" id="errDept"></div></div>
+        <div class="fg"><div class="flbl">Date Debut <span class="req">*</span></div><input class="finp" type="date" id="newDebut"><div class="ferr" id="errDebut"></div></div>
+        <div class="fg" id="fgFin"><div class="flbl">Date Fin</div><input class="finp" type="date" id="newFin"></div>
+        <div class="fg"><div class="flbl">Clause d'Essai</div><select class="fsel" id="newEssai"><option value="Oui">Oui</option><option value="Non">Non</option></select></div>
+        <div class="fg"><div class="flbl">Salaire Brut (FCFA) <span class="req">*</span></div><input class="finp" type="number" id="newSalaire" placeholder="Ex: 350000"><div class="ferr" id="errSalaire"></div></div>
+        <div class="fg"><div class="flbl">Categorie</div><select class="fsel"><option>A1</option><option>A2</option><option>B1</option><option>B2</option><option>C1</option><option>C2</option><option>D1</option></select></div>
+        <div class="fg"><div class="flbl">Echelon</div><input class="finp" type="number" value="1" min="1" max="10"></div>
+        <div class="fg"><div class="flbl">Convention Collective</div><select class="fsel"><option>CCGI</option><option>CCM</option><option>Autre</option></select></div>
+        <div class="fg"><div class="flbl">Affiliation CNPS</div><input class="finp" placeholder="CNPS-XXXX-XXXXX" id="newCnps"></div>
+        <div class="fg fw"><div class="flbl">Observations</div><textarea class="ftxt" placeholder="Observations complementaires..."></textarea></div>
+      </div>
+    </div>
+    <div class="modal-ft"><button class="btn btn-o" onclick="closeModal('createModal')">Annuler</button><button class="btn btn-s" onclick="validateCreate()">Creer le contrat</button></div>
+  </div>
+</div>
+<!-- MODAL 4: RENOUVELLEMENT -->
+<div class="modal-ov" id="renewModal">
+  <div class="modal sm">
+    <div class="modal-hd"><div class="modal-tt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>Renouvellement de Contrat</div><button class="modal-x" onclick="closeModal('renewModal')">&times;</button></div>
+    <div class="modal-bd">
+      <div class="info-box warn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><div><strong>Contrat actuel:</strong> CTR-2025-0003 (TCHINDA Emmanuel) - CDD<br>Du 01/06/2025 au 30/11/2025 - <strong>6 mois</strong> | Limite legale CDD: 24 mois total (1 renouvellement)</div></div>
+      <div class="fgrid">
+        <div class="fg"><div class="flbl">Motif du Renouvellement <span class="req">*</span></div><select class="fsel"><option value="">-- Selectionner --</option><option>Continuite de service</option><option>Projet en cours</option><option>Remplacement prolonge</option><option>Accord mutuel</option></select></div>
+        <div class="fg"><div class="flbl">Nouvelle Date Debut <span class="req">*</span></div><input class="finp" type="date" value="2025-12-01"></div>
+        <div class="fg"><div class="flbl">Nouvelle Date Fin <span class="req">*</span></div><input class="finp" type="date" value="2026-11-30"></div>
+        <div class="fg"><div class="flbl">Duree du Renouvellement</div><input class="finp" value="12 mois" readonly style="background:var(--gray-l)"></div>
+        <div class="fg fw"><div class="flbl">Observations</div><textarea class="ftxt" placeholder="Motif detaille du renouvellement..."></textarea></div>
+      </div>
+      <div class="info-box info" style="margin-top:12px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg><div>Apres ce renouvellement, la duree totale du CDD sera de <strong>18 mois</strong> (limite: 24 mois). Un seul renouvellement supplementaire sera possible pour max 6 mois.</div></div>
+    </div>
+    <div class="modal-ft"><button class="btn btn-o" onclick="closeModal('renewModal')">Annuler</button><button class="btn btn-s" onclick="closeModal('renewModal');toast('Renouvellement enregistre avec succes','success')">Confirmer le Renouvellement</button></div>
+  </div>
+</div>
+<!-- MODAL 5: RESILIATION -->
+<div class="modal-ov" id="termModal">
+  <div class="modal sm">
+    <div class="modal-hd"><div class="modal-tt" style="color:var(--danger)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>Resiliation de Contrat</div><button class="modal-x" onclick="closeModal('termModal')">&times;</button></div>
+    <div class="modal-bd">
+      <div class="del-w">
+        <div class="del-w-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+        <h3>Resiliation du Contrat</h3>
+        <p>Employe: <strong>NKOULOU Mbarga</strong></p>
+        <p>Contrat: <span class="dtxt">CTR-2024-0001</span> (CDI - Informatique)</p>
+      </div>
+      <div class="fgrid" style="margin-top:16px">
+        <div class="fg fw"><div class="flbl">Motif de Resiliation <span class="req">*</span></div><select class="fsel" id="termReason" onchange="calcPreavis()"><option value="">-- Selectionner --</option><option value="demission">Demission</option><option value="licenciement">Licenciement</option><option value="force_majeure">Force majeure</option><option value="fin_cdd_stage">Fin de CDD/Stage</option><option value="accord_mutuel">Accord mutuel</option><option value="retraite">Depart a la retraite</option></select></div>
+        <div class="fg"><div class="flbl">Preavis Legal</div><input class="finp" value="A calculer" readonly style="background:var(--gray-l)" id="preavisField"></div>
+        <div class="fg"><div class="flbl">Date Effective <span class="req">*</span></div><input class="finp" type="date" id="termDate"></div>
+        <div class="fg fw"><div class="flbl">Commentaire</div><textarea class="ftxt" placeholder="Details de la resiliation..."></textarea></div>
+      </div>
+      <div class="info-box danger" style="margin-top:12px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><div><strong>Solde de tout compte estime:</strong><br>- Salaire du mois en cours: <strong>485 000 FCFA</strong><br>- Indemnite de conges: <strong>121 250 FCFA</strong><br>- Indemnite de preavis: <strong>485 000 FCFA</strong><br>- <strong>Total estime: 1 091 250 FCFA</strong></div></div>
+      <div style="margin-top:16px;text-align:left"><div class="flbl">Tapez <strong>RESILIER</strong> pour confirmer la resiliation</div><input class="finp" id="termConfirm" placeholder="RESILIER" oninput="checkTermConfirm(this.value)" style="margin-top:4px"></div>
+    </div>
+    <div class="modal-ft"><button class="btn btn-o" onclick="closeModal('termModal')">Annuler</button><button class="btn btn-d" id="termBtn" disabled onclick="closeModal('termModal');toast('Contrat resilie avec succes','error')">Resilier le Contrat</button></div>
+  </div>
+</div>
+<!-- MODAL 6: IMPORT MASSE -->
+<div class="modal-ov" id="csvModal">
+  <div class="modal">
+    <div class="modal-hd"><div class="modal-tt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Import Masse de Contrats</div><button class="modal-x" onclick="closeModal('csvModal')">&times;</button></div>
+    <div class="modal-bd">
+      <div class="dz" id="dropZone" onclick="document.getElementById('csvFile').click()" ondragover="event.preventDefault();this.classList.add('over')" ondragleave="this.classList.remove('over')" ondrop="event.preventDefault();this.classList.remove('over');toast('Fichier charge avec succes','success')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        <p>Glissez votre fichier CSV ici ou cliquez pour parcourir</p>
+        <p class="hint">Format accepte: .csv (max 5 MB)</p>
+      </div>
+      <input type="file" id="csvFile" accept=".csv" style="display:none">
+      <div style="margin-top:12px;text-align:center"><span class="dz-link">Telecharger le modele CSV</span></div>
+      <div class="info-box info" style="margin-top:12px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg><div><strong>Colonnes requises du modele CSV:</strong><br>N.Contrat | Matricule Employe | Type | Date Debut | Date Fin | Salaire<br><small>Les types valides: CDI, CDD, Stage, Interim</small></div></div>
+      <div class="csv-sum" style="margin-top:16px">
+        <span>Lignes valides: <span class="val">8</span></span>
+        <span>Erreurs detectees: <span class="err-c">2</span></span>
+        <span>Total: <strong>10</strong></span>
+      </div>
+      <div class="tcon" style="margin-top:12px"><div class="twrap"><table class="csv-ptable"><thead><tr><th>N. Contrat</th><th>Matricule</th><th>Type</th><th>Date Debut</th><th>Date Fin</th><th>Salaire</th><th>Validation</th></tr></thead><tbody><tr><td>CTR-2026-0014</td><td>EMP-2026-0144</td><td>CDI</td><td>01/08/2026</td><td>-</td><td>350 000</td><td style="color:var(--success)">Valide</td></tr><tr><td>CTR-2026-0015</td><td>EMP-2026-0145</td><td>CDD</td><td>01/09/2026</td><td>28/02/2027</td><td>280 000</td><td style="color:var(--success)">Valide</td></tr><tr><td>CTR-2026-0016</td><td>EMP-2026-0146</td><td>STAGE</td><td>01/10/2026</td><td>31/03/2027</td><td>150 000</td><td style="color:var(--danger)">Stage > 6 mois</td></tr></tbody></table></div></div>
+    </div>
+    <div class="modal-ft"><button class="btn btn-o" onclick="closeModal('csvModal')">Annuler</button><button class="btn btn-s" onclick="closeModal('csvModal');toast('8 contrats importes avec succes','success')">Importer 8 contrats</button></div>
+  </div>
+</div>\n<!-- TOAST CONTAINER -->\n<div class="toast-c" id="toastContainer"></div>\n<script>
+const contrats=[
+{nc:'CTR-2024-0001',emp:'NKOULOU Mbarga',mat:'EMP-2024-0001',type:'CDI',dept:'Informatique',dd:'01/01/2020',df:'31/12/2025',statut:'Actif',ech:'J-152',echD:152,initiales:'NM',salaire:'485 000'},
+{nc:'CTR-2024-0002',emp:'FOTSO Jean Pierre',mat:'EMP-2024-0002',type:'CDI',dept:'Commercial',dd:'15/03/2021',df:'14/03/2026',statut:'Actif',ech:'J-41',echD:41,initiales:'FJ',salaire:'420 000'},
+{nc:'CTR-2025-0003',emp:'TCHINDA Emmanuel',mat:'EMP-2024-0004',type:'CDD',dept:'Production',dd:'01/06/2025',df:'30/11/2025',statut:'Actif',ech:'J-121',echD:121,initiales:'TE',salaire:'280 000'},
+{nc:'CTR-2025-0004',emp:'MBARGA Sylvie',mat:'EMP-2024-0005',type:'CDI',dept:'Comptabilite',dd:'01/09/2022',df:'31/08/2027',statut:'Actif',ech:'Aucune',echD:9999,initiales:'MS',salaire:'380 000'},
+{nc:'CTR-2025-0005',emp:'NDONGO Carine',mat:'EMP-2025-0007',type:'CDD',dept:'RH',dd:'01/02/2025',df:'31/07/2025',statut:'Actif',ech:'J-15',echD:15,initiales:'NC',salaire:'250 000'},
+{nc:'CTR-2025-0006',emp:'ESSOMBA Grace',mat:'EMP-2025-0009',type:'Stage',dept:'Commercial',dd:'01/09/2025',df:'28/02/2026',statut:'Actif',ech:'J-209',echD:209,initiales:'EG',salaire:'150 000'},
+{nc:'CTR-2025-0007',emp:'NGASSA Herve',mat:'EMP-2025-0012',type:'CDD',dept:'Logistique',dd:'01/04/2025',df:'31/10/2025',statut:'Suspendu',ech:'J-91',echD:91,initiales:'NH',salaire:'220 000'},
+{nc:'CTR-2024-0008',emp:'BEYALA Nathalie',mat:'EMP-2025-0011',type:'CDI',dept:'Comptabilite',dd:'01/01/2018',df:'31/12/2025',statut:'Actif',ech:'J-152',echD:152,initiales:'BN',salaire:'520 000'},
+{nc:'CTR-2026-0009',emp:'MPACKO Blaise',mat:'EMP-2026-0013',type:'CDI',dept:'Informatique',dd:'01/01/2026',df:'31/12/2028',statut:'Actif',ech:'Aucune',echD:9999,initiales:'MB',salaire:'450 000'},
+{nc:'CTR-2026-0010',emp:'EYOUM Estelle',mat:'EMP-2026-0014',type:'CDI',dept:'RH',dd:'01/01/2025',df:'31/12/2027',statut:'Actif',ech:'Aucune',echD:9999,initiales:'EE',salaire:'360 000'},
+{nc:'CTR-2025-0011',emp:'ATANGANA Samuel',mat:'EMP-2025-0010',type:'CDI',dept:'Production',dd:'01/03/2022',df:'28/02/2025',statut:'Expire',ech:'Expire',echD:-1,initiales:'AS',salaire:'310 000'},
+{nc:'CTR-2026-0012',emp:'ZANG Thierry',mat:'EMP-2026-0015',type:'Stage',dept:'Production',dd:'01/07/2026',df:'31/12/2026',statut:'Actif',ech:'J-151',echD:151,initiales:'ZT',salaire:'120 000'}
+];
+
+function getEchClass(c){
+if(c.ech==='Aucune')return 'none';
+if(c.ech==='Expire')return 'urgent';
+if(c.echD<=15)return 'urgent';
+if(c.echD<=30)return 'warning';
+if(c.echD<=90)return 'caution';
+return 'none';
+}
+function getStatutClass(s){
+if(s==='Actif')return 'actif';
+if(s==='Expire')return 'expire';
+if(s==='Suspendu')return 'suspendu';
+if(s==='En attente')return 'attente';
+return 'resilie';
+}
+function renderTable(){
+const tb=document.getElementById('contratTable');
+const mode=document.getElementById('modeSelect').value;
+const q=(document.getElementById('searchInput').value||'').toLowerCase();
+const ft=document.getElementById('filterType').value;
+const fd=document.getElementById('filterDept').value;
+const fs=document.getElementById('filterStatut').value;
+const fe=document.getElementById('filterEcheance').value;
+tb.innerHTML='';
+let count=0;
+contrats.forEach((c,i)=>{
+  if(q&&!((c.nc+c.emp+c.mat+c.dept+c.type+c.statut).toLowerCase()).includes(q))return;
+  if(ft&&c.type!==ft)return;
+  if(fd&&c.dept!==fd)return;
+  if(fs&&c.statut!==fs)return;
+  if(fe==='urgent'&&c.echD>15)return;
+  if(fe==='warning'&&(c.echD<=15||c.echD>30))return;
+  if(fe==='caution'&&(c.echD<=30||c.echD>90))return;
+  if(fe==='none'&&c.ech!=='Aucune')return;
+  count++;
+  const sc=getStatutClass(c.statut);
+  const dot='<span class="sbadge '+sc+'"><span class="dot"></span>'+c.statut+'</span>';
+  const ec=getEchClass(c);
+  const echBadge='<span class="ebadge '+ec+'">'+c.ech+'</span>';
+  let act='';
+  const eyeBtn='<button class="aib vw" title="Voir" onclick="viewContrat('+i+')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>';
+  const editBtn='<button class="aib ed" title="Modifier" onclick="editContrat('+i+')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>';
+  const renewBtn='<button class="aib rn" title="Renouveler" onclick="openModal(\'renewModal\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg></button>';
+  const termBtn='<button class="aib rt" title="Resilier" onclick="openModal(\'termModal\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></button>';
+  if(mode==='lecture'){act=eyeBtn;}
+  else if(mode==='lecture-ecriture'){act=eyeBtn+editBtn;}
+  else{act=eyeBtn+editBtn+renewBtn+termBtn;}
+  tb.innerHTML+='<tr><td><strong>'+c.nc+'</strong></td><td>'+c.emp+'</td><td>'+c.mat+'</td><td>'+c.type+'</td><td>'+c.dept+'</td><td>'+c.dd+'</td><td>'+c.df+'</td><td>'+dot+'</td><td>'+echBadge+'</td><td><div class="acts">'+act+'</div></td></tr>';
+});
+document.getElementById('pagiInfo').textContent='Affichage 1-'+count+' sur '+count+' contrats';
+}
+
+function viewContrat(i){
+const c=contrats[i];
+const mode=document.getElementById('modeSelect').value;
+document.getElementById('viewEmpName').textContent=c.emp;
+document.getElementById('viewContractInfo').textContent=c.nc+' | '+c.mat;
+document.getElementById('vContrat').textContent=c.nc;
+document.getElementById('vEmploye').textContent=c.emp;
+document.getElementById('vMatricule').textContent=c.mat;
+document.getElementById('vType').textContent=c.type;
+document.getElementById('vDept').textContent=c.dept;
+document.getElementById('vDebut').textContent=c.dd;
+document.getElementById('vFin').textContent=c.df;
+const vs=document.getElementById('viewSalary');
+vs.textContent=mode==='ecriture'?c.salaire+' FCFA':'*** *** FCFA';
+vs.className='vf-val'+(mode==='ecriture'?'':' masked');
+openModal('viewModal');
+}
+
+function editContrat(i){
+const c=contrats[i];
+openModal('editModal');
+}
+
+function switchMode(m){
+const b=document.getElementById('modeBadge');
+const ab=document.getElementById('actionBar');
+b.className='mbadge '+(m==='lecture'?'lect':m==='lecture-ecriture'?'lect-ecr':'ecr');
+b.textContent=m==='lecture'?'LECTURE':m==='lecture-ecriture'?'LECTURE-ECRITURE':'ECRITURE';
+if(m==='lecture'){ab.classList.add('hid');}
+else{ab.classList.remove('hid');}
+document.querySelectorAll('.write-only').forEach(el=>{el.style.display=m==='ecriture'?'inline-flex':'none';});
+document.querySelectorAll('.le-only').forEach(el=>{el.style.display=(m==='lecture-ecriture'||m==='ecriture')?'inline-flex':'none';});
+renderTable();
+}
+
+function openModal(id){document.getElementById(id).classList.add('on');document.body.style.overflow='hidden';}
+function closeModal(id){document.getElementById(id).classList.remove('on');document.body.style.overflow='';}
+
+function switchTab(e,id){
+e.target.parentElement.querySelectorAll('.tbtn').forEach(b=>b.classList.remove('active'));
+e.target.classList.add('active');
+e.target.closest('.modal-bd').querySelectorAll('.tc').forEach(t=>t.classList.remove('active'));
+document.getElementById(id).classList.add('active');
+}
+
+function toggleSB(){document.getElementById('sidebar').classList.toggle('collapsed');}
+
+function toast(msg,type){
+const c=document.getElementById('toastContainer');
+const icons={success:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>',error:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>',warning:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>'};
+const t=document.createElement('div');
+t.className='toast '+type;
+t.innerHTML=(icons[type]||'')+msg+'<button class="toast-x" onclick="this.parentElement.remove()">&times;</button>';
+c.appendChild(t);
+setTimeout(()=>t.classList.add('show'),50);
+setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.remove(),300);},3000);
+}
+
+function filterTable(){renderTable();}
+
+function onTypeChange(val){
+const fgFin=document.getElementById('fgFin');
+if(val==='CDI'){fgFin.querySelector('input').value='';fgFin.querySelector('input').placeholder='Non applicable (CDI)';fgFin.querySelector('input').disabled=true;}
+else{fgFin.querySelector('input').disabled=false;fgFin.querySelector('input').placeholder='';}
+}
+
+function onEmployeSelect(sel){
+// Auto-fill department based on selection if needed
+}
+
+function calcPreavis(){
+const r=document.getElementById('termReason').value;
+const p=document.getElementById('preavisField');
+const map={'demission':'1 mois','licenciement':'3 mois','force_majeure':'0 jour','fin_cdd_stage':'0 jour','accord_mutuel':'Negociable','retraite':'3 mois'};
+p.value=map[r]||'A calculer';
+}
+
+function checkTermConfirm(v){document.getElementById('termBtn').disabled=v!=='RESILIER';}
+
+function validateCreate(){
+let valid=true;
+const fields=[{id:'newEmploye',errId:null},{id:'newType',errId:'errType'},{id:'newDept',errId:'errDept'},{id:'newDebut',errId:'errDebut'},{id:'newSalaire',errId:'errSalaire'}];
+fields.forEach(f=>{
+const el=document.getElementById(f.id);
+if(el){
+const v=(el.value||'').trim();
+const hasVal=el.tagName==='SELECT'?v!=='':v!=='';
+if(!hasVal){el.classList.add('err');if(f.errId)document.getElementById(f.errId).textContent='Ce champ est requis';valid=false;}
+else{el.classList.remove('err');if(f.errId)document.getElementById(f.errId).textContent='';}
+}
+});
+if(!valid){toast('Veuillez corriger les erreurs dans le formulaire','warning');return;}
+closeModal('createModal');toast('Contrat CTR-2026-0013 cree avec succes','success');
+}
+
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){document.querySelectorAll('.modal-ov.on').forEach(m=>{m.classList.remove('on');});document.body.style.overflow='';}});
+
+window.addEventListener('DOMContentLoaded',()=>{renderTable();switchMode('lecture-ecriture');});
+</script>
+</body></html>
