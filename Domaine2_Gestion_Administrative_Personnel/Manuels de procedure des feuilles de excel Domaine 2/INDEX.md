@@ -12,8 +12,8 @@
 |---|---------|-------|--------|----------|
 | 01 | Tableau de Bord | Pilotage | Termine | 4 fichiers |
 | 02 | Employes | Identification | Termine | 3 fichiers |
-| 03 | Contrats | Contractualisation | En attente | - |
-| 04 | Avenants | Contractualisation | En attente | - |
+| 03 | Contrats | Contractualisation | Termine | 4 fichiers |
+| 04 | Avenants | Contractualisation | Termine | 4 fichiers |
 | 05 | Documents | Contractualisation | En attente | - |
 | 06 | Bancaires | Contractualisation | En attente | - |
 | 07 | Mutuelle | Contractualisation | En attente | - |
