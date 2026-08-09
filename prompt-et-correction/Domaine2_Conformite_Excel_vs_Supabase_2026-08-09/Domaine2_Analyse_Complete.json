@@ -1,0 +1,2717 @@
+{
+  "file_info": {
+    "filename": "Domaine2_Gestion_Administrative_Personnel.xlsx",
+    "sheets": [
+      "1-Tableau de Bord",
+      "2-Fiche Employe",
+      "3-Contrats Travail",
+      "4-Avenants Contrat",
+      "5-Suivi Documents",
+      "6-Donnees Bancaires",
+      "7-Mutuelle Prevoyance",
+      "8-Conges Annuels",
+      "9-Solde Conges",
+      "10-Absences Maladie",
+      "11-Heures Supplementaires",
+      "12-Pointage Presence",
+      "13-Fiches de Paie",
+      "14-Declarations Sociales",
+      "15-Autorisations Permis",
+      "16-Dossiers Departs",
+      "17-Archivage Documents",
+      "18-Rappels Admin",
+      "19-Prets Avances Salaire",
+      "20-Sanctions Disciplinaires",
+      "21-Visites Medicales",
+      "22-Planning Mensuel Presence",
+      "_Lists"
+    ],
+    "total_sheets": 23,
+    "file_size_bytes": 169979,
+    "file_size_kb": 166.0,
+    "total_data_rows": 2245
+  },
+  "sheets": {
+    "1-Tableau de Bord": {
+      "row_count": 0,
+      "column_count": 0,
+      "columns": [],
+      "sample_data": [],
+      "data_types": {},
+      "description": "Tableau de bord synthétique avec 68 indicateurs/KPIs",
+      "merged_cells": 43,
+      "dimensions": "B2:L72",
+      "is_dashboard": true,
+      "all_cells": [
+        {
+          "cell": "B2",
+          "value": "DOMAINE 2 — GESTION ADMINISTRATIVE DU PERSONNEL"
+        },
+        {
+          "cell": "B3",
+          "value": "TABLEAU DE BORD — Vue synthetique de tous les indicateurs du domaine (mis a jour automatiquement)"
+        },
+        {
+          "cell": "B5",
+          "value": "Effectif Total"
+        },
+        {
+          "cell": "E5",
+          "value": "Employes actifs"
+        },
+        {
+          "cell": "H5",
+          "value": "Cadres"
+        },
+        {
+          "cell": "K5",
+          "value": "CDI"
+        },
+        {
+          "cell": "B9",
+          "value": "Contrats en vigueur"
+        },
+        {
+          "cell": "E9",
+          "value": "Masse salariale brute"
+        },
+        {
+          "cell": "H9",
+          "value": "Avenants en attente"
+        },
+        {
+          "cell": "K9",
+          "value": "CDD/Interim"
+        },
+        {
+          "cell": "B13",
+          "value": "Documents valides"
+        },
+        {
+          "cell": "E13",
+          "value": "A renouveler"
+        },
+        {
+          "cell": "H13",
+          "value": "Permis valides"
+        },
+        {
+          "cell": "K13",
+          "value": "Rappels en retard"
+        },
+        {
+          "cell": "B17",
+          "value": "Absences (total jours)"
+        },
+        {
+          "cell": "E17",
+          "value": "Conges approuves"
+        },
+        {
+          "cell": "H17",
+          "value": "Heures supp totales"
+        },
+        {
+          "cell": "K17",
+          "value": "Taux presence moy."
+        },
+        {
+          "cell": "B21",
+          "value": "Total net paye (FCFA)"
+        },
+        {
+          "cell": "E21",
+          "value": "Total cotisations"
+        },
+        {
+          "cell": "H21",
+          "value": "Declarations en retard"
+        },
+        {
+          "cell": "K21",
+          "value": "Dossiers departs clos"
+        },
+        {
+          "cell": "B26",
+          "value": "REPARTITION PAR DEPARTEMENT ET STATUT"
+        },
+        {
+          "cell": "B27",
+          "value": "Departement"
+        },
+        {
+          "cell": "C27",
+          "value": "Effectif"
+        },
+        {
+          "cell": "B28",
+          "value": "Direction Generale"
+        },
+        {
+          "cell": "B29",
+          "value": "Service Client"
+        },
+        {
+          "cell": "B30",
+          "value": "Finance & Comptabilité"
+        },
+        {
+          "cell": "B31",
+          "value": "Marketing & Communication"
+        },
+        {
+          "cell": "B32",
+          "value": "Maintenance"
+        },
+        {
+          "cell": "B33",
+          "value": "Commercial"
+        },
+        {
+          "cell": "B34",
+          "value": "Logistique & Approvisionnement"
+        },
+        {
+          "cell": "B35",
+          "value": "Cuisine & Restauration"
+        },
+        {
+          "cell": "B36",
+          "value": "Service Client"
+        },
+        {
+          "cell": "B37",
+          "value": "Réception & Front Office"
+        },
+        {
+          "cell": "B38",
+          "value": "Cuisine & Restauration"
+        },
+        {
+          "cell": "B39",
+          "value": "Maintenance"
+        },
+        {
+          "cell": "B40",
+          "value": "Sécurité"
+        },
+        {
+          "cell": "H42",
+          "value": "Type Contrat"
+        },
+        {
+          "cell": "I42",
+          "value": "Nombre"
+        },
+        {
+          "cell": "H43",
+          "value": "CDI"
+        },
+        {
+          "cell": "H44",
+          "value": "CDD"
+        },
+        {
+          "cell": "H45",
+          "value": "Stage"
+        },
+        {
+          "cell": "H46",
+          "value": "Interim"
+        },
+        {
+          "cell": "H47",
+          "value": "Alternance"
+        },
+        {
+          "cell": "H48",
+          "value": "Freelance"
+        },
+        {
+          "cell": "B51",
+          "value": "Prêts en cours"
+        },
+        {
+          "cell": "E51",
+          "value": "Total avances (FCFA)"
+        },
+        {
+          "cell": "H51",
+          "value": "Sanctions année"
+        },
+        {
+          "cell": "K51",
+          "value": "Visites à planifier"
+        },
+        {
+          "cell": "B55",
+          "value": "Taux présence moy. (%)"
+        },
+        {
+          "cell": "E55",
+          "value": "Total retards (min)"
+        },
+        {
+          "cell": "H55",
+          "value": "Heures supp mensuelles"
+        },
+        {
+          "cell": "K55",
+          "value": "Indemnités départs (FCFA)"
+        },
+        {
+          "cell": "B59",
+          "value": "Type Sanction"
+        },
+        {
+          "cell": "C59",
+          "value": "Nombre"
+        },
+        {
+          "cell": "B60",
+          "value": "Avertissement oral"
+        },
+        {
+          "cell": "B61",
+          "value": "Avertissement écrit"
+        },
+        {
+          "cell": "B62",
+          "value": "Blâme"
+        },
+        {
+          "cell": "B63",
+          "value": "Suspension"
+        },
+        {
+          "cell": "B64",
+          "value": "Mise à pied"
+        },
+        {
+          "cell": "B67",
+          "value": "Type Prêt"
+        },
+        {
+          "cell": "C67",
+          "value": "Montant Total"
+        },
+        {
+          "cell": "B68",
+          "value": "Avance salaire"
+        },
+        {
+          "cell": "B69",
+          "value": "Prêt social"
+        },
+        {
+          "cell": "B70",
+          "value": "Prêt logement"
+        },
+        {
+          "cell": "B71",
+          "value": "Prêt urgence"
+        },
+        {
+          "cell": "B72",
+          "value": "Prêt formation"
+        }
+      ]
+    },
+    "2-Fiche Employe": {
+      "row_count": 108,
+      "column_count": 20,
+      "columns": [
+        "N° Matricule",
+        "Civilité",
+        "Nom",
+        "Prénom",
+        "Date Naissance",
+        "Lieu Naissance",
+        "Genre",
+        "Nationalité",
+        "Situation Familiale",
+        "N° Téléphone",
+        "Email",
+        "Adresse",
+        "Département",
+        "Poste",
+        "Type Contrat",
+        "Catégorie",
+        "Régime Travail",
+        "Date Embauche",
+        "Ancienneté (ans)",
+        "Statut"
+      ],
+      "sample_data": [
+        [
+          "EMP-001",
+          "M.",
+          "Nganou",
+          "Clarisse",
+          "1988-03-15T00:00:00",
+          "Douala",
+          "Feminin",
+          "Camerounaise",
+          "Marie(e)",
+          "699123456",
+          "c.nganou@hotel.com",
+          "Douala Bonapriso",
+          "Service Client",
+          "DRH",
+          "CDI",
+          "Cadre",
+          "Temps plein",
+          "2020-01-15T00:00:00",
+          null,
+          "Actif"
+        ],
+        [
+          "EMP-002",
+          "M.",
+          "Tchinda",
+          "Armand",
+          "1992-07-22T00:00:00",
+          "Yaoundé",
+          "Masculin",
+          "Camerounaise",
+          "Celibataire",
+          "677234567",
+          "a.tchinda@hotel.com",
+          "Douala Makepe",
+          "Maintenance",
+          "Chef de service IT",
+          "CDI",
+          "Cadre",
+          "Temps plein",
+          "2019-06-01T00:00:00",
+          null,
+          "Actif"
+        ],
+        [
+          "EMP-003",
+          "Mme",
+          "Fotso",
+          "Marguerite",
+          "1985-11-08T00:00:00",
+          "Bafoussam",
+          "Feminin",
+          "Camerounaise",
+          "Divorce(e)",
+          "698345678",
+          "m.fotso@hotel.com",
+          "Douala Akwa",
+          "Finance & Comptabilité",
+          "Comptable senior",
+          "CDI",
+          "Cadre",
+          "Temps plein",
+          "2017-03-01T00:00:00",
+          null,
+          "Actif"
+        ]
+      ],
+      "data_types": {
+        "N° Matricule": "mixte: null/vide, texte",
+        "Civilité": "mixte: null/vide, texte",
+        "Nom": "mixte: null/vide, texte",
+        "Prénom": "mixte: null/vide, texte",
+        "Date Naissance": "mixte: date, null/vide",
+        "Lieu Naissance": "mixte: null/vide, texte",
+        "Genre": "mixte: null/vide, texte",
+        "Nationalité": "mixte: null/vide, texte",
+        "Situation Familiale": "mixte: null/vide, texte",
+        "N° Téléphone": "mixte: null/vide, texte numérique",
+        "Email": "mixte: null/vide, texte",
+        "Adresse": "mixte: null/vide, texte",
+        "Département": "mixte: null/vide, texte",
+        "Poste": "mixte: null/vide, texte",
+        "Type Contrat": "mixte: null/vide, texte",
+        "Catégorie": "mixte: null/vide, texte",
+        "Régime Travail": "mixte: null/vide, texte",
+        "Date Embauche": "mixte: date, null/vide",
+        "Ancienneté (ans)": "null/vide",
+        "Statut": "mixte: null/vide, texte"
+      },
+      "description": "FICHE EMPLOYE — REPERTOIRE DU PERSONNEL | TABLEAU DYNAMIQUE — Saisissez dans la prochaine ligne jaune. Les calculs se mettent a jour automatiquement.",
+      "merged_cells": 3,
+      "dimensions": "B2:U113"
+    },
+    "3-Contrats Travail": {
+      "row_count": 110,
+      "column_count": 13,
+      "columns": [
+        "N° Contrat",
+        "Matricule",
+        "Nom Employé",
+        "Type Contrat",
+        "Date Début",
+        "Date Fin",
+        "Durée (mois)",
+        "Jours Restants",
+        "Statut",
+        "Salaire Brut (FCFA)",
+        "Régime Travail",
+        "Lieu Travail",
+        "Observations"
+      ],
+      "sample_data": [
+        [
+          "CTR-2025-001",
+          "EMP-001",
+          "Nganou Clarisse",
+          "CDI",
+          "2020-01-15T00:00:00",
+          null,
+          null,
+          null,
+          "En vigueur",
+          450000,
+          "Temps plein",
+          "Siège Douala",
+          "Contrat initial"
+        ],
+        [
+          "CTR-2025-002",
+          "EMP-002",
+          "Tchinda Armand",
+          "CDI",
+          "2019-06-01T00:00:00",
+          null,
+          null,
+          null,
+          "En vigueur",
+          420000,
+          "Temps plein",
+          "Siège Douala",
+          "Contrat initial"
+        ],
+        [
+          "CTR-2025-003",
+          "EMP-003",
+          "Fotso Marguerite",
+          "CDI",
+          "2017-03-01T00:00:00",
+          null,
+          null,
+          null,
+          "En vigueur",
+          380000,
+          "Temps plein",
+          "Siège Douala",
+          "Contrat initial"
+        ]
+      ],
+      "data_types": {
+        "N° Contrat": "mixte: null/vide, texte",
+        "Matricule": "mixte: null/vide, texte",
+        "Nom Employé": "mixte: null/vide, texte",
+        "Type Contrat": "mixte: null/vide, texte",
+        "Date Début": "mixte: date, null/vide",
+        "Date Fin": "mixte: date, null/vide",
+        "Durée (mois)": "null/vide",
+        "Jours Restants": "null/vide",
+        "Statut": "mixte: null/vide, texte",
+        "Salaire Brut (FCFA)": "mixte: entier, null/vide",
+        "Régime Travail": "mixte: null/vide, texte",
+        "Lieu Travail": "mixte: null/vide, texte",
+        "Observations": "mixte: null/vide, texte"
+      },
+      "description": "CONTRATS DE TRAVAIL | TABLEAU DYNAMIQUE — Saisissez dans la prochaine ligne jaune. Les calculs se mettent a jour automatiquement.",
+      "merged_cells": 3,
+      "dimensions": "B2:N115"
+    },
+    "4-Avenants Contrat": {
+      "row_count": 106,
+      "column_count": 11,
+      "columns": [
+        "N° Avenant",
+        "N° Contrat",
+        "Matricule",
+        "Nom Employé",
+        "Date Avenant",
+        "Type Modification",
+        "Ancienne Valeur",
+        "Nouvelle Valeur",
+        "Motif",
+        "Date Effet",
+        "Statut"
+      ],
+      "sample_data": [
+        [
+          "AV-2025-001",
+          "CTR-2025-001",
+          "EMP-001",
+          "Nganou Clarisse",
+          "2024-01-10T00:00:00",
+          "Modification salariale",
+          "400 000 FCFA",
+          "450 000 FCFA",
+          "Promotion",
+          "2024-01-01T00:00:00",
+          "Approuve"
+        ],
+        [
+          "AV-2025-002",
+          "CTR-2025-002",
+          "EMP-002",
+          "Tchinda Armand",
+          "2023-06-01T00:00:00",
+          "Changement poste",
+          "Technicien IT",
+          "Chef de service IT",
+          "Promotion interne",
+          "2023-06-01T00:00:00",
+          "Approuve"
+        ],
+        [
+          "AV-2025-003",
+          "CTR-2025-001",
+          "EMP-001",
+          "Nganou Clarisse",
+          "2025-03-01T00:00:00",
+          "Modification salariale",
+          "450 000 FCFA",
+          "500 000 FCFA",
+          "Augmentation annuelle",
+          "2025-03-01T00:00:00",
+          "En attente"
+        ]
+      ],
+      "data_types": {
+        "N° Avenant": "mixte: null/vide, texte",
+        "N° Contrat": "mixte: null/vide, texte",
+        "Matricule": "mixte: null/vide, texte",
+        "Nom Employé": "mixte: null/vide, texte",
+        "Date Avenant": "mixte: date, null/vide",
+        "Type Modification": "mixte: null/vide, texte",
+        "Ancienne Valeur": "mixte: null/vide, texte",
+        "Nouvelle Valeur": "mixte: null/vide, texte",
+        "Motif": "mixte: null/vide, texte",
+        "Date Effet": "mixte: date, null/vide",
+        "Statut": "mixte: null/vide, texte"
+      },
+      "description": "AVENANTS AU CONTRAT | TABLEAU DYNAMIQUE — Saisissez dans la prochaine ligne jaune. Les calculs se mettent a jour automatiquement.",
+      "merged_cells": 3,
+      "dimensions": "B2:L111"
+    },
+    "5-Suivi Documents": {
+      "row_count": 108,
+      "column_count": 11,
+      "columns": [
+        "N°",
+        "Matricule",
+        "Nom Employé",
+        "Type Document",
+        "N° Document",
+        "Date Émission",
+        "Date Expiration",
+        "Jours Restants",
+        "Statut",
+        "Lieu Dépôt",
+        "Notes"
+      ],
+      "sample_data": [
+        [
+          "DOC-001",
+          "EMP-001",
+          "Nganou Clarisse",
+          "CNI",
+          "123456789",
+          "2022-01-15T00:00:00",
+          "2027-01-15T00:00:00",
+          null,
+          "Valide",
+          "RH Central",
+          "CNI 5 ans"
+        ],
+        [
+          "DOC-002",
+          "EMP-001",
+          "Nganou Clarisse",
+          "Attestation CNPS",
+          "CNPS-78901",
+          "2025-01-01T00:00:00",
+          "2025-12-31T00:00:00",
+          null,
+          "Valide",
+          "RH Central",
+          "Attestation annuelle"
+        ],
+        [
+          "DOC-003",
+          "EMP-002",
+          "Tchinda Armand",
+          "Passeport",
+          "AB123456",
+          "2021-06-10T00:00:00",
+          "2031-06-10T00:00:00",
+          null,
+          "Valide",
+          "RH Central",
+          "Passeport 10 ans"
+        ]
+      ],
+      "data_types": {
+        "N°": "mixte: null/vide, texte",
+        "Matricule": "mixte: null/vide, texte",
+        "Nom Employé": "mixte: null/vide, texte",
+        "Type Document": "mixte: null/vide, texte",
+        "N° Document": "mixte: null/vide, texte, texte numérique",
+        "Date Émission": "mixte: date, null/vide",
+        "Date Expiration": "mixte: date, null/vide",
+        "Jours Restants": "null/vide",
+        "Statut": "mixte: null/vide, texte",
+        "Lieu Dépôt": "mixte: null/vide, texte",
+        "Notes": "mixte: null/vide, texte"
+      },
+      "description": "SUIVI DES DOCUMENTS DU PERSONNEL | TABLEAU DYNAMIQUE — Saisissez dans la prochaine ligne jaune. Les calculs se mettent a jour automatiquement.",
+      "merged_cells": 3,
+      "dimensions": "B2:L113"
+    },
+    "6-Donnees Bancaires": {
+      "row_count": 108,
+      "column_count": 9,
+      "columns": [
+        "N°",
+        "Matricule",
+        "Nom Employé",
+        "Banque",
+        "Agence",
+        "RIB",
+        "Compte Principal",
+        "Date Mise à Jour",
+        "Statut"
+      ],
+      "sample_data": [
+        [
+          "BAN-001",
+          "EMP-001",
+          "Nganou Clarisse",
+          "SGBC",
+          "Agence Akwa",
+          "10201 0001 23456789012 76",
+          "Oui",
+          "2024-06-01T00:00:00",
+          "Actif"
+        ],
+        [
+          "BAN-002",
+          "EMP-002",
+          "Tchinda Armand",
+          "AFRILAND First Bank",
+          "Agence Bonapriso",
+          "20001 0002 34567890123 45",
+          "Oui",
+          "2024-03-15T00:00:00",
+          "Actif"
+        ],
+        [
+          "BAN-003",
+          "EMP-003",
+          "Fotso Marguerite",
+          "BICEC",
+          "Agence Makepe",
+          "30001 0003 45678901234 89",
+          "Oui",
+          "2023-11-20T00:00:00",
+          "Actif"
+        ]
+      ],
+      "data_types": {
+        "N°": "mixte: null/vide, texte",
+        "Matricule": "mixte: null/vide, texte",
+        "Nom Employé": "mixte: null/vide, texte",
+        "Banque": "mixte: null/vide, texte",
+        "Agence": "mixte: null/vide, texte",
+        "RIB": "mixte: null/vide, texte",
+        "Compte Principal": "mixte: null/vide, texte",
+        "Date Mise à Jour": "mixte: date, null/vide",
+        "Statut": "mixte: null/vide, texte"
+      },
+      "description": "DONNEES BANCAIRES DU PERSONNEL | TABLEAU DYNAMIQUE — Saisissez dans la prochaine ligne jaune. Les calculs se mettent a jour automatiquement.",
+      "merged_cells": 3,
+      "dimensions": "B2:J113"
+    },
+    "7-Mutuelle Prevoyance": {
+      "row_count": 110,
+      "column_count": 11,
+      "columns": [
+        "N°",
+        "Matricule",
+        "Nom Employé",
+        "Organisme",
+        "N° Adhérent",
+        "Date Adhésion",
+        "Couverture",
+        "Personnes à Charge",
+        "Cotisation Mensuelle (FCFA)",
+        "Cotis. Annuelle (FCFA)",
+        "Statut"
+      ],
+      "sample_data": [
+        [
+          "MUT-001",
+          "EMP-001",
+          "Nganou Clarisse",
+          "CNPS",
+          "CNPS-EMP-001",
+          "2020-01-15T00:00:00",
+          "Sante + Retraite",
+          3,
+          45000,
+          null,
+          "Actif"
+        ],
+        [
+          "MUT-002",
+          "EMP-002",
+          "Tchinda Armand",
+          "CNPS",
+          "CNPS-EMP-002",
+          "2019-06-01T00:00:00",
+          "Sante + Retraite",
+          1,
+          42000,
+          null,
+          "Actif"
+        ],
+        [
+          "MUT-003",
+          "EMP-003",
+          "Fotso Marguerite",
+          "Allianz Cameroon",
+          "ALZ-789012",
+          "2021-01-01T00:00:00",
+          "Complete",
+          2,
+          65000,
+          null,
+          "Actif"
+        ]
+      ],
+      "data_types": {
+        "N°": "mixte: null/vide, texte",
+        "Matricule": "mixte: null/vide, texte",
+        "Nom Employé": "mixte: null/vide, texte",
+        "Organisme": "mixte: null/vide, texte",
+        "N° Adhérent": "mixte: null/vide, texte",
+        "Date Adhésion": "mixte: date, null/vide",
+        "Couverture": "mixte: null/vide, texte",
+        "Personnes à Charge": "mixte: entier, null/vide",
+        "Cotisation Mensuelle (FCFA)": "mixte: entier, null/vide",
+        "Cotis. Annuelle (FCFA)": "null/vide",
+        "Statut": "mixte: null/vide, texte"
+      },
+      "description": "MUTUELLE & PREVOYANCE | TABLEAU DYNAMIQUE — Saisissez dans la prochaine ligne jaune. Les calculs se mettent a jour automatiquement.",
+      "merged_cells": 3,
+      "dimensions": "B2:L115"
+    },
+    "8-Conges Annuels": {
+      "row_count": 107,
+      "column_count": 11,
+      "columns": [
+        "N°",
+        "Matricule",
+        "Nom Employé",
+        "Type Congé",
+        "Date Début",
+        "Date Fin",
+        "Nombre Jours",
+        "Motif",
+        "Statut",
+        "Date Approbation",
+        "Approbateur"
+      ],
+      "sample_data": [
+        [
+          "CONG-001",
+          "EMP-001",
+          "Nganou Clarisse",
+          "Annuel",
+          "2025-07-14T00:00:00",
+          "2025-07-28T00:00:00",
+          15,
+          "Vacances famille",
+          "Approuve",
+          "2025-06-20T00:00:00",
+          "DG Nkoulou"
+        ],
+        [
+          "CONG-002",
+          "EMP-002",
+          "Tchinda Armand",
+          "Annuel",
+          "2025-08-01T00:00:00",
+          "2025-08-10T00:00:00",
+          10,
+          "Repos",
+          "En attente",
+          null,
+          "DG Nkoulou"
+        ],
+        [
+          "CONG-003",
+          "EMP-003",
+          "Fotso Marguerite",
+          "Exceptionnel",
+          "2025-05-05T00:00:00",
+          "2025-05-07T00:00:00",
+          3,
+          "Evenement familial",
+          "Approuve",
+          "2025-05-01T00:00:00",
+          "DRH Nganou"
+        ]
+      ],
+      "data_types": {
+        "N°": "mixte: null/vide, texte",
+        "Matricule": "mixte: null/vide, texte",
+        "Nom Employé": "mixte: null/vide, texte",
+        "Type Congé": "mixte: null/vide, texte",
+        "Date Début": "mixte: date, null/vide",
+        "Date Fin": "mixte: date, null/vide",
+        "Nombre Jours": "mixte: entier, null/vide",
+        "Motif": "mixte: null/vide, texte",
+        "Statut": "mixte: null/vide, texte",
+        "Date Approbation": "mixte: date, null/vide",
+        "Approbateur": "mixte: null/vide, texte"
+      },
+      "description": "DEMANDES DE CONGES | TABLEAU DYNAMIQUE — Saisissez dans la prochaine ligne jaune. Les calculs se mettent a jour automatiquement.",
+      "merged_cells": 3,
+      "dimensions": "B2:L112"
+    },
+    "9-Solde Conges": {
+      "row_count": 108,
+      "column_count": 9,
+      "columns": [
+        "Matricule",
+        "Nom Employé",
+        "Droit Annuel (jrs)",
+        "Congés Pris (jrs)",
+        "Solde Disponible (jrs)",
+        "Congés en Cours (jrs)",
+        "Report N-1 (jrs)",
+        "Taux Utilisation (%)",
+        "Statut"
+      ],
+      "sample_data": [
+        [
+          "EMP-001",
+          null,
+          26,
+          null,
+          null,
+          null,
+          2,
+          null,
+          "A jour"
+        ],
+        [
+          "EMP-002",
+          null,
+          26,
+          null,
+          null,
+          null,
+          0,
+          null,
+          "A jour"
+        ],
+        [
+          "EMP-003",
+          null,
+          26,
+          null,
+          null,
+          null,
+          5,
+          null,
+          "A jour"
+        ]
+      ],
+      "data_types": {
+        "Matricule": "mixte: null/vide, texte",
+        "Nom Employé": "null/vide",
+        "Droit Annuel (jrs)": "mixte: entier, null/vide",
+        "Congés Pris (jrs)": "null/vide",
+        "Solde Disponible (jrs)": "null/vide",
+        "Congés en Cours (jrs)": "null/vide",
+        "Report N-1 (jrs)": "mixte: entier, null/vide",
+        "Taux Utilisation (%)": "null/vide",
+        "Statut": "mixte: null/vide, texte"
+      },
+      "description": "SOLDE DE CONGES PAR EMPLOYE | TABLEAU DYNAMIQUE — Saisissez dans la prochaine ligne jaune. Les calculs se mettent a jour automatiquement.",
+      "merged_cells": 3,
+      "dimensions": "B2:J113"
+    },
+    "10-Absences Maladie": {
+      "row_count": 106,
+      "column_count": 11,
+      "columns": [
+        "N°",
+        "Matricule",
+        "Nom Employé",
+        "Type Absence",
+        "Date Début",
+        "Date Fin",
+        "Durée (jours)",
+        "Justificatif",
+        "Statut",
+        "Motif",
+        "Observations"
+      ],
+      "sample_data": [
+        [
+          "ABS-001",
+          "EMP-003",
+          "Fotso Marguerite",
+          "Maladie",
+          "2025-02-10T00:00:00",
+          "2025-02-14T00:00:00",
+          5,
+          "Oui",
+          "Justifiee",
+          "Grippe",
+          "Certificat medical remis"
+        ],
+        [
+          "ABS-002",
+          "EMP-005",
+          "Kamga Paul",
+          "Accident travail",
+          "2025-03-20T00:00:00",
+          "2025-03-25T00:00:00",
+          6,
+          "Oui",
+          "Approuvee",
+          "Blessure atelier",
+          "Dossier CNPS ouvert"
+        ],
+        [
+          "ABS-003",
+          "EMP-004",
+          "Nkoulou Mbarga",
+          "Permission exceptionnelle",
+          "2025-04-02T00:00:00",
+          "2025-04-02T00:00:00",
+          1,
+          "Non",
+          "Approuvee",
+          "Demarches admin",
+          null
+        ]
+      ],
+      "data_types": {
+        "N°": "mixte: null/vide, texte",
+        "Matricule": "mixte: null/vide, texte",
+        "Nom Employé": "mixte: null/vide, texte",
+        "Type Absence": "mixte: null/vide, texte",
+        "Date Début": "mixte: date, null/vide",
+        "Date Fin": "mixte: date, null/vide",
+        "Durée (jours)": "mixte: entier, null/vide",
+        "Justificatif": "mixte: null/vide, texte",
+        "Statut": "mixte: null/vide, texte",
+        "Motif": "mixte: null/vide, texte",
+        "Observations": "mixte: null/vide, texte"
+      },
+      "description": "ABSENCES & MALADIE | TABLEAU DYNAMIQUE — Saisissez dans la prochaine ligne jaune. Les calculs se mettent a jour automatiquement.",
+      "merged_cells": 3,
+      "dimensions": "B2:L111"
+    },
+    "11-Heures Supplementaires": {
+      "row_count": 109,
+      "column_count": 11,
+      "columns": [
+        "N°",
+        "Matricule",
+        "Nom Employé",
+        "Semaine",
+        "Heures Normales",
+        "Heures Supp",
+        "Taux Majoration",
+        "Montant (FCFA)",
+        "Montant Calculé (FCFA)",
+        "Statut",
+        "Validé Par"
+      ],
+      "sample_data": [
+        [
+          "HS-001",
+          "EMP-005",
+          "Kamga Paul",
+          "S12-2025",
+          40,
+          8,
+          "125%",
+          null,
+          null,
+          "Validee",
+          "Chef Diallo"
+        ],
+        [
+          "HS-002",
+          "EMP-005",
+          "Kamga Paul",
+          "S13-2025",
+          40,
+          12,
+          "150%",
+          null,
+          null,
+          "Validee",
+          "Chef Diallo"
+        ],
+        [
+          "HS-003",
+          "EMP-004",
+          "Nkoulou Mbarga",
+          "S13-2025",
+          40,
+          6,
+          "125%",
+          null,
+          null,
+          "En attente",
+          "Superviseur"
+        ]
+      ],
+      "data_types": {
+        "N°": "mixte: null/vide, texte",
+        "Matricule": "mixte: null/vide, texte",
+        "Nom Employé": "mixte: null/vide, texte",
+        "Semaine": "mixte: null/vide, texte",
+        "Heures Normales": "mixte: entier, null/vide",
+        "Heures Supp": "mixte: entier, null/vide",
+        "Taux Majoration": "mixte: null/vide, texte",
+        "Montant (FCFA)": "null/vide",
+        "Montant Calculé (FCFA)": "null/vide",
+        "Statut": "mixte: null/vide, texte",
+        "Validé Par": "mixte: null/vide, texte"
+      },
+      "description": "HEURES SUPPLEMENTAIRES | TABLEAU DYNAMIQUE — Saisissez dans la prochaine ligne jaune. Les calculs se mettent a jour automatiquement.",
+      "merged_cells": 3,
+      "dimensions": "B2:L114"
+    },
+    "12-Pointage Presence": {
+      "row_count": 108,
+      "column_count": 10,
+      "columns": [
+        "N°",
+        "Matricule",
+        "Nom Employé",
+        "Semaine",
+        "Jours Présents",
+        "Jours Absents",
+        "Retards (min)",
+        "Heures Supp",
+        "Taux Présence (%)",
+        "Observations"
+      ],
+      "sample_data": [
+        [
+          "PNT-001",
+          "EMP-001",
+          "Nganou Clarisse",
+          "S12-2025",
+          5,
+          0,
+          0,
+          0,
+          null,
+          null
+        ],
+        [
+          "PNT-002",
+          "EMP-002",
+          "Tchinda Armand",
+          "S12-2025",
+          5,
+          0,
+          30,
+          4,
+          null,
+          "Retard lundi 30 min"
+        ],
+        [
+          "PNT-003",
+          "EMP-003",
+          "Fotso Marguerite",
+          "S12-2025",
+          3,
+          2,
+          0,
+          0,
+          null,
+          "Absence maladie"
+        ]
+      ],
+      "data_types": {
+        "N°": "mixte: null/vide, texte",
+        "Matricule": "mixte: null/vide, texte",
+        "Nom Employé": "mixte: null/vide, texte",
+        "Semaine": "mixte: null/vide, texte",
+        "Jours Présents": "mixte: entier, null/vide",
+        "Jours Absents": "mixte: entier, null/vide",
+        "Retards (min)": "mixte: entier, null/vide",
+        "Heures Supp": "mixte: entier, null/vide",
+        "Taux Présence (%)": "null/vide",
+        "Observations": "mixte: null/vide, texte"
+      },
+      "description": "POINTAGE & PRESENCE HEBDOMADAIRE | TABLEAU DYNAMIQUE — Saisissez dans la prochaine ligne jaune. Les calculs se mettent a jour automatiquement.",
+      "merged_cells": 3,
+      "dimensions": "B2:K113"
+    },
+    "13-Fiches de Paie": {
+      "row_count": 112,
+      "column_count": 11,
+      "columns": [
+        "N°",
+        "Matricule",
+        "Nom Employé",
+        "Mois",
+        "Salaire Brut (FCFA)",
+        "Cotisations (FCFA)",
+        "Taux Charges (%)",
+        "Net à Payer (FCFA)",
+        "Mode Paiement",
+        "Date Paiement",
+        "Statut"
+      ],
+      "sample_data": [
+        [
+          "PAIE-001",
+          "EMP-001",
+          "Nganou Clarisse",
+          "Janvier 2025",
+          450000,
+          67500,
+          null,
+          null,
+          "Virement bancaire",
+          "2025-01-31T00:00:00",
+          "Payee"
+        ],
+        [
+          "PAIE-002",
+          "EMP-002",
+          "Tchinda Armand",
+          "Janvier 2025",
+          420000,
+          63000,
+          null,
+          null,
+          "Virement bancaire",
+          "2025-01-31T00:00:00",
+          "Payee"
+        ],
+        [
+          "PAIE-003",
+          "EMP-003",
+          "Fotso Marguerite",
+          "Janvier 2025",
+          380000,
+          57000,
+          null,
+          null,
+          "Virement bancaire",
+          "2025-01-31T00:00:00",
+          "Payee"
+        ]
+      ],
+      "data_types": {
+        "N°": "mixte: null/vide, texte",
+        "Matricule": "mixte: null/vide, texte",
+        "Nom Employé": "mixte: null/vide, texte",
+        "Mois": "mixte: null/vide, texte",
+        "Salaire Brut (FCFA)": "mixte: entier, null/vide",
+        "Cotisations (FCFA)": "mixte: entier, null/vide",
+        "Taux Charges (%)": "null/vide",
+        "Net à Payer (FCFA)": "null/vide",
+        "Mode Paiement": "mixte: null/vide, texte",
+        "Date Paiement": "mixte: date, null/vide",
+        "Statut": "mixte: null/vide, texte"
+      },
+      "description": "FICHES DE PAIE | TABLEAU DYNAMIQUE — Saisissez dans la prochaine ligne jaune. Les calculs se mettent a jour automatiquement.",
+      "merged_cells": 3,
+      "dimensions": "B2:L117"
+    },
+    "14-Declarations Sociales": {
+      "row_count": 109,
+      "column_count": 10,
+      "columns": [
+        "N°",
+        "Organisme",
+        "Type Déclaration",
+        "Période",
+        "Montant (FCFA)",
+        "Date Soumission",
+        "Date Échéance",
+        "Statut",
+        "Nombre Salariés",
+        "Observations"
+      ],
+      "sample_data": [
+        [
+          "DECL-001",
+          "CNPS",
+          "Mensuelle",
+          "Janvier 2025",
+          285000,
+          "2025-01-15T00:00:00",
+          "2025-02-15T00:00:00",
+          "Soumise",
+          5,
+          "Cotisations employeurs + salaries"
+        ],
+        [
+          "DECL-002",
+          "Direction des impots",
+          "Mensuelle",
+          "Janvier 2025",
+          120000,
+          "2025-01-20T00:00:00",
+          "2025-02-15T00:00:00",
+          "Soumise",
+          5,
+          "IR sur salaires"
+        ],
+        [
+          "DECL-003",
+          "CNPS",
+          "Mensuelle",
+          "Fevrier 2025",
+          285000,
+          "2025-02-15T00:00:00",
+          "2025-03-15T00:00:00",
+          "En retard",
+          5,
+          "Retard de soumission"
+        ]
+      ],
+      "data_types": {
+        "N°": "mixte: null/vide, texte",
+        "Organisme": "mixte: null/vide, texte",
+        "Type Déclaration": "mixte: null/vide, texte",
+        "Période": "mixte: null/vide, texte",
+        "Montant (FCFA)": "mixte: entier, null/vide",
+        "Date Soumission": "mixte: date, null/vide",
+        "Date Échéance": "mixte: date, null/vide",
+        "Statut": "mixte: null/vide, texte",
+        "Nombre Salariés": "mixte: entier, null/vide",
+        "Observations": "mixte: null/vide, texte"
+      },
+      "description": "DECLARATIONS SOCIALES & FISCALES | TABLEAU DYNAMIQUE — Saisissez dans la prochaine ligne jaune. Les calculs se mettent a jour automatiquement.",
+      "merged_cells": 3,
+      "dimensions": "B2:K114"
+    },
+    "15-Autorisations Permis": {
+      "row_count": 107,
+      "column_count": 10,
+      "columns": [
+        "N°",
+        "Matricule",
+        "Nom Employé",
+        "Type Permis",
+        "N° Permis",
+        "Date Délivrance",
+        "Date Expiration",
+        "Autorité",
+        "Statut",
+        "Jours Restants"
+      ],
+      "sample_data": [
+        [
+          "PERM-001",
+          "EMP-001",
+          "Nganou Clarisse",
+          "Attestation CNPS",
+          "CNPS-78901",
+          "2025-01-01T00:00:00",
+          "2025-12-31T00:00:00",
+          "CNPS",
+          "Valide",
+          null
+        ],
+        [
+          "PERM-002",
+          "EMP-002",
+          "Tchinda Armand",
+          "Passeport",
+          "AB123456",
+          "2021-06-10T00:00:00",
+          "2031-06-10T00:00:00",
+          "DGSN",
+          "Valide",
+          null
+        ],
+        [
+          "PERM-003",
+          "EMP-004",
+          "Nkoulou Mbarga",
+          "CNI",
+          "987654321",
+          "2020-09-01T00:00:00",
+          "2025-09-01T00:00:00",
+          "DGSN",
+          "A renouveler",
+          null
+        ]
+      ],
+      "data_types": {
+        "N°": "mixte: null/vide, texte",
+        "Matricule": "mixte: null/vide, texte",
+        "Nom Employé": "mixte: null/vide, texte",
+        "Type Permis": "mixte: null/vide, texte",
+        "N° Permis": "mixte: null/vide, texte, texte numérique",
+        "Date Délivrance": "mixte: date, null/vide",
+        "Date Expiration": "mixte: date, null/vide",
+        "Autorité": "mixte: null/vide, texte",
+        "Statut": "mixte: null/vide, texte",
+        "Jours Restants": "null/vide"
+      },
+      "description": "AUTORISATIONS & PERMIS DE TRAVAIL | TABLEAU DYNAMIQUE — Saisissez dans la prochaine ligne jaune. Les calculs se mettent a jour automatiquement.",
+      "merged_cells": 3,
+      "dimensions": "B2:K112"
+    },
+    "16-Dossiers Departs": {
+      "row_count": 108,
+      "column_count": 11,
+      "columns": [
+        "N°",
+        "Matricule",
+        "Nom Employé",
+        "Date Départ",
+        "Motif Départ",
+        "Date Notification",
+        "Solde Congés (jrs)",
+        "Dernier Salaire (FCFA)",
+        "Indemnité (FCFA)",
+        "Documents Remis",
+        "Statut Dossier"
+      ],
+      "sample_data": [
+        [
+          "DEP-001",
+          "EMP-2024-012",
+          "Kamga Jean",
+          "2025-02-28T00:00:00",
+          "Demission",
+          "2025-01-15T00:00:00",
+          8,
+          320000,
+          null,
+          "Attestation, Certificat, Solde tout compte",
+          "Clos"
+        ],
+        [
+          "DEP-002",
+          "EMP-2024-015",
+          "Biyong Paul",
+          "2025-03-31T00:00:00",
+          "Fin de CDD",
+          "2025-03-01T00:00:00",
+          0,
+          165000,
+          null,
+          "Attestation, Certificat",
+          "En cours"
+        ],
+        [
+          "DEP-003",
+          "EMP-2023-003",
+          "Ngo Mballa Marie",
+          "2024-12-31T00:00:00",
+          "Retraite",
+          "2024-10-01T00:00:00",
+          20,
+          520000,
+          null,
+          "Tous documents remis",
+          "Clos"
+        ]
+      ],
+      "data_types": {
+        "N°": "mixte: null/vide, texte",
+        "Matricule": "mixte: null/vide, texte",
+        "Nom Employé": "mixte: null/vide, texte",
+        "Date Départ": "mixte: date, null/vide",
+        "Motif Départ": "mixte: null/vide, texte",
+        "Date Notification": "mixte: date, null/vide",
+        "Solde Congés (jrs)": "mixte: entier, null/vide",
+        "Dernier Salaire (FCFA)": "mixte: entier, null/vide",
+        "Indemnité (FCFA)": "null/vide",
+        "Documents Remis": "mixte: null/vide, texte",
+        "Statut Dossier": "mixte: null/vide, texte"
+      },
+      "description": "DOSSIERS DE DEPART | TABLEAU DYNAMIQUE — Saisissez dans la prochaine ligne jaune. Les calculs se mettent a jour automatiquement.",
+      "merged_cells": 3,
+      "dimensions": "B2:L113"
+    },
+    "17-Archivage Documents": {
+      "row_count": 106,
+      "column_count": 9,
+      "columns": [
+        "N°",
+        "Matricule",
+        "Nom Employé",
+        "Type Document",
+        "Date Archive",
+        "Lieu Stockage",
+        "Durée Conservation",
+        "Responsable",
+        "Observations"
+      ],
+      "sample_data": [
+        [
+          "ARCH-001",
+          "EMP-2024-012",
+          "Kamga Jean",
+          "Dossier complet",
+          "2025-03-15T00:00:00",
+          "Archive physique Salle B",
+          "5 ans",
+          "Nganou Clarisse",
+          "Depart fevrier 2025"
+        ],
+        [
+          "ARCH-002",
+          "EMP-2023-003",
+          "Ngo Mballa Marie",
+          "Dossier complet",
+          "2025-01-10T00:00:00",
+          "Archive physique Salle B",
+          "Illimitee",
+          "Nganou Clarisse",
+          "Retraite decembre 2024"
+        ],
+        [
+          "ARCH-003",
+          "EMP-001",
+          "Nganou Clarisse",
+          "Contrat initial",
+          "2020-02-01T00:00:00",
+          "Archive numerique RH",
+          "Illimitee",
+          "DRH",
+          "Contrat CDI 2020"
+        ]
+      ],
+      "data_types": {
+        "N°": "mixte: null/vide, texte",
+        "Matricule": "mixte: null/vide, texte",
+        "Nom Employé": "mixte: null/vide, texte",
+        "Type Document": "mixte: null/vide, texte",
+        "Date Archive": "mixte: date, null/vide",
+        "Lieu Stockage": "mixte: null/vide, texte",
+        "Durée Conservation": "mixte: null/vide, texte",
+        "Responsable": "mixte: null/vide, texte",
+        "Observations": "mixte: null/vide, texte"
+      },
+      "description": "ARCHIVAGE DES DOCUMENTS | TABLEAU DYNAMIQUE — Saisissez dans la prochaine ligne jaune. Les calculs se mettent a jour automatiquement.",
+      "merged_cells": 3,
+      "dimensions": "B2:J111"
+    },
+    "18-Rappels Admin": {
+      "row_count": 107,
+      "column_count": 10,
+      "columns": [
+        "N°",
+        "Matricule",
+        "Nom Employé",
+        "Type Rappel",
+        "Description",
+        "Date Échéance",
+        "Jours Restants",
+        "Statut",
+        "Responsable Suivi",
+        "Action Requise"
+      ],
+      "sample_data": [
+        [
+          "RAP-001",
+          "EMP-004",
+          "Nkoulou Mbarga",
+          "Expiration document",
+          "Renouvellement CNI avant sept 2025",
+          "2025-09-01T00:00:00",
+          null,
+          "En attente",
+          "DRH Nganou",
+          "Prendre rdv mairie"
+        ],
+        [
+          "RAP-002",
+          "EMP-005",
+          "Kamga Paul",
+          "Renouvellement contrat",
+          "CDD expire 31 mars 2025",
+          "2025-03-15T00:00:00",
+          null,
+          "En retard",
+          "DRH Nganou",
+          "Decider renouvellement ou fin"
+        ],
+        [
+          "RAP-003",
+          "EMP-002",
+          "Tchinda Armand",
+          "Bilan periodique",
+          "Entretien annuel 2025",
+          "2025-06-30T00:00:00",
+          null,
+          "En attente",
+          "DRH Nganou",
+          "Planifier entretien"
+        ]
+      ],
+      "data_types": {
+        "N°": "mixte: null/vide, texte",
+        "Matricule": "mixte: null/vide, texte",
+        "Nom Employé": "mixte: null/vide, texte",
+        "Type Rappel": "mixte: null/vide, texte",
+        "Description": "mixte: null/vide, texte",
+        "Date Échéance": "mixte: date, null/vide",
+        "Jours Restants": "null/vide",
+        "Statut": "mixte: null/vide, texte",
+        "Responsable Suivi": "mixte: null/vide, texte",
+        "Action Requise": "mixte: null/vide, texte"
+      },
+      "description": "RAPPELS ADMINISTRATIFS | TABLEAU DYNAMIQUE — Saisissez dans la prochaine ligne jaune. Les calculs se mettent a jour automatiquement.",
+      "merged_cells": 3,
+      "dimensions": "B2:K112"
+    },
+    "19-Prets Avances Salaire": {
+      "row_count": 102,
+      "column_count": 16,
+      "columns": [
+        "N°",
+        "Matricule",
+        "Nom Employé",
+        "Département",
+        "Type Prêt",
+        "Montant Demandé (FCFA)",
+        "Montant Accordé (FCFA)",
+        "Taux Intérêt (%)",
+        "Mensualité (FCFA)",
+        "Durée (mois)",
+        "Date Demande",
+        "Date Début Remb.",
+        "Mois Restants",
+        "Solde Restant (FCFA)",
+        "Statut",
+        "Observations"
+      ],
+      "sample_data": [
+        [
+          "PRT-001",
+          "EMP-001",
+          "Nkoumou Paul",
+          "Direction Generale",
+          "Avance salaire",
+          50000,
+          50000,
+          0,
+          50000,
+          1,
+          "2025-01-15",
+          "2025-02-01",
+          0,
+          0,
+          "Solde",
+          "Déduit fév. 2025"
+        ],
+        [
+          "PRT-002",
+          "EMP-003",
+          "Mbarga Jean",
+          "Finance & Comptabilité",
+          "Prêt social",
+          200000,
+          200000,
+          2,
+          34440,
+          6,
+          "2025-02-10",
+          "2025-03-01",
+          4,
+          137760,
+          "En cours",
+          "Remb. mensuel auto"
+        ],
+        [
+          "PRT-003",
+          "EMP-005",
+          "Tchinda Marie",
+          "Service Client",
+          "Avance salaire",
+          30000,
+          30000,
+          0,
+          30000,
+          1,
+          "2025-03-05",
+          "2025-04-01",
+          0,
+          0,
+          "Solde",
+          "Déduit avr. 2025"
+        ]
+      ],
+      "data_types": {
+        "N°": "mixte: null/vide, texte",
+        "Matricule": "mixte: null/vide, texte",
+        "Nom Employé": "mixte: null/vide, texte",
+        "Département": "mixte: null/vide, texte",
+        "Type Prêt": "mixte: null/vide, texte",
+        "Montant Demandé (FCFA)": "mixte: entier, null/vide",
+        "Montant Accordé (FCFA)": "mixte: entier, null/vide",
+        "Taux Intérêt (%)": "mixte: entier, flottant, null/vide",
+        "Mensualité (FCFA)": "mixte: entier, null/vide",
+        "Durée (mois)": "mixte: entier, null/vide",
+        "Date Demande": "mixte: date (texte), null/vide",
+        "Date Début Remb.": "mixte: date (texte), null/vide",
+        "Mois Restants": "mixte: entier, null/vide",
+        "Solde Restant (FCFA)": "mixte: entier, null/vide",
+        "Statut": "mixte: null/vide, texte",
+        "Observations": "mixte: null/vide, texte"
+      },
+      "description": "19-Prets Avances Salaire",
+      "merged_cells": 1,
+      "dimensions": "B2:Q107"
+    },
+    "20-Sanctions Disciplinaires": {
+      "row_count": 102,
+      "column_count": 13,
+      "columns": [
+        "N°",
+        "Matricule",
+        "Nom Employé",
+        "Département",
+        "Type Sanction",
+        "Faute Commise",
+        "Date Faute",
+        "Date Notification",
+        "Date Exécution",
+        "Durée Suspension (jrs)",
+        "Observations",
+        "Statut",
+        "Validé Par"
+      ],
+      "sample_data": [
+        [
+          "SAN-001",
+          "EMP-012",
+          "Kamga Pierre",
+          "Service Client",
+          "Avertissement oral",
+          "Retard répété (3 fois en 1 semaine)",
+          "2025-02-15",
+          "2025-02-16",
+          "2025-02-16",
+          0,
+          "Premier avertissement",
+          "Exécutee",
+          "Chef de service"
+        ],
+        [
+          "SAN-002",
+          "EMP-018",
+          "Ekode Simon",
+          "Cuisine & Restauration",
+          "Avertissement écrit",
+          "Non-respect des normes d'hygiène",
+          "2025-03-01",
+          "2025-03-02",
+          "2025-03-02",
+          0,
+          "Rappel des procédures HACCP",
+          "Exécutee",
+          "Chef cuisine"
+        ],
+        [
+          "SAN-003",
+          "EMP-025",
+          "Bouba Amina",
+          "Logistique & Approvisionnement",
+          "Blâme",
+          "Absence injustifiée de 2 jours",
+          "2025-03-20",
+          "2025-03-21",
+          null,
+          0,
+          "En attente de justification",
+          "En cours",
+          "DRH"
+        ]
+      ],
+      "data_types": {
+        "N°": "mixte: null/vide, texte",
+        "Matricule": "mixte: null/vide, texte",
+        "Nom Employé": "mixte: null/vide, texte",
+        "Département": "mixte: null/vide, texte",
+        "Type Sanction": "mixte: null/vide, texte",
+        "Faute Commise": "mixte: null/vide, texte",
+        "Date Faute": "mixte: date (texte), null/vide",
+        "Date Notification": "mixte: date (texte), null/vide",
+        "Date Exécution": "mixte: date (texte), null/vide",
+        "Durée Suspension (jrs)": "mixte: entier, null/vide",
+        "Observations": "mixte: null/vide, texte",
+        "Statut": "mixte: null/vide, texte",
+        "Validé Par": "mixte: null/vide, texte"
+      },
+      "description": "20-Sanctions Disciplinaires",
+      "merged_cells": 1,
+      "dimensions": "B2:N107"
+    },
+    "21-Visites Medicales": {
+      "row_count": 102,
+      "column_count": 15,
+      "columns": [
+        "N°",
+        "Matricule",
+        "Nom Employé",
+        "Département",
+        "Type Visite",
+        "Médecin / Structure",
+        "Date Visite",
+        "Date Prochaine Visite",
+        "Jours Restants",
+        "Résultat",
+        "Aptitude",
+        "Restrictions",
+        "Coût (FCFA)",
+        "Pris en Charge",
+        "Observations"
+      ],
+      "sample_data": [
+        [
+          "VIS-001",
+          "EMP-001",
+          "Nkoumou Paul",
+          "Direction Generale",
+          "Visite embauche",
+          "Dr. Nganou - CMP Douala",
+          "2024-01-10",
+          "2025-01-10",
+          0,
+          "Normal",
+          "Apte",
+          "Aucune",
+          15000,
+          "Oui",
+          "Bilan complet OK"
+        ],
+        [
+          "VIS-002",
+          "EMP-003",
+          "Mbarga Jean",
+          "Finance & Comptabilité",
+          "Visite périodique",
+          "Dr. Fotso - Clinique Bastos",
+          "2025-03-15",
+          "2026-03-15",
+          0,
+          "Normal",
+          "Apte",
+          "Aucune",
+          20000,
+          "Oui",
+          "RAS"
+        ],
+        [
+          "VIS-003",
+          "EMP-008",
+          "Djoumessi Francoise",
+          "Cuisine & Restauration",
+          "Visite reprise",
+          "Dr. Nganou - CMP Douala",
+          "2025-04-01",
+          "2025-10-01",
+          0,
+          "Convalescence",
+          "Apte avec restrictions",
+          "Port de charge limité 10kg",
+          25000,
+          "Oui",
+          "Reprise après congé maternité"
+        ]
+      ],
+      "data_types": {
+        "N°": "mixte: null/vide, texte",
+        "Matricule": "mixte: null/vide, texte",
+        "Nom Employé": "mixte: null/vide, texte",
+        "Département": "mixte: null/vide, texte",
+        "Type Visite": "mixte: null/vide, texte",
+        "Médecin / Structure": "mixte: null/vide, texte",
+        "Date Visite": "mixte: date (texte), null/vide",
+        "Date Prochaine Visite": "mixte: date (texte), null/vide",
+        "Jours Restants": "mixte: entier, null/vide",
+        "Résultat": "mixte: null/vide, texte",
+        "Aptitude": "mixte: null/vide, texte",
+        "Restrictions": "mixte: null/vide, texte",
+        "Coût (FCFA)": "mixte: entier, null/vide",
+        "Pris en Charge": "mixte: null/vide, texte",
+        "Observations": "mixte: null/vide, texte"
+      },
+      "description": "21-Visites Medicales",
+      "merged_cells": 1,
+      "dimensions": "B2:P107"
+    },
+    "22-Planning Mensuel Presence": {
+      "row_count": 102,
+      "column_count": 13,
+      "columns": [
+        "N°",
+        "Matricule",
+        "Nom Employé",
+        "Département",
+        "Poste",
+        "Mois",
+        "Jours Ouvrables",
+        "Jours Présents",
+        "Jours Absents",
+        "Retards (min)",
+        "Heures Supp",
+        "Taux Présence (%)",
+        "Commentaire"
+      ],
+      "sample_data": [
+        [
+          "PLN-001",
+          "EMP-001",
+          "Nkoumou Paul",
+          "Direction Generale",
+          "Directeur General",
+          "Janvier 2025",
+          22,
+          22,
+          0,
+          0,
+          0,
+          1,
+          null
+        ],
+        [
+          "PLN-002",
+          "EMP-003",
+          "Mbarga Jean",
+          "Finance & Comptabilité",
+          "Comptable Senior",
+          "Janvier 2025",
+          22,
+          21,
+          1,
+          15,
+          4,
+          0.95,
+          "1 jour maladie justifié"
+        ],
+        [
+          "PLN-003",
+          "EMP-005",
+          "Tchinda Marie",
+          "Service Client",
+          "Charge de Recrutement",
+          "Janvier 2025",
+          22,
+          22,
+          0,
+          0,
+          2,
+          1,
+          null
+        ]
+      ],
+      "data_types": {
+        "N°": "mixte: null/vide, texte",
+        "Matricule": "mixte: null/vide, texte",
+        "Nom Employé": "mixte: null/vide, texte",
+        "Département": "mixte: null/vide, texte",
+        "Poste": "mixte: null/vide, texte",
+        "Mois": "mixte: null/vide, texte",
+        "Jours Ouvrables": "mixte: entier, null/vide",
+        "Jours Présents": "mixte: entier, null/vide",
+        "Jours Absents": "mixte: entier, null/vide",
+        "Retards (min)": "mixte: entier, null/vide",
+        "Heures Supp": "mixte: entier, null/vide",
+        "Taux Présence (%)": "mixte: entier, flottant, null/vide",
+        "Commentaire": "mixte: null/vide, texte"
+      },
+      "description": "22-Planning Mensuel Presence",
+      "merged_cells": 1,
+      "dimensions": "B2:N107"
+    },
+    "_Lists": {
+      "row_count": 50,
+      "column_count": 50,
+      "columns": [
+        "aptitude",
+        "autorite",
+        "banque",
+        "categorie_salarie",
+        "civilite",
+        "couverture",
+        "departement",
+        "duree_conservation",
+        "genre",
+        "lieu_depot",
+        "mode_paie",
+        "motif_depart",
+        "motif_rappel",
+        "nationalite",
+        "organisme_prevo",
+        "organisme_social",
+        "oui_non",
+        "oui_non_2",
+        "poste_hotel",
+        "regime_travail",
+        "semaine",
+        "situation_fam",
+        "statut_absence",
+        "statut_adhesion",
+        "statut_conge",
+        "statut_contrat",
+        "statut_declaration",
+        "statut_document",
+        "statut_dossier",
+        "statut_employe",
+        "statut_heures",
+        "statut_paie",
+        "statut_permit",
+        "statut_pret",
+        "statut_rappel",
+        "statut_rib",
+        "statut_sanction",
+        "statut_solde",
+        "statut_solde_conge",
+        "taux_majoration",
+        "type_absence",
+        "type_avenant",
+        "type_conge",
+        "type_contrat",
+        "type_declaration",
+        "type_document",
+        "type_permit",
+        "type_pret",
+        "type_sanction",
+        "type_visite"
+      ],
+      "sample_data": [],
+      "data_types": {
+        "aptitude": "liste de référence (enum)",
+        "autorite": "liste de référence (enum)",
+        "banque": "liste de référence (enum)",
+        "categorie_salarie": "liste de référence (enum)",
+        "civilite": "liste de référence (enum)",
+        "couverture": "liste de référence (enum)",
+        "departement": "liste de référence (enum)",
+        "duree_conservation": "liste de référence (enum)",
+        "genre": "liste de référence (enum)",
+        "lieu_depot": "liste de référence (enum)",
+        "mode_paie": "liste de référence (enum)",
+        "motif_depart": "liste de référence (enum)",
+        "motif_rappel": "liste de référence (enum)",
+        "nationalite": "liste de référence (enum)",
+        "organisme_prevo": "liste de référence (enum)",
+        "organisme_social": "liste de référence (enum)",
+        "oui_non": "liste de référence (enum)",
+        "oui_non_2": "liste de référence (enum)",
+        "poste_hotel": "liste de référence (enum)",
+        "regime_travail": "liste de référence (enum)",
+        "semaine": "liste de référence (enum)",
+        "situation_fam": "liste de référence (enum)",
+        "statut_absence": "liste de référence (enum)",
+        "statut_adhesion": "liste de référence (enum)",
+        "statut_conge": "liste de référence (enum)",
+        "statut_contrat": "liste de référence (enum)",
+        "statut_declaration": "liste de référence (enum)",
+        "statut_document": "liste de référence (enum)",
+        "statut_dossier": "liste de référence (enum)",
+        "statut_employe": "liste de référence (enum)",
+        "statut_heures": "liste de référence (enum)",
+        "statut_paie": "liste de référence (enum)",
+        "statut_permit": "liste de référence (enum)",
+        "statut_pret": "liste de référence (enum)",
+        "statut_rappel": "liste de référence (enum)",
+        "statut_rib": "liste de référence (enum)",
+        "statut_sanction": "liste de référence (enum)",
+        "statut_solde": "liste de référence (enum)",
+        "statut_solde_conge": "liste de référence (enum)",
+        "taux_majoration": "liste de référence (enum)",
+        "type_absence": "liste de référence (enum)",
+        "type_avenant": "liste de référence (enum)",
+        "type_conge": "liste de référence (enum)",
+        "type_contrat": "liste de référence (enum)",
+        "type_declaration": "liste de référence (enum)",
+        "type_document": "liste de référence (enum)",
+        "type_permit": "liste de référence (enum)",
+        "type_pret": "liste de référence (enum)",
+        "type_sanction": "liste de référence (enum)",
+        "type_visite": "liste de référence (enum)"
+      },
+      "description": "Feuille de listes de référence: 50 listes dénombrant les valeurs autorisées pour les menus déroulants",
+      "merged_cells": 0,
+      "dimensions": "B1:AY53",
+      "is_lists_sheet": true,
+      "lists_detail": {
+        "civilite": [
+          "M.",
+          "Mme",
+          "Mlle"
+        ],
+        "genre": [
+          "Masculin",
+          "Feminin"
+        ],
+        "situation_fam": [
+          "Celibataire",
+          "Marie(e)",
+          "Divorce(e)",
+          "Veuf(ve)"
+        ],
+        "nationalite": [
+          "Camerounaise",
+          "Tchadienne",
+          "Nigeriane",
+          "Ghanéenne",
+          "Congolaise",
+          "Ivoirienne",
+          "Senegalaise",
+          "Autre"
+        ],
+        "statut_employe": [
+          "Actif",
+          "En conge",
+          "En arret maladie",
+          "Suspendu",
+          "Depart programme",
+          "Departi"
+        ],
+        "type_contrat": [
+          "CDI",
+          "CDD",
+          "Stage",
+          "Interim",
+          "Alternance",
+          "Freelance"
+        ],
+        "categorie_salarie": [
+          "Cadre",
+          "Agent de maitrise",
+          "Employe",
+          "Ouvrier",
+          "Stagiaire"
+        ],
+        "regime_travail": [
+          "Temps plein",
+          "Temps partiel",
+          "Horaires amenages",
+          "Forfait jours"
+        ],
+        "departement": [
+          "Direction Generale",
+          "Service Client",
+          "Finance & Comptabilité",
+          "Marketing & Communication",
+          "Maintenance",
+          "Commercial",
+          "Logistique & Approvisionnement",
+          "Cuisine & Restauration",
+          "Service Client",
+          "Réception & Front Office",
+          "Cuisine & Restauration",
+          "Maintenance",
+          "Sécurité"
+        ],
+        "statut_contrat": [
+          "En vigueur",
+          "Echu",
+          "Resilie",
+          "Suspendu",
+          "Renouvele"
+        ],
+        "type_avenant": [
+          "Modification salariale",
+          "Changement poste",
+          "Passage temps partiel",
+          "Renouvellement",
+          "Modification horaire",
+          "Changement departement",
+          "Autre"
+        ],
+        "type_document": [
+          "CNI",
+          "Passeport",
+          "Attestation de travail",
+          "Certificat medical",
+          "Diplome",
+          "CV",
+          "Photo d'identite",
+          "Extrait casier judiciaire",
+          "Permis de travail",
+          "Carte de sejour",
+          "Attestation CNPS",
+          "Attestation impots",
+          "RIB",
+          "Certificat de stage",
+          "Autre"
+        ],
+        "statut_document": [
+          "Valide",
+          "A renouveler",
+          "Expire",
+          "En cours",
+          "Manquant"
+        ],
+        "lieu_depot": [
+          "RH Central",
+          "Service du personnel",
+          "Direction",
+          "Archive physique",
+          "Archive numerique",
+          "Cabinet comptable"
+        ],
+        "banque": [
+          "SGBC",
+          "BICEC",
+          "AFRILAND First Bank",
+          "ECOBANK",
+          "SGBE",
+          "UBA",
+          "BAC",
+          "Standard Chartered",
+          "Citibank",
+          "Autre"
+        ],
+        "statut_rib": [
+          "Actif",
+          "Inactif",
+          "A verifier",
+          "Cloture"
+        ],
+        "organisme_prevo": [
+          "CNPS",
+          "Mutuelle entreprise",
+          "Assurance groupe",
+          "Allianz Cameroon",
+          "AXA Congo",
+          "SANLAM",
+          "Autre"
+        ],
+        "couverture": [
+          "Sante",
+          "Sante + Deces",
+          "Sante + Retraite",
+          "Complete",
+          "Famille",
+          "Individuelle"
+        ],
+        "statut_adhesion": [
+          "Actif",
+          "En attente",
+          "Resilie",
+          "Suspendu"
+        ],
+        "type_conge": [
+          "Annuel",
+          "Maternite",
+          "Paternite",
+          "Sans solde",
+          "Exceptionnel",
+          "Maladie",
+          "Formation"
+        ],
+        "statut_conge": [
+          "En attente",
+          "Approuve",
+          "Refuse",
+          "Pris",
+          "Annule"
+        ],
+        "type_absence": [
+          "Maladie",
+          "Accident travail",
+          "Congé maternite",
+          "Congé paternite",
+          "Permission exceptionnelle",
+          "Absence injustifiee",
+          "Mission",
+          "Formation"
+        ],
+        "statut_absence": [
+          "Justifiee",
+          "Non justifiee",
+          "En attente",
+          "Approuvee",
+          "Rejetee"
+        ],
+        "statut_heures": [
+          "En attente",
+          "Validee",
+          "Rejetee",
+          "Payee"
+        ],
+        "taux_majoration": [
+          "100%",
+          "125%",
+          "150%",
+          "200%"
+        ],
+        "statut_paie": [
+          "Generee",
+          "Validee",
+          "Payee",
+          "En retard",
+          "Annulee"
+        ],
+        "mode_paie": [
+          "Virement bancaire",
+          "Cheque",
+          "Especes"
+        ],
+        "organisme_social": [
+          "CNPS",
+          "CNP",
+          "Direction des impots",
+          "Mutuelle",
+          "Autre"
+        ],
+        "type_declaration": [
+          "Mensuelle",
+          "Trimestrielle",
+          "Annuelle",
+          "Exceptionnelle"
+        ],
+        "statut_declaration": [
+          "Soumise",
+          "En retard",
+          "Validee",
+          "Rejetee",
+          "En attente"
+        ],
+        "type_permit": [
+          "Permis de travail",
+          "Carte de sejour",
+          "Visa de travail",
+          "Autorisation d'exercice",
+          "Receve fiscal"
+        ],
+        "statut_permit": [
+          "Valide",
+          "En renouvellement",
+          "Expire",
+          "Rejete",
+          "En traitement"
+        ],
+        "autorite": [
+          "MINTSS",
+          "DGSN",
+          "Ministere de l'Interieur",
+          "Prefecture",
+          "Mairie",
+          "Autre"
+        ],
+        "motif_depart": [
+          "Demission",
+          "Licenciement",
+          "Fin de CDD",
+          "Retraite",
+          "Deces",
+          "Mutation",
+          "Commun accord",
+          "Abandon de poste"
+        ],
+        "statut_dossier": [
+          "En cours",
+          "Clos",
+          "En attente piece",
+          "Transmis",
+          "Solde",
+          "Litige"
+        ],
+        "duree_conservation": [
+          "1 an",
+          "3 ans",
+          "5 ans",
+          "10 ans",
+          "Illimitee"
+        ],
+        "motif_rappel": [
+          "Expiration document",
+          "Renouvellement contrat",
+          "Echeance periode essai",
+          "Bilan periodique",
+          "Audit externe",
+          "Renouvellement permis",
+          "Autre"
+        ],
+        "statut_rappel": [
+          "En attente",
+          "Traite",
+          "En retard",
+          "Annule"
+        ],
+        "oui_non": [
+          "Oui",
+          "Non"
+        ],
+        "poste_hotel": [
+          "Receptionniste",
+          "Concierge",
+          "Chef cuisinier",
+          "Cuisinier",
+          "Serveur",
+          "Barman",
+          "Gouvernante",
+          "Femme de chambre",
+          "Agent de securite",
+          "Technicien maintenance",
+          "Comptable",
+          "Agent d'accueil",
+          "Laveur de vaisselle",
+          "Plongeur",
+          "Jardinier",
+          "Chauffeur",
+          "Standardiste",
+          "Directeur general",
+          "DRH",
+          "Chef de service",
+          "Superviseur"
+        ],
+        "semaine": [
+          "S01-2025",
+          "S02-2025",
+          "S03-2025",
+          "S04-2025",
+          "S05-2025",
+          "S06-2025",
+          "S07-2025",
+          "S08-2025",
+          "S09-2025",
+          "S10-2025",
+          "S11-2025",
+          "S12-2025",
+          "S13-2025",
+          "S14-2025",
+          "S15-2025",
+          "S16-2025",
+          "S17-2025",
+          "S18-2025",
+          "S19-2025",
+          "S20-2025",
+          "S21-2025",
+          "S22-2025",
+          "S23-2025",
+          "S24-2025",
+          "S25-2025",
+          "S26-2025",
+          "S27-2025",
+          "S28-2025",
+          "S29-2025",
+          "S30-2025",
+          "S31-2025",
+          "S32-2025",
+          "S33-2025",
+          "S34-2025",
+          "S35-2025",
+          "S36-2025",
+          "S37-2025",
+          "S38-2025",
+          "S39-2025",
+          "S40-2025",
+          "S41-2025",
+          "S42-2025",
+          "S43-2025",
+          "S44-2025",
+          "S45-2025",
+          "S46-2025",
+          "S47-2025",
+          "S48-2025",
+          "S49-2025",
+          "S50-2025",
+          "S51-2025",
+          "S52-2025"
+        ],
+        "statut_solde": [
+          "A jour",
+          "A mettre a jour",
+          "En attente validation",
+          "Solde negatif"
+        ],
+        "statut_solde_conge": [
+          "A jour",
+          "A mettre a jour",
+          "En attente validation",
+          "Solde negatif",
+          "Exhaustif"
+        ],
+        "type_pret": [
+          "Avance salaire",
+          "Prêt social",
+          "Prêt logement",
+          "Prêt urgence",
+          "Prêt formation"
+        ],
+        "statut_pret": [
+          "En attente",
+          "Approuve",
+          "En cours",
+          "Solde",
+          "Refuse",
+          "En retard"
+        ],
+        "type_sanction": [
+          "Avertissement oral",
+          "Avertissement écrit",
+          "Blâme",
+          "Suspension",
+          "Mise à pied",
+          "Rétrogradation",
+          "Licenciement"
+        ],
+        "statut_sanction": [
+          "En cours",
+          "Exécutee",
+          "Contestee",
+          "Annulee",
+          "En attente"
+        ],
+        "type_visite": [
+          "Visite embauche",
+          "Visite périodique",
+          "Visite reprise",
+          "Visite de pré-retraite",
+          "Visite occasionnelle"
+        ],
+        "aptitude": [
+          "Apte",
+          "Apte avec restrictions",
+          "Inapte temporaire",
+          "Inapte définitif"
+        ],
+        "oui_non_2": [
+          "Oui",
+          "Non",
+          "Partiel"
+        ]
+      }
+    }
+  },
+  "all_entity_names": [
+    "1-Tableau de Bord",
+    "2-Fiche Employe",
+    "3-Contrats Travail",
+    "4-Avenants Contrat",
+    "5-Suivi Documents",
+    "6-Donnees Bancaires",
+    "7-Mutuelle Prevoyance",
+    "8-Conges Annuels",
+    "9-Solde Conges",
+    "10-Absences Maladie",
+    "11-Heures Supplementaires",
+    "12-Pointage Presence",
+    "13-Fiches de Paie",
+    "14-Declarations Sociales",
+    "15-Autorisations Permis",
+    "16-Dossiers Departs",
+    "17-Archivage Documents",
+    "18-Rappels Admin",
+    "19-Prets Avances Salaire",
+    "20-Sanctions Disciplinaires",
+    "21-Visites Medicales",
+    "22-Planning Mensuel Presence",
+    "_Lists"
+  ],
+  "all_field_names": [
+    "Action Requise",
+    "Adresse",
+    "Agence",
+    "Ancienne Valeur",
+    "Ancienneté (ans)",
+    "Approbateur",
+    "Aptitude",
+    "Autorité",
+    "Banque",
+    "Catégorie",
+    "Civilité",
+    "Commentaire",
+    "Compte Principal",
+    "Congés Pris (jrs)",
+    "Congés en Cours (jrs)",
+    "Cotis. Annuelle (FCFA)",
+    "Cotisation Mensuelle (FCFA)",
+    "Cotisations (FCFA)",
+    "Couverture",
+    "Coût (FCFA)",
+    "Date Adhésion",
+    "Date Approbation",
+    "Date Archive",
+    "Date Avenant",
+    "Date Demande",
+    "Date Début",
+    "Date Début Remb.",
+    "Date Délivrance",
+    "Date Départ",
+    "Date Effet",
+    "Date Embauche",
+    "Date Expiration",
+    "Date Exécution",
+    "Date Faute",
+    "Date Fin",
+    "Date Mise à Jour",
+    "Date Naissance",
+    "Date Notification",
+    "Date Paiement",
+    "Date Prochaine Visite",
+    "Date Soumission",
+    "Date Visite",
+    "Date Échéance",
+    "Date Émission",
+    "Dernier Salaire (FCFA)",
+    "Description",
+    "Documents Remis",
+    "Droit Annuel (jrs)",
+    "Durée (jours)",
+    "Durée (mois)",
+    "Durée Conservation",
+    "Durée Suspension (jrs)",
+    "Département",
+    "Email",
+    "Faute Commise",
+    "Genre",
+    "Heures Normales",
+    "Heures Supp",
+    "Indemnité (FCFA)",
+    "Jours Absents",
+    "Jours Ouvrables",
+    "Jours Présents",
+    "Jours Restants",
+    "Justificatif",
+    "Lieu Dépôt",
+    "Lieu Naissance",
+    "Lieu Stockage",
+    "Lieu Travail",
+    "Matricule",
+    "Mensualité (FCFA)",
+    "Mode Paiement",
+    "Mois",
+    "Mois Restants",
+    "Montant (FCFA)",
+    "Montant Accordé (FCFA)",
+    "Montant Calculé (FCFA)",
+    "Montant Demandé (FCFA)",
+    "Motif",
+    "Motif Départ",
+    "Médecin / Structure",
+    "Nationalité",
+    "Net à Payer (FCFA)",
+    "Nom",
+    "Nom Employé",
+    "Nombre Jours",
+    "Nombre Salariés",
+    "Notes",
+    "Nouvelle Valeur",
+    "N°",
+    "N° Adhérent",
+    "N° Avenant",
+    "N° Contrat",
+    "N° Document",
+    "N° Matricule",
+    "N° Permis",
+    "N° Téléphone",
+    "Observations",
+    "Organisme",
+    "Personnes à Charge",
+    "Poste",
+    "Pris en Charge",
+    "Prénom",
+    "Période",
+    "RIB",
+    "Report N-1 (jrs)",
+    "Responsable",
+    "Responsable Suivi",
+    "Restrictions",
+    "Retards (min)",
+    "Régime Travail",
+    "Résultat",
+    "Salaire Brut (FCFA)",
+    "Semaine",
+    "Situation Familiale",
+    "Solde Congés (jrs)",
+    "Solde Disponible (jrs)",
+    "Solde Restant (FCFA)",
+    "Statut",
+    "Statut Dossier",
+    "Taux Charges (%)",
+    "Taux Intérêt (%)",
+    "Taux Majoration",
+    "Taux Présence (%)",
+    "Taux Utilisation (%)",
+    "Type Absence",
+    "Type Congé",
+    "Type Contrat",
+    "Type Document",
+    "Type Déclaration",
+    "Type Modification",
+    "Type Permis",
+    "Type Prêt",
+    "Type Rappel",
+    "Type Sanction",
+    "Type Visite",
+    "Validé Par"
+  ],
+  "structure_summary": "CAHIER DES CHARGES FONCTIONNEL du Domaine 2 (Gestion Administrative du Personnel) d'Admina_RH. 23 feuilles: 1 tableau de bord KPI + 21 tables de donnees structurees (definissant les entités SQL) + 1 feuille _Lists (50 listes de référence/enum). Chaque feuille de données = 1 table SQL avec colonnes, types, et 2-3 lignes échantillon. La feuille _Lists définit 50 CHECK constraints. Total: 2245 lignes échantillon, 182 champs uniques.",
+  "github_directory_files": {
+    "domaine2_xlsx_count": 1,
+    "total_xlsx_in_repo": 31,
+    "domaine2_directory": [
+      "Audit_Interface_Domaine2_Deployee_2026-07-26.png",
+      "Comparaison_Prompt_V1_vs_V2_Domaine2_2026-07-26.png",
+      "Domaine2_Gestion_Administrative_Personnel (2).xlsx",
+      "Interconnexion_Bilaterale_D1_D2_Recrutement_Administration_Personnel.pdf",
+      "Manuel_Procedures_Domaine2_Gestion_Administrative.pdf",
+      "PROMPT_DEV_Domaine2_Complet.md",
+      "PROMPT_DEV_Domaine2_Complet_V2.md",
+      "cover_d2.pdf",
+      "d2_flux_global_admin.png",
+      "d2_interconnexion_schema.png",
+      "d2_matrice_formules.png",
+      "d2_processus_iso.png",
+      "migration_6_tables_manquantes_D02.sql",
+      "Manuels de procedure des feuilles de excel Domaine 2/ (24 sous-dossiers: 01-04 avec contenu, 05-24 .gitkeep)"
+    ],
+    "all_xlsx_in_repo": [
+      "Domaine1_Recrutement_Candidats (1).xlsx",
+      "Domaine2_Gestion_Administrative_Personnel (2).xlsx",
+      "Domaine3_Paie_Remuneration_Avantages_Complet (1).xlsx",
+      "Domaine4_Temps_Travail_Planification (4).xlsx",
+      "Domaine5_Conges_Absences_Presence (2).xlsx",
+      "Domaine6_Formation_Developpement_Competences (4).xlsx",
+      "Domaine7_Evaluation_Gestion_Performance.xlsx",
+      "Domaine8_Relations_Sociales_Syndicats.xlsx",
+      "Domaine9_Sante_Securite_Conditions_Travail (4).xlsx",
+      "Domaine10_Talents_Mobilite_Interne (1).xlsx",
+      "Domaine11_Droit_Travail_Conformite (1).xlsx",
+      "Domaine12_Documentation_Archivage_RH (2).xlsx",
+      "Domaine13_Communication_RH_Marque_Employeur (2).xlsx",
+      "Domaine14_Reporting_Tableaux_Bord_Analyse (1).xlsx",
+      "Domaine15_Budget_Pilotage_Financier_RH (5).xlsx",
+      "Domaine16_Diversite_Equite_Inclusion (1).xlsx",
+      "Domaine17_Audit_Conformite_Contentieux (3).xlsx",
+      "Domaine18_RSE_Developpement_Durable_RH (2).xlsx",
+      "Domaine19_Innovation_RH_Transformation_Digitale.xlsx",
+      "Domaine20_Pilotage_Reporting_RH (2).xlsx",
+      "Domaine21_Fiches_Postes_Profils_Cartographie_Metiers (1).xlsx",
+      "Domaine22_Avantages_Sociaux_Previsionnelle (1).xlsx",
+      "Domaine23_Travail_Temporaire (1).xlsx",
+      "Domaine24_Stagiaires_Alternants.xlsx",
+      "Domaine25_Expatries_Personnel_Detache (3).xlsx",
+      "Domaine26_Gestion_Budgetaire_Fiscale_RH.xlsx",
+      "000_Domaine27_Sante_Securite_Bienetre_Travail.xlsx",
+      "000_Domaine28_Mobilite_Carriere_Succession_RH.xlsx",
+      "Domaine29_Communication_Interne_Engagement.xlsx",
+      "Domaine30_Expatrites_Mobilite_Internationale.xlsx",
+      "Domaine31_Retraites_Prevoyance_Transitions_Carriere (1).xlsx"
+    ]
+  }
+}
