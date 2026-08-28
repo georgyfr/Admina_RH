@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=794px, initial-scale=1.0">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { width: 794px; height: 1123px; background: #f2f2f1; font-family: 'Inter', sans-serif; }
+  .cover-page { position: relative; width: 794px; height: 1123px; background: #ffffff; overflow: hidden; }
+  
+  /* Layer 1 - Background */
+  .cover-bg { position: absolute; inset: 0; overflow: hidden; z-index: 1; }
+  .grid-pattern { position: absolute; inset: 0; background-image:
+    linear-gradient(rgba(101,92,64,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(101,92,64,0.03) 1px, transparent 1px);
+  background-size: 50px 50px; }
+  
+  /* Layer 2 - Structure */
+  .cover-structure { position: absolute; inset: 0; z-index: 2; }
+  .anchor-line { position: absolute; left: 99px; top: 112px; width: 6px; height: 899px; background: #655c40; border-radius: 3px; }
+  
+  /* Layer 3 - Content */
+  .cover-content { position: absolute; inset: 0; z-index: 3; padding-left: 145px; }
+  
+  .kicker { position: absolute; top: 168px; left: 145px; font-size: 14pt; font-weight: 500; letter-spacing: 3pt; text-transform: uppercase; color: #655c40; opacity: 0.6; }
+  
+  .hero-title { position: absolute; top: 337px; left: 145px; font-size: 44pt; font-weight: 800; color: #1f1e1c; line-height: 1.15; max-width: 550px; }
+  
+  .summary { position: absolute; top: 560px; left: 145px; width: 450px; font-size: 15pt; font-weight: 400; color: #1f1e1c; opacity: 0.85; line-height: 1.6; }
+  
+  .meta { position: absolute; top: 760px; left: 145px; font-size: 16pt; font-weight: 400; color: #1f1e1c; opacity: 0.85; }
+  .meta-line { margin-bottom: 8px; }
+  .meta-label { color: #908e87; font-size: 12pt; }
+  
+  .footer { position: absolute; bottom: 45px; left: 145px; font-size: 11pt; font-weight: 500; letter-spacing: 2pt; text-transform: uppercase; color: #655c40; opacity: 0.5; }
+  
+  .badge { display: inline-block; background: #91463f; color: white; padding: 4px 14px; border-radius: 4px; font-size: 11pt; font-weight: 600; margin-top: 10px; }
+</style>
+</head>
+<body>
+<div class="cover-page">
+  <div class="cover-bg"><div class="grid-pattern"></div></div>
+  <div class="cover-structure"><div class="anchor-line"></div></div>
+  <div class="cover-content">
+    <div class="kicker">Rapport d'audit fonctionnel</div>
+    <div class="hero-title">Admina-RH<br>Module Recrutement</div>
+    <div class="summary">
+      Audit de conformite entre le modele de donnees de reference (Excel, 18 onglets) et l'implementation effective de la plateforme SaaS deployee sur Cloudflare Pages.
+    </div>
+    <div class="meta">
+      <div class="meta-label">URL auditee</div>
+      <div class="meta-line">admina-rh-bd0.pages.dev</div>
+      <div class="meta-label" style="margin-top:16px">Date</div>
+      <div class="meta-line">28 aout 2026</div>
+      <div class="meta-label" style="margin-top:16px">Classification</div>
+      <div class="badge">CONFIDENTIEL</div>
+    </div>
+    <div class="footer">Admina-RH - Domaine 1 Recrutement</div>
+  </div>
+</div>
+</body>
+</html>
