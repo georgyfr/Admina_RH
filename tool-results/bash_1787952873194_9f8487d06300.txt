@@ -1,0 +1,755 @@
+✓ Admina-RH | Recrutement
+  https://admina-rh-bd0.pages.dev/contrats
+✓ Done
+- main
+  - heading "Suivi des Contrats" [level=5, ref=e5]
+  - paragraph
+    - StaticText "12 contrats au total"
+  - button "Exporter 12 enregistrements en CSV" [ref=e6]
+    - StaticText "Exporter CSV"
+  - button " Nouveau Contrat" [ref=e7]
+    - StaticText "Nouveau Contrat"
+  - StaticText "TOTAL"
+  - heading "12" [level=5, ref=e8]
+  - StaticText "EN COURS"
+  - heading "10" [level=5, ref=e9]
+  - StaticText "ÉCHUS"
+  - heading "1" [level=5, ref=e10]
+  - StaticText "À RENOUVELER"
+  - heading "1" [level=5, ref=e11]
+  - generic [ref=e41] clickable [onclick]
+    - textbox "Rechercher par N°, employé, poste…" [ref=e46]
+  - generic
+    - StaticText "Département"
+    - generic [ref=e42] clickable [onclick]
+      - combobox "Département" [expanded=false, ref=e47]
+  - generic
+    - StaticText "Type Contrat"
+    - generic [ref=e43] clickable [onclick]
+      - combobox "Type Contrat" [expanded=false, ref=e48]
+  - generic
+    - StaticText "Statut"
+    - generic [ref=e44] clickable [onclick]
+      - combobox "Statut" [expanded=false, ref=e49]
+  - generic
+    - grid
+      - generic
+        - rowgroup
+          - row "N° Contrat N° Contrat column menu Employé Employé column menu Poste Poste column menu Département Département column menu Type Contrat Type Contrat column menu Date Début Date Début column menu Date Fin Date Fin column menu Durée (mois) Durée (mois) column menu Salaire Brut (FCFA) Salaire Brut (FCFA) column menu Statut Statut column menu"
+            - columnheader "N° Contrat N° Contrat column menu" [ref=e63] clickable [cursor:pointer, onclick, tabindex]
+              - StaticText "N° Contrat"
+              - button "N° Contrat column menu" [expanded=false, ref=e173]
+              - generic [ref=e174] clickable [onclick]
+            - columnheader "Employé Employé column menu" [ref=e64] clickable [cursor:pointer, onclick]
+              - StaticText "Employé"
+              - button "Employé column menu" [expanded=false, ref=e175]
+              - generic [ref=e176] clickable [onclick]
+            - columnheader "Poste Poste column menu" [ref=e65] clickable [cursor:pointer, onclick]
+              - StaticText "Poste"
+              - button "Poste column menu" [expanded=false, ref=e177]
+              - generic [ref=e178] clickable [onclick]
+            - columnheader "Département Département column menu" [ref=e66] clickable [cursor:pointer, onclick]
+              - StaticText "Département"
+              - button "Département column menu" [expanded=false, ref=e179]
+              - generic [ref=e180] clickable [onclick]
+            - columnheader "Type Contrat Type Contrat column menu" [ref=e67] clickable [cursor:pointer, onclick]
+              - StaticText "Type Contrat"
+              - button "Type Contrat column menu" [expanded=false, ref=e181]
+              - generic [ref=e182] clickable [onclick]
+            - columnheader "Date Début Date Début column menu" [ref=e68] clickable [cursor:pointer, onclick]
+              - StaticText "Date Début"
+              - button "Date Début column menu" [expanded=false, ref=e183]
+              - generic [ref=e184] clickable [onclick]
+            - columnheader "Date Fin Date Fin column menu" [ref=e69] clickable [cursor:pointer, onclick]
+              - StaticText "Date Fin"
+              - button "Date Fin column menu" [expanded=false, ref=e185]
+              - generic [ref=e186] clickable [onclick]
+            - columnheader "Durée (mois) Durée (mois) column menu" [ref=e70] clickable [cursor:pointer, onclick]
+              - StaticText "Durée (mois)"
+              - button "Durée (mois) column menu" [expanded=false, ref=e187]
+              - generic [ref=e188] clickable [onclick]
+            - columnheader "Salaire Brut (FCFA) Salaire Brut (FCFA) column menu" [ref=e71] clickable [cursor:pointer, onclick]
+              - StaticText "Salaire Brut (FCFA)"
+              - button "Salaire Brut (FCFA) column menu" [expanded=false, ref=e189]
+              - generic [ref=e190] clickable [onclick]
+            - columnheader "Statut Statut column menu" [ref=e72] clickable [cursor:pointer, onclick]
+              - StaticText "Statut"
+              - button "Statut column menu" [expanded=false, ref=e191]
+              - generic [ref=e192] clickable [onclick]
+        - rowgroup
+          - row "CT-001 Nkoulou Amina Chef de projet digital Marketing & Communication CDI 06/03/2025 — — 380 000 FCFA En cours" [ref=e53] clickable [onclick]
+            - gridcell "CT-001" [ref=e73] clickable [onclick]
+              - paragraph
+                - StaticText "CT-001"
+            - gridcell "Nkoulou Amina" [ref=e74] clickable [onclick]
+            - gridcell "Chef de projet digital" [ref=e75] clickable [onclick]
+            - gridcell "Marketing & Communication" [ref=e76] clickable [onclick]
+            - gridcell "CDI" [ref=e77] clickable [onclick]
+            - gridcell "06/03/2025" [ref=e78] clickable [onclick]
+            - gridcell "—" [ref=e79] clickable [onclick]
+            - gridcell "—" [ref=e80] clickable [onclick]
+            - gridcell "380 000 FCFA" [ref=e81] clickable [onclick]
+            - gridcell "En cours" [ref=e82] clickable [onclick]
+              - generic [ref=e193] clickable [onclick]
+                - StaticText "En cours"
+          - row "CT-002 Konate Aissatou Assistante RH Ressources Humaines CDD 20/02/2025 02/08/2025 6 160 000 FCFA En cours" [ref=e54] clickable [onclick]
+            - gridcell "CT-002" [ref=e83] clickable [onclick]
+              - paragraph
+                - StaticText "CT-002"
+            - gridcell "Konate Aissatou" [ref=e84] clickable [onclick]
+            - gridcell "Assistante RH" [ref=e85] clickable [onclick]
+            - gridcell "Ressources Humaines" [ref=e86] clickable [onclick]
+            - gridcell "CDD" [ref=e87] clickable [onclick]
+            - gridcell "20/02/2025" [ref=e88] clickable [onclick]
+            - gridcell "02/08/2025" [ref=e89] clickable [onclick]
+            - gridcell "6" [ref=e90] clickable [onclick]
+            - gridcell "160 000 FCFA" [ref=e91] clickable [onclick]
+            - gridcell "En cours" [ref=e92] clickable [onclick]
+              - generic [ref=e194] clickable [onclick]
+                - StaticText "En cours"
+          - row "CT-003 Ndiaye Moussa Chef cuisinier Restauration CDI 10/02/2025 — — 450 000 FCFA En cours" [ref=e55] clickable [onclick]
+            - gridcell "CT-003" [ref=e93] clickable [onclick]
+              - paragraph
+                - StaticText "CT-003"
+            - gridcell "Ndiaye Moussa" [ref=e94] clickable [onclick]
+            - gridcell "Chef cuisinier" [ref=e95] clickable [onclick]
+            - gridcell "Restauration" [ref=e96] clickable [onclick]
+            - gridcell "CDI" [ref=e97] clickable [onclick]
+            - gridcell "10/02/2025" [ref=e98] clickable [onclick]
+            - gridcell "—" [ref=e99] clickable [onclick]
+            - gridcell "—" [ref=e100] clickable [onclick]
+            - gridcell "450 000 FCFA" [ref=e101] clickable [onclick]
+            - gridcell "En cours" [ref=e102] clickable [onclick]
+              - generic [ref=e195] clickable [onclick]
+                - StaticText "En cours"
+          - row "CT-004 Tchouankou Claire Comptable senior Finance & Comptabilite CDI 15/01/2025 — — 550 000 FCFA En cours" [ref=e56] clickable [onclick]
+            - gridcell "CT-004" [ref=e103] clickable [onclick]
+              - paragraph
+                - StaticText "CT-004"
+            - gridcell "Tchouankou Claire" [ref=e104] clickable [onclick]
+            - gridcell "Comptable senior" [ref=e105] clickable [onclick]
+            - gridcell "Finance & Comptabilite" [ref=e106] clickable [onclick]
+            - gridcell "CDI" [ref=e107] clickable [onclick]
+            - gridcell "15/01/2025" [ref=e108] clickable [onclick]
+            - gridcell "—" [ref=e109] clickable [onclick]
+            - gridcell "—" [ref=e110] clickable [onclick]
+            - gridcell "550 000 FCFA" [ref=e111] clickable [onclick]
+            - gridcell "En cours" [ref=e112] clickable [onclick]
+              - generic [ref=e196] clickable [onclick]
+                - StaticText "En cours"
+          - row "CT-005 Fotso René Agent securite Securite CDI 01/06/2024 — — 150 000 FCFA En cours" [ref=e57] clickable [onclick]
+            - gridcell "CT-005" [ref=e113] clickable [onclick]
+              - paragraph
+                - StaticText "CT-005"
+            - gridcell "Fotso René" [ref=e114] clickable [onclick]
+            - gridcell "Agent securite" [ref=e115] clickable [onclick]
+            - gridcell "Securite" [ref=e116] clickable [onclick]
+            - gridcell "CDI" [ref=e117] clickable [onclick]
+            - gridcell "01/06/2024" [ref=e118] clickable [onclick]
+            - gridcell "—" [ref=e119] clickable [onclick]
+            - gridcell "—" [ref=e120] clickable [onclick]
+            - gridcell "150 000 FCFA" [ref=e121] clickable [onclick]
+            - gridcell "En cours" [ref=e122] clickable [onclick]
+              - generic [ref=e197] clickable [onclick]
+                - StaticText "En cours"
+          - row "CT-006 Mbarga Jules Technicien maintenance Maintenance CDD 15/09/2024 15/03/2025 6 220 000 FCFA Renouvele" [ref=e58] clickable [onclick]
+            - gridcell "CT-006" [ref=e123] clickable [onclick]
+              - paragraph
+                - StaticText "CT-006"
+            - gridcell "Mbarga Jules" [ref=e124] clickable [onclick]
+            - gridcell "Technicien maintenance" [ref=e125] clickable [onclick]
+            - gridcell "Maintenance" [ref=e126] clickable [onclick]
+            - gridcell "CDD" [ref=e127] clickable [onclick]
+            - gridcell "15/09/2024" [ref=e128] clickable [onclick]
+            - gridcell "15/03/2025" [ref=e129] clickable [onclick]
+            - gridcell "6" [ref=e130] clickable [onclick]
+            - gridcell "220 000 FCFA" [ref=e131] clickable [onclick]
+            - gridcell "Renouvele" [ref=e132] clickable [onclick]
+              - generic [ref=e198] clickable [onclick]
+                - StaticText "Renouvele"
+          - row "CT-007 Ngamani Carine Receptionniste Herbergement CDI 01/03/2024 — — 200 000 FCFA En cours" [ref=e59] clickable [onclick]
+            - gridcell "CT-007" [ref=e133] clickable [onclick]
+              - paragraph
+                - StaticText "CT-007"
+            - gridcell "Ngamani Carine" [ref=e134] clickable [onclick]
+            - gridcell "Receptionniste" [ref=e135] clickable [onclick]
+            - gridcell "Herbergement" [ref=e136] clickable [onclick]
+            - gridcell "CDI" [ref=e137] clickable [onclick]
+            - gridcell "01/03/2024" [ref=e138] clickable [onclick]
+            - gridcell "—" [ref=e139] clickable [onclick]
+            - gridcell "—" [ref=e140] clickable [onclick]
+            - gridcell "200 000 FCFA" [ref=e141] clickable [onclick]
+            - gridcell "En cours" [ref=e142] clickable [onclick]
+              - generic [ref=e199] clickable [onclick]
+                - StaticText "En cours"
+          - row "CT-008 Eyo Carole Agent de blanchisserie Lingerie CDI 15/12/2024 — — 130 000 FCFA En cours" [ref=e60] clickable [onclick]
+            - gridcell "CT-008" [ref=e143] clickable [onclick]
+              - paragraph
+                - StaticText "CT-008"
+            - gridcell "Eyo Carole" [ref=e144] clickable [onclick]
+            - gridcell "Agent de blanchisserie" [ref=e145] clickable [onclick]
+            - gridcell "Lingerie" [ref=e146] clickable [onclick]
+            - gridcell "CDI" [ref=e147] clickable [onclick]
+            - gridcell "15/12/2024" [ref=e148] clickable [onclick]
+            - gridcell "—" [ref=e149] clickable [onclick]
+            - gridcell "—" [ref=e150] clickable [onclick]
+            - gridcell "130 000 FCFA" [ref=e151] clickable [onclick]
+            - gridcell "En cours" [ref=e152] clickable [onclick]
+              - generic [ref=e200] clickable [onclick]
+                - StaticText "En cours"
+          - row "CT-009 Tchinda Alain Directeur commercial Commercial CDI 01/06/2023 — — 650 000 FCFA En cours" [ref=e61] clickable [onclick]
+            - gridcell "CT-009" [ref=e153] clickable [onclick]
+              - paragraph
+                - StaticText "CT-009"
+            - gridcell "Tchinda Alain" [ref=e154] clickable [onclick]
+            - gridcell "Directeur commercial" [ref=e155] clickable [onclick]
+            - gridcell "Commercial" [ref=e156] clickable [onclick]
+            - gridcell "CDI" [ref=e157] clickable [onclick]
+            - gridcell "01/06/2023" [ref=e158] clickable [onclick]
+            - gridcell "—" [ref=e159] clickable [onclick]
+            - gridcell "—" [ref=e160] clickable [onclick]
+            - gridcell "650 000 FCFA" [ref=e161] clickable [onclick]
+            - gridcell "En cours" [ref=e162] clickable [onclick]
+              - generic [ref=e201] clickable [onclick]
+                - StaticText "En cours"
+          - row "CT-010 Ouedraogo Ibrahim Chef securite Securite CDI 15/01/2023 — — 280 000 FCFA En cours" [ref=e62] clickable [onclick]
+            - gridcell "CT-010" [ref=e163] clickable [onclick]
+              - paragraph
+                - StaticText "CT-010"
+            - gridcell "Ouedraogo Ibrahim" [ref=e164] clickable [onclick]
+            - gridcell "Chef securite" [ref=e165] clickable [onclick]
+            - gridcell "Securite" [ref=e166] clickable [onclick]
+            - gridcell "CDI" [ref=e167] clickable [onclick]
+            - gridcell "15/01/2023" [ref=e168] clickable [onclick]
+            - gridcell "—" [ref=e169] clickable [onclick]
+            - gridcell "—" [ref=e170] clickable [onclick]
+            - gridcell "280 000 FCFA" [ref=e171] clickable [onclick]
+            - gridcell "En cours" [ref=e172] clickable [onclick]
+              - generic [ref=e202] clickable [onclick]
+                - StaticText "En cours"
+    - generic
+      - paragraph
+        - StaticText "1–10 of 12"
+      - generic
+        - button "Go to previous page" [disabled, ref=e51]
+        - button "Go to next page" [ref=e52]
+- heading "Suivi des Contrats" [level=5, ref=e5]
+- paragraph
+  - StaticText "12 contrats au total"
+- button "Exporter 12 enregistrements en CSV" [ref=e6]
+  - StaticText "Exporter CSV"
+- button " Nouveau Contrat" [ref=e7]
+  - StaticText "Nouveau Contrat"
+- StaticText "TOTAL"
+- heading "12" [level=5, ref=e8]
+- StaticText "EN COURS"
+- heading "10" [level=5, ref=e9]
+- StaticText "ÉCHUS"
+- heading "1" [level=5, ref=e10]
+- StaticText "À RENOUVELER"
+- heading "1" [level=5, ref=e11]
+- generic [ref=e41] clickable [onclick]
+  - textbox "Rechercher par N°, employé, poste…" [ref=e46]
+- generic
+  - StaticText "Département"
+  - generic [ref=e42] clickable [onclick]
+    - combobox "Département" [expanded=false, ref=e47]
+- generic
+  - StaticText "Type Contrat"
+  - generic [ref=e43] clickable [onclick]
+    - combobox "Type Contrat" [expanded=false, ref=e48]
+- generic
+  - StaticText "Statut"
+  - generic [ref=e44] clickable [onclick]
+    - combobox "Statut" [expanded=false, ref=e49]
+- generic
+  - grid
+    - generic
+      - rowgroup
+        - row "N° Contrat N° Contrat column menu Employé Employé column menu Poste Poste column menu Département Département column menu Type Contrat Type Contrat column menu Date Début Date Début column menu Date Fin Date Fin column menu Durée (mois) Durée (mois) column menu Salaire Brut (FCFA) Salaire Brut (FCFA) column menu Statut Statut column menu"
+          - columnheader "N° Contrat N° Contrat column menu" [ref=e63] clickable [cursor:pointer, onclick, tabindex]
+            - StaticText "N° Contrat"
+            - button "N° Contrat column menu" [expanded=false, ref=e173]
+            - generic [ref=e174] clickable [onclick]
+          - columnheader "Employé Employé column menu" [ref=e64] clickable [cursor:pointer, onclick]
+            - StaticText "Employé"
+            - button "Employé column menu" [expanded=false, ref=e175]
+            - generic [ref=e176] clickable [onclick]
+          - columnheader "Poste Poste column menu" [ref=e65] clickable [cursor:pointer, onclick]
+            - StaticText "Poste"
+            - button "Poste column menu" [expanded=false, ref=e177]
+            - generic [ref=e178] clickable [onclick]
+          - columnheader "Département Département column menu" [ref=e66] clickable [cursor:pointer, onclick]
+            - StaticText "Département"
+            - button "Département column menu" [expanded=false, ref=e179]
+            - generic [ref=e180] clickable [onclick]
+          - columnheader "Type Contrat Type Contrat column menu" [ref=e67] clickable [cursor:pointer, onclick]
+            - StaticText "Type Contrat"
+            - button "Type Contrat column menu" [expanded=false, ref=e181]
+            - generic [ref=e182] clickable [onclick]
+          - columnheader "Date Début Date Début column menu" [ref=e68] clickable [cursor:pointer, onclick]
+            - StaticText "Date Début"
+            - button "Date Début column menu" [expanded=false, ref=e183]
+            - generic [ref=e184] clickable [onclick]
+          - columnheader "Date Fin Date Fin column menu" [ref=e69] clickable [cursor:pointer, onclick]
+            - StaticText "Date Fin"
+            - button "Date Fin column menu" [expanded=false, ref=e185]
+            - generic [ref=e186] clickable [onclick]
+          - columnheader "Durée (mois) Durée (mois) column menu" [ref=e70] clickable [cursor:pointer, onclick]
+            - StaticText "Durée (mois)"
+            - button "Durée (mois) column menu" [expanded=false, ref=e187]
+            - generic [ref=e188] clickable [onclick]
+          - columnheader "Salaire Brut (FCFA) Salaire Brut (FCFA) column menu" [ref=e71] clickable [cursor:pointer, onclick]
+            - StaticText "Salaire Brut (FCFA)"
+            - button "Salaire Brut (FCFA) column menu" [expanded=false, ref=e189]
+            - generic [ref=e190] clickable [onclick]
+          - columnheader "Statut Statut column menu" [ref=e72] clickable [cursor:pointer, onclick]
+            - StaticText "Statut"
+            - button "Statut column menu" [expanded=false, ref=e191]
+            - generic [ref=e192] clickable [onclick]
+      - rowgroup
+        - row "CT-001 Nkoulou Amina Chef de projet digital Marketing & Communication CDI 06/03/2025 — — 380 000 FCFA En cours" [ref=e53] clickable [onclick]
+          - gridcell "CT-001" [ref=e73] clickable [onclick]
+            - paragraph
+              - StaticText "CT-001"
+          - gridcell "Nkoulou Amina" [ref=e74] clickable [onclick]
+          - gridcell "Chef de projet digital" [ref=e75] clickable [onclick]
+          - gridcell "Marketing & Communication" [ref=e76] clickable [onclick]
+          - gridcell "CDI" [ref=e77] clickable [onclick]
+          - gridcell "06/03/2025" [ref=e78] clickable [onclick]
+          - gridcell "—" [ref=e79] clickable [onclick]
+          - gridcell "—" [ref=e80] clickable [onclick]
+          - gridcell "380 000 FCFA" [ref=e81] clickable [onclick]
+          - gridcell "En cours" [ref=e82] clickable [onclick]
+            - generic [ref=e193] clickable [onclick]
+              - StaticText "En cours"
+        - row "CT-002 Konate Aissatou Assistante RH Ressources Humaines CDD 20/02/2025 02/08/2025 6 160 000 FCFA En cours" [ref=e54] clickable [onclick]
+          - gridcell "CT-002" [ref=e83] clickable [onclick]
+            - paragraph
+              - StaticText "CT-002"
+          - gridcell "Konate Aissatou" [ref=e84] clickable [onclick]
+          - gridcell "Assistante RH" [ref=e85] clickable [onclick]
+          - gridcell "Ressources Humaines" [ref=e86] clickable [onclick]
+          - gridcell "CDD" [ref=e87] clickable [onclick]
+          - gridcell "20/02/2025" [ref=e88] clickable [onclick]
+          - gridcell "02/08/2025" [ref=e89] clickable [onclick]
+          - gridcell "6" [ref=e90] clickable [onclick]
+          - gridcell "160 000 FCFA" [ref=e91] clickable [onclick]
+          - gridcell "En cours" [ref=e92] clickable [onclick]
+            - generic [ref=e194] clickable [onclick]
+              - StaticText "En cours"
+        - row "CT-003 Ndiaye Moussa Chef cuisinier Restauration CDI 10/02/2025 — — 450 000 FCFA En cours" [ref=e55] clickable [onclick]
+          - gridcell "CT-003" [ref=e93] clickable [onclick]
+            - paragraph
+              - StaticText "CT-003"
+          - gridcell "Ndiaye Moussa" [ref=e94] clickable [onclick]
+          - gridcell "Chef cuisinier" [ref=e95] clickable [onclick]
+          - gridcell "Restauration" [ref=e96] clickable [onclick]
+          - gridcell "CDI" [ref=e97] clickable [onclick]
+          - gridcell "10/02/2025" [ref=e98] clickable [onclick]
+          - gridcell "—" [ref=e99] clickable [onclick]
+          - gridcell "—" [ref=e100] clickable [onclick]
+          - gridcell "450 000 FCFA" [ref=e101] clickable [onclick]
+          - gridcell "En cours" [ref=e102] clickable [onclick]
+            - generic [ref=e195] clickable [onclick]
+              - StaticText "En cours"
+        - row "CT-004 Tchouankou Claire Comptable senior Finance & Comptabilite CDI 15/01/2025 — — 550 000 FCFA En cours" [ref=e56] clickable [onclick]
+          - gridcell "CT-004" [ref=e103] clickable [onclick]
+            - paragraph
+              - StaticText "CT-004"
+          - gridcell "Tchouankou Claire" [ref=e104] clickable [onclick]
+          - gridcell "Comptable senior" [ref=e105] clickable [onclick]
+          - gridcell "Finance & Comptabilite" [ref=e106] clickable [onclick]
+          - gridcell "CDI" [ref=e107] clickable [onclick]
+          - gridcell "15/01/2025" [ref=e108] clickable [onclick]
+          - gridcell "—" [ref=e109] clickable [onclick]
+          - gridcell "—" [ref=e110] clickable [onclick]
+          - gridcell "550 000 FCFA" [ref=e111] clickable [onclick]
+          - gridcell "En cours" [ref=e112] clickable [onclick]
+            - generic [ref=e196] clickable [onclick]
+              - StaticText "En cours"
+        - row "CT-005 Fotso René Agent securite Securite CDI 01/06/2024 — — 150 000 FCFA En cours" [ref=e57] clickable [onclick]
+          - gridcell "CT-005" [ref=e113] clickable [onclick]
+            - paragraph
+              - StaticText "CT-005"
+          - gridcell "Fotso René" [ref=e114] clickable [onclick]
+          - gridcell "Agent securite" [ref=e115] clickable [onclick]
+          - gridcell "Securite" [ref=e116] clickable [onclick]
+          - gridcell "CDI" [ref=e117] clickable [onclick]
+          - gridcell "01/06/2024" [ref=e118] clickable [onclick]
+          - gridcell "—" [ref=e119] clickable [onclick]
+          - gridcell "—" [ref=e120] clickable [onclick]
+          - gridcell "150 000 FCFA" [ref=e121] clickable [onclick]
+          - gridcell "En cours" [ref=e122] clickable [onclick]
+            - generic [ref=e197] clickable [onclick]
+              - StaticText "En cours"
+        - row "CT-006 Mbarga Jules Technicien maintenance Maintenance CDD 15/09/2024 15/03/2025 6 220 000 FCFA Renouvele" [ref=e58] clickable [onclick]
+          - gridcell "CT-006" [ref=e123] clickable [onclick]
+            - paragraph
+              - StaticText "CT-006"
+          - gridcell "Mbarga Jules" [ref=e124] clickable [onclick]
+          - gridcell "Technicien maintenance" [ref=e125] clickable [onclick]
+          - gridcell "Maintenance" [ref=e126] clickable [onclick]
+          - gridcell "CDD" [ref=e127] clickable [onclick]
+          - gridcell "15/09/2024" [ref=e128] clickable [onclick]
+          - gridcell "15/03/2025" [ref=e129] clickable [onclick]
+          - gridcell "6" [ref=e130] clickable [onclick]
+          - gridcell "220 000 FCFA" [ref=e131] clickable [onclick]
+          - gridcell "Renouvele" [ref=e132] clickable [onclick]
+            - generic [ref=e198] clickable [onclick]
+              - StaticText "Renouvele"
+        - row "CT-007 Ngamani Carine Receptionniste Herbergement CDI 01/03/2024 — — 200 000 FCFA En cours" [ref=e59] clickable [onclick]
+          - gridcell "CT-007" [ref=e133] clickable [onclick]
+            - paragraph
+              - StaticText "CT-007"
+          - gridcell "Ngamani Carine" [ref=e134] clickable [onclick]
+          - gridcell "Receptionniste" [ref=e135] clickable [onclick]
+          - gridcell "Herbergement" [ref=e136] clickable [onclick]
+          - gridcell "CDI" [ref=e137] clickable [onclick]
+          - gridcell "01/03/2024" [ref=e138] clickable [onclick]
+          - gridcell "—" [ref=e139] clickable [onclick]
+          - gridcell "—" [ref=e140] clickable [onclick]
+          - gridcell "200 000 FCFA" [ref=e141] clickable [onclick]
+          - gridcell "En cours" [ref=e142] clickable [onclick]
+            - generic [ref=e199] clickable [onclick]
+              - StaticText "En cours"
+        - row "CT-008 Eyo Carole Agent de blanchisserie Lingerie CDI 15/12/2024 — — 130 000 FCFA En cours" [ref=e60] clickable [onclick]
+          - gridcell "CT-008" [ref=e143] clickable [onclick]
+            - paragraph
+              - StaticText "CT-008"
+          - gridcell "Eyo Carole" [ref=e144] clickable [onclick]
+          - gridcell "Agent de blanchisserie" [ref=e145] clickable [onclick]
+          - gridcell "Lingerie" [ref=e146] clickable [onclick]
+          - gridcell "CDI" [ref=e147] clickable [onclick]
+          - gridcell "15/12/2024" [ref=e148] clickable [onclick]
+          - gridcell "—" [ref=e149] clickable [onclick]
+          - gridcell "—" [ref=e150] clickable [onclick]
+          - gridcell "130 000 FCFA" [ref=e151] clickable [onclick]
+          - gridcell "En cours" [ref=e152] clickable [onclick]
+            - generic [ref=e200] clickable [onclick]
+              - StaticText "En cours"
+        - row "CT-009 Tchinda Alain Directeur commercial Commercial CDI 01/06/2023 — — 650 000 FCFA En cours" [ref=e61] clickable [onclick]
+          - gridcell "CT-009" [ref=e153] clickable [onclick]
+            - paragraph
+              - StaticText "CT-009"
+          - gridcell "Tchinda Alain" [ref=e154] clickable [onclick]
+          - gridcell "Directeur commercial" [ref=e155] clickable [onclick]
+          - gridcell "Commercial" [ref=e156] clickable [onclick]
+          - gridcell "CDI" [ref=e157] clickable [onclick]
+          - gridcell "01/06/2023" [ref=e158] clickable [onclick]
+          - gridcell "—" [ref=e159] clickable [onclick]
+          - gridcell "—" [ref=e160] clickable [onclick]
+          - gridcell "650 000 FCFA" [ref=e161] clickable [onclick]
+          - gridcell "En cours" [ref=e162] clickable [onclick]
+            - generic [ref=e201] clickable [onclick]
+              - StaticText "En cours"
+        - row "CT-010 Ouedraogo Ibrahim Chef securite Securite CDI 15/01/2023 — — 280 000 FCFA En cours" [ref=e62] clickable [onclick]
+          - gridcell "CT-010" [ref=e163] clickable [onclick]
+            - paragraph
+              - StaticText "CT-010"
+          - gridcell "Ouedraogo Ibrahim" [ref=e164] clickable [onclick]
+          - gridcell "Chef securite" [ref=e165] clickable [onclick]
+          - gridcell "Securite" [ref=e166] clickable [onclick]
+          - gridcell "CDI" [ref=e167] clickable [onclick]
+          - gridcell "15/01/2023" [ref=e168] clickable [onclick]
+          - gridcell "—" [ref=e169] clickable [onclick]
+          - gridcell "—" [ref=e170] clickable [onclick]
+          - gridcell "280 000 FCFA" [ref=e171] clickable [onclick]
+          - gridcell "En cours" [ref=e172] clickable [onclick]
+            - generic [ref=e202] clickable [onclick]
+              - StaticText "En cours"
+  - generic
+    - paragraph
+      - StaticText "1–10 of 12"
+    - generic
+      - button "Go to previous page" [disabled, ref=e51]
+      - button "Go to next page" [ref=e52]
+- generic
+  - paragraph
+    - StaticText "1–10 of 12"
+  - generic
+    - button "Go to previous page" [disabled, ref=e51]
+    - button "Go to next page" [ref=e52]
+- StaticText "N° Contrat"
+- button "N° Contrat column menu" [expanded=false, ref=e173]
+- StaticText "Employé"
+- button "Employé column menu" [expanded=false, ref=e175]
+- StaticText "Poste"
+- button "Poste column menu" [expanded=false, ref=e177]
+- StaticText "Département"
+- button "Département column menu" [expanded=false, ref=e179]
+- StaticText "Type Contrat"
+- button "Type Contrat column menu" [expanded=false, ref=e181]
+- StaticText "Date Début"
+- button "Date Début column menu" [expanded=false, ref=e183]
+- StaticText "Date Fin"
+- button "Date Fin column menu" [expanded=false, ref=e185]
+- StaticText "Durée (mois)"
+- button "Durée (mois) column menu" [expanded=false, ref=e187]
+- StaticText "Salaire Brut (FCFA)"
+- button "Salaire Brut (FCFA) column menu" [expanded=false, ref=e189]
+- StaticText "Statut"
+- button "Statut column menu" [expanded=false, ref=e191]
+- StaticText "En cours"
+- StaticText "En cours"
+- StaticText "En cours"
+- StaticText "En cours"
+- StaticText "En cours"
+- StaticText "Renouvele"
+- StaticText "En cours"
+- StaticText "En cours"
+- StaticText "En cours"
+- StaticText "En cours"
+null
+✓ Done
+- main
+  - heading "Suivi des Contrats" [level=5, ref=e5]
+  - paragraph
+    - StaticText "12 contrats au total"
+  - button "Exporter 12 enregistrements en CSV" [ref=e6]
+    - StaticText "Exporter CSV"
+  - button " Nouveau Contrat" [ref=e7]
+    - StaticText "Nouveau Contrat"
+  - StaticText "TOTAL"
+  - heading "12" [level=5, ref=e8]
+  - StaticText "EN COURS"
+  - heading "10" [level=5, ref=e9]
+  - StaticText "ÉCHUS"
+  - heading "1" [level=5, ref=e10]
+  - StaticText "À RENOUVELER"
+  - heading "1" [level=5, ref=e11]
+  - generic [ref=e41] clickable [onclick]
+    - textbox "Rechercher par N°, employé, poste…" [ref=e46]
+  - generic
+    - StaticText "Département"
+    - generic [ref=e42] clickable [onclick]
+      - combobox "Département" [expanded=false, ref=e47]
+  - generic
+    - StaticText "Type Contrat"
+    - generic [ref=e43] clickable [onclick]
+      - combobox "Type Contrat" [expanded=false, ref=e48]
+  - generic
+    - StaticText "Statut"
+    - generic [ref=e44] clickable [onclick]
+      - combobox "Statut" [expanded=false, ref=e49]
+  - generic
+    - grid
+      - generic
+        - rowgroup
+          - row "N° Contrat N° Contrat column menu Employé Employé column menu Poste Poste column menu Département Département column menu Type Contrat Type Contrat column menu Date Début Date Début column menu Date Fin Date Fin column menu Durée (mois) Durée (mois) column menu Salaire Brut (FCFA) Salaire Brut (FCFA) column menu Statut Statut column menu"
+            - columnheader "N° Contrat N° Contrat column menu" [ref=e55] clickable [cursor:pointer, onclick, tabindex]
+              - StaticText "N° Contrat"
+              - button "N° Contrat column menu" [expanded=false, ref=e85]
+              - generic [ref=e86] clickable [onclick]
+            - columnheader "Employé Employé column menu" [ref=e56] clickable [cursor:pointer, onclick]
+              - StaticText "Employé"
+              - button "Employé column menu" [expanded=false, ref=e87]
+              - generic [ref=e88] clickable [onclick]
+            - columnheader "Poste Poste column menu" [ref=e57] clickable [cursor:pointer, onclick]
+              - StaticText "Poste"
+              - button "Poste column menu" [expanded=false, ref=e89]
+              - generic [ref=e90] clickable [onclick]
+            - columnheader "Département Département column menu" [ref=e58] clickable [cursor:pointer, onclick]
+              - StaticText "Département"
+              - button "Département column menu" [expanded=false, ref=e91]
+              - generic [ref=e92] clickable [onclick]
+            - columnheader "Type Contrat Type Contrat column menu" [ref=e59] clickable [cursor:pointer, onclick]
+              - StaticText "Type Contrat"
+              - button "Type Contrat column menu" [expanded=false, ref=e93]
+              - generic [ref=e94] clickable [onclick]
+            - columnheader "Date Début Date Début column menu" [ref=e60] clickable [cursor:pointer, onclick]
+              - StaticText "Date Début"
+              - button "Date Début column menu" [expanded=false, ref=e95]
+              - generic [ref=e96] clickable [onclick]
+            - columnheader "Date Fin Date Fin column menu" [ref=e61] clickable [cursor:pointer, onclick]
+              - StaticText "Date Fin"
+              - button "Date Fin column menu" [expanded=false, ref=e97]
+              - generic [ref=e98] clickable [onclick]
+            - columnheader "Durée (mois) Durée (mois) column menu" [ref=e62] clickable [cursor:pointer, onclick]
+              - StaticText "Durée (mois)"
+              - button "Durée (mois) column menu" [expanded=false, ref=e99]
+              - generic [ref=e100] clickable [onclick]
+            - columnheader "Salaire Brut (FCFA) Salaire Brut (FCFA) column menu" [ref=e63] clickable [cursor:pointer, onclick]
+              - StaticText "Salaire Brut (FCFA)"
+              - button "Salaire Brut (FCFA) column menu" [expanded=false, ref=e101]
+              - generic [ref=e102] clickable [onclick]
+            - columnheader "Statut Statut column menu" [ref=e64] clickable [cursor:pointer, onclick]
+              - StaticText "Statut"
+              - button "Statut column menu" [expanded=false, ref=e103]
+              - generic [ref=e104] clickable [onclick]
+        - rowgroup
+          - row "CT-011 Bassong Hermine Comptable Finance & Comptabilite CDD 01/07/2024 31/12/2024 6 180 000 FCFA Echu" [ref=e53] clickable [onclick]
+            - gridcell "CT-011" [ref=e65] clickable [onclick]
+              - paragraph
+                - StaticText "CT-011"
+            - gridcell "Bassong Hermine" [ref=e66] clickable [onclick]
+            - gridcell "Comptable" [ref=e67] clickable [onclick]
+            - gridcell "Finance & Comptabilite" [ref=e68] clickable [onclick]
+            - gridcell "CDD" [ref=e69] clickable [onclick]
+            - gridcell "01/07/2024" [ref=e70] clickable [onclick]
+            - gridcell "31/12/2024" [ref=e71] clickable [onclick]
+            - gridcell "6" [ref=e72] clickable [onclick]
+            - gridcell "180 000 FCFA" [ref=e73] clickable [onclick]
+            - gridcell "Echu" [ref=e74] clickable [onclick]
+              - generic [ref=e105] clickable [onclick]
+                - StaticText "Echu"
+          - row "CT-012 Ngo Meli Sophie Gouvernante Herbergement CDI 10/01/2024 — — 250 000 FCFA En cours" [ref=e54] clickable [onclick]
+            - gridcell "CT-012" [ref=e75] clickable [onclick]
+              - paragraph
+                - StaticText "CT-012"
+            - gridcell "Ngo Meli Sophie" [ref=e76] clickable [onclick]
+            - gridcell "Gouvernante" [ref=e77] clickable [onclick]
+            - gridcell "Herbergement" [ref=e78] clickable [onclick]
+            - gridcell "CDI" [ref=e79] clickable [onclick]
+            - gridcell "10/01/2024" [ref=e80] clickable [onclick]
+            - gridcell "—" [ref=e81] clickable [onclick]
+            - gridcell "—" [ref=e82] clickable [onclick]
+            - gridcell "250 000 FCFA" [ref=e83] clickable [onclick]
+            - gridcell "En cours" [ref=e84] clickable [onclick]
+              - generic [ref=e106] clickable [onclick]
+                - StaticText "En cours"
+    - generic
+      - paragraph
+        - StaticText "11–12 of 12"
+      - generic
+        - button "Go to previous page" [ref=e51]
+        - button "Go to next page" [disabled, ref=e52]
+- heading "Suivi des Contrats" [level=5, ref=e5]
+- paragraph
+  - StaticText "12 contrats au total"
+- button "Exporter 12 enregistrements en CSV" [ref=e6]
+  - StaticText "Exporter CSV"
+- button " Nouveau Contrat" [ref=e7]
+  - StaticText "Nouveau Contrat"
+- StaticText "TOTAL"
+- heading "12" [level=5, ref=e8]
+- StaticText "EN COURS"
+- heading "10" [level=5, ref=e9]
+- StaticText "ÉCHUS"
+- heading "1" [level=5, ref=e10]
+- StaticText "À RENOUVELER"
+- heading "1" [level=5, ref=e11]
+- generic [ref=e41] clickable [onclick]
+  - textbox "Rechercher par N°, employé, poste…" [ref=e46]
+- generic
+  - StaticText "Département"
+  - generic [ref=e42] clickable [onclick]
+    - combobox "Département" [expanded=false, ref=e47]
+- generic
+  - StaticText "Type Contrat"
+  - generic [ref=e43] clickable [onclick]
+    - combobox "Type Contrat" [expanded=false, ref=e48]
+- generic
+  - StaticText "Statut"
+  - generic [ref=e44] clickable [onclick]
+    - combobox "Statut" [expanded=false, ref=e49]
+- generic
+  - grid
+    - generic
+      - rowgroup
+        - row "N° Contrat N° Contrat column menu Employé Employé column menu Poste Poste column menu Département Département column menu Type Contrat Type Contrat column menu Date Début Date Début column menu Date Fin Date Fin column menu Durée (mois) Durée (mois) column menu Salaire Brut (FCFA) Salaire Brut (FCFA) column menu Statut Statut column menu"
+          - columnheader "N° Contrat N° Contrat column menu" [ref=e55] clickable [cursor:pointer, onclick, tabindex]
+            - StaticText "N° Contrat"
+            - button "N° Contrat column menu" [expanded=false, ref=e85]
+            - generic [ref=e86] clickable [onclick]
+          - columnheader "Employé Employé column menu" [ref=e56] clickable [cursor:pointer, onclick]
+            - StaticText "Employé"
+            - button "Employé column menu" [expanded=false, ref=e87]
+            - generic [ref=e88] clickable [onclick]
+          - columnheader "Poste Poste column menu" [ref=e57] clickable [cursor:pointer, onclick]
+            - StaticText "Poste"
+            - button "Poste column menu" [expanded=false, ref=e89]
+            - generic [ref=e90] clickable [onclick]
+          - columnheader "Département Département column menu" [ref=e58] clickable [cursor:pointer, onclick]
+            - StaticText "Département"
+            - button "Département column menu" [expanded=false, ref=e91]
+            - generic [ref=e92] clickable [onclick]
+          - columnheader "Type Contrat Type Contrat column menu" [ref=e59] clickable [cursor:pointer, onclick]
+            - StaticText "Type Contrat"
+            - button "Type Contrat column menu" [expanded=false, ref=e93]
+            - generic [ref=e94] clickable [onclick]
+          - columnheader "Date Début Date Début column menu" [ref=e60] clickable [cursor:pointer, onclick]
+            - StaticText "Date Début"
+            - button "Date Début column menu" [expanded=false, ref=e95]
+            - generic [ref=e96] clickable [onclick]
+          - columnheader "Date Fin Date Fin column menu" [ref=e61] clickable [cursor:pointer, onclick]
+            - StaticText "Date Fin"
+            - button "Date Fin column menu" [expanded=false, ref=e97]
+            - generic [ref=e98] clickable [onclick]
+          - columnheader "Durée (mois) Durée (mois) column menu" [ref=e62] clickable [cursor:pointer, onclick]
+            - StaticText "Durée (mois)"
+            - button "Durée (mois) column menu" [expanded=false, ref=e99]
+            - generic [ref=e100] clickable [onclick]
+          - columnheader "Salaire Brut (FCFA) Salaire Brut (FCFA) column menu" [ref=e63] clickable [cursor:pointer, onclick]
+            - StaticText "Salaire Brut (FCFA)"
+            - button "Salaire Brut (FCFA) column menu" [expanded=false, ref=e101]
+            - generic [ref=e102] clickable [onclick]
+          - columnheader "Statut Statut column menu" [ref=e64] clickable [cursor:pointer, onclick]
+            - StaticText "Statut"
+            - button "Statut column menu" [expanded=false, ref=e103]
+            - generic [ref=e104] clickable [onclick]
+      - rowgroup
+        - row "CT-011 Bassong Hermine Comptable Finance & Comptabilite CDD 01/07/2024 31/12/2024 6 180 000 FCFA Echu" [ref=e53] clickable [onclick]
+          - gridcell "CT-011" [ref=e65] clickable [onclick]
+            - paragraph
+              - StaticText "CT-011"
+          - gridcell "Bassong Hermine" [ref=e66] clickable [onclick]
+          - gridcell "Comptable" [ref=e67] clickable [onclick]
+          - gridcell "Finance & Comptabilite" [ref=e68] clickable [onclick]
+          - gridcell "CDD" [ref=e69] clickable [onclick]
+          - gridcell "01/07/2024" [ref=e70] clickable [onclick]
+          - gridcell "31/12/2024" [ref=e71] clickable [onclick]
+          - gridcell "6" [ref=e72] clickable [onclick]
+          - gridcell "180 000 FCFA" [ref=e73] clickable [onclick]
+          - gridcell "Echu" [ref=e74] clickable [onclick]
+            - generic [ref=e105] clickable [onclick]
+              - StaticText "Echu"
+        - row "CT-012 Ngo Meli Sophie Gouvernante Herbergement CDI 10/01/2024 — — 250 000 FCFA En cours" [ref=e54] clickable [onclick]
+          - gridcell "CT-012" [ref=e75] clickable [onclick]
+            - paragraph
+              - StaticText "CT-012"
+          - gridcell "Ngo Meli Sophie" [ref=e76] clickable [onclick]
+          - gridcell "Gouvernante" [ref=e77] clickable [onclick]
+          - gridcell "Herbergement" [ref=e78] clickable [onclick]
+          - gridcell "CDI" [ref=e79] clickable [onclick]
+          - gridcell "10/01/2024" [ref=e80] clickable [onclick]
+          - gridcell "—" [ref=e81] clickable [onclick]
+          - gridcell "—" [ref=e82] clickable [onclick]
+          - gridcell "250 000 FCFA" [ref=e83] clickable [onclick]
+          - gridcell "En cours" [ref=e84] clickable [onclick]
+            - generic [ref=e106] clickable [onclick]
+              - StaticText "En cours"
+  - generic
+    - paragraph
+      - StaticText "11–12 of 12"
+    - generic
+      - button "Go to previous page" [ref=e51]
+      - button "Go to next page" [disabled, ref=e52]
+- generic
+  - paragraph
+    - StaticText "11–12 of 12"
+  - generic
+    - button "Go to previous page" [ref=e51]
+    - button "Go to next page" [disabled, ref=e52]
+- StaticText "N° Contrat"
+- button "N° Contrat column menu" [expanded=false, ref=e85]
+- StaticText "Employé"
+- button "Employé column menu" [expanded=false, ref=e87]
+- StaticText "Poste"
+- button "Poste column menu" [expanded=false, ref=e89]
+- StaticText "Département"
+- button "Département column menu" [expanded=false, ref=e91]
+- StaticText "Type Contrat"
+- button "Type Contrat column menu" [expanded=false, ref=e93]
+- StaticText "Date Début"
+- button "Date Début column menu" [expanded=false, ref=e95]
+- StaticText "Date Fin"
+- button "Date Fin column menu" [expanded=false, ref=e97]
+- StaticText "Durée (mois)"
+- button "Durée (mois) column menu" [expanded=false, ref=e99]
+- StaticText "Salaire Brut (FCFA)"
+- button "Salaire Brut (FCFA) column menu" [expanded=false, ref=e101]
+- StaticText "Statut"
+- button "Statut column menu" [expanded=false, ref=e103]
+- StaticText "Echu"
+- StaticText "En cours"

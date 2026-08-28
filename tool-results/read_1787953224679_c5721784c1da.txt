@@ -1,0 +1,510 @@
+     1→- main
+     2→  - heading "Saisonniers" [level=4, ref=e5]
+     3→  - button "Exporter 10 enregistrements en CSV" [ref=e6]
+     4→    - StaticText "Exporter CSV"
+     5→  - button " Ajouter" [ref=e7]
+     6→    - StaticText "Ajouter"
+     7→  - paragraph
+     8→    - StaticText "Total Saisonniers"
+     9→  - heading "10" [level=4, ref=e8]
+    10→  - paragraph
+    11→    - StaticText "Coût Total"
+    12→  - heading "3 956 300 FCFA" [level=4, ref=e9]
+    13→  - paragraph
+    14→    - StaticText "Durée Moyenne"
+    15→  - heading "87 jours" [level=4, ref=e10]
+    16→    - StaticText "87 jours"
+    17→  - generic [ref=e40] clickable [onclick]
+    18→    - textbox "Rechercher..." [ref=e45]
+    19→  - generic
+    20→    - LabelText
+    21→      - StaticText "Département"
+    22→    - generic [ref=e41] clickable [onclick]
+    23→      - combobox [expanded=false, ref=e46]
+    24→  - generic
+    25→    - LabelText
+    26→      - StaticText "Statut"
+    27→    - generic [ref=e42] clickable [onclick]
+    28→      - combobox [expanded=false, ref=e47]
+    29→  - generic
+    30→    - LabelText
+    31→      - StaticText "Motif"
+    32→    - generic [ref=e43] clickable [onclick]
+    33→      - combobox [expanded=false, ref=e48]
+    34→  - generic
+    35→    - grid
+    36→      - generic
+    37→        - rowgroup
+    38→          - row "N° N° column menu Nom Nom column menu Prénom Prénom column menu Poste Poste column menu Département Département column menu Date Début Date Début column menu Date Fin Date Fin column menu Durée (jours) Durée (jours) column menu Statut Statut column menu Taux Horaire (FCFA) Taux Horaire (FCFA) column menu Coût Total (FCFA) Coût Total (FCFA) column menu"
+    39→            - columnheader "N° N° column menu" [ref=e64] clickable [cursor:pointer, onclick, tabindex]
+    40→              - StaticText "N°"
+    41→              - button "N° column menu" [expanded=false, ref=e185]
+    42→              - generic [ref=e186] clickable [onclick]
+    43→            - columnheader "Nom Nom column menu" [ref=e65] clickable [cursor:pointer, onclick]
+    44→              - StaticText "Nom"
+    45→              - button "Nom column menu" [expanded=false, ref=e187]
+    46→              - generic [ref=e188] clickable [onclick]
+    47→            - columnheader "Prénom Prénom column menu" [ref=e66] clickable [cursor:pointer, onclick]
+    48→              - StaticText "Prénom"
+    49→              - button "Prénom column menu" [expanded=false, ref=e189]
+    50→              - generic [ref=e190] clickable [onclick]
+    51→            - columnheader "Poste Poste column menu" [ref=e67] clickable [cursor:pointer, onclick]
+    52→              - StaticText "Poste"
+    53→              - button "Poste column menu" [expanded=false, ref=e191]
+    54→              - generic [ref=e192] clickable [onclick]
+    55→            - columnheader "Département Département column menu" [ref=e68] clickable [cursor:pointer, onclick]
+    56→              - StaticText "Département"
+    57→              - button "Département column menu" [expanded=false, ref=e193]
+    58→              - generic [ref=e194] clickable [onclick]
+    59→            - columnheader "Date Début Date Début column menu" [ref=e69] clickable [cursor:pointer, onclick]
+    60→              - StaticText "Date Début"
+    61→              - button "Date Début column menu" [expanded=false, ref=e195]
+    62→              - generic [ref=e196] clickable [onclick]
+    63→            - columnheader "Date Fin Date Fin column menu" [ref=e70] clickable [cursor:pointer, onclick]
+    64→              - StaticText "Date Fin"
+    65→              - button "Date Fin column menu" [expanded=false, ref=e197]
+    66→              - generic [ref=e198] clickable [onclick]
+    67→            - columnheader "Durée (jours) Durée (jours) column menu" [ref=e71] clickable [cursor:pointer, onclick]
+    68→              - StaticText "Durée (jours)"
+    69→              - button "Durée (jours) column menu" [expanded=false, ref=e199]
+    70→              - generic [ref=e200] clickable [onclick]
+    71→            - columnheader "Statut Statut column menu" [ref=e72] clickable [cursor:pointer, onclick]
+    72→              - StaticText "Statut"
+    73→              - button "Statut column menu" [expanded=false, ref=e201]
+    74→              - generic [ref=e202] clickable [onclick]
+    75→            - columnheader "Taux Horaire (FCFA) Taux Horaire (FCFA) column menu" [ref=e73] clickable [cursor:pointer, onclick]
+    76→              - StaticText "Taux Horaire (FCFA)"
+    77→              - button "Taux Horaire (FCFA) column menu" [expanded=false, ref=e203]
+    78→              - generic [ref=e204] clickable [onclick]
+    79→            - columnheader "Coût Total (FCFA) Coût Total (FCFA) column menu" [ref=e74] clickable [cursor:pointer, onclick]
+    80→              - StaticText "Coût Total (FCFA)"
+    81→              - button "Coût Total (FCFA) column menu" [expanded=false, ref=e205]
+    82→              - generic [ref=e206] clickable [onclick]
+    83→        - rowgroup
+    84→          - row "SAI-001 Nkoum Patrick Plongeur Restauration 2025-05-03 2025-08-02 91 j En negociation 2 500 FCFA 455 000 FCFA" [ref=e54] clickable [onclick]
+    85→            - gridcell "SAI-001" [ref=e75] clickable [onclick]
+    86→            - gridcell "Nkoum" [ref=e76] clickable [onclick]
+    87→            - gridcell "Patrick" [ref=e77] clickable [onclick]
+    88→            - gridcell "Plongeur" [ref=e78] clickable [onclick]
+    89→            - gridcell "Restauration" [ref=e79] clickable [onclick]
+    90→            - gridcell "2025-05-03" [ref=e80] clickable [onclick]
+    91→            - gridcell "2025-08-02" [ref=e81] clickable [onclick]
+    92→            - gridcell "91 j" [ref=e82] clickable [onclick]
+    93→            - gridcell "En negociation" [ref=e83] clickable [onclick]
+    94→              - generic [ref=e207] clickable [onclick]
+    95→                - StaticText "En negociation"
+    96→            - gridcell "2 500 FCFA" [ref=e84] clickable [onclick]
+    97→            - gridcell "455 000 FCFA" [ref=e85] clickable [onclick]
+    98→          - row "SAI-002 Moukouri Brigitte Femme de chambre Herbergement 2025-05-17 2025-08-17 92 j En negociation 2 250 FCFA 414 000 FCFA" [ref=e55] clickable [onclick]
+    99→            - gridcell "SAI-002" [ref=e86] clickable [onclick]
+   100→            - gridcell "Moukouri" [ref=e87] clickable [onclick]
+   101→            - gridcell "Brigitte" [ref=e88] clickable [onclick]
+   102→            - gridcell "Femme de chambre" [ref=e89] clickable [onclick]
+   103→            - gridcell "Herbergement" [ref=e90] clickable [onclick]
+   104→            - gridcell "2025-05-17" [ref=e91] clickable [onclick]
+   105→            - gridcell "2025-08-17" [ref=e92] clickable [onclick]
+   106→            - gridcell "92 j" [ref=e93] clickable [onclick]
+   107→            - gridcell "En negociation" [ref=e94] clickable [onclick]
+   108→              - generic [ref=e208] clickable [onclick]
+   109→                - StaticText "En negociation"
+   110→            - gridcell "2 250 FCFA" [ref=e95] clickable [onclick]
+   111→            - gridcell "414 000 FCFA" [ref=e96] clickable [onclick]
+   112→          - row "SAI-003 Tchinda Emmanuel Agent securite Securite 2025-06-01 2025-08-31 92 j En negociation 2 000 FCFA 368 000 FCFA" [ref=e56] clickable [onclick]
+   113→            - gridcell "SAI-003" [ref=e97] clickable [onclick]
+   114→            - gridcell "Tchinda" [ref=e98] clickable [onclick]
+   115→            - gridcell "Emmanuel" [ref=e99] clickable [onclick]
+   116→            - gridcell "Agent securite" [ref=e100] clickable [onclick]
+   117→            - gridcell "Securite" [ref=e101] clickable [onclick]
+   118→            - gridcell "2025-06-01" [ref=e102] clickable [onclick]
+   119→            - gridcell "2025-08-31" [ref=e103] clickable [onclick]
+   120→            - gridcell "92 j" [ref=e104] clickable [onclick]
+   121→            - gridcell "En negociation" [ref=e105] clickable [onclick]
+   122→              - generic [ref=e209] clickable [onclick]
+   123→                - StaticText "En negociation"
+   124→            - gridcell "2 000 FCFA" [ref=e106] clickable [onclick]
+   125→            - gridcell "368 000 FCFA" [ref=e107] clickable [onclick]
+   126→          - row "SAI-004 Ngassa Diane Serveuse Restauration 2025-06-15 2025-09-15 92 j En negociation 2 200 FCFA 404 800 FCFA" [ref=e57] clickable [onclick]
+   127→            - gridcell "SAI-004" [ref=e108] clickable [onclick]
+   128→            - gridcell "Ngassa" [ref=e109] clickable [onclick]
+   129→            - gridcell "Diane" [ref=e110] clickable [onclick]
+   130→            - gridcell "Serveuse" [ref=e111] clickable [onclick]
+   131→            - gridcell "Restauration" [ref=e112] clickable [onclick]
+   132→            - gridcell "2025-06-15" [ref=e113] clickable [onclick]
+   133→            - gridcell "2025-09-15" [ref=e114] clickable [onclick]
+   134→            - gridcell "92 j" [ref=e115] clickable [onclick]
+   135→            - gridcell "En negociation" [ref=e116] clickable [onclick]
+   136→              - generic [ref=e210] clickable [onclick]
+   137→                - StaticText "En negociation"
+   138→            - gridcell "2 200 FCFA" [ref=e117] clickable [onclick]
+   139→            - gridcell "404 800 FCFA" [ref=e118] clickable [onclick]
+   140→          - row "SAI-005 Fokou Alain Aide cuisinier Restauration 2025-05-01 2025-07-31 91 j En negociation 2 300 FCFA 419 300 FCFA" [ref=e58] clickable [onclick]
+   141→            - gridcell "SAI-005" [ref=e119] clickable [onclick]
+   142→            - gridcell "Fokou" [ref=e120] clickable [onclick]
+   143→            - gridcell "Alain" [ref=e121] clickable [onclick]
+   144→            - gridcell "Aide cuisinier" [ref=e122] clickable [onclick]
+   145→            - gridcell "Restauration" [ref=e123] clickable [onclick]
+   146→            - gridcell "2025-05-01" [ref=e124] clickable [onclick]
+   147→            - gridcell "2025-07-31" [ref=e125] clickable [onclick]
+   148→            - gridcell "91 j" [ref=e126] clickable [onclick]
+   149→            - gridcell "En negociation" [ref=e127] clickable [onclick]
+   150→              - generic [ref=e211] clickable [onclick]
+   151→                - StaticText "En negociation"
+   152→            - gridcell "2 300 FCFA" [ref=e128] clickable [onclick]
+   153→            - gridcell "419 300 FCFA" [ref=e129] clickable [onclick]
+   154→          - row "SAI-006 Mebenga Josiane Lingère Lingerie 2025-06-01 2025-08-31 92 j En negociation 2 000 FCFA 368 000 FCFA" [ref=e59] clickable [onclick]
+   155→            - gridcell "SAI-006" [ref=e130] clickable [onclick]
+   156→            - gridcell "Mebenga" [ref=e131] clickable [onclick]
+   157→            - gridcell "Josiane" [ref=e132] clickable [onclick]
+   158→            - gridcell "Lingère" [ref=e133] clickable [onclick]
+   159→            - gridcell "Lingerie" [ref=e134] clickable [onclick]
+   160→            - gridcell "2025-06-01" [ref=e135] clickable [onclick]
+   161→            - gridcell "2025-08-31" [ref=e136] clickable [onclick]
+   162→            - gridcell "92 j" [ref=e137] clickable [onclick]
+   163→            - gridcell "En negociation" [ref=e138] clickable [onclick]
+   164→              - generic [ref=e212] clickable [onclick]
+   165→                - StaticText "En negociation"
+   166→            - gridcell "2 000 FCFA" [ref=e139] clickable [onclick]
+   167→            - gridcell "368 000 FCFA" [ref=e140] clickable [onclick]
+   168→          - row "SAI-007 Nguimatsia Fabrice Jardinier Maintenance 2025-04-01 2025-06-30 90 j En cours 1 800 FCFA 324 000 FCFA" [ref=e60] clickable [onclick]
+   169→            - gridcell "SAI-007" [ref=e141] clickable [onclick]
+   170→            - gridcell "Nguimatsia" [ref=e142] clickable [onclick]
+   171→            - gridcell "Fabrice" [ref=e143] clickable [onclick]
+   172→            - gridcell "Jardinier" [ref=e144] clickable [onclick]
+   173→            - gridcell "Maintenance" [ref=e145] clickable [onclick]
+   174→            - gridcell "2025-04-01" [ref=e146] clickable [onclick]
+   175→            - gridcell "2025-06-30" [ref=e147] clickable [onclick]
+   176→            - gridcell "90 j" [ref=e148] clickable [onclick]
+   177→            - gridcell "En cours" [ref=e149] clickable [onclick]
+   178→              - generic [ref=e213] clickable [onclick]
+   179→                - StaticText "En cours"
+   180→            - gridcell "1 800 FCFA" [ref=e150] clickable [onclick]
+   181→            - gridcell "324 000 FCFA" [ref=e151] clickable [onclick]
+   182→          - row "SAI-008 Nkoulou Cédric Chauffeur Logistique & Approvisionnement 2025-07-01 2025-09-30 92 j En negociation 2 500 FCFA 460 000 FCFA" [ref=e61] clickable [onclick]
+   183→            - gridcell "SAI-008" [ref=e152] clickable [onclick]
+   184→            - gridcell "Nkoulou" [ref=e153] clickable [onclick]
+   185→            - gridcell "Cédric" [ref=e154] clickable [onclick]
+   186→            - gridcell "Chauffeur" [ref=e155] clickable [onclick]
+   187→            - gridcell "Logistique & Approvisionnement" [ref=e156] clickable [onclick]
+   188→            - gridcell "2025-07-01" [ref=e157] clickable [onclick]
+   189→            - gridcell "2025-09-30" [ref=e158] clickable [onclick]
+   190→            - gridcell "92 j" [ref=e159] clickable [onclick]
+   191→            - gridcell "En negociation" [ref=e160] clickable [onclick]
+   192→              - generic [ref=e214] clickable [onclick]
+   193→                - StaticText "En negociation"
+   194→            - gridcell "2 500 FCFA" [ref=e161] clickable [onclick]
+   195→            - gridcell "460 000 FCFA" [ref=e162] clickable [onclick]
+   196→          - row "SAI-009 Kamga Viviane Réceptionniste Herbergement 2025-06-01 2025-08-31 92 j En negociation 2 600 FCFA 478 400 FCFA" [ref=e62] clickable [onclick]
+   197→            - gridcell "SAI-009" [ref=e163] clickable [onclick]
+   198→            - gridcell "Kamga" [ref=e164] clickable [onclick]
+   199→            - gridcell "Viviane" [ref=e165] clickable [onclick]
+   200→            - gridcell "Réceptionniste" [ref=e166] clickable [onclick]
+   201→            - gridcell "Herbergement" [ref=e167] clickable [onclick]
+   202→            - gridcell "2025-06-01" [ref=e168] clickable [onclick]
+   203→            - gridcell "2025-08-31" [ref=e169] clickable [onclick]
+   204→            - gridcell "92 j" [ref=e170] clickable [onclick]
+   205→            - gridcell "En negociation" [ref=e171] clickable [onclick]
+   206→              - generic [ref=e215] clickable [onclick]
+   207→                - StaticText "En negociation"
+   208→            - gridcell "2 600 FCFA" [ref=e172] clickable [onclick]
+   209→            - gridcell "478 400 FCFA" [ref=e173] clickable [onclick]
+   210→          - row "SAI-010 Tchouankou Gloire Animateur Restauration 2025-07-15 2025-08-31 47 j En negociation 2 800 FCFA 264 800 FCFA" [ref=e63] clickable [onclick]
+   211→            - gridcell "SAI-010" [ref=e174] clickable [onclick]
+   212→            - gridcell "Tchouankou" [ref=e175] clickable [onclick]
+   213→            - gridcell "Gloire" [ref=e176] clickable [onclick]
+   214→            - gridcell "Animateur" [ref=e177] clickable [onclick]
+   215→            - gridcell "Restauration" [ref=e178] clickable [onclick]
+   216→            - gridcell "2025-07-15" [ref=e179] clickable [onclick]
+   217→            - gridcell "2025-08-31" [ref=e180] clickable [onclick]
+   218→            - gridcell "47 j" [ref=e181] clickable [onclick]
+   219→            - gridcell "En negociation" [ref=e182] clickable [onclick]
+   220→              - generic [ref=e216] clickable [onclick]
+   221→                - StaticText "En negociation"
+   222→            - gridcell "2 800 FCFA" [ref=e183] clickable [onclick]
+   223→            - gridcell "264 800 FCFA" [ref=e184] clickable [onclick]
+   224→    - generic
+   225→      - paragraph
+   226→        - StaticText "Rows per page:"
+   227→      - generic [ref=e49] clickable [onclick]
+   228→        - combobox "Rows per page:" [expanded=false, ref=e51]: 100
+   229→          - StaticText "100"
+   230→      - paragraph
+   231→        - StaticText "1–10 of 10"
+   232→      - generic
+   233→        - button "Go to previous page" [disabled, ref=e52]
+   234→        - button "Go to next page" [disabled, ref=e53]
+   235→- heading "Saisonniers" [level=4, ref=e5]
+   236→- button "Exporter 10 enregistrements en CSV" [ref=e6]
+   237→  - StaticText "Exporter CSV"
+   238→- button " Ajouter" [ref=e7]
+   239→  - StaticText "Ajouter"
+   240→- paragraph
+   241→  - StaticText "Total Saisonniers"
+   242→- heading "10" [level=4, ref=e8]
+   243→- paragraph
+   244→  - StaticText "Coût Total"
+   245→- heading "3 956 300 FCFA" [level=4, ref=e9]
+   246→- paragraph
+   247→  - StaticText "Durée Moyenne"
+   248→- heading "87 jours" [level=4, ref=e10]
+   249→  - StaticText "87 jours"
+   250→- generic [ref=e40] clickable [onclick]
+   251→  - textbox "Rechercher..." [ref=e45]
+   252→- generic
+   253→  - LabelText
+   254→    - StaticText "Département"
+   255→  - generic [ref=e41] clickable [onclick]
+   256→    - combobox [expanded=false, ref=e46]
+   257→- generic
+   258→  - LabelText
+   259→    - StaticText "Statut"
+   260→  - generic [ref=e42] clickable [onclick]
+   261→    - combobox [expanded=false, ref=e47]
+   262→- generic
+   263→  - LabelText
+   264→    - StaticText "Motif"
+   265→  - generic [ref=e43] clickable [onclick]
+   266→    - combobox [expanded=false, ref=e48]
+   267→- generic
+   268→  - grid
+   269→    - generic
+   270→      - rowgroup
+   271→        - row "N° N° column menu Nom Nom column menu Prénom Prénom column menu Poste Poste column menu Département Département column menu Date Début Date Début column menu Date Fin Date Fin column menu Durée (jours) Durée (jours) column menu Statut Statut column menu Taux Horaire (FCFA) Taux Horaire (FCFA) column menu Coût Total (FCFA) Coût Total (FCFA) column menu"
+   272→          - columnheader "N° N° column menu" [ref=e64] clickable [cursor:pointer, onclick, tabindex]
+   273→            - StaticText "N°"
+   274→            - button "N° column menu" [expanded=false, ref=e185]
+   275→            - generic [ref=e186] clickable [onclick]
+   276→          - columnheader "Nom Nom column menu" [ref=e65] clickable [cursor:pointer, onclick]
+   277→            - StaticText "Nom"
+   278→            - button "Nom column menu" [expanded=false, ref=e187]
+   279→            - generic [ref=e188] clickable [onclick]
+   280→          - columnheader "Prénom Prénom column menu" [ref=e66] clickable [cursor:pointer, onclick]
+   281→            - StaticText "Prénom"
+   282→            - button "Prénom column menu" [expanded=false, ref=e189]
+   283→            - generic [ref=e190] clickable [onclick]
+   284→          - columnheader "Poste Poste column menu" [ref=e67] clickable [cursor:pointer, onclick]
+   285→            - StaticText "Poste"
+   286→            - button "Poste column menu" [expanded=false, ref=e191]
+   287→            - generic [ref=e192] clickable [onclick]
+   288→          - columnheader "Département Département column menu" [ref=e68] clickable [cursor:pointer, onclick]
+   289→            - StaticText "Département"
+   290→            - button "Département column menu" [expanded=false, ref=e193]
+   291→            - generic [ref=e194] clickable [onclick]
+   292→          - columnheader "Date Début Date Début column menu" [ref=e69] clickable [cursor:pointer, onclick]
+   293→            - StaticText "Date Début"
+   294→            - button "Date Début column menu" [expanded=false, ref=e195]
+   295→            - generic [ref=e196] clickable [onclick]
+   296→          - columnheader "Date Fin Date Fin column menu" [ref=e70] clickable [cursor:pointer, onclick]
+   297→            - StaticText "Date Fin"
+   298→            - button "Date Fin column menu" [expanded=false, ref=e197]
+   299→            - generic [ref=e198] clickable [onclick]
+   300→          - columnheader "Durée (jours) Durée (jours) column menu" [ref=e71] clickable [cursor:pointer, onclick]
+   301→            - StaticText "Durée (jours)"
+   302→            - button "Durée (jours) column menu" [expanded=false, ref=e199]
+   303→            - generic [ref=e200] clickable [onclick]
+   304→          - columnheader "Statut Statut column menu" [ref=e72] clickable [cursor:pointer, onclick]
+   305→            - StaticText "Statut"
+   306→            - button "Statut column menu" [expanded=false, ref=e201]
+   307→            - generic [ref=e202] clickable [onclick]
+   308→          - columnheader "Taux Horaire (FCFA) Taux Horaire (FCFA) column menu" [ref=e73] clickable [cursor:pointer, onclick]
+   309→            - StaticText "Taux Horaire (FCFA)"
+   310→            - button "Taux Horaire (FCFA) column menu" [expanded=false, ref=e203]
+   311→            - generic [ref=e204] clickable [onclick]
+   312→          - columnheader "Coût Total (FCFA) Coût Total (FCFA) column menu" [ref=e74] clickable [cursor:pointer, onclick]
+   313→            - StaticText "Coût Total (FCFA)"
+   314→            - button "Coût Total (FCFA) column menu" [expanded=false, ref=e205]
+   315→            - generic [ref=e206] clickable [onclick]
+   316→      - rowgroup
+   317→        - row "SAI-001 Nkoum Patrick Plongeur Restauration 2025-05-03 2025-08-02 91 j En negociation 2 500 FCFA 455 000 FCFA" [ref=e54] clickable [onclick]
+   318→          - gridcell "SAI-001" [ref=e75] clickable [onclick]
+   319→          - gridcell "Nkoum" [ref=e76] clickable [onclick]
+   320→          - gridcell "Patrick" [ref=e77] clickable [onclick]
+   321→          - gridcell "Plongeur" [ref=e78] clickable [onclick]
+   322→          - gridcell "Restauration" [ref=e79] clickable [onclick]
+   323→          - gridcell "2025-05-03" [ref=e80] clickable [onclick]
+   324→          - gridcell "2025-08-02" [ref=e81] clickable [onclick]
+   325→          - gridcell "91 j" [ref=e82] clickable [onclick]
+   326→          - gridcell "En negociation" [ref=e83] clickable [onclick]
+   327→            - generic [ref=e207] clickable [onclick]
+   328→              - StaticText "En negociation"
+   329→          - gridcell "2 500 FCFA" [ref=e84] clickable [onclick]
+   330→          - gridcell "455 000 FCFA" [ref=e85] clickable [onclick]
+   331→        - row "SAI-002 Moukouri Brigitte Femme de chambre Herbergement 2025-05-17 2025-08-17 92 j En negociation 2 250 FCFA 414 000 FCFA" [ref=e55] clickable [onclick]
+   332→          - gridcell "SAI-002" [ref=e86] clickable [onclick]
+   333→          - gridcell "Moukouri" [ref=e87] clickable [onclick]
+   334→          - gridcell "Brigitte" [ref=e88] clickable [onclick]
+   335→          - gridcell "Femme de chambre" [ref=e89] clickable [onclick]
+   336→          - gridcell "Herbergement" [ref=e90] clickable [onclick]
+   337→          - gridcell "2025-05-17" [ref=e91] clickable [onclick]
+   338→          - gridcell "2025-08-17" [ref=e92] clickable [onclick]
+   339→          - gridcell "92 j" [ref=e93] clickable [onclick]
+   340→          - gridcell "En negociation" [ref=e94] clickable [onclick]
+   341→            - generic [ref=e208] clickable [onclick]
+   342→              - StaticText "En negociation"
+   343→          - gridcell "2 250 FCFA" [ref=e95] clickable [onclick]
+   344→          - gridcell "414 000 FCFA" [ref=e96] clickable [onclick]
+   345→        - row "SAI-003 Tchinda Emmanuel Agent securite Securite 2025-06-01 2025-08-31 92 j En negociation 2 000 FCFA 368 000 FCFA" [ref=e56] clickable [onclick]
+   346→          - gridcell "SAI-003" [ref=e97] clickable [onclick]
+   347→          - gridcell "Tchinda" [ref=e98] clickable [onclick]
+   348→          - gridcell "Emmanuel" [ref=e99] clickable [onclick]
+   349→          - gridcell "Agent securite" [ref=e100] clickable [onclick]
+   350→          - gridcell "Securite" [ref=e101] clickable [onclick]
+   351→          - gridcell "2025-06-01" [ref=e102] clickable [onclick]
+   352→          - gridcell "2025-08-31" [ref=e103] clickable [onclick]
+   353→          - gridcell "92 j" [ref=e104] clickable [onclick]
+   354→          - gridcell "En negociation" [ref=e105] clickable [onclick]
+   355→            - generic [ref=e209] clickable [onclick]
+   356→              - StaticText "En negociation"
+   357→          - gridcell "2 000 FCFA" [ref=e106] clickable [onclick]
+   358→          - gridcell "368 000 FCFA" [ref=e107] clickable [onclick]
+   359→        - row "SAI-004 Ngassa Diane Serveuse Restauration 2025-06-15 2025-09-15 92 j En negociation 2 200 FCFA 404 800 FCFA" [ref=e57] clickable [onclick]
+   360→          - gridcell "SAI-004" [ref=e108] clickable [onclick]
+   361→          - gridcell "Ngassa" [ref=e109] clickable [onclick]
+   362→          - gridcell "Diane" [ref=e110] clickable [onclick]
+   363→          - gridcell "Serveuse" [ref=e111] clickable [onclick]
+   364→          - gridcell "Restauration" [ref=e112] clickable [onclick]
+   365→          - gridcell "2025-06-15" [ref=e113] clickable [onclick]
+   366→          - gridcell "2025-09-15" [ref=e114] clickable [onclick]
+   367→          - gridcell "92 j" [ref=e115] clickable [onclick]
+   368→          - gridcell "En negociation" [ref=e116] clickable [onclick]
+   369→            - generic [ref=e210] clickable [onclick]
+   370→              - StaticText "En negociation"
+   371→          - gridcell "2 200 FCFA" [ref=e117] clickable [onclick]
+   372→          - gridcell "404 800 FCFA" [ref=e118] clickable [onclick]
+   373→        - row "SAI-005 Fokou Alain Aide cuisinier Restauration 2025-05-01 2025-07-31 91 j En negociation 2 300 FCFA 419 300 FCFA" [ref=e58] clickable [onclick]
+   374→          - gridcell "SAI-005" [ref=e119] clickable [onclick]
+   375→          - gridcell "Fokou" [ref=e120] clickable [onclick]
+   376→          - gridcell "Alain" [ref=e121] clickable [onclick]
+   377→          - gridcell "Aide cuisinier" [ref=e122] clickable [onclick]
+   378→          - gridcell "Restauration" [ref=e123] clickable [onclick]
+   379→          - gridcell "2025-05-01" [ref=e124] clickable [onclick]
+   380→          - gridcell "2025-07-31" [ref=e125] clickable [onclick]
+   381→          - gridcell "91 j" [ref=e126] clickable [onclick]
+   382→          - gridcell "En negociation" [ref=e127] clickable [onclick]
+   383→            - generic [ref=e211] clickable [onclick]
+   384→              - StaticText "En negociation"
+   385→          - gridcell "2 300 FCFA" [ref=e128] clickable [onclick]
+   386→          - gridcell "419 300 FCFA" [ref=e129] clickable [onclick]
+   387→        - row "SAI-006 Mebenga Josiane Lingère Lingerie 2025-06-01 2025-08-31 92 j En negociation 2 000 FCFA 368 000 FCFA" [ref=e59] clickable [onclick]
+   388→          - gridcell "SAI-006" [ref=e130] clickable [onclick]
+   389→          - gridcell "Mebenga" [ref=e131] clickable [onclick]
+   390→          - gridcell "Josiane" [ref=e132] clickable [onclick]
+   391→          - gridcell "Lingère" [ref=e133] clickable [onclick]
+   392→          - gridcell "Lingerie" [ref=e134] clickable [onclick]
+   393→          - gridcell "2025-06-01" [ref=e135] clickable [onclick]
+   394→          - gridcell "2025-08-31" [ref=e136] clickable [onclick]
+   395→          - gridcell "92 j" [ref=e137] clickable [onclick]
+   396→          - gridcell "En negociation" [ref=e138] clickable [onclick]
+   397→            - generic [ref=e212] clickable [onclick]
+   398→              - StaticText "En negociation"
+   399→          - gridcell "2 000 FCFA" [ref=e139] clickable [onclick]
+   400→          - gridcell "368 000 FCFA" [ref=e140] clickable [onclick]
+   401→        - row "SAI-007 Nguimatsia Fabrice Jardinier Maintenance 2025-04-01 2025-06-30 90 j En cours 1 800 FCFA 324 000 FCFA" [ref=e60] clickable [onclick]
+   402→          - gridcell "SAI-007" [ref=e141] clickable [onclick]
+   403→          - gridcell "Nguimatsia" [ref=e142] clickable [onclick]
+   404→          - gridcell "Fabrice" [ref=e143] clickable [onclick]
+   405→          - gridcell "Jardinier" [ref=e144] clickable [onclick]
+   406→          - gridcell "Maintenance" [ref=e145] clickable [onclick]
+   407→          - gridcell "2025-04-01" [ref=e146] clickable [onclick]
+   408→          - gridcell "2025-06-30" [ref=e147] clickable [onclick]
+   409→          - gridcell "90 j" [ref=e148] clickable [onclick]
+   410→          - gridcell "En cours" [ref=e149] clickable [onclick]
+   411→            - generic [ref=e213] clickable [onclick]
+   412→              - StaticText "En cours"
+   413→          - gridcell "1 800 FCFA" [ref=e150] clickable [onclick]
+   414→          - gridcell "324 000 FCFA" [ref=e151] clickable [onclick]
+   415→        - row "SAI-008 Nkoulou Cédric Chauffeur Logistique & Approvisionnement 2025-07-01 2025-09-30 92 j En negociation 2 500 FCFA 460 000 FCFA" [ref=e61] clickable [onclick]
+   416→          - gridcell "SAI-008" [ref=e152] clickable [onclick]
+   417→          - gridcell "Nkoulou" [ref=e153] clickable [onclick]
+   418→          - gridcell "Cédric" [ref=e154] clickable [onclick]
+   419→          - gridcell "Chauffeur" [ref=e155] clickable [onclick]
+   420→          - gridcell "Logistique & Approvisionnement" [ref=e156] clickable [onclick]
+   421→          - gridcell "2025-07-01" [ref=e157] clickable [onclick]
+   422→          - gridcell "2025-09-30" [ref=e158] clickable [onclick]
+   423→          - gridcell "92 j" [ref=e159] clickable [onclick]
+   424→          - gridcell "En negociation" [ref=e160] clickable [onclick]
+   425→            - generic [ref=e214] clickable [onclick]
+   426→              - StaticText "En negociation"
+   427→          - gridcell "2 500 FCFA" [ref=e161] clickable [onclick]
+   428→          - gridcell "460 000 FCFA" [ref=e162] clickable [onclick]
+   429→        - row "SAI-009 Kamga Viviane Réceptionniste Herbergement 2025-06-01 2025-08-31 92 j En negociation 2 600 FCFA 478 400 FCFA" [ref=e62] clickable [onclick]
+   430→          - gridcell "SAI-009" [ref=e163] clickable [onclick]
+   431→          - gridcell "Kamga" [ref=e164] clickable [onclick]
+   432→          - gridcell "Viviane" [ref=e165] clickable [onclick]
+   433→          - gridcell "Réceptionniste" [ref=e166] clickable [onclick]
+   434→          - gridcell "Herbergement" [ref=e167] clickable [onclick]
+   435→          - gridcell "2025-06-01" [ref=e168] clickable [onclick]
+   436→          - gridcell "2025-08-31" [ref=e169] clickable [onclick]
+   437→          - gridcell "92 j" [ref=e170] clickable [onclick]
+   438→          - gridcell "En negociation" [ref=e171] clickable [onclick]
+   439→            - generic [ref=e215] clickable [onclick]
+   440→              - StaticText "En negociation"
+   441→          - gridcell "2 600 FCFA" [ref=e172] clickable [onclick]
+   442→          - gridcell "478 400 FCFA" [ref=e173] clickable [onclick]
+   443→        - row "SAI-010 Tchouankou Gloire Animateur Restauration 2025-07-15 2025-08-31 47 j En negociation 2 800 FCFA 264 800 FCFA" [ref=e63] clickable [onclick]
+   444→          - gridcell "SAI-010" [ref=e174] clickable [onclick]
+   445→          - gridcell "Tchouankou" [ref=e175] clickable [onclick]
+   446→          - gridcell "Gloire" [ref=e176] clickable [onclick]
+   447→          - gridcell "Animateur" [ref=e177] clickable [onclick]
+   448→          - gridcell "Restauration" [ref=e178] clickable [onclick]
+   449→          - gridcell "2025-07-15" [ref=e179] clickable [onclick]
+   450→          - gridcell "2025-08-31" [ref=e180] clickable [onclick]
+   451→          - gridcell "47 j" [ref=e181] clickable [onclick]
+   452→          - gridcell "En negociation" [ref=e182] clickable [onclick]
+   453→            - generic [ref=e216] clickable [onclick]
+   454→              - StaticText "En negociation"
+   455→          - gridcell "2 800 FCFA" [ref=e183] clickable [onclick]
+   456→          - gridcell "264 800 FCFA" [ref=e184] clickable [onclick]
+   457→  - generic
+   458→    - paragraph
+   459→      - StaticText "Rows per page:"
+   460→    - generic [ref=e49] clickable [onclick]
+   461→      - combobox "Rows per page:" [expanded=false, ref=e51]: 100
+   462→        - StaticText "100"
+   463→    - paragraph
+   464→      - StaticText "1–10 of 10"
+   465→    - generic
+   466→      - button "Go to previous page" [disabled, ref=e52]
+   467→      - button "Go to next page" [disabled, ref=e53]
+   468→- generic
+   469→  - paragraph
+   470→    - StaticText "Rows per page:"
+   471→  - generic [ref=e49] clickable [onclick]
+   472→    - combobox "Rows per page:" [expanded=false, ref=e51]: 100
+   473→      - StaticText "100"
+   474→  - paragraph
+   475→    - StaticText "1–10 of 10"
+   476→  - generic
+   477→    - button "Go to previous page" [disabled, ref=e52]
+   478→    - button "Go to next page" [disabled, ref=e53]
+   479→- StaticText "N°"
+   480→- button "N° column menu" [expanded=false, ref=e185]
+   481→- StaticText "Nom"
+   482→- button "Nom column menu" [expanded=false, ref=e187]
+   483→- StaticText "Prénom"
+   484→- button "Prénom column menu" [expanded=false, ref=e189]
+   485→- StaticText "Poste"
+   486→- button "Poste column menu" [expanded=false, ref=e191]
+   487→- StaticText "Département"
+   488→- button "Département column menu" [expanded=false, ref=e193]
+   489→- StaticText "Date Début"
+   490→- button "Date Début column menu" [expanded=false, ref=e195]
+   491→- StaticText "Date Fin"
+   492→- button "Date Fin column menu" [expanded=false, ref=e197]
+   493→- StaticText "Durée (jours)"
+   494→- button "Durée (jours) column menu" [expanded=false, ref=e199]
+   495→- StaticText "Statut"
+   496→- button "Statut column menu" [expanded=false, ref=e201]
+   497→- StaticText "Taux Horaire (FCFA)"
+   498→- button "Taux Horaire (FCFA) column menu" [expanded=false, ref=e203]
+   499→- StaticText "Coût Total (FCFA)"
+   500→- button "Coût Total (FCFA) column menu" [expanded=false, ref=e205]
+   501→- StaticText "En negociation"
+   502→- StaticText "En negociation"
+   503→- StaticText "En negociation"
+   504→- StaticText "En negociation"
+   505→- StaticText "En negociation"
+   506→- StaticText "En negociation"
+   507→- StaticText "En cours"
+   508→- StaticText "En negociation"
+   509→- StaticText "En negociation"
+   510→- StaticText "En negociation"

@@ -1,0 +1,954 @@
+- main
+  - heading "Pipeline de Recrutement" [level=5, ref=e5]
+  - paragraph
+    - StaticText "Glissez-déposez les candidats entre les colonnes"
+  - paragraph
+    - StaticText "Nouvelle candidature"
+  - button "Ajouter un candidat" [ref=e35]
+  - generic [ref=e36] clickable [cursor:pointer, onclick]
+    - StaticText "PIPE-007"
+    - button [ref=e51]
+    - paragraph
+      - StaticText "Sophie Eyenga"
+    - StaticText "Agent de Sécurité"
+    - generic [ref=e69] clickable [cursor:pointer, onclick]
+      - StaticText "Securite"
+    - generic [ref=e52] clickable [cursor:pointer, onclick]
+      - StaticText "Candidature spontanée"
+    - generic [ref=e70] clickable [cursor:pointer, onclick]
+      - StaticText "Moyenne"
+    - StaticText "10/02/2025"
+    - StaticText "10/02/2025"
+    - StaticText "+564j"
+    - StaticText "Ouedraogo Ibrahim"
+    - StaticText "Entretien telephonique"
+    - StaticText "Candidature spontanée avec lettre de motivation."
+  - paragraph
+    - StaticText "CV reçus"
+  - button "Ajouter un candidat" [ref=e37]
+  - generic [ref=e38] clickable [cursor:pointer, onclick]
+    - StaticText "PIPE-009"
+    - button [ref=e53]
+    - paragraph
+      - StaticText "Joséphine Bikay"
+    - StaticText "Stagiaire Marketing"
+    - generic [ref=e71] clickable [cursor:pointer, onclick]
+      - StaticText "Marketing & Communication"
+    - generic [ref=e54] clickable [cursor:pointer, onclick]
+      - StaticText "École/Université"
+    - generic [ref=e72] clickable [cursor:pointer, onclick]
+      - StaticText "Basse"
+    - StaticText "08/02/2025"
+    - StaticText "08/02/2025"
+    - StaticText "+566j"
+    - StaticText "M. Tchinda Alain"
+    - StaticText "Pre-selection CV"
+    - StaticText "Fraîchement diplômée, très motivée pour le marketing digital."
+  - paragraph
+    - StaticText "Pré-sélection"
+  - button "Ajouter un candidat" [ref=e39]
+  - generic [ref=e40] clickable [cursor:pointer, onclick]
+    - StaticText "PIPE-004"
+    - button [ref=e55]
+    - paragraph
+      - StaticText "Aline Fokou"
+    - StaticText "Réceptionniste Nuit"
+    - generic [ref=e73] clickable [cursor:pointer, onclick]
+      - StaticText "Herbergement"
+    - generic [ref=e56] clickable [cursor:pointer, onclick]
+      - StaticText "Site web"
+    - generic [ref=e74] clickable [cursor:pointer, onclick]
+      - StaticText "Moyenne"
+    - StaticText "25/01/2025"
+    - StaticText "25/01/2025"
+    - StaticText "+580j"
+    - StaticText "Mme. Ngo Meli"
+    - StaticText "Envoyer test reception"
+    - StaticText "Diplômée récemment, motivée."
+  - paragraph
+    - StaticText "Entretien téléphonique"
+  - button "Ajouter un candidat" [ref=e41]
+  - generic [ref=e42] clickable [cursor:pointer, onclick]
+    - StaticText "PIPE-006"
+    - button [ref=e57]
+    - paragraph
+      - StaticText "Hervé Kamga"
+    - StaticText "Développeur Full Stack"
+    - generic [ref=e75] clickable [cursor:pointer, onclick]
+      - StaticText "Informatique"
+    - generic [ref=e58] clickable [cursor:pointer, onclick]
+      - StaticText "LinkedIn"
+    - generic [ref=e76] clickable [cursor:pointer, onclick]
+      - StaticText "Haute"
+    - StaticText "12/02/2025"
+    - StaticText "01/02/2025"
+    - StaticText "+573j"
+    - StaticText "Fotu Kevin"
+    - StaticText "Test technique avance"
+    - StaticText "Profil React/Node intéressant."
+  - paragraph
+    - StaticText "Entretien physique"
+  - button "Ajouter un candidat" [ref=e43]
+  - generic
+    - generic [ref=e59] clickable [cursor:pointer, onclick]
+      - StaticText "PIPE-003"
+      - button [ref=e77]
+      - paragraph
+        - StaticText "Serge Nganou"
+      - StaticText "Réceptionniste Nuit"
+      - generic [ref=e92] clickable [cursor:pointer, onclick]
+        - StaticText "Herbergement"
+      - generic [ref=e78] clickable [cursor:pointer, onclick]
+        - StaticText "LinkedIn"
+      - generic [ref=e93] clickable [cursor:pointer, onclick]
+        - StaticText "Moyenne"
+      - StaticText "05/02/2025"
+      - StaticText "05/02/2025"
+      - StaticText "+569j"
+      - StaticText "M. Tchinda Alain"
+      - StaticText "Planifier entretien physique"
+      - StaticText "Bilingue, bon profil."
+    - generic [ref=e60] clickable [cursor:pointer, onclick]
+      - StaticText "PIPE-010"
+      - button [ref=e79]
+      - paragraph
+        - StaticText "Brandon Nkoulou"
+      - StaticText "Développeur Full Stack"
+      - generic [ref=e94] clickable [cursor:pointer, onclick]
+        - StaticText "Informatique"
+      - generic [ref=e80] clickable [cursor:pointer, onclick]
+        - StaticText "LinkedIn"
+      - generic [ref=e81] clickable [cursor:pointer, onclick]
+        - StaticText "12/20"
+      - generic [ref=e95] clickable [cursor:pointer, onclick]
+        - StaticText "Haute"
+      - StaticText "18/02/2025"
+      - StaticText "18/02/2025"
+      - StaticText "+556j"
+      - StaticText "Fotu Kevin"
+      - StaticText "Decision finale recrutement"
+      - StaticText "Prétentions salariales trop élevées par rapport au budget."
+  - paragraph
+    - StaticText "Test technique"
+  - button "Ajouter un candidat" [ref=e44]
+  - generic [ref=e45] clickable [cursor:pointer, onclick]
+    - StaticText "PIPE-005"
+    - button [ref=e61]
+    - paragraph
+      - StaticText "Patrick Mebara"
+    - StaticText "Technicien Audiovisuel"
+    - generic [ref=e82] clickable [cursor:pointer, onclick]
+      - StaticText "Audiovisuel"
+    - generic [ref=e62] clickable [cursor:pointer, onclick]
+      - StaticText "Réseaux sociaux"
+    - generic [ref=e83] clickable [cursor:pointer, onclick]
+      - StaticText "Haute"
+    - StaticText "08/02/2025"
+    - StaticText "08/02/2025"
+    - StaticText "+566j"
+    - StaticText "M. Mebara Paul"
+    - StaticText "Organiser test technique"
+    - StaticText "Expérience solide en sonorisation événementielle."
+  - paragraph
+    - StaticText "Vérification références"
+  - button "Ajouter un candidat" [ref=e46]
+  - generic [ref=e47] clickable [cursor:pointer, onclick]
+    - StaticText "PIPE-008"
+    - button [ref=e63]
+    - paragraph
+      - StaticText "Arnaud Tabe"
+    - StaticText "Agent de Sécurité"
+    - generic [ref=e84] clickable [cursor:pointer, onclick]
+      - StaticText "Herbergement"
+    - generic [ref=e64] clickable [cursor:pointer, onclick]
+      - StaticText "Référence interne"
+    - generic [ref=e65] clickable [cursor:pointer, onclick]
+      - StaticText "15.2/20"
+    - generic [ref=e85] clickable [cursor:pointer, onclick]
+      - StaticText "Moyenne"
+    - StaticText "15/02/2025"
+    - StaticText "15/02/2025"
+    - StaticText "+559j"
+    - StaticText "Mme. Ngo Meli"
+    - StaticText "Verifier references"
+    - StaticText "Références en cours de vérification."
+  - paragraph
+    - StaticText "Proposition envoyée"
+  - button "Ajouter un candidat" [ref=e48]
+  - StaticText "Aucun candidat"
+  - paragraph
+    - StaticText "Embauché"
+  - button "Ajouter un candidat" [ref=e49]
+  - generic
+    - generic [ref=e66] clickable [cursor:pointer, onclick]
+      - StaticText "PIPE-001"
+      - button [ref=e86]
+      - paragraph
+        - StaticText "Moussa Ndiaye"
+      - StaticText "Chef Cuisinier"
+      - generic [ref=e96] clickable [cursor:pointer, onclick]
+        - StaticText "Restauration & Catering"
+      - generic [ref=e87] clickable [cursor:pointer, onclick]
+        - StaticText "Cabinet de recrutement"
+      - generic [ref=e88] clickable [cursor:pointer, onclick]
+        - StaticText "19.2/20"
+      - generic [ref=e97] clickable [cursor:pointer, onclick]
+        - StaticText "Haute"
+      - StaticText "10/02/2025"
+      - StaticText "10/02/2025"
+      - StaticText "+564j"
+      - StaticText "Mme. Fotso Marie"
+      - StaticText "Finaliser contrat"
+      - StaticText "Excellent profil, très bon entretien."
+    - generic [ref=e67] clickable [cursor:pointer, onclick]
+      - StaticText "PIPE-002"
+      - button [ref=e89]
+      - paragraph
+        - StaticText "Claire Tchouankou"
+      - StaticText "Comptable Senior"
+      - generic [ref=e98] clickable [cursor:pointer, onclick]
+        - StaticText "Finance & Comptabilite"
+      - generic [ref=e90] clickable [cursor:pointer, onclick]
+        - StaticText "Référence interne"
+      - generic [ref=e91] clickable [cursor:pointer, onclick]
+        - StaticText "17.6/20"
+      - generic [ref=e99] clickable [cursor:pointer, onclick]
+        - StaticText "Urgente"
+      - StaticText "15/01/2025"
+      - StaticText "15/01/2025"
+      - StaticText "+590j"
+      - StaticText "Mme. Fotso Marie"
+      - StaticText "Cloture periode essai"
+      - StaticText "Profil recommandé par M. Nkoulou."
+  - paragraph
+    - strong
+      - StaticText "10"
+    - StaticText " candidats dans le pipeline"
+  - StaticText "Nouvelle candidature"
+  - StaticText " : "
+  - strong
+    - StaticText "1"
+  - StaticText "CV reçus"
+  - StaticText " : "
+  - strong
+    - StaticText "1"
+  - StaticText "Pré-sélection"
+  - StaticText " : "
+  - strong
+    - StaticText "1"
+  - StaticText "Entretien téléphonique"
+  - StaticText " : "
+  - strong
+    - StaticText "1"
+  - StaticText "Entretien physique"
+  - StaticText " : "
+  - strong
+    - StaticText "2"
+  - StaticText "Test technique"
+  - StaticText " : "
+  - strong
+    - StaticText "1"
+  - StaticText "Vérification références"
+  - StaticText " : "
+  - strong
+    - StaticText "1"
+  - StaticText "Embauché"
+  - StaticText " : "
+  - strong
+    - StaticText "2"
+  - StaticText "Stades actifs :"
+  - StaticText " "
+  - strong
+    - StaticText "89%"
+  - StaticText " du pipeline"
+- heading "Pipeline de Recrutement" [level=5, ref=e5]
+- paragraph
+  - StaticText "Glissez-déposez les candidats entre les colonnes"
+- paragraph
+  - StaticText "Nouvelle candidature"
+- button "Ajouter un candidat" [ref=e35]
+- generic [ref=e36] clickable [cursor:pointer, onclick]
+  - StaticText "PIPE-007"
+  - button [ref=e51]
+  - paragraph
+    - StaticText "Sophie Eyenga"
+  - StaticText "Agent de Sécurité"
+  - generic [ref=e69] clickable [cursor:pointer, onclick]
+    - StaticText "Securite"
+  - generic [ref=e52] clickable [cursor:pointer, onclick]
+    - StaticText "Candidature spontanée"
+  - generic [ref=e70] clickable [cursor:pointer, onclick]
+    - StaticText "Moyenne"
+  - StaticText "10/02/2025"
+  - StaticText "10/02/2025"
+  - StaticText "+564j"
+  - StaticText "Ouedraogo Ibrahim"
+  - StaticText "Entretien telephonique"
+  - StaticText "Candidature spontanée avec lettre de motivation."
+- paragraph
+  - StaticText "CV reçus"
+- button "Ajouter un candidat" [ref=e37]
+- generic [ref=e38] clickable [cursor:pointer, onclick]
+  - StaticText "PIPE-009"
+  - button [ref=e53]
+  - paragraph
+    - StaticText "Joséphine Bikay"
+  - StaticText "Stagiaire Marketing"
+  - generic [ref=e71] clickable [cursor:pointer, onclick]
+    - StaticText "Marketing & Communication"
+  - generic [ref=e54] clickable [cursor:pointer, onclick]
+    - StaticText "École/Université"
+  - generic [ref=e72] clickable [cursor:pointer, onclick]
+    - StaticText "Basse"
+  - StaticText "08/02/2025"
+  - StaticText "08/02/2025"
+  - StaticText "+566j"
+  - StaticText "M. Tchinda Alain"
+  - StaticText "Pre-selection CV"
+  - StaticText "Fraîchement diplômée, très motivée pour le marketing digital."
+- paragraph
+  - StaticText "Pré-sélection"
+- button "Ajouter un candidat" [ref=e39]
+- generic [ref=e40] clickable [cursor:pointer, onclick]
+  - StaticText "PIPE-004"
+  - button [ref=e55]
+  - paragraph
+    - StaticText "Aline Fokou"
+  - StaticText "Réceptionniste Nuit"
+  - generic [ref=e73] clickable [cursor:pointer, onclick]
+    - StaticText "Herbergement"
+  - generic [ref=e56] clickable [cursor:pointer, onclick]
+    - StaticText "Site web"
+  - generic [ref=e74] clickable [cursor:pointer, onclick]
+    - StaticText "Moyenne"
+  - StaticText "25/01/2025"
+  - StaticText "25/01/2025"
+  - StaticText "+580j"
+  - StaticText "Mme. Ngo Meli"
+  - StaticText "Envoyer test reception"
+  - StaticText "Diplômée récemment, motivée."
+- paragraph
+  - StaticText "Entretien téléphonique"
+- button "Ajouter un candidat" [ref=e41]
+- generic [ref=e42] clickable [cursor:pointer, onclick]
+  - StaticText "PIPE-006"
+  - button [ref=e57]
+  - paragraph
+    - StaticText "Hervé Kamga"
+  - StaticText "Développeur Full Stack"
+  - generic [ref=e75] clickable [cursor:pointer, onclick]
+    - StaticText "Informatique"
+  - generic [ref=e58] clickable [cursor:pointer, onclick]
+    - StaticText "LinkedIn"
+  - generic [ref=e76] clickable [cursor:pointer, onclick]
+    - StaticText "Haute"
+  - StaticText "12/02/2025"
+  - StaticText "01/02/2025"
+  - StaticText "+573j"
+  - StaticText "Fotu Kevin"
+  - StaticText "Test technique avance"
+  - StaticText "Profil React/Node intéressant."
+- paragraph
+  - StaticText "Entretien physique"
+- button "Ajouter un candidat" [ref=e43]
+- generic
+  - generic [ref=e59] clickable [cursor:pointer, onclick]
+    - StaticText "PIPE-003"
+    - button [ref=e77]
+    - paragraph
+      - StaticText "Serge Nganou"
+    - StaticText "Réceptionniste Nuit"
+    - generic [ref=e92] clickable [cursor:pointer, onclick]
+      - StaticText "Herbergement"
+    - generic [ref=e78] clickable [cursor:pointer, onclick]
+      - StaticText "LinkedIn"
+    - generic [ref=e93] clickable [cursor:pointer, onclick]
+      - StaticText "Moyenne"
+    - StaticText "05/02/2025"
+    - StaticText "05/02/2025"
+    - StaticText "+569j"
+    - StaticText "M. Tchinda Alain"
+    - StaticText "Planifier entretien physique"
+    - StaticText "Bilingue, bon profil."
+  - generic [ref=e60] clickable [cursor:pointer, onclick]
+    - StaticText "PIPE-010"
+    - button [ref=e79]
+    - paragraph
+      - StaticText "Brandon Nkoulou"
+    - StaticText "Développeur Full Stack"
+    - generic [ref=e94] clickable [cursor:pointer, onclick]
+      - StaticText "Informatique"
+    - generic [ref=e80] clickable [cursor:pointer, onclick]
+      - StaticText "LinkedIn"
+    - generic [ref=e81] clickable [cursor:pointer, onclick]
+      - StaticText "12/20"
+    - generic [ref=e95] clickable [cursor:pointer, onclick]
+      - StaticText "Haute"
+    - StaticText "18/02/2025"
+    - StaticText "18/02/2025"
+    - StaticText "+556j"
+    - StaticText "Fotu Kevin"
+    - StaticText "Decision finale recrutement"
+    - StaticText "Prétentions salariales trop élevées par rapport au budget."
+- paragraph
+  - StaticText "Test technique"
+- button "Ajouter un candidat" [ref=e44]
+- generic [ref=e45] clickable [cursor:pointer, onclick]
+  - StaticText "PIPE-005"
+  - button [ref=e61]
+  - paragraph
+    - StaticText "Patrick Mebara"
+  - StaticText "Technicien Audiovisuel"
+  - generic [ref=e82] clickable [cursor:pointer, onclick]
+    - StaticText "Audiovisuel"
+  - generic [ref=e62] clickable [cursor:pointer, onclick]
+    - StaticText "Réseaux sociaux"
+  - generic [ref=e83] clickable [cursor:pointer, onclick]
+    - StaticText "Haute"
+  - StaticText "08/02/2025"
+  - StaticText "08/02/2025"
+  - StaticText "+566j"
+  - StaticText "M. Mebara Paul"
+  - StaticText "Organiser test technique"
+  - StaticText "Expérience solide en sonorisation événementielle."
+- paragraph
+  - StaticText "Vérification références"
+- button "Ajouter un candidat" [ref=e46]
+- generic [ref=e47] clickable [cursor:pointer, onclick]
+  - StaticText "PIPE-008"
+  - button [ref=e63]
+  - paragraph
+    - StaticText "Arnaud Tabe"
+  - StaticText "Agent de Sécurité"
+  - generic [ref=e84] clickable [cursor:pointer, onclick]
+    - StaticText "Herbergement"
+  - generic [ref=e64] clickable [cursor:pointer, onclick]
+    - StaticText "Référence interne"
+  - generic [ref=e65] clickable [cursor:pointer, onclick]
+    - StaticText "15.2/20"
+  - generic [ref=e85] clickable [cursor:pointer, onclick]
+    - StaticText "Moyenne"
+  - StaticText "15/02/2025"
+  - StaticText "15/02/2025"
+  - StaticText "+559j"
+  - StaticText "Mme. Ngo Meli"
+  - StaticText "Verifier references"
+  - StaticText "Références en cours de vérification."
+- paragraph
+  - StaticText "Proposition envoyée"
+- button "Ajouter un candidat" [ref=e48]
+- StaticText "Aucun candidat"
+- paragraph
+  - StaticText "Embauché"
+- button "Ajouter un candidat" [ref=e49]
+- generic
+  - generic [ref=e66] clickable [cursor:pointer, onclick]
+    - StaticText "PIPE-001"
+    - button [ref=e86]
+    - paragraph
+      - StaticText "Moussa Ndiaye"
+    - StaticText "Chef Cuisinier"
+    - generic [ref=e96] clickable [cursor:pointer, onclick]
+      - StaticText "Restauration & Catering"
+    - generic [ref=e87] clickable [cursor:pointer, onclick]
+      - StaticText "Cabinet de recrutement"
+    - generic [ref=e88] clickable [cursor:pointer, onclick]
+      - StaticText "19.2/20"
+    - generic [ref=e97] clickable [cursor:pointer, onclick]
+      - StaticText "Haute"
+    - StaticText "10/02/2025"
+    - StaticText "10/02/2025"
+    - StaticText "+564j"
+    - StaticText "Mme. Fotso Marie"
+    - StaticText "Finaliser contrat"
+    - StaticText "Excellent profil, très bon entretien."
+  - generic [ref=e67] clickable [cursor:pointer, onclick]
+    - StaticText "PIPE-002"
+    - button [ref=e89]
+    - paragraph
+      - StaticText "Claire Tchouankou"
+    - StaticText "Comptable Senior"
+    - generic [ref=e98] clickable [cursor:pointer, onclick]
+      - StaticText "Finance & Comptabilite"
+    - generic [ref=e90] clickable [cursor:pointer, onclick]
+      - StaticText "Référence interne"
+    - generic [ref=e91] clickable [cursor:pointer, onclick]
+      - StaticText "17.6/20"
+    - generic [ref=e99] clickable [cursor:pointer, onclick]
+      - StaticText "Urgente"
+    - StaticText "15/01/2025"
+    - StaticText "15/01/2025"
+    - StaticText "+590j"
+    - StaticText "Mme. Fotso Marie"
+    - StaticText "Cloture periode essai"
+    - StaticText "Profil recommandé par M. Nkoulou."
+- paragraph
+  - strong
+    - StaticText "10"
+  - StaticText " candidats dans le pipeline"
+- StaticText "Nouvelle candidature"
+- StaticText " : "
+- strong
+  - StaticText "1"
+- StaticText "CV reçus"
+- StaticText " : "
+- strong
+  - StaticText "1"
+- StaticText "Pré-sélection"
+- StaticText " : "
+- strong
+  - StaticText "1"
+- StaticText "Entretien téléphonique"
+- StaticText " : "
+- strong
+  - StaticText "1"
+- StaticText "Entretien physique"
+- StaticText " : "
+- strong
+  - StaticText "2"
+- StaticText "Test technique"
+- StaticText " : "
+- strong
+  - StaticText "1"
+- StaticText "Vérification références"
+- StaticText " : "
+- strong
+  - StaticText "1"
+- StaticText "Embauché"
+- StaticText " : "
+- strong
+  - StaticText "2"
+- StaticText "Stades actifs :"
+- strong
+  - StaticText "89%"
+- StaticText " du pipeline"
+- paragraph
+  - StaticText "Nouvelle candidature"
+- button "Ajouter un candidat" [ref=e35]
+- generic [ref=e36] clickable [cursor:pointer, onclick]
+  - StaticText "PIPE-007"
+  - button [ref=e51]
+  - paragraph
+    - StaticText "Sophie Eyenga"
+  - StaticText "Agent de Sécurité"
+  - generic [ref=e69] clickable [cursor:pointer, onclick]
+    - StaticText "Securite"
+  - generic [ref=e52] clickable [cursor:pointer, onclick]
+    - StaticText "Candidature spontanée"
+  - generic [ref=e70] clickable [cursor:pointer, onclick]
+    - StaticText "Moyenne"
+  - StaticText "10/02/2025"
+  - StaticText "10/02/2025"
+  - StaticText "+564j"
+  - StaticText "Ouedraogo Ibrahim"
+  - StaticText "Entretien telephonique"
+  - StaticText "Candidature spontanée avec lettre de motivation."
+- paragraph
+  - StaticText "CV reçus"
+- button "Ajouter un candidat" [ref=e37]
+- generic [ref=e38] clickable [cursor:pointer, onclick]
+  - StaticText "PIPE-009"
+  - button [ref=e53]
+  - paragraph
+    - StaticText "Joséphine Bikay"
+  - StaticText "Stagiaire Marketing"
+  - generic [ref=e71] clickable [cursor:pointer, onclick]
+    - StaticText "Marketing & Communication"
+  - generic [ref=e54] clickable [cursor:pointer, onclick]
+    - StaticText "École/Université"
+  - generic [ref=e72] clickable [cursor:pointer, onclick]
+    - StaticText "Basse"
+  - StaticText "08/02/2025"
+  - StaticText "08/02/2025"
+  - StaticText "+566j"
+  - StaticText "M. Tchinda Alain"
+  - StaticText "Pre-selection CV"
+  - StaticText "Fraîchement diplômée, très motivée pour le marketing digital."
+- paragraph
+  - StaticText "Pré-sélection"
+- button "Ajouter un candidat" [ref=e39]
+- generic [ref=e40] clickable [cursor:pointer, onclick]
+  - StaticText "PIPE-004"
+  - button [ref=e55]
+  - paragraph
+    - StaticText "Aline Fokou"
+  - StaticText "Réceptionniste Nuit"
+  - generic [ref=e73] clickable [cursor:pointer, onclick]
+    - StaticText "Herbergement"
+  - generic [ref=e56] clickable [cursor:pointer, onclick]
+    - StaticText "Site web"
+  - generic [ref=e74] clickable [cursor:pointer, onclick]
+    - StaticText "Moyenne"
+  - StaticText "25/01/2025"
+  - StaticText "25/01/2025"
+  - StaticText "+580j"
+  - StaticText "Mme. Ngo Meli"
+  - StaticText "Envoyer test reception"
+  - StaticText "Diplômée récemment, motivée."
+- paragraph
+  - StaticText "Entretien téléphonique"
+- button "Ajouter un candidat" [ref=e41]
+- generic [ref=e42] clickable [cursor:pointer, onclick]
+  - StaticText "PIPE-006"
+  - button [ref=e57]
+  - paragraph
+    - StaticText "Hervé Kamga"
+  - StaticText "Développeur Full Stack"
+  - generic [ref=e75] clickable [cursor:pointer, onclick]
+    - StaticText "Informatique"
+  - generic [ref=e58] clickable [cursor:pointer, onclick]
+    - StaticText "LinkedIn"
+  - generic [ref=e76] clickable [cursor:pointer, onclick]
+    - StaticText "Haute"
+  - StaticText "12/02/2025"
+  - StaticText "01/02/2025"
+  - StaticText "+573j"
+  - StaticText "Fotu Kevin"
+  - StaticText "Test technique avance"
+  - StaticText "Profil React/Node intéressant."
+- paragraph
+  - StaticText "Entretien physique"
+- button "Ajouter un candidat" [ref=e43]
+- generic
+  - generic [ref=e59] clickable [cursor:pointer, onclick]
+    - StaticText "PIPE-003"
+    - button [ref=e77]
+    - paragraph
+      - StaticText "Serge Nganou"
+    - StaticText "Réceptionniste Nuit"
+    - generic [ref=e92] clickable [cursor:pointer, onclick]
+      - StaticText "Herbergement"
+    - generic [ref=e78] clickable [cursor:pointer, onclick]
+      - StaticText "LinkedIn"
+    - generic [ref=e93] clickable [cursor:pointer, onclick]
+      - StaticText "Moyenne"
+    - StaticText "05/02/2025"
+    - StaticText "05/02/2025"
+    - StaticText "+569j"
+    - StaticText "M. Tchinda Alain"
+    - StaticText "Planifier entretien physique"
+    - StaticText "Bilingue, bon profil."
+  - generic [ref=e60] clickable [cursor:pointer, onclick]
+    - StaticText "PIPE-010"
+    - button [ref=e79]
+    - paragraph
+      - StaticText "Brandon Nkoulou"
+    - StaticText "Développeur Full Stack"
+    - generic [ref=e94] clickable [cursor:pointer, onclick]
+      - StaticText "Informatique"
+    - generic [ref=e80] clickable [cursor:pointer, onclick]
+      - StaticText "LinkedIn"
+    - generic [ref=e81] clickable [cursor:pointer, onclick]
+      - StaticText "12/20"
+    - generic [ref=e95] clickable [cursor:pointer, onclick]
+      - StaticText "Haute"
+    - StaticText "18/02/2025"
+    - StaticText "18/02/2025"
+    - StaticText "+556j"
+    - StaticText "Fotu Kevin"
+    - StaticText "Decision finale recrutement"
+    - StaticText "Prétentions salariales trop élevées par rapport au budget."
+- paragraph
+  - StaticText "Test technique"
+- button "Ajouter un candidat" [ref=e44]
+- generic [ref=e45] clickable [cursor:pointer, onclick]
+  - StaticText "PIPE-005"
+  - button [ref=e61]
+  - paragraph
+    - StaticText "Patrick Mebara"
+  - StaticText "Technicien Audiovisuel"
+  - generic [ref=e82] clickable [cursor:pointer, onclick]
+    - StaticText "Audiovisuel"
+  - generic [ref=e62] clickable [cursor:pointer, onclick]
+    - StaticText "Réseaux sociaux"
+  - generic [ref=e83] clickable [cursor:pointer, onclick]
+    - StaticText "Haute"
+  - StaticText "08/02/2025"
+  - StaticText "08/02/2025"
+  - StaticText "+566j"
+  - StaticText "M. Mebara Paul"
+  - StaticText "Organiser test technique"
+  - StaticText "Expérience solide en sonorisation événementielle."
+- paragraph
+  - StaticText "Vérification références"
+- button "Ajouter un candidat" [ref=e46]
+- generic [ref=e47] clickable [cursor:pointer, onclick]
+  - StaticText "PIPE-008"
+  - button [ref=e63]
+  - paragraph
+    - StaticText "Arnaud Tabe"
+  - StaticText "Agent de Sécurité"
+  - generic [ref=e84] clickable [cursor:pointer, onclick]
+    - StaticText "Herbergement"
+  - generic [ref=e64] clickable [cursor:pointer, onclick]
+    - StaticText "Référence interne"
+  - generic [ref=e65] clickable [cursor:pointer, onclick]
+    - StaticText "15.2/20"
+  - generic [ref=e85] clickable [cursor:pointer, onclick]
+    - StaticText "Moyenne"
+  - StaticText "15/02/2025"
+  - StaticText "15/02/2025"
+  - StaticText "+559j"
+  - StaticText "Mme. Ngo Meli"
+  - StaticText "Verifier references"
+  - StaticText "Références en cours de vérification."
+- paragraph
+  - StaticText "Proposition envoyée"
+- button "Ajouter un candidat" [ref=e48]
+- StaticText "Aucun candidat"
+- paragraph
+  - StaticText "Embauché"
+- button "Ajouter un candidat" [ref=e49]
+- generic
+  - generic [ref=e66] clickable [cursor:pointer, onclick]
+    - StaticText "PIPE-001"
+    - button [ref=e86]
+    - paragraph
+      - StaticText "Moussa Ndiaye"
+    - StaticText "Chef Cuisinier"
+    - generic [ref=e96] clickable [cursor:pointer, onclick]
+      - StaticText "Restauration & Catering"
+    - generic [ref=e87] clickable [cursor:pointer, onclick]
+      - StaticText "Cabinet de recrutement"
+    - generic [ref=e88] clickable [cursor:pointer, onclick]
+      - StaticText "19.2/20"
+    - generic [ref=e97] clickable [cursor:pointer, onclick]
+      - StaticText "Haute"
+    - StaticText "10/02/2025"
+    - StaticText "10/02/2025"
+    - StaticText "+564j"
+    - StaticText "Mme. Fotso Marie"
+    - StaticText "Finaliser contrat"
+    - StaticText "Excellent profil, très bon entretien."
+  - generic [ref=e67] clickable [cursor:pointer, onclick]
+    - StaticText "PIPE-002"
+    - button [ref=e89]
+    - paragraph
+      - StaticText "Claire Tchouankou"
+    - StaticText "Comptable Senior"
+    - generic [ref=e98] clickable [cursor:pointer, onclick]
+      - StaticText "Finance & Comptabilite"
+    - generic [ref=e90] clickable [cursor:pointer, onclick]
+      - StaticText "Référence interne"
+    - generic [ref=e91] clickable [cursor:pointer, onclick]
+      - StaticText "17.6/20"
+    - generic [ref=e99] clickable [cursor:pointer, onclick]
+      - StaticText "Urgente"
+    - StaticText "15/01/2025"
+    - StaticText "15/01/2025"
+    - StaticText "+590j"
+    - StaticText "Mme. Fotso Marie"
+    - StaticText "Cloture periode essai"
+    - StaticText "Profil recommandé par M. Nkoulou."
+- StaticText "PIPE-007"
+- button [ref=e51]
+- paragraph
+  - StaticText "Sophie Eyenga"
+- StaticText "Agent de Sécurité"
+- generic [ref=e69] clickable [cursor:pointer, onclick]
+  - StaticText "Securite"
+- generic [ref=e52] clickable [cursor:pointer, onclick]
+  - StaticText "Candidature spontanée"
+- generic [ref=e70] clickable [cursor:pointer, onclick]
+  - StaticText "Moyenne"
+- StaticText "10/02/2025"
+- StaticText "10/02/2025"
+- StaticText "+564j"
+- StaticText "Ouedraogo Ibrahim"
+- StaticText "Entretien telephonique"
+- StaticText "Candidature spontanée avec lettre de motivation."
+- StaticText "PIPE-009"
+- button [ref=e53]
+- paragraph
+  - StaticText "Joséphine Bikay"
+- StaticText "Stagiaire Marketing"
+- generic [ref=e71] clickable [cursor:pointer, onclick]
+  - StaticText "Marketing & Communication"
+- generic [ref=e54] clickable [cursor:pointer, onclick]
+  - StaticText "École/Université"
+- generic [ref=e72] clickable [cursor:pointer, onclick]
+  - StaticText "Basse"
+- StaticText "08/02/2025"
+- StaticText "08/02/2025"
+- StaticText "+566j"
+- StaticText "M. Tchinda Alain"
+- StaticText "Pre-selection CV"
+- StaticText "Fraîchement diplômée, très motivée pour le marketing digital."
+- StaticText "PIPE-004"
+- button [ref=e55]
+- paragraph
+  - StaticText "Aline Fokou"
+- StaticText "Réceptionniste Nuit"
+- generic [ref=e73] clickable [cursor:pointer, onclick]
+  - StaticText "Herbergement"
+- generic [ref=e56] clickable [cursor:pointer, onclick]
+  - StaticText "Site web"
+- generic [ref=e74] clickable [cursor:pointer, onclick]
+  - StaticText "Moyenne"
+- StaticText "25/01/2025"
+- StaticText "25/01/2025"
+- StaticText "+580j"
+- StaticText "Mme. Ngo Meli"
+- StaticText "Envoyer test reception"
+- StaticText "Diplômée récemment, motivée."
+- StaticText "PIPE-006"
+- button [ref=e57]
+- paragraph
+  - StaticText "Hervé Kamga"
+- StaticText "Développeur Full Stack"
+- generic [ref=e75] clickable [cursor:pointer, onclick]
+  - StaticText "Informatique"
+- generic [ref=e58] clickable [cursor:pointer, onclick]
+  - StaticText "LinkedIn"
+- generic [ref=e76] clickable [cursor:pointer, onclick]
+  - StaticText "Haute"
+- StaticText "12/02/2025"
+- StaticText "01/02/2025"
+- StaticText "+573j"
+- StaticText "Fotu Kevin"
+- StaticText "Test technique avance"
+- StaticText "Profil React/Node intéressant."
+- StaticText "PIPE-005"
+- button [ref=e61]
+- paragraph
+  - StaticText "Patrick Mebara"
+- StaticText "Technicien Audiovisuel"
+- generic [ref=e82] clickable [cursor:pointer, onclick]
+  - StaticText "Audiovisuel"
+- generic [ref=e62] clickable [cursor:pointer, onclick]
+  - StaticText "Réseaux sociaux"
+- generic [ref=e83] clickable [cursor:pointer, onclick]
+  - StaticText "Haute"
+- StaticText "08/02/2025"
+- StaticText "08/02/2025"
+- StaticText "+566j"
+- StaticText "M. Mebara Paul"
+- StaticText "Organiser test technique"
+- StaticText "Expérience solide en sonorisation événementielle."
+- StaticText "PIPE-008"
+- button [ref=e63]
+- paragraph
+  - StaticText "Arnaud Tabe"
+- StaticText "Agent de Sécurité"
+- generic [ref=e84] clickable [cursor:pointer, onclick]
+  - StaticText "Herbergement"
+- generic [ref=e64] clickable [cursor:pointer, onclick]
+  - StaticText "Référence interne"
+- generic [ref=e65] clickable [cursor:pointer, onclick]
+  - StaticText "15.2/20"
+- generic [ref=e85] clickable [cursor:pointer, onclick]
+  - StaticText "Moyenne"
+- StaticText "15/02/2025"
+- StaticText "15/02/2025"
+- StaticText "+559j"
+- StaticText "Mme. Ngo Meli"
+- StaticText "Verifier references"
+- StaticText "Références en cours de vérification."
+- StaticText "Candidature spontanée"
+- StaticText "École/Université"
+- StaticText "Site web"
+- StaticText "LinkedIn"
+- StaticText "PIPE-003"
+- button [ref=e77]
+- paragraph
+  - StaticText "Serge Nganou"
+- StaticText "Réceptionniste Nuit"
+- generic [ref=e92] clickable [cursor:pointer, onclick]
+  - StaticText "Herbergement"
+- generic [ref=e78] clickable [cursor:pointer, onclick]
+  - StaticText "LinkedIn"
+- generic [ref=e93] clickable [cursor:pointer, onclick]
+  - StaticText "Moyenne"
+- StaticText "05/02/2025"
+- StaticText "05/02/2025"
+- StaticText "+569j"
+- StaticText "M. Tchinda Alain"
+- StaticText "Planifier entretien physique"
+- StaticText "Bilingue, bon profil."
+- StaticText "PIPE-010"
+- button [ref=e79]
+- paragraph
+  - StaticText "Brandon Nkoulou"
+- StaticText "Développeur Full Stack"
+- generic [ref=e94] clickable [cursor:pointer, onclick]
+  - StaticText "Informatique"
+- generic [ref=e80] clickable [cursor:pointer, onclick]
+  - StaticText "LinkedIn"
+- generic [ref=e81] clickable [cursor:pointer, onclick]
+  - StaticText "12/20"
+- generic [ref=e95] clickable [cursor:pointer, onclick]
+  - StaticText "Haute"
+- StaticText "18/02/2025"
+- StaticText "18/02/2025"
+- StaticText "+556j"
+- StaticText "Fotu Kevin"
+- StaticText "Decision finale recrutement"
+- StaticText "Prétentions salariales trop élevées par rapport au budget."
+- StaticText "Réseaux sociaux"
+- StaticText "Référence interne"
+- StaticText "15.2/20"
+- StaticText "PIPE-001"
+- button [ref=e86]
+- paragraph
+  - StaticText "Moussa Ndiaye"
+- StaticText "Chef Cuisinier"
+- generic [ref=e96] clickable [cursor:pointer, onclick]
+  - StaticText "Restauration & Catering"
+- generic [ref=e87] clickable [cursor:pointer, onclick]
+  - StaticText "Cabinet de recrutement"
+- generic [ref=e88] clickable [cursor:pointer, onclick]
+  - StaticText "19.2/20"
+- generic [ref=e97] clickable [cursor:pointer, onclick]
+  - StaticText "Haute"
+- StaticText "10/02/2025"
+- StaticText "10/02/2025"
+- StaticText "+564j"
+- StaticText "Mme. Fotso Marie"
+- StaticText "Finaliser contrat"
+- StaticText "Excellent profil, très bon entretien."
+- StaticText "PIPE-002"
+- button [ref=e89]
+- paragraph
+  - StaticText "Claire Tchouankou"
+- StaticText "Comptable Senior"
+- generic [ref=e98] clickable [cursor:pointer, onclick]
+  - StaticText "Finance & Comptabilite"
+- generic [ref=e90] clickable [cursor:pointer, onclick]
+  - StaticText "Référence interne"
+- generic [ref=e91] clickable [cursor:pointer, onclick]
+  - StaticText "17.6/20"
+- generic [ref=e99] clickable [cursor:pointer, onclick]
+  - StaticText "Urgente"
+- StaticText "15/01/2025"
+- StaticText "15/01/2025"
+- StaticText "+590j"
+- StaticText "Mme. Fotso Marie"
+- StaticText "Cloture periode essai"
+- StaticText "Profil recommandé par M. Nkoulou."
+- StaticText "Securite"
+- StaticText "Moyenne"
+- StaticText "Marketing & Communication"
+- StaticText "Basse"
+- StaticText "Herbergement"
+- StaticText "Moyenne"
+- StaticText "Informatique"
+- StaticText "Haute"
+- StaticText "LinkedIn"
+- StaticText "LinkedIn"
+- StaticText "12/20"
+- StaticText "Audiovisuel"
+- StaticText "Haute"
+- StaticText "Herbergement"
+- StaticText "Moyenne"
+- StaticText "Cabinet de recrutement"
+- StaticText "19.2/20"
+- StaticText "Référence interne"
+- StaticText "17.6/20"
+- StaticText "Herbergement"
+- StaticText "Moyenne"
+- StaticText "Informatique"
+- StaticText "Haute"
+- StaticText "Restauration & Catering"
+- StaticText "Haute"
+- StaticText "Finance & Comptabilite"
+- StaticText "Urgente"

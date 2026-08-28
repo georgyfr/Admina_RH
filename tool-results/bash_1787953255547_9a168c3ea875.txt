@@ -1,0 +1,590 @@
+- main
+  - heading "Suivi Post-Embauche" [level=4, ref=e5]
+  - button "Exporter 9 enregistrements en CSV" [ref=e6]
+    - StaticText "Exporter CSV"
+  - button " Ajouter" [ref=e7]
+    - StaticText "Ajouter"
+  - paragraph
+    - StaticText "Total Suivis"
+  - heading "9" [level=4, ref=e8]
+  - paragraph
+    - StaticText "Satisfaction Moyenne"
+  - heading "4.4/5" [level=4, ref=e9]
+    - StaticText "4.4/5"
+  - paragraph
+    - StaticText "Risque Moyen"
+  - heading "1.1/4" [level=4, ref=e10]
+    - StaticText "1.1/4"
+  - generic [ref=e40] clickable [onclick]
+    - textbox "Rechercher..." [ref=e45]
+  - generic
+    - LabelText
+      - StaticText "Satisfaction"
+    - generic [ref=e41] clickable [onclick]
+      - combobox [expanded=false, ref=e46]
+  - generic
+    - LabelText
+      - StaticText "Risque Départ"
+    - generic [ref=e42] clickable [onclick]
+      - combobox [expanded=false, ref=e47]
+  - generic
+    - LabelText
+      - StaticText "Département"
+    - generic [ref=e43] clickable [onclick]
+      - combobox [expanded=false, ref=e48]
+  - generic
+    - grid
+      - generic
+        - rowgroup
+          - row "N° N° column menu Employé Employé column menu Poste Poste column menu Département Département column menu Date Embauche Date Embauche column menu Ancienneté (mois) Ancienneté (mois) column menu Éval 1 mois (/20) Éval 1 mois (/20) column menu Éval 3 mois (/20) Éval 3 mois (/20) column menu Éval 6 mois (/20) Éval 6 mois (/20) column menu Satisfaction Satisfaction column menu"
+            - columnheader "N° N° column menu" [ref=e63] clickable [cursor:pointer, onclick, tabindex]
+              - StaticText "N°"
+              - button "N° column menu" [expanded=false, ref=e163]
+              - generic [ref=e164] clickable [onclick]
+            - columnheader "Employé Employé column menu" [ref=e64] clickable [cursor:pointer, onclick]
+              - StaticText "Employé"
+              - button "Employé column menu" [expanded=false, ref=e165]
+              - generic [ref=e166] clickable [onclick]
+            - columnheader "Poste Poste column menu" [ref=e65] clickable [cursor:pointer, onclick]
+              - StaticText "Poste"
+              - button "Poste column menu" [expanded=false, ref=e167]
+              - generic [ref=e168] clickable [onclick]
+            - columnheader "Département Département column menu" [ref=e66] clickable [cursor:pointer, onclick]
+              - StaticText "Département"
+              - button "Département column menu" [expanded=false, ref=e169]
+              - generic [ref=e170] clickable [onclick]
+            - columnheader "Date Embauche Date Embauche column menu" [ref=e67] clickable [cursor:pointer, onclick]
+              - StaticText "Date Embauche"
+              - button "Date Embauche column menu" [expanded=false, ref=e171]
+              - generic [ref=e172] clickable [onclick]
+            - columnheader "Ancienneté (mois) Ancienneté (mois) column menu" [ref=e68] clickable [cursor:pointer, onclick]
+              - StaticText "Ancienneté (mois)"
+              - button "Ancienneté (mois) column menu" [expanded=false, ref=e173]
+              - generic [ref=e174] clickable [onclick]
+            - columnheader "Éval 1 mois (/20) Éval 1 mois (/20) column menu" [ref=e69] clickable [cursor:pointer, onclick]
+              - StaticText "Éval 1 mois (/20)"
+              - button "Éval 1 mois (/20) column menu" [expanded=false, ref=e175]
+              - generic [ref=e176] clickable [onclick]
+            - columnheader "Éval 3 mois (/20) Éval 3 mois (/20) column menu" [ref=e70] clickable [cursor:pointer, onclick]
+              - StaticText "Éval 3 mois (/20)"
+              - button "Éval 3 mois (/20) column menu" [expanded=false, ref=e177]
+              - generic [ref=e178] clickable [onclick]
+            - columnheader "Éval 6 mois (/20) Éval 6 mois (/20) column menu" [ref=e71] clickable [cursor:pointer, onclick]
+              - StaticText "Éval 6 mois (/20)"
+              - button "Éval 6 mois (/20) column menu" [expanded=false, ref=e179]
+              - generic [ref=e180] clickable [onclick]
+            - columnheader "Satisfaction Satisfaction column menu" [ref=e72] clickable [cursor:pointer, onclick]
+              - StaticText "Satisfaction"
+              - button "Satisfaction column menu" [expanded=false, ref=e181]
+              - generic [ref=e182] clickable [onclick]
+        - rowgroup
+          - row "SPE-001 Nkoulou Amina Chef de projet digital Marketing & Communication 2025-03-06 0 mois 16/20 — — Satisfait" [ref=e54] clickable [onclick]
+            - gridcell "SPE-001" [ref=e73] clickable [onclick]
+            - gridcell "Nkoulou Amina" [ref=e74] clickable [onclick]
+            - gridcell "Chef de projet digital" [ref=e75] clickable [onclick]
+            - gridcell "Marketing & Communication" [ref=e76] clickable [onclick]
+            - gridcell "2025-03-06" [ref=e77] clickable [onclick]
+            - gridcell "0 mois" [ref=e78] clickable [onclick]
+            - gridcell "16/20" [ref=e79] clickable [onclick]
+              - generic [ref=e183] clickable [onclick]
+                - StaticText "16/20"
+            - gridcell "—" [ref=e80] clickable [onclick]
+              - generic [ref=e184] clickable [onclick]
+                - StaticText "—"
+            - gridcell "—" [ref=e81] clickable [onclick]
+              - generic [ref=e185] clickable [onclick]
+                - StaticText "—"
+            - gridcell "Satisfait" [ref=e82] clickable [onclick]
+              - generic [ref=e186] clickable [onclick]
+                - StaticText "Satisfait"
+          - row "SPE-002 Konate Aissatou Assistante RH Ressources Humaines 2025-02-20 1 mois 15/20 17/20 — Satisfait" [ref=e55] clickable [onclick]
+            - gridcell "SPE-002" [ref=e83] clickable [onclick]
+            - gridcell "Konate Aissatou" [ref=e84] clickable [onclick]
+            - gridcell "Assistante RH" [ref=e85] clickable [onclick]
+            - gridcell "Ressources Humaines" [ref=e86] clickable [onclick]
+            - gridcell "2025-02-20" [ref=e87] clickable [onclick]
+            - gridcell "1 mois" [ref=e88] clickable [onclick]
+            - gridcell "15/20" [ref=e89] clickable [onclick]
+              - generic [ref=e187] clickable [onclick]
+                - StaticText "15/20"
+            - gridcell "17/20" [ref=e90] clickable [onclick]
+              - generic [ref=e188] clickable [onclick]
+                - StaticText "17/20"
+            - gridcell "—" [ref=e91] clickable [onclick]
+              - generic [ref=e189] clickable [onclick]
+                - StaticText "—"
+            - gridcell "Satisfait" [ref=e92] clickable [onclick]
+              - generic [ref=e190] clickable [onclick]
+                - StaticText "Satisfait"
+          - row "SPE-003 Ndiaye Moussa Chef cuisinier Restauration 2025-02-10 1 mois 18/20 — — Tres satisfait" [ref=e56] clickable [onclick]
+            - gridcell "SPE-003" [ref=e93] clickable [onclick]
+            - gridcell "Ndiaye Moussa" [ref=e94] clickable [onclick]
+            - gridcell "Chef cuisinier" [ref=e95] clickable [onclick]
+            - gridcell "Restauration" [ref=e96] clickable [onclick]
+            - gridcell "2025-02-10" [ref=e97] clickable [onclick]
+            - gridcell "1 mois" [ref=e98] clickable [onclick]
+            - gridcell "18/20" [ref=e99] clickable [onclick]
+              - generic [ref=e191] clickable [onclick]
+                - StaticText "18/20"
+            - gridcell "—" [ref=e100] clickable [onclick]
+              - generic [ref=e192] clickable [onclick]
+                - StaticText "—"
+            - gridcell "—" [ref=e101] clickable [onclick]
+              - generic [ref=e193] clickable [onclick]
+                - StaticText "—"
+            - gridcell "Tres satisfait" [ref=e102] clickable [onclick]
+              - generic [ref=e194] clickable [onclick]
+                - StaticText "Tres satisfait"
+          - row "SPE-004 Tchouankou Claire Comptable senior Finance & Comptabilite 2025-01-15 2 mois 14/20 16/20 — Satisfait" [ref=e57] clickable [onclick]
+            - gridcell "SPE-004" [ref=e103] clickable [onclick]
+            - gridcell "Tchouankou Claire" [ref=e104] clickable [onclick]
+            - gridcell "Comptable senior" [ref=e105] clickable [onclick]
+            - gridcell "Finance & Comptabilite" [ref=e106] clickable [onclick]
+            - gridcell "2025-01-15" [ref=e107] clickable [onclick]
+            - gridcell "2 mois" [ref=e108] clickable [onclick]
+            - gridcell "14/20" [ref=e109] clickable [onclick]
+              - generic [ref=e195] clickable [onclick]
+                - StaticText "14/20"
+            - gridcell "16/20" [ref=e110] clickable [onclick]
+              - generic [ref=e196] clickable [onclick]
+                - StaticText "16/20"
+            - gridcell "—" [ref=e111] clickable [onclick]
+              - generic [ref=e197] clickable [onclick]
+                - StaticText "—"
+            - gridcell "Satisfait" [ref=e112] clickable [onclick]
+              - generic [ref=e198] clickable [onclick]
+                - StaticText "Satisfait"
+          - row "SPE-005 Eyo Carole Agent de blanchisserie Lingerie 2024-12-15 3 mois 14/20 15/20 — Satisfait" [ref=e58] clickable [onclick]
+            - gridcell "SPE-005" [ref=e113] clickable [onclick]
+            - gridcell "Eyo Carole" [ref=e114] clickable [onclick]
+            - gridcell "Agent de blanchisserie" [ref=e115] clickable [onclick]
+            - gridcell "Lingerie" [ref=e116] clickable [onclick]
+            - gridcell "2024-12-15" [ref=e117] clickable [onclick]
+            - gridcell "3 mois" [ref=e118] clickable [onclick]
+            - gridcell "14/20" [ref=e119] clickable [onclick]
+              - generic [ref=e199] clickable [onclick]
+                - StaticText "14/20"
+            - gridcell "15/20" [ref=e120] clickable [onclick]
+              - generic [ref=e200] clickable [onclick]
+                - StaticText "15/20"
+            - gridcell "—" [ref=e121] clickable [onclick]
+              - generic [ref=e201] clickable [onclick]
+                - StaticText "—"
+            - gridcell "Satisfait" [ref=e122] clickable [onclick]
+              - generic [ref=e202] clickable [onclick]
+                - StaticText "Satisfait"
+          - row "SPE-006 Ngamani Carine Receptionniste Herbergement 2024-03-01 12 mois 16/20 17/20 18/20 Tres satisfait" [ref=e59] clickable [onclick]
+            - gridcell "SPE-006" [ref=e123] clickable [onclick]
+            - gridcell "Ngamani Carine" [ref=e124] clickable [onclick]
+            - gridcell "Receptionniste" [ref=e125] clickable [onclick]
+            - gridcell "Herbergement" [ref=e126] clickable [onclick]
+            - gridcell "2024-03-01" [ref=e127] clickable [onclick]
+            - gridcell "12 mois" [ref=e128] clickable [onclick]
+            - gridcell "16/20" [ref=e129] clickable [onclick]
+              - generic [ref=e203] clickable [onclick]
+                - StaticText "16/20"
+            - gridcell "17/20" [ref=e130] clickable [onclick]
+              - generic [ref=e204] clickable [onclick]
+                - StaticText "17/20"
+            - gridcell "18/20" [ref=e131] clickable [onclick]
+              - generic [ref=e205] clickable [onclick]
+                - StaticText "18/20"
+            - gridcell "Tres satisfait" [ref=e132] clickable [onclick]
+              - generic [ref=e206] clickable [onclick]
+                - StaticText "Tres satisfait"
+          - row "SPE-007 Fotso René Agent securite Securite 2024-06-01 9 mois 15/20 16/20 16/20 Satisfait" [ref=e60] clickable [onclick]
+            - gridcell "SPE-007" [ref=e133] clickable [onclick]
+            - gridcell "Fotso René" [ref=e134] clickable [onclick]
+            - gridcell "Agent securite" [ref=e135] clickable [onclick]
+            - gridcell "Securite" [ref=e136] clickable [onclick]
+            - gridcell "2024-06-01" [ref=e137] clickable [onclick]
+            - gridcell "9 mois" [ref=e138] clickable [onclick]
+            - gridcell "15/20" [ref=e139] clickable [onclick]
+              - generic [ref=e207] clickable [onclick]
+                - StaticText "15/20"
+            - gridcell "16/20" [ref=e140] clickable [onclick]
+              - generic [ref=e208] clickable [onclick]
+                - StaticText "16/20"
+            - gridcell "16/20" [ref=e141] clickable [onclick]
+              - generic [ref=e209] clickable [onclick]
+                - StaticText "16/20"
+            - gridcell "Satisfait" [ref=e142] clickable [onclick]
+              - generic [ref=e210] clickable [onclick]
+                - StaticText "Satisfait"
+          - row "SPE-008 Tchinda Alain Directeur commercial Commercial 2023-06-01 21 mois 17/20 18/20 18/20 Tres satisfait" [ref=e61] clickable [onclick]
+            - gridcell "SPE-008" [ref=e143] clickable [onclick]
+            - gridcell "Tchinda Alain" [ref=e144] clickable [onclick]
+            - gridcell "Directeur commercial" [ref=e145] clickable [onclick]
+            - gridcell "Commercial" [ref=e146] clickable [onclick]
+            - gridcell "2023-06-01" [ref=e147] clickable [onclick]
+            - gridcell "21 mois" [ref=e148] clickable [onclick]
+            - gridcell "17/20" [ref=e149] clickable [onclick]
+              - generic [ref=e211] clickable [onclick]
+                - StaticText "17/20"
+            - gridcell "18/20" [ref=e150] clickable [onclick]
+              - generic [ref=e212] clickable [onclick]
+                - StaticText "18/20"
+            - gridcell "18/20" [ref=e151] clickable [onclick]
+              - generic [ref=e213] clickable [onclick]
+                - StaticText "18/20"
+            - gridcell "Tres satisfait" [ref=e152] clickable [onclick]
+              - generic [ref=e214] clickable [onclick]
+                - StaticText "Tres satisfait"
+          - row "SPE-009 Tchinda Armand Developpeur informatique Informatique 2025-02-01 1 mois 17/20 — — Tres satisfait" [ref=e62] clickable [onclick]
+            - gridcell "SPE-009" [ref=e153] clickable [onclick]
+            - gridcell "Tchinda Armand" [ref=e154] clickable [onclick]
+            - gridcell "Developpeur informatique" [ref=e155] clickable [onclick]
+            - gridcell "Informatique" [ref=e156] clickable [onclick]
+            - gridcell "2025-02-01" [ref=e157] clickable [onclick]
+            - gridcell "1 mois" [ref=e158] clickable [onclick]
+            - gridcell "17/20" [ref=e159] clickable [onclick]
+              - generic [ref=e215] clickable [onclick]
+                - StaticText "17/20"
+            - gridcell "—" [ref=e160] clickable [onclick]
+              - generic [ref=e216] clickable [onclick]
+                - StaticText "—"
+            - gridcell "—" [ref=e161] clickable [onclick]
+              - generic [ref=e217] clickable [onclick]
+                - StaticText "—"
+            - gridcell "Tres satisfait" [ref=e162] clickable [onclick]
+              - generic [ref=e218] clickable [onclick]
+                - StaticText "Tres satisfait"
+    - generic
+      - paragraph
+        - StaticText "Rows per page:"
+      - generic [ref=e49] clickable [onclick]
+        - combobox "Rows per page:" [expanded=false, ref=e51]: 100
+          - StaticText "100"
+      - paragraph
+        - StaticText "1–9 of 9"
+      - generic
+        - button "Go to previous page" [disabled, ref=e52]
+        - button "Go to next page" [disabled, ref=e53]
+- heading "Suivi Post-Embauche" [level=4, ref=e5]
+- button "Exporter 9 enregistrements en CSV" [ref=e6]
+  - StaticText "Exporter CSV"
+- button " Ajouter" [ref=e7]
+  - StaticText "Ajouter"
+- paragraph
+  - StaticText "Total Suivis"
+- heading "9" [level=4, ref=e8]
+- paragraph
+  - StaticText "Satisfaction Moyenne"
+- heading "4.4/5" [level=4, ref=e9]
+  - StaticText "4.4/5"
+- paragraph
+  - StaticText "Risque Moyen"
+- heading "1.1/4" [level=4, ref=e10]
+  - StaticText "1.1/4"
+- generic [ref=e40] clickable [onclick]
+  - textbox "Rechercher..." [ref=e45]
+- generic
+  - LabelText
+    - StaticText "Satisfaction"
+  - generic [ref=e41] clickable [onclick]
+    - combobox [expanded=false, ref=e46]
+- generic
+  - LabelText
+    - StaticText "Risque Départ"
+  - generic [ref=e42] clickable [onclick]
+    - combobox [expanded=false, ref=e47]
+- generic
+  - LabelText
+    - StaticText "Département"
+  - generic [ref=e43] clickable [onclick]
+    - combobox [expanded=false, ref=e48]
+- generic
+  - grid
+    - generic
+      - rowgroup
+        - row "N° N° column menu Employé Employé column menu Poste Poste column menu Département Département column menu Date Embauche Date Embauche column menu Ancienneté (mois) Ancienneté (mois) column menu Éval 1 mois (/20) Éval 1 mois (/20) column menu Éval 3 mois (/20) Éval 3 mois (/20) column menu Éval 6 mois (/20) Éval 6 mois (/20) column menu Satisfaction Satisfaction column menu"
+          - columnheader "N° N° column menu" [ref=e63] clickable [cursor:pointer, onclick, tabindex]
+            - StaticText "N°"
+            - button "N° column menu" [expanded=false, ref=e163]
+            - generic [ref=e164] clickable [onclick]
+          - columnheader "Employé Employé column menu" [ref=e64] clickable [cursor:pointer, onclick]
+            - StaticText "Employé"
+            - button "Employé column menu" [expanded=false, ref=e165]
+            - generic [ref=e166] clickable [onclick]
+          - columnheader "Poste Poste column menu" [ref=e65] clickable [cursor:pointer, onclick]
+            - StaticText "Poste"
+            - button "Poste column menu" [expanded=false, ref=e167]
+            - generic [ref=e168] clickable [onclick]
+          - columnheader "Département Département column menu" [ref=e66] clickable [cursor:pointer, onclick]
+            - StaticText "Département"
+            - button "Département column menu" [expanded=false, ref=e169]
+            - generic [ref=e170] clickable [onclick]
+          - columnheader "Date Embauche Date Embauche column menu" [ref=e67] clickable [cursor:pointer, onclick]
+            - StaticText "Date Embauche"
+            - button "Date Embauche column menu" [expanded=false, ref=e171]
+            - generic [ref=e172] clickable [onclick]
+          - columnheader "Ancienneté (mois) Ancienneté (mois) column menu" [ref=e68] clickable [cursor:pointer, onclick]
+            - StaticText "Ancienneté (mois)"
+            - button "Ancienneté (mois) column menu" [expanded=false, ref=e173]
+            - generic [ref=e174] clickable [onclick]
+          - columnheader "Éval 1 mois (/20) Éval 1 mois (/20) column menu" [ref=e69] clickable [cursor:pointer, onclick]
+            - StaticText "Éval 1 mois (/20)"
+            - button "Éval 1 mois (/20) column menu" [expanded=false, ref=e175]
+            - generic [ref=e176] clickable [onclick]
+          - columnheader "Éval 3 mois (/20) Éval 3 mois (/20) column menu" [ref=e70] clickable [cursor:pointer, onclick]
+            - StaticText "Éval 3 mois (/20)"
+            - button "Éval 3 mois (/20) column menu" [expanded=false, ref=e177]
+            - generic [ref=e178] clickable [onclick]
+          - columnheader "Éval 6 mois (/20) Éval 6 mois (/20) column menu" [ref=e71] clickable [cursor:pointer, onclick]
+            - StaticText "Éval 6 mois (/20)"
+            - button "Éval 6 mois (/20) column menu" [expanded=false, ref=e179]
+            - generic [ref=e180] clickable [onclick]
+          - columnheader "Satisfaction Satisfaction column menu" [ref=e72] clickable [cursor:pointer, onclick]
+            - StaticText "Satisfaction"
+            - button "Satisfaction column menu" [expanded=false, ref=e181]
+            - generic [ref=e182] clickable [onclick]
+      - rowgroup
+        - row "SPE-001 Nkoulou Amina Chef de projet digital Marketing & Communication 2025-03-06 0 mois 16/20 — — Satisfait" [ref=e54] clickable [onclick]
+          - gridcell "SPE-001" [ref=e73] clickable [onclick]
+          - gridcell "Nkoulou Amina" [ref=e74] clickable [onclick]
+          - gridcell "Chef de projet digital" [ref=e75] clickable [onclick]
+          - gridcell "Marketing & Communication" [ref=e76] clickable [onclick]
+          - gridcell "2025-03-06" [ref=e77] clickable [onclick]
+          - gridcell "0 mois" [ref=e78] clickable [onclick]
+          - gridcell "16/20" [ref=e79] clickable [onclick]
+            - generic [ref=e183] clickable [onclick]
+              - StaticText "16/20"
+          - gridcell "—" [ref=e80] clickable [onclick]
+            - generic [ref=e184] clickable [onclick]
+              - StaticText "—"
+          - gridcell "—" [ref=e81] clickable [onclick]
+            - generic [ref=e185] clickable [onclick]
+              - StaticText "—"
+          - gridcell "Satisfait" [ref=e82] clickable [onclick]
+            - generic [ref=e186] clickable [onclick]
+              - StaticText "Satisfait"
+        - row "SPE-002 Konate Aissatou Assistante RH Ressources Humaines 2025-02-20 1 mois 15/20 17/20 — Satisfait" [ref=e55] clickable [onclick]
+          - gridcell "SPE-002" [ref=e83] clickable [onclick]
+          - gridcell "Konate Aissatou" [ref=e84] clickable [onclick]
+          - gridcell "Assistante RH" [ref=e85] clickable [onclick]
+          - gridcell "Ressources Humaines" [ref=e86] clickable [onclick]
+          - gridcell "2025-02-20" [ref=e87] clickable [onclick]
+          - gridcell "1 mois" [ref=e88] clickable [onclick]
+          - gridcell "15/20" [ref=e89] clickable [onclick]
+            - generic [ref=e187] clickable [onclick]
+              - StaticText "15/20"
+          - gridcell "17/20" [ref=e90] clickable [onclick]
+            - generic [ref=e188] clickable [onclick]
+              - StaticText "17/20"
+          - gridcell "—" [ref=e91] clickable [onclick]
+            - generic [ref=e189] clickable [onclick]
+              - StaticText "—"
+          - gridcell "Satisfait" [ref=e92] clickable [onclick]
+            - generic [ref=e190] clickable [onclick]
+              - StaticText "Satisfait"
+        - row "SPE-003 Ndiaye Moussa Chef cuisinier Restauration 2025-02-10 1 mois 18/20 — — Tres satisfait" [ref=e56] clickable [onclick]
+          - gridcell "SPE-003" [ref=e93] clickable [onclick]
+          - gridcell "Ndiaye Moussa" [ref=e94] clickable [onclick]
+          - gridcell "Chef cuisinier" [ref=e95] clickable [onclick]
+          - gridcell "Restauration" [ref=e96] clickable [onclick]
+          - gridcell "2025-02-10" [ref=e97] clickable [onclick]
+          - gridcell "1 mois" [ref=e98] clickable [onclick]
+          - gridcell "18/20" [ref=e99] clickable [onclick]
+            - generic [ref=e191] clickable [onclick]
+              - StaticText "18/20"
+          - gridcell "—" [ref=e100] clickable [onclick]
+            - generic [ref=e192] clickable [onclick]
+              - StaticText "—"
+          - gridcell "—" [ref=e101] clickable [onclick]
+            - generic [ref=e193] clickable [onclick]
+              - StaticText "—"
+          - gridcell "Tres satisfait" [ref=e102] clickable [onclick]
+            - generic [ref=e194] clickable [onclick]
+              - StaticText "Tres satisfait"
+        - row "SPE-004 Tchouankou Claire Comptable senior Finance & Comptabilite 2025-01-15 2 mois 14/20 16/20 — Satisfait" [ref=e57] clickable [onclick]
+          - gridcell "SPE-004" [ref=e103] clickable [onclick]
+          - gridcell "Tchouankou Claire" [ref=e104] clickable [onclick]
+          - gridcell "Comptable senior" [ref=e105] clickable [onclick]
+          - gridcell "Finance & Comptabilite" [ref=e106] clickable [onclick]
+          - gridcell "2025-01-15" [ref=e107] clickable [onclick]
+          - gridcell "2 mois" [ref=e108] clickable [onclick]
+          - gridcell "14/20" [ref=e109] clickable [onclick]
+            - generic [ref=e195] clickable [onclick]
+              - StaticText "14/20"
+          - gridcell "16/20" [ref=e110] clickable [onclick]
+            - generic [ref=e196] clickable [onclick]
+              - StaticText "16/20"
+          - gridcell "—" [ref=e111] clickable [onclick]
+            - generic [ref=e197] clickable [onclick]
+              - StaticText "—"
+          - gridcell "Satisfait" [ref=e112] clickable [onclick]
+            - generic [ref=e198] clickable [onclick]
+              - StaticText "Satisfait"
+        - row "SPE-005 Eyo Carole Agent de blanchisserie Lingerie 2024-12-15 3 mois 14/20 15/20 — Satisfait" [ref=e58] clickable [onclick]
+          - gridcell "SPE-005" [ref=e113] clickable [onclick]
+          - gridcell "Eyo Carole" [ref=e114] clickable [onclick]
+          - gridcell "Agent de blanchisserie" [ref=e115] clickable [onclick]
+          - gridcell "Lingerie" [ref=e116] clickable [onclick]
+          - gridcell "2024-12-15" [ref=e117] clickable [onclick]
+          - gridcell "3 mois" [ref=e118] clickable [onclick]
+          - gridcell "14/20" [ref=e119] clickable [onclick]
+            - generic [ref=e199] clickable [onclick]
+              - StaticText "14/20"
+          - gridcell "15/20" [ref=e120] clickable [onclick]
+            - generic [ref=e200] clickable [onclick]
+              - StaticText "15/20"
+          - gridcell "—" [ref=e121] clickable [onclick]
+            - generic [ref=e201] clickable [onclick]
+              - StaticText "—"
+          - gridcell "Satisfait" [ref=e122] clickable [onclick]
+            - generic [ref=e202] clickable [onclick]
+              - StaticText "Satisfait"
+        - row "SPE-006 Ngamani Carine Receptionniste Herbergement 2024-03-01 12 mois 16/20 17/20 18/20 Tres satisfait" [ref=e59] clickable [onclick]
+          - gridcell "SPE-006" [ref=e123] clickable [onclick]
+          - gridcell "Ngamani Carine" [ref=e124] clickable [onclick]
+          - gridcell "Receptionniste" [ref=e125] clickable [onclick]
+          - gridcell "Herbergement" [ref=e126] clickable [onclick]
+          - gridcell "2024-03-01" [ref=e127] clickable [onclick]
+          - gridcell "12 mois" [ref=e128] clickable [onclick]
+          - gridcell "16/20" [ref=e129] clickable [onclick]
+            - generic [ref=e203] clickable [onclick]
+              - StaticText "16/20"
+          - gridcell "17/20" [ref=e130] clickable [onclick]
+            - generic [ref=e204] clickable [onclick]
+              - StaticText "17/20"
+          - gridcell "18/20" [ref=e131] clickable [onclick]
+            - generic [ref=e205] clickable [onclick]
+              - StaticText "18/20"
+          - gridcell "Tres satisfait" [ref=e132] clickable [onclick]
+            - generic [ref=e206] clickable [onclick]
+              - StaticText "Tres satisfait"
+        - row "SPE-007 Fotso René Agent securite Securite 2024-06-01 9 mois 15/20 16/20 16/20 Satisfait" [ref=e60] clickable [onclick]
+          - gridcell "SPE-007" [ref=e133] clickable [onclick]
+          - gridcell "Fotso René" [ref=e134] clickable [onclick]
+          - gridcell "Agent securite" [ref=e135] clickable [onclick]
+          - gridcell "Securite" [ref=e136] clickable [onclick]
+          - gridcell "2024-06-01" [ref=e137] clickable [onclick]
+          - gridcell "9 mois" [ref=e138] clickable [onclick]
+          - gridcell "15/20" [ref=e139] clickable [onclick]
+            - generic [ref=e207] clickable [onclick]
+              - StaticText "15/20"
+          - gridcell "16/20" [ref=e140] clickable [onclick]
+            - generic [ref=e208] clickable [onclick]
+              - StaticText "16/20"
+          - gridcell "16/20" [ref=e141] clickable [onclick]
+            - generic [ref=e209] clickable [onclick]
+              - StaticText "16/20"
+          - gridcell "Satisfait" [ref=e142] clickable [onclick]
+            - generic [ref=e210] clickable [onclick]
+              - StaticText "Satisfait"
+        - row "SPE-008 Tchinda Alain Directeur commercial Commercial 2023-06-01 21 mois 17/20 18/20 18/20 Tres satisfait" [ref=e61] clickable [onclick]
+          - gridcell "SPE-008" [ref=e143] clickable [onclick]
+          - gridcell "Tchinda Alain" [ref=e144] clickable [onclick]
+          - gridcell "Directeur commercial" [ref=e145] clickable [onclick]
+          - gridcell "Commercial" [ref=e146] clickable [onclick]
+          - gridcell "2023-06-01" [ref=e147] clickable [onclick]
+          - gridcell "21 mois" [ref=e148] clickable [onclick]
+          - gridcell "17/20" [ref=e149] clickable [onclick]
+            - generic [ref=e211] clickable [onclick]
+              - StaticText "17/20"
+          - gridcell "18/20" [ref=e150] clickable [onclick]
+            - generic [ref=e212] clickable [onclick]
+              - StaticText "18/20"
+          - gridcell "18/20" [ref=e151] clickable [onclick]
+            - generic [ref=e213] clickable [onclick]
+              - StaticText "18/20"
+          - gridcell "Tres satisfait" [ref=e152] clickable [onclick]
+            - generic [ref=e214] clickable [onclick]
+              - StaticText "Tres satisfait"
+        - row "SPE-009 Tchinda Armand Developpeur informatique Informatique 2025-02-01 1 mois 17/20 — — Tres satisfait" [ref=e62] clickable [onclick]
+          - gridcell "SPE-009" [ref=e153] clickable [onclick]
+          - gridcell "Tchinda Armand" [ref=e154] clickable [onclick]
+          - gridcell "Developpeur informatique" [ref=e155] clickable [onclick]
+          - gridcell "Informatique" [ref=e156] clickable [onclick]
+          - gridcell "2025-02-01" [ref=e157] clickable [onclick]
+          - gridcell "1 mois" [ref=e158] clickable [onclick]
+          - gridcell "17/20" [ref=e159] clickable [onclick]
+            - generic [ref=e215] clickable [onclick]
+              - StaticText "17/20"
+          - gridcell "—" [ref=e160] clickable [onclick]
+            - generic [ref=e216] clickable [onclick]
+              - StaticText "—"
+          - gridcell "—" [ref=e161] clickable [onclick]
+            - generic [ref=e217] clickable [onclick]
+              - StaticText "—"
+          - gridcell "Tres satisfait" [ref=e162] clickable [onclick]
+            - generic [ref=e218] clickable [onclick]
+              - StaticText "Tres satisfait"
+  - generic
+    - paragraph
+      - StaticText "Rows per page:"
+    - generic [ref=e49] clickable [onclick]
+      - combobox "Rows per page:" [expanded=false, ref=e51]: 100
+        - StaticText "100"
+    - paragraph
+      - StaticText "1–9 of 9"
+    - generic
+      - button "Go to previous page" [disabled, ref=e52]
+      - button "Go to next page" [disabled, ref=e53]
+- generic
+  - paragraph
+    - StaticText "Rows per page:"
+  - generic [ref=e49] clickable [onclick]
+    - combobox "Rows per page:" [expanded=false, ref=e51]: 100
+      - StaticText "100"
+  - paragraph
+    - StaticText "1–9 of 9"
+  - generic
+    - button "Go to previous page" [disabled, ref=e52]
+    - button "Go to next page" [disabled, ref=e53]
+- StaticText "N°"
+- button "N° column menu" [expanded=false, ref=e163]
+- StaticText "Employé"
+- button "Employé column menu" [expanded=false, ref=e165]
+- StaticText "Poste"
+- button "Poste column menu" [expanded=false, ref=e167]
+- StaticText "Département"
+- button "Département column menu" [expanded=false, ref=e169]
+- StaticText "Date Embauche"
+- button "Date Embauche column menu" [expanded=false, ref=e171]
+- StaticText "Ancienneté (mois)"
+- button "Ancienneté (mois) column menu" [expanded=false, ref=e173]
+- StaticText "Éval 1 mois (/20)"
+- button "Éval 1 mois (/20) column menu" [expanded=false, ref=e175]
+- StaticText "Éval 3 mois (/20)"
+- button "Éval 3 mois (/20) column menu" [expanded=false, ref=e177]
+- StaticText "Éval 6 mois (/20)"
+- button "Éval 6 mois (/20) column menu" [expanded=false, ref=e179]
+- StaticText "Satisfaction"
+- button "Satisfaction column menu" [expanded=false, ref=e181]
+- StaticText "16/20"
+- StaticText "—"
+- StaticText "—"
+- StaticText "Satisfait"
+- StaticText "15/20"
+- StaticText "17/20"
+- StaticText "—"
+- StaticText "Satisfait"
+- StaticText "18/20"
+- StaticText "—"
+- StaticText "—"
+- StaticText "Tres satisfait"
+- StaticText "14/20"
+- StaticText "16/20"
+- StaticText "—"
+- StaticText "Satisfait"
+- StaticText "14/20"
+- StaticText "15/20"
+- StaticText "—"
+- StaticText "Satisfait"
+- StaticText "16/20"
+- StaticText "17/20"
+- StaticText "18/20"
+- StaticText "Tres satisfait"
+- StaticText "15/20"
+- StaticText "16/20"
+- StaticText "16/20"
+- StaticText "Satisfait"
+- StaticText "17/20"
+- StaticText "18/20"
+- StaticText "18/20"
+- StaticText "Tres satisfait"
+- StaticText "17/20"
+- StaticText "—"
+- StaticText "—"
+- StaticText "Tres satisfait"
