@@ -36,3 +36,41 @@ Stage Summary:
 - 28 champs ajoutés sur 5 pages du processus de recrutement
 - Déploiement réussi : https://admina-rh-bd0.pages.dev/
 - Pages modifiées : Entretiens.jsx, Evaluations.jsx, Verifications.jsx, Selections.jsx, Cabinets.jsx
+
+---
+Task ID: 3
+Agent: Main Agent
+Task: Sous-étape 3 — Offres & Analytics (4 pages, 25 champs)
+
+Work Log:
+- Réécrit Previsions.jsx : 11 colonnes gelées + 5 nouvelles (Budget, Profil Recherche, Date Publication, Candidatures Recues, Notes) + 11 lignes
+- Réécrit Sources.jsx : Vue cartes gelée + vue tableau avec 8 colonnes (N°, Nb Entretiens, Nb Recrutements, Taux Transformation, Coût/Recrutement, Délai Moyen, Qualité Moyenne, Notes) + 9 lignes
+- Réécrit Couts.jsx : 9 colonnes gelées + 5 nouvelles (N°, Demande Liée, Date, Département, Notes) + 7 lignes
+- Réécrit Pipeline.jsx : Vue Kanban gelée + 7 champs (N° Pipeline, Département, Date Mouvement, Délai, Évaluateur, Prochaine Action, Notes) sur cartes
+- Build + deploy Cloudflare Pages réussi
+
+Stage Summary:
+- 25 champs ajoutés sur 4 pages
+- Déploiement réussi : https://admina-rh-bd0.pages.dev/
+
+---
+Task ID: 4
+Agent: Main Agent
+Task: Sous-étapes 4 & 5 — Intégration, Stagiaires & Saisonniers (7 pages, 25 champs)
+
+Work Log:
+- Réécrit Integration.jsx : 10 colonnes gelées + 5 nouvelles (Formation Métier, Visite Locaux, Statut Intégration, Date Fin Intégration, Notes) + 9 lignes
+- Réécrit Checklist.jsx : 9 colonnes gelées + 3 nouvelles (Commentaires, Département, Date Arrivée) + 11 lignes
+- Réécrit PeriodeEssai.jsx : 11 colonnes gelées + 5 nouvelles (Objectifs Fixés, Score Mi-parcours, Score Final, Date Décision, Notes) + 10 lignes
+- Réécrit Formation.jsx : 10 colonnes gelées + 3 nouvelles (Notes, Département, Date Arrivée) + 12 lignes
+- Réécrit PostEmbauche.jsx : 10 colonnes gelées + 2 nouvelles (Risque Départ par ligne, Commentaires) + 9 lignes
+- Réécrit Stagiaires.jsx : 10 colonnes gelées + 4 nouvelles (Indemnité FCFA/mois, Statut colonne, Évaluation /20, Notes) + 10 lignes
+- Réécrit Saisonniers.jsx : 11 colonnes gelées + 3 nouvelles (Motif colonne, Source colonne, Notes) + 10 lignes
+- Build Vite 1.11s, deploy Cloudflare Pages OK
+- 7 pages vérifiées HTTP 200
+
+Stage Summary:
+- 25 champs ajoutés sur 7 pages (sous-étapes 4+5)
+- TOTAL CUMULÉ : 132 champs ajoutés sur 18 pages (sous-étapes 1 à 5)
+- Toutes les pages fonctionnelles avec données mock complètes
+- Site live : https://admina-rh-bd0.pages.dev/
