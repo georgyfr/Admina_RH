@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { Box, Typography, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination, Chip, FormControl, Select, MenuItem, Tooltip, Paper, Tabs, Tab } from '@mui/material';
 import { Add, Download } from '@mui/icons-material';
 import KPICard from '../components/KPICard';
+import AddDialog from '../components/AddDialog';
 import { nomenclatures } from '../data/nomenclatures';
 
 const statutColor = { 'Planifie': 'info', 'Realise': 'success', 'Annule': 'error', 'Reporte': 'warning' };
@@ -18,10 +19,11 @@ const initialData = [
 ];
 
 export default function Entretiens() {
-  const [data] = useState(initialData);
+  const [data, setData] = useState(initialData);
   const [tab, setTab] = useState(0);
   const [page, setPage] = useState(0);
   const [rpp, setRpp] = useState(10);
+  const [dlg, setDlg] = useState(false);
 
   const filtered = useMemo(() => {
     if (tab === 0) return data;
@@ -37,7 +39,7 @@ export default function Entretiens() {
       <Typography variant="h5" fontWeight="bold">Planification des Entretiens</Typography>
       <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>7 entretien(s)</Typography>
       <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
-        <Button variant="contained" startIcon={<Add fontSize="small" />}>Ajouter Entretien</Button>
+        <Button variant="contained" startIcon={<Add fontSize="small" />} onClick={() => setDlg(true)}>Ajouter Entretien</Button>
       </Box>
       <Tabs value={tab} onChange={(e, v) => { setTab(v); setPage(0); }} sx={{ mb: 2 }}>
         <Tab label="Tous" />
@@ -66,6 +68,11 @@ export default function Entretiens() {
         </TableRow>
       ))}</TableBody></Table></TableContainer>
       <TablePagination component="div" count={filtered.length} page={page} onPageChange={(e, p) => setPage(p)} rowsPerPage={rpp} onRowsPerPageChange={e => { setRpp(parseInt(e.target.value, 10)); setPage(0); }} rowsPerPageOptions={[5, 10, 25]} labelRowsPerPage="Lignes par page" /></Paper>
+    
+      <AddDialog open={dlg} onClose={() => setDlg(false)} title="Ajouter un Entretien"
+        fields={[{key: "candidat", label: "Candidat", required: true},{key: "type", label: "Type", type: "select", options: ["Telephonique", "Visioconference", "Presentiel", "Technique", "2eme tour", "Final"], required: true},{key: "dateHeure", label: "Date & Heure", required: true},{key: "duree", label: "Durée"},{key: "lieu", label: "Lieu/Lien", required: true},{key: "evaluateurs", label: "Évaluateur(s)", required: true},{key: "posteVise", label: "Poste Visé"},{key: "notes", label: "Notes", multiline: true}]}
+        onSubmit={(vals) => { const nid = data.length + 1; setData(prev => [...prev, { id: nid, numero: "ENT-2025-" + String(nid).padStart(3, '0'), ...{statut: "Planifie", resultat: "En attente", score: null}, ...vals }]); }}
+      />
     </Box>
   );
 }

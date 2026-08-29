@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Box, Typography, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination, Chip, Tooltip, Paper } from '@mui/material';
 import { Add, Download } from '@mui/icons-material';
 import KPICard from '../components/KPICard';
+import AddDialog from '../components/AddDialog';
 import { nomenclatures } from '../data/nomenclatures';
 
 const statutColor = { 'Terminee': 'success', 'En cours': 'warning', 'Planifiee': 'info', 'Annulee': 'error' };
@@ -34,9 +35,10 @@ const initialData = [
 ];
 
 export default function Formation() {
-  const [data] = useState(initialData);
+  const [data, setData] = useState(initialData);
   const [page, setPage] = useState(0);
   const [rpp, setRpp] = useState(10);
+  const [dlg, setDlg] = useState(false);
 
   const total = data.length;
   const heuresTotal = data.reduce((s, d) => s + d.duree, 0);
@@ -51,7 +53,7 @@ export default function Formation() {
       <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>12 formations au total</Typography>
       <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
         <Button variant="outlined" startIcon={<Download fontSize="small" />}>Exporter CSV</Button>
-        <Button variant="contained" startIcon={<Add fontSize="small" />}>Nouvelle Formation</Button>
+        <Button variant="contained" startIcon={<Add fontSize="small" />} onClick={() => setDlg(true)}>Nouvelle Formation</Button>
       </Box>
       <Box sx={{ display: 'flex', gap: 2, mb: 3, flexWrap: 'wrap' }}>
         <KPICard titre="TOTAL FORMATIONS" valeur={total} sousTexte={`${total} formation(s)`} />
@@ -77,6 +79,11 @@ export default function Formation() {
         </TableRow>
       ))}</TableBody></Table></TableContainer>
       <TablePagination component="div" count={data.length} page={page} onPageChange={(e, p) => setPage(p)} rowsPerPage={rpp} onRowsPerPageChange={e => { setRpp(parseInt(e.target.value, 10)); setPage(0); }} rowsPerPageOptions={[5, 10, 25]} labelRowsPerPage="Lignes par page" /></Paper>
+    
+      <AddDialog open={dlg} onClose={() => setDlg(false)} title="Ajouter une Formation"
+        fields={[{key: "employe", label: "Employé", required: true},{key: "poste", label: "Poste", required: true},{key: "moduleFormation", label: "Module", required: true},{key: "formateur", label: "Formateur", required: true},{key: "dateDebut", label: "Date Début", required: true},{key: "dateFin", label: "Date Fin", required: true},{key: "duree", label: "Durée (h)", type: "number", required: true},{key: "departement", label: "Département"},{key: "notes", label: "Notes", multiline: true}]}
+        onSubmit={(vals) => { const nid = data.length + 1; setData(prev => [...prev, { id: nid, numero: "FMT-" + String(nid).padStart(3, '0'), ...{statut: "Planifiee", eval20: null}, ...vals }]); }}
+      />
     </Box>
   );
 }

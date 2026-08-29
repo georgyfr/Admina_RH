@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Box, Typography, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination, Chip, Tooltip, Paper } from '@mui/material';
 import { Add, Download } from '@mui/icons-material';
 import KPICard from '../components/KPICard';
+import AddDialog from '../components/AddDialog';
 import { nomenclatures } from '../data/nomenclatures';
 
 const statutColor = { 'En cours': 'warning', 'Terminee': 'success', 'Echec': 'error', 'Prolongee': 'info' };
@@ -28,9 +29,10 @@ const initialData = [
 ];
 
 export default function Integration() {
-  const [data] = useState(initialData);
+  const [data, setData] = useState(initialData);
   const [page, setPage] = useState(0);
   const [rpp, setRpp] = useState(10);
+  const [dlg, setDlg] = useState(false);
 
   const enCours = data.filter(d => d.statutIntegration === 'En cours').length;
   const terminees = data.filter(d => d.statutIntegration === 'Terminee').length;
@@ -43,7 +45,7 @@ export default function Integration() {
       <Typography variant="h5" fontWeight="bold">Intégration Employé</Typography>
       <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>9 intégrations</Typography>
       <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
-        <Button variant="contained" startIcon={<Add fontSize="small" />}>Nouvelle Intégration</Button>
+        <Button variant="contained" startIcon={<Add fontSize="small" />} onClick={() => setDlg(true)}>Nouvelle Intégration</Button>
       </Box>
       <Box sx={{ display: 'flex', gap: 2, mb: 3, flexWrap: 'wrap' }}>
         <KPICard titre="EN COURS" valeur={enCours} sousTexte="intégrations en cours" />
@@ -71,6 +73,11 @@ export default function Integration() {
         </TableRow>
       ))}</TableBody></Table></TableContainer>
       <TablePagination component="div" count={data.length} page={page} onPageChange={(e, p) => setPage(p)} rowsPerPage={rpp} onRowsPerPageChange={e => { setRpp(parseInt(e.target.value, 10)); setPage(0); }} rowsPerPageOptions={[5, 10, 25]} labelRowsPerPage="Lignes par page" /></Paper>
+    
+      <AddDialog open={dlg} onClose={() => setDlg(false)} title="Ajouter une Intégration"
+        fields={[{key: "employe", label: "Employé", required: true},{key: "poste", label: "Poste", required: true},{key: "departement", label: "Département", required: true},{key: "dateArrivee", label: "Date Arrivée", required: true},{key: "managerAccueil", label: "Manager Accueillant", required: true},{key: "formationMetier", label: "Formation Métier", type: "select", options: ["Planifi\u00e9e", "En cours", "Termin\u00e9e"]},{key: "visiteLocaux", label: "Visite Locaux", type: "select", options: ["Fait", "Non fait"]},{key: "notes", label: "Notes", multiline: true}]}
+        onSubmit={(vals) => { const nid = data.length + 1; setData(prev => [...prev, { id: nid, numero: "INT-" + String(nid).padStart(3, '0'), ...{docsAdmin: "Non", formationSecurite: "Non", equipementBadge: "Non", compteInfo: "Non", statutIntegration: "En cours"}, ...vals }]); }}
+      />
     </Box>
   );
 }

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Box, Typography, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination, Chip, Tooltip, Paper } from '@mui/material';
 import { Add, Download } from '@mui/icons-material';
 import KPICard from '../components/KPICard';
+import AddDialog from '../components/AddDialog';
 import { nomenclatures } from '../data/nomenclatures';
 
 const formatFCFA = (a) => (!a && a !== 0) ? '—' : a.toLocaleString('fr-FR') + ' FCFA';
@@ -31,9 +32,10 @@ const initialData = [
 ];
 
 export default function Saisonniers() {
-  const [data] = useState(initialData);
+  const [data, setData] = useState(initialData);
   const [page, setPage] = useState(0);
   const [rpp, setRpp] = useState(10);
+  const [dlg, setDlg] = useState(false);
 
   const total = data.length;
   const coutTotal = data.reduce((s, d) => s + d.coutTotal, 0);
@@ -46,7 +48,7 @@ export default function Saisonniers() {
       <Typography variant="h5" fontWeight="bold">Saisonniers</Typography>
       <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
         <Button variant="outlined" startIcon={<Download fontSize="small" />}>Exporter CSV</Button>
-        <Button variant="contained" startIcon={<Add fontSize="small" />}>Ajouter</Button>
+        <Button variant="contained" startIcon={<Add fontSize="small" />} onClick={() => setDlg(true)}>Ajouter</Button>
       </Box>
       <Box sx={{ display: 'flex', gap: 2, mb: 3, flexWrap: 'wrap' }}>
         <KPICard titre="Total Saisonniers" valeur={total} sousTexte={`${total} saisonnier(s)`} />
@@ -73,6 +75,11 @@ export default function Saisonniers() {
         </TableRow>
       ))}</TableBody></Table></TableContainer>
       <TablePagination component="div" count={data.length} page={page} onPageChange={(e, p) => setPage(p)} rowsPerPage={rpp} onRowsPerPageChange={e => { setRpp(parseInt(e.target.value, 10)); setPage(0); }} rowsPerPageOptions={[5, 10, 25]} labelRowsPerPage="Lignes par page" /></Paper>
+    
+      <AddDialog open={dlg} onClose={() => setDlg(false)} title="Ajouter un Saisonnier"
+        fields={[{key: "nom", label: "Nom", required: true},{key: "prenom", label: "Prénom", required: true},{key: "poste", label: "Poste", required: true},{key: "departement", label: "Département", required: true},{key: "dateDebut", label: "Date Début", required: true},{key: "dateFin", label: "Date Fin", required: true},{key: "tauxHoraire", label: "Taux Horaire (FCFA)", type: "number", required: true},{key: "statut", label: "Statut", type: "select", options: ["En cours", "Termine", "Abandonne"], required: true},{key: "motif", label: "Motif", type: "select", options: ["Remplacement", "Saisonnalite", "Surcharge", "Reorganisation"]},{key: "source", label: "Source", type: "select", options: ["Site web entreprise", "Presse", "Cooptation", "Reseaux sociaux", "Candidature spontanee", "Cabinet de recrutement"]},{key: "notes", label: "Notes", multiline: true}]}
+        onSubmit={(vals) => { const nid = data.length + 1; setData(prev => [...prev, { id: nid, numero: "SAI-" + String(nid).padStart(3, '0'), ...{}, ...vals }]); }}
+      />
     </Box>
   );
 }

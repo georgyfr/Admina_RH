@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { Box, Typography, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination, Chip, FormControl, Select, MenuItem, Tooltip, Paper } from '@mui/material';
 import { Add } from '@mui/icons-material';
 import KPICard from '../components/KPICard';
+import AddDialog from '../components/AddDialog';
 import { nomenclatures } from '../data/nomenclatures';
 
 const statutColor = { 'Favorable': 'success', 'Defavorable': 'error', 'Partiel': 'warning', 'En cours': 'info' };
@@ -22,9 +23,10 @@ const initialData = [
 ];
 
 export default function Verifications() {
-  const [data] = useState(initialData);
+  const [data, setData] = useState(initialData);
   const [page, setPage] = useState(0);
   const [rpp, setRpp] = useState(10);
+  const [dlg, setDlg] = useState(false);
 
   const totalVerif = data.length;
   const verifies = data.filter(d => d.statut === 'Favorable').length;
@@ -38,7 +40,7 @@ export default function Verifications() {
       <Typography variant="h5" fontWeight="bold">Vérification des Références</Typography>
       <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>2 vérifications enregistrées</Typography>
       <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
-        <Button variant="contained" startIcon={<Add fontSize="small" />}>Ajouter Vérification</Button>
+        <Button variant="contained" startIcon={<Add fontSize="small" />} onClick={() => setDlg(true)}>Ajouter Vérification</Button>
       </Box>
       <Box sx={{ display: 'flex', gap: 2, mb: 3, flexWrap: 'wrap' }}>
         <KPICard titre="TOTAL" valeur={totalVerif} sousTexte={`${totalVerif} vérification(s)`} />
@@ -77,6 +79,11 @@ export default function Verifications() {
         </TableRow>
       ))}</TableBody></Table></TableContainer>
       <TablePagination component="div" count={data.length} page={page} onPageChange={(e, p) => setPage(p)} rowsPerPage={rpp} onRowsPerPageChange={e => { setRpp(parseInt(e.target.value, 10)); setPage(0); }} rowsPerPageOptions={[5, 10, 25]} labelRowsPerPage="Lignes par page" /></Paper>
+    
+      <AddDialog open={dlg} onClose={() => setDlg(false)} title="Ajouter une Vérification"
+        fields={[{key: "candidat", label: "Candidat", required: true},{key: "posteVise", label: "Poste Visé"},{key: "resultatGlobal", label: "Résultat Global", type: "select", options: ["Favorable", "Defavorable", "Partiel", "Non verifiable"]},{key: "decisionFinale", label: "Décision Finale", type: "select", options: ["Embauche recommandee", "Embauche avec reserve", "Refus", "En attente decision"]},{key: "notes", label: "Notes", multiline: true}]}
+        onSubmit={(vals) => { const nid = data.length + 1; setData(prev => [...prev, { id: nid, numero: "VERIF-2025-" + String(nid).padStart(3, '0'), ...{}, ...vals }]); }}
+      />
     </Box>
   );
 }

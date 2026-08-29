@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { Box, Typography, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination, Chip, FormControl, Select, MenuItem, Paper } from '@mui/material';
 import { Add, Download } from '@mui/icons-material';
 import KPICard from '../components/KPICard';
+import AddDialog from '../components/AddDialog';
 import { nomenclatures } from '../data/nomenclatures';
 
 const formatFCFA = (a) => (!a && a !== 0) ? '—' : a.toLocaleString('fr-FR') + ' FCFA';
@@ -31,9 +32,10 @@ const initialData = [
 ];
 
 export default function Cabinets() {
-  const [data] = useState(initialData);
+  const [data, setData] = useState(initialData);
   const [page, setPage] = useState(0);
   const [rpp, setRpp] = useState(10);
+  const [dlg, setDlg] = useState(false);
 
   const totalCab = data.length;
   const tauxMoyen = (data.reduce((s, d) => s + d.tauxReussite, 0) / totalCab).toFixed(1);
@@ -46,7 +48,7 @@ export default function Cabinets() {
       <Typography variant="h5" fontWeight="bold">Gestion des Cabinets</Typography>
       <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>12 cabinets partenaires</Typography>
       <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
-        <Button variant="contained" startIcon={<Add fontSize="small" />}>Nouveau Cabinet</Button>
+        <Button variant="contained" startIcon={<Add fontSize="small" />} onClick={() => setDlg(true)}>Nouveau Cabinet</Button>
       </Box>
       <Box sx={{ display: 'flex', gap: 2, mb: 3, flexWrap: 'wrap' }}>
         <KPICard titre="TOTAL CABINETS" valeur={totalCab} sousTexte={`${totalCab} partenaires`} />
@@ -75,6 +77,11 @@ export default function Cabinets() {
         </TableRow>
       ))}</TableBody></Table></TableContainer>
       <TablePagination component="div" count={data.length} page={page} onPageChange={(e, p) => setPage(p)} rowsPerPage={rpp} onRowsPerPageChange={e => { setRpp(parseInt(e.target.value, 10)); setPage(0); }} rowsPerPageOptions={[5, 10, 25]} labelRowsPerPage="Lignes par page" /></Paper>
+    
+      <AddDialog open={dlg} onClose={() => setDlg(false)} title="Ajouter un Cabinet"
+        fields={[{key: "nom", label: "Nom du Cabinet", required: true},{key: "specialite", label: "Spécialité", type: "select", options: ["Generaliste", "Cadres dirigeants", "Informatique", "Finance", "Hotellerie & Tourisme", "Commerce", "BTP", "Logistique"], required: true},{key: "contact", label: "Contact"},{key: "telephone", label: "Téléphone"},{key: "evaluation", label: "Évaluation", type: "select", options: ["Excellent", "Bon", "Moyen", "Insuffisant", "A evaluer"]},{key: "notes", label: "Notes", multiline: true}]}
+        onSubmit={(vals) => { const nid = data.length + 1; setData(prev => [...prev, { id: nid, numero: "CA-" + String(nid).padStart(3, '0'), ...{nbRecrutements: 0, coutTotal: 0}, ...vals }]); }}
+      />
     </Box>
   );
 }

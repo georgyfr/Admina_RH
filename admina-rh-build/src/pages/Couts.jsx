@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { Box, Typography, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination, Paper, TableSortLabel } from '@mui/material';
 import { Download } from '@mui/icons-material';
 import KPICard from '../components/KPICard';
+import AddDialog from '../components/AddDialog';
 import { nomenclatures } from '../data/nomenclatures';
 
 const formatFCFA = (a) => (!a && a !== 0) ? '—' : a.toLocaleString('fr-FR') + ' FCFA';
@@ -17,9 +18,10 @@ const initialData = [
 ];
 
 export default function Couts() {
-  const [data] = useState(initialData);
+  const [data, setData] = useState(initialData);
   const [page, setPage] = useState(0);
   const [rpp, setRpp] = useState(10);
+  const [dlg, setDlg] = useState(false);
 
   const coutTotal = data.reduce((s, d) => s + d.publicite + d.cabinet + d.deplacement + d.tests + d.hebergement + d.formation + d.autres, 0);
   const coutMoyenDemande = Math.round(coutTotal / data.length);
@@ -61,6 +63,11 @@ export default function Couts() {
         );
       })}</TableBody></Table></TableContainer>
       <TablePagination component="div" count={data.length} page={page} onPageChange={(e, p) => setPage(p)} rowsPerPage={rpp} onRowsPerPageChange={e => { setRpp(parseInt(e.target.value, 10)); setPage(0); }} rowsPerPageOptions={[5, 10, 25]} labelRowsPerPage="Lignes par page" /></Paper>
+    
+      <AddDialog open={dlg} onClose={() => setDlg(false)} title="Ajouter un Coût"
+        fields={[{key: "poste", label: "Poste", required: true},{key: "publicite", label: "Publicité (FCFA)", type: "number"},{key: "cabinet", label: "Cabinet (FCFA)", type: "number"},{key: "deplacement", label: "Déplacement (FCFA)", type: "number"},{key: "tests", label: "Tests (FCFA)", type: "number"},{key: "hebergement", label: "Hébergement (FCFA)", type: "number"},{key: "date", label: "Date"},{key: "departement", label: "Département"},{key: "notes", label: "Notes", multiline: true}]}
+        onSubmit={(vals) => { const nid = data.length + 1; setData(prev => [...prev, { id: nid, numero: "COUT-" + String(nid).padStart(3, '0'), ...{}, ...vals }]); }}
+      />
     </Box>
   );
 }

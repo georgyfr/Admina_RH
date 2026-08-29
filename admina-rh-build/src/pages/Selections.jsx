@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { Box, Typography, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination, Chip, FormControl, Select, MenuItem, Paper } from '@mui/material';
 import { Add } from '@mui/icons-material';
 import KPICard from '../components/KPICard';
+import AddDialog from '../components/AddDialog';
 import { nomenclatures } from '../data/nomenclatures';
 
 const statutColor = { 'Retenu': 'success', 'Rejete': 'error', 'En attente': 'warning' };
@@ -20,9 +21,10 @@ const initialData = [
 ];
 
 export default function Selections() {
-  const [data] = useState(initialData);
+  const [data, setData] = useState(initialData);
   const [page, setPage] = useState(0);
   const [rpp, setRpp] = useState(10);
+  const [dlg, setDlg] = useState(false);
 
   const totalSel = data.length;
   const retenus = data.filter(d => d.statut === 'Retenu').length;
@@ -36,7 +38,7 @@ export default function Selections() {
       <Typography variant="h5" fontWeight="bold">Sélections</Typography>
       <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>Gestion des shortlists et décisions de recrutement</Typography>
       <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
-        <Button variant="contained" startIcon={<Add fontSize="small" />}>Nouvelle Sélection</Button>
+        <Button variant="contained" startIcon={<Add fontSize="small" />} onClick={() => setDlg(true)}>Nouvelle Sélection</Button>
       </Box>
       <Box sx={{ display: 'flex', gap: 2, mb: 3, flexWrap: 'wrap' }}>
         <Chip label={`${totalSel} Total`} sx={{ fontWeight: 'bold', px: 2, py: 1.5, fontSize: '0.9rem' }} />
@@ -60,6 +62,11 @@ export default function Selections() {
         </TableRow>
       ))}</TableBody></Table></TableContainer>
       <TablePagination component="div" count={data.length} page={page} onPageChange={(e, p) => setPage(p)} rowsPerPage={rpp} onRowsPerPageChange={e => { setRpp(parseInt(e.target.value, 10)); setPage(0); }} rowsPerPageOptions={[5, 10, 25]} labelRowsPerPage="Lignes par page" /></Paper>
+    
+      <AddDialog open={dlg} onClose={() => setDlg(false)} title="Ajouter une Sélection"
+        fields={[{key: "candidat", label: "Candidat", required: true},{key: "poste", label: "Poste", required: true},{key: "departement", label: "Département"},{key: "notes", label: "Notes", multiline: true}]}
+        onSubmit={(vals) => { const nid = data.length + 1; setData(prev => [...prev, { id: nid, numero: "SEL-2025-" + String(nid).padStart(3, '0'), ...{statut: "En attente"}, ...vals }]); }}
+      />
     </Box>
   );
 }

@@ -114,3 +114,20 @@ Stage Summary:
 - Bug CSS corrigé : une ligne changée dans App.jsx
 - Toutes les 31 pages fonctionnelles et visibles
 - Site live : https://admina-rh-bd0.pages.dev/
+
+---
+Task ID: 8
+Agent: Main Agent
+Task: Rendre tous les boutons Ajouter fonctionnels sur 21 pages
+
+Work Log:
+- Créé AddDialog.jsx (Dialog + Snackbar)
+- Créé dialog_configs.json + patch_buttons.py
+- 21 pages patchées avec dialogues d'ajout fonctionnels
+- Testé : ajout réussi ENT-2025-008, snackbar OK
+- Build + déploiement Cloudflare Pages
+
+Stage Summary:
+- 21/30 pages avec boutons Ajouter fonctionnels
+- 9 pages sans modification (pas de bouton ou déjà fonctionnel)
+- Site live : https://admina-rh-bd0.pages.dev/

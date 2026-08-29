@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { Box, Typography, Button, Paper, Card, CardContent, Chip, Divider, Tooltip } from '@mui/material';
 import { Add } from '@mui/icons-material';
 import KPICard from '../components/KPICard';
+import AddDialog from '../components/AddDialog';
 import { nomenclatures } from '../data/nomenclatures';
 
 const initialData = [
@@ -53,7 +54,8 @@ const initialData = [
 ];
 
 export default function Evaluations() {
-  const [data] = useState(initialData);
+  const [data, setData] = useState(initialData);
+  const [dlg, setDlg] = useState(false);
 
   const totalEvals = data.length;
   const scoreMoyen = (data.reduce((s, d) => s + d.score20, 0) / totalEvals).toFixed(1);
@@ -65,7 +67,7 @@ export default function Evaluations() {
       <Typography variant="h5" fontWeight="bold">Évaluations des Candidats</Typography>
       <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>3 évaluation(s) enregistrée(s)</Typography>
       <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
-        <Button variant="contained" startIcon={<Add fontSize="small" />}>Nouvelle Évaluation</Button>
+        <Button variant="contained" startIcon={<Add fontSize="small" />} onClick={() => setDlg(true)}>Nouvelle Évaluation</Button>
       </Box>
       <Box sx={{ display: 'flex', gap: 2, mb: 3, flexWrap: 'wrap' }}>
         <KPICard titre="TOTAL ÉVALUATIONS" valeur={totalEvals} sousTexte={`${totalEvals} évaluation(s)`} />
@@ -123,6 +125,11 @@ export default function Evaluations() {
           </Card>
         ))}
       </Box>
+    
+      <AddDialog open={dlg} onClose={() => setDlg(false)} title="Ajouter une Évaluation"
+        fields={[{key: "candidat", label: "Candidat", required: true},{key: "posteVise", label: "Poste Visé"},{key: "salaireSouhaite", label: "Salaire Souhaité (FCFA)", type: "number"},{key: "salairePropose", label: "Salaire Proposé (FCFA)", type: "number"},{key: "source", label: "Source", type: "select", options: ["Site web entreprise", "Presse", "Cooptation", "Reseaux sociaux", "Candidature spontanee", "Cabinet de recrutement"]},{key: "notes", label: "Notes", multiline: true}]}
+        onSubmit={(vals) => { const nid = data.length + 1; setData(prev => [...prev, { id: nid, numero: "EVAL-2025-" + String(nid).padStart(3, '0'), ...{}, ...vals }]); }}
+      />
     </Box>
   );
 }

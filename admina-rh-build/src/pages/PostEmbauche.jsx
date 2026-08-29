@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Box, Typography, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination, Chip, Tooltip, Paper } from '@mui/material';
 import { Add, Download } from '@mui/icons-material';
 import KPICard from '../components/KPICard';
+import AddDialog from '../components/AddDialog';
 import { nomenclatures } from '../data/nomenclatures';
 
 const satisfactionColor = { 'Tres satisfait': 'success', 'Satisfait': 'info', 'Neutre': 'default', 'Insatisfait': 'warning', 'Tres insatisfait': 'error' };
@@ -20,9 +21,10 @@ const initialData = [
 ];
 
 export default function PostEmbauche() {
-  const [data] = useState(initialData);
+  const [data, setData] = useState(initialData);
   const [page, setPage] = useState(0);
   const [rpp, setRpp] = useState(10);
+  const [dlg, setDlg] = useState(false);
 
   const total = data.length;
   const satMoy = data.filter(d => d.satisfaction === 'Tres satisfait' || d.satisfaction === 'Satisfait').length;
@@ -39,7 +41,7 @@ export default function PostEmbauche() {
       <Typography variant="h5" fontWeight="bold">Suivi Post-Embauche</Typography>
       <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
         <Button variant="outlined" startIcon={<Download fontSize="small" />}>Exporter CSV</Button>
-        <Button variant="contained" startIcon={<Add fontSize="small" />}>Ajouter</Button>
+        <Button variant="contained" startIcon={<Add fontSize="small" />} onClick={() => setDlg(true)}>Ajouter</Button>
       </Box>
       <Box sx={{ display: 'flex', gap: 2, mb: 3, flexWrap: 'wrap' }}>
         <KPICard titre="Total Suivis" valeur={total} sousTexte={`${total} suivi(s)`} />
@@ -64,6 +66,11 @@ export default function PostEmbauche() {
         </TableRow>
       ))}</TableBody></Table></TableContainer>
       <TablePagination component="div" count={data.length} page={page} onPageChange={(e, p) => setPage(p)} rowsPerPage={rpp} onRowsPerPageChange={e => { setRpp(parseInt(e.target.value, 10)); setPage(0); }} rowsPerPageOptions={[5, 10, 25]} labelRowsPerPage="Lignes par page" /></Paper>
+    
+      <AddDialog open={dlg} onClose={() => setDlg(false)} title="Ajouter un Suivi"
+        fields={[{key: "employe", label: "Employé", required: true},{key: "poste", label: "Poste", required: true},{key: "departement", label: "Département", required: true},{key: "dateEmbauche", label: "Date Embauche", required: true},{key: "eval1mois", label: "Éval 1 mois (/20)", type: "number"},{key: "risqueDepart", label: "Risque Départ", type: "select", options: ["Faible", "Moyen", "Eleve", "Critique"]},{key: "commentaires", label: "Commentaires", multiline: true}]}
+        onSubmit={(vals) => { const nid = data.length + 1; setData(prev => [...prev, { id: nid, numero: "SPE-" + String(nid).padStart(3, '0'), ...{anciennete: 0, satisfaction: "Neutre"}, ...vals }]); }}
+      />
     </Box>
   );
 }
