@@ -48,7 +48,7 @@ function AppContent() {
     <>
       <Sidebar drawerWidth={dw} />
       <Header title={title} />
-      <Box sx={{ ml: dw, mt: '64px', p: 3, width: 'calc(100% - 260px)' }}>
+      <Box sx={{ ml: `${dw}px`, mt: '64px', p: 3, width: `calc(100% - ${dw}px)` }}>
         <Suspense fallback={<Box p={3}>Chargement...</Box>}>
           <Routes>
             <Route path='/' element={<TableauDeBord />} />

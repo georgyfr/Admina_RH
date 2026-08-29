@@ -95,3 +95,22 @@ Stage Summary:
 - Sous-étapes 4, 5 et 6 étaient DÉJÀ IMPLÉMENTÉES dans la session précédente
 - TOTAL FINAL : 133 champs manquants ajoutés sur 18 pages → 100% de couverture
 - Site live : https://admina-rh-bd0.pages.dev/
+
+---
+Task ID: 7
+Agent: Main Agent
+Task: Correction bug critique — pages blanches (contenu invisible)
+
+Work Log:
+- Utilisateur signale pages blanches sur toutes les pages (sauf sidebar)
+- Diagnostic agent-browser : contenu présent dans DOM mais marginLeft=2080px (hors écran)
+- Cause : MUI sx prop multiplie les valeurs numériques par theme.spacing() (facteur 8)
+- `ml: 260` → `260 × 8 = 2080px` au lieu de `260px`
+- Fix : changé `ml: dw` en `ml: \`${dw}px\`` dans App.jsx ligne 51
+- Build + déploiement Cloudflare Pages réussi
+- Vérifié visuellement : Entretiens (14 colonnes), Integration (15), Checklist (12), Candidats, Offres, Conformite — toutes affichent correctement
+
+Stage Summary:
+- Bug CSS corrigé : une ligne changée dans App.jsx
+- Toutes les 31 pages fonctionnelles et visibles
+- Site live : https://admina-rh-bd0.pages.dev/
