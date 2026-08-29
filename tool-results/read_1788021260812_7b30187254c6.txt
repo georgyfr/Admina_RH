@@ -1,0 +1,1221 @@
+     1→import { useState, useMemo } from 'react';
+     2→import {
+     3→  Box,
+     4→  Typography,
+     5→  Button,
+     6→  Table,
+     7→  TableBody,
+     8→  TableCell,
+     9→  TableContainer,
+    10→  TableHead,
+    11→  TableRow,
+    12→  TablePagination,
+    13→  Chip,
+    14→  FormControl,
+    15→  Select,
+    16→  MenuItem,
+    17→  Tooltip,
+    18→  Paper,
+    19→  Dialog,
+    20→  DialogTitle,
+    21→  DialogContent,
+    22→  DialogActions,
+    23→  Tabs,
+    24→  Tab,
+    25→  Grid,
+    26→  TextField,
+    27→  Checkbox,
+    28→  FormControlLabel,
+    29→  IconButton,
+    30→} from '@mui/material';
+    31→import { Add, Download, Visibility, Edit } from '@mui/icons-material';
+    32→import KPICard from '../components/KPICard';
+    33→import { nomenclatures } from '../data/nomenclatures';
+    34→
+    35→const statutColor = (statut) => {
+    36→  switch (statut) {
+    37→    case 'Retenu':
+    38→      return 'success';
+    39→    case 'Refuse':
+    40→      return 'error';
+    41→    case 'Entretien planifie':
+    42→      return 'warning';
+    43→    case 'En cours d\'etude':
+    44→      return 'info';
+    45→    case 'Entretien realise':
+    46→      return 'secondary';
+    47→    case 'Nouveau':
+    48→      return 'default';
+    49→    case 'En reserve':
+    50→      return 'default';
+    51→    default:
+    52→      return 'default';
+    53→  }
+    54→};
+    55→
+    56→const formatDate = (dateStr) => {
+    57→  if (!dateStr) return '';
+    58→  const parts = dateStr.split('-');
+    59→  if (parts.length === 3) {
+    60→    return `${parts[2]}/${parts[1]}/${parts[0]}`;
+    61→  }
+    62→  return dateStr;
+    63→};
+    64→
+    65→const formatDateReverse = (dateStr) => {
+    66→  if (!dateStr) return '';
+    67→  const parts = dateStr.split('/');
+    68→  if (parts.length === 3) {
+    69→    return `${parts[2]}-${parts[1]}-${parts[0]}`;
+    70→  }
+    71→  return dateStr;
+    72→};
+    73→
+    74→const initialCandidates = [
+    75→  {
+    76→    id: 'CAN-001',
+    77→    civilite: 'M.',
+    78→    genre: 'Masculin',
+    79→    nom: 'Ndiaye',
+    80→    prenom: 'Moussa',
+    81→    dateNaissance: '1988-03-15',
+    82→    nationalite: 'Camerounaise',
+    83→    situationFam: 'Marie(e)',
+    84→    telephone: '+237 699 123 456',
+    85→    email: 'ndiaye.m@email.com',
+    86→    adresse: 'Quartier Nlongkak Yaoundé',
+    87→    ville: 'Yaoundé',
+    88→    niveauEtude: 'Master',
+    89→    diplome: 'Master Hotellerie-Restauration',
+    90→    etablissement: 'Univ Douala',
+    91→    anneesExp: 8,
+    92→    dernierEmployeur: 'Hôtel Sawa',
+    93→    competencesCles: 'Gastronomie/Management/HACCP',
+    94→    langues: 'Français Anglais',
+    95→    niveauLangue: 'Bilingue',
+    96→    outilsLogiciels: 'Excel Word Sage',
+    97→    posteVise: 'Chef Cuisinier',
+    98→    sourceCandidature: 'Cabinet de recrutement',
+    99→    dateCandidature: '2025-01-10',
+   100→    statut: 'Retenu',
+   101→    score: 17.5,
+   102→    typeContrat: 'CDI',
+   103→    notes: 'candidat très motivé',
+   104→    contratTelechargeable: 'Contrat_CAN-001.pdf',
+   105→    dateDebutEssai: '2025-04-01',
+   106→    dateFinEssai: '2025-06-30',
+   107→    dateEmbaucheDefinitive: '2025-07-01',
+   108→    certificatTravail: true,
+   109→    attestationCNPS: true,
+   110→    extraitCasierJudiciaire: true,
+   111→  },
+   112→  {
+   113→    id: 'CAN-002',
+   114→    civilite: 'Mme',
+   115→    genre: 'Feminin',
+   116→    nom: 'Tchouankou',
+   117→    prenom: 'Claire',
+   118→    dateNaissance: '1992-07-22',
+   119→    nationalite: 'Camerounaise',
+   120→    situationFam: 'Celibataire',
+   121→    telephone: '+237 677 234 567',
+   122→    email: 'tchouankou.c@email.com',
+   123→    adresse: 'Bastos Yaoundé',
+   124→    ville: 'Yaoundé',
+   125→    niveauEtude: 'Licence',
+   126→    diplome: 'Licence Comptabilité',
+   127→    etablissement: 'Univ Yaoundé II',
+   128→    anneesExp: 3,
+   129→    dernierEmployeur: '',
+   130→    competencesCles: 'Comptabilité/Paie/Sage',
+   131→    langues: 'Français Anglais',
+   132→    niveauLangue: 'Avance',
+   133→    outilsLogiciels: 'Sage 100 Excel',
+   134→    posteVise: 'Comptable Senior',
+   135→    sourceCandidature: 'Ecole/Universite',
+   136→    dateCandidature: '2025-01-15',
+   137→    statut: 'Entretien realise',
+   138→    score: 14.0,
+   139→    typeContrat: 'CDI',
+   140→    notes: 'profil solide',
+   141→    contratTelechargeable: '',
+   142→    dateDebutEssai: '',
+   143→    dateFinEssai: '',
+   144→    dateEmbaucheDefinitive: '',
+   145→    certificatTravail: false,
+   146→    attestationCNPS: false,
+   147→    extraitCasierJudiciaire: false,
+   148→  },
+   149→  {
+   150→    id: 'CAN-003',
+   151→    civilite: 'M.',
+   152→    genre: 'Masculin',
+   153→    nom: 'Nganou',
+   154→    prenom: 'André',
+   155→    dateNaissance: '1998-11-05',
+   156→    nationalite: 'Camerounaise',
+   157→    situationFam: 'Celibataire',
+   158→    telephone: '+237 690 345 678',
+   159→    email: 'nganou.a@email.com',
+   160→    adresse: '',
+   161→    ville: 'Kribi',
+   162→    niveauEtude: 'BTS/DUT',
+   163→    diplome: 'BTS Securité',
+   164→    etablissement: 'ENST Douala',
+   165→    anneesExp: 2,
+   166→    dernierEmployeur: '',
+   167→    competencesCles: 'Surveillance/Premiers secours',
+   168→    langues: 'Français',
+   169→    niveauLangue: 'Intermediaire',
+   170→    outilsLogiciels: '',
+   171→    posteVise: 'Agent de Securite',
+   172→    sourceCandidature: 'Candidature spontanee',
+   173→    dateCandidature: '2025-01-20',
+   174→    statut: "En cours d'etude",
+   175→    score: 0,
+   176→    typeContrat: 'CDD',
+   177→    notes: '',
+   178→    contratTelechargeable: '',
+   179→    dateDebutEssai: '',
+   180→    dateFinEssai: '',
+   181→    dateEmbaucheDefinitive: '',
+   182→    certificatTravail: false,
+   183→    attestationCNPS: false,
+   184→    extraitCasierJudiciaire: false,
+   185→  },
+   186→  {
+   187→    id: 'CAN-004',
+   188→    civilite: 'Mme',
+   189→    genre: 'Feminin',
+   190→    nom: 'Eyenga',
+   191→    prenom: 'Clarisse',
+   192→    dateNaissance: '1995-04-18',
+   193→    nationalite: 'Camerounaise',
+   194→    situationFam: 'Marie(e)',
+   195→    telephone: '+237 695 456 789',
+   196→    email: 'eyenga.c@email.com',
+   197→    adresse: 'Mvog-Ada Yaoundé',
+   198→    ville: 'Yaoundé',
+   199→    niveauEtude: 'BTS/DUT',
+   200→    diplome: 'BTS Hotellerie',
+   201→    etablissement: 'IST Yaoundé',
+   202→    anneesExp: 4,
+   203→    dernierEmployeur: 'Hôtel Mont Fébé',
+   204→    competencesCles: 'Accueil/Reservation/Anglais',
+   205→    langues: 'Français Anglais Espagnol',
+   206→    niveauLangue: 'Avance',
+   207→    outilsLogiciels: 'Opera PMS Excel',
+   208→    posteVise: 'Agent Accueil',
+   209→    sourceCandidature: 'Site web entreprise',
+   210→    dateCandidature: '2025-02-05',
+   211→    statut: 'Retenu',
+   212→    score: 16.0,
+   213→    typeContrat: 'CDD',
+   214→    notes: 'bonne présentation',
+   215→    contratTelechargeable: 'Contrat_CAN-004.pdf',
+   216→    dateDebutEssai: '2025-03-15',
+   217→    dateFinEssai: '2025-05-15',
+   218→    dateEmbaucheDefinitive: '',
+   219→    certificatTravail: true,
+   220→    attestationCNPS: true,
+   221→    extraitCasierJudiciaire: true,
+   222→  },
+   223→  {
+   224→    id: 'CAN-005',
+   225→    civilite: 'M.',
+   226→    genre: 'Masculin',
+   227→    nom: 'Kamga',
+   228→    prenom: 'Blaise',
+   229→    dateNaissance: '1994-09-10',
+   230→    nationalite: 'Camerounaise',
+   231→    situationFam: 'Celibataire',
+   232→    telephone: '+237 677 567 890',
+   233→    email: 'kamga.b@email.com',
+   234→    adresse: 'Makepe Douala',
+   235→    ville: 'Douala',
+   236→    niveauEtude: 'Master',
+   237→    diplome: 'Master Info',
+   238→    etablissement: 'Univ Yaoundé I',
+   239→    anneesExp: 5,
+   240→    dernierEmployeur: '',
+   241→    competencesCles: 'React Node PostgreSQL Docker Git AWS',
+   242→    langues: 'Français Anglais',
+   243→    niveauLangue: 'Bilingue',
+   244→    outilsLogiciels: 'VS Code GitHub Jira',
+   245→    posteVise: 'Développeur Full Stack',
+   246→    sourceCandidature: 'LinkedIn',
+   247→    dateCandidature: '2025-02-10',
+   248→    statut: "En cours d'etude",
+   249→    score: 0,
+   250→    typeContrat: 'CDI',
+   251→    notes: 'full stack 5 ans',
+   252→    contratTelechargeable: '',
+   253→    dateDebutEssai: '',
+   254→    dateFinEssai: '',
+   255→    dateEmbaucheDefinitive: '',
+   256→    certificatTravail: false,
+   257→    attestationCNPS: false,
+   258→    extraitCasierJudiciaire: false,
+   259→  },
+   260→  {
+   261→    id: 'CAN-006',
+   262→    civilite: 'Mme',
+   263→    genre: 'Feminin',
+   264→    nom: 'Mebara',
+   265→    prenom: 'Nadege',
+   266→    dateNaissance: '1997-01-25',
+   267→    nationalite: 'Camerounaise',
+   268→    situationFam: 'Celibataire',
+   269→    telephone: '+237 699 678 901',
+   270→    email: 'mebara.n@email.com',
+   271→    adresse: 'Briqueterie Douala',
+   272→    ville: 'Douala',
+   273→    niveauEtude: 'Licence',
+   274→    diplome: 'Licence Marketing',
+   275→    etablissement: 'Univ Douala',
+   276→    anneesExp: 2,
+   277→    dernierEmployeur: '',
+   278→    competencesCles: 'Community management/Canva/SEO',
+   279→    langues: 'Français Anglais',
+   280→    niveauLangue: 'Avance',
+   281→    outilsLogiciels: 'Hootsuite Canva Analytics',
+   282→    posteVise: 'Community Manager',
+   283→    sourceCandidature: 'Reseaux sociaux',
+   284→    dateCandidature: '2025-02-15',
+   285→    statut: 'Entretien planifie',
+   286→    score: 0,
+   287→    typeContrat: 'CDI',
+   288→    notes: '',
+   289→    contratTelechargeable: '',
+   290→    dateDebutEssai: '',
+   291→    dateFinEssai: '',
+   292→    dateEmbaucheDefinitive: '',
+   293→    certificatTravail: false,
+   294→    attestationCNPS: false,
+   295→    extraitCasierJudiciaire: false,
+   296→  },
+   297→  {
+   298→    id: 'CAN-007',
+   299→    civilite: 'M.',
+   300→    genre: 'Masculin',
+   301→    nom: 'Nkoulou',
+   302→    prenom: 'Brandon',
+   303→    dateNaissance: '2001-06-30',
+   304→    nationalite: 'Camerounaise',
+   305→    situationFam: 'Celibataire',
+   306→    telephone: '+237 690 789 012',
+   307→    email: 'nkoulou.b@email.com',
+   308→    adresse: 'Mbankomo',
+   309→    ville: 'Mbankomo',
+   310→    niveauEtude: 'CAP/BEP',
+   311→    diplome: 'CAP Reception',
+   312→    etablissement: 'CETIC Yaoundé',
+   313→    anneesExp: 1,
+   314→    dernierEmployeur: '',
+   315→    competencesCles: '',
+   316→    langues: 'Français',
+   317→    niveauLangue: 'Debutant',
+   318→    outilsLogiciels: '',
+   319→    posteVise: 'Receptionniste Nuit',
+   320→    sourceCandidature: 'Cooptation',
+   321→    dateCandidature: '2025-02-20',
+   322→    statut: 'Refuse',
+   323→    score: 8.5,
+   324→    typeContrat: 'CDD',
+   325→    notes: "manque d'expérience",
+   326→    contratTelechargeable: '',
+   327→    dateDebutEssai: '',
+   328→    dateFinEssai: '',
+   329→    dateEmbaucheDefinitive: '',
+   330→    certificatTravail: false,
+   331→    attestationCNPS: false,
+   332→    extraitCasierJudiciaire: false,
+   333→  },
+   334→  {
+   335→    id: 'CAN-008',
+   336→    civilite: 'M.',
+   337→    genre: 'Masculin',
+   338→    nom: 'Fomumbod',
+   339→    prenom: 'Yvan',
+   340→    dateNaissance: '1989-12-12',
+   341→    nationalite: 'Camerounaise',
+   342→    situationFam: 'Marie(e)',
+   343→    telephone: '+237 677 890 123',
+   344→    email: 'fomumbod.y@email.com',
+   345→    adresse: 'Bonapriso Douala',
+   346→    ville: 'Douala',
+   347→    niveauEtude: 'Master',
+   348→    diplome: 'Master Logistique',
+   349→    etablissement: 'Univ Douala',
+   350→    anneesExp: 7,
+   351→    dernierEmployeur: 'SCB',
+   352→    competencesCles: "Stocks/Approvisionnement/Négociation/SAP",
+   353→    langues: 'Français Anglais Allemand',
+   354→    niveauLangue: 'Avance',
+   355→    outilsLogiciels: 'SAP MM Excel Power BI',
+   356→    posteVise: 'Chef Approvisionnement',
+   357→    sourceCandidature: 'Cabinet de recrutement',
+   358→    dateCandidature: '2025-03-01',
+   359→    statut: "En cours d'etude",
+   360→    score: 0,
+   361→    typeContrat: 'CDI',
+   362→    notes: '7 ans brasserie',
+   363→    contratTelechargeable: '',
+   364→    dateDebutEssai: '',
+   365→    dateFinEssai: '',
+   366→    dateEmbaucheDefinitive: '',
+   367→    certificatTravail: false,
+   368→    attestationCNPS: false,
+   369→    extraitCasierJudiciaire: false,
+   370→  },
+   371→  {
+   372→    id: 'CAN-009',
+   373→    civilite: 'Mme',
+   374→    genre: 'Feminin',
+   375→    nom: 'Ateba',
+   376→    prenom: 'Chantal',
+   377→    dateNaissance: '2000-08-14',
+   378→    nationalite: 'Camerounaise',
+   379→    situationFam: 'Celibataire',
+   380→    telephone: '+237 695 901 234',
+   381→    email: 'ateba.c@email.com',
+   382→    adresse: 'Tsinga Yaoundé',
+   383→    ville: 'Yaoundé',
+   384→    niveauEtude: 'Sans diplome',
+   385→    diplome: '',
+   386→    etablissement: '',
+   387→    anneesExp: 0,
+   388→    dernierEmployeur: '',
+   389→    competencesCles: '',
+   390→    langues: 'Français',
+   391→    niveauLangue: 'Intermediaire',
+   392→    outilsLogiciels: '',
+   393→    posteVise: 'Agent de Blanchisserie',
+   394→    sourceCandidature: 'Candidature spontanee',
+   395→    dateCandidature: '2025-03-05',
+   396→    statut: 'Nouveau',
+   397→    score: 0,
+   398→    typeContrat: 'CDD',
+   399→    notes: 'première candidature',
+   400→    contratTelechargeable: '',
+   401→    dateDebutEssai: '',
+   402→    dateFinEssai: '',
+   403→    dateEmbaucheDefinitive: '',
+   404→    certificatTravail: false,
+   405→    attestationCNPS: false,
+   406→    extraitCasierJudiciaire: false,
+   407→  },
+   408→  {
+   409→    id: 'CAN-010',
+   410→    civilite: 'M.',
+   411→    genre: 'Masculin',
+   412→    nom: 'Tchouante',
+   413→    prenom: 'Rodrigue',
+   414→    dateNaissance: '1996-02-28',
+   415→    nationalite: 'Camerounaise',
+   416→    situationFam: 'Marie(e)',
+   417→    telephone: '+237 690 012 345',
+   418→    email: 'tchouante.r@email.com',
+   419→    adresse: 'Nkoldongo Yaoundé',
+   420→    ville: 'Yaoundé',
+   421→    niveauEtude: 'BTS/DUT',
+   422→    diplome: 'BTS Audiovisuel',
+   423→    etablissement: 'ENST Douala',
+   424→    anneesExp: 3,
+   425→    dernierEmployeur: 'Hôtel Sawa',
+   426→    competencesCles: 'Sonorisation/Eclairage/Montage',
+   427→    langues: 'Français',
+   428→    niveauLangue: 'Intermediaire',
+   429→    outilsLogiciels: 'Premiere Final Cut',
+   430→    posteVise: 'Technicien Audiovisuel',
+   431→    sourceCandidature: 'Salon emploi',
+   432→    dateCandidature: '2025-03-10',
+   433→    statut: 'En reserve',
+   434→    score: 11.0,
+   435→    typeContrat: 'CDD',
+   436→    notes: 'en réserve',
+   437→    contratTelechargeable: '',
+   438→    dateDebutEssai: '',
+   439→    dateFinEssai: '',
+   440→    dateEmbaucheDefinitive: '',
+   441→    certificatTravail: false,
+   442→    attestationCNPS: false,
+   443→    extraitCasierJudiciaire: false,
+   444→  },
+   445→];
+   446→
+   447→export default function Candidats() {
+   448→  const [candidates, setCandidates] = useState(initialCandidates);
+   449→  const [page, setPage] = useState(0);
+   450→  const [rowsPerPage, setRowsPerPage] = useState(10);
+   451→  const [filterStatut, setFilterStatut] = useState('');
+   452→  const [filterSource, setFilterSource] = useState('');
+   453→  const [filterNiveau, setFilterNiveau] = useState('');
+   454→  const [searchQuery, setSearchQuery] = useState('');
+   455→  const [openDialog, setOpenDialog] = useState(false);
+   456→  const [selectedCandidate, setSelectedCandidate] = useState(null);
+   457→  const [activeTab, setActiveTab] = useState(0);
+   458→
+   459→  const filteredData = useMemo(() => {
+   460→    return candidates.filter((c) => {
+   461→      const matchStatut = filterStatut ? c.statut === filterStatut : true;
+   462→      const matchSource = filterSource ? c.sourceCandidature === filterSource : true;
+   463→      const matchNiveau = filterNiveau ? c.niveauEtude === filterNiveau : true;
+   464→      const query = searchQuery.toLowerCase();
+   465→      const matchSearch =
+   466→        !query ||
+   467→        c.id.toLowerCase().includes(query) ||
+   468→        c.nom.toLowerCase().includes(query) ||
+   469→        c.prenom.toLowerCase().includes(query) ||
+   470→        c.email.toLowerCase().includes(query) ||
+   471→        c.posteVise.toLowerCase().includes(query) ||
+   472→        c.telephone.includes(query);
+   473→      return matchStatut && matchSource && matchNiveau && matchSearch;
+   474→    });
+   475→  }, [candidates, filterStatut, filterSource, filterNiveau, searchQuery]);
+   476→
+   477→  const totalCandidates = candidates.length;
+   478→  const retenusCount = candidates.filter((c) => c.statut === 'Retenu').length;
+   479→  const enCoursCount = candidates.filter(
+   480→    (c) =>
+   481→      c.statut === "En cours d'etude" || c.statut === 'Entretien planifie'
+   482→  ).length;
+   483→  const scoredCandidates = candidates.filter((c) => c.score > 0);
+   484→  const scoreMoyen =
+   485→    scoredCandidates.length > 0
+   486→      ? (
+   487→          scoredCandidates.reduce((sum, c) => sum + c.score, 0) /
+   488→          scoredCandidates.length
+   489→        ).toFixed(1)
+   490→      : '0.0';
+   491→
+   492→  const handleExportCSV = () => {
+   493→    const headers = [
+   494→      'N° Candidat',
+   495→      'Civilité',
+   496→      'Nom',
+   497→      'Prénom',
+   498→      'Téléphone',
+   499→      'Email',
+   500→      'Poste Visé',
+   501→      'Source Candidature',
+   502→      'Statut',
+   503→      'Score /20',
+   504→      'Niveau Étude',
+   505→      'Années Exp.',
+   506→      'Dernier Employeur',
+   507→      'Date Candidature',
+   508→    ];
+   509→    const rows = filteredData.map((c) => [
+   510→      c.id,
+   511→      c.civilite,
+   512→      c.nom,
+   513→      c.prenom,
+   514→      c.telephone,
+   515→      c.email,
+   516→      c.posteVise,
+   517→      c.sourceCandidature,
+   518→      c.statut,
+   519→      c.score || '',
+   520→      c.niveauEtude,
+   521→      c.anneesExp,
+   522→      c.dernierEmployeur,
+   523→      formatDate(c.dateCandidature),
+   524→    ]);
+   525→    const csvContent =
+   526→      [headers, ...rows].map((row) => row.map((cell) => `"${cell}"`).join(';')).join('\n');
+   527→    const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
+   528→    const link = document.createElement('a');
+   529→    link.href = URL.createObjectURL(blob);
+   530→    link.download = 'candidats_export.csv';
+   531→    link.click();
+   532→  };
+   533→
+   534→  const handleOpenFiche = (candidate) => {
+   535→    setSelectedCandidate(candidate);
+   536→    setActiveTab(0);
+   537→    setOpenDialog(true);
+   538→  };
+   539→
+   540→  const handleCloseDialog = () => {
+   541→    setOpenDialog(false);
+   542→    setSelectedCandidate(null);
+   543→  };
+   544→
+   545→  const handleTabChange = (_, newValue) => {
+   546→    setActiveTab(newValue);
+   547→  };
+   548→
+   549→  const paginatedData = useMemo(() => {
+   550→    const start = page * rowsPerPage;
+   551→    return filteredData.slice(start, start + rowsPerPage);
+   552→  }, [filteredData, page, rowsPerPage]);
+   553→
+   554→  const handleChangePage = (_, newPage) => {
+   555→    setPage(newPage);
+   556→  };
+   557→
+   558→  const handleChangeRowsPerPage = (event) => {
+   559→    setRowsPerPage(parseInt(event.target.value, 10));
+   560→    setPage(0);
+   561→  };
+   562→
+   563→  return (
+   564→    <Box sx={{ p: 3 }}>
+   565→      <Typography variant="h5" fontWeight="bold" gutterBottom>
+   566→        Base de Données Candidats
+   567→      </Typography>
+   568→
+   569→      {/* KPI Cards */}
+   570→      <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', mb: 3 }}>
+   571→        <KPICard titre="Total Candidats" valeur={totalCandidates} sousTexte="candidats inscrits" />
+   572→        <KPICard titre="Retenus" valeur={retenusCount} sousTexte="candidats retenus" />
+   573→        <KPICard titre="En Cours" valeur={enCoursCount} sousTexte="en étude / planifiés" />
+   574→        <KPICard titre="Score Moyen" valeur={`${scoreMoyen} /20`} sousTexte="sur candidats évalués" />
+   575→      </Box>
+   576→
+   577→      {/* Filters & Actions */}
+   578→      <Paper sx={{ p: 2, mb: 2 }}>
+   579→        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, alignItems: 'center' }}>
+   580→          <TextField
+   581→            size="small"
+   582→            placeholder="Rechercher par nom, email, poste..."
+   583→            value={searchQuery}
+   584→            onChange={(e) => {
+   585→              setSearchQuery(e.target.value);
+   586→              setPage(0);
+   587→            }}
+   588→            sx={{ minWidth: 260, flex: '1 1 260px' }}
+   589→          />
+   590→          <FormControl size="small" sx={{ minWidth: 180 }}>
+   591→            <Select
+   592→              displayEmpty
+   593→              value={filterStatut}
+   594→              onChange={(e) => {
+   595→                setFilterStatut(e.target.value);
+   596→                setPage(0);
+   597→              }}
+   598→              renderValue={(val) => (val ? val : 'Tous les statuts')}
+   599→            >
+   600→              <MenuItem value="">Tous les statuts</MenuItem>
+   601→              {nomenclatures.statut_candidat.map((s) => (
+   602→                <MenuItem key={s} value={s}>
+   603→                  {s}
+   604→                </MenuItem>
+   605→              ))}
+   606→            </Select>
+   607→          </FormControl>
+   608→          <FormControl size="small" sx={{ minWidth: 180 }}>
+   609→            <Select
+   610→              displayEmpty
+   611→              value={filterSource}
+   612→              onChange={(e) => {
+   613→                setFilterSource(e.target.value);
+   614→                setPage(0);
+   615→              }}
+   616→              renderValue={(val) => (val ? val : 'Toutes les sources')}
+   617→            >
+   618→              <MenuItem value="">Toutes les sources</MenuItem>
+   619→              {nomenclatures.source.map((s) => (
+   620→                <MenuItem key={s} value={s}>
+   621→                  {s}
+   622→                </MenuItem>
+   623→              ))}
+   624→            </Select>
+   625→          </FormControl>
+   626→          <FormControl size="small" sx={{ minWidth: 180 }}>
+   627→            <Select
+   628→              displayEmpty
+   629→              value={filterNiveau}
+   630→              onChange={(e) => {
+   631→                setFilterNiveau(e.target.value);
+   632→                setPage(0);
+   633→              }}
+   634→              renderValue={(val) => (val ? val : 'Tous les niveaux')}
+   635→            >
+   636→              <MenuItem value="">Tous les niveaux</MenuItem>
+   637→              {nomenclatures.niveau_etude.map((n) => (
+   638→                <MenuItem key={n} value={n}>
+   639→                  {n}
+   640→                </MenuItem>
+   641→              ))}
+   642→            </Select>
+   643→          </FormControl>
+   644→          <Box sx={{ flex: '1 1 auto' }} />
+   645→          <Button
+   646→            variant="outlined"
+   647→            startIcon={<Download />}
+   648→            onClick={handleExportCSV}
+   649→            size="small"
+   650→          >
+   651→            Exporter CSV
+   652→          </Button>
+   653→          <Button
+   654→            variant="contained"
+   655→            startIcon={<Add />}
+   656→            size="small"
+   657→          >
+   658→            Nouveau Candidat
+   659→          </Button>
+   660→        </Box>
+   661→      </Paper>
+   662→
+   663→      {/* Counter */}
+   664→      <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+   665→        {filteredData.length} candidat(s) inscrit(s)
+   666→      </Typography>
+   667→
+   668→      {/* Table */}
+   669→      <TableContainer component={Paper} sx={{ overflowX: 'auto' }}>
+   670→        <Table size="small" stickyHeader>
+   671→          <TableHead>
+   672→            <TableRow>
+   673→              <TableCell sx={{ fontWeight: 'bold', minWidth: 110 }}>N° Candidat</TableCell>
+   674→              <TableCell sx={{ fontWeight: 'bold', minWidth: 70 }}>Civilité</TableCell>
+   675→              <TableCell sx={{ fontWeight: 'bold', minWidth: 120 }}>Nom</TableCell>
+   676→              <TableCell sx={{ fontWeight: 'bold', minWidth: 120 }}>Prénom</TableCell>
+   677→              <TableCell sx={{ fontWeight: 'bold', minWidth: 150 }}>Téléphone</TableCell>
+   678→              <TableCell sx={{ fontWeight: 'bold', minWidth: 190 }}>Email</TableCell>
+   679→              <TableCell sx={{ fontWeight: 'bold', minWidth: 170 }}>Poste Visé</TableCell>
+   680→              <TableCell sx={{ fontWeight: 'bold', minWidth: 170 }}>Source Candidature</TableCell>
+   681→              <TableCell sx={{ fontWeight: 'bold', minWidth: 140 }}>Statut</TableCell>
+   682→              <TableCell sx={{ fontWeight: 'bold', minWidth: 90 }} align="center">
+   683→                Score /20
+   684→              </TableCell>
+   685→              <TableCell sx={{ fontWeight: 'bold', minWidth: 120 }}>Niveau Étude</TableCell>
+   686→              <TableCell sx={{ fontWeight: 'bold', minWidth: 100 }} align="center">
+   687→                Années Exp.
+   688→              </TableCell>
+   689→              <TableCell sx={{ fontWeight: 'bold', minWidth: 150 }}>Dernier Employeur</TableCell>
+   690→              <TableCell sx={{ fontWeight: 'bold', minWidth: 120 }}>Date Candidature</TableCell>
+   691→              <TableCell sx={{ fontWeight: 'bold', minWidth: 100 }} align="center">
+   692→                Actions
+   693→              </TableCell>
+   694→            </TableRow>
+   695→          </TableHead>
+   696→          <TableBody>
+   697→            {paginatedData.length === 0 ? (
+   698→              <TableRow>
+   699→                <TableCell colSpan={15} align="center" sx={{ py: 4 }}>
+   700→                  <Typography color="text.secondary">Aucun candidat trouvé.</Typography>
+   701→                </TableCell>
+   702→              </TableRow>
+   703→            ) : (
+   704→              paginatedData.map((c) => (
+   705→                <TableRow key={c.id} hover>
+   706→                  <TableCell>{c.id}</TableCell>
+   707→                  <TableCell>{c.civilite}</TableCell>
+   708→                  <TableCell>{c.nom}</TableCell>
+   709→                  <TableCell>{c.prenom}</TableCell>
+   710→                  <TableCell>{c.telephone}</TableCell>
+   711→                  <TableCell>{c.email}</TableCell>
+   712→                  <TableCell>{c.posteVise}</TableCell>
+   713→                  <TableCell>
+   714→                    <Chip label={c.sourceCandidature} size="small" variant="outlined" />
+   715→                  </TableCell>
+   716→                  <TableCell>
+   717→                    <Chip
+   718→                      label={c.statut}
+   719→                      color={statutColor(c.statut)}
+   720→                      size="small"
+   721→                    />
+   722→                  </TableCell>
+   723→                  <TableCell align="center">
+   724→                    {c.score === 0 ? (
+   725→                      <Typography color="text.disabled">—</Typography>
+   726→                    ) : (
+   727→                      <Typography
+   728→                        fontWeight={c.score >= 12 ? 'bold' : 'normal'}
+   729→                        color={c.score < 10 ? 'error' : 'text.primary'}
+   730→                      >
+   731→                        {c.score}
+   732→                      </Typography>
+   733→                    )}
+   734→                  </TableCell>
+   735→                  <TableCell>{c.niveauEtude}</TableCell>
+   736→                  <TableCell align="center">{c.anneesExp}</TableCell>
+   737→                  <TableCell>{c.dernierEmployeur || '—'}</TableCell>
+   738→                  <TableCell>{formatDate(c.dateCandidature)}</TableCell>
+   739→                  <TableCell align="center">
+   740→                    <Tooltip title="Voir la fiche">
+   741→                      <IconButton
+   742→                        size="small"
+   743→                        color="primary"
+   744→                        onClick={() => handleOpenFiche(c)}
+   745→                      >
+   746→                        <Visibility fontSize="small" />
+   747→                      </IconButton>
+   748→                    </Tooltip>
+   749→                    <Tooltip title="Modifier">
+   750→                      <IconButton size="small" color="secondary">
+   751→                        <Edit fontSize="small" />
+   752→                      </IconButton>
+   753→                    </Tooltip>
+   754→                  </TableCell>
+   755→                </TableRow>
+   756→              ))
+   757→            )}
+   758→          </TableBody>
+   759→        </Table>
+   760→        <TablePagination
+   761→          component="div"
+   762→          count={filteredData.length}
+   763→          page={page}
+   764→          onPageChange={handleChangePage}
+   765→          rowsPerPage={rowsPerPage}
+   766→          onRowsPerPageChange={handleChangeRowsPerPage}
+   767→          rowsPerPageOptions={[5, 10, 25]}
+   768→          labelRowsPerPage="Lignes par page :"
+   769→          labelDisplayedRows={({ from, to, count }) =>
+   770→            `${from}-${to} sur ${count !== -1 ? count : `plus de ${to}`}`
+   771→          }
+   772→        />
+   773→      </TableContainer>
+   774→
+   775→      {/* Fiche Candidat Dialog */}
+   776→      <Dialog
+   777→        open={openDialog}
+   778→        onClose={handleCloseDialog}
+   779→        maxWidth="md"
+   780→        fullWidth
+   781→        scroll="paper"
+   782→      >
+   783→        {selectedCandidate && (
+   784→          <>
+   785→            <DialogTitle sx={{ fontWeight: 'bold' }}>
+   786→              Fiche Candidat — {selectedCandidate.id}
+   787→            </DialogTitle>
+   788→            <DialogContent dividers>
+   789→              <Tabs
+   790→                value={activeTab}
+   791→                onChange={handleTabChange}
+   792→                variant="scrollable"
+   793→                scrollButtons="auto"
+   794→                sx={{ mb: 3 }}
+   795→              >
+   796→                <Tab label="Informations Personnelles" />
+   797→                <Tab label="Formation & Compétences" />
+   798→                <Tab label="Candidature" />
+   799→                <Tab label="Documents & Contrat" />
+   800→              </Tabs>
+   801→
+   802→              {/* Tab 1 - Informations Personnelles */}
+   803→              {activeTab === 0 && (
+   804→                <Grid container spacing={2}>
+   805→                  <Grid item xs={6}>
+   806→                    <TextField
+   807→                      label="N° Candidat"
+   808→                      size="small"
+   809→                      fullWidth
+   810→                      value={selectedCandidate.id}
+   811→                      disabled
+   812→                    />
+   813→                  </Grid>
+   814→                  <Grid item xs={6}>
+   815→                    <FormControl size="small" fullWidth disabled>
+   816→                      <Typography variant="caption" color="text.secondary" sx={{ mb: 0.5, display: 'block' }}>
+   817→                        Civilité
+   818→                      </Typography>
+   819→                      <Select value={selectedCandidate.civilite}>
+   820→                        {nomenclatures.civilite.map((c) => (
+   821→                          <MenuItem key={c} value={c}>
+   822→                            {c}
+   823→                          </MenuItem>
+   824→                        ))}
+   825→                      </Select>
+   826→                    </FormControl>
+   827→                  </Grid>
+   828→                  <Grid item xs={6}>
+   829→                    <FormControl size="small" fullWidth disabled>
+   830→                      <Typography variant="caption" color="text.secondary" sx={{ mb: 0.5, display: 'block' }}>
+   831→                        Genre
+   832→                      </Typography>
+   833→                      <Select value={selectedCandidate.genre}>
+   834→                        {nomenclatures.genre.map((g) => (
+   835→                          <MenuItem key={g} value={g}>
+   836→                            {g}
+   837→                          </MenuItem>
+   838→                        ))}
+   839→                      </Select>
+   840→                    </FormControl>
+   841→                  </Grid>
+   842→                  <Grid item xs={6}>
+   843→                    <TextField
+   844→                      label="Nom"
+   845→                      size="small"
+   846→                      fullWidth
+   847→                      value={selectedCandidate.nom}
+   848→                      disabled
+   849→                    />
+   850→                  </Grid>
+   851→                  <Grid item xs={6}>
+   852→                    <TextField
+   853→                      label="Prénom"
+   854→                      size="small"
+   855→                      fullWidth
+   856→                      value={selectedCandidate.prenom}
+   857→                      disabled
+   858→                    />
+   859→                  </Grid>
+   860→                  <Grid item xs={6}>
+   861→                    <TextField
+   862→                      label="Date de Naissance"
+   863→                      size="small"
+   864→                      fullWidth
+   865→                      type="date"
+   866→                      value={selectedCandidate.dateNaissance}
+   867→                      disabled
+   868→                      InputLabelProps={{ shrink: true }}
+   869→                    />
+   870→                  </Grid>
+   871→                  <Grid item xs={6}>
+   872→                    <TextField
+   873→                      label="Nationalité"
+   874→                      size="small"
+   875→                      fullWidth
+   876→                      value={selectedCandidate.nationalite}
+   877→                      disabled
+   878→                    />
+   879→                  </Grid>
+   880→                  <Grid item xs={6}>
+   881→                    <FormControl size="small" fullWidth disabled>
+   882→                      <Typography variant="caption" color="text.secondary" sx={{ mb: 0.5, display: 'block' }}>
+   883→                        Situation Familiale
+   884→                      </Typography>
+   885→                      <Select value={selectedCandidate.situationFam}>
+   886→                        {nomenclatures.situation_fam.map((s) => (
+   887→                          <MenuItem key={s} value={s}>
+   888→                            {s}
+   889→                          </MenuItem>
+   890→                        ))}
+   891→                      </Select>
+   892→                    </FormControl>
+   893→                  </Grid>
+   894→                  <Grid item xs={6}>
+   895→                    <TextField
+   896→                      label="Téléphone"
+   897→                      size="small"
+   898→                      fullWidth
+   899→                      value={selectedCandidate.telephone}
+   900→                      disabled
+   901→                    />
+   902→                  </Grid>
+   903→                  <Grid item xs={6}>
+   904→                    <TextField
+   905→                      label="Email"
+   906→                      size="small"
+   907→                      fullWidth
+   908→                      value={selectedCandidate.email}
+   909→                      disabled
+   910→                    />
+   911→                  </Grid>
+   912→                  <Grid item xs={12}>
+   913→                    <TextField
+   914→                      label="Adresse"
+   915→                      size="small"
+   916→                      fullWidth
+   917→                      value={selectedCandidate.adresse}
+   918→                      disabled
+   919→                    />
+   920→                  </Grid>
+   921→                  <Grid item xs={6}>
+   922→                    <TextField
+   923→                      label="Ville"
+   924→                      size="small"
+   925→                      fullWidth
+   926→                      value={selectedCandidate.ville}
+   927→                      disabled
+   928→                    />
+   929→                  </Grid>
+   930→                </Grid>
+   931→              )}
+   932→
+   933→              {/* Tab 2 - Formation & Compétences */}
+   934→              {activeTab === 1 && (
+   935→                <Grid container spacing={2}>
+   936→                  <Grid item xs={6}>
+   937→                    <FormControl size="small" fullWidth disabled>
+   938→                      <Typography variant="caption" color="text.secondary" sx={{ mb: 0.5, display: 'block' }}>
+   939→                        Niveau Étude
+   940→                      </Typography>
+   941→                      <Select value={selectedCandidate.niveauEtude}>
+   942→                        {nomenclatures.niveau_etude.map((n) => (
+   943→                          <MenuItem key={n} value={n}>
+   944→                            {n}
+   945→                          </MenuItem>
+   946→                        ))}
+   947→                      </Select>
+   948→                    </FormControl>
+   949→                  </Grid>
+   950→                  <Grid item xs={6}>
+   951→                    <TextField
+   952→                      label="Diplôme"
+   953→                      size="small"
+   954→                      fullWidth
+   955→                      value={selectedCandidate.diplome}
+   956→                      disabled
+   957→                    />
+   958→                  </Grid>
+   959→                  <Grid item xs={6}>
+   960→                    <TextField
+   961→                      label="Établissement"
+   962→                      size="small"
+   963→                      fullWidth
+   964→                      value={selectedCandidate.etablissement}
+   965→                      disabled
+   966→                    />
+   967→                  </Grid>
+   968→                  <Grid item xs={6}>
+   969→                    <TextField
+   970→                      label="Années Exp."
+   971→                      size="small"
+   972→                      fullWidth
+   973→                      type="number"
+   974→                      value={selectedCandidate.anneesExp}
+   975→                      disabled
+   976→                    />
+   977→                  </Grid>
+   978→                  <Grid item xs={6}>
+   979→                    <TextField
+   980→                      label="Dernier Employeur"
+   981→                      size="small"
+   982→                      fullWidth
+   983→                      value={selectedCandidate.dernierEmployeur}
+   984→                      disabled
+   985→                    />
+   986→                  </Grid>
+   987→                  <Grid item xs={6}>
+   988→                    <FormControl size="small" fullWidth disabled>
+   989→                      <Typography variant="caption" color="text.secondary" sx={{ mb: 0.5, display: 'block' }}>
+   990→                        Langues
+   991→                      </Typography>
+   992→                      <TextField
+   993→                        size="small"
+   994→                        fullWidth
+   995→                        value={selectedCandidate.langues}
+   996→                        disabled
+   997→                      />
+   998→                    </FormControl>
+   999→                  </Grid>
+  1000→                  <Grid item xs={12}>
+  1001→                    <TextField
+  1002→                      label="Compétences Clés"
+  1003→                      size="small"
+  1004→                      fullWidth
+  1005→                      multiline
+  1006→                      minRows={2}
+  1007→                      value={selectedCandidate.competencesCles}
+  1008→                      disabled
+  1009→                    />
+  1010→                  </Grid>
+  1011→                  <Grid item xs={6}>
+  1012→                    <FormControl size="small" fullWidth disabled>
+  1013→                      <Typography variant="caption" color="text.secondary" sx={{ mb: 0.5, display: 'block' }}>
+  1014→                        Niveau Langue
+  1015→                      </Typography>
+  1016→                      <Select value={selectedCandidate.niveauLangue}>
+  1017→                        {nomenclatures.niveau_langue.map((n) => (
+  1018→                          <MenuItem key={n} value={n}>
+  1019→                            {n}
+  1020→                          </MenuItem>
+  1021→                        ))}
+  1022→                      </Select>
+  1023→                    </FormControl>
+  1024→                  </Grid>
+  1025→                  <Grid item xs={12}>
+  1026→                    <TextField
+  1027→                      label="Outils / Logiciels"
+  1028→                      size="small"
+  1029→                      fullWidth
+  1030→                      multiline
+  1031→                      minRows={2}
+  1032→                      value={selectedCandidate.outilsLogiciels}
+  1033→                      disabled
+  1034→                    />
+  1035→                  </Grid>
+  1036→                </Grid>
+  1037→              )}
+  1038→
+  1039→              {/* Tab 3 - Candidature */}
+  1040→              {activeTab === 2 && (
+  1041→                <Grid container spacing={2}>
+  1042→                  <Grid item xs={6}>
+  1043→                    <TextField
+  1044→                      label="Poste Visé"
+  1045→                      size="small"
+  1046→                      fullWidth
+  1047→                      value={selectedCandidate.posteVise}
+  1048→                      disabled
+  1049→                    />
+  1050→                  </Grid>
+  1051→                  <Grid item xs={6}>
+  1052→                    <FormControl size="small" fullWidth disabled>
+  1053→                      <Typography variant="caption" color="text.secondary" sx={{ mb: 0.5, display: 'block' }}>
+  1054→                        Source Candidature
+  1055→                      </Typography>
+  1056→                      <Select value={selectedCandidate.sourceCandidature}>
+  1057→                        {nomenclatures.source.map((s) => (
+  1058→                          <MenuItem key={s} value={s}>
+  1059→                            {s}
+  1060→                          </MenuItem>
+  1061→                        ))}
+  1062→                      </Select>
+  1063→                    </FormControl>
+  1064→                  </Grid>
+  1065→                  <Grid item xs={6}>
+  1066→                    <TextField
+  1067→                      label="Date Candidature"
+  1068→                      size="small"
+  1069→                      fullWidth
+  1070→                      type="date"
+  1071→                      value={selectedCandidate.dateCandidature}
+  1072→                      disabled
+  1073→                      InputLabelProps={{ shrink: true }}
+  1074→                    />
+  1075→                  </Grid>
+  1076→                  <Grid item xs={6}>
+  1077→                    <FormControl size="small" fullWidth disabled>
+  1078→                      <Typography variant="caption" color="text.secondary" sx={{ mb: 0.5, display: 'block' }}>
+  1079→                        Statut
+  1080→                      </Typography>
+  1081→                      <Select value={selectedCandidate.statut}>
+  1082→                        {nomenclatures.statut_candidat.map((s) => (
+  1083→                          <MenuItem key={s} value={s}>
+  1084→                            {s}
+  1085→                          </MenuItem>
+  1086→                        ))}
+  1087→                      </Select>
+  1088→                    </FormControl>
+  1089→                  </Grid>
+  1090→                  <Grid item xs={6}>
+  1091→                    <TextField
+  1092→                      label="Score /20"
+  1093→                      size="small"
+  1094→                      fullWidth
+  1095→                      type="number"
+  1096→                      value={selectedCandidate.score}
+  1097→                      disabled
+  1098→                      inputProps={{ step: 0.5, min: 0, max: 20 }}
+  1099→                    />
+  1100→                  </Grid>
+  1101→                  <Grid item xs={6}>
+  1102→                    <FormControl size="small" fullWidth disabled>
+  1103→                      <Typography variant="caption" color="text.secondary" sx={{ mb: 0.5, display: 'block' }}>
+  1104→                        Type Contrat
+  1105→                      </Typography>
+  1106→                      <Select value={selectedCandidate.typeContrat}>
+  1107→                        {nomenclatures.type_contrat.map((t) => (
+  1108→                          <MenuItem key={t} value={t}>
+  1109→                            {t}
+  1110→                          </MenuItem>
+  1111→                        ))}
+  1112→                      </Select>
+  1113→                    </FormControl>
+  1114→                  </Grid>
+  1115→                  <Grid item xs={12}>
+  1116→                    <TextField
+  1117→                      label="Notes"
+  1118→                      size="small"
+  1119→                      fullWidth
+  1120→                      multiline
+  1121→                      minRows={3}
+  1122→                      value={selectedCandidate.notes}
+  1123→                      disabled
+  1124→                    />
+  1125→                  </Grid>
+  1126→                </Grid>
+  1127→              )}
+  1128→
+  1129→              {/* Tab 4 - Documents & Contrat */}
+  1130→              {activeTab === 3 && (
+  1131→                <Grid container spacing={2}>
+  1132→                  <Grid item xs={12}>
+  1133→                    <TextField
+  1134→                      label="Contrat Téléchargeable"
+  1135→                      size="small"
+  1136→                      fullWidth
+  1137→                      value={selectedCandidate.contratTelechargeable || 'Non fourni'}
+  1138→                      disabled
+  1139→                    />
+  1140→                  </Grid>
+  1141→                  <Grid item xs={6}>
+  1142→                    <TextField
+  1143→                      label="Date Début Essai"
+  1144→                      size="small"
+  1145→                      fullWidth
+  1146→                      type="date"
+  1147→                      value={selectedCandidate.dateDebutEssai}
+  1148→                      disabled
+  1149→                      InputLabelProps={{ shrink: true }}
+  1150→                    />
+  1151→                  </Grid>
+  1152→                  <Grid item xs={6}>
+  1153→                    <TextField
+  1154→                      label="Date Fin Essai"
+  1155→                      size="small"
+  1156→                      fullWidth
+  1157→                      type="date"
+  1158→                      value={selectedCandidate.dateFinEssai}
+  1159→                      disabled
+  1160→                      InputLabelProps={{ shrink: true }}
+  1161→                    />
+  1162→                  </Grid>
+  1163→                  <Grid item xs={6}>
+  1164→                    <TextField
+  1165→                      label="Date Embauche Définitive"
+  1166→                      size="small"
+  1167→                      fullWidth
+  1168→                      type="date"
+  1169→                      value={selectedCandidate.dateEmbaucheDefinitive}
+  1170→                      disabled
+  1171→                      InputLabelProps={{ shrink: true }}
+  1172→                    />
+  1173→                  </Grid>
+  1174→                  <Grid item xs={6} />
+  1175→                  <Grid item xs={12}>
+  1176→                    <FormControlLabel
+  1177→                      control={
+  1178→                        <Checkbox
+  1179→                          checked={selectedCandidate.certificatTravail}
+  1180→                          disabled
+  1181→                        />
+  1182→                      }
+  1183→                      label="Certificat de Travail"
+  1184→                    />
+  1185→                  </Grid>
+  1186→                  <Grid item xs={12}>
+  1187→                    <FormControlLabel
+  1188→                      control={
+  1189→                        <Checkbox
+  1190→                          checked={selectedCandidate.attestationCNPS}
+  1191→                          disabled
+  1192→                        />
+  1193→                      }
+  1194→                      label="Attestation CNPS"
+  1195→                    />
+  1196→                  </Grid>
+  1197→                  <Grid item xs={12}>
+  1198→                    <FormControlLabel
+  1199→                      control={
+  1200→                        <Checkbox
+  1201→                          checked={selectedCandidate.extraitCasierJudiciaire}
+  1202→                          disabled
+  1203→                        />
+  1204→                      }
+  1205→                      label="Extrait de Casier Judiciaire"
+  1206→                    />
+  1207→                  </Grid>
+  1208→                </Grid>
+  1209→              )}
+  1210→            </DialogContent>
+  1211→            <DialogActions sx={{ px: 3, py: 2 }}>
+  1212→              <Button onClick={handleCloseDialog} variant="outlined" size="small">
+  1213→                Fermer
+  1214→              </Button>
+  1215→            </DialogActions>
+  1216→          </>
+  1217→        )}
+  1218→      </Dialog>
+  1219→    </Box>
+  1220→  );
+  1221→}

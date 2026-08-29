@@ -1,4 +1,5 @@
-import { BrowserRouter, Routes, Route, useLocation, useState, useEffect, lazy, Suspense } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
+import { BrowserRouter, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { Box } from '@mui/material';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
@@ -38,12 +39,13 @@ const Statuts = lazy(() => import('./pages/Statuts'));
 const titles = { '/': 'Tableau de Bord', '/offres': 'Demandes', '/candidats': 'Base Candidats', '/pipeline': 'Pipeline Candidatures', '/entretiens': 'Planning Entretiens', '/evaluations': 'Grille Evaluation', '/verifications': 'Verification References', '/selections': 'Selections', '/cabinets': 'Gestion Cabinets', '/contrats': 'Suivi Contrats', '/integration': 'Integration Employe', '/checklist': 'Checklist Integration', '/periode-essai': 'Periodes d\'Essai', '/formation': "Plan d\'Accueil & Formations", '/post-embauche': 'Suivi Post-Embauche', '/stagiaires': 'Stagiaires', '/saisonniers': 'Saisonniers & Temporaires', '/previsions': 'Previsions', '/sources': 'Sources de Recrutement', '/couts': 'Analyse des Couts', '/documents': 'Gestion des Documents', '/conformite': 'Conformite', '/parametres': 'Parametres du Systeme', '/audit': 'Journal d\'Audit', '/types-contrats': 'Types de Contrats', '/departements': 'Departements', '/sources-roi': 'Sources & ROI', '/experiences': 'Experiences des Candidats', '/formations': 'Formations des Candidats', '/competences': 'Competences des Candidats', '/statuts': 'Gestion des Statuts' };
 
 const dw = 260;
-export default function App() {
+
+function AppContent() {
   const loc = useLocation();
   const [title, setTitle] = useState('Admina-RH');
   useEffect(() => { setTitle(titles[loc.pathname] || 'Admina-RH'); }, [loc]);
   return (
-    <BrowserRouter>
+    <>
       <Sidebar drawerWidth={dw} />
       <Header title={title} />
       <Box sx={{ ml: dw, mt: '64px', p: 3, width: 'calc(100% - 260px)' }}>
@@ -83,6 +85,14 @@ export default function App() {
           </Routes>
         </Suspense>
       </Box>
+    </>
+  );
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <AppContent />
     </BrowserRouter>
   );
 }
