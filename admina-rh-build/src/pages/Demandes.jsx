@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { Box, Typography, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination, Chip, FormControl, Select, MenuItem, Tooltip, Paper } from '@mui/material';
 import { Add, Download } from '@mui/icons-material';
 import KPICard from '../components/KPICard';
+import AddDialog from '../components/AddDialog';
 import { nomenclatures } from '../data/nomenclatures';
 
 const formatFCFA = (a) => (!a && a !== 0) ? '—' : a.toLocaleString('fr-FR') + ' FCFA';
@@ -23,7 +24,8 @@ const prioriteColor = { 'Urgente':'error', 'Haute':'warning', 'Moyenne':'info', 
 const statutColor = { 'Pourvue':'success', 'En cours':'warning', 'Annulee':'error', 'Validée':'info', 'En attente':'default' };
 
 export default function Demandes() {
-  const [data] = useState(initialData);
+  const [data, setData] = useState(initialData);
+  const [dlg, setDlg] = useState(false);
   const [filterDep, setFilterDep] = useState('Tous');
   const [filterStatut, setFilterStatut] = useState('Tous');
   const [filterPrio, setFilterPrio] = useState('Tous');
@@ -46,7 +48,7 @@ export default function Demandes() {
       <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>{filtered.length} demande(s) de recrutement</Typography>
       <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
         <Button variant="outlined" startIcon={<Download fontSize="small" />}>Exporter CSV</Button>
-        <Button variant="contained" startIcon={<Add fontSize="small" />}>Nouvelle Demande</Button>
+        <Button variant="contained" startIcon={<Add fontSize="small" />} onClick={() => setDlg(true)}>Nouvelle Demande</Button>
       </Box>
       <Box sx={{ display: 'flex', gap: 2, mb: 3, flexWrap: 'wrap' }}>
         <KPICard titre="TOTAL DEMANDES" valeur={filtered.length} sousTexte={`${filtered.length} demande(s) enregistrée(s)`} />
@@ -84,6 +86,27 @@ export default function Demandes() {
         </TableRow>
       ))}</TableBody></Table></TableContainer>
       <TablePagination component="div" count={filtered.length} page={page} onPageChange={(e, p) => setPage(p)} rowsPerPage={rpp} onRowsPerPageChange={e => { setRpp(parseInt(e.target.value, 10)); setPage(0); }} rowsPerPageOptions={[5, 10, 25]} labelRowsPerPage="Lignes par page" /></Paper>
+
+      <AddDialog open={dlg} onClose={() => setDlg(false)} title="Nouvelle Demande de Recrutement"
+        fields={[
+          {key: "posteRecherche", label: "Poste Recherché", required: true},
+          {key: "departement", label: "Département", type: "select", options: nomenclatures.departement, required: true},
+          {key: "typePoste", label: "Type Poste", type: "select", options: nomenclatures.type_poste, required: true},
+          {key: "typeContrat", label: "Type Contrat", type: "select", options: nomenclatures.type_contrat, required: true},
+          {key: "effectif", label: "Effectif Requis", type: "number"},
+          {key: "motif", label: "Motif", type: "select", options: nomenclatures.motif},
+          {key: "dateBesoin", label: "Date de Besoin", required: true},
+          {key: "priorite", label: "Priorité", type: "select", options: nomenclatures.priorite, required: true},
+          {key: "responsableDemande", label: "Responsable Demande", required: true},
+          {key: "roleResponsable", label: "Rôle du Responsable", type: "select", options: nomenclatures.role_responsable},
+          {key: "cabinetAgence", label: "Cabinet / Agence", type: "select", options: nomenclatures.cabinet_recrutement},
+          {key: "budgetSalaire", label: "Budget Salaire (FCFA)", type: "number"},
+          {key: "coutRecrutement", label: "Coût Recrutement (FCFA)", type: "number"},
+          {key: "delai", label: "Délai (jours)", type: "number"},
+          {key: "notes", label: "Notes", multiline: true},
+        ]}
+        onSubmit={(vals) => { const nid = data.length + 1; const today = new Date().toLocaleDateString('fr-FR'); setData(prev => [...prev, { id: nid, numero: 'DR-2025-' + String(nid).padStart(3, '0'), dateDemande: today, statut: 'En attente', datePourvue: '', ...vals }]); }}
+      />
     </Box>
   );
 }

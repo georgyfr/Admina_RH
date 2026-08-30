@@ -1,0 +1,652 @@
+     1→# AI_GUIDE.md — Admina-RH
+     2→
+     3→> **VERSION DE GEL : v1.0 — 29 août 2026**
+     4→> **Taux de couverture au gel : 57% (144/279 champs Excel)**
+     5→> **URL de référence : https://admina-rh-bd0.pages.dev/**
+     6→
+     7→---
+     8→
+     9→## RèGLE SUPRÊME
+    10→
+    11→> **Ne JAMAIS modifier, supprimer ou altérer les pages, composants et données listés dans la section**
+    12→> **[FROZEN — CODE GELÉ] ci-dessous. Toute modification d'un élément gelé est INTERDITE.**
+    13→> **En cas de doute, vérifiez les screenshots dans `/frozen-snapshots/`.**
+    14→
+    15→---
+    16→
+    17→## TABLE DES MATIÈRES
+    18→
+    19→1. [Architecture du projet](#architecture-du-projet)
+    20→2. [FROZEN — Pages gelées (16 pages)](#frozen--pages-gelées-16-pages)
+    21→3. [FROZEN — Composants partagés gelés](#frozen--composants-partagés-gelés)
+    22→4. [FROZEN — Données de référence (nomenclatures)](#frozen--données-de-référence-nomenclatures)
+    23→5. [DEV — Pages à construire (2 pages)](#dev--pages-à-construire-2-pages)
+    24→6. [DEV — Champs manquants à ajouter](#dev--champs-manquants-à-ajouter)
+    25→7. [Workflow obligatoire](#workflow-obligatoire)
+    26→8. [Vérification avant chaque modification](#vérification-avant-chaque-modification)
+    27→
+    28→---
+    29→
+    30→## Architecture du projet
+    31→
+    32→```
+    33→Admina-RH/
+    34→├── src/
+    35→│   ├── App.jsx              # [FROZEN] Routeur principal, sidebar, layout
+    36→│   ├── components/
+    37→│   │   ├── Sidebar.jsx       # [FROZEN] Menu latéral complet avec 26 liens
+    38→│   │   ├── Header.jsx        # [FROZEN] Barre supérieure (recherche, notifs, user)
+    39→│   │   └── KPICard.jsx       # [FROZEN] Composant carte KPI réutilisable
+    40→│   ├── pages/
+    41→│   │   ├── TableauDeBord.jsx   # [FROZEN] /
+    42→│   │   ├── Entretiens.jsx      # [FROZEN] /entretiens
+    43→│   │   ├── Evaluations.jsx     # [FROZEN] /evaluations
+    44→│   │   ├── Verifications.jsx   # [FROZEN] /verifications
+    45→│   │   ├── Selections.jsx      # [FROZEN] /selections
+    46→│   │   ├── Cabinets.jsx        # [FROZEN] /cabinets
+    47→│   │   ├── Contrats.jsx        # [FROZEN] /contrats
+    48→│   │   ├── Integration.jsx     # [FROZEN] /integration
+    49→│   │   ├── Checklist.jsx       # [FROZEN] /checklist
+    50→│   │   ├── PeriodeEssai.jsx    # [FROZEN] /periode-essai
+    51→│   │   ├── Formation.jsx       # [FROZEN] /formation
+    52→│   │   ├── PostEmbauche.jsx    # [FROZEN] /post-embauche
+    53→│   │   ├── Stagiaires.jsx      # [FROZEN] /stagiaires
+    54→│   │   ├── Saisonniers.jsx     # [FROZEN] /saisonniers
+    55→│   │   ├── Previsions.jsx      # [FROZEN] /previsions
+    56→│   │   ├── Sources.jsx         # [FROZEN] /sources
+    57→│   │   ├── Couts.jsx           # [FROZEN] /couts
+    58→│   │   ├── Pipeline.jsx        # [FROZEN] /pipeline
+    59→│   │   ├── Documents.jsx       # [FROZEN] /documents
+    60→│   │   ├── Conformite.jsx      # [FROZEN] /conformite
+    61→│   │   ├── Parametres.jsx      # [FROZEN] /parametres
+    62→│   │   ├── Audit.jsx           # [FROZEN] /audit
+    63→│   │   ├── TypesContrats.jsx   # [FROZEN] /types-contrats
+    64→│   │   ├── Departements.jsx    # [FROZEN] /departements
+    65→│   │   ├── SourcesROI.jsx      # [FROZEN] /sources-roi
+    66→│   │   ├── Experiences.jsx     # [FROZEN] /experiences
+    67→│   │   ├── FormationsCandidats.jsx # [FROZEN] /formations
+    68→│   │   ├── Competences.jsx     # [FROZEN] /competences
+    69→│   │   ├── Statuts.jsx         # [FROZEN] /statuts
+    70→│   │   ├── Demandes.jsx        # [DEV] /offres — PAGE EN CONSTRUCTION
+    71→│   │   └── Candidats.jsx       # [DEV] /candidats — PAGE EN CONSTRUCTION
+    72→│   └── data/
+    73→│       └── nomenclatures.js    # [FROZEN] 38 listes de référence
+    74→├── AI_GUIDE.md                # CE FICHIER
+    75→├── FROZEN_STATE.md           # État détaillé du gel
+    76→└── frozen-snapshots/          # 28 screenshots de référence
+    77→```
+    78→
+    79→---
+    80→
+    81→## FROZEN — Pages gelées (16 pages)
+    82→
+    83→### Les règles absolues pour chaque page gelée :
+    84→- ❌ **NE PAS** modifier les colonnes existantes d'un tableau
+    85→- ❌ **NE PAS** supprimer ou renommer un champ affiché
+    86→- ❌ **NE PAS** changer le titre, le sous-titre ou la description
+    87→- ❌ **NE PAS** modifier les KPI cards (texte, valeur, calcul)
+    88→- ❌ **NE PAS** changer le style MUI/Material UI des composants existants
+    89→- ❌ **NE PAS** modifier les données d'exemple (mock data) visibles
+    90→- ❌ **NE PAS** altérer les filtres, boutons et actions existants
+    91→- ✅ **AUTORISÉ** : AJOUTER de nouvelles colonnes à DROITE des existantes
+    92→- ✅ **AUTORISÉ** : AJOUTER de nouveaux KPI cards à CÔTÉ des existants
+    93→- ✅ **AUTORISÉ** : AJOUTER de nouveaux filtres
+    94→- ✅ **AUTORISÉ** : AJOUTER de nouveaux boutons d'action
+    95→- **Vérification** : Comparer avec le screenshot correspondant dans `/frozen-snapshots/`
+    96→
+    97→---
+    98→
+    99→### PAGE 01 — Tableau de Bord (`/`)
+   100→- **Screenshot** : `frozen-snapshots/01_tableau-de-bord.png`
+   101→- **Titre** : "Tableau de Bord"
+   102→- **Sous-titre** : "Vue d'ensemble de votre activité de recrutement"
+   103→- **4 KPI Cards existants (GELÉS)** :
+   104→  - "Total Demandes" : 8, "5 demandes ouvertes"
+   105→  - "Total Candidats" : 10, "9 candidats actifs"
+   106→  - "Taux de Conversion" : 20.0%, "2 retenus / 10 candidats"
+   107→  - "Délai Moyen" : 27 j, "jours ouvrés"
+   108→- **4 Graphiques existants (GELÉS)** :
+   109→  - "Évolution du Recrutement" (linéaire, Oct 2024–Fév 2025, 2 séries: Demandes créées, Demandes pourvues)
+   110→  - "Sources de Recrutement" (barres horizontales, 6 sources)
+   111→  - "Répartition par Département" (donut, 8 départements)
+   112→  - "Statuts des Demandes" (barres, 6 statuts: Brouillon, En attente validation, Validée, Publiée, Pourvue, Clôturée)
+   113→- **2 Listes existantes (GELÉES)** :
+   114→  - "Demandes Récentes" (5 items: DR-2025-008, 006, 003, 004, 002)
+   115→  - "Candidats Récents" (5 items: Eyenga, Bikay, Nkoulou, Kamga, Mebara)
+   116→- **Champs gelés par item Demande** : N°, Poste, Département (chip), Statut (chip), Date
+   117→- **Champs gelés par item Candidat** : Nom complet, N° CAN, Source (chip), Étape (chip), Score (/20 si applicable)
+   118→
+   119→---
+   120→
+   121→### PAGE 02 — Pipeline Candidatures (`/pipeline`)
+   122→- **Screenshot** : `frozen-snapshots/19_pipeline-candidatures.png`
+   123→- **Titre** : "Pipeline de Recrutement"
+   124→- **Sous-titre** : "Glissez-déposez les candidats entre les colonnes"
+   125→- **8 Colonnes Kanban (GELÉES)** :
+   126→  1. Nouvelle candidature (1 carte)
+   127→  2. CV reçus (1 carte)
+   128→  3. Pré-sélection (1 carte)
+   129→  4. Entretien téléphonique (1 carte)
+   130→  5. Entretien physique (2 cartes)
+   131→  6. Test technique (1 carte)
+   132→  7. Vérification références (1 carte)
+   133→  8. Proposition envoyée (0 carte, texte "Aucun candidat")
+   134→  9. Embauché (2 cartes)
+   135→- **Champs gelés par carte** : Nom candidat, Poste, Source, Priorité (chip), Date, Score (/20 si applicable)
+   136→- **Footer (GELÉ)** : "10 candidats dans le pipeline" + résumé par stade + "Stades actifs : 89% du pipeline"
+   137→- **Bouton (GELÉ)** : "Nouvelle candidature"
+   138→
+   139→---
+   140→
+   141→### PAGE 03 — Planning Entretiens (`/entretiens`)
+   142→- **Screenshot** : `frozen-snapshots/03_planning-entretiens.png`
+   143→- **Titre** : "Planification des Entretiens"
+   144→- **Compteur** : "7 entretien(s)"
+   145→- **Bouton** : "Ajouter Entretien"
+   146→- **4 Filtres onglets (GELÉS)** : Tous, Planifiés, Réalisés, Annulés
+   147→- **8 Colonnes tableau (GELÉES)** :
+   148→  - Candidat, Type, Date & Heure, Durée, Lieu/Lien, Évaluateur(s), Statut, Résultat, Actions
+   149→- **Données gelées** : 7 lignes (Ndiaye, Tchouankou, Nganou×2, Mebara, Kamga, Nkoulou Brandon)
+   150→- **Pagination** : "1–7 of 7", Rows per page: 10
+   151→
+   152→---
+   153→
+   154→### PAGE 04 — Grille Évaluation (`/evaluations`)
+   155→- **Screenshot** : `frozen-snapshots/04_grille-evaluation.png`
+   156→- **Titre** : "Évaluations des Candidats"
+   157→- **Compteur** : "3 évaluation(s) enregistrée(s)"
+   158→- **Bouton** : "Nouvelle Évaluation"
+   159→- **3 KPI Cards (GELÉS)** : TOTAL ÉVALUATIONS: 3, SCORE MOYEN: 15.1/20, RECOMMANDATION EMBAUCHE: 2, RECOMMANDATION REFUS: 1
+   160→- **Format cartes d'évaluation (GELÉ)** — Chaque carte contient :
+   161→  - Nom candidat + "Évaluateur : {nom} — {date}"
+   162→  - Bouton de recommandation : "Embaucher" ou "Ne pas embaucher"
+   163→  - 5 critères notés /5 avec commentaire : Compétences techniques, Expérience professionnelle, Qualités humaines, Motivation, Adéquation au poste
+   164→  - Total /25 + Score /20 + "soit {x}/25"
+   165→  - Zone "Commentaire global"
+   166→- **3 Évaluations gelées** : Ndiaye Moussa (23.8/25), Tchouankou Claire (19.7/25), Nkoulou Brandon (13.0/25)
+   167→
+   168→---
+   169→
+   170→### PAGE 05 — Vérification Références (`/verifications`)
+   171→- **Screenshot** : `frozen-snapshots/05_verification-references.png`
+   172→- **Titre** : "Vérification des Références"
+   173→- **Compteur** : "2 vérifications enregistrées"
+   174→- **Bouton** : "Ajouter Vérification"
+   175→- **3 KPI Cards (GELÉS)** : TOTAL: 2, VÉRIFIÉS: 2, EN ATTENTE: 0, NON VÉRIFIÉS: 0
+   176→- **8 Colonnes tableau (GELÉES)** : Candidat, Entreprise, Contact, Téléphone, Date Vérification, Vérificateur, Statut, Résultat, Actions
+   177→- **Résultat affiché comme 3 chips** : Fiabilité, Performance, Comportement
+   178→- **2 Données gelées** : Ndiaye Moussa (Hôtel Sawa), Tabe Arnaud (Hôtel Sélect)
+   179→
+   180→---
+   181→
+   182→### PAGE 06 — Sélections (`/selections`)
+   183→- **Screenshot** : `frozen-snapshots/06_selections.png`
+   184→- **Titre** : "Sélections"
+   185→- **Sous-titre** : "Gestion des shortlists et décisions de recrutement"
+   186→- **4 KPI chips (GELÉS)** : 10 Total, 2 Retenus, 2 Rejetés, 1 En attente
+   187→- **8 Colonnes tableau (GELÉES)** : Candidat, Poste, Département, Date Sélection, Décideur, Statut, Note, Actions
+   188→- **10 Données gelées** : Nkoulou CAN-012, Mbarga CAN-018, Tabi CAN-025, Eyenga CAN-031, Ateba CAN-037, Fomumbod CAN-042, Kamga CAN-048, Ngo Ndobo CAN-055, Tchouante CAN-060, Moukouri CAN-066
+   189→- **Bouton** : "Nouvelle Sélection"
+   190→
+   191→---
+   192→
+   193→### PAGE 07 — Gestion Cabinets (`/cabinets`)
+   194→- **Screenshot** : `frozen-snapshots/07_gestion-cabinets.png`
+   195→- **Titre** : "Gestion des Cabinets"
+   196→- **Compteur** : "12 cabinets partenaires"
+   197→- **Bouton** : "Nouveau Cabinet"
+   198→- **3 KPI Cards (GELÉS)** : TOTAL CABINETS: 12, TAUX RÉUSSITE MOYEN: 27.7%, CANDIDATS FOURNIS TOTAL: 117
+   199→- **10 Colonnes tableau (GELÉES)** : N° Cabinet, Cabinet/Agence, Spécialité, Contact, Téléphone, Email, Ville, Candidats Fournis, Recrutements, Taux Réussite (%)
+   200→- **3 Filtres pie (GELÉS)** : Spécialité (2), Évaluation (2)
+   201→- **10 Données gelées** : CA-001 (HRC Cameroon) à CA-010 (Interne)
+   202→
+   203→---
+   204→
+   205→### PAGE 08 — Suivi Contrats (`/contrats`)
+   206→- **Screenshot** : `frozen-snapshots/08_suivi-contrats.png`
+   207→- **Titre** : "Suivi des Contrats"
+   208→- **Compteur** : "12 contrats au total"
+   209→- **Boutons** : "Exporter CSV", "Nouveau Contrat"
+   210→- **4 KPI Cards (GELÉS)** : TOTAL: 12, EN COURS: 10, ÉCHUS: 1, À RENOUVELER: 1
+   211→- **10 Colonnes tableau (GELÉES)** : N° Contrat, Employé, Poste, Département, Type Contrat, Date Début, Date Fin, Durée (mois), Salaire Brut (FCFA), Statut
+   212→- **3 Filtres pie (GELÉS)** : Département, Type Contrat, Statut
+   213→- **Données gelées** : CT-001 (Nkoulou Amina) à CT-010 (Ouedraogo Ibrahim)
+   214→
+   215→---
+   216→
+   217→### PAGE 09 — Intégration Employé (`/integration`)
+   218→- **Screenshot** : `frozen-snapshots/09_integration-employe.png`
+   219→- **Titre** : "Intégration Employé"
+   220→- **Compteur** : "9 intégrations"
+   221→- **Bouton** : "Nouvelle Intégration"
+   222→- **3 KPI Cards (GELÉS)** : EN COURS: 2, TERMINÉES: 7, EN RETARD: 0
+   223→- **10 Colonnes tableau (GELÉES)** : N°, Employé, Poste, Département, Date Arrivée, Manager Accueillant, Documents Admin, Formation Sécurité, Équipement Badge, Compte Informatique
+   224→- **2 Filtres pie (GELÉS)** : Département, Statut Intégration
+   225→- **9 Données gelées** : INT-001 à INT-009
+   226→
+   227→---
+   228→
+   229→### PAGE 10 — Checklist Intégration (`/checklist`)
+   230→- **Screenshot** : `frozen-snapshots/10_checklist-integration.png`
+   231→- **Titre** : "Checklist d'Intégration"
+   232→- **Compteur** : "11 tâches au total"
+   233→- **Boutons** : "Exporter CSV", "Nouvelle Tâche"
+   234→- **4 KPI Cards (GELÉS)** : TOTAL TÂCHES: 11, FAITES: 9, EN COURS: 1, À FAIRE: 1
+   235→- **9 Colonnes tableau (GELÉES)** : N°, Employé, Poste, Catégorie, Étape/Tâche, Responsable, Date Prévue, Date Réalisée, Statut
+   236→- **2 Filtres pie (GELÉS)** : Catégorie, Statut
+   237→- **10 Données gelées visibles** : CHK-001 à CHK-010
+   238→- **Catégories présentes** : Documents administratifs, Formation securite, Equipement & Badge, Compte informatique, Formation metier
+   239→
+   240→---
+   241→
+   242→### PAGE 11 — Période d'Essai (`/periode-essai`)
+   243→- **Screenshot** : `frozen-snapshots/11_periode-essai.png`
+   244→- **Titre** : "Périodes d'Essai"
+   245→- **Boutons** : "Exporter CSV", "Ajouter"
+   246→- **3 KPI Cards (GELÉS)** : Total Périodes: 10, Taux de Réussite: 71%, Note Moyenne: 14.6/20
+   247→- **11 Colonnes tableau (GELÉES)** : N°, Employé, Poste, Département, Type Contrat, Date Début Essai, Date Fin Essai, Durée (jours), Évaluateur, Note Globale (/20), Décision
+   248→- **3 Filtres pie (GELÉS)** : Décision, Département, Statut
+   249→- **10 Données gelées** : ESS-001 à ESS-010
+   250→- **Décisions présentes** : En cours, Embauche confirmee, Prolongation essai, Rupture essai
+   251→
+   252→---
+   253→
+   254→### PAGE 12 — Plan Accueil Formation (`/formation`)
+   255→- **Screenshot** : `frozen-snapshots/12_plan-accueil-formation.png`
+   256→- **Titre** : "Plan d'Accueil & Formations"
+   257→- **Compteur** : "12 formations au total"
+   258→- **Boutons** : "Exporter CSV", "Nouvelle Formation"
+   259→- **3 KPI Cards (GELÉS)** : TOTAL FORMATIONS: 12, HEURES TOTALES: 114h, NOTE MOYENNE: 16.5/20
+   260→- **10 Colonnes tableau (GELÉES)** : N°, Employé, Poste, Module Formation, Formateur, Date Début, Date Fin, Durée (h), Statut, Éval. /20
+   261→- **1 Filtre pie (GELÉ)** : Statut
+   262→- **10 Données gelées visibles** : FMT-001 à FMT-010
+   263→- **Statuts présents** : Terminée, En cours
+   264→
+   265→---
+   266→
+   267→### PAGE 13 — Suivi Post-Embauche (`/post-embauche`)
+   268→- **Screenshot** : `frozen-snapshots/13_suivi-post-embauche.png`
+   269→- **Titre** : "Suivi Post-Embauche"
+   270→- **Boutons** : "Exporter CSV", "Ajouter"
+   271→- **3 KPI Cards (GELÉS)** : Total Suivis: 9, Satisfaction Moyenne: 4.4/5, Risque Moyen: 1.1/4
+   272→- **Colonnes tableau (GELÉES)** : N°, Employé, Poste, Département, Date Embauche, Ancienneté (mois), Éval 1 mois (/20), Éval 3 mois (/20), Éval 6 mois (/20), Satisfaction
+   273→- **3 Filtres pie (GELÉS)** : Satisfaction, Risque Départ, Département
+   274→- **9 Données gelées** : SPE-001 à SPE-009
+   275→- **Satisfaction** : Satisfait, Tres satisfait
+   276→
+   277→---
+   278→
+   279→### PAGE 14 — Stagiaires (`/stagiaires`)
+   280→- **Screenshot** : `frozen-snapshots/14_stagiaires.png`
+   281→- **Titre** : "Stagiaires"
+   282→- **Boutons** : "Exporter CSV", "Ajouter"
+   283→- **3 KPI Cards (GELÉS)** : Total Stagiaires: 10, En Cours: 7, Indemnité Totale: 490 000 FCFA
+   284→- **Colonnes tableau (GELÉES)** : N°, Nom, Prénom, Établissement, Formation, Département Accueil, Tuteur, Date Début, Date Fin, Durée (jours)
+   285→- **3 Filtres pie (GELÉS)** : Statut, Département, Établissement
+   286→- **10 Données gelées** : STG-001 (Tchoumi Sandra) à STG-010 (Bikay Patricia)
+   287→
+   288→---
+   289→
+   290→### PAGE 15 — Saisonniers & Temporaires (`/saisonniers`)
+   291→- **Screenshot** : `frozen-snapshots/15_saisonniers-temporaires.png`
+   292→- **Titre** : "Saisonniers"
+   293→- **Boutons** : "Exporter CSV", "Ajouter"
+   294→- **3 KPI Cards (GELÉS)** : Total Saisonniers: 10, Coût Total: 3 956 300 FCFA, Durée Moyenne: 87 jours
+   295→- **Colonnes tableau (GELÉES)** : N°, Nom, Prénom, Poste, Département, Date Début, Date Fin, Durée (jours), Statut, Taux Horaire (FCFA), Coût Total (FCFA)
+   296→- **3 Filtres pie (GELÉS)** : Département, Statut, Motif
+   297→- **10 Données gelées** : SAI-001 (Nkoum Patrick) à SAI-010 (Tchouankou Gloire)
+   298→
+   299→---
+   300→
+   301→### PAGE 16 — Prévisions Postes & Offres (`/previsions`)
+   302→- **Screenshot** : `frozen-snapshots/16_previsions-postes-offres.png`
+   303→- **Titre** : "Prévisions — Postes & Offres"
+   304→- **Compteur** : "11 offres prévisionnelles"
+   305→- **Boutons** : "Exporter CSV", "Nouvelle Prévision"
+   306→- **3 KPI Cards (GELÉS)** : TOTAL POSTES PRÉVUS: 11, ÉCART TOTAL: +14, BUDGET TOTAL: 2 760 000 FCFA
+   307→- **11 Colonnes tableau (GELÉES)** : N° Offre, Département, Poste, Effectif Actuel, Effectif Prévu, Écart, Motif, Date Besoin, Priorité, Statut, Canal Diffusion
+   308→- **3 Filtres pie (GELÉS)** : Département, Priorité, Statut
+   309→- **10 Données gelées visibles** : PO-001 à PO-010
+   310→
+   311→---
+   312→
+   313→### PAGE 17 — Sources de Recrutement (`/sources`)
+   314→- **Screenshot** : `frozen-snapshots/17_sources-recrutement.png`
+   315→- **Titre** : "Sources de Recrutement"
+   316→- **Bouton** : "Ajouter"
+   317→- **3 KPI (GELÉS)** : Sources actives: 9/11, Total candidats: 148, Coût total: 1 510 000 FCFA
+   318→- **Layout cartes (GELÉ)** — 11 cartes, chacune contient :
+   319→  - Nom de la source, Description textuelle, Nb candidats, Coût
+   320→- **11 Sources gelées** : Site web, Référence interne, LinkedIn, Indeed, Cabinet de recrutement, École/Université, Salon professionnel, Candidature spontanée, Réseaux sociaux, Presse, Autre
+   321→
+   322→---
+   323→
+   324→### PAGE 18 — Analyse des Coûts (`/couts`)
+   325→- **Screenshot** : `frozen-snapshots/18_analyse-couts.png`
+   326→- **Titre** : "Analyse des Coûts de Recrutement"
+   327→- **4 KPI Cards (GELÉS)** : COÛT TOTAL: 1 295 000 FCFA, COÛT MOYEN/DEMANDE: 185 000 FCFA, COÛT MOYEN/POSTE POURVU: 647 500 FCFA, DEMANDE LA PLUS CHÈRE: Chef Cuisinier
+   328→- **Colonnes tableau (GELÉES)** : Poste, Publicité, Cabinet, Déplacement, Tests, Hébergement, Formation, Autres, Coût Total, Coût/Poste
+   329→- **7 Données gelées** : Chef Cuisinier (520K), Réceptionniste Nuit (95K), Technicien Audiovisuel (105K), Agent de Sécurité (55K), Comptable Senior (255K), Agent de Blanchisserie (80K), Développeur Full Stack (185K)
+   330→- **2 Graphiques (GELÉS)** : "Coûts par Demande (Empilés)" + "Répartition par Catégorie"
+   331→
+   332→---
+   333→
+   334→### PAGE 19 — Documents (`/documents`)
+   335→- **Screenshot** : `frozen-snapshots/20_documents.png`
+   336→- **Titre** : "Gestion des Documents"
+   337→- **Bouton** : "Téléverser"
+   338→- **Filtres (GELÉS)** : Tous, CV, Lettre de motivation, Contrat, Fiche de poste, Grille évaluation, Attestation, Autre
+   339→- **6 Colonnes tableau (GELÉES)** : Nom, Type, Candidat, Taille (KO), Date Upload, Uploadé par, Actions
+   340→- **5 Données gelées** : CV_Ndiaye_Moussa.pdf, LM_Ndiaye_Moussa.pdf, CV_Tchouankou_Claire.pdf, Grille_Ndiaye_Moussa.pdf, FP_Chef_Cuisinier.pdf
+   341→
+   342→---
+   343→
+   344→### PAGE 20 — Conformité (`/conformite`)
+   345→- **Screenshot** : `frozen-snapshots/21_conformite.png`
+   346→- **Titre** : "Conformité"
+   347→- **Sous-titre** : "Suivi de conformité des modules de l'application Admina-RH"
+   348→- **KPI principal (GELÉ)** : CONFORMITÉ GLOBALE: 77.3%, Au-dessus du seuil, Seuil de base: 45%
+   349→- **3 KPI secondaires (GELÉS)** : PAGES FONCTIONNELLES: 100% (31/31), RÉFÉRENCE DE BASE: v1.0.0, Seuil: 45%, Date: 2026-08-27
+   350→- **Tableau 31 modules (GELÉ)** : Colonnes PAGE, CHEMIN, FONCTIONNEL, CONFORMITÉ — chaque module avec son %
+   351→
+   352→---
+   353→
+   354→### PAGE 21 — Paramètres (`/parametres`)
+   355→- **Screenshot** : `frozen-snapshots/22_parametres.png`
+   356→- **Titre** : "Paramètres du Système"
+   357→- **Section Général (GELÉE)** : Nom entreprise: HRC Cameroon, Logo: hrc-logo.png, Devise: FCFA, Langue: Français
+   358→- **Section Recrutement (GELÉE)** : Délai par défaut: 30, Score minimum: 12, Notification email: Activé
+   359→- **Section Évaluation (GELÉE)** : Barème: /25, Nombre critères: 5, Seuil recommandation: 15
+   360→
+   361→---
+   362→
+   363→### PAGE 22 — Audit (`/audit`)
+   364→- **Screenshot** : `frozen-snapshots/23_audit.png`
+   365→- **Titre** : "Journal d'Audit"
+   366→- **Filtres (GELÉS)** : Action, Module, Utilisateur, Date début, Date fin
+   367→- **Colonnes tableau (GELÉES)** : Date & Heure, Utilisateur, Action, Module, Détails
+   368→- **Données gelées** : Entrées avec Mme. Fotso Marie, M. Nkoulou Paul, etc.
+   369→
+   370→---
+   371→
+   372→### PAGE 23 — Types de Contrats (`/types-contrats`)
+   373→- **Screenshot** : `frozen-snapshots/24_types-contrats.png`
+   374→- **Titre** : "Types de Contrats"
+   375→- **Bouton** : "Ajouter"
+   376→- **5 Colonnes tableau (GELÉES)** : Type, Description, Durée max, Rupture possible, Avantages légaux
+   377→- **7 Types gelés** : CDI, CDD, Stage, Saisonnier, Intérim, Freelance, Alternance
+   378→
+   379→---
+   380→
+   381→### PAGE 24 — Départements (`/departements`)
+   382→- **Screenshot** : `frozen-snapshots/25_departements.png`
+   383→- **Titre** : "Départements"
+   384→- **Bouton** : "Ajouter"
+   385→- **7 Colonnes tableau (GELÉES)** : Nom, Description, Responsable, Nb employés, Effectif cible, Progression, Localisation
+   386→- **17 Départements gelés** : Direction Générale à Achats (avec % progression)
+   387→
+   388→---
+   389→
+   390→### PAGE 25 — Sources & ROI (`/sources-roi`)
+   391→- **Screenshot** : `frozen-snapshots/26_sources-roi.png`
+   392→- **Titre** : "Sources de Recrutement & ROI"
+   393→- **4 KPI Cards (GELÉS)** : TOTAL CANDIDATS: 118, MEILLEURE SOURCE: Référence interne (ROI 2900.0%), TAUX CONVERSION MOYEN: 7.6%, COÛT MOYEN/EMBAUCHE: 130 000 FCFA
+   394→- **9 Colonnes tableau (GELÉES)** : Source, Nb Candidats, Nb Entretiens, Nb Embauches, Taux Conversion, Coût Total (FCFA), Coût/Candidat (FCFA), Coût/Embauche (FCFA), ROI (%)
+   395→- **6 Données gelées** : LinkedIn, Cabinet de recrutement, Site web, Référence interne, Réseaux sociaux, Candidature spontanée
+   396→- **2 Graphiques (GELÉS)** : "Candidats vs Embauches par Source" (barres groupées) + "Distribution des Sources" (donut)
+   397→- **Tableau récapitulatif (GELÉ)** : 8 indicateurs clés
+   398→
+   399→---
+   400→
+   401→### PAGE 26 — Expériences Candidats (`/experiences`)
+   402→- **Screenshot** : `frozen-snapshots/27_experiences.png`
+   403→- **Titre** : "Expériences des Candidats"
+   404→- **Bouton** : "Ajouter"
+   405→- **8 Colonnes tableau (GELÉES)** : Candidat, Entreprise, Poste, Date début, Date fin, Durée, Description, Vérifiée
+   406→- **Données gelées** : Ndiaye Moussa (Hôtel Sawa, Restaurant Le Nautic), Tchouankou Claire, etc.
+   407→
+   408→---
+   409→
+   410→### PAGE 27 — Formations Candidats (`/formations`)
+   411→- **Screenshot** : `frozen-snapshots/28_formations-candidats.png`
+   412→- **Titre** : "Formations des Candidats"
+   413→- **Bouton** : "Ajouter"
+   414→- **8 Colonnes tableau (GELÉES)** : Candidat, Établissement, Diplôme, Spécialité, Date début, Date fin, Durée
+   415→- **Données gelées** : Ndiaye Moussa (BTS Hotellerie-Restauration), Tchouankou Claire (Licence Comptabilité), etc.
+   416→
+   417→---
+   418→
+   419→### PAGE 28 — Compétences (`/competences`)
+   420→- **Screenshot** : `frozen-snapshots/29_competences.png`
+   421→- **Titre** : "Compétences des Candidats"
+   422→- **Bouton** : "Ajouter"
+   423→- **4 Colonnes tableau (GELÉES)** : Candidat, Compétence, Niveau, Années d'expérience
+   424→- **Données gelées** : Ndiaye Moussa (Gastronomie/Expert/8ans, Management/Avancé/5ans, HACCP/Expert/7ans), etc.
+   425→
+   426→---
+   427→
+   428→### PAGE 29 — Statuts (`/statuts`)
+   429→- **Screenshot** : `frozen-snapshots/30_statuts.png`
+   430→- **Titre** : "Gestion des Statuts"
+   431→- **Sous-titre** : "Référence des statuts utilisés dans le système. Cette page est en lecture seule."
+   432→- **Statuts Candidats (GELÉS)** : Nouveau (Ordre 1), En cours (Ordre 2), Retenu (Ordre 3), Non retenu (Ordre 4), En attente (Ordre 5), Recontact (Ordre 6)
+   433→- **Statuts Offres (GELÉS)** : affichés côté droit
+   434→
+   435→---
+   436→
+   437→## FROZEN — Composants partagés gelés
+   438→
+   439→### Sidebar (`Sidebar.jsx`)
+   440→- **Logo** : "AR" + "Admina-RH"
+   441→- **Sous-titre** : "Domaine 1 — Recrutement"
+   442→- **6 Sections de menu (GELÉES)** :
+   443→  1. VUE D'ENSEMBLE : Tableau de Bord
+   444→  2. GESTION DES OFFRES : Demandes, Prévisions Postes, Sources Recrutement, Analyse des Coûts
+   445→  3. GESTION DES CANDIDATS : Base Candidats, Pipeline Candidatures, Types de Contrats, Départements
+   446→  4. PROCESSUS DE RECRUTEMENT : Planning Entretiens, Grille Évaluation, Vérification Références, Sélections, Gestion Cabinets, Suivi Contrats
+   447→  5. INTÉGRATION & SUIVI : Intégration Employé, Checklist Intégration, Période d'Essai, Plan Accueil Formation, Suivi Post-Embauche
+   448→  6. STAGIAIRES & SAISONNIERS : Stagiaires, Saisonniers & Temporaires
+   449→  7. ANALYTICS & DOCUMENTS : Documents, Conformité
+   450→  8. CONFIGURATION : Paramètres, Audit
+   451→- **Bouton** : "Réduire le menu"
+   452→
+   453→### Header (`Header.jsx`)
+   454→- **Éléments (GELÉS)** : Titre de page dynamique, barre de recherche ("Rechercher..."), date du jour, bouton notifications ("3 notifications"), menu utilisateur ("RH")
+   455→
+   456→### KPICard (`KPICard.jsx`)
+   457→- **Props (GELÉES)** : titre, valeur, sous-texte
+   458→- **Style (GELÉ)** : carte Material UI avec padding
+   459→
+   460→---
+   461→
+   462→## FROZEN — Données de référence (nomenclatures)
+   463→
+   464→Les 38 listes de référence du fichier Excel sont GELÉES. Elles définissent les valeurs autorisées.
+   465→
+   466→| Nomenclature | Valeurs gelées |
+   467→|---|---|
+   468→| statut_demande | En attente, Validée, En cours, Pourvue, Annulee |
+   469→| priorite | Urgente, Haute, Moyenne, Basse |
+   470→| type_contrat | CDI, CDD, Stage, Interim, Alternance, Freelance |
+   471→| type_poste | Cadre, Agent de maitrise, Operationnel, Stagiaire, Temporaire |
+   472→| motif | Remplacement, Creation de poste, Saisonnalite, Surcharge, Reorganisation |
+   473→| source | Site web entreprise, Presse, Cooptation, Reseaux sociaux, Candidature spontanee, Ecole/Universite, Cabinet de recrutement, Salon emploi, Autre |
+   474→| statut_candidat | Nouveau, En cours d'etude, Entretien planifie, Entretien realise, Retenu, Refuse, En reserve, Desiste |
+   475→| statut_entretien | Planifie, Realise, Annule, Reporte |
+   476→| type_entretien | Telephonique, Visioconference, Presentiel, Technique, 2eme tour, Final |
+   477→| resultat_entretien | Favorable, Defavorable, A revoir, En attente |
+   478→| elements_verif | Diplome, Experience, Comportement, Salaire declare, Causes de depart |
+   479→| resultat_verif | Favorable, Defavorable, Partiel, N'a pas repondu, Non verifiable |
+   480→| decision_finale | Embauche recommandee, Embauche avec reserve, Refus, En attente decision |
+   481→| oui_non | Oui, Non |
+   482→| civilite | M., Mme, Mlle |
+   483→| niveau_etude | Sans diplome, CAP/BEP, BTS/DUT, Licence, Master, Doctorat, Autre |
+   484→| niveau_langue | Aucun, Debutant, Intermediaire, Avance, Bilingue, Natif |
+   485→| genre | Masculin, Feminin |
+   486→| situation_fam | Celibataire, Marie(e), Divorce(e), Veuf(ve) |
+   487→| departement | Direction Generale, Ressources Humaines, Finance & Comptabilite, Marketing & Communication, Informatique, Commercial, Logistique & Approvisionnement, Production, Service Client, Juridique, Administration, Securite, Restauration, Herbergement, Maintenance, Lingerie, Audiovisuel |
+   488→| role_responsable | Directeur General, Directeur Adjoint, DRH, DRH Adjoint, Chef de Departement, Chef de Service, Responsable de Pole, Superviseur, Manager Operationnel |
+   489→| cabinet_recrutement | HRC Cameroon, Activa RH, Skillmatch Africa, Michael Page Cameroon, Pedarec, AfricSearch, Manpower Cameroon, Interne (sans cabinet), Autre |
+   490→| statut_contrat | En cours, Renouvele, Echu, Resilie, En negociation |
+   491→| motif_fin_contrat | Fin de contrat, Demission, Licenciement, Depart retraite, Mutation, Force majeure |
+   492→| specialite_cabinet | Generaliste, Cadres dirigeants, Informatique, Finance, Hotellerie & Tourisme, Commerce, BTP, Logistique |
+   493→| evaluation_cabinet | Excellent, Bon, Moyen, Insuffisant, A evaluer |
+   494→| canal_diffusion | Site web, LinkedIn, Facebook, Presse ecrite, Radio, Salon emploi, Cabinet, Cooptation, Universites, Affichage |
+   495→| statut_offre | A creer, Publiee, Candidatures en cours, Cloturee, Annulee |
+   496→| categorie_checklist | Documents administratifs, Formation securite, Formation metier, Equipement & Badge, Presentation equipes, Visite locaux, Compte informatique, Repas & avantages |
+   497→| statut_checklist | A faire, En cours, Fait, Non applicable |
+   498→| decision_essai | Embauche confirmee, Prolongation essai, Rupture essai, En cours |
+   499→| statut_integration | En cours, Terminee, Echec, Prolongee |
+   500→| statut_formation | Planifiee, En cours, Terminee, Annulee |
+   501→| statut_stagiaire | En cours, Termine, Abandonne, Embauche |
+   502→| satisfaction | Tres satisfait, Satisfait, Neutre, Insatisfait, Tres insatisfait |
+   503→| risque_depart | Faible, Moyen, Eleve, Critique |
+   504→| stade_pipeline | CV recu, Pre-selection, Entretien HR, Test technique, Entretien final, Offre envoyee, Accepte, Refuse, Retraite |
+   505→| priorite_pipeline | Haute, Moyenne, Basse |
+   506→
+   507→---
+   508→
+   509→## DEV — Pages à construire (2 pages)
+   510→
+   511→### PAGE A — Demandes de Recrutement (`/offres`) — ❌ ACTUELLEMENT 🚧
+   512→**Feuille Excel référence** : `1-Demandes Recrutement` (19 champs)
+   513→**Champs OBLIGATOIRES à implémenter** :
+   514→1. N° Demande (auto-généré : DR-YYYY-NNN)
+   515→2. Date Demande
+   516→3. Departement / Service (dropdown → nomenclature `departement`)
+   517→4. Poste Recherche
+   518→5. Type de Poste (dropdown → `type_poste`)
+   519→6. Type de Contrat (dropdown → `type_contrat`)
+   520→7. Effectif Demande
+   521→8. Motif du Recrutement (dropdown → `motif`)
+   522→9. Date Besoin
+   523→10. Priorite (dropdown → `priorite`)
+   524→11. Statut (dropdown → `statut_demande`)
+   525→12. Date Pourvue
+   526→13. Responsable Demande
+   527→14. Role du Responsable (dropdown → `role_responsable`)
+   528→15. Cabinet / Agence Externe (dropdown → `cabinet_recrutement`)
+   529→16. Budget Salaire (FCFA)
+   530→17. Cout Recrutement (FCFA)
+   531→18. Delai (jours)
+   532→19. Notes
+   533→
+   534→**UI attendue** : Tableau avec filtres (comme les autres pages) + Bouton "Nouvelle Demande" + KPI cards
+   535→
+   536→### PAGE B — Base Candidats (`/candidats`) — ❌ ACTUELLEMENT 🚧
+   537→**Feuille Excel référence** : `2-Base Candidats` (35 champs)
+   538→**Champs OBLIGATOIRES à implémenter** :
+   539→1. N° Candidat (auto : CAN-NNN)
+   540→2. Civilite (dropdown → `civilite`)
+   541→3. Nom
+   542→4. Prenom
+   543→5. Genre (dropdown → `genre`)
+   544→6. Date de Naissance
+   545→7. Nationalite
+   546→8. Situation Familiale (dropdown → `situation_fam`)
+   547→9. Telephone
+   548→10. Email
+   549→11. Adresse
+   550→12. Ville
+   551→13. Niveau Etude (dropdown → `niveau_etude`)
+   552→14. Diplome
+   553→15. Etablissement
+   554→16. Annees Exp.
+   555→17. Dernier Employeur
+   556→18. Competences Cles
+   557→19. Langues
+   558→20. Niveau Langue (dropdown → `niveau_langue`)
+   559→21. Outils/Logiciels
+   560→22. Poste Vise
+   561→23. Source Candidature (dropdown → `source`)
+   562→24. Date Candidature
+   563→25. Statut (dropdown → `statut_candidat`)
+   564→26. Score (/20)
+   565→27. Type Contrat (dropdown → `type_contrat`)
+   566→28. Contrat Telechargeable
+   567→29. Date Debut Essai
+   568→30. Date Fin Essai
+   569→31. Date Embauche Definitive
+   570→32. Certificat Travail
+   571→33. Attestation CNPS
+   572→34. Extrait Casier Judiciaire
+   573→35. Notes
+   574→
+   575→**UI attendue** : Vue tableau + Vue fiche détaillée (onglets) + Lien vers sous-pages Expériences/Formations/Compétences
+   576→
+   577→---
+   578→
+   579→## DEV — Champs manquants à ajouter sur les pages gelées
+   580→
+   581→> **RÈGLE** : Ajouter les colonnes manquantes **À DROITE** des colonnes existantes.
+   582→> Ne PAS déplacer ou renommer les colonnes gelées.
+   583→
+   584→| Page | Champs manquants à AJOUTER (à droite) |
+   585→|---|---|
+   586→| Entretiens | N° Entretien, Poste Visé, Score (/20), Prochaine Étape, Date Prochaine Étape, Notes |
+   587→| Évaluations | N° Évaluation, Poste Visé, Salaire Souhaité (FCFA), Salaire Proposé (FCFA), Source Candidature, Statut Candidat |
+   588→| Vérifications | N° Verif., Poste Visé, Éléments Vérifiés (sélection multiple), Résultat Global (dropdown), Détails/Retour, Suites Données, Décision Finale, Date Décision |
+   589→| Sélections | N° Sélection (ajouter), Notes |
+   590→| Cabinets | Cout Total (FCFA), Évaluation (dropdown → `evaluation_cabinet`), Contrat en Cours (oui/non), Date Début Contrat, Date Fin Contrat, Notes |
+   591→| Prévisions | Budget (FCFA), Profil Recherche, Date Publication, Candidatures Recues, Notes |
+   592→| Sources | Ajouter vue tableau avec : N°, Nb Entretiens, Nb Recrutements, Taux Transformation, Cout/Recrutement, Delai Moyen, Qualite Moyenne (/20), Notes |
+   593→| Coûts | N°, Demande Liée, Date, Département, Notes |
+   594→| Intégration | Formation Metier, Visite Locaux, Statut Integration (dropdown → `statut_integration`), Date Fin Integration, Notes |
+   595→| Checklist | Commentaires, Département, Date Arrivée |
+   596→| Période Essai | Objectifs Fixes, Score Mi-parcours (/20), Score Final (/20) [séparer la note unique], Date Décision, Notes |
+   597→| Formation | Notes, Département, Date Arrivée |
+   598→| Stagiaires | Indemnite (FCFA/mois), Statut (colonne), Évaluation (/20), Notes |
+   599→| Saisonniers | Motif (colonne), Source (colonne), Notes |
+   600→| Post-Embauche | Risque Départ (par ligne), Commentaires |
+   601→| Pipeline | N° Pipeline, Département, Date Mouvement, Délai (jours), Évaluateur, Prochaine Action, Notes |
+   602→
+   603→---
+   604→
+   605→## Workflow obligatoire
+   606→
+   607→### Avant toute modification de code :
+   608→1. **Lire ce fichier** (`AI_GUIDE.md`) en entier
+   609→2. **Vérifier le screenshot** concerné dans `frozen-snapshots/`
+   610→3. **Confirmer** que la modification cible est dans la section `[DEV]` et NON dans `[FROZEN]`
+   611→
+   612→### Pendant le développement :
+   613→4. **NE JAMAIS** ouvrir ou modifier un fichier listé comme `[FROZEN]` dans l'arborescence
+   614→5. **SEULEMENT** créer de nouveaux fichiers ou modifier des fichiers listés `[DEV]`
+   615→6. **AJOUTER** les nouvelles colonnes/champs à DROITE des existantes
+   616→7. **CONSERVER** exactement le même nommage, style et structure pour les éléments gelés
+   617→
+   618→### Après le développement :
+   619→8. **COMPARER** visuellement le résultat avec le screenshot de référence
+   620→9. **VÉRIFIER** qu'aucun élément gelé n'a changé
+   621→10. **Tester** que les nouvelles fonctionnalités ne cassent pas les existantes
+   622→
+   623→---
+   624→
+   625→## Vérification avant chaque modification
+   626→
+   627→```
+   628→Checklist de sécurité :
+   629→
+   630→□ AI_GUIDE.md a été lu en entier ?
+   631→□ Screenshot de référence consulté ?
+   632→□ La cible est dans [DEV] (pas dans [FROZEN]) ?
+   633→□ Aucun fichier [FROZEN] ne sera modifié ?
+   634→□ Les colonnes existantes ne seront pas déplacées/renommées ?
+   635→□ Les données d'exemple ne seront pas modifiées ?
+   636→□ Le style MUI existant est conservé ?
+   637→□ La sidebar et le header restent identiques ?
+   638→□ Les nomenclatures (38 listes) ne sont pas modifiées ?
+   639→□ Le routage existant (/entretiens, /contrats, etc.) fonctionne toujours ?
+   640→```
+   641→
+   642→---
+   643→
+   644→## Historique du gel
+   645→
+   646→| Date | Action | Auteur |
+   647→|---|---|---|
+   648→| 29/08/2026 | GEL v1.0 — 28 pages capturées, 144/279 champs gelés | Super Z |
+   649→
+   650→---
+   651→
+   652→> **PROCHAINE ÉTAPE** : Une fois les 2 pages manquantes (Demandes + Base Candidats) construites et les champs manquants ajoutés, ce fichier sera mis à jour pour passer les nouveaux éléments de [DEV] à [FROZEN]. Le dégel complet interviendra à 100% de couverture front-end.

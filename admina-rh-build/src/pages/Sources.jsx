@@ -1,7 +1,8 @@
 import { useState, useMemo } from 'react';
-import { Box, Typography, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination, Chip, Paper, Card, CardContent, CardActions, IconButton, Tooltip } from '@mui/material';
+import { Box, Typography, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination, Chip, Paper, Card, CardContent, Tooltip } from '@mui/material';
 import { Add } from '@mui/icons-material';
 import KPICard from '../components/KPICard';
+import AddDialog from '../components/AddDialog';
 import { nomenclatures } from '../data/nomenclatures';
 
 const formatFCFA = (a) => (!a && a !== 0) ? '—' : a.toLocaleString('fr-FR') + ' FCFA';
@@ -10,7 +11,7 @@ const initialCards = [
   { id: 1, nom: 'Site web entreprise', description: 'Candidatures via le site officiel de HRC Cameroon', nbCandidats: 32, cout: 50000, active: true },
   { id: 2, nom: 'Référence interne', description: 'Cooptation et recommandations des collaborateurs', nbCandidats: 28, cout: 0, active: true },
   { id: 3, nom: 'LinkedIn', description: 'Publications et recherche proactive sur LinkedIn', nbCandidats: 25, cout: 180000, active: true },
-  { id: 4, nom: 'Indeed', description: 'Diffusion d\'offres sur la plateforme Indeed', nbCandidats: 18, cout: 120000, active: true },
+  { id: 4, nom: 'Indeed', description: "Diffusion d'offres sur la plateforme Indeed", nbCandidats: 18, cout: 120000, active: true },
   { id: 5, nom: 'Cabinet de recrutement', description: 'Prestataires externes spécialisés', nbCandidats: 22, cout: 450000, active: true },
   { id: 6, nom: 'École/Université', description: 'Partenariats avec les établissements de formation', nbCandidats: 12, cout: 80000, active: true },
   { id: 7, nom: 'Salon professionnel', description: 'Participation aux salons de l\'emploi', nbCandidats: 8, cout: 200000, active: true },
@@ -33,13 +34,16 @@ const initialTableData = [
 ];
 
 export default function Sources() {
+  const [cards, setCards] = useState(initialCards);
+  const [tableData, setTableData] = useState(initialTableData);
   const [view, setView] = useState('cards');
   const [page, setPage] = useState(0);
   const [rpp, setRpp] = useState(10);
+  const [dlg, setDlg] = useState(false);
 
-  const totalCandidats = initialCards.reduce((s, d) => s + d.nbCandidats, 0);
-  const coutTotal = initialCards.reduce((s, d) => s + d.cout, 0);
-  const sourcesActives = initialCards.filter(d => d.active).length;
+  const totalCandidats = cards.reduce((s, d) => s + d.nbCandidats, 0);
+  const coutTotal = cards.reduce((s, d) => s + d.cout, 0);
+  const sourcesActives = cards.filter(d => d.active).length;
 
   const tableCols = ['N°', 'Source', 'Nb Candidats', 'Nb Entretiens', 'Nb Recrutements', 'Taux Transformation', 'Coût/Recrutement (FCFA)', 'Délai Moyen (j)', 'Qualité Moyenne (/20)', 'Notes'];
 
@@ -50,17 +54,17 @@ export default function Sources() {
       <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
         <Button variant={view === 'cards' ? 'contained' : 'outlined'} onClick={() => setView('cards')}>Vue Cartes</Button>
         <Button variant={view === 'table' ? 'contained' : 'outlined'} onClick={() => setView('table')}>Vue Tableau</Button>
-        <Button variant="contained" startIcon={<Add fontSize="small" />}>Ajouter</Button>
+        <Button variant="contained" startIcon={<Add fontSize="small" />} onClick={() => setDlg(true)}>Ajouter</Button>
       </Box>
       <Box sx={{ display: 'flex', gap: 2, mb: 3, flexWrap: 'wrap' }}>
-        <KPICard titre="SOURCES ACTIVES" valeur={`${sourcesActives}/11`} sousTexte="sources actives" />
+        <KPICard titre="SOURCES ACTIVES" valeur={`${sourcesActives}/${cards.length}`} sousTexte="sources actives" />
         <KPICard titre="TOTAL CANDIDATS" valeur={totalCandidats} sousTexte="tous canaux confondus" />
         <KPICard titre="COÛT TOTAL" valeur={formatFCFA(coutTotal)} sousTexte="toutes sources" />
       </Box>
 
       {view === 'cards' ? (
         <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 2 }}>
-          {initialCards.map(src => (
+          {cards.map(src => (
             <Card key={src.id} variant="outlined" sx={{ opacity: src.active ? 1 : 0.5 }}>
               <CardContent>
                 <Typography variant="h6" fontWeight="bold" sx={{ fontSize: '1rem' }}>{src.nom}</Typography>
@@ -75,7 +79,7 @@ export default function Sources() {
         </Box>
       ) : (
         <Paper><TableContainer><Table size="small"><TableHead><TableRow>{tableCols.map(c => <TableCell key={c} sx={{ fontWeight: 'bold', bgcolor: '#f5f5f5', whiteSpace: 'nowrap' }}>{c}</TableCell>)}</TableRow></TableHead>
-        <TableBody>{initialTableData.slice(page * rpp, page * rpp + rpp).map(row => (
+        <TableBody>{tableData.slice(page * rpp, page * rpp + rpp).map(row => (
           <TableRow key={row.id} hover>
             <TableCell sx={{ color: 'text.secondary', fontSize: '0.8rem' }}>{row.numero}</TableCell>
             <TableCell sx={{ fontWeight: 500 }}>{row.source}</TableCell>
@@ -89,8 +93,26 @@ export default function Sources() {
             <TableCell>{row.notes && row.notes.length > 35 ? `${row.notes.substring(0, 35)}...` : (row.notes || '—')}</TableCell>
           </TableRow>
         ))}</TableBody></Table></TableContainer>
-        <TablePagination component="div" count={initialTableData.length} page={page} onPageChange={(e, p) => setPage(p)} rowsPerPage={rpp} onRowsPerPageChange={e => { setRpp(parseInt(e.target.value, 10)); setPage(0); }} rowsPerPageOptions={[5, 10, 25]} labelRowsPerPage="Lignes par page" /></Paper>
+        <TablePagination component="div" count={tableData.length} page={page} onPageChange={(e, p) => setPage(p)} rowsPerPage={rpp} onRowsPerPageChange={e => { setRpp(parseInt(e.target.value, 10)); setPage(0); }} rowsPerPageOptions={[5, 10, 25]} labelRowsPerPage="Lignes par page" /></Paper>
       )}
+
+      <AddDialog open={dlg} onClose={() => setDlg(false)} title="Ajouter une Source de Recrutement"
+        fields={[
+          {key: "nom", label: "Nom de la source", required: true},
+          {key: "description", label: "Description", multiline: true},
+          {key: "nbCandidats", label: "Nb Candidats", type: "number"},
+          {key: "cout", label: "Coût (FCFA)", type: "number"},
+          {key: "canal", label: "Canal de diffusion", type: "select", options: nomenclatures.canal_diffusion},
+          {key: "notes", label: "Notes", multiline: true},
+        ]}
+        onSubmit={(vals) => {
+          const nid = cards.length + 1;
+          const nc = { id: nid, nbCandidats: vals.nbCandidats || 0, cout: vals.cout || 0, active: true, nom: vals.nom, description: vals.description || '' };
+          const nt = { id: nid, numero: 'SRC-' + String(nid).padStart(3, '0'), source: vals.nom, nbCandidats: vals.nbCandidats || 0, nbEntretiens: 0, nbRecrutements: 0, tauxTransformation: 0, coutRecrutement: vals.cout || 0, delaiMoyen: 0, qualiteMoyenne: 0, notes: vals.notes || '' };
+          setCards(prev => [...prev, nc]);
+          setTableData(prev => [...prev, nt]);
+        }}
+      />
     </Box>
   );
 }

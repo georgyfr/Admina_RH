@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { Box, Typography, Button, Paper, Chip, Tooltip } from '@mui/material';
 import { Add } from '@mui/icons-material';
 import KPICard from '../components/KPICard';
+import AddDialog from '../components/AddDialog';
 import { nomenclatures } from '../data/nomenclatures';
 
 const prioriteColor = { 'Haute': 'error', 'Moyenne': 'warning', 'Basse': 'default' };
@@ -31,7 +32,7 @@ const initialData = [
   { id:6, numero:'PPL-006', nom:'Eyenga Clarisse', poste:'Community Manager', source:'Reseaux sociaux', stade:'CV recu', priorite:'Moyenne', date:'01/02/2025', score:null,
     departement:'Marketing & Communication', dateMouvement:'01/02/2025', delai:0, evaluateur:'', prochaineAction:'Pré-sélection', notes:'CV récemment reçu' },
   { id:7, numero:'PPL-007', nom:'Ateba Chantal', poste:'Agent Accueil', source:'Site web entreprise', stade:'Pre-selection', priorite:'Basse', date:'05/02/2025', score:null,
-    departement:'Service Client', dateMouvement:'10/02/2025', delai:5, evaluateur:'', prochaineAction:'Entretien téléphonique', notes:'CV en cours d\'analyse' },
+    departement:'Service Client', dateMouvement:'10/02/2025', delai:5, evaluateur:'', prochaineAction:'Entretien téléphonique', notes:"CV en cours d'analyse" },
   { id:8, numero:'PPL-008', nom:'Nkoulou Brandon', poste:'Réceptionniste Nuit', source:'Site web entreprise', stade:'Refuse', priorite:'Moyenne', date:'08/02/2025', score:10,
     departement:'Herbergement', dateMouvement:'25/02/2025', delai:17, evaluateur:'Mme. Fotso Marie', prochaineAction:'', notes:'Candidat trop junior' },
   { id:9, numero:'PPL-009', nom:'Tabi Sandrine', poste:'Réceptionniste Nuit', source:'Cabinet de recrutement', stade:'Accepte', priorite:'Haute', date:'10/02/2025', score:16,
@@ -41,7 +42,8 @@ const initialData = [
 ];
 
 export default function Pipeline() {
-  const [data] = useState(initialData);
+  const [data, setData] = useState(initialData);
+  const [dlg, setDlg] = useState(false);
 
   const totalCandidats = data.length;
   const stadesActifs = stages.filter(s => data.some(d => d.stade === s.key)).length;
@@ -54,7 +56,7 @@ export default function Pipeline() {
       <Typography variant="h5" fontWeight="bold">Pipeline de Recrutement</Typography>
       <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>Glissez-déposez les candidats entre les colonnes</Typography>
       <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
-        <Button variant="contained" startIcon={<Add fontSize="small" />}>Nouvelle candidature</Button>
+        <Button variant="contained" startIcon={<Add fontSize="small" />} onClick={() => setDlg(true)}>Nouvelle candidature</Button>
       </Box>
       {/* Kanban Board */}
       <Box sx={{ display: 'flex', gap: 1, overflowX: 'auto', pb: 2 }}>
@@ -104,6 +106,22 @@ export default function Pipeline() {
           <Typography variant="caption" color="text.secondary">Stades actifs : {pctActifs}% du pipeline</Typography>
         </Box>
       </Paper>
+
+      <AddDialog open={dlg} onClose={() => setDlg(false)} title="Nouvelle Candidature"
+        fields={[
+          {key: "nom", label: "Nom du candidat", required: true},
+          {key: "poste", label: "Poste visé", required: true},
+          {key: "departement", label: "Département", type: "select", options: nomenclatures.departement, required: true},
+          {key: "source", label: "Source", type: "select", options: nomenclatures.source, required: true},
+          {key: "stade", label: "Stade", type: "select", options: nomenclatures.stade_pipeline, required: true},
+          {key: "priorite", label: "Priorité", type: "select", options: nomenclatures.priorite_pipeline, required: true},
+          {key: "date", label: "Date d'entrée", required: true},
+          {key: "evaluateur", label: "Évaluateur"},
+          {key: "prochaineAction", label: "Prochaine action"},
+          {key: "notes", label: "Notes", multiline: true},
+        ]}
+        onSubmit={(vals) => { const nid = data.length + 1; const today = new Date().toLocaleDateString('fr-FR'); setData(prev => [...prev, { id: nid, numero: 'PPL-' + String(nid).padStart(3, '0'), dateMouvement: today, delai: 0, score: null, ...vals }]); }}
+      />
     </Box>
   );
 }

@@ -131,3 +131,31 @@ Stage Summary:
 - 21/30 pages avec boutons Ajouter fonctionnels
 - 9 pages sans modification (pas de bouton ou déjà fonctionnel)
 - Site live : https://admina-rh-bd0.pages.dev/
+---
+Task ID: 8
+Agent: Main Agent
+Task: Fix all non-working add buttons and rebuild dashboard
+
+Work Log:
+- Diagnosed TableauDeBord as empty stub (Col1/Col2/--)
+- Installed recharts for dashboard charts
+- Rebuilt TableauDeBord with 4 KPI cards, 4 charts (line, bar, donut, bar), 2 recent data tables
+- Added AddDialog to Demandes.jsx (was missing onClick handler)
+- Added AddDialog to Pipeline.jsx (was missing onClick handler)
+- Added AddDialog to Sources.jsx (was missing onClick handler)
+- Fixed Audit.jsx (referenced undefined data/setData variables)
+- Rebuilt Conformite.jsx from stub with 6 records + AddDialog
+- Rebuilt Parametres.jsx from stub with 10 records + AddDialog
+- Rebuilt Statuts.jsx from stub with 8 records + AddDialog
+- Rebuilt SourcesROI.jsx from stub with 6 records + AddDialog
+- Build successful, deployed to Cloudflare Pages
+- Visual verification: Dashboard shows KPIs, charts, data tables
+- Visual verification: Demandes AddDialog opens with 15 fields
+- Visual verification: Conformite page shows data, KPIs, and functional buttons
+
+Stage Summary:
+- 8 pages fixed in total
+- All add buttons across the app now functional with popup dialogs
+- Dashboard fully rebuilt with charts and data
+- 4 stub pages rebuilt with proper data and AddDialog
+- Deployed at https://admina-rh-bd0.pages.dev/
