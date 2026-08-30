@@ -1,6 +1,7 @@
 import { useState, useMemo, useCallback } from 'react';
-import { Box, Typography, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination, Chip, FormControl, Select, MenuItem, Tooltip, Paper, Drawer, Divider, IconButton, TextField, Badge, Avatar, List, ListItem, ListItemAvatar, ListItemText, LinearProgress, Alert, Snackbar, Stack } from '@mui/material';
-import { Add, Download, Close, Send, CheckCircle, ArrowForward, Schedule, Business, Person, Edit, NoteAdd, History, TrendingUp, AssignmentTurnedIn, CalendarToday, AccountBalanceWallet, Timer } from '@mui/icons-material';
+import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
+import { Box, Typography, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination, Chip, FormControl, Select, MenuItem, Tooltip, Paper, Drawer, Divider, IconButton, TextField, Badge, Avatar, List, ListItem, ListItemAvatar, ListItemText, LinearProgress, Alert, Snackbar, Stack, ToggleButtonGroup, ToggleButton } from '@mui/material';
+import { Add, Download, Close, Send, CheckCircle, ArrowForward, Schedule, Business, Person, Edit, NoteAdd, History, TrendingUp, AssignmentTurnedIn, CalendarToday, AccountBalanceWallet, Timer, ViewList, ViewKanban, DragIndicator, People, AccessTime } from '@mui/icons-material';
 import KPICard from '../components/KPICard';
 import AddDialog from '../components/AddDialog';
 import { nomenclatures } from '../data/nomenclatures';
@@ -114,6 +115,113 @@ const prioriteColor = { 'Urgente':'error', 'Haute':'warning', 'Moyenne':'info', 
 const statutColor = { 'Pourvue':'success', 'En cours':'warning', 'Annulee':'error', 'Validée':'info', 'En attente':'default' };
 const histIcon = { creation:'Add', validation:'CheckCircle', cabinet:'Business', publication:'Send', candidature:'Person', entretien:'AssignmentTurnedIn', pourvoi:'CheckCircle', annulation:'Close' };
 const histColor = { creation:'#1976d2', validation:'#2e7d32', cabinet:'#7b1fa2', publication:'#0D7C66', candidature:'#f57f17', entretien:'#1565c0', pourvoi:'#2e7d32', annulation:'#d32f2f' };
+
+/* ═══ KANBAN CONFIG ═══ */
+const KANBAN_COLS = [
+  { id: 'En attente', label: 'En attente', color: '#9e9e9e', bgcolor: '#f5f5f5' },
+  { id: 'Validée',   label: 'Validée',   color: '#1976d2', bgcolor: '#e3f2fd' },
+  { id: 'En cours',  label: 'En cours',  color: '#f57f17', bgcolor: '#fff8e1' },
+  { id: 'Pourvue',   label: 'Pourvue',   color: '#2e7d32', bgcolor: '#e8f5e9' },
+  { id: 'Annulee',   label: 'Annulée',   color: '#d32f2f', bgcolor: '#ffebee' },
+];
+
+/* ═══ KANBAN BOARD ═══ */
+function KanbanBoard({ data, onStatutChange, onCardClick }) {
+  const columns = useMemo(() => {
+    const map = {};
+    KANBAN_COLS.forEach(c => { map[c.id] = []; });
+    data.forEach(d => { if (map[d.statut]) map[d.statut].push(d); });
+    return map;
+  }, [data]);
+
+  const handleDragEnd = useCallback((result) => {
+    const { destination, source, draggableId } = result;
+    if (!destination || destination.droppableId === source.droppableId) return;
+    const id = parseInt(draggableId, 10);
+    onStatutChange(id, destination.droppableId);
+  }, [onStatutChange]);
+
+  return (
+    <DragDropContext onDragEnd={handleDragEnd}>
+      <Box sx={{ display: 'flex', gap: 1.5, overflowX: 'auto', pb: 2, minHeight: 500 }}>
+        {KANBAN_COLS.map(col => {
+          const items = columns[col.id] || [];
+          return (
+            <Droppable key={col.id} droppableId={col.id}>
+              {(provided, snapshot) => (
+                <Paper ref={provided.innerRef} {...provided.droppableProps}
+                  variant="outlined"
+                  sx={{
+                    minWidth: 280, maxWidth: 320, flex: '1 1 280px',
+                    display: 'flex', flexDirection: 'column', maxHeight: 'calc(100vh - 320px)',
+                    borderTop: `3px solid ${col.color}`,
+                    bgcolor: snapshot.isDraggingOver ? `${col.bgcolor}` : 'background.paper',
+                    transition: 'background-color 0.2s',
+                  }}
+                >
+                  {/* Column header */}
+                  <Box sx={{ p: 1.5, pb: 1, display: 'flex', alignItems: 'center', gap: 1, borderBottom: '1px solid', borderColor: 'divider' }}>
+                    <Typography variant="subtitle2" fontWeight="bold" sx={{ color: col.color, flex: 1, fontSize: '0.85rem' }}>{col.label}</Typography>
+                    <Badge badgeContent={items.length} sx={{ '& .MuiBadge-badge': { bgcolor: col.color, color: 'white', fontWeight: 700, fontSize: '0.7rem' } }} />
+                  </Box>
+
+                  {/* Cards */}
+                  <Box sx={{ flex: 1, overflowY: 'auto', p: 1, display: 'flex', flexDirection: 'column', gap: 1 }}>
+                    {items.map((d, idx) => {
+                      const jours = Math.floor((new Date() - new Date(d.dateDemande.split('/').reverse().join('-'))) / 86400000);
+                      const delaiPct = d.delai > 0 ? Math.min(100, Math.round((jours / d.delai) * 100)) : 0;
+                      const delaiColor = delaiPct >= 100 ? '#d32f2f' : delaiPct >= 75 ? '#f57f17' : '#2e7d32';
+                      return (
+                        <Draggable key={d.id} draggableId={String(d.id)} index={idx}>
+                          {(prov, snap) => (
+                            <Paper ref={prov.innerRef} {...prov.draggableProps}
+                              onClick={() => onCardClick(d)}
+                              sx={{
+                                p: 1.5, cursor: snap.isDragging ? 'grabbing' : 'grab',
+                                borderLeft: `3px solid ${prioriteColor[d.priorite] === 'error' ? '#d32f2f' : prioriteColor[d.priorite] === 'warning' ? '#f57f17' : prioriteColor[d.priorite] === 'info' ? '#1976d2' : '#bdbdbd'}`,
+                                boxShadow: snap.isDragging ? 4 : 1,
+                                opacity: snap.isDragging ? 0.9 : 1,
+                                transform: snap.isDragging ? 'rotate(2deg)' : 'none',
+                                transition: 'box-shadow 0.2s, transform 0.2s, opacity 0.2s',
+                                '&:hover': { boxShadow: 3 },
+                              }}
+                            >
+                              <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}>
+                                <Box {...prov.dragHandleProps} sx={{ mt: 0.3, color: 'text.disabled', '&:hover': { color: 'text.primary' } }}><DragIndicator sx={{ fontSize: 18 }} /></Box>
+                                <Box sx={{ flex: 1, minWidth: 0 }}>
+                                  <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.65rem', fontWeight: 600 }}>{d.numero}</Typography>
+                                  <Typography variant="body2" fontWeight="bold" sx={{ fontSize: '0.85rem', lineHeight: 1.3, mb: 0.5 }} noWrap>{d.posteRecherche}</Typography>
+                                  <Chip label={d.departement} size="small" variant="outlined" sx={{ height: 20, fontSize: '0.65rem', mb: 1 }} />
+                                  <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', flexWrap: 'wrap' }}>
+                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.3 }}><AccessTime sx={{ fontSize: 12, color: delaiColor }} /><Typography variant="caption" sx={{ fontSize: '0.7rem', color: delaiColor, fontWeight: 600 }}>{jours}j/{d.delai}j</Typography></Box>
+                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.3 }}><People sx={{ fontSize: 12, color: 'text.secondary' }} /><Typography variant="caption" sx={{ fontSize: '0.7rem', color: 'text.secondary' }}>{d.candidatsAssocies?.length || 0} candidat(s)</Typography></Box>
+                                  </Box>
+                                  <Chip label={d.priorite} size="small" color={prioriteColor[d.priorite]} sx={{ height: 18, fontSize: '0.6rem', fontWeight: 700, ml: 'auto' }} />
+                                </Box>
+                              </Box>
+                              <Box sx={{ mt: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.65rem' }}>{d.responsableDemande}</Typography>
+                                <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.65rem' }}>{d.typeContrat} · {d.effectif}</Typography>
+                              </Box>
+                              {/* Mini progress bar */}
+                              <LinearProgress variant="determinate" value={delaiPct} sx={{ mt: 1, height: 3, borderRadius: 1.5, bgcolor: '#f0f0f0', '& .MuiLinearProgress-bar': { bgcolor: delaiColor, borderRadius: 1.5 } }} />
+                            </Paper>
+                          )}
+                        </Draggable>
+                      );
+                    })}
+                    {items.length === 0 && <Typography variant="body2" color="text.disabled" sx={{ textAlign: 'center', py: 4, fontSize: '0.8rem' }}>Aucune demande</Typography>}
+                    {provided.placeholder}
+                  </Box>
+                </Paper>
+              )}
+            </Droppable>
+          );
+        })}
+      </Box>
+    </DragDropContext>
+  );
+}
 
 /* ═══ TABLEAU SIMPLIFIÉ (colonnes principales) ═══ */
 const tableCols = [
@@ -297,6 +405,7 @@ export default function Demandes() {
   const [rpp, setRpp] = useState(10);
   const [drawerDemande, setDrawerDemande] = useState(null);
   const [snack, setSnack] = useState(null);
+  const [viewMode, setViewMode] = useState('table');
 
   const filtered = useMemo(() => data.filter(d =>
     (filterDep === 'Tous' || d.departement === filterDep) &&
@@ -341,9 +450,14 @@ export default function Demandes() {
     <Box>
       <Typography variant="h5" fontWeight="bold">Demandes de Recrutement</Typography>
       <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>{filtered.length} demande(s) de recrutement</Typography>
-      <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
+      <Box sx={{ display: 'flex', gap: 1, mb: 2, alignItems: 'center' }}>
         <Button variant="outlined" startIcon={<Download fontSize="small" />} onClick={handleExport}>Exporter CSV</Button>
         <Button variant="contained" startIcon={<Add fontSize="small" />} onClick={() => setDlg(true)}>Nouvelle Demande</Button>
+        <Box sx={{ flex: 1 }} />
+        <ToggleButtonGroup value={viewMode} exclusive onChange={(_, v) => v && setViewMode(v)} size="small" sx={{ '& .MuiToggleButton-root': { px: 2, py: 0.5, border: '1px solid', borderColor: 'divider', '&.Mui-selected': { bgcolor: '#0D7C66', color: 'white', '&:hover': { bgcolor: '#0a6b58' } } } }}>
+          <ToggleButton value="table" sx={{ gap: 0.5 }}><ViewList sx={{ fontSize: 18 }} /><Typography variant="caption" sx={{ fontSize: '0.7rem' }}>Tableau</Typography></ToggleButton>
+          <ToggleButton value="kanban" sx={{ gap: 0.5 }}><ViewKanban sx={{ fontSize: 18 }} /><Typography variant="caption" sx={{ fontSize: '0.7rem' }}>Kanban</Typography></ToggleButton>
+        </ToggleButtonGroup>
       </Box>
       <Box sx={{ display: 'flex', gap: 2, mb: 3, flexWrap: 'wrap' }}>
         <KPICard titre="TOTAL DEMANDES" valeur={filtered.length} sousTexte={`${filtered.length} demande(s) enregistrée(s)`} />
@@ -356,6 +470,7 @@ export default function Demandes() {
         <FormControl size="small" sx={{ minWidth: 150 }}><Select value={filterStatut} onChange={e => { setFilterStatut(e.target.value); setPage(0); }} displayEmpty><MenuItem value="Tous">Tous les statuts</MenuItem>{nomenclatures.statut_demande.map(s => <MenuItem key={s} value={s}>{s}</MenuItem>)}</Select></FormControl>
         <FormControl size="small" sx={{ minWidth: 140 }}><Select value={filterPrio} onChange={e => { setFilterPrio(e.target.value); setPage(0); }} displayEmpty><MenuItem value="Tous">Toutes priorités</MenuItem>{nomenclatures.priorite.map(p => <MenuItem key={p} value={p}>{p}</MenuItem>)}</Select></FormControl>
       </Box>
+      {viewMode === 'table' ? (
       <Paper>
         <TableContainer><Table size="small">
           <TableHead><TableRow>
@@ -382,6 +497,9 @@ export default function Demandes() {
         </Table></TableContainer>
         <TablePagination component="div" count={filtered.length} page={page} onPageChange={(e, p) => setPage(p)} rowsPerPage={rpp} onRowsPerPageChange={e => { setRpp(parseInt(e.target.value, 10)); setPage(0); }} rowsPerPageOptions={[5, 10, 25]} labelRowsPerPage="Lignes par page" />
       </Paper>
+      ) : (
+        <KanbanBoard data={filtered} onStatutChange={handleStatutChange} onCardClick={setDrawerDemande} />
+      )}
 
       {/* Drawer détail */}
       <DemandeDrawer

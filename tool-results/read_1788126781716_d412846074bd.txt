@@ -1,0 +1,432 @@
+     1→import { useState, useMemo, useCallback } from 'react';
+     2→import { Box, Typography, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination, Chip, FormControl, Select, MenuItem, Tooltip, Paper, Drawer, Divider, IconButton, TextField, Badge, Avatar, List, ListItem, ListItemAvatar, ListItemText, LinearProgress, Alert, Snackbar, Stack } from '@mui/material';
+     3→import { Add, Download, Close, Send, CheckCircle, ArrowForward, Schedule, Business, Person, Edit, NoteAdd, History, TrendingUp, AssignmentTurnedIn, CalendarToday, AccountBalanceWallet, Timer } from '@mui/icons-material';
+     4→import KPICard from '../components/KPICard';
+     5→import AddDialog from '../components/AddDialog';
+     6→import { nomenclatures } from '../data/nomenclatures';
+     7→import { useNavigate } from 'react-router-dom';
+     8→
+     9→const formatFCFA = (a) => (!a && a !== 0) ? '—' : a.toLocaleString('fr-FR') + ' FCFA';
+    10→
+    11→const initialData = [
+    12→  { id:1, numero:'DR-2025-001', dateDemande:'15/01/2025', departement:'Restauration', posteRecherche:'Chef Cuisinier', typePoste:'Cadre', typeContrat:'CDI', effectif:1, motif:'Remplacement', dateBesoin:'01/02/2025', priorite:'Urgente', statut:'Pourvue', datePourvue:'15/03/2025', responsableDemande:'M. Nkoulou Paul', roleResponsable:'DRH', cabinetAgence:'HRC Cameroon', budgetSalaire:350000, coutRecrutement:150000, delai:30, notes:'Candidat interne recommandé', site:'Hôtel Sawa',
+    13→    historique:[
+    14→      {date:'15/01/2025', evenement:'Demande créée', auteur:'M. Nkoulou Paul', type:'creation'},
+    15→      {date:'16/01/2025', evenement:'Validation DRH', auteur:'DRH', type:'validation'},
+    16→      {date:'20/01/2025', evenement:'Mandat donné au cabinet HRC Cameroon', auteur:'DRH', type:'cabinet'},
+    17→      {date:'10/02/2025', evenement:'3 candidats reçus', auteur:'HRC Cameroon', type:'candidature'},
+    18→      {date:'01/03/2025', evenement:'Entretien final réalisé', auteur:'M. Nkoulou Paul', type:'entretien'},
+    19→      {date:'15/03/2025', evenement:'Poste pourvu — candidat retenu', auteur:'DRH', type:'pourvoi'},
+    20→    ],
+    21→    candidatsAssocies:[
+    22→      {nom:'Ndiaye Moussa', score:18, etape:'Sélectionné', source:'Cooptation'},
+    23→      {nom:'Fotso Amandine', score:14, etape:'Rejeté', source:'Site web'},
+    24→      {nom:'Nganou André', score:11, etape:'Rejeté', source:'Indeed'},
+    25→    ]
+    26→  },
+    27→  { id:2, numero:'DR-2025-002', dateDemande:'20/01/2025', departement:'Hebergement', posteRecherche:'Réceptionniste Nuit', typePoste:'Operationnel', typeContrat:'CDD', effectif:2, motif:'Saisonnalite', dateBesoin:'01/03/2025', priorite:'Haute', statut:'En cours', datePourvue:'', responsableDemande:'Mme. Fotso Marie', roleResponsable:'Chef de Departement', cabinetAgence:'', budgetSalaire:180000, coutRecrutement:80000, delai:45, notes:'Recrutement interne en cours', site:'Hôtel Sawa',
+    28→    historique:[
+    29→      {date:'20/01/2025', evenement:'Demande créée', auteur:'Mme. Fotso Marie', type:'creation'},
+    30→      {date:'22/01/2025', evenement:'Validation DRH Adjoint', auteur:'DRH Adjoint', type:'validation'},
+    31→      {date:'01/02/2025', evenement:'Offre publiée sur les canaux', auteur:'Service RH', type:'publication'},
+    32→      {date:'15/02/2025', evenement:'5 CVs reçus — présélection en cours', auteur:'Service RH', type:'candidature'},
+    33→    ],
+    34→    candidatsAssocies:[
+    35→      {nom:'Mebara Nadège', score:17, etape:'Entretien HR', source:'Site web'},
+    36→      {nom:'Tabi Sandrine', score:15, etape:'CV reçu', source:'Site web'},
+    37→      {nom:'Bikay Jean-Pierre', score:14, etape:'Test technique', source:'LinkedIn'},
+    38→      {nom:'Eyenga Clarisse', score:null, etape:'CV reçu', source:'Cooptation'},
+    39→      {nom:'Fotso Amandine', score:null, etape:'CV reçu', source:'LinkedIn'},
+    40→    ]
+    41→  },
+    42→  { id:3, numero:'DR-2025-003', dateDemande:'25/01/2025', departement:'Finance & Comptabilite', posteRecherche:'Comptable Senior', typePoste:'Cadre', typeContrat:'CDI', effectif:1, motif:'Creation de poste', dateBesoin:'01/04/2025', priorite:'Moyenne', statut:'Validée', datePourvue:'', responsableDemande:'M. Tchouankou Jean', roleResponsable:'DRH Adjoint', cabinetAgence:'Activa RH', budgetSalaire:400000, coutRecrutement:250000, delai:60, notes:'Recherche spécialisée', site:'Annexe (Yaoundé)',
+    43→    historique:[
+    44→      {date:'25/01/2025', evenement:'Demande créée', auteur:'M. Tchouankou Jean', type:'creation'},
+    45→      {date:'28/01/2025', evenement:'Validation DRH', auteur:'DRH', type:'validation'},
+    46→      {date:'05/02/2025', evenement:'Cabinet Activa RH mandaté', auteur:'DRH', type:'cabinet'},
+    47→    ],
+    48→    candidatsAssocies:[
+    49→      {nom:'Kamga Blaise', score:null, etape:'En attente cabinet', source:'Cabinet'},
+    50→    ]
+    51→  },
+    52→  { id:4, numero:'DR-2025-004', dateDemande:'01/02/2025', departement:'Service Client', posteRecherche:'Agent Accueil', typePoste:'Operationnel', typeContrat:'CDD', effectif:1, motif:'Surcharge', dateBesoin:'15/02/2025', priorite:'Haute', statut:'Pourvue', datePourvue:'10/03/2025', responsableDemande:'Mme. Eyenga Clarisse', roleResponsable:'Chef de Service', cabinetAgence:'Interne (sans cabinet)', budgetSalaire:150000, coutRecrutement:25000, delai:15, notes:'Recrutement rapide réussi', site:'Hôtel Sawa',
+    53→    historique:[
+    54→      {date:'01/02/2025', evenement:'Demande créée', auteur:'Mme. Eyenga Clarisse', type:'creation'},
+    55→      {date:'02/02/2025', evenement:'Validation rapide — urgence', auteur:'DRH', type:'validation'},
+    56→      {date:'15/02/2025', evenement:'Candidat identifié en interne', auteur:'Service RH', type:'candidature'},
+    57→      {date:'10/03/2025', evenement:'Poste pourvu', auteur:'DRH', type:'pourvoi'},
+    58→    ],
+    59→    candidatsAssocies:[
+    60→      {nom:'Ateba Chantal', score:16, etape:'Sélectionné', source:'Interne'},
+    61→    ]
+    62→  },
+    63→  { id:5, numero:'DR-2025-005', dateDemande:'05/02/2025', departement:'Securite', posteRecherche:'Agent de Sécurité', typePoste:'Operationnel', typeContrat:'CDD', effectif:3, motif:'Remplacement', dateBesoin:'01/03/2025', priorite:'Moyenne', statut:'En attente', datePourvue:'', responsableDemande:'M. Nganou André', roleResponsable:'Responsable de Pole', cabinetAgence:'', budgetSalaire:120000, coutRecrutement:45000, delai:30, notes:'', site:'Siège (Douala)',
+    64→    historique:[
+    65→      {date:'05/02/2025', evenement:'Demande créée', auteur:'M. Nganou André', type:'creation'},
+    66→    ],
+    67→    candidatsAssocies:[]
+    68→  },
+    69→  { id:6, numero:'DR-2025-006', dateDemande:'10/02/2025', departement:'Informatique', posteRecherche:'Développeur Full Stack', typePoste:'Cadre', typeContrat:'CDI', effectif:1, motif:'Creation de poste', dateBesoin:'01/05/2025', priorite:'Basse', statut:'En attente', datePourvue:'', responsableDemande:'M. Kamga Blaise', roleResponsable:'Directeur Adjoint', cabinetAgence:'Skillmatch Africa', budgetSalaire:500000, coutRecrutement:300000, delai:90, notes:'Profil rare, cabinet mandaté', site:'Siège (Douala)',
+    70→    historique:[
+    71→      {date:'10/02/2025', evenement:'Demande créée', auteur:'M. Kamga Blaise', type:'creation'},
+    72→      {date:'12/02/2025', evenement:'En attente validation direction', auteur:'Directeur Adjoint', type:'validation'},
+    73→    ],
+    74→    candidatsAssocies:[
+    75→      {nom:'Nkoulou Brandon', score:10, etape:'Test technique', source:'Site web'},
+    76→    ]
+    77→  },
+    78→  { id:7, numero:'DR-2025-007', dateDemande:'15/02/2025', departement:'Marketing & Communication', posteRecherche:'Community Manager', typePoste:'Agent de maitrise', typeContrat:'CDI', effectif:1, motif:'Surcharge', dateBesoin:'01/03/2025', priorite:'Haute', statut:'En cours', datePourvue:'', responsableDemande:'Mme. Mebara Nadège', roleResponsable:'Chef de Departement', cabinetAgence:'', budgetSalaire:250000, coutRecrutement:60000, delai:20, notes:'', site:'Siège (Douala)',
+    79→    historique:[
+    80→      {date:'15/02/2025', evenement:'Demande créée', auteur:'Mme. Mebara Nadège', type:'creation'},
+    81→      {date:'16/02/2025', evenement:'Validée par DRH', auteur:'DRH', type:'validation'},
+    82→      {date:'20/02/2025', evenement:'Offre publiée — LinkedIn + Site web', auteur:'Service RH', type:'publication'},
+    83→      {date:'25/02/2025', evenement:'12 CVs reçus', auteur:'Service RH', type:'candidature'},
+    84→    ],
+    85→    candidatsAssocies:[
+    86→      {nom:'Eyenga Clarisse', score:null, etape:'CV reçu', source:'Cooptation'},
+    87→      {nom:'Tabi Sandrine', score:15, etape:'Entretien HR', source:'Site web'},
+    88→    ]
+    89→  },
+    90→  { id:8, numero:'DR-2025-008', dateDemande:'20/02/2025', departement:'Logistique & Approvisionnement', posteRecherche:'Chef Approvisionnement', typePoste:'Cadre', typeContrat:'CDI', effectif:1, motif:'Creation de poste', dateBesoin:'01/06/2025', priorite:'Moyenne', statut:'Validée', datePourvue:'', responsableDemande:'M. Ngo Ndobo Alain', roleResponsable:'DRH', cabinetAgence:'Michael Page Cameroon', budgetSalaire:450000, coutRecrutement:200000, delai:75, notes:'Processus en cours avec cabinet', site:'Siège (Douala)',
+    91→    historique:[
+    92→      {date:'20/02/2025', evenement:'Demande créée', auteur:'M. Ngo Ndobo Alain', type:'creation'},
+    93→      {date:'22/02/2025', evenement:'Validation DRH', auteur:'DRH', type:'validation'},
+    94→      {date:'01/03/2025', evenement:'Cabinet Michael Page mandaté', auteur:'DRH', type:'cabinet'},
+    95→    ],
+    96→    candidatsAssocies:[]
+    97→  },
+    98→  { id:9, numero:'DR-2025-009', dateDemande:'01/03/2025', departement:'Audiovisuel', posteRecherche:'Technicien Audiovisuel', typePoste:'Agent de maitrise', typeContrat:'CDD', effectif:1, motif:'', dateBesoin:'15/03/2025', priorite:'Urgente', statut:'Annulee', datePourvue:'', responsableDemande:'M. Tabe Arnaud', roleResponsable:'Superviseur', cabinetAgence:'', budgetSalaire:200000, coutRecrutement:0, delai:30, notes:'Poste annulé faute de budget', site:'Campus Formation',
+    99→    historique:[
+   100→      {date:'01/03/2025', evenement:'Demande créée', auteur:'M. Tabe Arnaud', type:'creation'},
+   101→      {date:'05/03/2025', evenement:'Demande annulée — budget insuffisant', auteur:'Direction', type:'annulation'},
+   102→    ],
+   103→    candidatsAssocies:[]
+   104→  },
+   105→  { id:10, numero:'DR-2025-010', dateDemande:'05/03/2025', departement:'Lingerie', posteRecherche:'Agent de Blanchisserie', typePoste:'Operationnel', typeContrat:'CDD', effectif:2, motif:'Saisonnalite', dateBesoin:'01/04/2025', priorite:'Basse', statut:'En attente', datePourvue:'', responsableDemande:'Mme. Ateba Chantal', roleResponsable:'Chef de Service', cabinetAgence:'', budgetSalaire:100000, coutRecrutement:30000, delai:30, notes:'', site:'Hôtel Sawa',
+   106→    historique:[
+   107→      {date:'05/03/2025', evenement:'Demande créée', auteur:'Mme. Ateba Chantal', type:'creation'},
+   108→    ],
+   109→    candidatsAssocies:[]
+   110→  },
+   111→];
+   112→
+   113→const prioriteColor = { 'Urgente':'error', 'Haute':'warning', 'Moyenne':'info', 'Basse':'default' };
+   114→const statutColor = { 'Pourvue':'success', 'En cours':'warning', 'Annulee':'error', 'Validée':'info', 'En attente':'default' };
+   115→const histIcon = { creation:'Add', validation:'CheckCircle', cabinet:'Business', publication:'Send', candidature:'Person', entretien:'AssignmentTurnedIn', pourvoi:'CheckCircle', annulation:'Close' };
+   116→const histColor = { creation:'#1976d2', validation:'#2e7d32', cabinet:'#7b1fa2', publication:'#0D7C66', candidature:'#f57f17', entretien:'#1565c0', pourvoi:'#2e7d32', annulation:'#d32f2f' };
+   117→
+   118→/* ═══ TABLEAU SIMPLIFIÉ (colonnes principales) ═══ */
+   119→const tableCols = [
+   120→  { key: 'numero', label: 'N°', width: 120 },
+   121→  { key: 'dateDemande', label: 'Date', width: 100 },
+   122→  { key: 'departement', label: 'Département', width: 140, chip: true },
+   123→  { key: 'posteRecherche', label: 'Poste', width: 200 },
+   124→  { key: 'priorite', label: 'Priorité', width: 100, chipColor: prioriteColor },
+   125→  { key: 'statut', label: 'Statut', width: 110, chipColor: statutColor },
+   126→  { key: 'responsableDemande', label: 'Responsable', width: 160 },
+   127→];
+   128→
+   129→/* ═══ DRAWER DÉTAIL LATÉRAL ═══ */
+   130→function DemandeDrawer({ demande, open, onClose, onStatutChange, onAddNote }) {
+   131→  const [newNote, setNewNote] = useState('');
+   132→  const [editingNote, setEditingNote] = useState(false);
+   133→  const navigate = useNavigate();
+   134→
+   135→  if (!demande) return null;
+   136→
+   137→  const d = demande;
+   138→  const joursEcoules = Math.floor((new Date() - new Date(d.dateDemande.split('/').reverse().join('-'))) / 86400000);
+   139→  const delaiPct = d.delai > 0 ? Math.min(100, Math.round((joursEcoules / d.delai) * 100)) : 0;
+   140→  const delaiColor = delaiPct >= 100 ? '#d32f2f' : delaiPct >= 75 ? '#f57f17' : '#2e7d32';
+   141→  const isClosed = d.statut === 'Pourvue' || d.statut === 'Annulee';
+   142→
+   143→  const handleSaveNote = () => {
+   144→    if (newNote.trim()) { onAddNote(d.id, newNote.trim()); setNewNote(''); setEditingNote(false); }
+   145→  };
+   146→
+   147→  return (
+   148→    <Drawer anchor="right" open={open} onClose={onClose} PaperProps={{ sx: { width: { xs: '100%', sm: 520 }, p: 0 } }}>
+   149→      {/* Header */}
+   150→      <Box sx={{ p: 2.5, pb: 2, background: 'linear-gradient(135deg, #0D7C66 0%, #1976d2 100%)', color: 'white' }}>
+   151→        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+   152→          <Box sx={{ flex: 1, minWidth: 0 }}>
+   153→            <Typography variant="overline" sx={{ opacity: 0.8, letterSpacing: 1 }}>{d.numero}</Typography>
+   154→            <Typography variant="h6" fontWeight="bold" sx={{ mt: 0.3, lineHeight: 1.2 }}>{d.posteRecherche}</Typography>
+   155→            <Box sx={{ display: 'flex', gap: 0.5, mt: 1, flexWrap: 'wrap' }}>
+   156→              <Chip label={d.departement} size="small" sx={{ bgcolor: 'rgba(255,255,255,0.2)', color: 'white', fontWeight: 600 }} />
+   157→              <Chip label={d.priorite} size="small" color={prioriteColor[d.priorite]} sx={{ fontWeight: 600 }} />
+   158→              <Chip label={d.statut} size="small" color={statutColor[d.statut]} sx={{ fontWeight: 600 }} />
+   159→            </Box>
+   160→          </Box>
+   161→          <IconButton onClick={onClose} sx={{ color: 'white' }}><Close /></IconButton>
+   162→        </Box>
+   163→      </Box>
+   164→
+   165→      <Box sx={{ overflow: 'auto', height: 'calc(100vh - 180px)', px: 2.5, py: 2 }}>
+   166→        {/* Indicateurs clés */}
+   167→        <Stack direction="row" spacing={1.5} sx={{ mb: 2.5 }}>
+   168→          <Paper variant="outlined" sx={{ flex: 1, p: 1.5, textAlign: 'center' }}>
+   169→            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 0.5, mb: 0.3 }}><CalendarToday sx={{ fontSize: 14, color: 'text.secondary' }} /><Typography variant="caption" color="text.secondary">Demandé le</Typography></Box>
+   170→            <Typography variant="body2" fontWeight="bold">{d.dateDemande}</Typography>
+   171→          </Paper>
+   172→          <Paper variant="outlined" sx={{ flex: 1, p: 1.5, textAlign: 'center' }}>
+   173→            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 0.5, mb: 0.3 }}><Schedule sx={{ fontSize: 14, color: 'text.secondary' }} /><Typography variant="caption" color="text.secondary">Besoin le</Typography></Box>
+   174→            <Typography variant="body2" fontWeight="bold">{d.dateBesoin}</Typography>
+   175→          </Paper>
+   176→        </Stack>
+   177→
+   178→        {/* Jauge délai */}
+   179→        <Paper variant="outlined" sx={{ p: 2, mb: 2.5 }}>
+   180→          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+   181→            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}><Timer sx={{ fontSize: 16 }} /><Typography variant="subtitle2" fontWeight="bold">Délai</Typography></Box>
+   182→            <Typography variant="caption" sx={{ color: delaiColor, fontWeight: 700 }}>{joursEcoules}j / {d.delai}j</Typography>
+   183→          </Box>
+   184→          <LinearProgress variant="determinate" value={delaiPct} sx={{ height: 8, borderRadius: 4, bgcolor: '#f0f0f0', '& .MuiLinearProgress-bar': { bgcolor: delaiColor, borderRadius: 4 } }} />
+   185→          {delaiPct >= 100 && <Typography variant="caption" color="error" sx={{ mt: 0.5, display: 'block' }}>Délai dépassé de {joursEcoules - d.delai} jour(s)</Typography>}
+   186→        </Paper>
+   187→
+   188→        {/* Budget */}
+   189→        <Paper variant="outlined" sx={{ p: 2, mb: 2.5 }}>
+   190→          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mb: 1.5 }}><AccountBalanceWallet sx={{ fontSize: 16 }} /><Typography variant="subtitle2" fontWeight="bold">Budget & Coûts</Typography></Box>
+   191→          <Box sx={{ display: 'flex', gap: 2 }}>
+   192→            <Box sx={{ flex: 1 }}><Typography variant="caption" color="text.secondary">Salaire brut</Typography><Typography variant="body2" fontWeight="bold">{formatFCFA(d.budgetSalaire)}</Typography></Box>
+   193→            <Box sx={{ flex: 1 }}><Typography variant="caption" color="text.secondary">Coût recrutement</Typography><Typography variant="body2" fontWeight="bold" color={d.coutRecrutement > 200000 ? 'error' : 'text.primary'}>{formatFCFA(d.coutRecrutement)}</Typography></Box>
+   194→          </Box>
+   195→          <Divider sx={{ my: 1.5 }} />
+   196→          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}><Typography variant="caption" color="text.secondary">Coût total estimé</Typography><Typography variant="subtitle2" fontWeight="bold" color="#0D7C66">{formatFCFA((d.budgetSalaire || 0) + (d.coutRecrutement || 0))}</Typography></Box>
+   197→        </Paper>
+   198→
+   199→        {/* Infos poste */}
+   200→        <Paper variant="outlined" sx={{ p: 2, mb: 2.5 }}>
+   201→          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mb: 1.5 }}><TrendingUp sx={{ fontSize: 16 }} /><Typography variant="subtitle2" fontWeight="bold">Détails du poste</Typography></Box>
+   202→          <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1.5 }}>
+   203→            {[
+   204→              ['Type de poste', d.typePoste],
+   205→              ['Type de contrat', d.typeContrat],
+   206→              ['Effectif requis', d.effectif + ''],
+   207→              ['Motif', d.motif || '—'],
+   208→              ['Site', d.site || '—'],
+   209→              ['Cabinet', d.cabinetAgence || 'Non assigné'],
+   210→            ].map(([label, val]) => (
+   211→              <Box key={label}><Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.7rem' }}>{label}</Typography><Typography variant="body2" fontWeight={500} sx={{ fontSize: '0.85rem' }}>{val}</Typography></Box>
+   212→            ))}
+   213→          </Box>
+   214→          <Divider sx={{ my: 1.5 }} />
+   215→          <Box><Typography variant="caption" color="text.secondary">Responsable</Typography><Typography variant="body2" fontWeight={500}>{d.responsableDemande} <Typography component="span" variant="caption" color="text.secondary">— {d.roleResponsable}</Typography></Typography></Box>
+   216→        </Paper>
+   217→
+   218→        {/* Candidats associés */}
+   219→        <Paper variant="outlined" sx={{ p: 2, mb: 2.5 }}>
+   220→          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
+   221→            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}><Person sx={{ fontSize: 16 }} /><Typography variant="subtitle2" fontWeight="bold">Candidats ({d.candidatsAssocies?.length || 0})</Typography></Box>
+   222→            <Button size="small" endIcon={<ArrowForward sx={{ fontSize: 14 }} />} onClick={() => { onClose(); navigate('/candidats'); }} sx={{ fontSize: '0.75rem' }}>Voir tous</Button>
+   223→          </Box>
+   224→          {d.candidatsAssocies?.length > 0 ? (
+   225→            <List dense disablePadding>
+   226→              {d.candidatsAssocies.map((c, i) => {
+   227→                const scoreColor = c.score === null ? 'default' : c.score >= 16 ? 'success' : c.score >= 12 ? 'warning' : 'error';
+   228→                const etapeColor = c.etape === 'Sélectionné' ? 'success' : ['Rejeté', 'Annulé'].includes(c.etape) ? 'error' : 'default';
+   229→                return (
+   230→                  <ListItem key={i} sx={{ px: 0, py: 0.5, borderRadius: 1, '&:hover': { bgcolor: 'rgba(0,0,0,0.02)' }, cursor: 'pointer' }} onClick={() => { onClose(); navigate(`/candidats?focus=${c.nom}`); }}>
+   231→                    <ListItemAvatar><Avatar sx={{ width: 32, height: 32, fontSize: '0.75rem', bgcolor: '#0D7C66' }}>{c.nom.split(' ').map(n => n[0]).join('')}</Avatar></ListItemAvatar>
+   232→                    <ListItemText primary={<Typography variant="body2" fontWeight={500} sx={{ fontSize: '0.85rem' }}>{c.nom}</Typography>} secondary={<Box sx={{ display: 'flex', gap: 0.5, mt: 0.3 }}><Chip label={c.etape} size="small" color={etapeColor} sx={{ height: 20, fontSize: '0.65rem' }} /><Chip label={c.score !== null ? `${c.score}/20` : '—'} size="small" color={scoreColor} variant="outlined" sx={{ height: 20, fontSize: '0.65rem' }} /><Chip label={c.source} size="small" variant="outlined" sx={{ height: 20, fontSize: '0.65rem' }} /></Box>} />
+   233→                  </ListItem>
+   234→                );
+   235→              })}
+   236→            </List>
+   237→          ) : <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'center', py: 2 }}>Aucun candidat associé</Typography>}
+   238→        </Paper>
+   239→
+   240→        {/* Historique / Timeline */}
+   241→        <Paper variant="outlined" sx={{ p: 2, mb: 2.5 }}>
+   242→          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mb: 1.5 }}><History sx={{ fontSize: 16 }} /><Typography variant="subtitle2" fontWeight="bold">Historique ({d.historique?.length || 0})</Typography></Box>
+   243→          {d.historique?.length > 0 ? (
+   244→            <Box sx={{ position: 'relative', ml: 1.5, pl: 3, borderLeft: '2px solid #e0e0e0' }}>
+   245→              {d.historique.map((h, i) => (
+   246→                <Box key={i} sx={{ position: 'relative', pb: i < d.historique.length - 1 ? 2 : 0 }}>
+   247→                  <Box sx={{ position: 'absolute', left: -25, top: 2, width: 12, height: 12, borderRadius: '50%', bgcolor: histColor[h.type] || '#9e9e9e', border: '2px solid white', boxShadow: '0 0 0 1px ' + (histColor[h.type] || '#9e9e') }} />
+   248→                  <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.7rem' }}>{h.date}</Typography>
+   249→                  <Typography variant="body2" fontWeight={500} sx={{ fontSize: '0.85rem' }}>{h.evenement}</Typography>
+   250→                  <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.7rem' }}>par {h.auteur}</Typography>
+   251→                </Box>
+   252→              ))}
+   253→            </Box>
+   254→          ) : <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'center', py: 2 }}>Aucun historique</Typography>}
+   255→        </Paper>
+   256→
+   257→        {/* Notes */}
+   258→        <Paper variant="outlined" sx={{ p: 2, mb: 2.5 }}>
+   259→          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+   260→            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}><NoteAdd sx={{ fontSize: 16 }} /><Typography variant="subtitle2" fontWeight="bold">Notes</Typography></Box>
+   261→            {!editingNote && <IconButton size="small" onClick={() => setEditingNote(true)}><Edit sx={{ fontSize: 16 }} /></IconButton>}
+   262→          </Box>
+   263→          {d.notes ? <Typography variant="body2" sx={{ mb: 1.5, color: 'text.secondary', bgcolor: '#f5f5f5', p: 1.5, borderRadius: 1, fontSize: '0.85rem' }}>{d.notes}</Typography> : !editingNote && <Typography variant="body2" color="text.secondary" sx={{ mb: 1.5 }}>Aucune note</Typography>}
+   264→          {editingNote && (
+   265→            <Box sx={{ display: 'flex', gap: 1, mt: 1 }}>
+   266→              <TextField fullWidth size="small" placeholder="Ajouter une note..." value={newNote} onChange={e => setNewNote(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleSaveNote()} multiline rows={2} sx={{ '& textarea': { fontSize: '0.85rem' } }} />
+   267→              <Button variant="contained" size="small" onClick={handleSaveNote} disabled={!newNote.trim()} sx={{ minWidth: 0, px: 2 }}><Send sx={{ fontSize: 16 }} /></Button>
+   268→            </Box>
+   269→          )}
+   270→        </Paper>
+   271→      </Box>
+   272→
+   273→      {/* Footer actions */}
+   274→      {!isClosed && (
+   275→        <Box sx={{ p: 2, borderTop: '1px solid', borderColor: 'divider', bgcolor: 'background.paper', display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+   276→          <FormControl size="small" sx={{ minWidth: 160 }}>
+   277→            <Select value={d.statut} onChange={e => onStatutChange(d.id, e.target.value)} sx={{ fontSize: '0.8rem' }}>
+   278→              {nomenclatures.statut_demande.map(s => <MenuItem key={s} value={s}>{s}</MenuItem>)}
+   279→            </Select>
+   280→          </FormControl>
+   281→          <Button variant="contained" size="small" startIcon={<CheckCircle sx={{ fontSize: 16 }} />} onClick={() => onStatutChange(d.id, 'Pourvue')} sx={{ bgcolor: '#2e7d32', '&:hover': { bgcolor: '#1b5e20' } }}>Marquer pourvue</Button>
+   282→          <Button variant="outlined" size="small" startIcon={<Business sx={{ fontSize: 16 }} />} onClick={() => { onClose(); navigate('/cabinets'); }}>Cabinet</Button>
+   283→        </Box>
+   284→      )}
+   285→    </Drawer>
+   286→  );
+   287→}
+   288→
+   289→/* ═══ PAGE PRINCIPALE ═══ */
+   290→export default function Demandes() {
+   291→  const [data, setData] = useState(initialData);
+   292→  const [dlg, setDlg] = useState(false);
+   293→  const [filterDep, setFilterDep] = useState('Tous');
+   294→  const [filterStatut, setFilterStatut] = useState('Tous');
+   295→  const [filterPrio, setFilterPrio] = useState('Tous');
+   296→  const [page, setPage] = useState(0);
+   297→  const [rpp, setRpp] = useState(10);
+   298→  const [drawerDemande, setDrawerDemande] = useState(null);
+   299→  const [snack, setSnack] = useState(null);
+   300→
+   301→  const filtered = useMemo(() => data.filter(d =>
+   302→    (filterDep === 'Tous' || d.departement === filterDep) &&
+   303→    (filterStatut === 'Tous' || d.statut === filterStatut) &&
+   304→    (filterPrio === 'Tous' || d.priorite === filterPrio)
+   305→  ), [data, filterDep, filterStatut, filterPrio]);
+   306→
+   307→  const budgetTotal = useMemo(() => filtered.reduce((s, d) => s + (d.budgetSalaire || 0), 0), [filtered]);
+   308→
+   309→  const handleStatutChange = useCallback((id, newStatut) => {
+   310→    setData(prev => prev.map(d => {
+   311→      if (d.id !== id) return d;
+   312→      const today = new Date().toLocaleDateString('fr-FR');
+   313→      const newHist = [...(d.historique || []), { date: today, evenement: `Statut changé : ${d.statut} → ${newStatut}`, auteur: 'Utilisateur', type: newStatut === 'Pourvue' ? 'pourvoi' : 'validation' }];
+   314→      return { ...d, statut: newStatut, historique: newHist, ...(newStatut === 'Pourvue' ? { datePourvue: today } : {}) };
+   315→    }));
+   316→    setDrawerDemande(prev => prev && prev.id === id ? { ...prev, statut: newStatut } : prev);
+   317→    setSnack({ msg: `Statut mis à jour : ${newStatut}`, severity: 'success' });
+   318→  }, []);
+   319→
+   320→  const handleAddNote = useCallback((id, note) => {
+   321→    setData(prev => prev.map(d => {
+   322→      if (d.id !== id) return d;
+   323→      const today = new Date().toLocaleDateString('fr-FR');
+   324→      const newHist = [...(d.historique || []), { date: today, evenement: `Note ajoutée : ${note.substring(0, 50)}${note.length > 50 ? '...' : ''}`, auteur: 'Utilisateur', type: 'creation' }];
+   325→      return { ...d, notes: (d.notes ? d.notes + '\n' : '') + `[${today}] ${note}`, historique: newHist };
+   326→    }));
+   327→    setDrawerDemande(prev => prev && prev.id === id ? { ...prev, notes: (prev.notes ? prev.notes + '\n' : '') + `[${new Date().toLocaleDateString('fr-FR')}] ${note}` } : prev);
+   328→    setSnack({ msg: 'Note ajoutée', severity: 'info' });
+   329→  }, []);
+   330→
+   331→  const handleExport = useCallback(() => {
+   332→    const cols = ['N°','Date','Département','Poste','Type Poste','Type Contrat','Effectif','Motif','Date Besoin','Priorité','Statut','Date Pourvue','Responsable','Rôle','Cabinet','Budget Salaire','Coût Recrutement','Délai (j)','Site','Notes'];
+   333→    const rows = [cols.join(';')];
+   334→    filtered.forEach(d => rows.push([d.numero,d.dateDemande,d.departement,d.posteRecherche,d.typePoste,d.typeContrat,d.effectif,d.motif,d.dateBesoin,d.priorite,d.statut,d.datePourvue,d.responsableDemande,d.roleResponsable,d.cabinetAgence,d.budgetSalaire,d.coutRecrutement,d.delai,d.site,d.notes].map(v => `"${v}"`).join(';')));
+   335→    const blob = new Blob(['\uFEFF' + rows.join('\n')], { type: 'text/csv;charset=utf-8' });
+   336→    const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = 'demandes_recrutement.csv'; a.click(); URL.revokeObjectURL(url);
+   337→    setSnack({ msg: 'Export CSV téléchargé', severity: 'info' });
+   338→  }, [filtered]);
+   339→
+   340→  return (
+   341→    <Box>
+   342→      <Typography variant="h5" fontWeight="bold">Demandes de Recrutement</Typography>
+   343→      <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>{filtered.length} demande(s) de recrutement</Typography>
+   344→      <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
+   345→        <Button variant="outlined" startIcon={<Download fontSize="small" />} onClick={handleExport}>Exporter CSV</Button>
+   346→        <Button variant="contained" startIcon={<Add fontSize="small" />} onClick={() => setDlg(true)}>Nouvelle Demande</Button>
+   347→      </Box>
+   348→      <Box sx={{ display: 'flex', gap: 2, mb: 3, flexWrap: 'wrap' }}>
+   349→        <KPICard titre="TOTAL DEMANDES" valeur={filtered.length} sousTexte={`${filtered.length} demande(s) enregistrée(s)`} />
+   350→        <KPICard titre="POURVUES" valeur={filtered.filter(d => d.statut === 'Pourvue').length} sousTexte={`${Math.round(filtered.filter(d => d.statut === 'Pourvue').length / Math.max(filtered.length, 1) * 100)}% du total`} />
+   351→        <KPICard titre="EN COURS" valeur={filtered.filter(d => ['En cours', 'Validée', 'En attente'].includes(d.statut)).length} sousTexte="demandes actives" />
+   352→        <KPICard titre="BUDGET TOTAL" valeur={formatFCFA(budgetTotal)} sousTexte="budget cumulé" />
+   353→      </Box>
+   354→      <Box sx={{ display: 'flex', gap: 2, mb: 2, flexWrap: 'wrap' }}>
+   355→        <FormControl size="small" sx={{ minWidth: 180 }}><Select value={filterDep} onChange={e => { setFilterDep(e.target.value); setPage(0); }} displayEmpty><MenuItem value="Tous">Tous les départements</MenuItem>{nomenclatures.departement.map(d => <MenuItem key={d} value={d}>{d}</MenuItem>)}</Select></FormControl>
+   356→        <FormControl size="small" sx={{ minWidth: 150 }}><Select value={filterStatut} onChange={e => { setFilterStatut(e.target.value); setPage(0); }} displayEmpty><MenuItem value="Tous">Tous les statuts</MenuItem>{nomenclatures.statut_demande.map(s => <MenuItem key={s} value={s}>{s}</MenuItem>)}</Select></FormControl>
+   357→        <FormControl size="small" sx={{ minWidth: 140 }}><Select value={filterPrio} onChange={e => { setFilterPrio(e.target.value); setPage(0); }} displayEmpty><MenuItem value="Tous">Toutes priorités</MenuItem>{nomenclatures.priorite.map(p => <MenuItem key={p} value={p}>{p}</MenuItem>)}</Select></FormControl>
+   358→      </Box>
+   359→      <Paper>
+   360→        <TableContainer><Table size="small">
+   361→          <TableHead><TableRow>
+   362→            {tableCols.map(c => <TableCell key={c.key} sx={{ fontWeight: 'bold', bgcolor: '#f5f5f5', whiteSpace: 'nowrap', width: c.width }}>{c.label}</TableCell>)}
+   363→            <TableCell sx={{ fontWeight: 'bold', bgcolor: '#f5f5f5', width: 60 }}>Actions</TableCell>
+   364→          </TableRow></TableHead>
+   365→          <TableBody>
+   366→            {filtered.slice(page * rpp, page * rpp + rpp).map(row => (
+   367→              <TableRow key={row.id} hover sx={{ cursor: 'pointer' }} onClick={() => setDrawerDemande(row)}>
+   368→                {tableCols.map(c => (
+   369→                  <TableCell key={c.key} sx={{ whiteSpace: 'nowrap' }}>
+   370→                    {c.chip ? <Chip label={row[c.key]} size="small" variant="outlined" /> :
+   371→                     c.chipColor ? <Chip label={row[c.key]} size="small" color={c.chipColor[row[c.key]]} /> :
+   372→                     row[c.key]}
+   373→                  </TableCell>
+   374→                ))}
+   375→                <TableCell>
+   376→                  <Tooltip title="Ouvrir le détail"><IconButton size="small" onClick={e => { e.stopPropagation(); setDrawerDemande(row); }}><ArrowForward sx={{ fontSize: 16 }} /></IconButton></Tooltip>
+   377→                </TableCell>
+   378→              </TableRow>
+   379→            ))}
+   380→            {filtered.length === 0 && <TableRow><TableCell colSpan={tableCols.length + 1} align="center" sx={{ py: 4, color: 'text.secondary' }}>Aucune demande trouvée</TableCell></TableRow>}
+   381→          </TableBody>
+   382→        </Table></TableContainer>
+   383→        <TablePagination component="div" count={filtered.length} page={page} onPageChange={(e, p) => setPage(p)} rowsPerPage={rpp} onRowsPerPageChange={e => { setRpp(parseInt(e.target.value, 10)); setPage(0); }} rowsPerPageOptions={[5, 10, 25]} labelRowsPerPage="Lignes par page" />
+   384→      </Paper>
+   385→
+   386→      {/* Drawer détail */}
+   387→      <DemandeDrawer
+   388→        demande={drawerDemande}
+   389→        open={Boolean(drawerDemande)}
+   390→        onClose={() => setDrawerDemande(null)}
+   391→        onStatutChange={handleStatutChange}
+   392→        onAddNote={handleAddNote}
+   393→      />
+   394→
+   395→      <AddDialog open={dlg} onClose={() => setDlg(false)} title="Nouvelle Demande de Recrutement"
+   396→        fields={[
+   397→          {key: "posteRecherche", label: "Poste Recherché", required: true},
+   398→          {key: "departement", label: "Département", type: "select", options: nomenclatures.departement, required: true},
+   399→          {key: "typePoste", label: "Type Poste", type: "select", options: nomenclatures.type_poste, required: true},
+   400→          {key: "typeContrat", label: "Type Contrat", type: "select", options: nomenclatures.type_contrat, required: true},
+   401→          {key: "effectif", label: "Effectif Requis", type: "number"},
+   402→          {key: "motif", label: "Motif", type: "select", options: nomenclatures.motif},
+   403→          {key: "dateBesoin", label: "Date de Besoin", required: true},
+   404→          {key: "priorite", label: "Priorité", type: "select", options: nomenclatures.priorite, required: true},
+   405→          {key: "site", label: "Site", type: "select", options: nomenclatures.site},
+   406→          {key: "responsableDemande", label: "Responsable Demande", required: true},
+   407→          {key: "roleResponsable", label: "Rôle du Responsable", type: "select", options: nomenclatures.role_responsable},
+   408→          {key: "cabinetAgence", label: "Cabinet / Agence", type: "select", options: nomenclatures.cabinet_recrutement},
+   409→          {key: "budgetSalaire", label: "Budget Salaire (FCFA)", type: "number"},
+   410→          {key: "coutRecrutement", label: "Coût Recrutement (FCFA)", type: "number"},
+   411→          {key: "delai", label: "Délai (jours)", type: "number"},
+   412→          {key: "notes", label: "Notes", multiline: true},
+   413→        ]}
+   414→        onSubmit={(vals) => {
+   415→          const nid = data.length + 1;
+   416→          const today = new Date().toLocaleDateString('fr-FR');
+   417→          setData(prev => [...prev, {
+   418→            id: nid, numero: 'DR-2025-' + String(nid).padStart(3, '0'), dateDemande: today,
+   419→            statut: 'En attente', datePourvue: '',
+   420→            historique: [{ date: today, evenement: 'Demande créée', auteur: vals.responsableDemande || 'Utilisateur', type: 'creation' }],
+   421→            candidatsAssocies: [],
+   422→            site: vals.site || 'Non défini',
+   423→            ...vals
+   424→          }]);
+   425→        }}
+   426→      />
+   427→      <Snackbar open={Boolean(snack)} autoHideDuration={3000} onClose={() => setSnack(null)} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
+   428→        {snack && <Alert onClose={() => setSnack(null)} severity={snack.severity} variant="filled" sx={{ borderRadius: 2 }}>{snack.msg}</Alert>}
+   429→      </Snackbar>
+   430→    </Box>
+   431→  );
+   432→}
