@@ -14,6 +14,8 @@ import {
 } from '@mui/icons-material';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
+import { useRole, ROLES } from '../context/RoleContext';
+import { Person, BusinessCenter, AdminPanelSettings } from '@mui/icons-material';
 
 const notifIconMap = {
   person_add: <PersonIcon sx={{ fontSize: 18 }} />,
@@ -70,6 +72,10 @@ export default function Header({ title }) {
   const [actionsAnchor, setActionsAnchor] = useState(null);
   const [deadlineAnchor, setDeadlineAnchor] = useState(null);
   const [langAnchor, setLangAnchor] = useState(null);
+  const [roleAnchor, setRoleAnchor] = useState(null);
+
+  const { currentRole, changeRole } = useRole();
+  const roleIconMap = { person: <Person sx={{ fontSize: 16 }} />, business: <BusinessCenter sx={{ fontSize: 16 }} />, admin_panel_settings: <AdminPanelSettings sx={{ fontSize: 16 }} /> };
 
   const results = useMemo(() => search(query), [query, search]);
   const breadcrumb = useMemo(() => getBreadcrumb(location.pathname), [location.pathname, getBreadcrumb]);
@@ -402,6 +408,26 @@ export default function Header({ title }) {
 
             {/* S\u00e9parateur vertical */}
             <Divider orientation="vertical" flexItem sx={{ mx: 1, height: 22, borderColor: dividerClr }} />
+
+            {/* === Role Switcher === */}
+            <Tooltip title="Vue par rôle" arrow>
+              <Chip
+                icon={roleIconMap[currentRole.icon]}
+                label={currentRole.label}
+                size="small"
+                onClick={(e) => setRoleAnchor(e.currentTarget)}
+                onDelete={(e) => { e.stopPropagation(); const idx = ROLES.findIndex(r => r.key === currentRole.key); changeRole(ROLES[(idx + 1) % ROLES.length].key); }}
+                deleteIcon={<KeyboardArrowDown sx={{ fontSize: 14 }} />}
+                sx={{
+                  height: 26, fontSize: '0.7rem', fontWeight: 600, cursor: 'pointer',
+                  bgcolor: `${currentRole.color}18`, color: currentRole.color,
+                  border: `1px solid ${currentRole.color}40`,
+                  '& .MuiChip-icon': { color: currentRole.color },
+                  '& .MuiChip-deleteIcon': { color: currentRole.color },
+                  '&:hover': { bgcolor: `${currentRole.color}25` },
+                }}
+              />
+            </Tooltip>
 
             {/* === Groupe Notifications + Compte === */}
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.25 }}>
@@ -780,6 +806,48 @@ export default function Header({ title }) {
                     <CheckCircle sx={{ fontSize: 16, color: '#0D7C66', flexShrink: 0 }} />
                   )}
                 </Box>
+              </ListItemButton>
+            ))}
+          </List>
+        </Paper>
+      </Popover>
+
+      {/* Role Switcher Popover */}
+      <Popover
+        open={Boolean(roleAnchor)}
+        anchorEl={roleAnchor}
+        onClose={handleCloseAll}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+        disableAutoFocus
+        disableEnforceFocus
+        slotProps={{ paper: { sx: { mt: 0.5, borderRadius: 2, border: `1px solid ${borderClr}`, overflow: 'hidden' } } }}
+      >
+        <Paper sx={{ width: 260, bgcolor: paperBg }}>
+          <Box sx={{ px: 2, py: 1.5, borderBottom: `1px solid ${borderClr}` }}>
+            <Typography variant="subtitle2" fontWeight="bold" fontSize="0.82rem">Vue par rôle</Typography>
+            <Typography variant="caption" color="text.secondary" fontSize="0.65rem">Adapte le tableau de bord selon votre fonction</Typography>
+          </Box>
+          <List dense sx={{ py: 0.5 }}>
+            {ROLES.map((r) => (
+              <ListItemButton
+                key={r.key}
+                onClick={() => { changeRole(r.key); handleCloseAll(); }}
+                sx={{
+                  borderRadius: 1.5, mx: 1, my: 0.15, py: 1,
+                  bgcolor: currentRole.key === r.key ? `${r.color}12` : 'transparent',
+                  borderLeft: currentRole.key === r.key ? `3px solid ${r.color}` : '3px solid transparent',
+                  '&:hover': { bgcolor: hoverBg }, transition: 'all 0.15s',
+                }}
+              >
+                <ListItemIcon sx={{ minWidth: 36, color: r.color }}>{roleIconMap[r.icon]}</ListItemIcon>
+                <ListItemText
+                  primary={r.label}
+                  primaryTypographyProps={{ fontWeight: currentRole.key === r.key ? 600 : 400, fontSize: '0.8rem', color: currentRole.key === r.key ? r.color : headerColor }}
+                  secondary={r.desc}
+                  secondaryTypographyProps={{ variant: 'caption', fontSize: '0.65rem' }}
+                />
+                {currentRole.key === r.key && <CheckCircle sx={{ fontSize: 16, color: r.color }} />}
               </ListItemButton>
             ))}
           </List>
