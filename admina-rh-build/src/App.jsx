@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, useLocation, useNavigate } from 'react-ro
 import { Box } from '@mui/material';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
+import { AppProvider } from './context/AppContext';
 
 const TableauDeBord = lazy(() => import('./pages/TableauDeBord'));
 const Demandes = lazy(() => import('./pages/Demandes'));
@@ -45,7 +46,7 @@ function AppContent() {
   const [title, setTitle] = useState('Admina-RH');
   useEffect(() => { setTitle(titles[loc.pathname] || 'Admina-RH'); }, [loc]);
   return (
-    <>
+    <AppProvider>
       <Sidebar drawerWidth={dw} />
       <Header title={title} />
       <Box sx={{ ml: `${dw}px`, mt: '64px', p: 3, width: `calc(100% - ${dw}px)` }}>
@@ -85,7 +86,7 @@ function AppContent() {
           </Routes>
         </Suspense>
       </Box>
-    </>
+    </AppProvider>
   );
 }
 
