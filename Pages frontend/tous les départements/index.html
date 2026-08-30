@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admina_RH — SIRH Pro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 14px; }
+body { font-family: 'Inter', system-ui, -apple-system, sans-serif; background: #F8FAFC; color: #1E293B; display: flex; height: 100vh; overflow: hidden; }
+::-webkit-scrollbar { width: 5px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 3px; }
+
+/* ═══════ TOPBAR ═══════ */
+.topbar {
+  position: fixed; top: 0; left: 0; right: 0; height: 56px; background: white;
+  border-bottom: 1px solid #E2E8F0; display: flex; align-items: center;
+  padding: 0 28px; gap: 16px; z-index: 100;
+}
+.topbar-logo { display: flex; align-items: center; gap: 10px; }
+.topbar-logo .logo-mark { width: 32px; height: 32px; background: linear-gradient(135deg, #0D9488, #2DD4BF); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: .75rem; }
+.topbar-logo h1 { font-size: 1.05rem; font-weight: 700; color: #1E293B; letter-spacing: -.3px; }
+.topbar-logo h1 span { color: #0D9488; }
+.topbar-badges { display: flex; gap: 8px; margin-left: 12px; }
+.topbar-badge { display: inline-flex; align-items: center; gap: 5px; padding: 4px 12px; border-radius: 20px; border: 1px solid #E2E8F0; font-size: .7rem; font-weight: 500; color: #64748B; background: white; }
+.topbar-badge .dot { width: 6px; height: 6px; border-radius: 50%; }
+.topbar-badge .dot.green { background: #10B981; }
+.topbar-badge .dot.blue { background: #3B82F6; }
+.topbar-spacer { flex: 1; }
+
+/* Account Dropdown */
+.account-btn { position: relative; }
+.account-trigger { display: flex; align-items: center; gap: 8px; padding: 7px 16px; border-radius: 9px; border: 1px solid #E2E8F0; background: white; cursor: pointer; font-size: .82rem; font-weight: 600; color: #1E293B; transition: all .2s; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
+.account-trigger:hover { background: #F8FAFC; border-color: #CBD5E1; }
+.account-trigger .acc-arrow { font-size: .55rem; color: #94A3B8; transition: transform .2s; }
+.account-btn:hover .acc-arrow { transform: rotate(180deg); }
+.account-dropdown { position: absolute; top: calc(100% + 8px); right: 0; width: 290px; background: white; border: 1px solid #E2E8F0; border-radius: 14px; box-shadow: 0 20px 50px -12px rgba(0,0,0,.15); opacity: 0; visibility: hidden; transform: translateY(8px); transition: all .25s ease; z-index: 999; overflow: hidden; }
+.account-btn:hover .account-dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
+.account-dd-header { padding: 18px 18px 14px; background: linear-gradient(135deg, #0F172A, #1E293B); }
+.account-dd-header .name { color: white; font-size: .9rem; font-weight: 600; }
+.account-dd-header .email { color: rgba(255,255,255,.55); font-size: .72rem; margin-top: 3px; }
+.account-dd-menu { padding: 6px; }
+.account-dd-item { display: flex; align-items: center; gap: 11px; padding: 10px 12px; border-radius: 10px; cursor: pointer; transition: background .12s; }
+.account-dd-item:hover { background: #F1F5F9; }
+.account-dd-item .item-icon { width: 34px; height: 34px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: .95rem; flex-shrink: 0; }
+.account-dd-item .item-title { font-size: .82rem; font-weight: 500; }
+.account-dd-item .item-desc { font-size: .68rem; color: #94A3B8; margin-top: 1px; }
+.account-dd-divider { height: 1px; background: #F1F5F9; margin: 4px 12px; }
+.account-dd-item.danger .item-title { color: #EF4444; }
+.account-dd-item.danger:hover { background: #FEF2F2; }
+
+/* ═══════ SIDEBAR ═══════ */
+.sidebar {
+  width: 260px; min-width: 260px; background: white; height: 100vh; display: flex;
+  flex-direction: column; border-right: 1px solid #E2E8F0; z-index: 110;
+  box-shadow: 2px 0 8px rgba(0,0,0,.03); overflow: hidden;
+}
+.sidebar-header { padding: 20px 20px 16px; border-bottom: 1px solid #F1F5F9; }
+.sidebar-header .version { font-size: .65rem; color: #94A3B8; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600; margin-bottom: 12px; }
+.sidebar-header .summary-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; }
+.sidebar-header .sum-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: .95rem; }
+.sidebar-header .sum-val { font-size: 1.2rem; font-weight: 700; color: #1E293B; line-height: 1; }
+.sidebar-header .sum-lbl { font-size: .68rem; color: #94A3B8; }
+.sidebar-nav { flex: 1; overflow-y: auto; padding: 12px 0; }
+.sidebar-label { padding: 0 20px; font-size: .65rem; color: #94A3B8; text-transform: uppercase; letter-spacing: 1.2px; font-weight: 600; margin-bottom: 8px; }
+.nav-item { display: flex; align-items: center; gap: 12px; padding: 10px 20px; cursor: pointer; transition: all .15s; border-left: 3px solid transparent; }
+.nav-item:hover { background: #F8FAFC; }
+.nav-item.active { background: #F0FDFA; border-left-color: #0D9488; }
+.nav-item .ni-icon { width: 34px; height: 34px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
+.nav-item .ni-name { font-size: .82rem; font-weight: 600; color: #1E293B; }
+.nav-item .ni-count { font-size: .68rem; color: #94A3B8; margin-top: 1px; }
+.nav-item.active .ni-name { color: #0D9488; }
+
+/* ═══════ MAIN CONTENT ═══════ */
+.main { margin-left: 0; margin-top: 56px; flex: 1; overflow-y: auto; padding: 28px; }
+
+/* Hero Banner */
+.hero {
+  background: linear-gradient(135deg, #0D9488 0%, #14B8A6 40%, #2DD4BF 100%);
+  border-radius: 20px; padding: 36px 40px; margin-bottom: 32px;
+  position: relative; overflow: hidden; color: white;
+}
+.hero::before { content: ''; position: absolute; top: -40%; right: -5%; width: 300px; height: 300px; background: rgba(255,255,255,.08); border-radius: 50%; }
+.hero::after { content: ''; position: absolute; bottom: -50%; right: 15%; width: 250px; height: 250px; background: rgba(255,255,255,.05); border-radius: 50%; }
+.hero-top { display: flex; align-items: center; justify-content: space-between; position: relative; z-index: 1; margin-bottom: 28px; }
+.hero-top h2 { font-size: 1.7rem; font-weight: 800; letter-spacing: -.5px; }
+.hero-top .hero-ver { background: rgba(255,255,255,.2); padding: 4px 14px; border-radius: 20px; font-size: .72rem; font-weight: 500; backdrop-filter: blur(4px); }
+.hero-stats { display: flex; gap: 16px; position: relative; z-index: 1; flex-wrap: wrap; }
+.hero-stat { background: rgba(0,0,0,.15); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,.12); border-radius: 14px; padding: 18px 22px; display: flex; align-items: center; gap: 14px; min-width: 180px; }
+.hero-stat .hs-icon { font-size: 1.3rem; opacity: .9; }
+.hero-stat .hs-val { font-size: 1.6rem; font-weight: 800; line-height: 1; }
+.hero-stat .hs-lbl { font-size: .72rem; opacity: .7; margin-top: 3px; }
+
+/* Department Section */
+.dept-section { margin-bottom: 12px; }
+.dept-header {
+  background: white; border-radius: 14px; padding: 18px 22px; display: flex;
+  align-items: center; gap: 16px; cursor: pointer; transition: all .2s;
+  border: 1px solid #E2E8F0; position: relative;
+}
+.dept-header:hover { box-shadow: 0 4px 12px rgba(0,0,0,.06); }
+.dept-header.expanded { border-radius: 14px 14px 0 0; border-bottom-color: transparent; }
+.dept-header .dh-icon { width: 42px; height: 42px; border-radius: 11px; display: flex; align-items: center; justify-content: center; font-size: 1.15rem; flex-shrink: 0; }
+.dept-header .dh-info { flex: 1; min-width: 0; }
+.dept-header .dh-badge { font-size: .62rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 3px; }
+.dept-header .dh-title { font-size: 1.05rem; font-weight: 700; color: #1E293B; }
+.dept-header .dh-sub { font-size: .78rem; color: #94A3B8; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dept-header .dh-right { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+.dept-header .dh-count { font-size: 1.8rem; font-weight: 800; line-height: 1; }
+.dept-header .dh-count-label { font-size: .65rem; color: #94A3B8; text-align: center; }
+.dept-header .dh-chevron { color: #94A3B8; font-size: .75rem; transition: transform .25s; }
+.dept-header.expanded .dh-chevron { transform: rotate(180deg); }
+
+/* Domain Grid */
+.dept-body { background: white; border: 1px solid #E2E8F0; border-top: none; border-radius: 0 0 14px 14px; padding: 20px 22px; display: none; }
+.dept-body.open { display: block; }
+.domain-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+.domain-card {
+  background: #F0FDFA; border-radius: 12px; padding: 20px; cursor: pointer;
+  border-left: 4px solid; transition: all .2s; position: relative;
+}
+.domain-card:hover { box-shadow: 0 6px 16px rgba(0,0,0,.08); transform: translateY(-2px); }
+.domain-card .dc-badge { position: absolute; top: 14px; right: 14px; background: white; border: 1px solid #E2E8F0; padding: 2px 10px; border-radius: 6px; font-size: .68rem; font-weight: 700; color: #64748B; }
+.domain-card .dc-icon { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.05rem; margin-bottom: 12px; }
+.domain-card .dc-title { font-size: .92rem; font-weight: 700; color: #1E293B; margin-bottom: 6px; padding-right: 40px; }
+.domain-card .dc-desc { font-size: .78rem; color: #64748B; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 14px; }
+.domain-card .dc-footer { display: flex; gap: 16px; padding-top: 12px; border-top: 1px solid rgba(0,0,0,.06); }
+.domain-card .dc-stat { display: flex; align-items: center; gap: 5px; font-size: .72rem; color: #94A3B8; }
+.domain-card .dc-stat strong { color: #475569; font-weight: 600; }
+
+/* Domain Detail Page */
+.page { display: none; }
+.page.active { display: block; animation: fadeUp .35s ease; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+.back-btn { display: inline-flex; align-items: center; gap: 6px; font-size: .82rem; color: #64748B; cursor: pointer; margin-bottom: 20px; padding: 6px 14px; border-radius: 8px; transition: all .15s; border: 1px solid transparent; }
+.back-btn:hover { background: white; border-color: #E2E8F0; color: #1E293B; }
+.domain-page-banner { border-radius: 18px; padding: 32px 36px; color: white; margin-bottom: 24px; position: relative; overflow: hidden; }
+.domain-page-banner::before { content: ''; position: absolute; top: -30%; right: -3%; width: 200px; height: 200px; background: rgba(255,255,255,.08); border-radius: 50%; }
+.domain-page-banner::after { content: ''; position: absolute; bottom: -40%; right: 12%; width: 160px; height: 160px; background: rgba(255,255,255,.05); border-radius: 50%; }
+.domain-page-banner h3 { font-size: 1.4rem; font-weight: 800; margin-bottom: 4px; position: relative; z-index: 1; }
+.domain-page-banner p { opacity: .8; font-size: .88rem; position: relative; z-index: 1; max-width: 600px; line-height: 1.5; }
+.domain-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; margin-bottom: 24px; }
+.kpi { background: white; border-radius: 12px; border: 1px solid #E2E8F0; padding: 16px 18px; display: flex; align-items: center; gap: 14px; transition: box-shadow .2s; }
+.kpi:hover { box-shadow: 0 4px 12px rgba(0,0,0,.06); }
+.kpi .kpi-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.05rem; flex-shrink: 0; }
+.kpi .kpi-val { font-size: 1.3rem; font-weight: 800; line-height: 1; }
+.kpi .kpi-lbl { font-size: .72rem; color: #94A3B8; margin-top: 2px; }
+.action-bar { display: flex; gap: 10px; margin-bottom: 22px; flex-wrap: wrap; }
+.act-btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 18px; border-radius: 10px; font-size: .82rem; font-weight: 500; cursor: pointer; transition: all .15s; border: 1px solid #E2E8F0; background: white; }
+.act-btn:hover { background: #F8FAFC; }
+.act-btn.primary { border: none; color: white; }
+.content-card { background: white; border-radius: 14px; border: 1px solid #E2E8F0; margin-bottom: 20px; overflow: hidden; }
+.cc-header { padding: 16px 22px; border-bottom: 1px solid #F1F5F9; display: flex; align-items: center; justify-content: space-between; }
+.cc-header h4 { font-size: .95rem; font-weight: 600; }
+.cc-body { padding: 22px; }
+.data-table { width: 100%; border-collapse: collapse; }
+.data-table th { text-align: left; padding: 10px 16px; font-size: .68rem; font-weight: 600; color: #94A3B8; text-transform: uppercase; letter-spacing: .8px; border-bottom: 1px solid #F1F5F9; }
+.data-table td { padding: 12px 16px; font-size: .82rem; border-bottom: 1px solid #F8FAFC; }
+.data-table tr:hover td { background: #FAFBFC; }
+.status { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 6px; font-size: .7rem; font-weight: 600; }
+.status.s-active { background: #ECFDF5; color: #059669; }
+.status.s-pending { background: #FFFBEB; color: #D97706; }
+.status.s-review { background: #EEF2FF; color: #4F46E5; }
+.status.s-inactive { background: #FEF2F2; color: #DC2626; }
+.info-section { border-radius: 14px; padding: 22px 24px; margin-bottom: 20px; border-left: 4px solid; }
+.info-section h4 { font-size: .95rem; font-weight: 600; margin-bottom: 6px; }
+.info-section p { font-size: .82rem; line-height: 1.6; opacity: .85; }
+.progress-row { margin-bottom: 16px; }
+.progress-row .pr-top { display: flex; justify-content: space-between; margin-bottom: 5px; }
+.progress-row .pr-label { font-size: .78rem; color: #64748B; }
+.progress-row .pr-val { font-size: .78rem; font-weight: 700; }
+.progress-bar { height: 7px; background: #E2E8F0; border-radius: 4px; overflow: hidden; }
+.progress-bar .fill { height: 100%; border-radius: 4px; transition: width .6s ease; }
+.two-col { display: grid; grid-template-columns: 1.4fr 1fr; gap: 20px; margin-bottom: 20px; }
+.donut-wrap { display: flex; align-items: center; gap: 24px; }
+.css-donut { width: 110px; height: 110px; border-radius: 50%; position: relative; flex-shrink: 0; }
+.css-donut::before { content: ''; position: absolute; inset: 22px; border-radius: 50%; background: white; z-index: 1; }
+.donut-legend { display: flex; flex-direction: column; gap: 8px; }
+.donut-legend-item { display: flex; align-items: center; gap: 8px; font-size: .78rem; }
+.donut-legend-item .dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+.donut-legend-item .val { margin-left: auto; font-weight: 700; padding-left: 12px; }
+
+/* FAB Font Size */
+.font-fab { position: fixed; bottom: 28px; right: 28px; z-index: 9999; }
+.font-fab-trigger { width: 54px; height: 54px; border-radius: 50%; border: none; background: linear-gradient(135deg, #0D9488, #2DD4BF); color: white; font-size: 1.15rem; font-weight: 700; cursor: pointer; box-shadow: 0 6px 24px rgba(13,148,136,.5), 0 0 0 0 rgba(13,148,136,.3); transition: all .2s; animation: fabPulse 2.5s infinite; }
+@keyframes fabPulse { 0%,100% { box-shadow: 0 6px 24px rgba(13,148,136,.5), 0 0 0 0 rgba(13,148,136,.3); } 50% { box-shadow: 0 6px 24px rgba(13,148,136,.5), 0 0 0 10px rgba(13,148,136,0); } }
+.font-fab-trigger:hover { transform: scale(1.08); box-shadow: 0 8px 25px rgba(13,148,136,.5); }
+.font-fab-popup { position: absolute; bottom: 62px; right: 0; width: 270px; background: white; border: 1px solid #E2E8F0; border-radius: 16px; box-shadow: 0 20px 50px -12px rgba(0,0,0,.18); padding: 22px; opacity: 0; visibility: hidden; transform: translateY(10px) scale(.95); transition: all .25s ease; }
+.font-fab-popup.open { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
+.font-fab-popup h5 { font-size: .92rem; font-weight: 700; margin-bottom: 3px; }
+.font-fab-popup > p { font-size: .72rem; color: #94A3B8; margin-bottom: 16px; }
+.font-presets { display: flex; gap: 8px; margin-bottom: 16px; }
+.font-preset { flex: 1; padding: 10px 6px; border-radius: 10px; border: 2px solid #E2E8F0; background: white; text-align: center; cursor: pointer; transition: all .15s; }
+.font-preset:hover { border-color: #0D9488; background: #F0FDFA; }
+.font-preset.active { border-color: #0D9488; background: #F0FDFA; }
+.font-preset .fp-label { font-size: .62rem; color: #94A3B8; display: block; margin-bottom: 3px; text-transform: uppercase; letter-spacing: .5px; }
+.font-preset .fp-val { font-weight: 800; color: #1E293B; }
+.slider-row { display: flex; align-items: center; gap: 10px; }
+.slider-row label { font-size: .75rem; color: #64748B; white-space: nowrap; }
+.slider-row input[type=range] { flex: 1; accent-color: #0D9488; }
+.slider-row .s-val { font-size: .82rem; font-weight: 700; color: #0D9488; min-width: 38px; text-align: right; }
+.font-preview { margin-top: 14px; padding: 12px 14px; background: #F8FAFC; border-radius: 10px; border: 1px solid #E2E8F0; }
+.font-preview p { font-size: inherit; color: #64748B; margin: 0; line-height: 1.5; }
+
+/* ═══════ VIEW SWITCHER ═══════ */
+.view-switcher { display: flex; gap: 4px; background: #F1F5F9; padding: 4px; border-radius: 12px; margin-bottom: 28px; width: fit-content; border: 1px solid #E2E8F0; }
+.view-btn { display: flex; align-items: center; gap: 7px; padding: 9px 18px; border-radius: 9px; border: none; background: transparent; cursor: pointer; font-size: .78rem; font-weight: 600; color: #64748B; transition: all .2s; font-family: inherit; white-space: nowrap; }
+.view-btn:hover { color: #1E293B; background: rgba(255,255,255,.6); }
+.view-btn.active { background: white; color: #0D9488; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
+.view-btn .vb-icon { font-size: .9rem; }
+
+/* ═══════ CASCADE VIEW ═══════ */
+.cascade-dept { margin-bottom: 0; position: relative; }
+.cascade-dept:last-child { margin-bottom: 0; }
+.cascade-dept:nth-child(odd) { padding-right: 60px; }
+.cascade-dept:nth-child(even) { padding-left: 60px; }
+.cascade-dept-header { display: flex; align-items: center; gap: 14px; padding: 16px 20px; background: white; border: 1px solid #E2E8F0; border-radius: 14px; cursor: pointer; transition: all .2s; position: relative; overflow: hidden; }
+.cascade-dept-header::after { content: ''; position: absolute; top: 0; right: 0; width: 80px; height: 100%; opacity: .06; }
+.cascade-dept-header:hover { box-shadow: 0 6px 20px rgba(0,0,0,.07); transform: translateY(-1px); }
+.cascade-dept-header .cdh-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
+.cascade-dept-header .cdh-info { flex: 1; }
+.cascade-dept-header .cdh-title { font-size: .95rem; font-weight: 700; color: #1E293B; }
+.cascade-dept-header .cdh-sub { font-size: .72rem; color: #94A3B8; margin-top: 2px; }
+.cascade-dept-header .cdh-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+.cascade-dept-header .cdh-count { font-size: 1.5rem; font-weight: 800; }
+.cascade-dept-header .cdh-phase { font-size: .65rem; font-weight: 600; padding: 3px 10px; border-radius: 6px; background: #F1F5F9; color: #64748B; }
+.cascade-domains { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; padding: 14px 0; }
+.cascade-domain-chip { display: flex; align-items: center; gap: 10px; padding: 12px 16px; background: white; border: 1px solid #E2E8F0; border-radius: 11px; cursor: pointer; transition: all .2s; border-left: 3px solid; }
+.cascade-domain-chip:hover { box-shadow: 0 4px 12px rgba(0,0,0,.06); transform: translateX(3px); }
+.cascade-domain-chip .cdc-icon { font-size: 1rem; }
+.cascade-domain-chip .cdc-name { font-size: .78rem; font-weight: 600; color: #1E293B; flex: 1; }
+.cascade-domain-chip .cdc-id { font-size: .65rem; font-weight: 700; color: #94A3B8; background: #F8FAFC; padding: 2px 8px; border-radius: 5px; }
+.cascade-connector { position: absolute; left: 30px; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, #E2E8F0, transparent); z-index: -1; }
+
+/* ═══════ MOSAIC VIEW ═══════ */
+.mosaic-container { columns: 3; column-gap: 16px; }
+.mosaic-dept { break-inside: avoid; margin-bottom: 16px; }
+.mosaic-dept-header { padding: 14px 16px; border-radius: 12px 12px 0 0; color: white; }
+.mosaic-dept-header .mdh-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+.mosaic-dept-header .mdh-icon { font-size: 1.2rem; }
+.mosaic-dept-header .mdh-count { font-size: .65rem; font-weight: 700; background: rgba(255,255,255,.2); padding: 2px 8px; border-radius: 5px; }
+.mosaic-dept-header .mdh-name { font-size: .88rem; font-weight: 700; }
+.mosaic-dept-header .mdh-sub { font-size: .68rem; opacity: .75; margin-top: 2px; }
+.mosaic-dept-body { background: white; border: 1px solid #E2E8F0; border-top: none; border-radius: 0 0 12px 12px; padding: 12px; }
+.mosaic-domain-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 9px; cursor: pointer; transition: all .15s; margin-bottom: 4px; }
+.mosaic-domain-item:last-child { margin-bottom: 0; }
+.mosaic-domain-item:hover { background: #F8FAFC; }
+.mosaic-domain-item .mdi-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.mosaic-domain-item .mdi-name { font-size: .78rem; font-weight: 600; color: #1E293B; flex: 1; }
+.mosaic-domain-item .mdi-badge { font-size: .6rem; font-weight: 700; color: #94A3B8; background: #F1F5F9; padding: 2px 7px; border-radius: 4px; }
+
+/* ═══════ CARDS FLAT VIEW ═══════ */
+.cards-dept-group { margin-bottom: 24px; }
+.cards-dept-label { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 2px solid; }
+.cards-dept-label .cdl-icon { font-size: 1.1rem; }
+.cards-dept-label .cdl-name { font-size: .92rem; font-weight: 700; }
+.cards-dept-label .cdl-count { font-size: .68rem; font-weight: 600; color: white; padding: 2px 9px; border-radius: 5px; margin-left: auto; }
+.cards-flat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+.cards-flat-item { background: white; border: 1px solid #E2E8F0; border-radius: 12px; padding: 16px; cursor: pointer; transition: all .2s; position: relative; overflow: hidden; }
+.cards-flat-item::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+.cards-flat-item:hover { box-shadow: 0 6px 16px rgba(0,0,0,.08); transform: translateY(-2px); }
+.cards-flat-item .cfi-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.cards-flat-item .cfi-icon { font-size: 1.1rem; }
+.cards-flat-item .cfi-id { font-size: .62rem; font-weight: 700; color: #94A3B8; background: #F1F5F9; padding: 2px 8px; border-radius: 5px; }
+.cards-flat-item .cfi-name { font-size: .82rem; font-weight: 700; color: #1E293B; margin-bottom: 4px; }
+.cards-flat-item .cfi-desc { font-size: .72rem; color: #94A3B8; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.cards-flat-item .cfi-footer { display: flex; gap: 14px; margin-top: 10px; padding-top: 8px; border-top: 1px solid #F1F5F9; }
+.cards-flat-item .cfi-stat { font-size: .68rem; color: #94A3B8; }
+.cards-flat-item .cfi-stat strong { color: #475569; }
+
+/* ═══════ TREE VIEW ═══════ */
+.tree-container { padding: 8px 0; }
+.tree-root { display: flex; flex-direction: column; gap: 6px; }
+.tree-dept { position: relative; }
+.tree-dept-header { display: flex; align-items: center; gap: 12px; padding: 12px 18px; background: white; border: 1px solid #E2E8F0; border-radius: 12px; cursor: pointer; transition: all .2s; }
+.tree-dept-header:hover { box-shadow: 0 4px 12px rgba(0,0,0,.05); }
+.tree-dept-header .tdh-icon { width: 36px; height: 36px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
+.tree-dept-header .tdh-info { flex: 1; }
+.tree-dept-header .tdh-name { font-size: .88rem; font-weight: 700; color: #1E293B; }
+.tree-dept-header .tdh-meta { font-size: .68rem; color: #94A3B8; margin-top: 1px; }
+.tree-dept-header .tdh-chevron { color: #94A3B8; font-size: .7rem; transition: transform .25s; }
+.tree-dept-header.expanded .tdh-chevron { transform: rotate(90deg); }
+.tree-children { margin-left: 28px; padding-left: 20px; border-left: 2px solid #E2E8F0; padding-top: 6px; padding-bottom: 6px; display: none; }
+.tree-children.open { display: flex; flex-direction: column; gap: 4px; }
+.tree-domain-item { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: white; border: 1px solid #F1F5F9; border-radius: 9px; cursor: pointer; transition: all .15s; position: relative; }
+.tree-domain-item::before { content: ''; position: absolute; left: -21px; top: 50%; width: 16px; height: 1px; background: #E2E8F0; }
+.tree-domain-item:hover { border-color: #E2E8F0; box-shadow: 0 2px 8px rgba(0,0,0,.04); }
+.tree-domain-item .tdi-dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+.tree-domain-item .tdi-name { font-size: .78rem; font-weight: 600; color: #1E293B; flex: 1; }
+.tree-domain-item .tdi-id { font-size: .62rem; font-weight: 700; color: white; padding: 2px 8px; border-radius: 4px; }
+.tree-domain-item .tdi-tables { font-size: .68rem; color: #94A3B8; }
+
+/* ═══════ TIMELINE VIEW ═══════ */
+.timeline-container { position: relative; padding-left: 40px; }
+.timeline-container::before { content: ''; position: absolute; left: 18px; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, #0D9488, #2DD4BF, #E2E8F0); border-radius: 1px; }
+.timeline-dept { position: relative; margin-bottom: 28px; }
+.timeline-dept:last-child { margin-bottom: 0; }
+.timeline-dept .tl-dot { position: absolute; left: -31px; top: 16px; width: 14px; height: 14px; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 0 2px currentColor; z-index: 1; }
+.timeline-dept .tl-content { background: white; border: 1px solid #E2E8F0; border-radius: 14px; overflow: hidden; transition: all .2s; }
+.timeline-dept .tl-content:hover { box-shadow: 0 6px 20px rgba(0,0,0,.06); }
+.timeline-dept .tl-header { padding: 16px 20px; display: flex; align-items: center; gap: 14px; cursor: pointer; }
+.timeline-dept .tl-header .tlh-icon { font-size: 1.2rem; }
+.timeline-dept .tl-header .tlh-info { flex: 1; }
+.timeline-dept .tl-header .tlh-name { font-size: .92rem; font-weight: 700; color: #1E293B; }
+.timeline-dept .tl-header .tlh-sub { font-size: .72rem; color: #94A3B8; margin-top: 2px; }
+.timeline-dept .tl-header .tlh-right { text-align: right; flex-shrink: 0; }
+.timeline-dept .tl-header .tlh-count { font-size: 1.3rem; font-weight: 800; }
+.timeline-dept .tl-header .tlh-label { font-size: .62rem; color: #94A3B8; }
+.timeline-dept .tl-body { padding: 4px 20px 16px; display: none; }
+.timeline-dept .tl-body.open { display: flex; flex-wrap: wrap; gap: 8px; }
+.timeline-tag { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 8px; border: 1px solid; cursor: pointer; transition: all .15s; font-size: .72rem; font-weight: 600; }
+.timeline-tag:hover { transform: translateY(-1px); box-shadow: 0 3px 10px rgba(0,0,0,.06); }
+.timeline-tag .tt-id { font-size: .6rem; font-weight: 800; opacity: .7; }
+
+@media (max-width: 1100px) { .two-col { grid-template-columns: 1fr; } .domain-grid { grid-template-columns: 1fr 1fr; } .mosaic-container { columns: 2; } .cascade-dept:nth-child(odd), .cascade-dept:nth-child(even) { padding-left: 0; padding-right: 0; } }
+@media (max-width: 768px) { .sidebar { display: none; } .topbar { left: 0; } .main { margin-left: 0; } .domain-grid { grid-template-columns: 1fr; } .mosaic-container { columns: 1; } .view-switcher { flex-wrap: wrap; width: 100%; } .view-btn { flex: 1; justify-content: center; padding: 8px 10px; font-size: .7rem; } .cards-flat-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<!-- Sidebar removed per user request -->
+
+<!-- ═══════ TOPBAR ═══════ -->
+<header class="topbar">
+  <div class="topbar-logo">
+    <div class="logo-mark">AR</div>
+    <h1>Admina<span>_RH</span></h1>
+  </div>
+  <div class="topbar-badges">
+    <span class="topbar-badge"><span class="dot green"></span>Base connectée</span>
+    <span class="topbar-badge"><span class="dot blue"></span>Cloudflare Pages</span>
+  </div>
+  <div class="topbar-spacer"></div>
+  <div class="account-btn">
+    <div class="account-trigger">🔐 Mon Compte <span class="acc-arrow">▼</span></div>
+    <div class="account-dropdown">
+      <div class="account-dd-header">
+        <div class="name">Georges Fouretout</div>
+        <div class="email">admin@admina-rh.com</div>
+      </div>
+      <div class="account-dd-menu">
+        <div class="account-dd-item"><div class="item-icon" style="background:#EFF6FF;color:#1E40AF">👤</div><div><div class="item-title">Profil</div><div class="item-desc">Modifier vos informations</div></div></div>
+        <div class="account-dd-item"><div class="item-icon" style="background:#ECFDF5;color:#059669">🔑</div><div><div class="item-title">Changer le mot de passe</div><div class="item-desc">Sécurité et authentification</div></div></div>
+        <div class="account-dd-item"><div class="item-icon" style="background:#FFFBEB;color:#D97706">🛡️</div><div><div class="item-title">Connexions actives</div><div class="item-desc">2 sessions en cours</div></div></div>
+        <div class="account-dd-item"><div class="item-icon" style="background:#F5F3FF;color:#7C3AED">📋</div><div><div class="item-title">Journal d'audit</div><div class="item-desc">Historique des connexions</div></div></div>
+        <div class="account-dd-divider"></div>
+        <div class="account-dd-item"><div class="item-icon" style="background:#EEF2FF;color:#4F46E5">⚙️</div><div><div class="item-title">Paramètres</div><div class="item-desc">Configuration générale</div></div></div>
+        <div class="account-dd-item danger"><div class="item-icon" style="background:#FEF2F2;color:#EF4444">🚪</div><div><div class="item-title">Déconnexion</div><div class="item-desc">Se déconnecter du système</div></div></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════ MAIN CONTENT ═══════ -->
+<main class="main" id="mainContent"></main>
+
+<!-- ═══════ FAB FONT SIZE ═══════ -->
+<div class="font-fab" id="fontFab">
+  <button class="font-fab-trigger" onclick="toggleFontPopup()">Aa</button>
+  <div class="font-fab-popup" id="fontPopup">
+    <h5>Taille de police</h5>
+    <p>Ajustez l'affichage à votre convenance</p>
+    <div class="font-presets">
+      <div class="font-preset" onclick="setFontSize(12)" data-size="12"><span class="fp-label">Petit</span><span class="fp-val" style="font-size:12px">Aa</span></div>
+      <div class="font-preset active" onclick="setFontSize(14)" data-size="14"><span class="fp-label">Normal</span><span class="fp-val" style="font-size:14px">Aa</span></div>
+      <div class="font-preset" onclick="setFontSize(16)" data-size="16"><span class="fp-label">Grand</span><span class="fp-val" style="font-size:16px">Aa</span></div>
+      <div class="font-preset" onclick="setFontSize(18)" data-size="18"><span class="fp-label">Très grand</span><span class="fp-val" style="font-size:18px">Aa</span></div>
+    </div>
+    <div class="slider-row">
+      <label>Taille :</label>
+      <input type="range" min="10" max="22" value="14" id="fontSlider" oninput="setFontSize(this.value)">
+      <span class="s-val" id="fontSliderVal">14px</span>
+    </div>
+    <div class="font-preview" id="fontPreview"><p>Aperçu du texte avec la taille sélectionnée pour vérifier le confort de lecture.</p></div>
+  </div>
+</div>
+
+<script>
+const departments=[
+  {id:'dept1',name:'Administration et Gestion des Carrières',icon:'🗂️',color:'#1E40AF',bg:'#EFF6FF',phase:'Phase 1',
+   domains:[
+     {id:'D2',name:'Gestion Administrative du Personnel',icon:'👥',color:'#1E40AF',bg:'#EFF6FF',text:'#1E3A8A',desc:'Coeur du registre du personnel : données d\'identité, informations contractuelles, coordonnées bancaires, situations familiales et historique des mouvements internes.',tables:12,sheets:17},
+     {id:'D4',name:'Temps de Travail et Planification',icon:'📅',color:'#2563EB',bg:'#F0F7FF',text:'#1E40AF',desc:'Horaires, plannings, astreintes, travail en équipes et règles de modulation du temps de travail.',tables:6,sheets:9},
+     {id:'D5',name:'Congés, Absences et Présence',icon:'🏖️',color:'#3B82F6',bg:'#EFF6FF',text:'#1D4ED8',desc:'Suivi des congés (annuels, maladie, maternité, paternité, sans solde), autorisations d\'absence, retards et compensations.',tables:8,sheets:12},
+     {id:'D12',name:'Documentation et Archivage RH',icon:'📚',color:'#1D4ED8',bg:'#EFF6FF',text:'#1E3A8A',desc:'Gestion documentaire : contrats de travail, attestations, certificats, notes internes, archivage légal et restitution.',tables:5,sheets:7},
+     {id:'D21',name:'Fiches de Postes et Cartographie des Métiers',icon:'🗺️',color:'#1E3A5F',bg:'#F0F4F8',text:'#0F2640',desc:'Fiches de poste, profils de compétences requis, classifications, grilles salariales associées et cartographie globale des métiers.',tables:9,sheets:14},
+     {id:'D23',name:'Travail Temporaire',icon:'🔄',color:'#0F766E',bg:'#F0FDFA',text:'#134E4A',desc:'Contrats d\'intérim, prestations de services, missions temporaires, suivi des agences et facturation associée.',tables:4,sheets:6},
+     {id:'D24',name:'Stagiaires et Alternants',icon:'🎓',color:'#7C3AED',bg:'#F5F3FF',text:'#5B21B6',desc:'Accueil, suivi et évaluation des stagiaires et apprentis, conventions de stage et contrats d\'alternance.',tables:7,sheets:10}
+   ]},
+  {id:'dept2',name:'Paie, Rémunération et Avantages Sociaux',icon:'💰',color:'#059669',bg:'#ECFDF5',phase:'Phase 2',
+   domains:[
+     {id:'D3',name:'Paie, Rémunération et Avantages',icon:'💳',color:'#059669',bg:'#ECFDF5',text:'#065F46',desc:'Calcul des salaires bruts et nets, retenues sociales et fiscales, primes, indemnités, heures supplémentaires et bulletins de paie.',tables:18,sheets:17},
+     {id:'D15',name:'Budget et Pilotage Financier RH',icon:'📊',color:'#10B981',bg:'#ECFDF5',text:'#047857',desc:'Consolidation des coûts RH : masse salariale, charges sociales, coûts de recrutement et de formation, écarts budgétaires.',tables:8,sheets:11},
+     {id:'D22',name:'Avantages Sociaux',icon:'🏦',color:'#047857',bg:'#ECFDF5',text:'#064E3B',desc:'Mutuelle, prévoyance, tickets restaurant, participation, intéressement, épargne salariale et véhicules de fonction.',tables:7,sheets:10},
+     {id:'D31',name:'Retraites, Prévoyance et Transitions de Carrière',icon:'🚪',color:'#14B8A6',bg:'#F0FDFA',text:'#0F766E',desc:'Départs à la retraite, mises en pré-retraite, ruptures conventionnelles, calculs d\'indemnités et formalités associées.',tables:5,sheets:7}
+   ]},
+  {id:'dept3',name:'Développement RH et Talents',icon:'🚀',color:'#D97706',bg:'#FFFBEB',phase:'Phase 3',
+   domains:[
+     {id:'D1',name:'Recrutement et Candidats',icon:'📦',color:'#D97706',bg:'#FFFBEB',text:'#92400E',desc:'Besoins de recrutement, diffusion d\'offres, réception et tri des candidatures, entretiens, tests et processus d\'intégration.',tables:18,sheets:17},
+     {id:'D6',name:'Formation et Développement des Compétences',icon:'📖',color:'#F59E0B',bg:'#FFFBEB',text:'#B45309',desc:'Plans de formation annuels, catalogues, inscriptions, convocations, attestations, évaluations et suivi budgétaire.',tables:6,sheets:9},
+     {id:'D7',name:'Évaluation et Gestion de la Performance',icon:'🎯',color:'#EA580C',bg:'#FFF7ED',text:'#C2410C',desc:'Objectifs individuels et collectifs, critères d\'évaluation, entretiens annuels, notations, calibrages et plans d\'amélioration.',tables:8,sheets:11},
+     {id:'D10',name:'Talents et Mobilité Interne',icon:'🏆',color:'#B45309',bg:'#FFFBEB',text:'#78350F',desc:'Identification des talents à fort potentiel, programmes haut potentiel, successions clés et mobilité interne.',tables:5,sheets:7},
+     {id:'D30',name:'Expatriés et Mobilité Internationale',icon:'✈️',color:'#C2410C',bg:'#FFF7ED',text:'#9A3412',desc:'Contrats d\'expatriation, régimes fiscaux et sociaux spécifiques, relocation et suivi des collaborateurs à l\'étranger.',tables:6,sheets:8}
+   ]},
+  {id:'dept4',name:'Relations Sociales, Juridique et Conformité',icon:'⚖️',color:'#7C3AED',bg:'#F5F3FF',phase:'Phase 4',
+   domains:[
+     {id:'D8',name:'Relations Sociales, Syndicats et Discipline',icon:'🏢',color:'#7C3AED',bg:'#F5F3FF',text:'#5B21B6',desc:'Représentants du personnel, syndicats, CSE, consultations, protocoles d\'accord, grèves et gestion disciplinaire.',tables:9,sheets:12},
+     {id:'D11',name:'Droit du Travail et Conformité',icon:'📜',color:'#8B5CF6',bg:'#F5F3FF',text:'#6D28D9',desc:'Veille réglementaire, interprétation des textes législatifs et conventionnels, mise en conformité et gestion des risques juridiques.',tables:6,sheets:8},
+     {id:'D17',name:'Audit, Conformité et Contentieux',icon:'🔍',color:'#A855F7',bg:'#FAF5FF',text:'#7E22CE',desc:'Audits internes RH, inspections du travail, litiges, procédures prud\'hommales et gestion des contentieux.',tables:7,sheets:10}
+   ]},
+  {id:'dept5',name:'Santé, Sécurité et Conditions de Travail',icon:'❤️',color:'#DC2626',bg:'#FEF2F2',phase:'Phase 5',
+   domains:[
+     {id:'D9',name:'Santé, Sécurité et Conditions de Travail',icon:'⚕️',color:'#DC2626',bg:'#FEF2F2',text:'#991B1B',desc:'Risques professionnels, accidents du travail, maladies professionnelles, DUERP, EPI, formations obligatoires et indicateurs de santé.',tables:5,sheets:7}
+   ]},
+  {id:'dept6',name:'Communication, Marque Employeur et Engagement',icon:'📣',color:'#DB2777',bg:'#FDF2F8',phase:'Phase 5',
+   domains:[
+     {id:'D13',name:'Communication RH et Marque Employeur',icon:'🌐',color:'#DB2777',bg:'#FDF2F8',text:'#9D174D',desc:'Site carrières, réseaux sociaux professionnels, salons emploi, campagnes de marque employeur et certifications.',tables:4,sheets:6},
+     {id:'D29',name:'Communication Interne et Engagement',icon:'💬',color:'#EC4899',bg:'#FDF2F8',text:'#BE185D',desc:'Newsletters RH, intranet, enquêtes d\'engagement, baromètres sociaux, événements internes et programmes de reconnaissance.',tables:4,sheets:5}
+   ]},
+  {id:'dept7',name:'Pilotage, Reporting et Transformation',icon:'📈',color:'#0891B2',bg:'#ECFEFF',phase:'Phase 5',
+   domains:[
+     {id:'D14',name:'Reporting, Tableaux de Bord et Analyse',icon:'📊',color:'#0891B2',bg:'#ECFEFF',text:'#155E75',desc:'Reportings opérationnels et stratégiques : effectifs, pyramide des âges, turn-over, absentéisme, masse salariale et diversité.',tables:6,sheets:8},
+     {id:'D19',name:'Innovation RH et Transformation Digitale',icon:'💡',color:'#0EA5E9',bg:'#F0F9FF',text:'#0369A1',desc:'Projets SIRH, intégration IA, automatisation, self-service RH, chatbots, outils collaboratifs et digitalisation.',tables:5,sheets:7},
+     {id:'D20',name:'Pilotage et Reporting RH',icon:'🎛️',color:'#0284C7',bg:'#F0F9FF',text:'#075985',desc:'Tableaux de bord de pilotage pour managers et direction, indicateurs agrégés et alertes seuils.',tables:5,sheets:7}
+   ]},
+  {id:'dept8',name:'RSE, Diversité et Éthique',icon:'🌿',color:'#4F46E5',bg:'#EEF2FF',phase:'Phase 5',
+   domains:[
+     {id:'D16',name:'Diversité, Équité et Inclusion',icon:'🤝',color:'#4F46E5',bg:'#EEF2FF',text:'#3730A3',desc:'Index égalité professionnelle, plans d\'action femmes-hommes, inclusion handicap, lutte contre les discriminations et indicateurs.',tables:4,sheets:5},
+     {id:'D18',name:'RSE et Développement Durable RH',icon:'🌍',color:'#6366F1',bg:'#EEF2FF',text:'#4338CA',desc:'Empreinte carbone RH, télétravail, achats responsables, mécénat de compétences, engagement citoyen et reporting RSE.',tables:6,sheets:8}
+   ]}
+];
+
+let currentView='home';
+
+function findDomain(id){for(let d of departments)for(let dom of d.domains)if(dom.id===id)return{dept:d,domain:dom};return null;}
+
+function buildSidebar(){
+  const nav=document.getElementById('sidebarNav');
+  let h='';
+  departments.forEach((dept,i)=>{
+    h+=`<div class="nav-item${i===0?' active':''}" data-dept="${dept.id}" onclick="scrollToDept('${dept.id}')"><div class="ni-icon" style="background:${dept.bg};color:${dept.color}">${dept.icon}</div><div><div class="ni-name">${dept.name}</div><div class="ni-count">${dept.domains.length} domaine${dept.domains.length>1?'s':''}</div></div></div>`;
+  });
+  nav.innerHTML=h;
+}
+
+function scrollToDept(id){
+  const el=document.getElementById('dept-'+id);
+  if(el)el.scrollIntoView({behavior:'smooth',block:'start'});
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active',n.dataset.dept===id));
+}
+
+function toggleDept(id){
+  const hdr=document.getElementById('dh-'+id);
+  const body=document.getElementById('db-'+id);
+  const wasOpen=body.classList.contains('open');
+  // Close all
+  document.querySelectorAll('.dept-body').forEach(b=>b.classList.remove('open'));
+  document.querySelectorAll('.dept-header').forEach(h=>h.classList.remove('expanded'));
+  // Open clicked if was closed
+  if(!wasOpen){
+    hdr.classList.add('expanded');
+    body.classList.add('open');
+  }
+}
+
+function showDomainPage(domainId){
+  const f=findDomain(domainId);if(!f)return;
+  currentView='domain';
+  document.getElementById('mainContent').innerHTML=renderDomainPage(f.dept,f.domain);
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active',n.dataset.dept===f.dept.id));
+}
+
+function goHome(){
+  currentView='home';
+  document.getElementById('mainContent').innerHTML=renderHome();
+  document.querySelectorAll('.nav-item').forEach((n,i)=>n.classList.toggle('active',i===0));
+}
+
+function renderHome(){
+  let totalTables=0,totalSheets=0;
+  departments.forEach(d=>d.domains.forEach(dom=>{totalTables+=dom.tables;totalSheets+=dom.sheets;}));
+
+  let deptSections='';
+  departments.forEach((dept,i)=>{
+    let domainCards='';
+    dept.domains.forEach(dom=>{
+      domainCards+=`
+        <div class="domain-card" style="border-left-color:${dom.color}" onclick="showDomainPage('${dom.id}')">
+          <span class="dc-badge">${dom.id}</span>
+          <div class="dc-icon" style="background:${dom.color}18;color:${dom.color}">${dom.icon}</div>
+          <div class="dc-title">${dom.name}</div>
+          <div class="dc-desc">${dom.desc}</div>
+          <div class="dc-footer">
+            <span class="dc-stat">📄 <strong>${dom.tables}</strong> tables</span>
+            <span class="dc-stat">📊 <strong>${dom.sheets}</strong> feuilles</span>
+          </div>
+        </div>`;
+    });
+    deptSections+=`
+      <div class="dept-section" id="dept-${dept.id}">
+        <div class="dept-header${i===0?' expanded':''}" id="dh-${dept.id}" onclick="toggleDept('${dept.id}')">
+          <div class="dh-icon" style="background:${dept.bg};color:${dept.color}">${dept.icon}</div>
+          <div class="dh-info">
+            <div class="dh-badge" style="color:${dept.color}">Département ${i+1}</div>
+            <div class="dh-title">${dept.name}</div>
+            <div class="dh-sub">${dept.domains.map(d=>d.id).join(' • ')}</div>
+          </div>
+          <div class="dh-right">
+            <div style="text-align:center"><div class="dh-count" style="color:${dept.color}">${dept.domains.length}</div><div class="dh-count-label">domaines</div></div>
+            <span class="dh-chevron">▼</span>
+          </div>
+        </div>
+        <div class="dept-body${i===0?' open':''}" id="db-${dept.id}">
+          <div class="domain-grid">${domainCards}</div>
+        </div>
+      </div>`;
+  });
+
+  const pendingSection=`
+    <div class="dept-section" style="opacity:.7">
+      <div class="dept-header" onclick="toggleDept('pending')" id="dh-pending">
+        <div class="dh-icon" style="background:#F1F5F9;color:#94A3B8">⏳</div>
+        <div class="dh-info">
+          <div class="dh-badge" style="color:#94A3B8">En attente de définition</div>
+          <div class="dh-title">Domaines D25 à D28</div>
+          <div class="dh-sub">D25 • D26 • D27 • D28</div>
+        </div>
+        <div class="dh-right">
+          <div style="text-align:center"><div class="dh-count" style="color:#94A3B8">4</div><div class="dh-count-label">domaines</div></div>
+          <span class="dh-chevron">▼</span>
+        </div>
+      </div>
+      <div class="dept-body" id="db-pending">
+        <div style="padding:24px;text-align:center;color:#64748B;font-size:.85rem;line-height:1.7;background:#F8FAFC;border-radius:12px;border:1px dashed #CBD5E1">
+          <div style="font-size:1.6rem;margin-bottom:8px">📋</div>
+          <strong style="color:#475569">4 domaines fonctionnels en attente de périmètre précis</strong><br>
+          D25, D26, D27 et D28 seront intégrés dans des départements existants<br>
+          ou formeront un nouveau département une fois leur contenu détaillé analysé.<br>
+          <span style="color:#94A3B8;font-size:.78rem">L'architecture Supabase est prête pour les accueillir (approche modulaire).</span>
+        </div>
+      </div>
+    </div>`;
+
+  // Render view content based on mode
+  let viewContent='';
+  if(currentViewMode==='cascade') viewContent=renderCascadeView();
+  else if(currentViewMode==='mosaic') viewContent=renderMosaicView();
+  else if(currentViewMode==='cards') viewContent=renderCardsView();
+  else if(currentViewMode==='tree') viewContent=renderTreeView();
+  else if(currentViewMode==='timeline') viewContent=renderTimelineView();
+  else viewContent=deptSections+pendingSection;
+
+  return `<div class="page active">
+    <div class="hero">
+      <div class="hero-top">
+        <h2>Admina_RH — Architecture SIRH</h2>
+        <span class="hero-ver">v1.1 — 2026</span>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat"><span class="hs-icon">🏢</span><div><div class="hs-val">${departments.length}</div><div class="hs-lbl">Départements</div></div></div>
+        <div class="hero-stat"><span class="hs-icon">📦</span><div><div class="hs-val">${departments.reduce((a,d)=>a+d.domains.length,0)}</div><div class="hs-lbl">Domaines fonctionnels</div></div></div>
+        <div class="hero-stat"><span class="hs-icon">⏳</span><div><div class="hs-val">4</div><div class="hs-lbl">Domaines en attente</div></div></div>
+        <div class="hero-stat"><span class="hs-icon">📄</span><div><div class="hs-val">${totalTables}</div><div class="hs-lbl">Tables de données</div></div></div>
+        <div class="hero-stat"><span class="hs-icon">📊</span><div><div class="hs-val">${totalSheets}</div><div class="hs-lbl">Feuilles Excel</div></div></div>
+      </div>
+    </div>
+    ${renderViewSwitcher()}
+    ${viewContent}
+  </div>`;
+}
+
+function renderDomainPage(dept,domain){
+  const donutBg=`conic-gradient(${domain.color} 0% 38%, #F59E0B 38% 62%, #10B981 62% 82%, #E2E8F0 82% 100%)`;
+  const rows=[
+    ['REF-2026-001','Service Commercial','Vendeur Senior','CDI','active','Actif'],
+    ['REF-2026-002','Direction Générale','Assistant DG','CDI','active','Actif'],
+    ['REF-2026-003','Département IT','Développeur','CDD','pending','En attente'],
+    ['REF-2026-004','Ressources Humaines','Chargé Recrutement','CDI','active','Actif'],
+    ['REF-2026-005','Finance','Comptable Junior','Stage','review','En cours']
+  ];
+  let tRows='';
+  rows.forEach(r=>{tRows+=`<tr><td style="font-weight:500;font-family:monospace;font-size:.78rem">${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td><span style="background:${domain.bg};color:${domain.text};padding:2px 8px;border-radius:6px;font-size:.7rem;font-weight:600">${r[3]}</span></td><td><span class="status s-${r[4]}">${r[5]}</span></td></tr>`;});
+
+  return `<div class="page active">
+    <div class="back-btn" onclick="goHome()">← Retour à l'architecture</div>
+    <div class="domain-page-banner" style="background:${domain.color}">
+      <h3>${domain.icon} ${domain.id} — ${domain.name}</h3>
+      <p>${domain.desc}</p>
+    </div>
+    <div class="domain-kpis">
+      <div class="kpi"><div class="kpi-icon" style="background:${domain.bg};color:${domain.color}">📋</div><div><div class="kpi-val">${domain.tables}</div><div class="kpi-lbl">Tables</div></div></div>
+      <div class="kpi"><div class="kpi-icon" style="background:${domain.bg};color:${domain.color}">📊</div><div><div class="kpi-val">${domain.sheets}</div><div class="kpi-lbl">Feuilles</div></div></div>
+      <div class="kpi"><div class="kpi-icon" style="background:${domain.bg};color:${domain.color}">🏢</div><div><div class="kpi-val">${dept.name}</div><div class="kpi-lbl">Département</div></div></div>
+      <div class="kpi"><div class="kpi-icon" style="background:${domain.bg};color:${domain.color}">📝</div><div><div class="kpi-val">D${dept.id.replace('dept','')}</div><div class="kpi-lbl">N° Département</div></div></div>
+    </div>
+    <div class="action-bar">
+      <button class="act-btn primary" style="background:${domain.color}">+ Nouvelle Fiche</button>
+      <button class="act-btn">📥 Importer</button>
+      <button class="act-btn">📤 Exporter</button>
+      <button class="act-btn">📊 Rapport</button>
+    </div>
+    <div class="two-col">
+      <div class="content-card"><div class="cc-header"><h4>Données Récentes — ${domain.id}</h4><div><button class="act-btn" style="padding:5px 12px;font-size:.75rem">Filtrer</button></div></div><div class="cc-body" style="padding:0;overflow-x:auto"><table class="data-table"><thead><tr><th>Référence</th><th>Service</th><th>Poste</th><th>Type</th><th>Statut</th></tr></thead><tbody>${tRows}</tbody></table></div></div>
+      <div class="content-card"><div class="cc-header"><h4>Performance</h4></div><div class="cc-body">
+        <div class="donut-wrap" style="margin-bottom:20px">
+          <div class="css-donut" style="background:${donutBg}"></div>
+          <div class="donut-legend">
+            <div class="donut-legend-item"><span class="dot" style="background:${domain.color}"></span>Terminés<span class="val">38%</span></div>
+            <div class="donut-legend-item"><span class="dot" style="background:#F59E0B"></span>En cours<span class="val">24%</span></div>
+            <div class="donut-legend-item"><span class="dot" style="background:#10B981"></span>Validés<span class="val">20%</span></div>
+            <div class="donut-legend-item"><span class="dot" style="background:#E2E8F0"></span>En attente<span class="val">18%</span></div>
+          </div>
+        </div>
+        <div class="progress-row"><div class="pr-top"><span class="pr-label">Taux de complétion</span><span class="pr-val" style="color:${domain.color}">78%</span></div><div class="progress-bar"><div class="fill" style="width:78%;background:${domain.color}"></div></div></div>
+        <div class="progress-row"><div class="pr-top"><span class="pr-label">Objectif trimestriel</span><span class="pr-val" style="color:${domain.color}">62%</span></div><div class="progress-bar"><div class="fill" style="width:62%;background:${domain.color}"></div></div></div>
+        <div class="progress-row"><div class="pr-top"><span class="pr-label">Conformité</span><span class="pr-val" style="color:${domain.color}">91%</span></div><div class="progress-bar"><div class="fill" style="width:91%;background:${domain.color}"></div></div></div>
+      </div></div>
+    </div>
+    <div class="info-section" style="border-color:${domain.color};background:${domain.bg}">
+      <h4 style="color:${domain.text}">📋 Structure des données</h4>
+      <p style="color:${domain.text}">Ce module fait partie du <strong>${dept.name}</strong>. Les données sont structurées selon les tables préfixées <code style="background:rgba(0,0,0,.06);padding:1px 6px;border-radius:4px;font-size:.8rem">d${domain.id.replace('D','')}_*</code> avec des politiques de sécurité appliquées pour chaque rôle utilisateur.</p>
+    </div>
+  </div>`;
+}
+
+// ═══════ VIEW SWITCHER ═══════
+let currentViewMode='accordion';
+
+function setViewMode(mode){
+  currentViewMode=mode;
+  document.querySelectorAll('.view-btn').forEach(function(b){b.classList.toggle('active',b.dataset.view===mode);});
+  if(currentView==='home') document.getElementById('mainContent').innerHTML=renderHome();
+}
+
+function renderViewSwitcher(){
+  const views=[
+    {id:'accordion',icon:'≡',label:'Accordion'},
+    {id:'cascade',icon:'▸',label:'Cascade'},
+    {id:'mosaic',icon:'⊞',label:'Mosa\u00efque'},
+    {id:'cards',icon:'⊡',label:'Cartes'},
+    {id:'tree',icon:'🌳',label:'Arbre'},
+    {id:'timeline',icon:'\u23F3',label:'Chrono'}
+  ];
+  let h='<div class="view-switcher">';
+  views.forEach(function(v){
+    h+='<button class="view-btn'+(v.id===currentViewMode?' active':'')+'" data-view="'+v.id+'" onclick="setViewMode(\''+v.id+'\')"><span class="vb-icon">'+v.icon+'</span>'+v.label+'</button>';
+  });
+  h+='</div>';
+  return h;
+}
+
+// ═══════ CASCADE VIEW ═══════
+function renderCascadeView(){
+  let h='';
+  departments.forEach(function(dept,i){
+    let chips='';
+    dept.domains.forEach(function(dom){
+      chips+='<div class="cascade-domain-chip" style="border-left-color:'+dom.color+'" onclick="showDomainPage(\''+dom.id+'\')"><span class="cdc-icon">'+dom.icon+'</span><span class="cdc-name">'+dom.name+'</span><span class="cdc-id">'+dom.id+'</span></div>';
+    });
+    h+='<div class="cascade-dept"><div class="cascade-dept-header" style="border-left:4px solid '+dept.color+'" onclick="showDomainPage(\''+dept.domains[0].id+'\')"><div class="cdh-icon" style="background:'+dept.bg+';color:'+dept.color+'">'+dept.icon+'</div><div class="cdh-info"><div class="cdh-title">'+dept.name+'</div><div class="cdh-sub">'+dept.domains.map(function(d){return d.id;}).join(' \u2022 ')+'</div></div><div class="cdh-right"><span class="cdh-count" style="color:'+dept.color+'">'+dept.domains.length+'</span><span class="cdh-phase">'+dept.phase+'</span></div></div><div class="cascade-domains">'+chips+'</div></div>';
+  });
+  return h;
+}
+
+// ═══════ MOSAIC VIEW ═══════
+function renderMosaicView(){
+  let h='<div class="mosaic-container">';
+  departments.forEach(function(dept){
+    let items='';
+    dept.domains.forEach(function(dom){
+      items+='<div class="mosaic-domain-item" onclick="showDomainPage(\''+dom.id+'\')"><span class="mdi-dot" style="background:'+dom.color+'"></span><span class="mdi-name">'+dom.name+'</span><span class="mdi-badge">'+dom.id+'</span></div>';
+    });
+    h+='<div class="mosaic-dept"><div class="mosaic-dept-header" style="background:'+dept.color+'"><div class="mdh-top"><span class="mdh-icon">'+dept.icon+'</span><span class="mdh-count">'+dept.domains.length+' domaines</span></div><div class="mdh-name">'+dept.name+'</div><div class="mdh-sub">'+dept.domains.map(function(d){return d.id;}).join(', ')+'</div></div><div class="mosaic-dept-body">'+items+'</div></div>';
+  });
+  h+='</div>';
+  return h;
+}
+
+// ═══════ CARDS FLAT VIEW ═══════
+function renderCardsView(){
+  let h='';
+  departments.forEach(function(dept){
+    let cards='';
+    dept.domains.forEach(function(dom){
+      cards+='<div class="cards-flat-item" style="--c:'+dom.color+'" onclick="showDomainPage(\''+dom.id+'\')"><div style="position:absolute;top:0;left:0;right:0;height:3px;background:'+dom.color+'"></div><div class="cfi-top"><span class="cfi-icon">'+dom.icon+'</span><span class="cfi-id">'+dom.id+'</span></div><div class="cfi-name">'+dom.name+'</div><div class="cfi-desc">'+dom.desc+'</div><div class="cfi-footer"><span class="cfi-stat">\u{1F4C4} <strong>'+dom.tables+'</strong> tables</span><span class="cfi-stat">\u{1F4CA} <strong>'+dom.sheets+'</strong> feuilles</span></div></div>';
+    });
+    h+='<div class="cards-dept-group"><div class="cards-dept-label" style="border-color:'+dept.color+'"><span class="cdl-icon">'+dept.icon+'</span><span class="cdl-name" style="color:'+dept.color+'">'+dept.name+'</span><span class="cdl-count" style="background:'+dept.color+'">'+dept.domains.length+' domaines</span></div><div class="cards-flat-grid">'+cards+'</div></div>';
+  });
+  return h;
+}
+
+// ═══════ TREE VIEW ═══════
+function renderTreeView(){
+  let h='<div class="tree-container"><div class="tree-root">';
+  departments.forEach(function(dept,i){
+    let children='';
+    dept.domains.forEach(function(dom){
+      children+='<div class="tree-domain-item" onclick="showDomainPage(\''+dom.id+'\')"><span class="tdi-dot" style="background:'+dom.color+'"></span><span class="tdi-name">'+dom.name+'</span><span class="tdi-id" style="background:'+dom.color+'">'+dom.id+'</span><span class="tdi-tables">'+dom.tables+' tables</span></div>';
+    });
+    h+='<div class="tree-dept"><div class="tree-dept-header" onclick="this.classList.toggle(\'expanded\');this.nextElementSibling.classList.toggle(\'open\')"><div class="tdh-icon" style="background:'+dept.bg+';color:'+dept.color+'">'+dept.icon+'</div><div class="tdh-info"><div class="tdh-name">'+dept.name+'</div><div class="tdh-meta">'+dept.phase+' \u2022 '+dept.domains.length+' domaines</div></div><span class="tdh-chevron">\u25B6</span></div><div class="tree-children">'+children+'</div></div>';
+  });
+  h+='</div></div>';
+  return h;
+}
+
+// ═══════ TIMELINE VIEW ═══════
+function renderTimelineView(){
+  let h='<div class="timeline-container">';
+  departments.forEach(function(dept,i){
+    let tags='';
+    dept.domains.forEach(function(dom){
+      tags+='<span class="timeline-tag" style="border-color:'+dom.color+';color:'+dom.color+';background:'+dom.bg+'" onclick="showDomainPage(\''+dom.id+'\')"><span class="tt-id">'+dom.id+'</span>'+dom.name+'</span>';
+    });
+    h+='<div class="timeline-dept"><div class="tl-dot" style="color:'+dept.color+';background:'+dept.color+'"></div><div class="tl-content"><div class="tl-header" onclick="this.nextElementSibling.classList.toggle(\'open\')"><span class="tlh-icon">'+dept.icon+'</span><div class="tlh-info"><div class="tlh-name">'+dept.name+'</div><div class="tlh-sub">'+dept.domains.map(function(d){return d.id;}).join(', ')+'</div></div><div class="tlh-right"><div class="tlh-count" style="color:'+dept.color+'">'+dept.domains.length+'</div><div class="tlh-label">domaines</div></div></div><div class="tl-body">'+tags+'</div></div></div>';
+  });
+  h+='</div>';
+  return h;
+}
+
+// Font Size Manager
+function toggleFontPopup(){document.getElementById('fontPopup').classList.toggle('open');}
+function setFontSize(size){
+  size=parseInt(size);
+  document.documentElement.style.fontSize=size+'px';
+  document.getElementById('fontSlider').value=size;
+  document.getElementById('fontSliderVal').textContent=size+'px';
+  document.querySelectorAll('.font-preset').forEach(function(p){p.classList.toggle('active',parseInt(p.dataset.size)===size);});
+}
+document.addEventListener('click',function(e){var fab=document.getElementById('fontFab');if(!fab.contains(e.target)){document.getElementById('fontPopup').classList.remove('open');}});
+
+// Init
+document.getElementById('mainContent').innerHTML=renderHome();
+</script>
+<!-- Admina_RH v1.2.0 - Multi-view: Accordion/Cascade/Mosaique/Cartes/Arbre/Chrono - 2026-08-17T20:30:00Z -->
+</body>
+</html>

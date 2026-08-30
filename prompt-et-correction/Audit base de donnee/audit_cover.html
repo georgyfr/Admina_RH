@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    @page { size: 794px 1123px; margin: 0; }
+    :root {
+      --c-bg: #f4f4f3;
+      --c-accent: #907422;
+      --c-text: #1c1b19;
+      --c-muted: #807e76;
+      --c-mid: #726745;
+      --c-surface: #eceae6;
+      --c-border: #cdc6b0;
+      --c-error: #a45d57;
+      --c-success: #477857;
+    }
+    html, body { margin: 0; padding: 0; width: 794px; height: 1123px; background: var(--c-bg); color: var(--c-text); font-family: 'Inter', sans-serif; }
+    @media screen {
+      html { height: auto; display: flex; justify-content: center; min-height: 100vh; background: var(--c-bg); }
+      body { transform-origin: top center; scale: min(1, calc(100vw / 794), calc(100vh / 1123)); margin: 0 auto; box-shadow: 0 0 60px rgba(0,0,0,0.15); }
+    }
+    .cover { width: 794px; height: 1123px; position: relative; box-sizing: border-box; overflow: hidden; }
+
+    /* Layer 1 - Background grid */
+    .cover-bg-layer { position: absolute; inset: 0; overflow: hidden; z-index: 1; }
+    .grid { position: absolute; inset: 0; background-image:
+      linear-gradient(rgba(114,103,69,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(114,103,69,0.06) 1px, transparent 1px);
+      background-size: 50px 50px; }
+
+    /* Layer 2 - Structure */
+    .cover-layer-2 { position: absolute; inset: 0; z-index: 2; }
+    .anchor-line { position: absolute; left: 70px; top: 112px; bottom: 112px; width: 6pt; background: var(--c-accent); }
+    .score-badge { position: absolute; right: 60px; top: 140px; width: 120px; height: 120px; background: var(--c-error); border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .score-badge .number { font-size: 42pt; font-weight: 900; color: white; line-height: 1; }
+    .score-badge .label { font-size: 9pt; color: rgba(255,255,255,0.8); letter-spacing: 2px; text-transform: uppercase; margin-top: 4px; }
+
+    /* Layer 3 - Content */
+    .cover-layer-3 { position: absolute; inset: 0; z-index: 3; }
+    .content { position: absolute; left: 130px; right: 60px; top: 0; bottom: 0; }
+    .kicker { position: absolute; top: 168px; font-size: 13pt; color: var(--c-accent); letter-spacing: 3pt; text-transform: uppercase; font-weight: 500; }
+    .hero-title { position: absolute; top: 240px; font-size: 48pt; font-weight: 900; line-height: 1.15; color: var(--c-text); max-width: 480px; }
+    .summary { position: absolute; top: 430px; font-size: 14pt; line-height: 1.7; color: var(--c-muted); max-width: 420px; }
+    .meta { position: absolute; top: 630px; }
+    .meta-row { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; font-size: 12pt; color: var(--c-text); }
+    .meta-label { color: var(--c-muted); min-width: 140px; }
+    .meta-value { font-weight: 600; }
+    .footer-bar { position: absolute; bottom: 60px; left: 130px; right: 60px; display: flex; justify-content: space-between; align-items: center; }
+    .footer-left { font-size: 9pt; color: var(--c-muted); letter-spacing: 2pt; text-transform: uppercase; }
+    .footer-right { font-size: 9pt; color: var(--c-muted); letter-spacing: 1pt; }
+    .tag-row { display: flex; gap: 8px; margin-top: 16px; }
+    .tag { padding: 4px 12px; border-radius: 4px; font-size: 9pt; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
+    .tag-critique { background: var(--c-error); color: white; }
+    .tag-majeur { background: #a4874e; color: white; }
+    .tag-info { background: var(--c-surface); color: var(--c-mid); border: 1px solid var(--c-border); }
+  </style>
+</head>
+<body>
+  <div class="cover">
+    <!-- Layer 1: Background -->
+    <div class="cover-bg-layer">
+      <div class="grid"></div>
+    </div>
+    <!-- Layer 2: Structure -->
+    <div class="cover-layer-2">
+      <div class="anchor-line"></div>
+      <div class="score-badge">
+        <div class="number">27</div>
+        <div class="label">/100</div>
+      </div>
+    </div>
+    <!-- Layer 3: Content -->
+    <div class="cover-layer-3">
+      <div class="content">
+        <div class="kicker">Rapport d'Audit Technique</div>
+        <div class="hero-title">Admina_RH Conformite Base de Donnees & Gestion des Comptes</div>
+        <div class="summary">Audit de conformite ISO 30201:2026 evaluant l'etat de la base de donnees Supabase et la fonctionnalite de gestion des comptes utilisateurs. Score global: 27/100. Huit problemes critiques identifies necessitant une correction immediate.</div>
+        <div class="meta">
+          <div class="meta-row"><span class="meta-label">Projet</span><span class="meta-value">Admina_RH SaaS Multi-Tenant</span></div>
+          <div class="meta-row"><span class="meta-label">Reference</span><span class="meta-value">aywwakllgvfoqlpowzqf</span></div>
+          <div class="meta-row"><span class="meta-label">Date</span><span class="meta-value">7 aout 2026</span></div>
+          <div class="meta-row"><span class="meta-label">Norme</span><span class="meta-value">ISO 30201:2026</span></div>
+          <div class="tag-row">
+            <span class="tag tag-critique">2 critiques P0</span>
+            <span class="tag tag-majeur">3 majeurs P1</span>
+            <span class="tag tag-info">3 mineurs P2-P3</span>
+          </div>
+        </div>
+        <div class="footer-bar">
+          <span class="footer-left">Admina_RH</span>
+          <span class="footer-right">Confidentiel</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

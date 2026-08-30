@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Admina_RH - Avenants</title>
+<style>
+:root{
+--bg:#f1f5f9;--white:#fff;--text:#1e293b;--text2:#64748b;--border:#e2e8f0;
+--primary:#0f766e;--primary-l:#14b8a6;--primary-ll:#ccfbf1;
+--success:#16a34a;--success-l:#dcfce7;
+--danger:#dc2626;--danger-l:#fee2e2;
+--warning:#d97706;--warning-l:#fef3c7;
+--info:#2563eb;--info-l:#dbeafe;
+--purple:#7c3aed;--purple-l:#ede9fe;
+--gray:#6b7280;--gray-l:#f3f4f6;
+--r:8px;--sh:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);
+--sh-lg:0 10px 15px -3px rgba(0,0,0,.1),0 4px 6px -4px rgba(0,0,0,.1);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'WenQuanYi Zen Hei','Noto Sans CJK SC',system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:13px;line-height:1.5;}
+
+/* TOPBAR */
+.topbar{background:var(--white);border-bottom:1px solid var(--border);padding:0 20px;height:56px;display:flex;align-items:center;gap:20px;position:sticky;top:0;z-index:100;box-shadow:var(--sh);}
+.topbar-logo{display:flex;align-items:center;gap:8px;font-weight:700;font-size:18px;color:var(--primary);white-space:nowrap;}
+.li{width:32px;height:32px;background:var(--primary);color:#fff;border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;}
+.breadcrumb{display:flex;align-items:center;gap:6px;color:var(--text2);font-size:13px;}
+.breadcrumb span{color:var(--text);font-weight:600;}
+.topbar-r{margin-left:auto;display:flex;align-items:center;gap:12px;}
+.mode-wrap{position:relative;}
+.mode-sel{appearance:none;background:var(--gray-l);border:1px solid var(--border);border-radius:var(--r);padding:6px 32px 6px 12px;font-size:12px;font-weight:600;cursor:pointer;color:var(--text);font-family:inherit;}
+.mode-arr{position:absolute;right:8px;top:50%;transform:translateY(-50%);pointer-events:none;font-size:10px;color:var(--text2);}
+.mbadge{padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:.5px;white-space:nowrap;}
+.mbadge.lect{background:#dbeafe;color:#1e40af;}
+.mbadge.lect-ecr{background:#d1fae5;color:#065f46;}
+.mbadge.ecr{background:#fee2e2;color:#991b1b;}
+.tuser{display:flex;align-items:center;gap:10px;padding-left:12px;border-left:1px solid var(--border);}
+.uav{width:34px;height:34px;background:var(--primary);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;}
+.uinfo{display:flex;flex-direction:column;}
+.uname{font-weight:600;font-size:13px;}
+.urole{font-size:11px;color:var(--text2);}
+
+/* LAYOUT */
+.app-lay{display:flex;min-height:calc(100vh - 56px);}
+.sidebar{width:220px;background:var(--white);border-right:1px solid var(--border);padding:12px 0;overflow-y:auto;flex-shrink:0;transition:width .2s;}
+.sb-sec{padding:8px 16px 4px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-top:8px;}
+.sb-item{display:flex;align-items:center;gap:10px;padding:9px 16px;cursor:pointer;color:var(--text2);font-size:13px;transition:all .15s;border-left:3px solid transparent;}
+.sb-item:hover{background:var(--gray-l);color:var(--text);}
+.sb-item.active{background:var(--primary-ll);color:var(--primary);border-left-color:var(--primary);font-weight:600;}
+.sb-item svg{width:16px;height:16px;flex-shrink:0;}
+
+/* MAIN */
+.main-c{flex:1;padding:20px;overflow-x:hidden;}
+.abar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:16px;}
+.abar.hid{display:none;}
+.srch-wrap{position:relative;display:flex;align-items:center;}
+.srch-wrap svg{position:absolute;left:10px;width:16px;height:16px;color:var(--text2);pointer-events:none;}
+.srch{padding:8px 12px 8px 34px;border:1px solid var(--border);border-radius:var(--r);font-size:13px;width:220px;outline:none;font-family:inherit;background:var(--white);}
+.srch:focus{border-color:var(--primary-l);box-shadow:0 0 0 3px rgba(20,184,166,.15);}
+.fsel{padding:8px 12px;border:1px solid var(--border);border-radius:var(--r);font-size:13px;outline:none;font-family:inherit;background:var(--white);cursor:pointer;}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:var(--r);font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .15s;font-family:inherit;white-space:nowrap;}
+.btn svg{width:16px;height:16px;}
+.btn-o{background:var(--white);border:1px solid var(--border);color:var(--text);}
+.btn-o:hover{background:var(--gray-l);}
+.btn-s{background:var(--primary);color:#fff;}
+.btn-s:hover{background:var(--primary-l);}
+.btn-w{background:var(--warning);color:#fff;}
+.btn-w:hover{background:#b45309;}
+.btn-d{background:var(--danger);color:#fff;}
+.btn-d:hover{background:#b91c1c;}
+.btn-g{background:transparent;color:var(--primary);border:1px solid var(--primary);padding:5px 12px;font-size:12px;}
+.btn-g:hover{background:var(--primary-ll);}
+.write-only{display:none;}
+.le-only{display:none;}
+
+/* TABLE */
+.tcon{background:var(--white);border-radius:var(--r);box-shadow:var(--sh);overflow:hidden;margin-bottom:20px;}
+.twrap{overflow-x:auto;}
+.twrap table{width:100%;border-collapse:collapse;min-width:1100px;}
+.twrap th{background:var(--gray-l);padding:10px 14px;text-align:left;font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid var(--border);white-space:nowrap;}
+.twrap td{padding:10px 14px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:middle;}
+.twrap tr:hover{background:#f8fafc;}
+.twrap tr:last-child td{border-bottom:none;}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;}
+.badge.brouillon{background:#fef3c7;color:#92400e;}
+.badge.soumis{background:#dbeafe;color:#1e40af;}
+.badge.valide{background:#ede9fe;color:#5b21b6;}
+.badge.signe{background:#ccfbf1;color:#065f46;}
+.badge.applique{background:#dcfce7;color:#166534;}
+.badge.rejete{background:#fee2e2;color:#991b1b;}
+.badge.type-remun{background:#dbeafe;color:#1e40af;}
+.badge.type-mut{background:#fef3c7;color:#92400e;}
+.badge.type-class{background:#ede9fe;color:#5b21b6;}
+.badge.type-tps{background:#e0e7ff;color:#3730a3;}
+.badge.type-susp{background:#fce7f3;color:#9d174d;}
+.badge.type-div{background:#f3f4f6;color:#374151;}
+
+/* KPI */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px;}
+.kpi{background:var(--white);border-radius:var(--r);padding:18px 20px;box-shadow:var(--sh);display:flex;align-items:center;gap:16px;}
+.kpi-ico{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.kpi-ico.blue{background:#dbeafe;color:#2563eb;}
+.kpi-ico.amber{background:#fef3c7;color:#d97706;}
+.kpi-ico.green{background:#dcfce7;color:#16a34a;}
+.kpi-ico.purple{background:#ede9fe;color:#7c3aed;}
+.kpi-lbl{font-size:12px;color:var(--text2);margin-bottom:2px;}
+.kpi-val{font-size:24px;font-weight:700;line-height:1.2;}
+.kpi-sub{font-size:11px;color:var(--text2);margin-top:2px;}
+
+/* MODAL */
+.mover{display:none;position:fixed;inset:0;background:rgba(15,23,42,.5);z-index:200;justify-content:center;align-items:flex-start;padding:40px 20px;overflow-y:auto;}
+.mover.show{display:flex;}
+.mbox{background:var(--white);border-radius:12px;box-shadow:var(--sh-lg);width:100%;max-width:680px;animation:mIn .2s ease;}
+@keyframes mIn{from{opacity:0;transform:translateY(-20px);}to{opacity:1;transform:translateY(0);}}
+.mhead{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;border-bottom:1px solid var(--border);}
+.mhead h3{font-size:16px;font-weight:700;}
+.mclose{width:32px;height:32px;border:none;background:var(--gray-l);border-radius:var(--r);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text2);font-size:18px;}
+.mclose:hover{background:var(--danger-l);color:var(--danger);}
+.mbody{padding:24px;}
+.mfoot{display:flex;justify-content:flex-end;gap:10px;padding:16px 24px;border-top:1px solid var(--border);background:var(--gray-l);border-radius:0 0 12px 12px;}
+
+/* FORM */
+.fg{margin-bottom:16px;}
+.fg label{display:block;font-size:12px;font-weight:600;color:var(--text2);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px;}
+.fg input,.fg select,.fg textarea{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:var(--r);font-size:13px;outline:none;font-family:inherit;background:var(--white);}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--primary-l);box-shadow:0 0 0 3px rgba(20,184,166,.15);}
+.fg textarea{resize:vertical;min-height:80px;}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.ferr{color:var(--danger);font-size:11px;margin-top:4px;display:none;}
+.fg.err input,.fg.err select{border-color:var(--danger);}
+.fg.err .ferr{display:block;}
+
+/* INFO GRID (modal voir) */
+.igrid{display:grid;grid-template-columns:1fr 1fr;gap:12px 24px;margin-bottom:20px;}
+.igrid .ifield{display:flex;flex-direction:column;gap:2px;}
+.igrid .ifield .ilbl{font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;}
+.igrid .ifield .ival{font-size:14px;font-weight:500;}
+.tab-bar{display:flex;gap:0;border-bottom:2px solid var(--border);margin-bottom:16px;}
+.tab-bar button{padding:10px 20px;border:none;background:none;font-size:13px;font-weight:600;color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .15s;font-family:inherit;}
+.tab-bar button.active{color:var(--primary);border-bottom-color:var(--primary);}
+.tab-bar button:hover{color:var(--text);}
+.tab-c{display:none;}
+.tab-c.active{display:block;}
+
+/* TOAST */
+.toast-c{position:fixed;bottom:20px;right:20px;z-index:300;display:flex;flex-direction:column;gap:8px;}
+.toast{padding:12px 20px;border-radius:var(--r);font-size:13px;font-weight:500;box-shadow:var(--sh-lg);animation:tIn .3s ease;min-width:280px;}
+@keyframes tIn{from{opacity:0;transform:translateX(40px);}to{opacity:1;transform:translateX(0);}}
+.toast.success{background:#065f46;color:#fff;}
+.toast.error{background:#991b1b;color:#fff;}
+.toast.info{background:#1e40af;color:#fff;}
+
+/* ACTIONS CELL */
+.act-cell{display:flex;gap:6px;flex-wrap:nowrap;}
+.act-cell .btn-g{padding:4px 10px;font-size:11px;}
+
+/* COMPARE TABLE */
+.cmp-tbl{width:100%;border-collapse:collapse;margin-top:12px;}
+.cmp-tbl th,.cmp-tbl td{padding:8px 12px;border:1px solid var(--border);text-align:left;font-size:13px;}
+.cmp-tbl th{background:var(--gray-l);font-weight:700;}
+.cmp-tbl .diff{background:#fef3c7;}
+.cmp-tbl .new{background:#dcfce7;}
+.cmp-tbl .old{background:#fee2e2;}
+</style>
+</head>
+<body>
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-logo"><div class="li">A</div> Admina_RH</div>
+  <div class="breadcrumb">Domaine 2 <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 3l4 4-4 4"/></svg> Contractualisation <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 3l4 4-4 4"/></svg> <span>Avenants</span></div>
+  <div class="topbar-r">
+    <div class="mode-wrap">
+      <select class="mode-sel" id="modeSel" onchange="switchMode(this.value)">
+        <option value="LECTURE">LECTURE</option>
+        <option value="LECTURE-ECRITURE">LECTURE-ECRITURE</option>
+        <option value="ECRITURE">ECRITURE</option>
+      </select>
+      <div class="mode-arr">&#9660;</div>
+    </div>
+    <div class="mbadge lect" id="modeBadge">LECTURE</div>
+    <div class="tuser">
+      <div class="uav">NK</div>
+      <div class="uinfo"><div class="uname">Nkoulou K.</div><div class="urole">Admin RH</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- LAYOUT -->
+<div class="app-lay">
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sb-sec">Phase 1 : Identification</div>
+    <div class="sb-item" data-sec="01"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4z"/><path d="M3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6z"/><path d="M15 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/></svg><span>01. Tableau de Bord</span></div>
+    <div class="sb-item" data-sec="02"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"/></svg><span>02. Employes</span></div>
+    <div class="sb-sec">Phase 2 : Contractualisation</div>
+    <div class="sb-item" data-sec="03"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clip-rule="evenodd"/></svg><span>03. Contrats</span></div>
+    <div class="sb-item active" data-sec="04"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.53 1.53 0 01-2.28.52c-1.28-.88-2.83.67-1.95 1.95a1.53 1.53 0 01-.52 2.28c-1.56.38-1.56 2.6 0 2.98a1.53 1.53 0 01.52 2.28c-.88 1.28.67 2.83 1.95 1.95a1.53 1.53 0 012.28.52c.38 1.56 2.6 1.56 2.98 0a1.53 1.53 0 012.28-.52c1.28.88 2.83-.67 1.95-1.95a1.53 1.53 0 01.52-2.28c1.56-.38 1.56-2.6 0-2.98a1.53 1.53 0 01-.52-2.28c.88-1.28-.67-2.83-1.95-1.95a1.53 1.53 0 01-2.28-.52z" clip-rule="evenodd"/><path d="M10 13a3 3 0 100-6 3 3 0 000 6z"/></svg><span>04. Avenants</span></div>
+    <div class="sb-item" data-sec="05"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"/></svg><span>05. Documents</span></div>
+    <div class="sb-item" data-sec="06"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"/></svg><span>06. Bancaires</span></div>
+    <div class="sb-item" data-sec="07"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"/></svg><span>07. Mutuelle</span></div>
+    <div class="sb-item" data-sec="08"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"/></svg><span>08. Permis</span></div>
+    <div class="sb-sec">Phase 3 : Presence & Conges</div>
+    <div class="sb-item" data-sec="09"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1z" clip-rule="evenodd"/></svg><span>09. Conges</span></div>
+    <div class="sb-item" data-sec="10"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 18a8 8 0 100-16 8 8 0 000 16z"/><path d="M10 5v5l3 3" stroke="#fff" stroke-width="1.5" fill="none"/></svg><span>10. Soldes de Conges</span></div>
+    <div class="sb-item" data-sec="11"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.736 6.979C9.208 6.193 9.696 6 10 6c.304 0 .792.193 1.264.979a1 1 0 001.715-1.029C12.279 4.784 11.232 4 10 4s-2.279.784-2.979 1.95c-.285.475-.507 1-.67 1.55H6a1 1 0 000 2h.013a9.358 9.358 0 000 1H6a1 1 0 100 2h.351c.163.55.385 1.075.67 1.55C7.721 15.216 8.768 16 10 16s2.279-.784 2.979-1.95a1 1 0 10-1.715-1.029C10.792 13.807 10.304 14 10 14c-.304 0-.792-.193-1.264-.979a5.94 5.94 0 01-.491-.521H10a1 1 0 100-2H7.997a7.35 7.35 0 010-1H10a1 1 0 100-2H8.245c.17-.18.346-.358.491-.521z"/></svg><span>11. Absences</span></div>
+    <div class="sb-item" data-sec="12"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/></svg><span>12. Heures Supp.</span></div>
+    <div class="sb-item" data-sec="13"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"/></svg><span>13. Pointage</span></div>
+    <div class="sb-item" data-sec="14"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"/></svg><span>14. Planning</span></div>
+    <div class="sb-sec">Phase 4 : Paie & Conformite</div>
+    <div class="sb-item" data-sec="15"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 18a8 8 0 100-16 8 8 0 000 16z"/><path d="M10 5v10M6 8l4-3 4 3" stroke="#fff" stroke-width="1.5" fill="none"/></svg><span>15. Paie</span></div>
+    <div class="sb-item" data-sec="16"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"/></svg><span>16. Declarations Sociales</span></div>
+    <div class="sb-item" data-sec="17"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"/></svg><span>17. Prets & Avances</span></div>
+    <div class="sb-item" data-sec="18"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"/></svg><span>18. Sanctions</span></div>
+    <div class="sb-sec">Phase 5 : Sortie & Pilotage</div>
+    <div class="sb-item" data-sec="19"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"/></svg><span>19. Visites Medicales</span></div>
+    <div class="sb-item" data-sec="20"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z"/></svg><span>20. Departs</span></div>
+    <div class="sb-item" data-sec="21"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"/></svg><span>21. Archivage</span></div>
+    <div class="sb-item" data-sec="22"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"/></svg><span>22. Rappels & Echeances</span></div>
+    <div class="sb-item" data-sec="23"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"/></svg><span>23. PDCA</span></div>
+    <div class="sb-item" data-sec="24"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg><span>24. Non-Conformites</span></div>
+  </div>
+<!-- MAIN CONTENT -->
+<div class="main-c">
+  <!-- KPI ROW -->
+  <div class="kpi-row">
+    <div class="kpi">
+      <div class="kpi-ico blue">
+        <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
+      </div>
+      <div><div class="kpi-lbl">Avenants Actifs</div><div class="kpi-val">64</div><div class="kpi-sub">+8 ce mois</div></div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-ico amber">
+        <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      </div>
+      <div><div class="kpi-lbl">En Attente Validation</div><div class="kpi-val">12</div><div class="kpi-sub">3 urgents (>7j)</div></div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-ico green">
+        <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      </div>
+      <div><div class="kpi-lbl">Taux d\'Approbation</div><div class="kpi-val">72%</div><div class="kpi-sub">Moy. sur 12 mois</div></div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-ico purple">
+        <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
+      </div>
+      <div><div class="kpi-lbl">Taux Conformite</div><div class="kpi-val">96.8%</div><div class="kpi-sub">ISO 30201:2026</div></div>
+    </div>
+  </div>
+
+  <!-- ACTION BAR -->
+  <div class="abar" id="actionBar">
+    <div class="srch-wrap">
+      <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"/></svg>
+      <input class="srch" id="srchInput" placeholder="Rechercher un avenant..." oninput="filterTable()">
+    </div>
+    <select class="fsel" id="fType" onchange="filterTable()"><option value="">Tous types</option><option value="Remuneration">Remuneration</option><option value="Mutation">Mutation</option><option value="Classification">Classification</option><option value="Temps de travail">Temps de travail</option><option value="Suspension">Suspension</option></select>
+    <select class="fsel" id="fStatut" onchange="filterTable()"><option value="">Tous statuts</option><option value="Brouillon">Brouillon</option><option value="Soumis">Soumis</option><option value="Valide">Valide</option><option value="Signe">Signe</option><option value="Applique">Applique</option><option value="Rejete">Rejete</option></select>
+    <select class="fsel" id="fDept" onchange="filterTable()"><option value="">Tous depts</option><option value="Ressources Humaines">Ressources Humaines</option><option value="Finance">Finance</option><option value="Informatique">Informatique</option><option value="Commercial">Commercial</option><option value="Production">Production</option></select>
+    <div style="flex:1"></div>
+    <button class="btn btn-o write-only" onclick="exportPDF()"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg> Export PDF</button>
+    <button class="btn btn-o le-only" onclick="exportXLS()"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg> Export Excel</button>
+    <button class="btn btn-o le-only" onclick="openModal('compareModal')"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg> Comparer</button>
+    <button class="btn btn-s write-only" onclick="openModal('newModal')"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg> Nouvel Avenant</button>
+  </div>
+
+  <!-- TABLE -->
+  <div class="tcon">
+    <div class="twrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Ref.</th>
+            <th>Employe</th>
+            <th>Type</th>
+            <th>Contrat Parent</th>
+            <th>Departement</th>
+            <th>Date Effet</th>
+            <th>Statut</th>
+            <th>Validateur</th>
+            <th class="act-col">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="tblBody">
+          <tr data-type="Remuneration" data-stat="Applique" data-dept="Ressources Humaines" data-emp="nkoulou k.">
+            <td><strong>AV-2026-001</strong></td>
+            <td>Nkoulou K.</td>
+            <td><span class="badge type-remun">Remuneration</span></td>
+            <td style="font-size:12px;color:var(--text2)">CTR-2024-012</td>
+            <td>Ressources Humaines</td>
+            <td>2026-01-15</td>
+            <td><span class="badge applique">Applique</span></td>
+            <td style="font-size:12px">M. Fotso</td>
+            <td class="act-cell">
+              <button class="btn btn-g" onclick="openModal('viewModal','AV-2026-001')">Voir</button>
+              <button class="btn btn-g le-only" onclick="openModal('editModal','AV-2026-001')" data-act="edit">Modifier</button>
+              <button class="btn btn-g le-only" onclick="submitAvenant('AV-2026-001')" data-act="submit" data-stat-hide="Soumis,Valide,Signe,Applique,Rejete">Soumettre</button>
+              <button class="btn btn-g write-only" onclick="validateAvenant('AV-2026-001')" data-act="validate" data-stat-hide="Brouillon,Applique,Rejete">Valider</button>
+              <button class="btn btn-g write-only" onclick="rejectAvenant('AV-2026-001')" data-act="reject" data-stat-hide="Brouillon,Applique">Rejeter</button>
+              <button class="btn btn-g write-only" onclick="signAvenant('AV-2026-001')" data-act="sign" data-stat-hide="Brouillon,Soumis,Rejete,Applique">Signer</button>
+              <button class="btn btn-g write-only" onclick="dupAvenant('AV-2026-001')" data-act="dup">Dupliquer</button>
+            </td>
+          </tr>
+          <tr data-type="Mutation" data-stat="Applique" data-dept="Finance" data-emp="tchinda p.">
+            <td><strong>AV-2026-002</strong></td>
+            <td>Tchinda P.</td>
+            <td><span class="badge type-mut">Mutation</span></td>
+            <td style="font-size:12px;color:var(--text2)">CTR-2023-008</td>
+            <td>Finance</td>
+            <td>2026-02-01</td>
+            <td><span class="badge applique">Applique</span></td>
+            <td style="font-size:12px">Dr. Nganou</td>
+            <td class="act-cell">
+              <button class="btn btn-g" onclick="openModal('viewModal','AV-2026-002')">Voir</button>
+              <button class="btn btn-g le-only" onclick="openModal('editModal','AV-2026-002')" data-act="edit">Modifier</button>
+              <button class="btn btn-g le-only" onclick="submitAvenant('AV-2026-002')" data-act="submit" data-stat-hide="Soumis,Valide,Signe,Applique,Rejete">Soumettre</button>
+              <button class="btn btn-g write-only" onclick="validateAvenant('AV-2026-002')" data-act="validate" data-stat-hide="Brouillon,Applique,Rejete">Valider</button>
+              <button class="btn btn-g write-only" onclick="rejectAvenant('AV-2026-002')" data-act="reject" data-stat-hide="Brouillon,Applique">Rejeter</button>
+              <button class="btn btn-g write-only" onclick="signAvenant('AV-2026-002')" data-act="sign" data-stat-hide="Brouillon,Soumis,Rejete,Applique">Signer</button>
+              <button class="btn btn-g write-only" onclick="dupAvenant('AV-2026-002')" data-act="dup">Dupliquer</button>
+            </td>
+          </tr>
+          <tr data-type="Classification" data-stat="Signe" data-dept="Informatique" data-emp="mbarga j.">
+            <td><strong>AV-2026-003</strong></td>
+            <td>Mbarga J.</td>
+            <td><span class="badge type-class">Classification</span></td>
+            <td style="font-size:12px;color:var(--text2)">CTR-2024-015</td>
+            <td>Informatique</td>
+            <td>2026-03-10</td>
+            <td><span class="badge signe">Signe</span></td>
+            <td style="font-size:12px">M. Fotso</td>
+            <td class="act-cell">
+              <button class="btn btn-g" onclick="openModal('viewModal','AV-2026-003')">Voir</button>
+              <button class="btn btn-g le-only" onclick="openModal('editModal','AV-2026-003')" data-act="edit">Modifier</button>
+              <button class="btn btn-g le-only" onclick="submitAvenant('AV-2026-003')" data-act="submit" data-stat-hide="Soumis,Valide,Signe,Applique,Rejete">Soumettre</button>
+              <button class="btn btn-g write-only" onclick="validateAvenant('AV-2026-003')" data-act="validate" data-stat-hide="Brouillon,Applique,Rejete">Valider</button>
+              <button class="btn btn-g write-only" onclick="rejectAvenant('AV-2026-003')" data-act="reject" data-stat-hide="Brouillon,Applique">Rejeter</button>
+              <button class="btn btn-g write-only" onclick="signAvenant('AV-2026-003')" data-act="sign" data-stat-hide="Brouillon,Soumis,Rejete,Applique">Signer</button>
+              <button class="btn btn-g write-only" onclick="dupAvenant('AV-2026-003')" data-act="dup">Dupliquer</button>
+            </td>
+          </tr>
+          <tr data-type="Remuneration" data-stat="Valide" data-dept="Commercial" data-emp="eyoum a.">
+            <td><strong>AV-2026-004</strong></td>
+            <td>Eyoum A.</td>
+            <td><span class="badge type-remun">Remuneration</span></td>
+            <td style="font-size:12px;color:var(--text2)">CTR-2022-003</td>
+            <td>Commercial</td>
+            <td>2026-04-01</td>
+            <td><span class="badge valide">Valide</span></td>
+            <td style="font-size:12px">En attente</td>
+            <td class="act-cell">
+              <button class="btn btn-g" onclick="openModal('viewModal','AV-2026-004')">Voir</button>
+              <button class="btn btn-g le-only" onclick="openModal('editModal','AV-2026-004')" data-act="edit">Modifier</button>
+              <button class="btn btn-g le-only" onclick="submitAvenant('AV-2026-004')" data-act="submit" data-stat-hide="Soumis,Valide,Signe,Applique,Rejete">Soumettre</button>
+              <button class="btn btn-g write-only" onclick="validateAvenant('AV-2026-004')" data-act="validate" data-stat-hide="Brouillon,Applique,Rejete">Valider</button>
+              <button class="btn btn-g write-only" onclick="rejectAvenant('AV-2026-004')" data-act="reject" data-stat-hide="Brouillon,Applique">Rejeter</button>
+              <button class="btn btn-g write-only" onclick="signAvenant('AV-2026-004')" data-act="sign" data-stat-hide="Brouillon,Soumis,Rejete,Applique">Signer</button>
+              <button class="btn btn-g write-only" onclick="dupAvenant('AV-2026-004')" data-act="dup">Dupliquer</button>
+            </td>
+          </tr>
+          <tr data-type="Temps de travail" data-stat="Soumis" data-dept="Production" data-emp="ngo m.">
+            <td><strong>AV-2026-005</strong></td>
+            <td>Ngo M.</td>
+            <td><span class="badge type-tps">Temps de travail</span></td>
+            <td style="font-size:12px;color:var(--text2)">CTR-2025-007</td>
+            <td>Production</td>
+            <td>2026-05-15</td>
+            <td><span class="badge soumis">Soumis</span></td>
+            <td style="font-size:12px">C. Manga</td>
+            <td class="act-cell">
+              <button class="btn btn-g" onclick="openModal('viewModal','AV-2026-005')">Voir</button>
+              <button class="btn btn-g le-only" onclick="openModal('editModal','AV-2026-005')" data-act="edit">Modifier</button>
+              <button class="btn btn-g le-only" onclick="submitAvenant('AV-2026-005')" data-act="submit" data-stat-hide="Soumis,Valide,Signe,Applique,Rejete">Soumettre</button>
+              <button class="btn btn-g write-only" onclick="validateAvenant('AV-2026-005')" data-act="validate" data-stat-hide="Brouillon,Applique,Rejete">Valider</button>
+              <button class="btn btn-g write-only" onclick="rejectAvenant('AV-2026-005')" data-act="reject" data-stat-hide="Brouillon,Applique">Rejeter</button>
+              <button class="btn btn-g write-only" onclick="signAvenant('AV-2026-005')" data-act="sign" data-stat-hide="Brouillon,Soumis,Rejete,Applique">Signer</button>
+              <button class="btn btn-g write-only" onclick="dupAvenant('AV-2026-005')" data-act="dup">Dupliquer</button>
+            </td>
+          </tr>
+          <tr data-type="Mutation" data-stat="Brouillon" data-dept="Informatique" data-emp="fongang s.">
+            <td><strong>AV-2026-006</strong></td>
+            <td>Fongang S.</td>
+            <td><span class="badge type-mut">Mutation</span></td>
+            <td style="font-size:12px;color:var(--text2)">CTR-2024-019</td>
+            <td>Informatique</td>
+            <td>2026-06-01</td>
+            <td><span class="badge brouillon">Brouillon</span></td>
+            <td style="font-size:12px">-</td>
+            <td class="act-cell">
+              <button class="btn btn-g" onclick="openModal('viewModal','AV-2026-006')">Voir</button>
+              <button class="btn btn-g le-only" onclick="openModal('editModal','AV-2026-006')" data-act="edit">Modifier</button>
+              <button class="btn btn-g le-only" onclick="submitAvenant('AV-2026-006')" data-act="submit" data-stat-hide="Soumis,Valide,Signe,Applique,Rejete">Soumettre</button>
+              <button class="btn btn-g write-only" onclick="validateAvenant('AV-2026-006')" data-act="validate" data-stat-hide="Brouillon,Applique,Rejete">Valider</button>
+              <button class="btn btn-g write-only" onclick="rejectAvenant('AV-2026-006')" data-act="reject" data-stat-hide="Brouillon,Applique">Rejeter</button>
+              <button class="btn btn-g write-only" onclick="signAvenant('AV-2026-006')" data-act="sign" data-stat-hide="Brouillon,Soumis,Rejete,Applique">Signer</button>
+              <button class="btn btn-g write-only" onclick="dupAvenant('AV-2026-006')" data-act="dup">Dupliquer</button>
+            </td>
+          </tr>
+          <tr data-type="Remuneration" data-stat="Brouillon" data-dept="Ressources Humaines" data-emp="kamga r.">
+            <td><strong>AV-2026-007</strong></td>
+            <td>Kamga R.</td>
+            <td><span class="badge type-remun">Remuneration</span></td>
+            <td style="font-size:12px;color:var(--text2)">CTR-2023-011</td>
+            <td>Ressources Humaines</td>
+            <td>2026-06-15</td>
+            <td><span class="badge brouillon">Brouillon</span></td>
+            <td style="font-size:12px">-</td>
+            <td class="act-cell">
+              <button class="btn btn-g" onclick="openModal('viewModal','AV-2026-007')">Voir</button>
+              <button class="btn btn-g le-only" onclick="openModal('editModal','AV-2026-007')" data-act="edit">Modifier</button>
+              <button class="btn btn-g le-only" onclick="submitAvenant('AV-2026-007')" data-act="submit" data-stat-hide="Soumis,Valide,Signe,Applique,Rejete">Soumettre</button>
+              <button class="btn btn-g write-only" onclick="validateAvenant('AV-2026-007')" data-act="validate" data-stat-hide="Brouillon,Applique,Rejete">Valider</button>
+              <button class="btn btn-g write-only" onclick="rejectAvenant('AV-2026-007')" data-act="reject" data-stat-hide="Brouillon,Applique">Rejeter</button>
+              <button class="btn btn-g write-only" onclick="signAvenant('AV-2026-007')" data-act="sign" data-stat-hide="Brouillon,Soumis,Rejete,Applique">Signer</button>
+              <button class="btn btn-g write-only" onclick="dupAvenant('AV-2026-007')" data-act="dup">Dupliquer</button>
+            </td>
+          </tr>
+          <tr data-type="Classification" data-stat="Soumis" data-dept="Finance" data-emp="assoumou d.">
+            <td><strong>AV-2026-008</strong></td>
+            <td>Assoumou D.</td>
+            <td><span class="badge type-class">Classification</span></td>
+            <td style="font-size:12px;color:var(--text2)">CTR-2025-002</td>
+            <td>Finance</td>
+            <td>2026-07-01</td>
+            <td><span class="badge soumis">Soumis</span></td>
+            <td style="font-size:12px">Dr. Nganou</td>
+            <td class="act-cell">
+              <button class="btn btn-g" onclick="openModal('viewModal','AV-2026-008')">Voir</button>
+              <button class="btn btn-g le-only" onclick="openModal('editModal','AV-2026-008')" data-act="edit">Modifier</button>
+              <button class="btn btn-g le-only" onclick="submitAvenant('AV-2026-008')" data-act="submit" data-stat-hide="Soumis,Valide,Signe,Applique,Rejete">Soumettre</button>
+              <button class="btn btn-g write-only" onclick="validateAvenant('AV-2026-008')" data-act="validate" data-stat-hide="Brouillon,Applique,Rejete">Valider</button>
+              <button class="btn btn-g write-only" onclick="rejectAvenant('AV-2026-008')" data-act="reject" data-stat-hide="Brouillon,Applique">Rejeter</button>
+              <button class="btn btn-g write-only" onclick="signAvenant('AV-2026-008')" data-act="sign" data-stat-hide="Brouillon,Soumis,Rejete,Applique">Signer</button>
+              <button class="btn btn-g write-only" onclick="dupAvenant('AV-2026-008')" data-act="dup">Dupliquer</button>
+            </td>
+          </tr>
+          <tr data-type="Remuneration" data-stat="Rejete" data-dept="Commercial" data-emp="biyouha f.">
+            <td><strong>AV-2026-009</strong></td>
+            <td>Biyouha F.</td>
+            <td><span class="badge type-remun">Remuneration</span></td>
+            <td style="font-size:12px;color:var(--text2)">CTR-2024-004</td>
+            <td>Commercial</td>
+            <td>2026-07-15</td>
+            <td><span class="badge rejete">Rejete</span></td>
+            <td style="font-size:12px">M. Fotso</td>
+            <td class="act-cell">
+              <button class="btn btn-g" onclick="openModal('viewModal','AV-2026-009')">Voir</button>
+              <button class="btn btn-g le-only" onclick="openModal('editModal','AV-2026-009')" data-act="edit">Modifier</button>
+              <button class="btn btn-g le-only" onclick="submitAvenant('AV-2026-009')" data-act="submit" data-stat-hide="Soumis,Valide,Signe,Applique,Rejete">Soumettre</button>
+              <button class="btn btn-g write-only" onclick="validateAvenant('AV-2026-009')" data-act="validate" data-stat-hide="Brouillon,Applique,Rejete">Valider</button>
+              <button class="btn btn-g write-only" onclick="rejectAvenant('AV-2026-009')" data-act="reject" data-stat-hide="Brouillon,Applique">Rejeter</button>
+              <button class="btn btn-g write-only" onclick="signAvenant('AV-2026-009')" data-act="sign" data-stat-hide="Brouillon,Soumis,Rejete,Applique">Signer</button>
+              <button class="btn btn-g write-only" onclick="dupAvenant('AV-2026-009')" data-act="dup">Dupliquer</button>
+            </td>
+          </tr>
+          <tr data-type="Suspension" data-stat="Soumis" data-dept="Production" data-emp="nganmedjio l.">
+            <td><strong>AV-2026-010</strong></td>
+            <td>Nganmedjio L.</td>
+            <td><span class="badge type-susp">Suspension</span></td>
+            <td style="font-size:12px;color:var(--text2)">CTR-2023-016</td>
+            <td>Production</td>
+            <td>2026-08-01</td>
+            <td><span class="badge soumis">Soumis</span></td>
+            <td style="font-size:12px">C. Manga</td>
+            <td class="act-cell">
+              <button class="btn btn-g" onclick="openModal('viewModal','AV-2026-010')">Voir</button>
+              <button class="btn btn-g le-only" onclick="openModal('editModal','AV-2026-010')" data-act="edit">Modifier</button>
+              <button class="btn btn-g le-only" onclick="submitAvenant('AV-2026-010')" data-act="submit" data-stat-hide="Soumis,Valide,Signe,Applique,Rejete">Soumettre</button>
+              <button class="btn btn-g write-only" onclick="validateAvenant('AV-2026-010')" data-act="validate" data-stat-hide="Brouillon,Applique,Rejete">Valider</button>
+              <button class="btn btn-g write-only" onclick="rejectAvenant('AV-2026-010')" data-act="reject" data-stat-hide="Brouillon,Applique">Rejeter</button>
+              <button class="btn btn-g write-only" onclick="signAvenant('AV-2026-010')" data-act="sign" data-stat-hide="Brouillon,Soumis,Rejete,Applique">Signer</button>
+              <button class="btn btn-g write-only" onclick="dupAvenant('AV-2026-010')" data-act="dup">Dupliquer</button>
+            </td>
+          </tr>
+          <tr data-type="Mutation" data-stat="Brouillon" data-dept="Informatique" data-emp="tchapda h.">
+            <td><strong>AV-2026-011</strong></td>
+            <td>Tchapda H.</td>
+            <td><span class="badge type-mut">Mutation</span></td>
+            <td style="font-size:12px;color:var(--text2)">CTR-2025-021</td>
+            <td>Informatique</td>
+            <td>2026-08-15</td>
+            <td><span class="badge brouillon">Brouillon</span></td>
+            <td style="font-size:12px">-</td>
+            <td class="act-cell">
+              <button class="btn btn-g" onclick="openModal('viewModal','AV-2026-011')">Voir</button>
+              <button class="btn btn-g le-only" onclick="openModal('editModal','AV-2026-011')" data-act="edit">Modifier</button>
+              <button class="btn btn-g le-only" onclick="submitAvenant('AV-2026-011')" data-act="submit" data-stat-hide="Soumis,Valide,Signe,Applique,Rejete">Soumettre</button>
+              <button class="btn btn-g write-only" onclick="validateAvenant('AV-2026-011')" data-act="validate" data-stat-hide="Brouillon,Applique,Rejete">Valider</button>
+              <button class="btn btn-g write-only" onclick="rejectAvenant('AV-2026-011')" data-act="reject" data-stat-hide="Brouillon,Applique">Rejeter</button>
+              <button class="btn btn-g write-only" onclick="signAvenant('AV-2026-011')" data-act="sign" data-stat-hide="Brouillon,Soumis,Rejete,Applique">Signer</button>
+              <button class="btn btn-g write-only" onclick="dupAvenant('AV-2026-011')" data-act="dup">Dupliquer</button>
+            </td>
+          </tr>
+          <tr data-type="Temps de travail" data-stat="Brouillon" data-dept="Ressources Humaines" data-emp="nkoulou k.">
+            <td><strong>AV-2026-012</strong></td>
+            <td>Nkoulou K.</td>
+            <td><span class="badge type-tps">Temps de travail</span></td>
+            <td style="font-size:12px;color:var(--text2)">CTR-2024-012</td>
+            <td>Ressources Humaines</td>
+            <td>2026-09-01</td>
+            <td><span class="badge brouillon">Brouillon</span></td>
+            <td style="font-size:12px">-</td>
+            <td class="act-cell">
+              <button class="btn btn-g" onclick="openModal('viewModal','AV-2026-012')">Voir</button>
+              <button class="btn btn-g le-only" onclick="openModal('editModal','AV-2026-012')" data-act="edit">Modifier</button>
+              <button class="btn btn-g le-only" onclick="submitAvenant('AV-2026-012')" data-act="submit" data-stat-hide="Soumis,Valide,Signe,Applique,Rejete">Soumettre</button>
+              <button class="btn btn-g write-only" onclick="validateAvenant('AV-2026-012')" data-act="validate" data-stat-hide="Brouillon,Applique,Rejete">Valider</button>
+              <button class="btn btn-g write-only" onclick="rejectAvenant('AV-2026-012')" data-act="reject" data-stat-hide="Brouillon,Applique">Rejeter</button>
+              <button class="btn btn-g write-only" onclick="signAvenant('AV-2026-012')" data-act="sign" data-stat-hide="Brouillon,Soumis,Rejete,Applique">Signer</button>
+              <button class="btn btn-g write-only" onclick="dupAvenant('AV-2026-012')" data-act="dup">Dupliquer</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div><!-- end main-c -->
+<!-- MODAL VOIR AVENANT -->
+<div class="mover" id="viewModal">
+  <div class="mbox">
+    <div class="mhead"><h3>Détails de l'Avenant <span id="viewRef"></span></h3><button class="mclose" onclick="closeModal('viewModal')">&times;</button></div>
+    <div class="mbody">
+      <div class="tab-bar">
+        <button class="active" onclick="switchTab(this,'vt-info')">Informations</button>
+        <button onclick="switchTab(this,'vt-champs')">Champs Modifies</button>
+        <button onclick="switchTab(this,'vt-histo')">Historique</button>
+        <button onclick="switchTab(this,'vt-conform')">Conformite</button>
+      </div>
+      <div class="tab-c active" id="vt-info">
+        <div class="igrid">
+          <div class="ifield"><div class="ilbl">Reference</div><div class="ival" id="vi-ref">AV-2026-001</div></div>
+          <div class="ifield"><div class="ilbl">Employe</div><div class="ival" id="vi-emp">Nkoulou K.</div></div>
+          <div class="ifield"><div class="ilbl">Type</div><div class="ival" id="vi-type">Remuneration</div></div>
+          <div class="ifield"><div class="ilbl">Statut</div><div class="ival" id="vi-stat">Applique</div></div>
+          <div class="ifield"><div class="ilbl">Contrat Parent</div><div class="ival" id="vi-contrat">CTR-2024-012</div></div>
+          <div class="ifield"><div class="ilbl">Departement</div><div class="ival" id="vi-dept">Ressources Humaines</div></div>
+          <div class="ifield"><div class="ilbl">Date d'Effet</div><div class="ival" id="vi-date">2026-01-15</div></div>
+          <div class="ifield"><div class="ilbl">Dernier Validateur</div><div class="ival" id="vi-val">M. Fotso</div></div>
+        </div>
+        <div class="fg"><label>Motif</label><div style="padding:10px;background:var(--gray-l);border-radius:var(--r);font-size:13px;">Revalorisation salariale annuelle conforme a la convention collective. Augmentation de 8% du salaire de base suite a l'evaluation individuelle 2025 et l'evolution de l'indice des prix a la consommation (IPC) au Cameroun.</div></div>
+      </div>
+      <div class="tab-c" id="vt-champs">
+        <table class="cmp-tbl">
+          <thead><tr><th>Champ</th><th style="background:#fee2e2;">Ancienne Valeur</th><th style="background:#dcfce7;">Nouvelle Valeur</th></tr></thead>
+          <tbody>
+            <tr><td>Salaire de Base</td><td class="old">350 000 FCFA</td><td class="new">378 000 FCFA</td></tr>
+            <tr><td>Indemnite logement</td><td class="old">70 000 FCFA</td><td class="new">75 600 FCFA</td></tr>
+            <tr><td>Indemnite transport</td><td class="old">25 000 FCFA</td><td class="new">27 000 FCFA</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="tab-c" id="vt-histo">
+        <table class="cmp-tbl">
+          <thead><tr><th>Date</th><th>Action</th><th>Auteur</th><th>Commentaire</th></tr></thead>
+          <tbody>
+            <tr><td>2026-01-05 09:30</td><td>Creation</td><td>Nkoulou K. (Admin RH)</td><td>Brouillon cree automatiquement</td></tr>
+            <tr><td>2026-01-07 14:15</td><td>Soumission</td><td>Nkoulou K. (Admin RH)</td><td>Soumis a la validation N+1</td></tr>
+            <tr><td>2026-01-09 11:00</td><td>Validation N+1</td><td>Dr. Nganou (DRH)</td><td>Approuve - impact paie calcule</td></tr>
+            <tr><td>2026-01-12 16:45</td><td>Signature employeur</td><td>M. Fotso (Admin RH)</td><td>Signe electroniquement</td></tr>
+            <tr><td>2026-01-14 10:00</td><td>Signature employe</td><td>Nkoulou K.</td><td>Contre-signe via portail</td></tr>
+            <tr><td>2026-01-15 08:00</td><td>Application</td><td>Systeme (auto)</td><td>Contrat parent mis a jour, paie synchronisee</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="tab-c" id="vt-conform">
+        <div class="igrid">
+          <div class="ifield"><div class="ilbl">Code du Travail</div><div class="ival" style="color:var(--success)">Conforme (Art. 23-34)</div></div>
+          <div class="ifield"><div class="ilbl">Convention Collective</div><div class="ival" style="color:var(--success)">Respectee</div></div>
+          <div class="ifield"><div class="ilbl">Plafond CNPS</div><div class="ival" style="color:var(--success)">Sous le plafond (750 000 FCFA)</div></div>
+          <div class="ifield"><div class="ilbl">Preavis Legal</div><div class="ival" style="color:var(--success)">Applique (15 jours)</div></div>
+          <div class="ifield"><div class="ilbl">Droit du Travail OHADA</div><div class="ival" style="color:var(--success)">Conforme</div></div>
+          <div class="ifield"><div class="ilbl">Audit ISO 30201</div><div class="ival" style="color:var(--success)">Trace enregistrée (id: aud_2847)</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="mfoot">
+      <button class="btn btn-o" onclick="closeModal('viewModal')">Fermer</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL NOUVEL AVENANT -->
+<div class="mover" id="newModal">
+  <div class="mbox">
+    <div class="mhead"><h3>Nouvel Avenant</h3><button class="mclose" onclick="closeModal('newModal')">&times;</button></div>
+    <div class="mbody">
+      <div class="frow">
+        <div class="fg"><label>Employe *</label><select id="newEmp" required><option value="">Selectionner...</option><option>Nkoulou K.</option><option>Tchinda P.</option><option>Mbarga J.</option><option>Eyoum A.</option><option>Ngo M.</option><option>Fongang S.</option><option>Kamga R.</option><option>Assoumou D.</option><option>Biyouha F.</option><option>Nganmedjio L.</option><option>Tchapda H.</option></select><div class="ferr">Employe requis</div></div>
+        <div class="fg"><label>Contrat Parent *</label><select id="newContrat" required><option value="">Auto (lie a l'employe)</option></select></div>
+      </div>
+      <div class="frow">
+        <div class="fg"><label>Type d'Avenant *</label><select id="newType" required><option value="">Selectionner...</option><option>Remuneration</option><option>Mutation</option><option>Classification</option><option>Temps de travail</option><option>Suspension</option></select><div class="ferr">Type requis</div></div>
+        <div class="fg"><label>Date d'Effet *</label><input type="date" id="newDate" required><div class="ferr">Date requise</div></div>
+      </div>
+      <div class="fg"><label>Motif *</label><textarea id="newMotif" placeholder="Expliquer la raison de cet avenant..."></textarea><div class="ferr">Motif requis (min. 20 caracteres)</div></div>
+      <div id="newDynFields"></div>
+    </div>
+    <div class="mfoot">
+      <button class="btn btn-o" onclick="closeModal('newModal')">Annuler</button>
+      <button class="btn btn-s" onclick="createAvenant()">Creer le Brouillon</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL MODIFIER -->
+<div class="mover" id="editModal">
+  <div class="mbox">
+    <div class="mhead"><h3>Modifier l'Avenant <span id="editRef"></span></h3><button class="mclose" onclick="closeModal('editModal')">&times;</button></div>
+    <div class="mbody">
+      <div class="frow">
+        <div class="fg"><label>Type</label><select id="editType"><option>Remuneration</option><option>Mutation</option><option>Classification</option><option>Temps de travail</option><option>Suspension</option></select></div>
+        <div class="fg"><label>Date d'Effet</label><input type="date" id="editDate"></div>
+      </div>
+      <div class="fg"><label>Motif</label><textarea id="editMotif"></textarea></div>
+      <div id="editDynFields"></div>
+    </div>
+    <div class="mfoot">
+      <button class="btn btn-o" onclick="closeModal('editModal')">Annuler</button>
+      <button class="btn btn-s" onclick="saveEdit()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL COMPARER VERSIONS -->
+<div class="mover" id="compareModal">
+  <div class="mbox">
+    <div class="mhead"><h3>Comparaison d'Avenants</h3><button class="mclose" onclick="closeModal('compareModal')">&times;</button></div>
+    <div class="mbody">
+      <div class="frow">
+        <div class="fg"><label>Avenant Source</label><select><option>AV-2026-001 (Nkoulou K. - Remuneration)</option><option>AV-2026-003 (Mbarga J. - Classification)</option></select></div>
+        <div class="fg"><label>Avenant Cible</label><select><option>AV-2026-004 (Eyoum A. - Remuneration)</option><option>AV-2026-007 (Kamga R. - Remuneration)</option></select></div>
+      </div>
+      <table class="cmp-tbl">
+        <thead><tr><th>Champ</th><th>Source (AV-2026-001)</th><th>Cible (AV-2026-004)</th></tr></thead>
+        <tbody>
+          <tr><td>Employe</td><td>Nkoulou K.</td><td>Eyoum A.</td></tr>
+          <tr class="diff"><td>Ancien Salaire</td><td>350 000 FCFA</td><td>280 000 FCFA</td></tr>
+          <tr class="diff"><td>Nouveau Salaire</td><td>378 000 FCFA</td><td>310 000 FCFA</td></tr>
+          <tr class="diff"><td>Augmentation</td><td>+8.0%</td><td>+10.7%</td></tr>
+          <tr><td>Statut</td><td class="new">Applique</td><td class="old">Valide</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="mfoot">
+      <button class="btn btn-o" onclick="closeModal('compareModal')">Fermer</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST CONTAINER -->
+<div class="toast-c" id="toastC"></div>
+<script>
+// DATA
+const avenants = {
+  'AV-2026-001': {emp:'Nkoulou K.',type:'Remuneration',contrat:'CTR-2024-012',dept:'Ressources Humaines',date:'2026-01-15',stat:'Applique',val:'M. Fotso',
+    motif:'Revalorisation salariale annuelle conforme a la convention collective. Augmentation de 8% du salaire de base.'},
+  'AV-2026-002': {emp:'Tchinda P.',type:'Mutation',contrat:'CTR-2023-008',dept:'Finance',date:'2026-02-01',stat:'Applique',val:'Dr. Nganou',
+    motif:'Mutation du service Comptabilite vers le service Controle de Gestion pour reorganisation interne.'},
+  'AV-2026-003': {emp:'Mbarga J.',type:'Classification',contrat:'CTR-2024-015',dept:'Informatique',date:'2026-03-10',stat:'Signe',val:'M. Fotso',
+    motif:'Reclassification de A3 a A4 suite a l\'obtention du diplome superieur en informatique.'},
+  'AV-2026-004': {emp:'Eyoum A.',type:'Remuneration',contrat:'CTR-2022-003',dept:'Commercial',date:'2026-04-01',stat:'Valide',val:'En attente',
+    motif:'Ajustement salarial individuel base sur les resultats exceptionnels du T4 2025.'},
+  'AV-2026-005': {emp:'Ngo M.',type:'Temps de travail',contrat:'CTR-2025-007',dept:'Production',date:'2026-05-15',stat:'Soumis',val:'C. Manga',
+    motif:'Passage de 40h a 35h hebdomadaires (temps partiel) pour raisons personnelles medically documentees.'},
+  'AV-2026-006': {emp:'Fongang S.',type:'Mutation',contrat:'CTR-2024-019',dept:'Informatique',date:'2026-06-01',stat:'Brouillon',val:'-',
+    motif:'Proposition de mutation vers le departement Commercial comme chef de projet digital.'},
+  'AV-2026-007': {emp:'Kamga R.',type:'Remuneration',contrat:'CTR-2023-011',dept:'Ressources Humaines',date:'2026-06-15',stat:'Brouillon',val:'-',
+    motif:'Revision salariale suite a la promotion au poste de Responsable Formation.'},
+  'AV-2026-008': {emp:'Assoumou D.',type:'Classification',contrat:'CTR-2025-002',dept:'Finance',date:'2026-07-01',stat:'Soumis',val:'Dr. Nganou',
+    motif:'Passage de la categorie B a la categorie A apres 5 ans d\'anciennete.'},
+  'AV-2026-009': {emp:'Biyouha F.',type:'Remuneration',contrat:'CTR-2024-004',dept:'Commercial',date:'2026-07-15',stat:'Rejete',val:'M. Fotso',
+    motif:'Demande d\'augmentation non justifiee par les evaluations de performance.'},
+  'AV-2026-010': {emp:'Nganmedjio L.',type:'Suspension',contrat:'CTR-2023-016',dept:'Production',date:'2026-08-01',stat:'Soumis',val:'C. Manga',
+    motif:'Suspension temporaire du contrat pour convenances personnelles (art. 26 Code du Travail camerounais).'},
+  'AV-2026-011': {emp:'Tchapda H.',type:'Mutation',contrat:'CTR-2025-021',dept:'Informatique',date:'2026-08-15',stat:'Brouillon',val:'-',
+    motif:'Mutation interne vers l\'equipe DevOps pour renforcement technique.'},
+  'AV-2026-012': {emp:'Nkoulou K.',type:'Temps de travail',contrat:'CTR-2024-012',dept:'Ressources Humaines',date:'2026-09-01',stat:'Brouillon',val:'-',
+    motif:'Passage au teletravail 2j/semaine en application de la politique interne.'}
+};
+
+// MODE SWITCHING
+function switchMode(m){
+  const b=document.getElementById('modeBadge');
+  const ab=document.getElementById('actionBar');
+  const wo=document.querySelectorAll('.write-only');
+  const lo=document.querySelectorAll('.le-only');
+  
+  wo.forEach(e=>e.style.display='none');
+  lo.forEach(e=>e.style.display='none');
+  b.className='mbadge '+(m==='LECTURE'?'lect':m==='LECTURE-ECRITURE'?'lect-ecr':'ecr');
+  b.textContent=m;
+  
+  if(m==='LECTURE-ECRITURE'){
+    ab.classList.remove('hid');
+    lo.forEach(e=>e.style.display='inline-flex');
+  } else if(m==='ECRITURE'){
+    ab.classList.remove('hid');
+    wo.forEach(e=>e.style.display='inline-flex');
+    lo.forEach(e=>e.style.display='inline-flex');
+  } else {
+    ab.classList.add('hid');
+  }
+  updateActionCells(m);
+  showToast('Mode : '+m,'info');
+}
+
+function updateActionCells(mode){
+  document.querySelectorAll('#tblBody tr').forEach(tr=>{
+    const stat=tr.dataset.stat;
+    const cell=tr.querySelector('.act-cell');
+    if(!cell)return;
+    cell.querySelectorAll('[data-act]').forEach(btn=>{
+      const hide=btn.dataset.statHide||'';
+      const hidden=hide.split(',').includes(stat);
+      if(mode==='LECTURE'){
+        btn.style.display='none';
+      } else if(mode==='LECTURE-ECRITURE'){
+        const act=btn.dataset.act;
+        if(['submit','edit','dup'].includes(act)&&!hidden) btn.style.display='inline-flex';
+        else btn.style.display='none';
+      } else {
+        btn.style.display=hidden?'none':'inline-flex';
+      }
+    });
+  });
+}
+
+// FILTER
+function filterTable(){
+  const q=document.getElementById('srchInput').value.toLowerCase();
+  const ft=document.getElementById('fType').value;
+  const fs=document.getElementById('fStatut').value;
+  const fd=document.getElementById('fDept').value;
+  document.querySelectorAll('#tblBody tr').forEach(tr=>{
+    const show=(!q||tr.dataset.emp.includes(q)||tr.dataset.type.toLowerCase().includes(q)||tr.dataset.dept.toLowerCase().includes(q))
+      &&(!ft||tr.dataset.type===ft)
+      &&(!fs||tr.dataset.stat===fs)
+      &&(!fd||tr.dataset.dept===fd);
+    tr.style.display=show?'':'none';
+  });
+}
+
+// MODAL
+function openModal(id,ref){
+  if(ref && avenants[ref]){
+    const a=avenants[ref];
+    document.getElementById('viewRef').textContent=ref;
+    document.getElementById('vi-ref').textContent=ref;
+    document.getElementById('vi-emp').textContent=a.emp;
+    document.getElementById('vi-type').textContent=a.type;
+    document.getElementById('vi-stat').textContent=a.stat;
+    document.getElementById('vi-contrat').textContent=a.contrat;
+    document.getElementById('vi-dept').textContent=a.dept;
+    document.getElementById('vi-date').textContent=a.date;
+    document.getElementById('vi-val').textContent=a.val;
+  }
+  if(id==='editModal'&&ref){
+    const a=avenants[ref];
+    document.getElementById('editRef').textContent=ref;
+    document.getElementById('editType').value=a.type;
+    document.getElementById('editDate').value=a.date;
+    document.getElementById('editMotif').value=a.motif;
+  }
+  document.getElementById(id).classList.add('show');
+}
+function closeModal(id){document.getElementById(id).classList.remove('show');}
+
+// TABS
+function switchTab(btn,id){
+  const bar=btn.parentElement;
+  const parent=bar.parentElement;
+  bar.querySelectorAll('button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  parent.querySelectorAll('.tab-c').forEach(c=>c.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+// ACTIONS
+function submitAvenant(ref){closeModal('viewModal');showToast(ref+' soumis pour validation','success');}
+function validateAvenant(ref){closeModal('viewModal');showToast(ref+' valide avec succes','success');}
+function rejectAvenant(ref){closeModal('viewModal');showToast(ref+' rejete','error');}
+function signAvenant(ref){closeModal('viewModal');showToast(ref+' signe electroniquement','success');}
+function dupAvenant(ref){showToast('Avenant duplique a partir de '+ref,'info');}
+function exportPDF(){showToast('Export PDF en cours de generation...','info');}
+function exportXLS(){showToast('Export Excel en cours de generation...','info');}
+
+function createAvenant(){
+  let ok=true;
+  const emp=document.getElementById('newEmp');
+  const typ=document.getElementById('newType');
+  const dt=document.getElementById('newDate');
+  const mot=document.getElementById('newMotif');
+  [emp,typ,dt].forEach(s=>{s.parentElement.classList.toggle('err',!s.value);if(!s.value)ok=false;});
+  if(mot.value.length<20){mot.parentElement.classList.add('err');ok=false;}
+  else mot.parentElement.classList.remove('err');
+  if(ok){closeModal('newModal');showToast('Avenant AV-2026-013 cree en brouillon','success');
+    [emp,typ,dt,mot].forEach(s=>{if(s.value)s.value='';});
+  }
+}
+function saveEdit(){closeModal('editModal');showToast('Avenant modifie avec succes','success');}
+
+// TOAST
+function showToast(msg,type){
+  const c=document.getElementById('toastC');
+  const t=document.createElement('div');
+  t.className='toast '+type;
+  t.textContent=msg;
+  c.appendChild(t);
+  setTimeout(()=>t.remove(),3000);
+}
+
+// ESC CLOSE
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.mover.show').forEach(m=>m.classList.remove('show'));});
+
+// INIT
+window.addEventListener('load',()=>{switchMode('LECTURE');});
+</script>
+</body>
+</html>
