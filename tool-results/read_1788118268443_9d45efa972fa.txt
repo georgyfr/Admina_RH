@@ -1,0 +1,702 @@
+     1→import { ResponsiveGridLayout } from 'react-grid-layout';
+     2→import './dashboard-grid.css';
+     3→import { useNavigate } from 'react-router-dom';
+     4→import {
+     5→  Box, Typography, Button, Paper, Chip, Table, TableBody, TableCell,
+     6→  TableContainer, TableHead, TableRow, IconButton, Tooltip, Select, MenuItem,
+     7→  FormControl, InputLabel, Badge, Alert, Snackbar, TextField,
+     8→  InputAdornment, Divider, Fab, Drawer, Slider, Switch, FormControlLabel,
+     9→} from '@mui/material';
+    10→import {
+    11→  Download, FilterListOff, Send, CheckCircle, Visibility,
+    12→  Schedule, Warning, TrendingUp, TrendingDown,
+    13→  Search, Tune, Close,
+    14→  ArrowForward, Lightbulb, Campaign, ReportProblem, Speed, PlayArrow,
+    15→  DragIndicator, ViewModule,
+    16→} from '@mui/icons-material';
+    17→import {
+    18→  LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis,
+    19→  CartesianGrid, ResponsiveContainer, Legend, Tooltip as RTooltip,
+    20→} from 'recharts';
+    21→import { useDashboardFilters } from '../context/DashboardFilterContext';
+    22→import { useApp } from '../context/AppContext';
+    23→import { useRole } from '../context/RoleContext';
+    24→
+    25→const ResponsiveGridLayout = WidthProvider(Responsive);
+    26→
+    27→const COLORS = ['#1976d2', '#42a5f5', '#0D7C66', '#ffa726', '#ef5350', '#ab47bc', '#26c6da', '#8d6e63'];
+    28→
+    29→/* ─── Enriched data ─── */
+    30→const allDemandes = [
+    31→  { numero: 'DR-2025-008', poste: 'Chef Approvisionnement', departement: 'Logistique', statut: 'Validée', date: '2025-02-20', site: 'Siège', joursAttente: 0, alerte: false, priorite: 'haute', manager: 'M. Nkoulou Paul' },
+    32→  { numero: 'DR-2025-006', poste: 'Développeur Full Stack', departement: 'Informatique', statut: 'En attente', date: '2025-02-10', site: 'Siège', joursAttente: 20, alerte: true, priorite: 'haute', manager: 'M. Kamga Blaise' },
+    33→  { numero: 'DR-2025-003', poste: 'Comptable Senior', departement: 'Finance', statut: 'Validée', date: '2025-01-25', site: 'Annexe', joursAttente: 0, alerte: false, priorite: 'moyenne', manager: 'M. Tchouankou Jean' },
+    34→  { numero: 'DR-2025-004', poste: 'Agent Accueil', departement: 'Service Client', statut: 'Pourvue', date: '2025-02-01', site: 'Hôtel Sawa', joursAttente: 0, alerte: false, priorite: 'basse', manager: 'Mme. Eyenga Clarisse' },
+    35→  { numero: 'DR-2025-002', poste: 'Réceptionniste Nuit', departement: 'Hébergement', statut: 'En cours', date: '2025-01-20', site: 'Hôtel Sawa', joursAttente: 41, alerte: true, priorite: 'moyenne', manager: 'Mme. Fotso Marie' },
+    36→  { numero: 'DR-2025-001', poste: 'Chef Cuisinier', departement: 'Restauration', statut: 'En attente', date: '2025-01-15', site: 'Hôtel Sawa', joursAttente: 46, alerte: true, priorite: 'haute', manager: 'M. Ndiaye Moussa' },
+    37→  { numero: 'DR-2024-012', poste: 'Agent Sécurité', departement: 'Sécurité', statut: 'Clôturée', date: '2024-12-10', site: 'Siège', joursAttente: 0, alerte: false, priorite: 'basse', manager: 'M. Nganou André' },
+    38→  { numero: 'DR-2025-009', poste: 'Community Manager', departement: 'Marketing', statut: 'En attente', date: '2025-02-25', site: 'Siège', joursAttente: 5, alerte: false, priorite: 'moyenne', manager: 'Mme. Mebara Nadège' },
+    39→  { numero: 'DR-2025-010', poste: 'Serveur', departement: 'Restauration', statut: 'Validée', date: '2025-02-28', site: 'Hôtel Sawa', joursAttente: 0, alerte: false, priorite: 'basse', manager: 'M. Ndiaye Moussa' },
+    40→  { numero: 'DR-2025-011', poste: 'Commercial Senior', departement: 'Commercial', statut: 'En attente', date: '2025-02-18', site: 'Annexe', joursAttente: 12, alerte: false, priorite: 'haute', manager: 'M. Tabi Arnaud' },
+    41→];
+    42→
+    43→const allCandidats = [
+    44→  { nom: 'Eyenga Clarisse', numero: 'CAN-006', source: 'Cooptation', etape: 'CV reçu', score: null, departement: 'Marketing', date: '2025-02-22', site: 'Siège', enAttente: false, experience: 3, joursEnAttente: 0 },
+    45→  { nom: 'Bikay Jean-Pierre', numero: 'CAN-004', source: 'LinkedIn', etape: 'Entretien HR', score: 14, departement: 'Informatique', date: '2025-02-05', site: 'Siège', enAttente: true, experience: 6, joursEnAttente: 15 },
+    46→  { nom: 'Nkoulou Brandon', numero: 'CAN-003', source: 'Site web', etape: 'Test technique', score: 10, departement: 'Informatique', date: '2025-01-28', site: 'Siège', enAttente: false, experience: 1, joursEnAttente: 0 },
+    47→  { nom: 'Kamga Blaise', numero: 'CAN-005', source: 'Cabinet', etape: 'Entretien HR', score: null, departement: 'Finance', date: '2025-02-12', site: 'Annexe', enAttente: true, experience: 4, joursEnAttente: 12 },
+    48→  { nom: 'Mebara Nadège', numero: 'CAN-007', source: 'Site web', etape: 'Offre envoyée', score: 17, departement: 'Service Client', date: '2025-01-20', site: 'Hôtel Sawa', enAttente: false, experience: 8, joursEnAttente: 0 },
+    49→  { nom: 'Ndiaye Moussa', numero: 'CAN-001', source: 'Cooptation', etape: 'Sélectionné', score: 18, departement: 'Restauration', date: '2025-01-10', site: 'Hôtel Sawa', enAttente: false, experience: 9, joursEnAttente: 0 },
+    50→  { nom: 'Nganou André', numero: 'CAN-002', source: 'Indeed', etape: 'Entretien technique', score: 12, departement: 'Sécurité', date: '2025-01-18', site: 'Siège', enAttente: false, experience: 5, joursEnAttente: 0 },
+    51→  { nom: 'Fotso Amandine', numero: 'CAN-008', source: 'LinkedIn', etape: 'CV reçu', score: null, departement: 'Hébergement', date: '2025-02-26', site: 'Hôtel Sawa', enAttente: false, experience: 2, joursEnAttente: 0 },
+    52→  { nom: 'Tabi Sandrine', numero: 'CAN-009', source: 'Site web', etape: 'Entretien HR', score: 15, departement: 'Restauration', date: '2025-02-15', site: 'Hôtel Sawa', enAttente: true, experience: 3, joursEnAttente: 18 },
+    53→  { nom: 'Ateba Chantal', numero: 'CAN-010', source: 'Cabinet', etape: 'Vérification refs', score: 16, departement: 'Hébergement', date: '2025-01-30', site: 'Annexe', enAttente: false, experience: 7, joursEnAttente: 0 },
+    54→];
+    55→
+    56→const allEvolution = [
+    57→  { mois: 'Oct 2024', demandes: 3, pourvues: 1 },
+    58→  { mois: 'Nov 2024', demandes: 5, pourvues: 2 },
+    59→  { mois: 'Dec 2024', demandes: 4, pourvues: 3 },
+    60→  { mois: 'Jan 2025', demandes: 8, pourvues: 4 },
+    61→  { mois: 'Fev 2025', demandes: 10, pourvues: 5 },
+    62→];
+    63→
+    64→const SOURCES = ['Site web', 'Cooptation', 'LinkedIn', 'Indeed', 'Cabinet', 'Autres'];
+    65→const ETAPES = ['CV reçu', 'Entretien HR', 'Test technique', 'Entretien technique', 'Vérification refs', 'Offre envoyée', 'Sélectionné', 'Rejeté'];
+    66→const KPI_KEYS = ['totalD', 'totalC', 'conversion', 'delai', 'enAttente', 'alertes'];
+    67→const statutColor = { 'Pourvue': 'success', 'En cours': 'warning', 'Validée': 'info', 'En attente': 'warning', 'Annulee': 'error', 'Brouillon': 'default', 'Publiée': 'info', 'Clôturée': 'default' };
+    68→const statutSeverity = { 'En attente': 'warning', 'En cours': 'error' };
+    69→
+    70→function filterByPeriod(items, periode) {
+    71→  if (periode === 'tout') return items;
+    72→  const cutoff = periode === 'mois' ? new Date('2025-02-01') : new Date('2025-01-01');
+    73→  return items.filter(i => new Date(i.date) >= cutoff);
+    74→}
+    75→
+    76→function ChartTooltip({ active, payload, label, clickable }) {
+    77→  if (!active || !payload?.length) return null;
+    78→  return (
+    79→    <Paper sx={{ p: 1.5, boxShadow: 3, maxWidth: 220 }}>
+    80→      <Typography variant="caption" fontWeight="bold">{label}</Typography>
+    81→      {payload.map((p, i) => (
+    82→        <Typography key={i} variant="body2" sx={{ color: p.color, mt: 0.3 }}>{p.name}: <strong>{p.value}</strong></Typography>
+    83→      ))}
+    84→      {clickable && <Typography variant="caption" sx={{ color: 'text.secondary', mt: 0.5, display: 'block', fontStyle: 'italic' }}>Cliquer pour filtrer</Typography>}
+    85→    </Paper>
+    86→  );
+    87→}
+    88→
+    89→function FilterChip({ label, onRemove }) {
+    90→  return <Chip label={label} size="small" onDelete={onRemove} sx={{ ml: 1, bgcolor: 'rgba(13,124,102,0.1)', borderColor: '#0D7C66', '& .MuiChip-deleteIcon': { color: '#0D7C66' } }} variant="outlined" />;
+    91→}
+    92→
+    93→/* ═══ FACETED SEARCH DRAWER ═══ */
+    94→function FacetedSearchDrawer({ open, onClose, facets, onChange }) {
+    95→  return (
+    96→    <Drawer anchor="right" open={open} onClose={onClose} PaperProps={{ sx: { width: 320, p: 2 } }}>
+    97→      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+    98→        <Typography variant="h6" fontWeight="bold" fontSize="1rem">Recherche avancée</Typography>
+    99→        <IconButton onClick={onClose}><Close /></IconButton>
+   100→      </Box>
+   101→      <Divider sx={{ mb: 2 }} />
+   102→      <TextField fullWidth size="small" placeholder="Rechercher..." value={facets.text || ''}
+   103→        onChange={e => onChange('text', e.target.value)}
+   104→        InputProps={{ startAdornment: <InputAdornment position="start"><Search sx={{ fontSize: 18 }} /></InputAdornment> }} sx={{ mb: 2.5 }} />
+   105→      <Typography variant="subtitle2" fontWeight="bold" sx={{ mb: 1, fontSize: '0.8rem' }}>Statut</Typography>
+   106→      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, mb: 2.5 }}>
+   107→        {[...new Set(allDemandes.map(d => d.statut))].map(s => (
+   108→          <Chip key={s} label={s} size="small" variant={facets.statut === s ? 'filled' : 'outlined'}
+   109→            color={facets.statut === s ? 'primary' : 'default'} onClick={() => onChange('statut', facets.statut === s ? null : s)} />
+   110→        ))}
+   111→      </Box>
+   112→      <Typography variant="subtitle2" fontWeight="bold" sx={{ mb: 1, fontSize: '0.8rem' }}>Source candidat</Typography>
+   113→      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, mb: 2.5 }}>
+   114→        {SOURCES.map(s => (
+   115→          <Chip key={s} label={s} size="small" variant={facets.source === s ? 'filled' : 'outlined'}
+   116→            color={facets.source === s ? 'primary' : 'default'} onClick={() => onChange('source', facets.source === s ? null : s)} />
+   117→        ))}
+   118→      </Box>
+   119→      <Typography variant="subtitle2" fontWeight="bold" sx={{ mb: 1, fontSize: '0.8rem' }}>Étape recrutement</Typography>
+   120→      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, mb: 2.5 }}>
+   121→        {ETAPES.map(e => (
+   122→          <Chip key={e} label={e} size="small" variant={facets.etape === e ? 'filled' : 'outlined'}
+   123→            color={facets.etape === e ? 'primary' : 'default'} onClick={() => onChange('etape', facets.etape === e ? null : e)} />
+   124→        ))}
+   125→      </Box>
+   126→      <Typography variant="subtitle2" fontWeight="bold" sx={{ mb: 0.5, fontSize: '0.8rem' }}>Score minimum</Typography>
+   127→      <Box sx={{ mb: 2.5 }}><Slider value={facets.minScore || 0} min={0} max={20} step={1} valueLabelDisplay="auto"
+   128→        marks={[{ value: 0, label: '0' }, { value: 10, label: '10' }, { value: 20, label: '20' }]}
+   129→        onChange={(_, v) => onChange('minScore', v)} /></Box>
+   130→      <Typography variant="subtitle2" fontWeight="bold" sx={{ mb: 0.5, fontSize: '0.8rem' }}>Expérience min. (années)</Typography>
+   131→      <Box sx={{ mb: 2.5 }}><Slider value={facets.minExp || 0} min={0} max={15} step={1} valueLabelDisplay="auto"
+   132→        marks={[{ value: 0, label: '0' }, { value: 5, label: '5' }, { value: 10, label: '10+' }]}
+   133→        onChange={(_, v) => onChange('minExp', v)} /></Box>
+   134→      <FormControlLabel control={<Switch checked={facets.alertesOnly || false} onChange={e => onChange('alertesOnly', e.target.checked)} color="warning" />}
+   135→        label={<Typography variant="body2" fontSize="0.8rem">Afficher uniquement les alertes</Typography>} sx={{ mb: 2 }} />
+   136→      <Divider sx={{ mb: 2 }} />
+   137→      <Button fullWidth variant="outlined" startIcon={<FilterListOff />} onClick={() => { onChange('reset', null); onClose(); }}>Réinitialiser tous les filtres</Button>
+   138→    </Drawer>
+   139→  );
+   140→}
+   141→
+   142→/* ═══ SMART ALERT PANEL ═══ */
+   143→function SmartAlertPanel({ recommendations, onRelanceGlobale, hasRetard }) {
+   144→  if (!recommendations?.length) return null;
+   145→  return (
+   146→    <Box>
+   147→      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5, flexWrap: 'wrap', gap: 1 }}>
+   148→        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+   149→          <Lightbulb sx={{ color: '#f57f17' }} />
+   150→          <Typography variant="subtitle2" fontWeight="bold">Recommandations</Typography>
+   151→          <Chip label={recommendations.length} size="small" sx={{ bgcolor: '#fff3e0', color: '#e65100', fontWeight: 700, height: 20, fontSize: '0.7rem' }} />
+   152→        </Box>
+   153→        {hasRetard && (
+   154→          <Button size="small" variant="outlined" startIcon={<Campaign />} onClick={onRelanceGlobale}
+   155→            sx={{ borderColor: '#ef5350', color: '#ef5350', '&:hover': { borderColor: '#c62828', bgcolor: '#ffebee' } }}>
+   156→            Relance globale ({hasRetard})
+   157→          </Button>
+   158→        )}
+   159→      </Box>
+   160→      {recommendations.map((rec, i) => (
+   161→        <Box key={i} sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.5, mb: i < recommendations.length - 1 ? 1.5 : 0, p: 1, borderRadius: 1, bgcolor: rec.severity === 'error' ? 'rgba(239,83,80,0.06)' : 'rgba(255,167,38,0.06)' }}>
+   162→          <Box sx={{ mt: 0.3, color: rec.severity === 'error' ? '#d32f2f' : '#f57f17', flexShrink: 0 }}>{rec.icon}</Box>
+   163→          <Box sx={{ flex: 1, minWidth: 0 }}>
+   164→            <Typography variant="body2" fontWeight={600} sx={{ fontSize: '0.85rem' }}>{rec.title}</Typography>
+   165→            <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.78rem', display: 'block', mt: 0.2 }}>{rec.desc}</Typography>
+   166→          </Box>
+   167→          {rec.action && (
+   168→            <Button size="small" variant="text" endIcon={<ArrowForward sx={{ fontSize: 14 }} />} onClick={rec.action.onClick} sx={{ flexShrink: 0, mt: -0.5 }}>{rec.action.label}</Button>
+   169→          )}
+   170→        </Box>
+   171→      ))}
+   172→    </Box>
+   173→  );
+   174→}
+   175→
+   176→/* ═══ WIDGET TITLE BAR (drag handle) ═══ */
+   177→function WidgetBar({ title, badge }) {
+   178→  return (
+   179→    <Box className="drag-handle" sx={{ display: 'flex', alignItems: 'center', gap: 0.5, px: 2, pt: 1.5, pb: 0.5, cursor: 'move', userSelect: 'none' }}>
+   180→      <DragIndicator sx={{ fontSize: 15, color: 'text.disabled', opacity: 0.5 }} />
+   181→      <Typography variant="subtitle2" fontWeight="bold" sx={{ fontSize: '0.85rem', flex: 1 }}>{title}</Typography>
+   182→      {badge}
+   183→    </Box>
+   184→  );
+   185→}
+   186→
+   187→/* ═══ DEFAULT LAYOUTS PER ROLE ═══ */
+   188→const DEFAULT_LAYOUTS = {
+   189→  recruteur: [
+   190→    { i: 'kpi-cards', x: 0, y: 0, w: 12, h: 4, minW: 8, minH: 3 },
+   191→    { i: 'entretiens-jour', x: 0, y: 4, w: 12, h: 4, minW: 6, minH: 3 },
+   192→    { i: 'pipeline-resume', x: 0, y: 8, w: 12, h: 3, minW: 6, minH: 2 },
+   193→    { i: 'smart-alerts', x: 0, y: 11, w: 12, h: 5, minW: 6, minH: 2 },
+   194→    { i: 'table-candidats', x: 0, y: 16, w: 12, h: 10, minW: 6, minH: 5 },
+   195→  ],
+   196→  manager: [
+   197→    { i: 'kpi-cards', x: 0, y: 0, w: 12, h: 4, minW: 8, minH: 3 },
+   198→    { i: 'smart-alerts', x: 0, y: 4, w: 12, h: 5, minW: 6, minH: 2 },
+   199→    { i: 'chart-evolution', x: 0, y: 9, w: 6, h: 7, minW: 4, minH: 5 },
+   200→    { i: 'chart-sources', x: 6, y: 9, w: 6, h: 7, minW: 4, minH: 5 },
+   201→    { i: 'chart-statuts', x: 0, y: 16, w: 6, h: 7, minW: 4, minH: 5 },
+   202→    { i: 'chart-depart', x: 6, y: 16, w: 6, h: 7, minW: 4, minH: 5 },
+   203→    { i: 'couts-resume', x: 0, y: 23, w: 12, h: 3, minW: 6, minH: 2 },
+   204→    { i: 'table-demandes', x: 0, y: 26, w: 6, h: 10, minW: 4, minH: 5 },
+   205→    { i: 'table-candidats', x: 6, y: 26, w: 6, h: 10, minW: 4, minH: 5 },
+   206→  ],
+   207→  drh: [
+   208→    { i: 'kpi-cards', x: 0, y: 0, w: 12, h: 4, minW: 8, minH: 3 },
+   209→    { i: 'smart-alerts', x: 0, y: 4, w: 12, h: 5, minW: 6, minH: 2 },
+   210→    { i: 'chart-evolution', x: 0, y: 9, w: 6, h: 7, minW: 4, minH: 5 },
+   211→    { i: 'chart-depart', x: 6, y: 9, w: 6, h: 7, minW: 4, minH: 5 },
+   212→    { i: 'couts-resume', x: 0, y: 16, w: 6, h: 3, minW: 4, minH: 2 },
+   213→    { i: 'conformite-resume', x: 6, y: 16, w: 6, h: 3, minW: 4, minH: 2 },
+   214→    { i: 'chart-statuts', x: 0, y: 19, w: 6, h: 7, minW: 4, minH: 5 },
+   215→    { i: 'table-demandes', x: 6, y: 19, w: 6, h: 10, minW: 4, minH: 5 },
+   216→  ],
+   217→};
+   218→
+   219→const LAYOUT_STORAGE = 'admina-grid-layout';
+   220→
+   221→/* ═══════════════════════════════════════════════════════════════
+   222→   MAIN COMPONENT
+   223→   ═══════════════════════════════════════════════════════════════ */
+   224→export default function TableauDeBord() {
+   225→  const navigate = useNavigate();
+   226→  const demandesRef = useRef(null);
+   227→  const candidatsRef = useRef(null);
+   228→
+   229→  const {
+   230→    periode, setPeriode, departement, setDepartement, site, setSite,
+   231→    activeSource, setActiveSource, activeStatut, setActiveStatut,
+   232→    resetFilters, hasActiveFilters, PERIODES, DEPARTEMENTS, SITES,
+   233→  } = useDashboardFilters();
+   234→  const { addNotification } = useApp();
+   235→  const { currentRole } = useRole();
+   236→  const [snack, setSnack] = useState(null);
+   237→  const [facetDrawer, setFacetDrawer] = useState(false);
+   238→  const [facets, setFacets] = useState({ text: '', statut: null, source: null, etape: null, minScore: 0, minExp: 0, alertesOnly: false });
+   239→  const [drillKpi, setDrillKpi] = useState(null);
+   240→
+   241→  /* ─── Grid layout persistence ─── */
+   242→  const [savedLayouts, setSavedLayouts] = useState(() => {
+   243→    try { return JSON.parse(localStorage.getItem(LAYOUT_STORAGE) || '{}'); } catch { return {}; }
+   244→  });
+   245→
+   246→  const handleFacetChange = useCallback((key, val) => {
+   247→    if (key === 'reset') { setFacets({ text: '', statut: null, source: null, etape: null, minScore: 0, minExp: 0, alertesOnly: false }); setDrillKpi(null); return; }
+   248→    setFacets(prev => ({ ...prev, [key]: val })); setDrillKpi(null);
+   249→  }, []);
+   250→
+   251→  /* ─── Filtered data ─── */
+   252→  const filteredDemandes = useMemo(() => {
+   253→    let data = filterByPeriod(allDemandes, periode);
+   254→    if (departement !== 'tout') data = data.filter(d => d.departement === departement);
+   255→    if (site !== 'tout') data = data.filter(d => d.site === site);
+   256→    if (activeStatut) data = data.filter(d => d.statut === activeStatut);
+   257→    if (facets.statut) data = data.filter(d => d.statut === facets.statut);
+   258→    if (facets.text) { const q = facets.text.toLowerCase(); data = data.filter(d => d.poste.toLowerCase().includes(q) || d.numero.toLowerCase().includes(q) || d.departement.toLowerCase().includes(q)); }
+   259→    if (facets.alertesOnly) data = data.filter(d => d.alerte);
+   260→    return data;
+   261→  }, [periode, departement, site, activeStatut, facets]);
+   262→
+   263→  const filteredCandidats = useMemo(() => {
+   264→    let data = filterByPeriod(allCandidats, periode);
+   265→    if (departement !== 'tout') data = data.filter(c => c.departement === departement);
+   266→    if (site !== 'tout') data = data.filter(c => c.site === site);
+   267→    if (activeSource) data = data.filter(c => c.source === activeSource);
+   268→    if (facets.source) data = data.filter(c => c.source === facets.source);
+   269→    if (facets.etape) data = data.filter(c => c.etape === facets.etape);
+   270→    if (facets.minScore > 0) data = data.filter(c => c.score !== null && c.score >= facets.minScore);
+   271→    if (facets.minExp > 0) data = data.filter(c => c.experience >= facets.minExp);
+   272→    if (facets.text) { const q = facets.text.toLowerCase(); data = data.filter(c => c.nom.toLowerCase().includes(q) || c.numero.toLowerCase().includes(q) || c.etape.toLowerCase().includes(q)); }
+   273→    if (facets.alertesOnly) data = data.filter(c => c.enAttente);
+   274→    return data;
+   275→  }, [periode, departement, site, activeSource, facets]);
+   276→
+   277→  /* ─── KPIs ─── */
+   278→  const kpis = useMemo(() => {
+   279→    const totalD = filteredDemandes.length;
+   280→    const ouvertes = filteredDemandes.filter(d => ['En attente', 'En cours', 'Validée', 'Publiée'].includes(d.statut)).length;
+   281→    const totalC = filteredCandidats.length;
+   282→    const actifs = filteredCandidats.filter(c => !['Sélectionné', 'Rejeté'].includes(c.etape)).length;
+   283→    const pourvues = filteredDemandes.filter(d => d.statut === 'Pourvue').length;
+   284→    const taux = totalC > 0 ? ((pourvues / totalC) * 100).toFixed(1) : '0.0';
+   285→    const enRetard = filteredDemandes.filter(d => d.alerte).length;
+   286→    const enAttente = filteredCandidats.filter(c => c.enAttente).length;
+   287→    const delai = totalD > 0 ? Math.round(filteredDemandes.reduce((s, d) => s + (d.joursAttente || 0), 0) / totalD) : 0;
+   288→    return [
+   289→      { titre: 'Total Demandes', valeur: totalD, sousTexte: `${ouvertes} ouvertes`, tendance: '+12%', up: true, alerte: enRetard > 0, alerteMsg: `${enRetard} en retard` },
+   290→      { titre: 'Total Candidats', valeur: totalC, sousTexte: `${actifs} actifs`, tendance: '+8%', up: true, alerte: false },
+   291→      { titre: 'Taux de Conversion', valeur: `${taux}%`, sousTexte: `${pourvues} retenus / ${totalC}`, tendance: '+3.2%', up: true, alerte: parseFloat(taux) < 15, alerteMsg: 'Sous objectif' },
+   292→      { titre: 'Délai Moyen', valeur: delai ? `${delai} j` : '—', sousTexte: 'jours ouvrés', tendance: '-5 j', up: false, alerte: delai > 30, alerteMsg: 'Objectif dépassé' },
+   293→      { titre: 'En Attente Décision', valeur: enAttente, sousTexte: 'candidats bloqués', tendance: enAttente > 3 ? '+2' : '0', up: enAttente > 3, alerte: enAttente >= 3, alerteMsg: 'Relance nécessaire' },
+   294→      { titre: 'Alertes', valeur: enRetard, sousTexte: 'demandes en retard', tendance: null, up: null, alerte: enRetard > 0, alerteMsg: `${enRetard} action(s) requise(s)` },
+   295→    ];
+   296→  }, [filteredDemandes, filteredCandidats]);
+   297→
+   298→  /* ─── KPI Drill-Down ─── */
+   299→  function handleKpiClick(kpiKey) {
+   300→    const isTogglingOff = drillKpi === kpiKey;
+   301→    setDrillKpi(isTogglingOff ? null : kpiKey);
+   302→    if (isTogglingOff) { setFacets(p => ({ ...p, alertesOnly: false, statut: null })); return; }
+   303→    if (kpiKey === 'alertes') { setFacets(p => ({ ...p, alertesOnly: true, statut: null })); setTimeout(() => demandesRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 150); }
+   304→    else if (kpiKey === 'enAttente') { setFacets(p => ({ ...p, alertesOnly: true, statut: null })); setTimeout(() => candidatsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 150); }
+   305→    else if (kpiKey === 'pourvues' || kpiKey === 'conversion') { setFacets(p => ({ ...p, statut: 'Pourvue', alertesOnly: false })); setTimeout(() => demandesRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 150); }
+   306→    else if (kpiKey === 'delai') { setFacets(p => ({ ...p, alertesOnly: false, statut: null })); setTimeout(() => demandesRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 150); }
+   307→  }
+   308→
+   309→  /* ─── Chart data (Phase 2: filtered by global filters) ─── */
+   310→  const chartSources = useMemo(() => {
+   311→    let data = filterByPeriod(allCandidats, periode);
+   312→    if (departement !== 'tout') data = data.filter(c => c.departement === departement);
+   313→    if (site !== 'tout') data = data.filter(c => c.site === site);
+   314→    const map = {}; data.forEach(c => { map[c.source] = (map[c.source] || 0) + 1; });
+   315→    return SOURCES.map(s => ({ source: s, valeur: map[s] || 0 })).filter(s => s.valeur > 0);
+   316→  }, [periode, departement, site]);
+   317→  const chartDepart = useMemo(() => {
+   318→    let data = filterByPeriod(allDemandes, periode);
+   319→    if (site !== 'tout') data = data.filter(d => d.site === site);
+   320→    const map = {}; data.forEach(d => { map[d.departement] = (map[d.departement] || 0) + 1; });
+   321→    return Object.entries(map).map(([name, value]) => ({ name, value }));
+   322→  }, [periode, site]);
+   323→  const chartStatuts = useMemo(() => {
+   324→    let data = filterByPeriod(allDemandes, periode);
+   325→    if (departement !== 'tout') data = data.filter(d => d.departement === departement);
+   326→    if (site !== 'tout') data = data.filter(d => d.site === site);
+   327→    const map = {}; data.forEach(d => { map[d.statut] = (map[d.statut] || 0) + 1; });
+   328→    return Object.entries(map).map(([statut, valeur]) => ({ statut, valeur }));
+   329→  }, [periode, departement, site]);
+   330→  const chartEvolution = useMemo(() => {
+   331→    if (periode === 'tout') return allEvolution;
+   332→    if (periode === 'trimestre') return allEvolution.slice(2);
+   333→    return allEvolution.slice(4);
+   334→  }, [periode]);
+   335→  const displaySources = useMemo(() => activeSource ? chartSources.map(s => ({ ...s, valeur: s.source === activeSource ? s.valeur : 0 })) : chartSources, [chartSources, activeSource]);
+   336→  const displayStatuts = useMemo(() => activeStatut ? chartStatuts.map(s => ({ ...s, valeur: s.statut === activeStatut ? s.valeur : 0 })) : chartStatuts, [chartStatuts, activeStatut]);
+   337→
+   338→  /* ─── Smart Recommendations (Phase 4) ─── */
+   339→  const recommendations = useMemo(() => {
+   340→    const recs = [];
+   341→    const deptDelay = {};
+   342→    filteredDemandes.forEach(d => {
+   343→      if (!deptDelay[d.departement]) deptDelay[d.departement] = { total: 0, alerte: 0, totalJours: 0, managers: new Set() };
+   344→      deptDelay[d.departement].total++; deptDelay[d.departement].totalJours += d.joursAttente || 0;
+   345→      if (d.alerte) deptDelay[d.departement].alerte++;
+   346→      if (d.manager) deptDelay[d.departement].managers.add(d.manager);
+   347→    });
+   348→    Object.entries(deptDelay).forEach(([dept, data]) => {
+   349→      const avg = data.total > 0 ? Math.round(data.totalJours / data.total) : 0;
+   350→      if (data.alerte > 0) recs.push({ severity: 'error', icon: <ReportProblem sx={{ fontSize: 20 }} />, title: `${dept} : ${data.alerte} demande(s) en retard`, desc: `Délai moyen ${avg}j — Manager(s): ${[...data.managers].join(', ')}. Suggérer un cabinet.`, action: { label: 'Filtrer', onClick: () => setDepartement(dept) } });
+   351→      else if (avg > 15) recs.push({ severity: 'warning', icon: <Speed sx={{ fontSize: 20 }} />, title: `${dept} : délai élevé (${avg}j)`, desc: "Proche de l'objectif de 21j — surveiller.", action: { label: 'Filtrer', onClick: () => setDepartement(dept) } });
+   352→    });
+   353→    const blockedLong = filteredCandidats.filter(c => c.enAttente && c.joursEnAttente >= 10);
+   354→    if (blockedLong.length > 0) recs.push({ severity: 'warning', icon: <Schedule sx={{ fontSize: 20 }} />, title: `${blockedLong.length} candidat(s) bloqué(s) >10j`, desc: blockedLong.map(c => `${c.nom} (${c.etape}, ${c.joursEnAttente}j)`).join(' | '), action: { label: 'Voir', onClick: () => { setFacets(p => ({ ...p, alertesOnly: true, statut: null })); setDrillKpi('enAttente'); setTimeout(() => candidatsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 200); } } });
+   355→    const sourceMap = {};
+   356→    filteredCandidats.forEach(c => { if (!sourceMap[c.source]) sourceMap[c.source] = { total: 0, selected: 0 }; sourceMap[c.source].total++; if (['Sélectionné', 'Offre envoyée'].includes(c.etape)) sourceMap[c.source].selected++; });
+   357→    const worstSource = Object.entries(sourceMap).map(([s, d]) => ({ source: s, rate: d.total > 0 ? (d.selected / d.total * 100) : 0, total: d.total })).filter(s => s.total >= 2).sort((a, b) => a.rate - b.rate)[0];
+   358→    if (worstSource && worstSource.rate < 25) recs.push({ severity: 'warning', icon: <TrendingDown sx={{ fontSize: 20 }} />, title: `Source « ${worstSource.source} » sous-performante`, desc: `Conversion: ${worstSource.rate.toFixed(0)}% sur ${worstSource.total} candidats.`, action: { label: 'Voir', onClick: () => setActiveSource(worstSource.source) } });
+   359→    const hautesNonPourvues = filteredDemandes.filter(d => d.priorite === 'haute' && !['Pourvue', 'Clôturée'].includes(d.statut));
+   360→    if (hautesNonPourvues.length > 0) recs.push({ severity: 'error', icon: <Warning sx={{ fontSize: 20 }} />, title: `${hautesNonPourvues.length} poste(s) haute priorité non pourvu(s)`, desc: hautesNonPourvues.map(d => `${d.poste} (${d.departement})`).join(', '), action: { label: 'Voir', onClick: () => { setFacets(p => ({ ...p, alertesOnly: true, statut: null })); setDrillKpi('alertes'); setTimeout(() => demandesRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 200); } } });
+   361→    return recs;
+   362→  }, [filteredDemandes, filteredCandidats, setDepartement, setActiveSource]);
+   363→
+   364→  /* ─── Handlers ─── */
+   365→  const handleRelancer = useCallback((c) => { setSnack({ msg: `Relance envoyée à ${c.nom}`, severity: 'success' }); addNotification({ icon: 'send', color: '#0D7C66', msg: `Relance envoyée : ${c.nom}`, path: '/candidats' }); }, [addNotification]);
+   366→  const handleValider = useCallback((d) => { setSnack({ msg: `Demande ${d.numero} validée`, severity: 'success' }); addNotification({ icon: 'check_circle', color: '#2e7d32', msg: `Demande ${d.numero} validée`, path: '/offres' }); }, [addNotification]);
+   367→  const handleRappelerManager = useCallback((d) => { setSnack({ msg: `Rappel envoyé à ${d.manager}`, severity: 'info' }); addNotification({ icon: 'campaign', color: '#e65100', msg: `Rappel manager : ${d.poste}`, path: '/offres' }); }, [addNotification]);
+   368→  const handleRelanceGlobale = useCallback(() => { const n = filteredDemandes.filter(d => d.alerte).length; setSnack({ msg: `${n} rappel(s) envoyé(s)`, severity: 'success' }); addNotification({ icon: 'campaign', color: '#d32f2f', msg: `Relance globale : ${n} demandes`, path: '/offres' }); }, [filteredDemandes, addNotification]);
+   369→  const handleExporter = useCallback(() => { const rows = ['N°,Poste,Département,Statut,Date,Jours attente,Site,Manager']; filteredDemandes.forEach(d => rows.push(`${d.numero},${d.poste},${d.departement},${d.statut},${d.date},${d.joursAttente},${d.site},${d.manager}`)); const blob = new Blob([rows.join('\n')], { type: 'text/csv' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = 'dashboard_export.csv'; a.click(); URL.revokeObjectURL(url); setSnack({ msg: 'Export CSV téléchargé', severity: 'info' }); }, [filteredDemandes]);
+   370→  const handleSourceClick = useCallback((data) => { if (data?.activePayload?.[0]) { const src = data.activePayload[0].payload.source; setActiveSource(prev => prev === src ? null : src); } }, [setActiveSource]);
+   371→  const handleStatutClick = useCallback((data) => { if (data?.activePayload?.[0]) { const st = data.activePayload[0].payload.statut; setActiveStatut(prev => prev === st ? null : st); } }, [setActiveStatut]);
+   372→  const goToCandidat = useCallback((n) => navigate(`/candidats?focus=${n}`), [navigate]);
+   373→  const goToFormation = useCallback((nom) => navigate(`/formation?candidat=${encodeURIComponent(nom)}`), [navigate]);
+   374→  const goToOffre = useCallback((n) => navigate(`/offres?focus=${n}`), [navigate]);
+   375→
+   376→  const activeFacetCount = useMemo(() => [facets.statut, facets.source, facets.etape, facets.minScore > 0, facets.minExp > 0, facets.alertesOnly].filter(Boolean).length, [facets]);
+   377→
+   378→  /* ─── Role visibility ─── */
+   379→  const show = useMemo(() => {
+   380→    const s = currentRole.sections;
+   381→    return { kpi: true, evolution: s.includes('evolution'), sources: s.includes('sources'), depart: s.includes('departement'), statuts: s.includes('statuts'), demandes: s.includes('demandesRecentes'), candidats: s.includes('candidatsRecents'), couts: s.includes('coutsResume'), conformite: s.includes('conformiteResume'), pipeline: s.includes('pipelineResume'), entretiens: s.includes('entretiensJour') };
+   382→  }, [currentRole]);
+   383→
+   384→  /* ─── Grid layout logic (Phase 3) ─── */
+   385→  const visibleWidgetIds = useMemo(() => {
+   386→    const ids = [];
+   387→    if (show.kpi) ids.push('kpi-cards');
+   388→    if (recommendations.length > 0) ids.push('smart-alerts');
+   389→    if (show.entretiens) ids.push('entretiens-jour');
+   390→    if (show.pipeline) ids.push('pipeline-resume');
+   391→    if (show.evolution) ids.push('chart-evolution');
+   392→    if (show.sources) ids.push('chart-sources');
+   393→    if (show.depart) ids.push('chart-depart');
+   394→    if (show.statuts) ids.push('chart-statuts');
+   395→    if (show.couts) ids.push('couts-resume');
+   396→    if (show.conformite) ids.push('conformite-resume');
+   397→    if (show.demandes) ids.push('table-demandes');
+   398→    if (show.candidats) ids.push('table-candidats');
+   399→    return ids;
+   400→  }, [show, recommendations.length]);
+   401→
+   402→  const currentLayout = useMemo(() => {
+   403→    const saved = savedLayouts[currentRole.key];
+   404→    const base = saved || DEFAULT_LAYOUTS[currentRole.key] || DEFAULT_LAYOUTS['manager'];
+   405→    return base.filter(item => visibleWidgetIds.includes(item.i));
+   406→  }, [currentRole.key, savedLayouts, visibleWidgetIds]);
+   407→
+   408→  const handleLayoutChange = useCallback((layout) => {
+   409→    setSavedLayouts(prev => {
+   410→      const updated = { ...prev, [currentRole.key]: layout };
+   411→      try { localStorage.setItem(LAYOUT_STORAGE, JSON.stringify(updated)); } catch {}
+   412→      return updated;
+   413→    });
+   414→  }, [currentRole.key]);
+   415→
+   416→  const handleResetLayout = useCallback(() => {
+   417→    setSavedLayouts(prev => {
+   418→      const updated = { ...prev }; delete updated[currentRole.key];
+   419→      try { localStorage.setItem(LAYOUT_STORAGE, JSON.stringify(updated)); } catch {}
+   420→      return updated;
+   421→    });
+   422→    setSnack({ msg: 'Mise en page réinitialisée', severity: 'info' });
+   423→  }, [currentRole.key]);
+   424→
+   425→  const enRetardCount = filteredDemandes.filter(d => d.alerte).length;
+   426→  const sortedDemandes = useMemo(() => drillKpi === 'delai' ? [...filteredDemandes].sort((a, b) => (b.joursAttente || 0) - (a.joursAttente || 0)) : filteredDemandes, [filteredDemandes, drillKpi]);
+   427→  const selectSx = { minWidth: 150, '& .MuiSelect-select': { py: 1, fontSize: '0.8rem' } };
+   428→  const entretiensJour = [
+   429→    { heure: '09:00', candidat: 'Bikay Jean-Pierre', poste: 'Développeur Full Stack', type: 'HR' },
+   430→    { heure: '10:30', candidat: 'Tabi Sandrine', poste: 'Serveuse', type: 'Technique' },
+   431→    { heure: '14:00', candidat: 'Kamga Blaise', poste: 'Comptable', type: 'HR' },
+   432→  ];
+   433→
+   434→
+   435→  return (
+   436→    <Box>
+   437→      {/* Header */}
+   438→      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, flexWrap: 'wrap', gap: 1 }}>
+   439→        <Box>
+   440→          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+   441→            <Typography variant="h5" fontWeight="bold">Tableau de Bord</Typography>
+   442→            <Chip label={currentRole.label} size="small" sx={{ bgcolor: `${currentRole.color}18`, color: currentRole.color, fontWeight: 600, fontSize: '0.7rem', height: 22 }} />
+   443→          </Box>
+   444→          <Typography variant="body2" color="text.secondary">Vue d'ensemble — {currentRole.desc}</Typography>
+   445→        </Box>
+   446→        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+   447→          <Tooltip title="Réinitialiser la mise en page"><IconButton size="small" onClick={handleResetLayout}><ViewModule sx={{ fontSize: 18 }} /></IconButton></Tooltip>
+   448→          <Button variant="outlined" startIcon={<Tune />} onClick={() => setFacetDrawer(true)} size="small">Filtres</Button>
+   449→          <Button variant="outlined" startIcon={<Download fontSize="small" />} onClick={handleExporter} size="small">Export</Button>
+   450→        </Box>
+   451→      </Box>
+   452→
+   453→      {/* Global Filter Bar */}
+   454→      <Paper elevation={0} sx={{ display: 'flex', gap: 1.5, alignItems: 'center', flexWrap: 'wrap', p: 1.5, mb: 2, borderRadius: 2, bgcolor: 'background.paper', border: '1px solid', borderColor: 'divider' }}>
+   455→        <FilterListOff sx={{ color: 'text.secondary', fontSize: 20 }} />
+   456→        <FormControl size="small" sx={selectSx}><InputLabel>Période</InputLabel><Select value={periode} label="Période" onChange={e => setPeriode(e.target.value)}>{PERIODES.map(p => <MenuItem key={p.key} value={p.key}>{p.label}</MenuItem>)}</Select></FormControl>
+   457→        <FormControl size="small" sx={selectSx}><InputLabel>Département</InputLabel><Select value={departement} label="Département" onChange={e => setDepartement(e.target.value)}>{DEPARTEMENTS.map(d => <MenuItem key={d.key} value={d.key}>{d.label}</MenuItem>)}</Select></FormControl>
+   458→        <FormControl size="small" sx={selectSx}><InputLabel>Site</InputLabel><Select value={site} label="Site" onChange={e => setSite(e.target.value)}>{SITES.map(s => <MenuItem key={s.key} value={s.key}>{s.label}</MenuItem>)}</Select></FormControl>
+   459→        <Box sx={{ flex: 1 }} />
+   460→        {activeSource && <FilterChip label={`Source: ${activeSource}`} onRemove={() => setActiveSource(null)} />}
+   461→        {activeStatut && <FilterChip label={`Statut: ${activeStatut}`} onRemove={() => setActiveStatut(null)} />}
+   462→        {activeFacetCount > 0 && <FilterChip label={`${activeFacetCount} filtre(s) avancé(s)`} onRemove={() => handleFacetChange('reset', null)} />}
+   463→        {drillKpi && <FilterChip label={`Drill: ${kpis[KPI_KEYS.indexOf(drillKpi)]?.titre || drillKpi}`} onRemove={() => handleKpiClick(drillKpi)} />}
+   464→        {hasActiveFilters && <Button size="small" variant="text" startIcon={<FilterListOff />} onClick={() => { resetFilters(); handleFacetChange('reset', null); setDrillKpi(null); }} sx={{ ml: 1, color: '#ef5350' }}>Réinitialiser</Button>}
+   465→      </Paper>
+   466→
+   467→      {/* ═══ PHASE 3: DRAG & DROP GRID ═══ */}
+   468→      <ResponsiveGridLayout
+   469→        key={currentRole.key}
+   470→        layout={currentLayout}
+   471→        layouts={{ lg: currentLayout }}
+   472→        onLayoutChange={handleLayoutChange}
+   473→        breakpoints={{ lg: 900, md: 600, sm: 0 }}
+   474→        cols={{ lg: 12, md: 6, sm: 1 }}
+   475→        rowHeight={38}
+   476→        margin={[12, 12]}
+   477→        compactType="vertical"
+   478→        isDraggable
+   479→        isResizable
+   480→        draggableHandle=".drag-handle"
+   481→        isBounded
+   482→      >
+   483→        {show.kpi && (
+   484→          <div key="kpi-cards" style={{ overflow: 'hidden' }}>
+   485→            <Paper sx={{ height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+   486→              <WidgetBar title="Indicateurs Clés (KPIs)" />
+   487→              <Box sx={{ flex: 1, px: 2, pb: 2, overflow: 'auto', minHeight: 0 }}>
+   488→                <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap' }}>
+   489→                  {kpis.map((k, idx) => {
+   490→                    const key = KPI_KEYS[idx]; const isDrilled = drillKpi === key;
+   491→                    return (
+   492→                      <Paper key={k.titre} onClick={() => handleKpiClick(key)}
+   493→                        sx={{ p: 1.5, flex: '1 1 130px', minWidth: 130, position: 'relative', cursor: 'pointer',
+   494→                          borderLeft: isDrilled ? '4px solid #0D7C66' : k.alerte ? '4px solid #ef5350' : '4px solid transparent',
+   495→                          border: isDrilled ? '2px solid #0D7C66' : undefined, bgcolor: isDrilled ? '#f0fdf4' : undefined,
+   496→                          transition: 'all 0.2s', '&:hover': { boxShadow: 3, transform: 'translateY(-1px)' } }}>
+   497→                        {isDrilled && <Chip label="Filtré" size="small" sx={{ position: 'absolute', top: 4, right: 4, height: 16, fontSize: '0.55rem', bgcolor: '#0D7C66', color: 'white' }} />}
+   498→                        {!isDrilled && k.alerte && <Tooltip title={k.alerteMsg}><Warning sx={{ position: 'absolute', top: 6, right: 6, fontSize: 16, color: '#ef5350' }} /></Tooltip>}
+   499→                        <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: 0.5 }}>{k.titre}</Typography>
+   500→                        <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 0.5, my: 0.3 }}>
+   501→                          <Typography variant="h6" fontWeight="bold" sx={{ fontSize: '1.1rem' }}>{k.valeur}</Typography>
+   502→                          {k.tendance && <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.2 }}>{k.up ? <TrendingUp sx={{ fontSize: 12, color: '#2e7d32' }} /> : <TrendingDown sx={{ fontSize: 12, color: k.alerte ? '#ef5350' : '#2e7d32' }} />}<Typography variant="caption" sx={{ color: k.up ? '#2e7d32' : '#ef5350', fontWeight: 600, fontSize: '0.65rem' }}>{k.tendance}</Typography></Box>}
+   503→                        </Box>
+   504→                        <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.7rem' }}>{k.sousTexte}</Typography>
+   505→                      </Paper>
+   506→                    );
+   507→                  })}
+   508→                </Box>
+   509→              </Box>
+   510→            </Paper>
+   511→          </div>
+   512→        )}
+   513→        {recommendations.length > 0 && (
+   514→          <div key="smart-alerts" style={{ overflow: 'hidden' }}>
+   515→            <Paper sx={{ height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden', borderLeft: '4px solid #ffa726', bgcolor: '#fffbeb' }}>
+   516→              <WidgetBar title="Recommandations intelligentes" badge={<Chip label={recommendations.length} size="small" sx={{ bgcolor: '#fff3e0', color: '#e65100', fontWeight: 700, height: 18, fontSize: '0.65rem' }} />} />
+   517→              <Box sx={{ flex: 1, px: 2, pb: 2, overflow: 'auto', minHeight: 0 }}>
+   518→                <SmartAlertPanel recommendations={recommendations} onRelanceGlobale={handleRelanceGlobale} hasRetard={enRetardCount > 0 ? enRetardCount : null} />
+   519→              </Box>
+   520→            </Paper>
+   521→          </div>
+   522→        )}
+   523→        {show.entretiens && (
+   524→          <div key="entretiens-jour" style={{ overflow: 'hidden' }}>
+   525→            <Paper sx={{ height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden', borderLeft: '4px solid #1976d2' }}>
+   526→              <WidgetBar title="Entretiens du jour" badge={<Chip label={`${entretiensJour.length} prévus`} size="small" color="primary" />} />
+   527→              <Box sx={{ flex: 1, px: 2, pb: 2, overflow: 'auto', minHeight: 0 }}>
+   528→                <Box sx={{ display: 'flex', gap: 1.5, overflowX: 'auto', pb: 1 }}>
+   529→                  {entretiensJour.map((e, i) => (
+   530→                    <Paper key={i} variant="outlined" sx={{ p: 1.5, minWidth: 200, flexShrink: 0, borderColor: '#e0e0e0' }}>
+   531→                      <Typography variant="h6" fontWeight="bold" sx={{ color: '#1976d2', fontSize: '1.1rem' }}>{e.heure}</Typography>
+   532→                      <Typography variant="body2" fontWeight={500} sx={{ mt: 0.5 }}>{e.candidat}</Typography>
+   533→                      <Typography variant="caption" color="text.secondary">{e.poste}</Typography>
+   534→                      <Chip label={e.type} size="small" sx={{ mt: 1, bgcolor: e.type === 'HR' ? '#e3f2fd' : '#fff3e0', color: e.type === 'HR' ? '#1976d2' : '#e65100', fontSize: '0.65rem' }} />
+   535→                    </Paper>
+   536→                  ))}
+   537→                </Box>
+   538→              </Box>
+   539→            </Paper>
+   540→          </div>
+   541→        )}
+   542→        {show.pipeline && (
+   543→          <div key="pipeline-resume" style={{ overflow: 'hidden' }}>
+   544→            <Paper sx={{ height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+   545→              <WidgetBar title="Pipeline candidatures" />
+   546→              <Box sx={{ flex: 1, px: 2, pb: 2, overflow: 'auto', minHeight: 0 }}>
+   547→                <Box sx={{ display: 'flex', gap: 1, overflowX: 'auto', pb: 1 }}>
+   548→                  {ETAPES.slice(0, 6).map(etape => {
+   549→                    const count = allCandidats.filter(c => c.etape === etape).length;
+   550→                    return <Paper key={etape} variant="outlined" sx={{ p: 1.5, minWidth: 90, textAlign: 'center', flexShrink: 0, borderColor: '#e0e0e0' }}><Typography variant="h6" fontWeight="bold" color="#1976d2">{count}</Typography><Typography variant="caption" sx={{ fontSize: '0.65rem' }}>{etape}</Typography></Paper>;
+   551→                  })}
+   552→                </Box>
+   553→              </Box>
+   554→            </Paper>
+   555→          </div>
+   556→        )}
+   557→        {show.evolution && (
+   558→          <div key="chart-evolution" style={{ overflow: 'hidden' }}>
+   559→            <Paper sx={{ height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+   560→              <WidgetBar title="Évolution du Recrutement" />
+   561→              <Box sx={{ flex: 1, px: 2, pb: 2, minHeight: 0 }}>
+   562→                <ResponsiveContainer width="100%" height="100%">
+   563→                  <LineChart data={chartEvolution}><CartesianGrid strokeDasharray="3 3" /><XAxis dataKey="mois" tick={{ fontSize: 11 }} /><YAxis tick={{ fontSize: 11 }} /><RTooltip content={<ChartTooltip />} /><Legend wrapperStyle={{ fontSize: 12 }} /><Line type="monotone" dataKey="demandes" stroke="#1976d2" name="Demandes" strokeWidth={2} dot={{ r: 4 }} /><Line type="monotone" dataKey="pourvues" stroke="#0D7C66" name="Pourvues" strokeWidth={2} dot={{ r: 4 }} /></LineChart>
+   564→                </ResponsiveContainer>
+   565→              </Box>
+   566→            </Paper>
+   567→          </div>
+   568→        )}
+   569→        {show.sources && (
+   570→          <div key="chart-sources" style={{ overflow: 'hidden' }}>
+   571→            <Paper sx={{ height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden', border: activeSource ? '2px solid #0D7C66' : 'none' }}>
+   572→              <WidgetBar title="Sources de Recrutement" badge={activeSource ? <Chip label={activeSource} size="small" color="primary" onDelete={() => setActiveSource(null)} /> : undefined} />
+   573→              <Box sx={{ flex: 1, px: 2, pb: 2, minHeight: 0 }}>
+   574→                <Typography variant="caption" color="text.secondary" sx={{ mb: 0.5, display: 'block' }}>Cliquer pour filtrer</Typography>
+   575→                <ResponsiveContainer width="100%" height="100%">
+   576→                  <BarChart data={displaySources} layout="vertical" onClick={handleSourceClick} style={{ cursor: 'pointer' }}><CartesianGrid strokeDasharray="3 3" /><XAxis type="number" tick={{ fontSize: 11 }} /><YAxis dataKey="source" type="category" tick={{ fontSize: 11 }} width={75} /><RTooltip content={<ChartTooltip clickable />} /><Bar dataKey="valeur" name="Candidats" radius={[0, 4, 4, 0]}>{displaySources.map((s, i) => <Cell key={i} fill={activeSource && s.source !== activeSource ? '#e0e0e0' : COLORS[i % COLORS.length]} />)}</Bar></BarChart>
+   577→                </ResponsiveContainer>
+   578→              </Box>
+   579→            </Paper>
+   580→          </div>
+   581→        )}
+   582→        {show.depart && (
+   583→          <div key="chart-depart" style={{ overflow: 'hidden' }}>
+   584→            <Paper sx={{ height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+   585→              <WidgetBar title="Répartition par Département" />
+   586→              <Box sx={{ flex: 1, px: 2, pb: 2, minHeight: 0 }}>
+   587→                <ResponsiveContainer width="100%" height="100%"><PieChart><Pie data={chartDepart} cx="50%" cy="50%" innerRadius={40} outerRadius={70} dataKey="value" label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`} labelLine={{ strokeWidth: 1 }}>{chartDepart.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}</Pie><RTooltip /></PieChart></ResponsiveContainer>
+   588→              </Box>
+   589→            </Paper>
+   590→          </div>
+   591→        )}
+   592→        {show.statuts && (
+   593→          <div key="chart-statuts" style={{ overflow: 'hidden' }}>
+   594→            <Paper sx={{ height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden', border: activeStatut ? '2px solid #0D7C66' : 'none' }}>
+   595→              <WidgetBar title="Statuts des Demandes" badge={activeStatut ? <Chip label={activeStatut} size="small" color="primary" onDelete={() => setActiveStatut(null)} /> : undefined} />
+   596→              <Box sx={{ flex: 1, px: 2, pb: 2, minHeight: 0 }}>
+   597→                <Typography variant="caption" color="text.secondary" sx={{ mb: 0.5, display: 'block' }}>Cliquer pour filtrer</Typography>
+   598→                <ResponsiveContainer width="100%" height="100%">
+   599→                  <BarChart data={displayStatuts} onClick={handleStatutClick} style={{ cursor: 'pointer' }}><CartesianGrid strokeDasharray="3 3" /><XAxis dataKey="statut" tick={{ fontSize: 10 }} angle={-20} textAnchor="end" height={45} /><YAxis tick={{ fontSize: 11 }} /><RTooltip content={<ChartTooltip clickable />} /><Bar dataKey="valeur" name="Demandes" radius={[4, 4, 0, 0]}>{displayStatuts.map((s, i) => { const sev = statutSeverity[s.statut]; return <Cell key={i} fill={activeStatut && s.statut !== activeStatut ? '#e0e0e0' : sev === 'error' ? '#ef5350' : sev === 'warning' ? '#ffa726' : '#42a5f5'} />; })}</Bar></BarChart>
+   600→                </ResponsiveContainer>
+   601→              </Box>
+   602→            </Paper>
+   603→          </div>
+   604→        )}
+   605→        {show.couts && (
+   606→          <div key="couts-resume" style={{ overflow: 'hidden' }}>
+   607→            <Paper sx={{ height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden', borderLeft: '4px solid #7b1fa2' }}>
+   608→              <WidgetBar title="Résumé des Coûts" />
+   609→              <Box sx={{ flex: 1, px: 2, pb: 2, overflow: 'auto', minHeight: 0 }}>
+   610→                <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+   611→                  {[{ label: 'Budget annuel', val: '12 500 000 FCFA', sub: 'Prévisionnel 2025' }, { label: 'Coût moyen / embauche', val: '285 000 FCFA', sub: '-8% vs 2024' }, { label: 'Coût par source', val: 'LinkedIn: 42 000 FCFA', sub: 'Source la + chère' }].map((c, i) => (
+   612→                    <Paper key={i} variant="outlined" sx={{ p: 1.5, flex: '1 1 160px' }}><Typography variant="caption" color="text.secondary">{c.label}</Typography><Typography variant="h6" fontWeight="bold" sx={{ color: '#7b1fa2' }}>{c.val}</Typography><Typography variant="caption" color="text.secondary">{c.sub}</Typography></Paper>
+   613→                  ))}
+   614→                </Box>
+   615→              </Box>
+   616→            </Paper>
+   617→          </div>
+   618→        )}
+   619→        {show.conformite && (
+   620→          <div key="conformite-resume" style={{ overflow: 'hidden' }}>
+   621→            <Paper sx={{ height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden', borderLeft: '4px solid #d32f2f' }}>
+   622→              <WidgetBar title="Conformité & Risques" />
+   623→              <Box sx={{ flex: 1, px: 2, pb: 2, overflow: 'auto', minHeight: 0 }}>
+   624→                <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+   625→                  {[{ label: 'Taux conformité', val: '92%', ok: true }, { label: 'Documents manquants', val: '3', ok: false }, { label: 'Contrats < 30j', val: '1', ok: false }].map((c, i) => (
+   626→                    <Paper key={i} variant="outlined" sx={{ p: 1.5, flex: '1 1 130px', borderLeft: `3px solid ${c.ok ? '#2e7d32' : '#ef5350'}` }}><Typography variant="caption" color="text.secondary">{c.label}</Typography><Typography variant="h6" fontWeight="bold" sx={{ color: c.ok ? '#2e7d32' : '#ef5350' }}>{c.val}</Typography></Paper>
+   627→                  ))}
+   628→                </Box>
+   629→              </Box>
+   630→            </Paper>
+   631→          </div>
+   632→        )}
+   633→        {show.demandes && (
+   634→          <div key="table-demandes" style={{ overflow: 'hidden' }}>
+   635→            <Paper ref={demandesRef} sx={{ height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden', transition: 'box-shadow 0.3s', boxShadow: drillKpi && ['alertes', 'delai', 'conversion', 'pourvues'].includes(drillKpi) ? '0 0 0 2px #0D7C66' : undefined }}>
+   636→              <WidgetBar title={`Demandes (${sortedDemandes.length})`} badge={<Badge badgeContent={sortedDemandes.filter(d => d.alerte).length} color="error"><Warning sx={{ color: '#ef5350' }} /></Badge>} />
+   637→              <TableContainer sx={{ flex: 1, overflow: 'auto' }}><Table size="small" stickyHeader><TableHead><TableRow>
+   638→                <TableCell sx={{ fontWeight: 'bold', bgcolor: '#f5f5f5', fontSize: '0.75rem' }}>N°</TableCell>
+   639→                <TableCell sx={{ fontWeight: 'bold', bgcolor: '#f5f5f5', fontSize: '0.75rem' }}>Poste</TableCell>
+   640→                <TableCell sx={{ fontWeight: 'bold', bgcolor: '#f5f5f5', fontSize: '0.75rem' }}>Statut</TableCell>
+   641→                <TableCell sx={{ fontWeight: 'bold', bgcolor: '#f5f5f5', fontSize: '0.75rem' }}>Actions</TableCell>
+   642→              </TableRow></TableHead><TableBody>
+   643→                {sortedDemandes.length === 0 && <TableRow><TableCell colSpan={4} align="center" sx={{ py: 4, color: 'text.secondary' }}>Aucun résultat</TableCell></TableRow>}
+   644→                {sortedDemandes.map(d => (
+   645→                  <TableRow key={d.numero} hover sx={{ bgcolor: d.alerte ? 'rgba(239,83,80,0.04)' : 'inherit' }}>
+   646→                    <TableCell sx={{ fontSize: '0.75rem', color: 'text.secondary' }}>{d.numero}</TableCell>
+   647→                    <TableCell><Box><Typography variant="body2" fontWeight={500} sx={{ fontSize: '0.8rem' }}>{d.poste}</Typography><Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.65rem' }}>{d.departement}</Typography></Box></TableCell>
+   648→                    <TableCell><Chip label={d.statut} size="small" color={statutColor[d.statut]} /></TableCell>
+   649→                    <TableCell>
+   650→                      {d.alerte && <Tooltip title={`Rappeler ${d.manager} (${d.joursAttente}j)`}><IconButton size="small" color="warning" onClick={() => handleRappelerManager(d)}><Campaign sx={{ fontSize: 16 }} /></IconButton></Tooltip>}
+   651→                      {d.statut === 'En attente' && <Tooltip title="Valider"><IconButton size="small" color="success" onClick={() => handleValider(d)}><CheckCircle sx={{ fontSize: 18 }} /></IconButton></Tooltip>}
+   652→                      <Tooltip title="Voir la demande"><IconButton size="small" onClick={() => goToOffre(d.numero)}><Visibility sx={{ fontSize: 18 }} /></IconButton></Tooltip>
+   653→                    </TableCell>
+   654→                  </TableRow>
+   655→                ))}
+   656→              </TableBody></Table></TableContainer>
+   657→            </Paper>
+   658→          </div>
+   659→        )}
+   660→        {show.candidats && (
+   661→          <div key="table-candidats" style={{ overflow: 'hidden' }}>
+   662→            <Paper ref={candidatsRef} sx={{ height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden', transition: 'box-shadow 0.3s', boxShadow: drillKpi === 'enAttente' ? '0 0 0 2px #0D7C66' : undefined }}>
+   663→              <WidgetBar title={`Candidats (${filteredCandidats.length})`} badge={<Badge badgeContent={filteredCandidats.filter(c => c.enAttente).length} color="warning"><Schedule sx={{ color: '#ffa726' }} /></Badge>} />
+   664→              <TableContainer sx={{ flex: 1, overflow: 'auto' }}><Table size="small" stickyHeader><TableHead><TableRow>
+   665→                <TableCell sx={{ fontWeight: 'bold', bgcolor: '#f5f5f5', fontSize: '0.75rem' }}>Nom</TableCell>
+   666→                <TableCell sx={{ fontWeight: 'bold', bgcolor: '#f5f5f5', fontSize: '0.75rem' }}>Source</TableCell>
+   667→                <TableCell sx={{ fontWeight: 'bold', bgcolor: '#f5f5f5', fontSize: '0.75rem' }}>Étape</TableCell>
+   668→                <TableCell sx={{ fontWeight: 'bold', bgcolor: '#f5f5f5', fontSize: '0.75rem' }}>Score</TableCell>
+   669→                <TableCell sx={{ fontWeight: 'bold', bgcolor: '#f5f5f5', fontSize: '0.75rem' }}>Actions</TableCell>
+   670→              </TableRow></TableHead><TableBody>
+   671→                {filteredCandidats.length === 0 && <TableRow><TableCell colSpan={5} align="center" sx={{ py: 4, color: 'text.secondary' }}>Aucun résultat</TableCell></TableRow>}
+   672→                {filteredCandidats.map(c => (
+   673→                  <TableRow key={c.numero} hover sx={{ bgcolor: c.enAttente ? 'rgba(255,167,38,0.04)' : 'inherit' }}>
+   674→                    <TableCell><Box><Typography variant="body2" fontWeight={500} sx={{ fontSize: '0.8rem' }}>{c.nom}</Typography><Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.65rem' }}>{c.departement} · {c.experience} ans</Typography></Box></TableCell>
+   675→                    <TableCell><Chip label={c.source} size="small" variant="outlined" /></TableCell>
+   676→                    <TableCell><Chip label={c.etape} size="small" color={c.etape === 'Offre envoyée' ? 'success' : c.enAttente ? 'warning' : 'default'} /></TableCell>
+   677→                    <TableCell sx={{ fontSize: '0.8rem' }}>{c.score !== null ? `${c.score}/20` : '—'}</TableCell>
+   678→                    <TableCell>
+   679→                      {c.enAttente && <Tooltip title="Relancer"><IconButton size="small" color="primary" onClick={() => handleRelancer(c)}><Send sx={{ fontSize: 16 }} /></IconButton></Tooltip>}
+   680→                      <Tooltip title="Fiche candidat"><IconButton size="small" onClick={() => goToCandidat(c.numero)}><Visibility sx={{ fontSize: 18 }} /></IconButton></Tooltip>
+   681→                      <Tooltip title="Formation"><IconButton size="small" onClick={() => goToFormation(c.nom)}><PlayArrow sx={{ fontSize: 18 }} /></IconButton></Tooltip>
+   682→                    </TableCell>
+   683→                  </TableRow>
+   684→                ))}
+   685→              </TableBody></Table></TableContainer>
+   686→            </Paper>
+   687→          </div>
+   688→        )}
+   689→      </ResponsiveGridLayout>
+   690→
+   691→      {/* FAB + Drawer + Snackbar */}
+   692→      <Fab color="primary" size="small" sx={{ position: 'fixed', bottom: 24, right: 24, bgcolor: currentRole.color }} onClick={() => setFacetDrawer(true)}>
+   693→        <Badge badgeContent={activeFacetCount} color="warning"><Tune /></Badge>
+   694→      </Fab>
+   695→      <FacetedSearchDrawer open={facetDrawer} onClose={() => setFacetDrawer(false)} facets={facets} onChange={handleFacetChange} />
+   696→      <Snackbar open={Boolean(snack)} autoHideDuration={3000} onClose={() => setSnack(null)} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
+   697→        {snack && <Alert onClose={() => setSnack(null)} severity={snack.severity} variant="filled" sx={{ borderRadius: 2 }}>{snack.msg}</Alert>}
+   698→      </Snackbar>
+   699→    </Box>
+   700→  );
+   701→}
+   702→
