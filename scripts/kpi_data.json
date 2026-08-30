@@ -1,0 +1,122 @@
+{
+  "1": {
+    "time_to_hire": 34.0,
+    "cost_per_hire": 295000,
+    "quality_of_hire": 14.4,
+    "taux_acceptation": null,
+    "taux_remplissage": 33.3,
+    "taux_recommandation": 50.0,
+    "candidats_par_embauche": 3.0,
+    "entretiens_par_embauche": 1.0
+  },
+  "2": {
+    "time_to_hire": 34.0,
+    "cost_per_hire": 70000,
+    "quality_of_hire": 14.4,
+    "taux_acceptation": null,
+    "taux_remplissage": 0.0,
+    "taux_recommandation": 0.0,
+    "candidats_par_embauche": 1.0,
+    "entretiens_par_embauche": 2.0
+  },
+  "3": {
+    "time_to_hire": null,
+    "cost_per_hire": null,
+    "quality_of_hire": null,
+    "taux_acceptation": null,
+    "taux_remplissage": null,
+    "taux_recommandation": null,
+    "candidats_par_embauche": null,
+    "entretiens_par_embauche": null
+  },
+  "4": {
+    "time_to_hire": null,
+    "cost_per_hire": null,
+    "quality_of_hire": null,
+    "taux_acceptation": null,
+    "taux_remplissage": null,
+    "taux_recommandation": null,
+    "candidats_par_embauche": null,
+    "entretiens_par_embauche": null
+  },
+  "5": {
+    "time_to_hire": null,
+    "cost_per_hire": null,
+    "quality_of_hire": null,
+    "taux_acceptation": null,
+    "taux_remplissage": null,
+    "taux_recommandation": null,
+    "candidats_par_embauche": null,
+    "entretiens_par_embauche": null
+  },
+  "6": {
+    "time_to_hire": null,
+    "cost_per_hire": null,
+    "quality_of_hire": null,
+    "taux_acceptation": null,
+    "taux_remplissage": null,
+    "taux_recommandation": null,
+    "candidats_par_embauche": null,
+    "entretiens_par_embauche": null
+  },
+  "7": {
+    "time_to_hire": null,
+    "cost_per_hire": null,
+    "quality_of_hire": null,
+    "taux_acceptation": null,
+    "taux_remplissage": null,
+    "taux_recommandation": null,
+    "candidats_par_embauche": null,
+    "entretiens_par_embauche": null
+  },
+  "8": {
+    "time_to_hire": null,
+    "cost_per_hire": null,
+    "quality_of_hire": null,
+    "taux_acceptation": null,
+    "taux_remplissage": null,
+    "taux_recommandation": null,
+    "candidats_par_embauche": null,
+    "entretiens_par_embauche": null
+  },
+  "9": {
+    "time_to_hire": null,
+    "cost_per_hire": null,
+    "quality_of_hire": null,
+    "taux_acceptation": null,
+    "taux_remplissage": null,
+    "taux_recommandation": null,
+    "candidats_par_embauche": null,
+    "entretiens_par_embauche": null
+  },
+  "10": {
+    "time_to_hire": null,
+    "cost_per_hire": null,
+    "quality_of_hire": null,
+    "taux_acceptation": null,
+    "taux_remplissage": null,
+    "taux_recommandation": null,
+    "candidats_par_embauche": null,
+    "entretiens_par_embauche": null
+  },
+  "11": {
+    "time_to_hire": null,
+    "cost_per_hire": null,
+    "quality_of_hire": null,
+    "taux_acceptation": null,
+    "taux_remplissage": null,
+    "taux_recommandation": null,
+    "candidats_par_embauche": null,
+    "entretiens_par_embauche": null
+  },
+  "12": {
+    "time_to_hire": null,
+    "cost_per_hire": null,
+    "quality_of_hire": null,
+    "taux_acceptation": null,
+    "taux_remplissage": null,
+    "taux_recommandation": null,
+    "candidats_par_embauche": null,
+    "entretiens_par_embauche": null
+  }
+}

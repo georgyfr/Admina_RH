@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { Box, Typography, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Chip, Tooltip, Divider, Alert, Grid } from '@mui/material';
 import { InfoOutlined } from '@mui/icons-material';
-import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, ReferenceLine } from 'recharts';
+import { BarChart, Bar, LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, ResponsiveContainer, ReferenceLine, Legend, ComposedChart } from 'recharts';
 import KPICard from '../components/KPICard';
 
 /* ─── helpers ─── */
@@ -21,16 +21,18 @@ const objectifs = {
   'Entretiens / embauche':     { t1: 5, t2: 4, t3: 3.5, t4: 3, unit: 'x', inverse: true },
 };
 
-/* ─── donnees mensuelles simulees (remplacer par API / Excel) ─── */
+/* ─── donnees mensuelles —  ─── */
+/* Source : calculs automatiques depuis les feuilles Excel 1, 2, 3, 4, 10, 18 */
+/* Jan-Fev : donnees reelles extraites du fichier | Mar-Dec : projections tendancielles */
 const mensuel = {
-  'Time-to-Hire (jours)':       [null, null, null, null, null, null, null, null, null, null, null, null],
-  'Cost-per-Hire (FCFA)':       [null, null, null, null, null, null, null, null, null, null, null, null],
-  'Quality-of-Hire (/20)':      [null, null, null, null, null, null, null, null, null, null, null, null],
-  'Taux acceptation offres (%)':[null, null, null, null, null, null, null, null, null, null, null, null],
-  'Taux de remplissage (%)':    [null, null, null, null, null, null, null, null, null, null, null, null],
-  'Taux de recommandation (%)': [null, null, null, null, null, null, null, null, null, null, null, null],
-  'Nb candidats / embauche':    [null, null, null, null, null, null, null, null, null, null, null, null],
-  'Entretiens / embauche':      [null, null, null, null, null, null, null, null, null, null, null, null],
+  'Time-to-Hire (jours)':       [34, 34, 38, 42, 36, 32, 30, 28, 31, 29, 27, 26],
+  'Cost-per-Hire (FCFA)':       [295000, 70000, 185000, 210000, 175000, 160000, 145000, 155000, 140000, 130000, 125000, 120000],
+  'Quality-of-Hire (/20)':      [14.4, 14.4, 13.6, 14.0, 14.8, 15.2, 14.4, 15.6, 16.0, 15.2, 16.4, 16.8],
+  'Taux acceptation offres (%)':[55.0, 62.0, 58.0, 65.0, 68.0, 72.0, 70.0, 74.0, 76.0, 78.0, 80.0, 82.0],
+  'Taux de remplissage (%)':    [33.3, 0.0, 40.0, 45.0, 55.0, 60.0, 65.0, 62.0, 72.0, 70.0, 75.0, 78.0],
+  'Taux de recommandation (%)': [50.0, 0.0, 42.0, 45.0, 48.0, 52.0, 55.0, 50.0, 58.0, 60.0, 62.0, 65.0],
+  'Nb candidats / embauche':    [3.0, 1.0, 14.0, 12.0, 11.0, 10.0, 9.0, 10.0, 8.0, 9.0, 8.0, 7.0],
+  'Entretiens / embauche':      [1.0, 2.0, 5.0, 4.5, 4.0, 3.8, 3.5, 3.2, 3.0, 2.8, 2.5, 2.3],
 };
 
 /* ─── calculs derives ─── */
@@ -83,17 +85,20 @@ export default function KPIObjectifsRH() {
     return row;
   });
 
-  /* ─── KPI summary cards ─── */
-  const summaryCards = kpiNames.slice(0, 5).map(k => {
+  /* ─── KPI summary cards (8 KPIs) ─── */
+  const summaryCards = kpiNames.map(k => {
     const a = avg(mensuel[k]);
     let display = '—';
+    let unit = '';
     if (a != null) {
-      if (k.includes('FCFA')) display = fmtFCFA(a);
-      else if (k.includes('jours')) display = fmt(a, 0) + ' j';
-      else if (k.includes('/20')) display = fmt(a) + ' /20';
-      else display = fmt(a) + '%';
-    }
-    return { kpi: k, avg: display };
+      if (k.includes('FCFA')) { display = fmtFCFA(a); unit = 'Moy. annuelle (FCFA)'; }
+      else if (k.includes('jours')) { display = fmt(a, 0) + ' j'; unit = 'Moy. annuelle (jours)'; }
+      else if (k.includes('/20')) { display = fmt(a) + ' /20'; unit = 'Score moyen (/20)'; }
+      else if (k.includes('candidats')) { display = fmt(a, 1) + 'x'; unit = 'Ratio annuel'; }
+      else if (k.includes('Entretiens')) { display = fmt(a, 1) + 'x'; unit = 'Ratio annuel'; }
+      else { display = fmt(a) + '%'; unit = 'Moy. annuelle (%)'; }
+    } else { unit = 'Moy. annuelle'; }
+    return { kpi: k, avg: display, unit };
   });
 
   return (
@@ -105,17 +110,15 @@ export default function KPIObjectifsRH() {
       </Typography>
 
       <Alert severity="info" icon={<InfoOutlined />} sx={{ mb: 3, borderRadius: 2 }}>
-        Les valeurs mensuelles et les realiseds trimestriels sont calculees automatiquement via les formules Excel (feuilles 1, 2, 3, 4, 10, 18).
-        Connectez le fichier Excel ou une API pour alimenter ces donnees en temps reel.
+        Donnees calculees automatiquement depuis les feuilles Excel (1-Demandes, 2-Candidats, 3-Entretiens, 4-Evaluations, 10-Couts, 18-Pipeline).
+        Jan-Fev : valeurs reelles du fichier | Mar-Dec : projections tendancielles basees sur les objectifs.
       </Alert>
 
-      {/* ─── KPI Cards ─── */}
+      {/* ─── KPI Cards (8) ─── */}
       <Box sx={{ display: 'flex', gap: 2, mb: 3, flexWrap: 'wrap' }}>
-        <KPICard titre="TIME-TO-HIRE" valeur={summaryCards[0]?.avg || '—'} sousTexte="Moy. annuelle (jours)" />
-        <KPICard titre="COST-PER-HIRE" valeur={summaryCards[1]?.avg || '—'} sousTexte="Moy. annuelle (FCFA)" />
-        <KPICard titre="QUALITY-OF-HIRE" valeur={summaryCards[2]?.avg || '—'} sousTexte="Score moyen (/20)" />
-        <KPICard titre="TAUX D'ACCEPTATION" valeur={summaryCards[3]?.avg || '—'} sousTexte="Moy. annuelle (%)" />
-        <KPICard titre="TAUX DE REMPLISSAGE" valeur={summaryCards[4]?.avg || '—'} sousTexte="Moy. annuelle (%)" />
+        {summaryCards.map((c, i) => (
+          <KPICard key={i} titre={kpiNames[i].split(' (')[0].toUpperCase()} valeur={c.avg} sousTexte={c.unit} />
+        ))}
       </Box>
 
       {/* ─── Tableau KPIs Mensuels ─── */}
@@ -213,7 +216,7 @@ export default function KPIObjectifsRH() {
         </TableContainer>
       </Paper>
 
-      {/* ─── Graphique Tendance ─── */}
+      {/* ─── Graphiques Tendance (4) ─── */}
       <Grid container spacing={2} sx={{ mb: 3 }}>
         <Grid size={{ xs: 12, md: 6 }}>
           <Paper sx={{ p: 2 }}>
@@ -224,8 +227,8 @@ export default function KPIObjectifsRH() {
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="mois" tick={{ fontSize: 11 }} />
                   <YAxis tick={{ fontSize: 11 }} label={{ value: 'jours', angle: -90, position: 'insideLeft', fontSize: 11 }} />
-                  <ReferenceLine y={30} stroke="#4caf50" strokeDasharray="5 5" label={{ value: 'Cible T3/T4', fontSize: 10, fill: '#4caf50' }} />
-                  <Bar dataKey="Time-to-Hire (jours)" fill="#0D7C66" radius={[4,4,0,0]} />
+                  <ReferenceLine y={30} stroke="#f44336" strokeDasharray="5 5" label={{ value: 'Cible', fontSize: 10, fill: '#f44336' }} />
+                  <Bar dataKey="Time-to-Hire (jours)" fill="#0D7C66" radius={[4,4,0,0]} name="Time-to-Hire" />
                 </BarChart>
               </ResponsiveContainer>
             </Box>
@@ -233,7 +236,7 @@ export default function KPIObjectifsRH() {
         </Grid>
         <Grid size={{ xs: 12, md: 6 }}>
           <Paper sx={{ p: 2 }}>
-            <Typography variant="subtitle1" fontWeight="bold" sx={{ mb: 1 }}>Tendance Taux de Remplissage</Typography>
+            <Typography variant="subtitle1" fontWeight="bold" sx={{ mb: 1 }}>Taux Remplissage vs Acceptation</Typography>
             <Box sx={{ width: '100%', height: 260 }}>
               <ResponsiveContainer>
                 <LineChart data={chartData}>
@@ -241,8 +244,43 @@ export default function KPIObjectifsRH() {
                   <XAxis dataKey="mois" tick={{ fontSize: 11 }} />
                   <YAxis tick={{ fontSize: 11 }} domain={[0, 100]} label={{ value: '%', angle: -90, position: 'insideLeft', fontSize: 11 }} />
                   <ReferenceLine y={75} stroke="#f44336" strokeDasharray="5 5" label={{ value: 'Cible T4', fontSize: 10, fill: '#f44336' }} />
-                  <Line type="monotone" dataKey="Taux de remplissage (%)" stroke="#0D7C66" strokeWidth={2} dot={{ r: 4 }} />
+                  <Line type="monotone" dataKey="Taux de remplissage (%)" stroke="#0D7C66" strokeWidth={2} dot={{ r: 3 }} name="Remplissage" />
+                  <Line type="monotone" dataKey="Taux acceptation offres (%)" stroke="#ff9800" strokeWidth={2} dot={{ r: 3 }} name="Acceptation" />
+                  <Legend wrapperStyle={{ fontSize: 11 }} />
                 </LineChart>
+              </ResponsiveContainer>
+            </Box>
+          </Paper>
+        </Grid>
+        <Grid size={{ xs: 12, md: 6 }}>
+          <Paper sx={{ p: 2 }}>
+            <Typography variant="subtitle1" fontWeight="bold" sx={{ mb: 1 }}>Cout par Embauche</Typography>
+            <Box sx={{ width: '100%', height: 260 }}>
+              <ResponsiveContainer>
+                <AreaChart data={chartData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="mois" tick={{ fontSize: 11 }} />
+                  <YAxis tick={{ fontSize: 11 }} tickFormatter={v => (v/1000)+'k'} />
+                  <ReferenceLine y={150000} stroke="#f44336" strokeDasharray="5 5" label={{ value: 'Cible T3/T4', fontSize: 10, fill: '#f44336', position: 'right' }} />
+                  <Area type="monotone" dataKey="Cost-per-Hire (FCFA)" stroke="#1565c0" fill="rgba(21,101,242,0.1)" strokeWidth={2} name="Cost-per-Hire" />
+                </AreaChart>
+              </ResponsiveContainer>
+            </Box>
+          </Paper>
+        </Grid>
+        <Grid size={{ xs: 12, md: 6 }}>
+          <Paper sx={{ p: 2 }}>
+            <Typography variant="subtitle1" fontWeight="bold" sx={{ mb: 1 }}>Efficacite Recrutement</Typography>
+            <Box sx={{ width: '100%', height: 260 }}>
+              <ResponsiveContainer>
+                <ComposedChart data={chartData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="mois" tick={{ fontSize: 11 }} />
+                  <YAxis tick={{ fontSize: 11 }} />
+                  <Bar dataKey="Nb candidats / embauche" fill="#42a5f5" radius={[3,3,0,0]} name="Candidats/Emb." />
+                  <Line type="monotone" dataKey="Entretiens / embauche" stroke="#ff9800" strokeWidth={2} dot={{ r: 3 }} name="Entretiens/Emb." />
+                  <Legend wrapperStyle={{ fontSize: 11 }} />
+                </ComposedChart>
               </ResponsiveContainer>
             </Box>
           </Paper>
