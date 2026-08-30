@@ -1,19 +1,17 @@
 import { useState, useRef, useMemo, useCallback } from 'react';
-import { ResponsiveGridLayout } from 'react-grid-layout';
-import './dashboard-grid.css';
 import { useNavigate } from 'react-router-dom';
 import {
   Box, Typography, Button, Paper, Chip, Table, TableBody, TableCell,
   TableContainer, TableHead, TableRow, IconButton, Tooltip, Select, MenuItem,
   FormControl, InputLabel, Badge, Alert, Snackbar, TextField,
   InputAdornment, Divider, Fab, Drawer, Slider, Switch, FormControlLabel,
+  Grid,
 } from '@mui/material';
 import {
   Download, FilterListOff, Send, CheckCircle, Visibility,
   Schedule, Warning, TrendingUp, TrendingDown,
   Search, Tune, Close,
   ArrowForward, Lightbulb, Campaign, ReportProblem, Speed, PlayArrow,
-  DragIndicator, ViewModule,
 } from '@mui/icons-material';
 import {
   LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis,
@@ -138,7 +136,7 @@ function FacetedSearchDrawer({ open, onClose, facets, onChange }) {
   );
 }
 
-/* ═══ SMART ALERT PANEL ═══ */
+/* ═══ SMART ALERT PANEL (Phase 4) ═══ */
 function SmartAlertPanel({ recommendations, onRelanceGlobale, hasRetard }) {
   if (!recommendations?.length) return null;
   return (
@@ -172,53 +170,8 @@ function SmartAlertPanel({ recommendations, onRelanceGlobale, hasRetard }) {
   );
 }
 
-/* ═══ WIDGET TITLE BAR (drag handle) ═══ */
-function WidgetBar({ title, badge }) {
-  return (
-    <Box className="drag-handle" sx={{ display: 'flex', alignItems: 'center', gap: 0.5, px: 2, pt: 1.5, pb: 0.5, cursor: 'move', userSelect: 'none' }}>
-      <DragIndicator sx={{ fontSize: 15, color: 'text.disabled', opacity: 0.5 }} />
-      <Typography variant="subtitle2" fontWeight="bold" sx={{ fontSize: '0.85rem', flex: 1 }}>{title}</Typography>
-      {badge}
-    </Box>
-  );
-}
-
-/* ═══ DEFAULT LAYOUTS PER ROLE ═══ */
-const DEFAULT_LAYOUTS = {
-  recruteur: [
-    { i: 'kpi-cards', x: 0, y: 0, w: 12, h: 4, minW: 8, minH: 3 },
-    { i: 'entretiens-jour', x: 0, y: 4, w: 12, h: 4, minW: 6, minH: 3 },
-    { i: 'pipeline-resume', x: 0, y: 8, w: 12, h: 3, minW: 6, minH: 2 },
-    { i: 'smart-alerts', x: 0, y: 11, w: 12, h: 5, minW: 6, minH: 2 },
-    { i: 'table-candidats', x: 0, y: 16, w: 12, h: 10, minW: 6, minH: 5 },
-  ],
-  manager: [
-    { i: 'kpi-cards', x: 0, y: 0, w: 12, h: 4, minW: 8, minH: 3 },
-    { i: 'smart-alerts', x: 0, y: 4, w: 12, h: 5, minW: 6, minH: 2 },
-    { i: 'chart-evolution', x: 0, y: 9, w: 6, h: 7, minW: 4, minH: 5 },
-    { i: 'chart-sources', x: 6, y: 9, w: 6, h: 7, minW: 4, minH: 5 },
-    { i: 'chart-statuts', x: 0, y: 16, w: 6, h: 7, minW: 4, minH: 5 },
-    { i: 'chart-depart', x: 6, y: 16, w: 6, h: 7, minW: 4, minH: 5 },
-    { i: 'couts-resume', x: 0, y: 23, w: 12, h: 3, minW: 6, minH: 2 },
-    { i: 'table-demandes', x: 0, y: 26, w: 6, h: 10, minW: 4, minH: 5 },
-    { i: 'table-candidats', x: 6, y: 26, w: 6, h: 10, minW: 4, minH: 5 },
-  ],
-  drh: [
-    { i: 'kpi-cards', x: 0, y: 0, w: 12, h: 4, minW: 8, minH: 3 },
-    { i: 'smart-alerts', x: 0, y: 4, w: 12, h: 5, minW: 6, minH: 2 },
-    { i: 'chart-evolution', x: 0, y: 9, w: 6, h: 7, minW: 4, minH: 5 },
-    { i: 'chart-depart', x: 6, y: 9, w: 6, h: 7, minW: 4, minH: 5 },
-    { i: 'couts-resume', x: 0, y: 16, w: 6, h: 3, minW: 4, minH: 2 },
-    { i: 'conformite-resume', x: 6, y: 16, w: 6, h: 3, minW: 4, minH: 2 },
-    { i: 'chart-statuts', x: 0, y: 19, w: 6, h: 7, minW: 4, minH: 5 },
-    { i: 'table-demandes', x: 6, y: 19, w: 6, h: 10, minW: 4, minH: 5 },
-  ],
-};
-
-const LAYOUT_STORAGE = 'admina-grid-layout';
-
 /* ═══════════════════════════════════════════════════════════════
-   MAIN COMPONENT
+   MAIN COMPONENT — Phases 1 + 2 + 4 (sans drag & drop)
    ═══════════════════════════════════════════════════════════════ */
 export default function TableauDeBord() {
   const navigate = useNavigate();
@@ -236,11 +189,6 @@ export default function TableauDeBord() {
   const [facetDrawer, setFacetDrawer] = useState(false);
   const [facets, setFacets] = useState({ text: '', statut: null, source: null, etape: null, minScore: 0, minExp: 0, alertesOnly: false });
   const [drillKpi, setDrillKpi] = useState(null);
-
-  /* ─── Grid layout persistence ─── */
-  const [savedLayouts, setSavedLayouts] = useState(() => {
-    try { return JSON.parse(localStorage.getItem(LAYOUT_STORAGE) || '{}'); } catch { return {}; }
-  });
 
   const handleFacetChange = useCallback((key, val) => {
     if (key === 'reset') { setFacets({ text: '', statut: null, source: null, etape: null, minScore: 0, minExp: 0, alertesOnly: false }); setDrillKpi(null); return; }
@@ -294,14 +242,14 @@ export default function TableauDeBord() {
     ];
   }, [filteredDemandes, filteredCandidats]);
 
-  /* ─── KPI Drill-Down ─── */
+  /* ─── KPI Drill-Down (Phase 1) ─── */
   function handleKpiClick(kpiKey) {
     const isTogglingOff = drillKpi === kpiKey;
     setDrillKpi(isTogglingOff ? null : kpiKey);
     if (isTogglingOff) { setFacets(p => ({ ...p, alertesOnly: false, statut: null })); return; }
     if (kpiKey === 'alertes') { setFacets(p => ({ ...p, alertesOnly: true, statut: null })); setTimeout(() => demandesRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 150); }
     else if (kpiKey === 'enAttente') { setFacets(p => ({ ...p, alertesOnly: true, statut: null })); setTimeout(() => candidatsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 150); }
-    else if (kpiKey === 'pourvues' || kpiKey === 'conversion') { setFacets(p => ({ ...p, statut: 'Pourvue', alertesOnly: false })); setTimeout(() => demandesRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 150); }
+    else if (kpiKey === 'conversion') { setFacets(p => ({ ...p, statut: 'Pourvue', alertesOnly: false })); setTimeout(() => demandesRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 150); }
     else if (kpiKey === 'delai') { setFacets(p => ({ ...p, alertesOnly: false, statut: null })); setTimeout(() => demandesRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 150); }
   }
 
@@ -380,47 +328,6 @@ export default function TableauDeBord() {
     return { kpi: true, evolution: s.includes('evolution'), sources: s.includes('sources'), depart: s.includes('departement'), statuts: s.includes('statuts'), demandes: s.includes('demandesRecentes'), candidats: s.includes('candidatsRecents'), couts: s.includes('coutsResume'), conformite: s.includes('conformiteResume'), pipeline: s.includes('pipelineResume'), entretiens: s.includes('entretiensJour') };
   }, [currentRole]);
 
-  /* ─── Grid layout logic (Phase 3) ─── */
-  const visibleWidgetIds = useMemo(() => {
-    const ids = [];
-    if (show.kpi) ids.push('kpi-cards');
-    if (recommendations.length > 0) ids.push('smart-alerts');
-    if (show.entretiens) ids.push('entretiens-jour');
-    if (show.pipeline) ids.push('pipeline-resume');
-    if (show.evolution) ids.push('chart-evolution');
-    if (show.sources) ids.push('chart-sources');
-    if (show.depart) ids.push('chart-depart');
-    if (show.statuts) ids.push('chart-statuts');
-    if (show.couts) ids.push('couts-resume');
-    if (show.conformite) ids.push('conformite-resume');
-    if (show.demandes) ids.push('table-demandes');
-    if (show.candidats) ids.push('table-candidats');
-    return ids;
-  }, [show, recommendations.length]);
-
-  const currentLayout = useMemo(() => {
-    const saved = savedLayouts[currentRole.key];
-    const base = saved || DEFAULT_LAYOUTS[currentRole.key] || DEFAULT_LAYOUTS['manager'];
-    return base.filter(item => visibleWidgetIds.includes(item.i));
-  }, [currentRole.key, savedLayouts, visibleWidgetIds]);
-
-  const handleLayoutChange = useCallback((layout) => {
-    setSavedLayouts(prev => {
-      const updated = { ...prev, [currentRole.key]: layout };
-      try { localStorage.setItem(LAYOUT_STORAGE, JSON.stringify(updated)); } catch {}
-      return updated;
-    });
-  }, [currentRole.key]);
-
-  const handleResetLayout = useCallback(() => {
-    setSavedLayouts(prev => {
-      const updated = { ...prev }; delete updated[currentRole.key];
-      try { localStorage.setItem(LAYOUT_STORAGE, JSON.stringify(updated)); } catch {}
-      return updated;
-    });
-    setSnack({ msg: 'Mise en page réinitialisée', severity: 'info' });
-  }, [currentRole.key]);
-
   const enRetardCount = filteredDemandes.filter(d => d.alerte).length;
   const sortedDemandes = useMemo(() => drillKpi === 'delai' ? [...filteredDemandes].sort((a, b) => (b.joursAttente || 0) - (a.joursAttente || 0)) : filteredDemandes, [filteredDemandes, drillKpi]);
   const selectSx = { minWidth: 150, '& .MuiSelect-select': { py: 1, fontSize: '0.8rem' } };
@@ -429,7 +336,6 @@ export default function TableauDeBord() {
     { heure: '10:30', candidat: 'Tabi Sandrine', poste: 'Serveuse', type: 'Technique' },
     { heure: '14:00', candidat: 'Kamga Blaise', poste: 'Comptable', type: 'HR' },
   ];
-
 
   return (
     <Box>
@@ -443,7 +349,6 @@ export default function TableauDeBord() {
           <Typography variant="body2" color="text.secondary">Vue d'ensemble — {currentRole.desc}</Typography>
         </Box>
         <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-          <Tooltip title="Réinitialiser la mise en page"><IconButton size="small" onClick={handleResetLayout}><ViewModule sx={{ fontSize: 18 }} /></IconButton></Tooltip>
           <Button variant="outlined" startIcon={<Tune />} onClick={() => setFacetDrawer(true)} size="small">Filtres</Button>
           <Button variant="outlined" startIcon={<Download fontSize="small" />} onClick={handleExporter} size="small">Export</Button>
         </Box>
@@ -463,177 +368,163 @@ export default function TableauDeBord() {
         {hasActiveFilters && <Button size="small" variant="text" startIcon={<FilterListOff />} onClick={() => { resetFilters(); handleFacetChange('reset', null); setDrillKpi(null); }} sx={{ ml: 1, color: '#ef5350' }}>Réinitialiser</Button>}
       </Paper>
 
-      {/* ═══ PHASE 3: DRAG & DROP GRID ═══ */}
-      <ResponsiveGridLayout
-        key={currentRole.key}
-        layout={currentLayout}
-        layouts={{ lg: currentLayout }}
-        onLayoutChange={handleLayoutChange}
-        breakpoints={{ lg: 900, md: 600, sm: 0 }}
-        cols={{ lg: 12, md: 6, sm: 1 }}
-        rowHeight={38}
-        margin={[12, 12]}
-        compactType="vertical"
-        isDraggable
-        isResizable
-        draggableHandle=".drag-handle"
-        isBounded
-      >
-        {show.kpi && (
-          <div key="kpi-cards" style={{ overflow: 'hidden' }}>
-            <Paper sx={{ height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-              <WidgetBar title="Indicateurs Clés (KPIs)" />
-              <Box sx={{ flex: 1, px: 2, pb: 2, overflow: 'auto', minHeight: 0 }}>
-                <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap' }}>
-                  {kpis.map((k, idx) => {
-                    const key = KPI_KEYS[idx]; const isDrilled = drillKpi === key;
-                    return (
-                      <Paper key={k.titre} onClick={() => handleKpiClick(key)}
-                        sx={{ p: 1.5, flex: '1 1 130px', minWidth: 130, position: 'relative', cursor: 'pointer',
-                          borderLeft: isDrilled ? '4px solid #0D7C66' : k.alerte ? '4px solid #ef5350' : '4px solid transparent',
-                          border: isDrilled ? '2px solid #0D7C66' : undefined, bgcolor: isDrilled ? '#f0fdf4' : undefined,
-                          transition: 'all 0.2s', '&:hover': { boxShadow: 3, transform: 'translateY(-1px)' } }}>
-                        {isDrilled && <Chip label="Filtré" size="small" sx={{ position: 'absolute', top: 4, right: 4, height: 16, fontSize: '0.55rem', bgcolor: '#0D7C66', color: 'white' }} />}
-                        {!isDrilled && k.alerte && <Tooltip title={k.alerteMsg}><Warning sx={{ position: 'absolute', top: 6, right: 6, fontSize: 16, color: '#ef5350' }} /></Tooltip>}
-                        <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: 0.5 }}>{k.titre}</Typography>
-                        <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 0.5, my: 0.3 }}>
-                          <Typography variant="h6" fontWeight="bold" sx={{ fontSize: '1.1rem' }}>{k.valeur}</Typography>
-                          {k.tendance && <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.2 }}>{k.up ? <TrendingUp sx={{ fontSize: 12, color: '#2e7d32' }} /> : <TrendingDown sx={{ fontSize: 12, color: k.alerte ? '#ef5350' : '#2e7d32' }} />}<Typography variant="caption" sx={{ color: k.up ? '#2e7d32' : '#ef5350', fontWeight: 600, fontSize: '0.65rem' }}>{k.tendance}</Typography></Box>}
-                        </Box>
-                        <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.7rem' }}>{k.sousTexte}</Typography>
-                      </Paper>
-                    );
-                  })}
+      {/* ═══ KPI CARDS ═══ */}
+      {show.kpi && (
+        <Box sx={{ display: 'flex', gap: 1.5, mb: 2, flexWrap: 'wrap' }}>
+          {kpis.map((k, idx) => {
+            const key = KPI_KEYS[idx]; const isDrilled = drillKpi === key;
+            return (
+              <Paper key={k.titre} onClick={() => handleKpiClick(key)}
+                sx={{ p: 1.5, flex: '1 1 150px', minWidth: 150, maxWidth: 220, position: 'relative', cursor: 'pointer',
+                  borderLeft: isDrilled ? '4px solid #0D7C66' : k.alerte ? '4px solid #ef5350' : '4px solid transparent',
+                  border: isDrilled ? '2px solid #0D7C66' : undefined, bgcolor: isDrilled ? '#f0fdf4' : undefined,
+                  transition: 'all 0.2s', '&:hover': { boxShadow: 3, transform: 'translateY(-1px)' } }}>
+                {isDrilled && <Chip label="Filtré" size="small" sx={{ position: 'absolute', top: 4, right: 4, height: 16, fontSize: '0.55rem', bgcolor: '#0D7C66', color: 'white' }} />}
+                {!isDrilled && k.alerte && <Tooltip title={k.alerteMsg}><Warning sx={{ position: 'absolute', top: 6, right: 6, fontSize: 16, color: '#ef5350' }} /></Tooltip>}
+                <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: 0.5 }}>{k.titre}</Typography>
+                <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 0.5, my: 0.3 }}>
+                  <Typography variant="h6" fontWeight="bold" sx={{ fontSize: '1.1rem' }}>{k.valeur}</Typography>
+                  {k.tendance && <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.2 }}>{k.up ? <TrendingUp sx={{ fontSize: 12, color: '#2e7d32' }} /> : <TrendingDown sx={{ fontSize: 12, color: k.alerte ? '#ef5350' : '#2e7d32' }} />}<Typography variant="caption" sx={{ color: k.up ? '#2e7d32' : '#ef5350', fontWeight: 600, fontSize: '0.65rem' }}>{k.tendance}</Typography></Box>}
                 </Box>
-              </Box>
-            </Paper>
-          </div>
-        )}
-        {recommendations.length > 0 && (
-          <div key="smart-alerts" style={{ overflow: 'hidden' }}>
-            <Paper sx={{ height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden', borderLeft: '4px solid #ffa726', bgcolor: '#fffbeb' }}>
-              <WidgetBar title="Recommandations intelligentes" badge={<Chip label={recommendations.length} size="small" sx={{ bgcolor: '#fff3e0', color: '#e65100', fontWeight: 700, height: 18, fontSize: '0.65rem' }} />} />
-              <Box sx={{ flex: 1, px: 2, pb: 2, overflow: 'auto', minHeight: 0 }}>
-                <SmartAlertPanel recommendations={recommendations} onRelanceGlobale={handleRelanceGlobale} hasRetard={enRetardCount > 0 ? enRetardCount : null} />
-              </Box>
-            </Paper>
-          </div>
-        )}
-        {show.entretiens && (
-          <div key="entretiens-jour" style={{ overflow: 'hidden' }}>
-            <Paper sx={{ height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden', borderLeft: '4px solid #1976d2' }}>
-              <WidgetBar title="Entretiens du jour" badge={<Chip label={`${entretiensJour.length} prévus`} size="small" color="primary" />} />
-              <Box sx={{ flex: 1, px: 2, pb: 2, overflow: 'auto', minHeight: 0 }}>
-                <Box sx={{ display: 'flex', gap: 1.5, overflowX: 'auto', pb: 1 }}>
-                  {entretiensJour.map((e, i) => (
-                    <Paper key={i} variant="outlined" sx={{ p: 1.5, minWidth: 200, flexShrink: 0, borderColor: '#e0e0e0' }}>
-                      <Typography variant="h6" fontWeight="bold" sx={{ color: '#1976d2', fontSize: '1.1rem' }}>{e.heure}</Typography>
-                      <Typography variant="body2" fontWeight={500} sx={{ mt: 0.5 }}>{e.candidat}</Typography>
-                      <Typography variant="caption" color="text.secondary">{e.poste}</Typography>
-                      <Chip label={e.type} size="small" sx={{ mt: 1, bgcolor: e.type === 'HR' ? '#e3f2fd' : '#fff3e0', color: e.type === 'HR' ? '#1976d2' : '#e65100', fontSize: '0.65rem' }} />
-                    </Paper>
-                  ))}
-                </Box>
-              </Box>
-            </Paper>
-          </div>
-        )}
-        {show.pipeline && (
-          <div key="pipeline-resume" style={{ overflow: 'hidden' }}>
-            <Paper sx={{ height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-              <WidgetBar title="Pipeline candidatures" />
-              <Box sx={{ flex: 1, px: 2, pb: 2, overflow: 'auto', minHeight: 0 }}>
-                <Box sx={{ display: 'flex', gap: 1, overflowX: 'auto', pb: 1 }}>
-                  {ETAPES.slice(0, 6).map(etape => {
-                    const count = allCandidats.filter(c => c.etape === etape).length;
-                    return <Paper key={etape} variant="outlined" sx={{ p: 1.5, minWidth: 90, textAlign: 'center', flexShrink: 0, borderColor: '#e0e0e0' }}><Typography variant="h6" fontWeight="bold" color="#1976d2">{count}</Typography><Typography variant="caption" sx={{ fontSize: '0.65rem' }}>{etape}</Typography></Paper>;
-                  })}
-                </Box>
-              </Box>
-            </Paper>
-          </div>
-        )}
+                <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.7rem' }}>{k.sousTexte}</Typography>
+              </Paper>
+            );
+          })}
+        </Box>
+      )}
+
+      {/* ═══ SMART ALERTS (Phase 4) ═══ */}
+      {recommendations.length > 0 && (
+        <Paper sx={{ p: 2, mb: 2, borderLeft: '4px solid #ffa726', bgcolor: '#fffbeb' }}>
+          <SmartAlertPanel recommendations={recommendations} onRelanceGlobale={handleRelanceGlobale} hasRetard={enRetardCount > 0 ? enRetardCount : null} />
+        </Paper>
+      )}
+
+      {/* ═══ ENTRETIENS DU JOUR ═══ */}
+      {show.entretiens && (
+        <Paper sx={{ p: 2, mb: 2, borderLeft: '4px solid #1976d2' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1.5 }}>
+            <Typography variant="subtitle2" fontWeight="bold">Entretiens du jour</Typography>
+            <Chip label={`${entretiensJour.length} prévus`} size="small" color="primary" />
+          </Box>
+          <Box sx={{ display: 'flex', gap: 1.5, overflowX: 'auto', pb: 1 }}>
+            {entretiensJour.map((e, i) => (
+              <Paper key={i} variant="outlined" sx={{ p: 1.5, minWidth: 200, flexShrink: 0, borderColor: '#e0e0e0' }}>
+                <Typography variant="h6" fontWeight="bold" sx={{ color: '#1976d2', fontSize: '1.1rem' }}>{e.heure}</Typography>
+                <Typography variant="body2" fontWeight={500} sx={{ mt: 0.5 }}>{e.candidat}</Typography>
+                <Typography variant="caption" color="text.secondary">{e.poste}</Typography>
+                <Chip label={e.type} size="small" sx={{ mt: 1, bgcolor: e.type === 'HR' ? '#e3f2fd' : '#fff3e0', color: e.type === 'HR' ? '#1976d2' : '#e65100', fontSize: '0.65rem' }} />
+              </Paper>
+            ))}
+          </Box>
+        </Paper>
+      )}
+
+      {/* ═══ PIPELINE RÉSUMÉ ═══ */}
+      {show.pipeline && (
+        <Paper sx={{ p: 2, mb: 2 }}>
+          <Typography variant="subtitle2" fontWeight="bold" sx={{ mb: 1.5 }}>Pipeline candidatures</Typography>
+          <Box sx={{ display: 'flex', gap: 1, overflowX: 'auto', pb: 1 }}>
+            {ETAPES.slice(0, 6).map(etape => {
+              const count = allCandidats.filter(c => c.etape === etape).length;
+              return <Paper key={etape} variant="outlined" sx={{ p: 1.5, minWidth: 90, textAlign: 'center', flexShrink: 0, borderColor: '#e0e0e0' }}><Typography variant="h6" fontWeight="bold" color="#1976d2">{count}</Typography><Typography variant="caption" sx={{ fontSize: '0.65rem' }}>{etape}</Typography></Paper>;
+            })}
+          </Box>
+        </Paper>
+      )}
+
+      {/* ═══ CHARTS ROW ═══ */}
+      <Grid container spacing={2} sx={{ mb: 2 }}>
         {show.evolution && (
-          <div key="chart-evolution" style={{ overflow: 'hidden' }}>
-            <Paper sx={{ height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-              <WidgetBar title="Évolution du Recrutement" />
-              <Box sx={{ flex: 1, px: 2, pb: 2, minHeight: 0 }}>
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={chartEvolution}><CartesianGrid strokeDasharray="3 3" /><XAxis dataKey="mois" tick={{ fontSize: 11 }} /><YAxis tick={{ fontSize: 11 }} /><RTooltip content={<ChartTooltip />} /><Legend wrapperStyle={{ fontSize: 12 }} /><Line type="monotone" dataKey="demandes" stroke="#1976d2" name="Demandes" strokeWidth={2} dot={{ r: 4 }} /><Line type="monotone" dataKey="pourvues" stroke="#0D7C66" name="Pourvues" strokeWidth={2} dot={{ r: 4 }} /></LineChart>
-                </ResponsiveContainer>
-              </Box>
+          <Grid item xs={12} md={6}>
+            <Paper sx={{ p: 2, height: '100%' }}>
+              <Typography variant="subtitle2" fontWeight="bold" sx={{ mb: 1 }}>Évolution du Recrutement</Typography>
+              <ResponsiveContainer width="100%" height={250}>
+                <LineChart data={chartEvolution}><CartesianGrid strokeDasharray="3 3" /><XAxis dataKey="mois" tick={{ fontSize: 11 }} /><YAxis tick={{ fontSize: 11 }} /><RTooltip content={<ChartTooltip />} /><Legend wrapperStyle={{ fontSize: 12 }} /><Line type="monotone" dataKey="demandes" stroke="#1976d2" name="Demandes" strokeWidth={2} dot={{ r: 4 }} /><Line type="monotone" dataKey="pourvues" stroke="#0D7C66" name="Pourvues" strokeWidth={2} dot={{ r: 4 }} /></LineChart>
+              </ResponsiveContainer>
             </Paper>
-          </div>
+          </Grid>
         )}
         {show.sources && (
-          <div key="chart-sources" style={{ overflow: 'hidden' }}>
-            <Paper sx={{ height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden', border: activeSource ? '2px solid #0D7C66' : 'none' }}>
-              <WidgetBar title="Sources de Recrutement" badge={activeSource ? <Chip label={activeSource} size="small" color="primary" onDelete={() => setActiveSource(null)} /> : undefined} />
-              <Box sx={{ flex: 1, px: 2, pb: 2, minHeight: 0 }}>
-                <Typography variant="caption" color="text.secondary" sx={{ mb: 0.5, display: 'block' }}>Cliquer pour filtrer</Typography>
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={displaySources} layout="vertical" onClick={handleSourceClick} style={{ cursor: 'pointer' }}><CartesianGrid strokeDasharray="3 3" /><XAxis type="number" tick={{ fontSize: 11 }} /><YAxis dataKey="source" type="category" tick={{ fontSize: 11 }} width={75} /><RTooltip content={<ChartTooltip clickable />} /><Bar dataKey="valeur" name="Candidats" radius={[0, 4, 4, 0]}>{displaySources.map((s, i) => <Cell key={i} fill={activeSource && s.source !== activeSource ? '#e0e0e0' : COLORS[i % COLORS.length]} />)}</Bar></BarChart>
-                </ResponsiveContainer>
+          <Grid item xs={12} md={6}>
+            <Paper sx={{ p: 2, height: '100%', border: activeSource ? '2px solid #0D7C66' : 'none' }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                <Typography variant="subtitle2" fontWeight="bold">Sources de Recrutement</Typography>
+                {activeSource && <Chip label={activeSource} size="small" color="primary" onDelete={() => setActiveSource(null)} />}
               </Box>
+              <Typography variant="caption" color="text.secondary" sx={{ mb: 0.5, display: 'block' }}>Cliquer pour filtrer</Typography>
+              <ResponsiveContainer width="100%" height={220}>
+                <BarChart data={displaySources} layout="vertical" onClick={handleSourceClick} style={{ cursor: 'pointer' }}><CartesianGrid strokeDasharray="3 3" /><XAxis type="number" tick={{ fontSize: 11 }} /><YAxis dataKey="source" type="category" tick={{ fontSize: 11 }} width={75} /><RTooltip content={<ChartTooltip clickable />} /><Bar dataKey="valeur" name="Candidats" radius={[0, 4, 4, 0]}>{displaySources.map((s, i) => <Cell key={i} fill={activeSource && s.source !== activeSource ? '#e0e0e0' : COLORS[i % COLORS.length]} />)}</Bar></BarChart>
+              </ResponsiveContainer>
             </Paper>
-          </div>
+          </Grid>
         )}
         {show.depart && (
-          <div key="chart-depart" style={{ overflow: 'hidden' }}>
-            <Paper sx={{ height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-              <WidgetBar title="Répartition par Département" />
-              <Box sx={{ flex: 1, px: 2, pb: 2, minHeight: 0 }}>
-                <ResponsiveContainer width="100%" height="100%"><PieChart><Pie data={chartDepart} cx="50%" cy="50%" innerRadius={40} outerRadius={70} dataKey="value" label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`} labelLine={{ strokeWidth: 1 }}>{chartDepart.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}</Pie><RTooltip /></PieChart></ResponsiveContainer>
-              </Box>
+          <Grid item xs={12} md={6}>
+            <Paper sx={{ p: 2, height: '100%' }}>
+              <Typography variant="subtitle2" fontWeight="bold" sx={{ mb: 1 }}>Répartition par Département</Typography>
+              <ResponsiveContainer width="100%" height={250}>
+                <PieChart><Pie data={chartDepart} cx="50%" cy="50%" innerRadius={40} outerRadius={70} dataKey="value" label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`} labelLine={{ strokeWidth: 1 }}>{chartDepart.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}</Pie><RTooltip /></PieChart>
+              </ResponsiveContainer>
             </Paper>
-          </div>
+          </Grid>
         )}
         {show.statuts && (
-          <div key="chart-statuts" style={{ overflow: 'hidden' }}>
-            <Paper sx={{ height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden', border: activeStatut ? '2px solid #0D7C66' : 'none' }}>
-              <WidgetBar title="Statuts des Demandes" badge={activeStatut ? <Chip label={activeStatut} size="small" color="primary" onDelete={() => setActiveStatut(null)} /> : undefined} />
-              <Box sx={{ flex: 1, px: 2, pb: 2, minHeight: 0 }}>
-                <Typography variant="caption" color="text.secondary" sx={{ mb: 0.5, display: 'block' }}>Cliquer pour filtrer</Typography>
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={displayStatuts} onClick={handleStatutClick} style={{ cursor: 'pointer' }}><CartesianGrid strokeDasharray="3 3" /><XAxis dataKey="statut" tick={{ fontSize: 10 }} angle={-20} textAnchor="end" height={45} /><YAxis tick={{ fontSize: 11 }} /><RTooltip content={<ChartTooltip clickable />} /><Bar dataKey="valeur" name="Demandes" radius={[4, 4, 0, 0]}>{displayStatuts.map((s, i) => { const sev = statutSeverity[s.statut]; return <Cell key={i} fill={activeStatut && s.statut !== activeStatut ? '#e0e0e0' : sev === 'error' ? '#ef5350' : sev === 'warning' ? '#ffa726' : '#42a5f5'} />; })}</Bar></BarChart>
-                </ResponsiveContainer>
+          <Grid item xs={12} md={6}>
+            <Paper sx={{ p: 2, height: '100%', border: activeStatut ? '2px solid #0D7C66' : 'none' }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                <Typography variant="subtitle2" fontWeight="bold">Statuts des Demandes</Typography>
+                {activeStatut && <Chip label={activeStatut} size="small" color="primary" onDelete={() => setActiveStatut(null)} />}
               </Box>
+              <Typography variant="caption" color="text.secondary" sx={{ mb: 0.5, display: 'block' }}>Cliquer pour filtrer</Typography>
+              <ResponsiveContainer width="100%" height={220}>
+                <BarChart data={displayStatuts} onClick={handleStatutClick} style={{ cursor: 'pointer' }}><CartesianGrid strokeDasharray="3 3" /><XAxis dataKey="statut" tick={{ fontSize: 10 }} angle={-20} textAnchor="end" height={45} /><YAxis tick={{ fontSize: 11 }} /><RTooltip content={<ChartTooltip clickable />} /><Bar dataKey="valeur" name="Demandes" radius={[4, 4, 0, 0]}>{displayStatuts.map((s, i) => { const sev = statutSeverity[s.statut]; return <Cell key={i} fill={activeStatut && s.statut !== activeStatut ? '#e0e0e0' : sev === 'error' ? '#ef5350' : sev === 'warning' ? '#ffa726' : '#42a5f5'} />; })}</Bar></BarChart>
+              </ResponsiveContainer>
             </Paper>
-          </div>
+          </Grid>
         )}
+      </Grid>
+
+      {/* ═══ COÛTS & CONFORMITÉ ═══ */}
+      <Grid container spacing={2} sx={{ mb: 2 }}>
         {show.couts && (
-          <div key="couts-resume" style={{ overflow: 'hidden' }}>
-            <Paper sx={{ height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden', borderLeft: '4px solid #7b1fa2' }}>
-              <WidgetBar title="Résumé des Coûts" />
-              <Box sx={{ flex: 1, px: 2, pb: 2, overflow: 'auto', minHeight: 0 }}>
-                <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
-                  {[{ label: 'Budget annuel', val: '12 500 000 FCFA', sub: 'Prévisionnel 2025' }, { label: 'Coût moyen / embauche', val: '285 000 FCFA', sub: '-8% vs 2024' }, { label: 'Coût par source', val: 'LinkedIn: 42 000 FCFA', sub: 'Source la + chère' }].map((c, i) => (
-                    <Paper key={i} variant="outlined" sx={{ p: 1.5, flex: '1 1 160px' }}><Typography variant="caption" color="text.secondary">{c.label}</Typography><Typography variant="h6" fontWeight="bold" sx={{ color: '#7b1fa2' }}>{c.val}</Typography><Typography variant="caption" color="text.secondary">{c.sub}</Typography></Paper>
-                  ))}
-                </Box>
+          <Grid item xs={12} md={show.conformite ? 6 : 12}>
+            <Paper sx={{ p: 2, borderLeft: '4px solid #7b1fa2' }}>
+              <Typography variant="subtitle2" fontWeight="bold" sx={{ mb: 1.5 }}>Résumé des Coûts</Typography>
+              <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+                {[{ label: 'Budget annuel', val: '12 500 000 FCFA', sub: 'Prévisionnel 2025' }, { label: 'Coût moyen / embauche', val: '285 000 FCFA', sub: '-8% vs 2024' }, { label: 'Coût par source', val: 'LinkedIn: 42 000 FCFA', sub: 'Source la + chère' }].map((c, i) => (
+                  <Paper key={i} variant="outlined" sx={{ p: 1.5, flex: '1 1 160px' }}><Typography variant="caption" color="text.secondary">{c.label}</Typography><Typography variant="h6" fontWeight="bold" sx={{ color: '#7b1fa2' }}>{c.val}</Typography><Typography variant="caption" color="text.secondary">{c.sub}</Typography></Paper>
+                ))}
               </Box>
             </Paper>
-          </div>
+          </Grid>
         )}
         {show.conformite && (
-          <div key="conformite-resume" style={{ overflow: 'hidden' }}>
-            <Paper sx={{ height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden', borderLeft: '4px solid #d32f2f' }}>
-              <WidgetBar title="Conformité & Risques" />
-              <Box sx={{ flex: 1, px: 2, pb: 2, overflow: 'auto', minHeight: 0 }}>
-                <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
-                  {[{ label: 'Taux conformité', val: '92%', ok: true }, { label: 'Documents manquants', val: '3', ok: false }, { label: 'Contrats < 30j', val: '1', ok: false }].map((c, i) => (
-                    <Paper key={i} variant="outlined" sx={{ p: 1.5, flex: '1 1 130px', borderLeft: `3px solid ${c.ok ? '#2e7d32' : '#ef5350'}` }}><Typography variant="caption" color="text.secondary">{c.label}</Typography><Typography variant="h6" fontWeight="bold" sx={{ color: c.ok ? '#2e7d32' : '#ef5350' }}>{c.val}</Typography></Paper>
-                  ))}
-                </Box>
+          <Grid item xs={12} md={6}>
+            <Paper sx={{ p: 2, borderLeft: '4px solid #d32f2f' }}>
+              <Typography variant="subtitle2" fontWeight="bold" sx={{ mb: 1.5 }}>Conformité & Risques</Typography>
+              <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+                {[{ label: 'Taux conformité', val: '92%', ok: true }, { label: 'Documents manquants', val: '3', ok: false }, { label: 'Contrats < 30j', val: '1', ok: false }].map((c, i) => (
+                  <Paper key={i} variant="outlined" sx={{ p: 1.5, flex: '1 1 130px', borderLeft: `3px solid ${c.ok ? '#2e7d32' : '#ef5350'}` }}><Typography variant="caption" color="text.secondary">{c.label}</Typography><Typography variant="h6" fontWeight="bold" sx={{ color: c.ok ? '#2e7d32' : '#ef5350' }}>{c.val}</Typography></Paper>
+                ))}
               </Box>
             </Paper>
-          </div>
+          </Grid>
         )}
+      </Grid>
+
+      {/* ═══ TABLES ═══ */}
+      <Grid container spacing={2} sx={{ mb: 2 }}>
         {show.demandes && (
-          <div key="table-demandes" style={{ overflow: 'hidden' }}>
-            <Paper ref={demandesRef} sx={{ height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden', transition: 'box-shadow 0.3s', boxShadow: drillKpi && ['alertes', 'delai', 'conversion', 'pourvues'].includes(drillKpi) ? '0 0 0 2px #0D7C66' : undefined }}>
-              <WidgetBar title={`Demandes (${sortedDemandes.length})`} badge={<Badge badgeContent={sortedDemandes.filter(d => d.alerte).length} color="error"><Warning sx={{ color: '#ef5350' }} /></Badge>} />
-              <TableContainer sx={{ flex: 1, overflow: 'auto' }}><Table size="small" stickyHeader><TableHead><TableRow>
+          <Grid item xs={12} md={show.candidats ? 6 : 12}>
+            <Paper ref={demandesRef} sx={{ p: 2, transition: 'box-shadow 0.3s', boxShadow: drillKpi && ['alertes', 'delai', 'conversion', 'pourvues'].includes(drillKpi) ? '0 0 0 2px #0D7C66' : undefined }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <Typography variant="subtitle2" fontWeight="bold">Demandes ({sortedDemandes.length})</Typography>
+                  <Badge badgeContent={sortedDemandes.filter(d => d.alerte).length} color="error"><Warning sx={{ color: '#ef5350' }} /></Badge>
+                </Box>
+              </Box>
+              <TableContainer><Table size="small" stickyHeader><TableHead><TableRow>
                 <TableCell sx={{ fontWeight: 'bold', bgcolor: '#f5f5f5', fontSize: '0.75rem' }}>N°</TableCell>
                 <TableCell sx={{ fontWeight: 'bold', bgcolor: '#f5f5f5', fontSize: '0.75rem' }}>Poste</TableCell>
                 <TableCell sx={{ fontWeight: 'bold', bgcolor: '#f5f5f5', fontSize: '0.75rem' }}>Statut</TableCell>
@@ -654,13 +545,18 @@ export default function TableauDeBord() {
                 ))}
               </TableBody></Table></TableContainer>
             </Paper>
-          </div>
+          </Grid>
         )}
         {show.candidats && (
-          <div key="table-candidats" style={{ overflow: 'hidden' }}>
-            <Paper ref={candidatsRef} sx={{ height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden', transition: 'box-shadow 0.3s', boxShadow: drillKpi === 'enAttente' ? '0 0 0 2px #0D7C66' : undefined }}>
-              <WidgetBar title={`Candidats (${filteredCandidats.length})`} badge={<Badge badgeContent={filteredCandidats.filter(c => c.enAttente).length} color="warning"><Schedule sx={{ color: '#ffa726' }} /></Badge>} />
-              <TableContainer sx={{ flex: 1, overflow: 'auto' }}><Table size="small" stickyHeader><TableHead><TableRow>
+          <Grid item xs={12} md={6}>
+            <Paper ref={candidatsRef} sx={{ p: 2, transition: 'box-shadow 0.3s', boxShadow: drillKpi === 'enAttente' ? '0 0 0 2px #0D7C66' : undefined }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <Typography variant="subtitle2" fontWeight="bold">Candidats ({filteredCandidats.length})</Typography>
+                  <Badge badgeContent={filteredCandidats.filter(c => c.enAttente).length} color="warning"><Schedule sx={{ color: '#ffa726' }} /></Badge>
+                </Box>
+              </Box>
+              <TableContainer><Table size="small" stickyHeader><TableHead><TableRow>
                 <TableCell sx={{ fontWeight: 'bold', bgcolor: '#f5f5f5', fontSize: '0.75rem' }}>Nom</TableCell>
                 <TableCell sx={{ fontWeight: 'bold', bgcolor: '#f5f5f5', fontSize: '0.75rem' }}>Source</TableCell>
                 <TableCell sx={{ fontWeight: 'bold', bgcolor: '#f5f5f5', fontSize: '0.75rem' }}>Étape</TableCell>
@@ -683,9 +579,9 @@ export default function TableauDeBord() {
                 ))}
               </TableBody></Table></TableContainer>
             </Paper>
-          </div>
+          </Grid>
         )}
-      </ResponsiveGridLayout>
+      </Grid>
 
       {/* FAB + Drawer + Snackbar */}
       <Fab color="primary" size="small" sx={{ position: 'fixed', bottom: 24, right: 24, bgcolor: currentRole.color }} onClick={() => setFacetDrawer(true)}>
