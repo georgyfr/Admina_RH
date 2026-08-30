@@ -38,3 +38,4 @@ export const nomenclatures = {
   stade_pipeline: ['CV recu', 'Pre-selection', 'Entretien HR', 'Test technique', 'Entretien final', 'Offre envoyee', 'Accepte', 'Refuse', 'Retraite'],
   priorite_pipeline: ['Haute', 'Moyenne', 'Basse'],
 };
+

@@ -1,3 +1,4 @@
+// FormationsCandidats page v2
 import { useState, useMemo } from 'react';
 import { Box, Typography, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination, Chip, Paper, FormControl, Select, MenuItem, Tooltip } from '@mui/material';
 import { Add, Download } from '@mui/icons-material';
