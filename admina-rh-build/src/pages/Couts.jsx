@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
-import { Box, Typography, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination, Paper, TableSortLabel } from '@mui/material';
-import { Download } from '@mui/icons-material';
+import { Box, Typography, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination, Chip, Paper } from '@mui/material';
+import { Add, Download } from '@mui/icons-material';
 import KPICard from '../components/KPICard';
 import AddDialog from '../components/AddDialog';
 import { nomenclatures } from '../data/nomenclatures';
@@ -33,6 +33,11 @@ export default function Couts() {
   return (
     <Box>
       <Typography variant="h5" fontWeight="bold">Analyse des Coûts de Recrutement</Typography>
+      <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>{data.length} analyse(s) de coûts</Typography>
+      <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
+        <Button variant="outlined" startIcon={<Download fontSize="small" />}>Exporter CSV</Button>
+        <Button variant="contained" startIcon={<Add fontSize="small" />} onClick={() => setDlg(true)}>Ajouter</Button>
+      </Box>
       <Box sx={{ display: 'flex', gap: 2, mb: 3, flexWrap: 'wrap' }}>
         <KPICard titre="COÛT TOTAL" valeur={formatFCFA(coutTotal)} sousTexte="tous postes" />
         <KPICard titre="COÛT MOYEN/DEMANDE" valeur={formatFCFA(coutMoyenDemande)} sousTexte={"par demande"} />
