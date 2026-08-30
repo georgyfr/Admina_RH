@@ -30,6 +30,7 @@ import {
 } from '@mui/material';
 import { Add, Download, Visibility, Edit } from '@mui/icons-material';
 import KPICard from '../components/KPICard';
+import AddDialog from '../components/AddDialog';
 import { nomenclatures } from '../data/nomenclatures';
 
 const statutColor = (statut) => {
@@ -453,6 +454,7 @@ export default function Candidats() {
   const [filterNiveau, setFilterNiveau] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [openDialog, setOpenDialog] = useState(false);
+  const [addDlg, setAddDlg] = useState(false);
   const [selectedCandidate, setSelectedCandidate] = useState(null);
   const [activeTab, setActiveTab] = useState(0);
 
@@ -654,6 +656,7 @@ export default function Candidats() {
             variant="contained"
             startIcon={<Add />}
             size="small"
+            onClick={() => setAddDlg(true)}
           >
             Nouveau Candidat
           </Button>
@@ -1216,6 +1219,39 @@ export default function Candidats() {
           </>
         )}
       </Dialog>
+
+      <AddDialog open={addDlg} onClose={() => setAddDlg(false)} title="Nouveau Candidat"
+        fields={[
+          {key: 'civilite', label: 'Civilité', type: 'select', options: nomenclatures.civilite, required: true},
+          {key: 'nom', label: 'Nom', required: true},
+          {key: 'prenom', label: 'Prénom', required: true},
+          {key: 'telephone', label: 'Téléphone', required: true},
+          {key: 'email', label: 'Email'},
+          {key: 'ville', label: 'Ville'},
+          {key: 'niveauEtude', label: 'Niveau Étude', type: 'select', options: nomenclatures.niveau_etude},
+          {key: 'anneesExp', label: 'Années Expérience', type: 'number'},
+          {key: 'dernierEmployeur', label: 'Dernier Employeur'},
+          {key: 'posteVise', label: 'Poste Visé', required: true},
+          {key: 'sourceCandidature', label: 'Source', type: 'select', options: nomenclatures.source},
+          {key: 'statut', label: 'Statut', type: 'select', options: nomenclatures.statut_candidat},
+          {key: 'notes', label: 'Notes', multiline: true},
+        ]}
+        onSubmit={(vals) => {
+          const nid = candidates.length + 1;
+          const newId = 'CAN-' + String(nid).padStart(3, '0');
+          const today = new Date().toISOString().split('T')[0];
+          setCandidates(prev => [...prev, {
+            id: newId, dateNaissance: '', nationalite: 'Camerounaise', situationFam: '',
+            adresse: '', genre: vals.civilite === 'M.' ? 'Masculin' : 'Feminin',
+            diplome: '', etablissement: '', competencesCles: '', langues: '',
+            niveauLangue: '', outilsLogiciels: '', dateCandidature: today,
+            score: 0, typeContrat: '', contratTelechargeable: '',
+            dateDebutEssai: '', dateFinEssai: '', dateEmbaucheDefinitive: '',
+            certificatTravail: false, attestationCNPS: false, extraitCasierJudiciaire: false,
+            ...vals
+          }]);
+        }}
+      />
     </Box>
   );
 }
