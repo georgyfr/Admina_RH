@@ -1,9 +1,10 @@
-import { useState, useEffect, lazy, Suspense } from 'react';
-import { BrowserRouter, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
-import { Box } from '@mui/material';
+import { useState, useEffect, useCallback, lazy, Suspense } from 'react';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { Box, ThemeProvider, CssBaseline } from '@mui/material';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import { AppProvider } from './context/AppContext';
+import { lightTheme, darkTheme } from './theme';
 
 const TableauDeBord = lazy(() => import('./pages/TableauDeBord'));
 const Demandes = lazy(() => import('./pages/Demandes'));
@@ -37,56 +38,75 @@ const FormationsCandidats = lazy(() => import('./pages/FormationsCandidats'));
 const Competences = lazy(() => import('./pages/Competences'));
 const Statuts = lazy(() => import('./pages/Statuts'));
 
-const titles = { '/': 'Tableau de Bord', '/offres': 'Demandes', '/candidats': 'Base Candidats', '/pipeline': 'Pipeline Candidatures', '/entretiens': 'Planning Entretiens', '/evaluations': 'Grille Evaluation', '/verifications': 'Verification References', '/selections': 'Selections', '/cabinets': 'Gestion Cabinets', '/contrats': 'Suivi Contrats', '/integration': 'Integration Employe', '/checklist': 'Checklist Integration', '/periode-essai': 'Periodes d\'Essai', '/formation': "Plan d\'Accueil & Formations", '/post-embauche': 'Suivi Post-Embauche', '/stagiaires': 'Stagiaires', '/saisonniers': 'Saisonniers & Temporaires', '/previsions': 'Previsions', '/sources': 'Sources de Recrutement', '/couts': 'Analyse des Couts', '/documents': 'Gestion des Documents', '/conformite': 'Conformite', '/parametres': 'Parametres du Systeme', '/audit': 'Journal d\'Audit', '/types-contrats': 'Types de Contrats', '/departements': 'Departements', '/sources-roi': 'Sources & ROI', '/experiences': 'Experiences des Candidats', '/formations': 'Formations des Candidats', '/competences': 'Competences des Candidats', '/statuts': 'Gestion des Statuts' };
+const titles = { '/': 'Tableau de Bord', '/offres': 'Demandes', '/candidats': 'Base Candidats', '/pipeline': 'Pipeline Candidatures', '/entretiens': 'Planning Entretiens', '/evaluations': 'Grille Evaluation', '/verifications': 'Verification References', '/selections': 'Selections', '/cabinets': 'Gestion Cabinets', '/contrats': 'Suivi Contrats', '/integration': 'Integration Employe', '/checklist': 'Checklist Integration', '/periode-essai': "Periodes d'Essai", '/formation': "Plan d'Accueil & Formations", '/post-embauche': 'Suivi Post-Embauche', '/stagiaires': 'Stagiaires', '/saisonniers': 'Saisonniers & Temporaires', '/previsions': 'Previsions', '/sources': 'Sources de Recrutement', '/couts': 'Analyse des Couts', '/documents': 'Gestion des Documents', '/conformite': 'Conformite', '/parametres': 'Parametres du Systeme', '/audit': 'Journal d\'Audit', '/types-contrats': 'Types de Contrats', '/departements': 'Departements', '/sources-roi': 'Sources & ROI', '/experiences': 'Experiences des Candidats', '/formations': 'Formations des Candidats', '/competences': 'Competences des Candidats', '/statuts': 'Gestion des Statuts' };
 
 const dw = 260;
+const headerH = 84;
 
 function AppContent() {
   const loc = useLocation();
   const [title, setTitle] = useState('Admina-RH');
+  const [darkMode, setDarkMode] = useState(() => {
+    try { return localStorage.getItem('admina-dark') === 'true'; } catch { return false; }
+  });
+
+  const toggleDark = useCallback(() => {
+    setDarkMode(prev => {
+      const next = !prev;
+      try { localStorage.setItem('admina-dark', String(next)); } catch {}
+      return next;
+    });
+  }, []);
+
   useEffect(() => { setTitle(titles[loc.pathname] || 'Admina-RH'); }, [loc]);
+
+  const theme = darkMode ? darkTheme : lightTheme;
+
   return (
-    <AppProvider>
-      <Sidebar drawerWidth={dw} />
-      <Header title={title} />
-      <Box sx={{ ml: `${dw}px`, mt: '64px', p: 3, width: `calc(100% - ${dw}px)` }}>
-        <Suspense fallback={<Box p={3}>Chargement...</Box>}>
-          <Routes>
-            <Route path='/' element={<TableauDeBord />} />
-            <Route path='/offres' element={<Demandes />} />
-            <Route path='/candidats' element={<Candidats />} />
-            <Route path='/pipeline' element={<Pipeline />} />
-            <Route path='/entretiens' element={<Entretiens />} />
-            <Route path='/evaluations' element={<Evaluations />} />
-            <Route path='/verifications' element={<Verifications />} />
-            <Route path='/selections' element={<Selections />} />
-            <Route path='/cabinets' element={<Cabinets />} />
-            <Route path='/contrats' element={<Contrats />} />
-            <Route path='/integration' element={<Integration />} />
-            <Route path='/checklist' element={<Checklist />} />
-            <Route path='/periode-essai' element={<PeriodeEssai />} />
-            <Route path='/formation' element={<Formation />} />
-            <Route path='/post-embauche' element={<PostEmbauche />} />
-            <Route path='/stagiaires' element={<Stagiaires />} />
-            <Route path='/saisonniers' element={<Saisonniers />} />
-            <Route path='/previsions' element={<Previsions />} />
-            <Route path='/sources' element={<Sources />} />
-            <Route path='/couts' element={<Couts />} />
-            <Route path='/documents' element={<Documents />} />
-            <Route path='/conformite' element={<Conformite />} />
-            <Route path='/parametres' element={<Parametres />} />
-            <Route path='/audit' element={<Audit />} />
-            <Route path='/types-contrats' element={<TypesContrats />} />
-            <Route path='/departements' element={<Departements />} />
-            <Route path='/sources-roi' element={<SourcesROI />} />
-            <Route path='/experiences' element={<Experiences />} />
-            <Route path='/formations' element={<FormationsCandidats />} />
-            <Route path='/competences' element={<Competences />} />
-            <Route path='/statuts' element={<Statuts />} />
-          </Routes>
-        </Suspense>
-      </Box>
-    </AppProvider>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <AppProvider darkMode={darkMode} toggleDark={toggleDark}>
+        <Sidebar drawerWidth={dw} />
+        <Header title={title} />
+        <Box sx={{ ml: `${dw}px`, mt: `${headerH}px`, p: 3, width: `calc(100% - ${dw}px)`, minHeight: `calc(100vh - ${headerH}px)` }}>
+          <Suspense fallback={<Box p={3}>Chargement...</Box>}>
+            <Routes>
+              <Route path='/' element={<TableauDeBord />} />
+              <Route path='/offres' element={<Demandes />} />
+              <Route path='/candidats' element={<Candidats />} />
+              <Route path='/pipeline' element={<Pipeline />} />
+              <Route path='/entretiens' element={<Entretiens />} />
+              <Route path='/evaluations' element={<Evaluations />} />
+              <Route path='/verifications' element={<Verifications />} />
+              <Route path='/selections' element={<Selections />} />
+              <Route path='/cabinets' element={<Cabinets />} />
+              <Route path='/contrats' element={<Contrats />} />
+              <Route path='/integration' element={<Integration />} />
+              <Route path='/checklist' element={<Checklist />} />
+              <Route path='/periode-essai' element={<PeriodeEssai />} />
+              <Route path='/formation' element={<Formation />} />
+              <Route path='/post-embauche' element={<PostEmbauche />} />
+              <Route path='/stagiaires' element={<Stagiaires />} />
+              <Route path='/saisonniers' element={<Saisonniers />} />
+              <Route path='/previsions' element={<Previsions />} />
+              <Route path='/sources' element={<Sources />} />
+              <Route path='/couts' element={<Couts />} />
+              <Route path='/documents' element={<Documents />} />
+              <Route path='/conformite' element={<Conformite />} />
+              <Route path='/parametres' element={<Parametres />} />
+              <Route path='/audit' element={<Audit />} />
+              <Route path='/types-contrats' element={<TypesContrats />} />
+              <Route path='/departements' element={<Departements />} />
+              <Route path='/sources-roi' element={<SourcesROI />} />
+              <Route path='/experiences' element={<Experiences />} />
+              <Route path='/formations' element={<FormationsCandidats />} />
+              <Route path='/competences' element={<Competences />} />
+              <Route path='/statuts' element={<Statuts />} />
+            </Routes>
+          </Suspense>
+        </Box>
+      </AppProvider>
+    </ThemeProvider>
   );
 }
 

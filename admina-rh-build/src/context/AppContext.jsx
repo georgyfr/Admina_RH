@@ -59,10 +59,84 @@ const initialNotifications = [
   { id:'n7', icon:'school', color:'#0288d1', msg:'Formation Master Informatique de Kamga Blaise en cours', time:'Il y a 5h', read:true, path:'/formations' },
 ];
 
-export function AppProvider({ children }) {
+const deadlines = [
+  { id:'dl1', label:'Entretien Kamga Blaise', sub:'Demain 10:00 — Informatique', urgent: true, path:'/entretiens' },
+  { id:'dl2', label:'Contrat CDD Nganou André', sub:'Expire dans 15 jours', urgent: true, path:'/contrats' },
+  { id:'dl3', label:'Période essai Eyenga Clarisse', sub:'Expire dans 30 jours', urgent: false, path:'/periode-essai' },
+  { id:'dl4', label:'Fin de stage Nkoulou Brandon', sub:'Dans 2 mois', urgent: false, path:'/stagiaires' },
+];
+
+const quickActions = [
+  { icon: 'add_circle', label: 'Nouvelle Demande', desc: 'Créer une demande de recrutement', path: '/offres', color: '#1976d2' },
+  { icon: 'person_add', label: 'Ajouter un Candidat', desc: 'Enregistrer un nouveau candidat', path: '/candidats', color: '#0D7C66' },
+  { icon: 'event', label: 'Planifier Entretien', desc: 'Programmer un entretien', path: '/entretiens', color: '#e65100' },
+  { icon: 'description', label: 'Générer un Rapport', desc: 'Exporter les données', path: '/audit', color: '#7b1fa2' },
+];
+
+// Stats de recrutement temps réel
+const recrutementStats = [
+  { key: 'postes', label: 'Postes ouverts', value: 12, icon: 'work', color: '#1976d2', path: '/offres' },
+  { key: 'entretiens', label: 'Entretiens / semaine', value: 8, icon: 'event', color: '#e65100', path: '/entretiens' },
+  { key: 'contrats', label: 'Contrats à signer', value: 3, icon: 'description', color: '#d32f2f', path: '/contrats' },
+  { key: 'attente', label: 'En attente décision', value: 5, icon: 'hourglass_top', color: '#7b1fa2', path: '/pipeline' },
+];
+
+// Breadcrumb mapping
+const breadcrumbMap = {
+  '/': ['Tableau de Bord'],
+  '/offres': ['Recrutement', 'Demandes'],
+  '/candidats': ['Recrutement', 'Base Candidats'],
+  '/pipeline': ['Recrutement', 'Pipeline Candidatures'],
+  '/entretiens': ['Processus', 'Planning Entretiens'],
+  '/evaluations': ['Processus', 'Grille Évaluation'],
+  '/verifications': ['Processus', 'Vérification Références'],
+  '/selections': ['Processus', 'Sélections'],
+  '/cabinets': ['Processus', 'Gestion Cabinets'],
+  '/contrats': ['Processus', 'Suivi Contrats'],
+  '/integration': ['Intégration', 'Intégration Employé'],
+  '/checklist': ['Intégration', 'Checklist'],
+  '/periode-essai': ['Intégration', 'Période d\'Essai'],
+  '/formation': ['Intégration', 'Plan Accueil & Formations'],
+  '/post-embauche': ['Intégration', 'Suivi Post-Embauche'],
+  '/stagiaires': ['Stagiaires & Saisonniers', 'Stagiaires'],
+  '/saisonniers': ['Stagiaires & Saisonniers', 'Saisonniers'],
+  '/previsions': ['Recrutement', 'Prévisions Postes'],
+  '/sources': ['Recrutement', 'Sources'],
+  '/couts': ['Recrutement', 'Analyse des Coûts'],
+  '/documents': ['Analytics', 'Documents'],
+  '/conformite': ['Analytics', 'Conformité'],
+  '/parametres': ['Analytics', 'Paramètres'],
+  '/audit': ['Analytics', 'Journal d\'Audit'],
+  '/types-contrats': ['Recrutement', 'Types de Contrats'],
+  '/departements': ['Organisation', 'Départements'],
+  '/sources-roi': ['Recrutement', 'Sources & ROI'],
+  '/experiences': ['Candidats', 'Expériences'],
+  '/formations': ['Candidats', 'Formations'],
+  '/competences': ['Candidats', 'Compétences'],
+  '/statuts': ['Organisation', 'Statuts'],
+};
+
+const labels = {
+  fr: { search: 'Rechercher un candidat, département, contrat...', noResult: 'Aucun résultat pour', result: 'résultat(s)', allRead: 'Tout marquer comme lu', seeAll: 'Voir tout l\'historique', notifications: 'Notifications', deadlines: 'Échéances', actions: 'Actions rapides', export: 'Exporter', darkHint: 'Mode sombre', lightHint: 'Mode clair' },
+  en: { search: 'Search candidate, department, contract...', noResult: 'No results for', result: 'result(s)', allRead: 'Mark all as read', seeAll: 'See full history', notifications: 'Notifications', deadlines: 'Deadlines', actions: 'Quick actions', export: 'Export', darkHint: 'Dark mode', lightHint: 'Light mode' },
+};
+
+export function AppProvider({ children, darkMode, toggleDark }) {
   const [notifications, setNotifications] = useState(initialNotifications);
+  const [lang, setLang] = useState(() => {
+    try { return localStorage.getItem('admina-lang') || 'fr'; } catch { return 'fr'; }
+  });
   const [user] = useState({ name: 'Georgy F.', role: 'Responsable RH', initials: 'GF' });
 
+  const toggleLang = useCallback(() => {
+    setLang(prev => {
+      const next = prev === 'fr' ? 'en' : 'fr';
+      try { localStorage.setItem('admina-lang', next); } catch {}
+      return next;
+    });
+  }, []);
+
+  const t = useMemo(() => labels[lang] || labels.fr, [lang]);
   const unreadCount = useMemo(() => notifications.filter(n => !n.read).length, [notifications]);
 
   const addNotification = useCallback((notif) => {
@@ -87,16 +161,15 @@ export function AppProvider({ children }) {
     ).slice(0, 12);
   }, []);
 
+  const getBreadcrumb = useCallback((path) => {
+    return breadcrumbMap[path] || ['Admina-RH'];
+  }, []);
+
   const value = useMemo(() => ({
-    user,
-    notifications,
-    unreadCount,
-    addNotification,
-    markAllRead,
-    markRead,
-    search,
-    searchIndex,
-  }), [user, notifications, unreadCount, addNotification, markAllRead, markRead, search]);
+    user, notifications, unreadCount, addNotification, markAllRead, markRead, search, searchIndex,
+    darkMode, toggleDark, lang, toggleLang, t,
+    deadlines, quickActions, recrutementStats, getBreadcrumb,
+  }), [user, notifications, unreadCount, addNotification, markAllRead, markRead, search, darkMode, toggleDark, lang, toggleLang, t, getBreadcrumb]);
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 }
