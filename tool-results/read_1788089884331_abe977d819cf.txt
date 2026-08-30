@@ -1,0 +1,622 @@
+     1→"""
+     2→Ajoute la feuille '19-KPIs & Objectifs RH' au fichier Excel existant.
+     3→KPIs mensuels avec formules SUMPRODUCT + Objectifs trimestriels avec RAG.
+     4→"""
+     5→
+     6→import sys, os
+     7→sys.path.insert(0, '/home/z/my-project/skills/xlsx/templates')
+     8→from base import (
+     9→    FONT_NAME, HEADER_BOLD, PRIMARY, PRIMARY_LIGHT, SECONDARY,
+    10→    ACCENT_POSITIVE, ACCENT_NEGATIVE, ACCENT_WARNING,
+    11→    NEUTRAL_900, NEUTRAL_600, NEUTRAL_200, NEUTRAL_100, NEUTRAL_0,
+    12→    CF_POSITIVE_FILL, CF_NEGATIVE_FILL, CF_WARNING_FILL,
+    13→    font_title, font_header, font_subheader, font_body, font_caption,
+    14→    fill_header, fill_total, fill_data_row, border_header, border_total,
+    15→    align_title, align_header, align_number, align_text, align_date,
+    16→    setup_sheet, style_header_row, style_data_row, style_total_row,
+    17→)
+    18→
+    19→from openpyxl import load_workbook
+    20→from openpyxl.styles import PatternFill, Font, Border, Side, Alignment, numbers
+    21→from openpyxl.formatting.rule import CellIsRule, FormulaRule
+    22→from openpyxl.utils import get_column_letter
+    23→
+    24→# ============================================================
+    25→# CONFIGURATION
+    26→# ============================================================
+    27→
+    28→INPUT_FILE  = '/home/z/my-project/upload/Domaine1_Recrutement_Candidats (1).xlsx'
+    29→OUTPUT_FILE = '/home/z/my-project/upload/Domaine1_Recrutement_Candidats (1).xlsx'
+    30→
+    31→SHEET_NAME = '19-KPIs & Objectifs RH'
+    32→
+    33→# Data ranges (matching existing dashboard formulas)
+    34→R_DEM   = "'1-Demandes Recrutement'"       # C=Date Demande, L=Statut, M=Date Pourvue, S=Delai
+    35→R_CAN   = "'2-Base Candidats'"              # Y=Date Candidature, Z=Statut, AA=Score, AF=Date Embauche Def.
+    36→R_ENT   = "'3-Planning Entretiens'"         # E=Date Entretien, K=Statut
+    37→R_EVAL  = "'4-Grille Evaluation'"           # E=Date Evaluation, L=Total(/25), M=Recommandation
+    38→R_COUT  = "'10-Analyse Couts'"             # F=Cout Pub, G=Cout Cabinet, H=Cout Entretiens, I=Cout Form, K=Date
+    39→R_PIPE  = "'18-Pipeline Candidatures'"     # G=Date Candidature, H=Stade
+    40→
+    41→DATA_START = 5
+    42→DATA_END   = 85
+    43→
+    44→# ============================================================
+    45→# KPI DEFINITIONS
+    46→# ============================================================
+    47→
+    48→KPIS = [
+    49→    {
+    50→        'name': 'Time-to-Hire (jours)',
+    51→        'desc': 'Delai moyen entre demande et pourvoiement',
+    52→        'unit': '0.0',
+    53→        'lower_better': True,  # lower is better
+    54→    },
+    55→    {
+    56→        'name': 'Cost-per-Hire (FCFA)',
+    57→        'desc': 'Cout moyen par recrutement',
+    58→        'unit': '#,##0',
+    59→        'lower_better': True,
+    60→    },
+    61→    {
+    62→        'name': 'Quality-of-Hire (/20)',
+    63→        'desc': 'Score moyen evaluation candidats retenus',
+    64→        'unit': '0.0',
+    65→        'lower_better': False,  # higher is better
+    66→    },
+    67→    {
+    68→        'name': 'Taux acceptation offres (%)',
+    69→        'desc': 'Offres acceptees / Offres envoyees',
+    70→        'unit': '0.0%',
+    71→        'lower_better': False,
+    72→    },
+    73→    {
+    74→        'name': 'Taux de remplissage (%)',
+    75→        'desc': 'Postes pourvus / Total demandes',
+    76→        'unit': '0.0%',
+    77→        'lower_better': False,
+    78→    },
+    79→    {
+    80→        'name': 'Taux de recommandation (%)',
+    81→        'desc': 'Candidats recommandes / Total evalues',
+    82→        'unit': '0.0%',
+    83→        'lower_better': False,
+    84→    },
+    85→    {
+    86→        'name': 'Nb candidats / embauche',
+    87→        'desc': 'Volume de candidatures par recrutement',
+    88→        'unit': '0.0',
+    89→        'lower_better': True,
+    90→    },
+    91→    {
+    92→        'name': 'Entretiens / embauche',
+    93→        'desc': 'Efficacite du processus de selection',
+    94→        'unit': '0.0',
+    95→        'lower_better': True,
+    96→    },
+    97→]
+    98→
+    99→# Default quarterly targets
+   100→TARGETS = {
+   101→    'Time-to-Hire (jours)': [45, 35, 30, 30],
+   102→    'Cost-per-Hire (FCFA)': [200000, 180000, 150000, 150000],
+   103→    'Quality-of-Hire (/20)': [13, 14, 15, 16],
+   104→    'Taux acceptation offres (%)': [0.60, 0.70, 0.75, 0.80],
+   105→    'Taux de remplissage (%)': [0.50, 0.60, 0.70, 0.75],
+   106→    'Taux de recommandation (%)': [0.40, 0.50, 0.55, 0.60],
+   107→    'Nb candidats / embauche': [15, 12, 10, 10],
+   108→    'Entretiens / embauche': [5, 4, 3.5, 3],
+   109→}
+   110→
+   111→MONTHS_FR = ['Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Jun', 'Jul', 'Aou', 'Sep', 'Oct', 'Nov', 'Dec']
+   112→QUARTERS = ['T1 (Jan-Mar)', 'T2 (Avr-Jun)', 'T3 (Jul-Sep)', 'T4 (Oct-Dec)']
+   113→
+   114→# ============================================================
+   115→# FORMULA BUILDERS
+   116→# ============================================================
+   117→
+   118→def _sumproduct_month(range_ref, month_num, value_range=None):
+   119→    """SUMPRODUCT by month. If value_range is None, counts."""
+   120→    if value_range is None:
+   121→        return f"SUMPRODUCT((MONTH({range_ref})={month_num})*({range_ref}<>\"\"))"
+   122→    return f"SUMPRODUCT((MONTH({range_ref})={month_num})*({range_range}))"
+   123→
+   124→
+   125→def _countif_month_cond(range_ref, month_ref, month_num, criteria):
+   126→    """Count rows where month matches AND another column equals criteria."""
+   127→    return f"SUMPRODUCT((MONTH({month_ref})={month_num})*({range_ref}=\"{criteria}\"))"
+   128→
+   129→
+   130→def build_formula(kpi_name, month_num):
+   131→    """Build the KPI formula for a given month (1-12)."""
+   132→    ds, de = DATA_START, DATA_END
+   133→    m = month_num
+   134→    
+   135→    if kpi_name == 'Time-to-Hire (jours)':
+   136→        # Average of (Date Pourvue - Date Demande) where Date Pourvue is in that month
+   137→        numerator = (
+   138→            f"SUMPRODUCT((MONTH({R_DEM}!$M${ds}:$M${de})={m})"
+   139→            f"*({R_DEM}!$M${ds}:$M${de}<>\"\")"
+   140→            f"*({R_DEM}!$M${ds}:$M${de}-{R_DEM}!$C${ds}:$C${de}))"
+   141→        )
+   142→        denominator = (
+   143→            f"MAX(SUMPRODUCT((MONTH({R_DEM}!$M${ds}:$M${de})={m})"
+   144→            f"*({R_DEM}!$M${ds}:$M${de}<>\"\")),1)"
+   145→        )
+   146→        return f"IFERROR({numerator}/{denominator},0)"
+   147→    
+   148→    elif kpi_name == 'Cost-per-Hire (FCFA)':
+   149→        # Sum of all cost components / count of hires (Date Embauche Def.) in that month
+   150→        cost_sum = (
+   151→            f"SUMPRODUCT((MONTH({R_COUT}!$K${ds}:$K${de})={m})"
+   152→            f"*({R_COUT}!$F${ds}:$F${de}+{R_COUT}!$G${ds}:$G${de}"
+   153→            f"+{R_COUT}!$H${ds}:$H${de}+{R_COUT}!$I${ds}:$I${de}))"
+   154→        )
+   155→        hire_count = (
+   156→            f"MAX(SUMPRODUCT((MONTH({R_CAN}!$AF${ds}:$AF${de})={m})"
+   157→            f"*({R_CAN}!$AF${ds}:$AF${de}<>\"\")),1)"
+   158→        )
+   159→        return f"IFERROR({cost_sum}/{hire_count},0)"
+   160→    
+   161→    elif kpi_name == 'Quality-of-Hire (/20)':
+   162→        # Average evaluation total score for evaluations in that month
+   163→        numerator = (
+   164→            f"SUMPRODUCT((MONTH({R_EVAL}!$E${ds}:$E${de})={m})"
+   165→            f"*({R_EVAL}!$L${ds}:$L${de}<>\"\"))"
+   166→        )
+   167→        denominator = (
+   168→            f"MAX(SUMPRODUCT((MONTH({R_EVAL}!$E${ds}:$E${de})={m})"
+   169→            f"*({R_EVAL}!$L${ds}:$L${de}<>\"\")),1)"
+   170→        )
+   171→        return f"IFERROR({numerator}/{denominator},0)"
+   172→    
+   173→    elif kpi_name == 'Taux acceptation offres (%)':
+   174→        # Pipeline: Accepte / (Accepte + Refuse) in that month
+   175→        accepte = f"SUMPRODUCT((MONTH({R_PIPE}!$G${ds}:$G${de})={m})*({R_PIPE}!$H${ds}:$H${de}=\"Accepte\"))"
+   176→        refuse = f"SUMPRODUCT((MONTH({R_PIPE}!$G${ds}:$G${de})={m})*({R_PIPE}!$H${ds}:$H${de}=\"Refuse\"))"
+   177→        denom = f"MAX({accepte}+{refuse},1)"
+   178→        return f"IFERROR({accepte}/{denom},0)"
+   179→    
+   180→    elif kpi_name == 'Taux de remplissage (%)':
+   181→        # Demandes Pourvue / Total demandes in that month
+   182→        pourvue = f"SUMPRODUCT((MONTH({R_DEM}!$C${ds}:$C${de})={m})*({R_DEM}!$L${ds}:$L${de}=\"Pourvue\"))"
+   183→        total = f"MAX(SUMPRODUCT((MONTH({R_DEM}!$C${ds}:$C${de})={m})*({R_DEM}!$B${ds}:$B${de}<>\"\")),1)"
+   184→        return f"IFERROR({pourvue}/{total},0)"
+   185→    
+   186→    elif kpi_name == 'Taux de recommandation (%)':
+   187→        # Grille: "Embauche recommandee" / Total evaluated in that month
+   188→        reco = f"SUMPRODUCT((MONTH({R_EVAL}!$E${ds}:$E${de})={m})*({R_EVAL}!$M${ds}:$M${de}=\"Embauche recommandee\"))"
+   189→        total = f"MAX(SUMPRODUCT((MONTH({R_EVAL}!$E${ds}:$E${de})={m})*({R_EVAL}!$B${ds}:$B${de}<>\"\")),1)"
+   190→        return f"IFERROR({reco}/{total},0)"
+   191→    
+   192→    elif kpi_name == 'Nb candidats / embauche':
+   193→        # New candidatures / hires in that month
+   194→        candidats = f"SUMPRODUCT((MONTH({R_CAN}!$Y${ds}:$Y${de})={m})*({R_CAN}!$B${ds}:$B${de}<>\"\"))"
+   195→        hires = f"MAX(SUMPRODUCT((MONTH({R_CAN}!$AF${ds}:$AF${de})={m})*({R_CAN}!$AF${ds}:$AF${de}<>\"\")),1)"
+   196→        return f"IFERROR({candidats}/{hires},0)"
+   197→    
+   198→    elif kpi_name == 'Entretiens / embauche':
+   199→        # Entretiens realises / hires in that month
+   200→        entretiens = f"SUMPRODUCT((MONTH({R_ENT}!$E${ds}:$E${de})={m})*({R_ENT}!$K${ds}:$K${de}=\"Realise\"))"
+   201→        hires = f"MAX(SUMPRODUCT((MONTH({R_CAN}!$AF${ds}:$AF${de})={m})*({R_CAN}!$AF${ds}:$AF${de}<>\"\")),1)"
+   202→        return f"IFERROR({entretiens}/{hires},0)"
+   203→    
+   204→    return '0'
+   205→
+   206→
+   207→def build_quarterly_realised(kpi_name, start_month, end_month):
+   208→    """Build formula for quarterly realised value (average of monthly values)."""
+   209→    monthly_refs = []
+   210→    for m in range(start_month, end_month + 1):
+   211→        col = get_column_letter(3 + m - 1)  # C=Jan, D=Fev, ...
+   212→        monthly_refs.append(f'{SHEET_NAME}!{col}{{row}}')
+   213→    refs = ','.join(monthly_refs)
+   214→    return f"IFERROR(AVERAGE({refs}),0)"
+   215→
+   216→
+   217→# ============================================================
+   218→# MAIN SCRIPT
+   219→# ============================================================
+   220→
+   221→wb = load_workbook(INPUT_FILE)
+   222→
+   223→# Check if sheet already exists
+   224→if SHEET_NAME in wb.sheetnames:
+   225→    del wb[SHEET_NAME]
+   226→
+   227→ws = wb.create_sheet(SHEET_NAME)
+   228→
+   229→# ---- Match existing file style ----
+   230→# The existing file uses Noto Sans CJK SC (heavy font => HEADER_BOLD=False)
+   231→# with PRIMARY=1B2A4A, no alternating rows (all white fill on data)
+   232→
+   233→FONT = FONT_NAME  # Noto Sans CJK SC on this system
+   234→
+   235→# ---- Layout constants ----
+   236→A = 1  # margin column
+   237→B = 2  # KPI name
+   238→C = 3  # Jan / T1 fields start
+   239→# Monthly columns: C(3) to N(14) = Jan..Dec
+   240→# Quarterly section starts after monthly
+   241→
+   242→MONTHLY_HEADER_ROW = 6
+   243→MONTHLY_DATA_START = 7
+   244→
+   245→# ---- Row 1: margin ----
+   246→ws.row_dimensions[1].height = 15
+   247→ws.column_dimensions['A'].width = 3
+   248→
+   249→# ---- Row 2: Title ----
+   250→ws.merge_cells(start_row=2, start_column=2, end_row=2, end_column=14)
+   251→title_cell = ws.cell(row=2, column=2, value='KPIs & OBJECTIFS RH')
+   252→title_cell.font = Font(name=FONT, size=16, bold=False, color=PRIMARY)
+   253→title_cell.alignment = Alignment(horizontal='left', vertical='center')
+   254→ws.row_dimensions[2].height = 32
+   255→
+   256→# ---- Row 3: Subtitle ----
+   257→subtitle_cell = ws.cell(row=3, column=2, value='Suivi des indicateurs cles de performance — Donnees automatiques')
+   258→subtitle_cell.font = Font(name=FONT, size=10, bold=True, color=ACCENT_POSITIVE)
+   259→ws.row_dimensions[3].height = 20
+   260→
+   261→# ============================================================
+   262→# SECTION 1: KPIs MENSUELS
+   263→# ============================================================
+   264→
+   265→SECTION1_TITLE_ROW = 5
+   266→
+   267→# Section title
+   268→sec1_cell = ws.cell(row=SECTION1_TITLE_ROW, column=2, value='KPIs MENSUELS')
+   269→sec1_cell.font = Font(name=FONT, size=12, bold=False, color=PRIMARY)
+   270→sec1_cell.fill = PatternFill('solid', fgColor=PRIMARY_LIGHT)
+   271→for c in range(2, 15):
+   272→    cell = ws.cell(row=SECTION1_TITLE_ROW, column=c)
+   273→    cell.fill = PatternFill('solid', fgColor=PRIMARY_LIGHT)
+   274→ws.row_dimensions[SECTION1_TITLE_ROW].height = 26
+   275→
+   276→# Header row
+   277→headers_monthly = ['KPI'] + MONTHS_FR + ['Moy. Annuelle']
+   278→for i, h in enumerate(headers_monthly):
+   279→    col = 2 + i
+   280→    cell = ws.cell(row=MONTHLY_HEADER_ROW, column=col, value=h)
+   281→    cell.font = Font(name=FONT, size=11, bold=False, color='FFFFFF')
+   282→    cell.fill = PatternFill('solid', fgColor=PRIMARY)
+   283→    cell.alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
+   284→    cell.border = Border(bottom=Side(style='thin', color=NEUTRAL_200))
+   285→ws.row_dimensions[MONTHLY_HEADER_ROW].height = 28
+   286→
+   287→# KPI description row (row below header, merged with KPI name)
+   288→DESC_ROW = MONTHLY_HEADER_ROW  # We'll put desc in the KPI column
+   289→
+   290→# Data rows for each KPI
+   291→for kpi_idx, kpi in enumerate(KPIS):
+   292→    row = MONTHLY_DATA_START + kpi_idx
+   293→    row_fill = PatternFill('solid', fgColor=NEUTRAL_0)
+   294→    
+   295→    # KPI name cell
+   296→    name_cell = ws.cell(row=row, column=2, value=kpi['name'])
+   297→    name_cell.font = Font(name=FONT, size=11, bold=False, color=PRIMARY)
+   298→    name_cell.alignment = Alignment(horizontal='left', vertical='center', wrap_text=True)
+   299→    name_cell.fill = row_fill
+   300→    
+   301→    # Description in column B comment
+   302→    from openpyxl.comments import Comment
+   303→    name_cell.comment = Comment(kpi['desc'], 'System')
+   304→    
+   305→    # Monthly formulas
+   306→    for m in range(1, 13):
+   307→        col = 2 + m  # C=Jan(1), D=Fev(2), ..., N=Dec(12)
+   308→        formula = build_formula(kpi['name'], m)
+   309→        cell = ws.cell(row=row, column=col, value=formula)
+   310→        cell.font = Font(name=FONT, size=11, bold=False, color=NEUTRAL_900)
+   311→        cell.alignment = Alignment(horizontal='right', vertical='center')
+   312→        cell.fill = row_fill
+   313→        cell.number_format = kpi['unit']
+   314→    
+   315→    # Annual average (column O = 15)
+   316→    first_col = get_column_letter(3)  # C
+   317→    last_col = get_column_letter(14)  # N
+   318→    avg_cell = ws.cell(row=row, column=15,
+   319→        value=f"IFERROR(AVERAGE({first_col}{row}:{last_col}{row}),0)")
+   320→    avg_cell.font = Font(name=FONT, size=11, bold=False, color=PRIMARY)
+   321→    avg_cell.alignment = Alignment(horizontal='right', vertical='center')
+   322→    avg_cell.fill = PatternFill('solid', fgColor=PRIMARY_LIGHT)
+   323→    avg_cell.number_format = kpi['unit']
+   324→    
+   325→    ws.row_dimensions[row].height = 22
+   326→
+   327→# ============================================================
+   328→# SECTION 2: OBJECTIFS TRIMESTRIELS & VARIANCE RAG
+   329→# ============================================================
+   330→
+   331→SEC2_GAP = 2
+   332→SECTION2_TITLE_ROW = MONTHLY_DATA_START + len(KPIS) + SEC2_GAP
+   333→
+   334→# Section title
+   335→sec2_cell = ws.cell(row=SECTION2_TITLE_ROW, column=2, value='OBJECTIFS TRIMESTRIELS & VARIANCE RAG')
+   336→sec2_cell.font = Font(name=FONT, size=12, bold=False, color=PRIMARY)
+   337→sec2_cell.fill = PatternFill('solid', fgColor=PRIMARY_LIGHT)
+   338→for c in range(2, 19):
+   339→    cell = ws.cell(row=SECTION2_TITLE_ROW, column=c)
+   340→    cell.fill = PatternFill('solid', fgColor=PRIMARY_LIGHT)
+   341→ws.row_dimensions[SECTION2_TITLE_ROW].height = 26
+   342→
+   343→# Sub-header row: Quarter labels (merged)
+   344→Q_HEADER_ROW = SECTION2_TITLE_ROW + 1
+   345→q_header_labels = ['KPI']
+   346→for q_label in QUARTERS:
+   347→    q_header_labels.extend([q_label, '', '', ''])
+   348→
+   349→# Simpler: just put quarter labels merged across 4 cols each
+   350→q_col = 3
+   351→for qi, ql in enumerate(QUARTERS):
+   352→    start_c = q_col + qi * 4
+   353→    end_c = start_c + 3
+   354→    ws.merge_cells(start_row=Q_HEADER_ROW, start_column=start_c, end_row=Q_HEADER_ROW, end_column=end_c)
+   355→    cell = ws.cell(row=Q_HEADER_ROW, column=start_c, value=ql)
+   356→    cell.font = Font(name=FONT, size=10, bold=True, color='FFFFFF')
+   357→    cell.fill = PatternFill('solid', fgColor=PRIMARY)
+   358→    cell.alignment = Alignment(horizontal='center', vertical='center')
+   359→    for cc in range(start_c, end_c + 1):
+   360→        ws.cell(row=Q_HEADER_ROW, column=cc).fill = PatternFill('solid', fgColor=PRIMARY)
+   361→        ws.cell(row=Q_HEADER_ROW, column=cc).font = Font(name=FONT, size=10, bold=True, color='FFFFFF')
+   362→
+   363→# KPI label in quarter header row
+   364→kpi_hdr = ws.cell(row=Q_HEADER_ROW, column=2)
+   365→kpi_hdr.font = Font(name=FONT, size=10, bold=True, color='FFFFFF')
+   366→kpi_hdr.fill = PatternFill('solid', fgColor=PRIMARY)
+   367→
+   368→ws.row_dimensions[Q_HEADER_ROW].height = 24
+   369→
+   370→# Column sub-headers: Objectif, Realise, Ecart(%), RAG
+   371→Q_COL_HEADER_ROW = Q_HEADER_ROW + 1
+   372→sub_headers = ['KPI']
+   373→for _ in QUARTERS:
+   374→    sub_headers.extend(['Objectif', 'Realise', 'Ecart (%)', 'RAG'])
+   375→
+   376→for i, h in enumerate(sub_headers):
+   377→    col = 2 + i
+   378→    cell = ws.cell(row=Q_COL_HEADER_ROW, column=col, value=h)
+   379→    cell.font = Font(name=FONT, size=10, bold=False, color='FFFFFF')
+   380→    cell.fill = PatternFill('solid', fgColor=PRIMARY)
+   381→    cell.alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
+   382→    cell.border = Border(bottom=Side(style='thin', color=NEUTRAL_200))
+   383→ws.row_dimensions[Q_COL_HEADER_ROW].height = 28
+   384→
+   385→# Data rows for quarterly section
+   386→Q_DATA_START = Q_COL_HEADER_ROW + 1
+   387→
+   388→for kpi_idx, kpi in enumerate(KPIS):
+   389→    row = Q_DATA_START + kpi_idx
+   390→    row_fill = PatternFill('solid', fgColor=NEUTRAL_0)
+   391→    
+   392→    # KPI name
+   393→    name_cell = ws.cell(row=row, column=2, value=kpi['name'])
+   394→    name_cell.font = Font(name=FONT, size=11, bold=False, color=PRIMARY)
+   395→    name_cell.alignment = Alignment(horizontal='left', vertical='center', wrap_text=True)
+   396→    name_cell.fill = row_fill
+   397→    
+   398→    monthly_row = MONTHLY_DATA_START + kpi_idx
+   399→    targets = TARGETS[kpi['name']]
+   400→    
+   401→    for qi in range(4):
+   402→        base_col = 3 + qi * 4  # 3, 7, 11, 15
+   403→        
+   404→        # --- Objectif (target) ---
+   405→        target_cell = ws.cell(row=row, column=base_col, value=targets[qi])
+   406→        target_cell.font = Font(name=FONT, size=11, bold=False, color='0000FF')  # Blue = manual input
+   407→        target_cell.alignment = Alignment(horizontal='right', vertical='center')
+   408→        target_cell.fill = row_fill
+   409→        if '%' in kpi['unit']:
+   410→            target_cell.number_format = '0%'
+   411→        elif kpi['unit'] == '#,##0':
+   412→            target_cell.number_format = '#,##0'
+   413→        else:
+   414→            target_cell.number_format = '0.0'
+   415→        
+   416→        # --- Realise (quarterly average) ---
+   417→        m_start = qi * 3 + 1  # 1, 4, 7, 10
+   418→        m_end = m_start + 2    # 3, 6, 9, 12
+   419→        
+   420→        # Build references to monthly cells
+   421→        month_cells = []
+   422→        for mm in range(m_start, m_end + 1):
+   423→            mcol = get_column_letter(2 + mm)  # C=Jan, D=Fev...
+   424→            month_cells.append(f"{SHEET_NAME}!{mcol}{monthly_row}")
+   425→        
+   426→        realised_formula = f"IFERROR(AVERAGE({','.join(month_cells)}),0)"
+   427→        realised_cell = ws.cell(row=row, column=base_col + 1, value=realised_formula)
+   428→        realised_cell.font = Font(name=FONT, size=11, bold=False, color=NEUTRAL_900)
+   429→        realised_cell.alignment = Alignment(horizontal='right', vertical='center')
+   430→        realised_cell.fill = row_fill
+   431→        realised_cell.number_format = kpi['unit']
+   432→        
+   433→        # --- Ecart (%) ---
+   434→        obj_ref = f"{get_column_letter(base_col)}{row}"
+   435→        real_ref = f"{get_column_letter(base_col+1)}{row}"
+   436→        
+   437→        if kpi['lower_better']:
+   438→            # For lower_better: positive variance = target met (actual <= target)
+   439→            # Ecart = (Objectif - Realise) / Objectif
+   440→            ecart_formula = (
+   441→                f"IFERROR(({obj_ref}-{real_ref})/MAX(ABS({obj_ref}),0.001),0)"
+   442→            )
+   443→        else:
+   444→            # For higher_better: positive variance = target met (actual >= target)
+   445→            # Ecart = (Realise - Objectif) / Objectif
+   446→            ecart_formula = (
+   447→                f"IFERROR(({real_ref}-{obj_ref})/MAX(ABS({obj_ref}),0.001),0)"
+   448→            )
+   449→        
+   450→        ecart_cell = ws.cell(row=row, column=base_col + 2, value=ecart_formula)
+   451→        ecart_cell.font = Font(name=FONT, size=11, bold=False, color=NEUTRAL_900)
+   452→        ecart_cell.alignment = Alignment(horizontal='right', vertical='center')
+   453→        ecart_cell.fill = row_fill
+   454→        ecart_cell.number_format = '+0.0%;-0.0%;0.0%'
+   455→        
+   456→        # --- RAG (formula-driven text) ---
+   457→        ecart_ref = f"{get_column_letter(base_col+2)}{row}"
+   458→        rag_formula = (
+   459→            f'=IF({ecart_ref}>=0.1,"\u2705",'
+   460→            f'IF({ecart_ref}>=-0.1,"\u26a0\ufe0f","\u274c"))'
+   461→        )
+   462→        rag_cell = ws.cell(row=row, column=base_col + 3, value=rag_formula)
+   463→        rag_cell.font = Font(name=FONT, size=14, bold=False)
+   464→        rag_cell.alignment = Alignment(horizontal='center', vertical='center')
+   465→        rag_cell.fill = row_fill
+   466→    
+   467→    ws.row_dimensions[row].height = 22
+   468→
+   469→# ============================================================
+   470→# SECTION 3: LEGENDE & METHODOLOGIE
+   471→# ============================================================
+   472→
+   473→LEGEND_ROW = Q_DATA_START + len(KPIS) + 2
+   474→
+   475→# Legend title
+   476→leg_title = ws.cell(row=LEGEND_ROW, column=2, value='LEGENDE & METHODOLOGIE')
+   477→leg_title.font = Font(name=FONT, size=12, bold=False, color=PRIMARY)
+   478→leg_title.fill = PatternFill('solid', fgColor=PRIMARY_LIGHT)
+   479→for c in range(2, 10):
+   480→    ws.cell(row=LEGEND_ROW, column=c).fill = PatternFill('solid', fgColor=PRIMARY_LIGHT)
+   481→ws.row_dimensions[LEGEND_ROW].height = 26
+   482→
+   483→# Legend items
+   484→legend_items = [
+   485→    ('RAG Vert', 'Objectif depasse de plus de 10% (ecart positif >= +10%)'),
+   486→    ('RAG Amber', 'Dans une marge de +/- 10% de l\'objectif'),
+   487→    ('RAG Rouge', 'En dessous de l\'objectif de plus de 10% (ecart negatif < -10%)'),
+   488→    ('', ''),
+   489→    ('Time-to-Hire', 'Moyenne (Date Pourvue - Date Demande) par mois, depuis feuille 1'),
+   490→    ('Cost-per-Hire', 'Somme (Publication + Cabinet + Entretiens + Formation) / Nb embauches, depuis feuille 10 & 2'),
+   491→    ('Quality-of-Hire', 'Score moyen Total (/25) des evaluations, depuis feuille 4'),
+   492→    ('Taux acceptation', 'Pipeline "Accepte" / ("Accepte" + "Refuse") par mois, depuis feuille 18'),
+   493→    ('Taux remplissage', 'Demandes "Pourvue" / Total demandes par mois, depuis feuille 1'),
+   494→    ('Taux recommandation', 'Evaluations "Embauche recommandee" / Total evalues, depuis feuille 4'),
+   495→    ('Candidats / embauche', 'Nouvelles candidatures / Embauches definitives, depuis feuille 2'),
+   496→    ('Entretiens / embauche', 'Entretiens "Realise" / Embauches definitives, depuis feuille 3 & 2'),
+   497→    ('', ''),
+   498→    ('Objectifs (bleu)', 'Valeurs modifiables — ajustez les cibles selon votre strategie'),
+   499→    ('Realise (noir)', 'Formules automatiques — ne pas modifier'),
+   500→]
+   501→
+   502→for i, (label, desc) in enumerate(legend_items):
+   503→    r = LEGEND_ROW + 1 + i
+   504→    if not label and not desc:
+   505→        continue
+   506→    
+   507→    label_cell = ws.cell(row=r, column=2, value=label)
+   508→    if 'Vert' in label:
+   509→        label_cell.font = Font(name=FONT, size=10, bold=False, color=ACCENT_POSITIVE)
+   510→    elif 'Amber' in label:
+   511→        label_cell.font = Font(name=FONT, size=10, bold=False, color=ACCENT_WARNING)
+   512→    elif 'Rouge' in label:
+   513→        label_cell.font = Font(name=FONT, size=10, bold=False, color=ACCENT_NEGATIVE)
+   514→    else:
+   515→        label_cell.font = Font(name=FONT, size=10, bold=True, color=PRIMARY)
+   516→    
+   517→    desc_cell = ws.cell(row=r, column=3, value=desc)
+   518→    ws.merge_cells(start_row=r, start_column=3, end_row=r, end_column=10)
+   519→    desc_cell.font = Font(name=FONT, size=10, bold=False, color=NEUTRAL_600)
+   520→    desc_cell.alignment = Alignment(horizontal='left', vertical='center', wrap_text=True)
+   521→    
+   522→    ws.row_dimensions[r].height = 20
+   523→
+   524→# ============================================================
+   525→# CONDITIONAL FORMATTING: RAG on Ecart columns
+   526→# ============================================================
+   527→
+   528→# Apply RAG coloring to all Ecart columns (4 quarters x 8 KPIs = 32 cells)
+   529→from openpyxl.formatting.rule import CellIsRule
+   530→
+   531→green_fill = PatternFill('solid', fgColor='E8F5E9')
+   532→green_font = Font(name=FONT, size=11, bold=False, color=ACCENT_POSITIVE)
+   533→amber_fill = PatternFill('solid', fgColor='FEF9E7')
+   534→amber_font = Font(name=FONT, size=11, bold=False, color=ACCENT_WARNING)
+   535→red_fill = PatternFill('solid', fgColor='FDEDEC')
+   536→red_font = Font(name=FONT, size=11, bold=False, color=ACCENT_NEGATIVE)
+   537→
+   538→for kpi_idx in range(len(KPIS)):
+   539→    row = Q_DATA_START + kpi_idx
+   540→    for qi in range(4):
+   541→        ecart_col = 3 + qi * 4 + 2  # 5, 9, 13, 17
+   542→        col_letter = get_column_letter(ecart_col)
+   543→        cell_range = f'{col_letter}{row}'
+   544→        
+   545→        # Green: >= 10%
+   546→        ws.conditional_formatting.add(cell_range,
+   547→            CellIsRule(operator='greaterThanOrEqual', formula=['0.1'],
+   548→                      fill=green_fill, font=green_font))
+   549→        # Amber: between -10% and 10%
+   550→        ws.conditional_formatting.add(cell_range,
+   551→            CellIsRule(operator='between', formula=['-0.1', '0.0999'],
+   552→                      fill=amber_fill, font=amber_font))
+   553→        # Red: < -10%
+   554→        ws.conditional_formatting.add(cell_range,
+   555→            CellIsRule(operator='lessThan', formula=['-0.1'],
+   556→                      fill=red_fill, font=red_font))
+   557→
+   558→# Also add conditional formatting on RAG emoji columns
+   559→for kpi_idx in range(len(KPIS)):
+   560→    row = Q_DATA_START + kpi_idx
+   561→    for qi in range(4):
+   562→        rag_col = 3 + qi * 4 + 3  # 6, 10, 14, 18
+   563→        col_letter = get_column_letter(rag_col)
+   564→        ecart_letter = get_column_letter(rag_col - 1)
+   565→        cell_range = f'{col_letter}{row}'
+   566→        
+   567→        # Green RAG
+   568→        ws.conditional_formatting.add(cell_range,
+   569→            FormulaRule(formula=[f'{ecart_letter}{row}>=0.1'],
+   570→                       fill=green_fill, font=Font(name=FONT, size=14, color=ACCENT_POSITIVE)))
+   571→        # Amber RAG
+   572→        ws.conditional_formatting.add(cell_range,
+   573→            FormulaRule(formula=[f'AND({ecart_letter}{row}>=-0.1,{ecart_letter}{row}<0.1)'],
+   574→                       fill=amber_fill, font=Font(name=FONT, size=14, color=ACCENT_WARNING)))
+   575→        # Red RAG
+   576→        ws.conditional_formatting.add(cell_range,
+   577→            FormulaRule(formula=[f'{ecart_letter}{row}<-0.1'],
+   578→                       fill=red_fill, font=Font(name=FONT, size=14, color=ACCENT_NEGATIVE)))
+   579→
+   580→# ============================================================
+   581→# COLUMN WIDTHS
+   582→# ============================================================
+   583→
+   584→ws.column_dimensions['A'].width = 3    # margin
+   585→ws.column_dimensions['B'].width = 30   # KPI name
+   586→for col_idx in range(3, 15):  # C to N (months)
+   587→    ws.column_dimensions[get_column_letter(col_idx)].width = 13
+   588→ws.column_dimensions['O'].width = 15   # Moy. Annuelle
+   589→
+   590→# Quarterly section columns
+   591→for col_idx in range(3, 19):  # C to R
+   592→    ws.column_dimensions[get_column_letter(col_idx)].width = 14
+   593→
+   594→# ============================================================
+   595→# FREEZE PANES (freeze KPI column + headers)
+   596→# ============================================================
+   597→
+   598→ws.freeze_panes = 'C7'  # Freeze column B (KPI names) and rows 1-6 (title + headers)
+   599→
+   600→# ============================================================
+   601→# PRINT SETTINGS
+   602→# ============================================================
+   603→
+   604→ws.sheet_properties.pageSetUpPr = None
+   605→ws.page_setup.orientation = 'landscape'
+   606→ws.page_setup.fitToWidth = 1
+   607→ws.page_setup.fitToHeight = 0
+   608→
+   609→# ============================================================
+   610→# SAVE
+   611→# ============================================================
+   612→
+   613→wb.properties.creator = 'Z.ai'
+   614→wb.save(OUTPUT_FILE)
+   615→print(f"Feuille '{SHEET_NAME}' ajoutee avec succes !")
+   616→print(f"Fichier sauvegarde: {OUTPUT_FILE}")
+   617→print(f"\nStructure:")
+   618→print(f"  - 8 KPIs mensuels (Jan-Dec) avec formules SUMPRODUCT")
+   619→print(f"  - Objectifs trimestriels avec variance RAG")
+   620→print(f"  - Mise en forme conditionnelle verte/ambre/rouge")
+   621→print(f"  - Legendes et methodology")
+   622→
