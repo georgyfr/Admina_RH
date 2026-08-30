@@ -4,6 +4,7 @@ import { Box, ThemeProvider, CssBaseline } from '@mui/material';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import { AppProvider } from './context/AppContext';
+import { DashboardFilterProvider } from './context/DashboardFilterContext';
 import { lightTheme, darkTheme } from './theme';
 
 const TableauDeBord = lazy(() => import('./pages/TableauDeBord'));
@@ -72,7 +73,7 @@ function AppContent() {
         <Box sx={{ ml: `${dw}px`, mt: `${headerH}px`, p: 3, width: `calc(100% - ${dw}px)`, minHeight: `calc(100vh - ${headerH}px)` }}>
           <Suspense fallback={<Box p={3}>Chargement...</Box>}>
             <Routes>
-              <Route path='/' element={<TableauDeBord />} />
+              <Route path='/' element={<DashboardFilterProvider><TableauDeBord /></DashboardFilterProvider>} />
               <Route path='/offres' element={<Demandes />} />
               <Route path='/candidats' element={<Candidats />} />
               <Route path='/pipeline' element={<Pipeline />} />
