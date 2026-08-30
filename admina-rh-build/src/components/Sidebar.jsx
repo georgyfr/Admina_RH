@@ -41,6 +41,7 @@ const sections = [
     { label: 'Compétences', path: '/competences' },
   ]},
   { title: 'ANALYTICS & CONFIGURATION', items: [
+    { label: 'KPIs & Objectifs RH', path: '/kpi-objectifs' },
     { label: 'Documents', path: '/documents' },
     { label: 'Conformité', path: '/conformite' },
     { label: 'Paramètres', path: '/parametres' },
