@@ -1,0 +1,582 @@
+=== 18-Tableau de Bord - FORMULES ===
+  E6: =COUNTIF('1-Demandes Recrutement'!L5:L85,"En cours")
+  E7: =COUNTIF('1-Demandes Recrutement'!L5:L85,"Pourvue")
+  E8: =COUNTIF('2-Base Candidats'!D6:D86,"<>")
+  E9: =COUNTIF('2-Base Candidats'!Z6:Z86,"Retenu")
+  E10: =COUNTIF('3-Planning Entretiens'!K5:K85,"Realise")
+  E13: =COUNTIF('6-Suivi Contrats'!K5:K85,"En cours")
+  E14: =COUNTIF('13-Periode Essai'!M5:M85,"En cours")
+  E15: =COUNTIF('13-Periode Essai'!M5:M85,"Embauche confirmee")
+  E16: =COUNTIF('15-Stagiaires'!M5:M85,"En cours")
+  B40: =COUNTIF('11-Integration Employe'!M5:M85,"En cours")
+  E40: =COUNTIF('17-Suivi Post-Embauche'!C5:C86,"<>")
+  H40: =COUNTIF('18-Pipeline Candidatures'!C5:C88,"<>")
+  K40: =COUNTIF('18-Pipeline Candidatures'!M5:M88,"Haute")
+  B44: =COUNTIF('15-Stagiaires'!M5:M85,"En cours")
+  E44: =COUNTIF('16-Saisonniers Temporaires'!M5:M85,"En cours")
+  J48: =COUNTIF('1-Demandes Recrutement'!L5:L85,"En cours")
+  J49: =COUNTIF('1-Demandes Recrutement'!L5:L85,"Pourvue")
+  J50: =COUNTIF('1-Demandes Recrutement'!L5:L85,"Annulee")
+  J51: =COUNTIF('1-Demandes Recrutement'!L5:L85,"En attente")
+  J52: =COUNTIF('1-Demandes Recrutement'!L5:L85,"Reportee")
+  E55: =IFERROR(AVERAGEIF('4-Grille Evaluation'!L5:L85,"<>"),0)
+  E56: =COUNTA('4-Grille Evaluation'!B5:B85)-COUNTBLANK('4-Grille Evaluation'!B5:B85)
+  E57: =COUNTIF('4-Grille Evaluation'!M5:M85,"Embauche recommandee")
+  E58: =IFERROR(SUM('10-Analyse Couts'!J5:J85),0)
+  E59: =IFERROR(SUM('10-Analyse Couts'!J5:J85)/MAX(COUNTIFS('2-Base Candidats'!Z5:Z85,"Retenu"),1),0)
+  E60: =IFERROR(COUNTIF('4-Grille Evaluation'!M5:M85,"Embauche recommandee")/MAX(COUNTA('4-Grille Evaluation'!M5:M85)-COUNTBLANK('4-Grille Evaluation'!M5:M85),1)*100,0)
+  E63: =COUNTA('9-Sources Recrutement'!C5:C85)-COUNTBLANK('9-Sources Recrutement'!C5:C85)
+  E64: =IFERROR(MAX('9-Sources Recrutement'!G5:G85),0)
+  E65: =IFERROR(SUM('9-Sources Recrutement'!H5:H85),0)
+  E68: =COUNTA('18-Pipeline Candidatures'!C5:C88)-COUNTBLANK('18-Pipeline Candidatures'!C5:C88)
+  E69: =COUNTIF('3-Planning Entretiens'!K5:K85,"Planifie")
+  E70: =COUNTIF('12-Checklist Integration'!J5:J85,"En cours")
+  E71: =COUNTIF('14-Plan Accueil Formation'!J5:J85,"Terminee")
+  E74: =COUNTIF('7-Gestion Cabinets'!N5:N85,"Oui")
+  E75: =IFERROR(SUM('7-Gestion Cabinets'!L5:L85),0)
+  E76: =IFERROR(AVERAGEIF('7-Gestion Cabinets'!K5:K85,"<>"),0)
+
+=== FORMULES DANS TOUTES LES FEUILLES ===
+
+--- 1-Demandes Recrutement (173 formules) ---
+  S5: =IF(OR(J5="",C5=""),"",J5-C5)
+  S6: =IF(OR(J6="",C6=""),"",J6-C6)
+  S7: =IF(OR(J7="",C7=""),"",J7-C7)
+  S8: =IF(OR(J8="",C8=""),"",J8-C8)
+  S9: =IF(OR(J9="",C9=""),"",J9-C9)
+  B10: =IF(C10="","","DR-2025-"&TEXT(COUNTA($C$5:C10),"000"))
+  S10: =IF(OR(J10="",C10=""),"",J10-C10)
+  B11: =IF(C11="","","DR-2025-"&TEXT(COUNTA($C$5:C11),"000"))
+  S11: =IF(OR(J11="",C11=""),"",J11-C11)
+  B12: =IF(C12="","","DR-2025-"&TEXT(COUNTA($C$5:C12),"000"))
+  S12: =IF(OR(J12="",C12=""),"",J12-C12)
+  B13: =IF(C13="","","DR-2025-"&TEXT(COUNTA($C$5:C13),"000"))
+  S13: =IF(OR(J13="",C13=""),"",J13-C13)
+  B14: =IF(C14="","","DR-2025-"&TEXT(COUNTA($C$5:C14),"000"))
+  S14: =IF(OR(J14="",C14=""),"",J14-C14)
+  B15: =IF(C15="","","DR-2025-"&TEXT(COUNTA($C$5:C15),"000"))
+  S15: =IF(OR(J15="",C15=""),"",J15-C15)
+  B16: =IF(C16="","","DR-2025-"&TEXT(COUNTA($C$5:C16),"000"))
+  S16: =IF(OR(J16="",C16=""),"",J16-C16)
+  B17: =IF(C17="","","DR-2025-"&TEXT(COUNTA($C$5:C17),"000"))
+  ... (153 formules supplementaires)
+
+--- 2-Base Candidats (85 formules) ---
+  B10: =IF(D10="","","CAN-"&TEXT(COUNTA($D$6:D10),"000"))
+  B11: =IF(D11="","","CAN-"&TEXT(COUNTA($D$6:D11),"000"))
+  B12: =IF(D12="","","CAN-"&TEXT(COUNTA($D$6:D12),"000"))
+  B13: =IF(D13="","","CAN-"&TEXT(COUNTA($D$6:D13),"000"))
+  B14: =IF(D14="","","CAN-"&TEXT(COUNTA($D$6:D14),"000"))
+  B15: =IF(D15="","","CAN-"&TEXT(COUNTA($D$6:D15),"000"))
+  B16: =IF(D16="","","CAN-"&TEXT(COUNTA($D$6:D16),"000"))
+  B17: =IF(D17="","","CAN-"&TEXT(COUNTA($D$6:D17),"000"))
+  B18: =IF(D18="","","CAN-"&TEXT(COUNTA($D$6:D18),"000"))
+  B19: =IF(D19="","","CAN-"&TEXT(COUNTA($D$6:D19),"000"))
+  B20: =IF(D20="","","CAN-"&TEXT(COUNTA($D$6:D20),"000"))
+  B21: =IF(D21="","","CAN-"&TEXT(COUNTA($D$6:D21),"000"))
+  B22: =IF(D22="","","CAN-"&TEXT(COUNTA($D$6:D22),"000"))
+  B23: =IF(D23="","","CAN-"&TEXT(COUNTA($D$6:D23),"000"))
+  B24: =IF(D24="","","CAN-"&TEXT(COUNTA($D$6:D24),"000"))
+  B25: =IF(D25="","","CAN-"&TEXT(COUNTA($D$6:D25),"000"))
+  B26: =IF(D26="","","CAN-"&TEXT(COUNTA($D$6:D26),"000"))
+  B27: =IF(D27="","","CAN-"&TEXT(COUNTA($D$6:D27),"000"))
+  B28: =IF(D28="","","CAN-"&TEXT(COUNTA($D$6:D28),"000"))
+  B29: =IF(D29="","","CAN-"&TEXT(COUNTA($D$6:D29),"000"))
+  ... (65 formules supplementaires)
+
+--- 3-Planning Entretiens (84 formules) ---
+  B8: =IF(C8="","","ENT-"&TEXT(COUNTA($C$5:C8),"000"))
+  B9: =IF(C9="","","ENT-"&TEXT(COUNTA($C$5:C9),"000"))
+  B10: =IF(C10="","","ENT-"&TEXT(COUNTA($C$5:C10),"000"))
+  B11: =IF(C11="","","ENT-"&TEXT(COUNTA($C$5:C11),"000"))
+  B12: =IF(C12="","","ENT-"&TEXT(COUNTA($C$5:C12),"000"))
+  B13: =IF(C13="","","ENT-"&TEXT(COUNTA($C$5:C13),"000"))
+  B14: =IF(C14="","","ENT-"&TEXT(COUNTA($C$5:C14),"000"))
+  B15: =IF(C15="","","ENT-"&TEXT(COUNTA($C$5:C15),"000"))
+  B16: =IF(C16="","","ENT-"&TEXT(COUNTA($C$5:C16),"000"))
+  B17: =IF(C17="","","ENT-"&TEXT(COUNTA($C$5:C17),"000"))
+  B18: =IF(C18="","","ENT-"&TEXT(COUNTA($C$5:C18),"000"))
+  B19: =IF(C19="","","ENT-"&TEXT(COUNTA($C$5:C19),"000"))
+  B20: =IF(C20="","","ENT-"&TEXT(COUNTA($C$5:C20),"000"))
+  B21: =IF(C21="","","ENT-"&TEXT(COUNTA($C$5:C21),"000"))
+  B22: =IF(C22="","","ENT-"&TEXT(COUNTA($C$5:C22),"000"))
+  B23: =IF(C23="","","ENT-"&TEXT(COUNTA($C$5:C23),"000"))
+  B24: =IF(C24="","","ENT-"&TEXT(COUNTA($C$5:C24),"000"))
+  B25: =IF(C25="","","ENT-"&TEXT(COUNTA($C$5:C25),"000"))
+  B26: =IF(C26="","","ENT-"&TEXT(COUNTA($C$5:C26),"000"))
+  B27: =IF(C27="","","ENT-"&TEXT(COUNTA($C$5:C27),"000"))
+  ... (64 formules supplementaires)
+
+--- 4-Grille Evaluation (378 formules) ---
+  R5: =IFERROR(VLOOKUP(C5,'2-Base Candidats'!D5:AJ85,21,FALSE),"")
+  S5: =IFERROR(VLOOKUP(C5,'2-Base Candidats'!D5:AJ85,23,FALSE),"")
+  T5: =IFERROR(VLOOKUP(C5,'3-Planning Entretiens'!C5:O85,11,FALSE),"")
+  R6: =IFERROR(VLOOKUP(C6,'2-Base Candidats'!D5:AJ85,21,FALSE),"")
+  S6: =IFERROR(VLOOKUP(C6,'2-Base Candidats'!D5:AJ85,23,FALSE),"")
+  T6: =IFERROR(VLOOKUP(C6,'3-Planning Entretiens'!C5:O85,11,FALSE),"")
+  R7: =IFERROR(VLOOKUP(C7,'2-Base Candidats'!D5:AJ85,21,FALSE),"")
+  S7: =IFERROR(VLOOKUP(C7,'2-Base Candidats'!D5:AJ85,23,FALSE),"")
+  T7: =IFERROR(VLOOKUP(C7,'3-Planning Entretiens'!C5:O85,11,FALSE),"")
+  B8: =IF(C8="","","EVAL-"&TEXT(COUNTA($C$5:C8),"000"))
+  R8: =IFERROR(VLOOKUP(C8,'2-Base Candidats'!D5:AJ85,21,FALSE),"")
+  S8: =IFERROR(VLOOKUP(C8,'2-Base Candidats'!D5:AJ85,23,FALSE),"")
+  T8: =IFERROR(VLOOKUP(C8,'3-Planning Entretiens'!C5:O85,11,FALSE),"")
+  B9: =IF(C9="","","EVAL-"&TEXT(COUNTA($C$5:C9),"000"))
+  R9: =IFERROR(VLOOKUP(C9,'2-Base Candidats'!D5:AJ85,21,FALSE),"")
+  S9: =IFERROR(VLOOKUP(C9,'2-Base Candidats'!D5:AJ85,23,FALSE),"")
+  T9: =IFERROR(VLOOKUP(C9,'3-Planning Entretiens'!C5:O85,11,FALSE),"")
+  B10: =IF(C10="","","EVAL-"&TEXT(COUNTA($C$5:C10),"000"))
+  R10: =IFERROR(VLOOKUP(C10,'2-Base Candidats'!D5:AJ85,21,FALSE),"")
+  S10: =IFERROR(VLOOKUP(C10,'2-Base Candidats'!D5:AJ85,23,FALSE),"")
+  ... (358 formules supplementaires)
+
+--- 5-Verification References (83 formules) ---
+  B8: =IF(C8="","","VRF-"&TEXT(COUNTA($C$5:C8),"000"))
+  B9: =IF(C9="","","VRF-"&TEXT(COUNTA($C$5:C9),"000"))
+  B10: =IF(C10="","","VRF-"&TEXT(COUNTA($C$5:C10),"000"))
+  B11: =IF(C11="","","VRF-"&TEXT(COUNTA($C$5:C11),"000"))
+  B12: =IF(C12="","","VRF-"&TEXT(COUNTA($C$5:C12),"000"))
+  B13: =IF(C13="","","VRF-"&TEXT(COUNTA($C$5:C13),"000"))
+  B14: =IF(C14="","","VRF-"&TEXT(COUNTA($C$5:C14),"000"))
+  B15: =IF(C15="","","VRF-"&TEXT(COUNTA($C$5:C15),"000"))
+  B16: =IF(C16="","","VRF-"&TEXT(COUNTA($C$5:C16),"000"))
+  B17: =IF(C17="","","VRF-"&TEXT(COUNTA($C$5:C17),"000"))
+  B18: =IF(C18="","","VRF-"&TEXT(COUNTA($C$5:C18),"000"))
+  B19: =IF(C19="","","VRF-"&TEXT(COUNTA($C$5:C19),"000"))
+  B20: =IF(C20="","","VRF-"&TEXT(COUNTA($C$5:C20),"000"))
+  B21: =IF(C21="","","VRF-"&TEXT(COUNTA($C$5:C21),"000"))
+  B22: =IF(C22="","","VRF-"&TEXT(COUNTA($C$5:C22),"000"))
+  B23: =IF(C23="","","VRF-"&TEXT(COUNTA($C$5:C23),"000"))
+  B24: =IF(C24="","","VRF-"&TEXT(COUNTA($C$5:C24),"000"))
+  B25: =IF(C25="","","VRF-"&TEXT(COUNTA($C$5:C25),"000"))
+  B26: =IF(C26="","","VRF-"&TEXT(COUNTA($C$5:C26),"000"))
+  B27: =IF(C27="","","VRF-"&TEXT(COUNTA($C$5:C27),"000"))
+  ... (63 formules supplementaires)
+
+--- 6-Suivi Contrats (86 formules) ---
+  B7: =IF(C7="","","CT-"&TEXT(COUNTA($C$5:C7),"000"))
+  B8: =IF(C8="","","CT-"&TEXT(COUNTA($C$5:C8),"000"))
+  B9: =IF(C9="","","CT-"&TEXT(COUNTA($C$5:C9),"000"))
+  B10: =IF(C10="","","CT-"&TEXT(COUNTA($C$5:C10),"000"))
+  B11: =IF(C11="","","CT-"&TEXT(COUNTA($C$5:C11),"000"))
+  B12: =IF(C12="","","CT-"&TEXT(COUNTA($C$5:C12),"000"))
+  B13: =IF(C13="","","CT-"&TEXT(COUNTA($C$5:C13),"000"))
+  B14: =IF(C14="","","CT-"&TEXT(COUNTA($C$5:C14),"000"))
+  B15: =IF(C15="","","CT-"&TEXT(COUNTA($C$5:C15),"000"))
+  B16: =IF(C16="","","CT-"&TEXT(COUNTA($C$5:C16),"000"))
+  B17: =IF(C17="","","CT-"&TEXT(COUNTA($C$5:C17),"000"))
+  B18: =IF(C18="","","CT-"&TEXT(COUNTA($C$5:C18),"000"))
+  B19: =IF(C19="","","CT-"&TEXT(COUNTA($C$5:C19),"000"))
+  B20: =IF(C20="","","CT-"&TEXT(COUNTA($C$5:C20),"000"))
+  B21: =IF(C21="","","CT-"&TEXT(COUNTA($C$5:C21),"000"))
+  B22: =IF(C22="","","CT-"&TEXT(COUNTA($C$5:C22),"000"))
+  B23: =IF(C23="","","CT-"&TEXT(COUNTA($C$5:C23),"000"))
+  B24: =IF(C24="","","CT-"&TEXT(COUNTA($C$5:C24),"000"))
+  B25: =IF(C25="","","CT-"&TEXT(COUNTA($C$5:C25),"000"))
+  B26: =IF(C26="","","CT-"&TEXT(COUNTA($C$5:C26),"000"))
+  ... (66 formules supplementaires)
+
+--- 7-Gestion Cabinets (87 formules) ---
+  B8: =IF(C8="","","CA-"&TEXT(COUNTA($C$5:C8),"000"))
+  B9: =IF(C9="","","CA-"&TEXT(COUNTA($C$5:C9),"000"))
+  B10: =IF(C10="","","CA-"&TEXT(COUNTA($C$5:C10),"000"))
+  B11: =IF(C11="","","CA-"&TEXT(COUNTA($C$5:C11),"000"))
+  B12: =IF(C12="","","CA-"&TEXT(COUNTA($C$5:C12),"000"))
+  B13: =IF(C13="","","CA-"&TEXT(COUNTA($C$5:C13),"000"))
+  B14: =IF(C14="","","CA-"&TEXT(COUNTA($C$5:C14),"000"))
+  B15: =IF(C15="","","CA-"&TEXT(COUNTA($C$5:C15),"000"))
+  B16: =IF(C16="","","CA-"&TEXT(COUNTA($C$5:C16),"000"))
+  B17: =IF(C17="","","CA-"&TEXT(COUNTA($C$5:C17),"000"))
+  B18: =IF(C18="","","CA-"&TEXT(COUNTA($C$5:C18),"000"))
+  B19: =IF(C19="","","CA-"&TEXT(COUNTA($C$5:C19),"000"))
+  B20: =IF(C20="","","CA-"&TEXT(COUNTA($C$5:C20),"000"))
+  B21: =IF(C21="","","CA-"&TEXT(COUNTA($C$5:C21),"000"))
+  B22: =IF(C22="","","CA-"&TEXT(COUNTA($C$5:C22),"000"))
+  B23: =IF(C23="","","CA-"&TEXT(COUNTA($C$5:C23),"000"))
+  B24: =IF(C24="","","CA-"&TEXT(COUNTA($C$5:C24),"000"))
+  B25: =IF(C25="","","CA-"&TEXT(COUNTA($C$5:C25),"000"))
+  B26: =IF(C26="","","CA-"&TEXT(COUNTA($C$5:C26),"000"))
+  B27: =IF(C27="","","CA-"&TEXT(COUNTA($C$5:C27),"000"))
+  ... (67 formules supplementaires)
+
+--- 8-Prevision Postes Offres (88 formules) ---
+  B7: =IF(C7="","","PO-"&TEXT(COUNTA($C$5:C7),"000"))
+  B8: =IF(C8="","","PO-"&TEXT(COUNTA($C$5:C8),"000"))
+  B9: =IF(C9="","","PO-"&TEXT(COUNTA($C$5:C9),"000"))
+  B10: =IF(C10="","","PO-"&TEXT(COUNTA($C$5:C10),"000"))
+  B11: =IF(C11="","","PO-"&TEXT(COUNTA($C$5:C11),"000"))
+  B12: =IF(C12="","","PO-"&TEXT(COUNTA($C$5:C12),"000"))
+  B13: =IF(C13="","","PO-"&TEXT(COUNTA($C$5:C13),"000"))
+  B14: =IF(C14="","","PO-"&TEXT(COUNTA($C$5:C14),"000"))
+  B15: =IF(C15="","","PO-"&TEXT(COUNTA($C$5:C15),"000"))
+  B16: =IF(C16="","","PO-"&TEXT(COUNTA($C$5:C16),"000"))
+  B17: =IF(C17="","","PO-"&TEXT(COUNTA($C$5:C17),"000"))
+  B18: =IF(C18="","","PO-"&TEXT(COUNTA($C$5:C18),"000"))
+  B19: =IF(C19="","","PO-"&TEXT(COUNTA($C$5:C19),"000"))
+  B20: =IF(C20="","","PO-"&TEXT(COUNTA($C$5:C20),"000"))
+  B21: =IF(C21="","","PO-"&TEXT(COUNTA($C$5:C21),"000"))
+  B22: =IF(C22="","","PO-"&TEXT(COUNTA($C$5:C22),"000"))
+  B23: =IF(C23="","","PO-"&TEXT(COUNTA($C$5:C23),"000"))
+  B24: =IF(C24="","","PO-"&TEXT(COUNTA($C$5:C24),"000"))
+  B25: =IF(C25="","","PO-"&TEXT(COUNTA($C$5:C25),"000"))
+  B26: =IF(C26="","","PO-"&TEXT(COUNTA($C$5:C26),"000"))
+  ... (68 formules supplementaires)
+
+--- 9-Sources Recrutement (358 formules) ---
+  D5: =COUNTIF('2-Base Candidats'!X5:X85,C5)
+  E5: =COUNTIFS('2-Base Candidats'!X5:X85,C5,'2-Base Candidats'!AA5:AA85,">0")
+  F5: =COUNTIFS('2-Base Candidats'!X5:X85,C5,'2-Base Candidats'!Z5:Z85,"Retenu")
+  D6: =COUNTIF('2-Base Candidats'!X5:X85,C6)
+  E6: =COUNTIFS('2-Base Candidats'!X5:X85,C6,'2-Base Candidats'!AA5:AA85,">0")
+  F6: =COUNTIFS('2-Base Candidats'!X5:X85,C6,'2-Base Candidats'!Z5:Z85,"Retenu")
+  D7: =COUNTIF('2-Base Candidats'!X5:X85,C7)
+  E7: =COUNTIFS('2-Base Candidats'!X5:X85,C7,'2-Base Candidats'!AA5:AA85,">0")
+  F7: =COUNTIFS('2-Base Candidats'!X5:X85,C7,'2-Base Candidats'!Z5:Z85,"Retenu")
+  D8: =COUNTIF('2-Base Candidats'!X5:X85,C8)
+  E8: =COUNTIFS('2-Base Candidats'!X5:X85,C8,'2-Base Candidats'!AA5:AA85,">0")
+  F8: =COUNTIFS('2-Base Candidats'!X5:X85,C8,'2-Base Candidats'!Z5:Z85,"Retenu")
+  B9: =IF(C9="","","SRC-"&TEXT(COUNTA($C$5:C9),"000"))
+  D9: =COUNTIF('2-Base Candidats'!X5:X85,C9)
+  E9: =COUNTIFS('2-Base Candidats'!X5:X85,C9,'2-Base Candidats'!AA5:AA85,">0")
+  F9: =COUNTIFS('2-Base Candidats'!X5:X85,C9,'2-Base Candidats'!Z5:Z85,"Retenu")
+  B10: =IF(C10="","","SRC-"&TEXT(COUNTA($C$5:C10),"000"))
+  D10: =COUNTIF('2-Base Candidats'!X5:X85,C10)
+  E10: =COUNTIFS('2-Base Candidats'!X5:X85,C10,'2-Base Candidats'!AA5:AA85,">0")
+  F10: =COUNTIFS('2-Base Candidats'!X5:X85,C10,'2-Base Candidats'!Z5:Z85,"Retenu")
+  ... (338 formules supplementaires)
+
+--- 10-Analyse Couts (278 formules) ---
+  D5: =IFERROR(VLOOKUP(C5,'1-Demandes Recrutement'!B5:O85,4,FALSE),"")
+  L5: =IFERROR(VLOOKUP(C5,'1-Demandes Recrutement'!B5:O85,3,FALSE),"")
+  D6: =IFERROR(VLOOKUP(C6,'1-Demandes Recrutement'!B5:O85,4,FALSE),"")
+  L6: =IFERROR(VLOOKUP(C6,'1-Demandes Recrutement'!B5:O85,3,FALSE),"")
+  D7: =IFERROR(VLOOKUP(C7,'1-Demandes Recrutement'!B5:O85,4,FALSE),"")
+  L7: =IFERROR(VLOOKUP(C7,'1-Demandes Recrutement'!B5:O85,3,FALSE),"")
+  B8: =IF(C8="","","COUT-"&TEXT(COUNTA($C$5:C8),"000"))
+  D8: =IFERROR(VLOOKUP(C8,'1-Demandes Recrutement'!B5:O85,4,FALSE),"")
+  L8: =IFERROR(VLOOKUP(C8,'1-Demandes Recrutement'!B5:O85,3,FALSE),"")
+  B9: =IF(C9="","","COUT-"&TEXT(COUNTA($C$5:C9),"000"))
+  D9: =IFERROR(VLOOKUP(C9,'1-Demandes Recrutement'!B5:O85,4,FALSE),"")
+  L9: =IFERROR(VLOOKUP(C9,'1-Demandes Recrutement'!B5:O85,3,FALSE),"")
+  B10: =IF(C10="","","COUT-"&TEXT(COUNTA($C$5:C10),"000"))
+  D10: =IFERROR(VLOOKUP(C10,'1-Demandes Recrutement'!B5:O85,4,FALSE),"")
+  L10: =IFERROR(VLOOKUP(C10,'1-Demandes Recrutement'!B5:O85,3,FALSE),"")
+  B11: =IF(C11="","","COUT-"&TEXT(COUNTA($C$5:C11),"000"))
+  D11: =IFERROR(VLOOKUP(C11,'1-Demandes Recrutement'!B5:O85,4,FALSE),"")
+  L11: =IFERROR(VLOOKUP(C11,'1-Demandes Recrutement'!B5:O85,3,FALSE),"")
+  B12: =IF(C12="","","COUT-"&TEXT(COUNTA($C$5:C12),"000"))
+  D12: =IFERROR(VLOOKUP(C12,'1-Demandes Recrutement'!B5:O85,4,FALSE),"")
+  ... (258 formules supplementaires)
+
+--- 11-Integration Employe (83 formules) ---
+  B7: =IF(C7="","","INT-"&TEXT(COUNTA($C$5:C7),"000"))
+  B8: =IF(C8="","","INT-"&TEXT(COUNTA($C$5:C8),"000"))
+  B9: =IF(C9="","","INT-"&TEXT(COUNTA($C$5:C9),"000"))
+  B10: =IF(C10="","","INT-"&TEXT(COUNTA($C$5:C10),"000"))
+  B11: =IF(C11="","","INT-"&TEXT(COUNTA($C$5:C11),"000"))
+  B12: =IF(C12="","","INT-"&TEXT(COUNTA($C$5:C12),"000"))
+  B13: =IF(C13="","","INT-"&TEXT(COUNTA($C$5:C13),"000"))
+  B14: =IF(C14="","","INT-"&TEXT(COUNTA($C$5:C14),"000"))
+  B15: =IF(C15="","","INT-"&TEXT(COUNTA($C$5:C15),"000"))
+  B16: =IF(C16="","","INT-"&TEXT(COUNTA($C$5:C16),"000"))
+  B17: =IF(C17="","","INT-"&TEXT(COUNTA($C$5:C17),"000"))
+  B18: =IF(C18="","","INT-"&TEXT(COUNTA($C$5:C18),"000"))
+  B19: =IF(C19="","","INT-"&TEXT(COUNTA($C$5:C19),"000"))
+  B20: =IF(C20="","","INT-"&TEXT(COUNTA($C$5:C20),"000"))
+  B21: =IF(C21="","","INT-"&TEXT(COUNTA($C$5:C21),"000"))
+  B22: =IF(C22="","","INT-"&TEXT(COUNTA($C$5:C22),"000"))
+  B23: =IF(C23="","","INT-"&TEXT(COUNTA($C$5:C23),"000"))
+  B24: =IF(C24="","","INT-"&TEXT(COUNTA($C$5:C24),"000"))
+  B25: =IF(C25="","","INT-"&TEXT(COUNTA($C$5:C25),"000"))
+  B26: =IF(C26="","","INT-"&TEXT(COUNTA($C$5:C26),"000"))
+  ... (63 formules supplementaires)
+
+--- 12-Checklist Integration (275 formules) ---
+  L5: =IFERROR(VLOOKUP(C5,'11-Integration Employe'!C5:O85,3,FALSE),"")
+  M5: =IFERROR(VLOOKUP(C5,'11-Integration Employe'!C5:O85,4,FALSE),"")
+  L6: =IFERROR(VLOOKUP(C6,'11-Integration Employe'!C5:O85,3,FALSE),"")
+  M6: =IFERROR(VLOOKUP(C6,'11-Integration Employe'!C5:O85,4,FALSE),"")
+  L7: =IFERROR(VLOOKUP(C7,'11-Integration Employe'!C5:O85,3,FALSE),"")
+  M7: =IFERROR(VLOOKUP(C7,'11-Integration Employe'!C5:O85,4,FALSE),"")
+  L8: =IFERROR(VLOOKUP(C8,'11-Integration Employe'!C5:O85,3,FALSE),"")
+  M8: =IFERROR(VLOOKUP(C8,'11-Integration Employe'!C5:O85,4,FALSE),"")
+  B9: =IF(C9="","","CHK-"&TEXT(COUNTA($C$5:C9),"000"))
+  L9: =IFERROR(VLOOKUP(C9,'11-Integration Employe'!C5:O85,3,FALSE),"")
+  M9: =IFERROR(VLOOKUP(C9,'11-Integration Employe'!C5:O85,4,FALSE),"")
+  B10: =IF(C10="","","CHK-"&TEXT(COUNTA($C$5:C10),"000"))
+  L10: =IFERROR(VLOOKUP(C10,'11-Integration Employe'!C5:O85,3,FALSE),"")
+  M10: =IFERROR(VLOOKUP(C10,'11-Integration Employe'!C5:O85,4,FALSE),"")
+  B11: =IF(C11="","","CHK-"&TEXT(COUNTA($C$5:C11),"000"))
+  L11: =IFERROR(VLOOKUP(C11,'11-Integration Employe'!C5:O85,3,FALSE),"")
+  M11: =IFERROR(VLOOKUP(C11,'11-Integration Employe'!C5:O85,4,FALSE),"")
+  B12: =IF(C12="","","CHK-"&TEXT(COUNTA($C$5:C12),"000"))
+  L12: =IFERROR(VLOOKUP(C12,'11-Integration Employe'!C5:O85,3,FALSE),"")
+  M12: =IFERROR(VLOOKUP(C12,'11-Integration Employe'!C5:O85,4,FALSE),"")
+  ... (255 formules supplementaires)
+
+--- 13-Periode Essai (84 formules) ---
+  B7: =IF(C7="","","ESS-"&TEXT(COUNTA($C$5:C7),"000"))
+  B8: =IF(C8="","","ESS-"&TEXT(COUNTA($C$5:C8),"000"))
+  B9: =IF(C9="","","ESS-"&TEXT(COUNTA($C$5:C9),"000"))
+  B10: =IF(C10="","","ESS-"&TEXT(COUNTA($C$5:C10),"000"))
+  B11: =IF(C11="","","ESS-"&TEXT(COUNTA($C$5:C11),"000"))
+  B12: =IF(C12="","","ESS-"&TEXT(COUNTA($C$5:C12),"000"))
+  B13: =IF(C13="","","ESS-"&TEXT(COUNTA($C$5:C13),"000"))
+  B14: =IF(C14="","","ESS-"&TEXT(COUNTA($C$5:C14),"000"))
+  B15: =IF(C15="","","ESS-"&TEXT(COUNTA($C$5:C15),"000"))
+  B16: =IF(C16="","","ESS-"&TEXT(COUNTA($C$5:C16),"000"))
+  B17: =IF(C17="","","ESS-"&TEXT(COUNTA($C$5:C17),"000"))
+  B18: =IF(C18="","","ESS-"&TEXT(COUNTA($C$5:C18),"000"))
+  B19: =IF(C19="","","ESS-"&TEXT(COUNTA($C$5:C19),"000"))
+  B20: =IF(C20="","","ESS-"&TEXT(COUNTA($C$5:C20),"000"))
+  B21: =IF(C21="","","ESS-"&TEXT(COUNTA($C$5:C21),"000"))
+  B22: =IF(C22="","","ESS-"&TEXT(COUNTA($C$5:C22),"000"))
+  B23: =IF(C23="","","ESS-"&TEXT(COUNTA($C$5:C23),"000"))
+  B24: =IF(C24="","","ESS-"&TEXT(COUNTA($C$5:C24),"000"))
+  B25: =IF(C25="","","ESS-"&TEXT(COUNTA($C$5:C25),"000"))
+  B26: =IF(C26="","","ESS-"&TEXT(COUNTA($C$5:C26),"000"))
+  ... (64 formules supplementaires)
+
+--- 14-Plan Accueil Formation (277 formules) ---
+  M5: =IFERROR(VLOOKUP(C5,'11-Integration Employe'!C5:O85,3,FALSE),"")
+  N5: =IFERROR(VLOOKUP(C5,'11-Integration Employe'!C5:O85,4,FALSE),"")
+  M6: =IFERROR(VLOOKUP(C6,'11-Integration Employe'!C5:O85,3,FALSE),"")
+  N6: =IFERROR(VLOOKUP(C6,'11-Integration Employe'!C5:O85,4,FALSE),"")
+  M7: =IFERROR(VLOOKUP(C7,'11-Integration Employe'!C5:O85,3,FALSE),"")
+  N7: =IFERROR(VLOOKUP(C7,'11-Integration Employe'!C5:O85,4,FALSE),"")
+  B8: =IF(C8="","","FMT-"&TEXT(COUNTA($C$5:C8),"000"))
+  M8: =IFERROR(VLOOKUP(C8,'11-Integration Employe'!C5:O85,3,FALSE),"")
+  N8: =IFERROR(VLOOKUP(C8,'11-Integration Employe'!C5:O85,4,FALSE),"")
+  B9: =IF(C9="","","FMT-"&TEXT(COUNTA($C$5:C9),"000"))
+  M9: =IFERROR(VLOOKUP(C9,'11-Integration Employe'!C5:O85,3,FALSE),"")
+  N9: =IFERROR(VLOOKUP(C9,'11-Integration Employe'!C5:O85,4,FALSE),"")
+  B10: =IF(C10="","","FMT-"&TEXT(COUNTA($C$5:C10),"000"))
+  M10: =IFERROR(VLOOKUP(C10,'11-Integration Employe'!C5:O85,3,FALSE),"")
+  N10: =IFERROR(VLOOKUP(C10,'11-Integration Employe'!C5:O85,4,FALSE),"")
+  B11: =IF(C11="","","FMT-"&TEXT(COUNTA($C$5:C11),"000"))
+  M11: =IFERROR(VLOOKUP(C11,'11-Integration Employe'!C5:O85,3,FALSE),"")
+  N11: =IFERROR(VLOOKUP(C11,'11-Integration Employe'!C5:O85,4,FALSE),"")
+  B12: =IF(C12="","","FMT-"&TEXT(COUNTA($C$5:C12),"000"))
+  M12: =IFERROR(VLOOKUP(C12,'11-Integration Employe'!C5:O85,3,FALSE),"")
+  ... (257 formules supplementaires)
+
+--- 15-Stagiaires (84 formules) ---
+  B7: =IF(C7="","","STG-"&TEXT(COUNTA($C$5:C7),"000"))
+  B8: =IF(C8="","","STG-"&TEXT(COUNTA($C$5:C8),"000"))
+  B9: =IF(C9="","","STG-"&TEXT(COUNTA($C$5:C9),"000"))
+  B10: =IF(C10="","","STG-"&TEXT(COUNTA($C$5:C10),"000"))
+  B11: =IF(C11="","","STG-"&TEXT(COUNTA($C$5:C11),"000"))
+  B12: =IF(C12="","","STG-"&TEXT(COUNTA($C$5:C12),"000"))
+  B13: =IF(C13="","","STG-"&TEXT(COUNTA($C$5:C13),"000"))
+  B14: =IF(C14="","","STG-"&TEXT(COUNTA($C$5:C14),"000"))
+  B15: =IF(C15="","","STG-"&TEXT(COUNTA($C$5:C15),"000"))
+  B16: =IF(C16="","","STG-"&TEXT(COUNTA($C$5:C16),"000"))
+  B17: =IF(C17="","","STG-"&TEXT(COUNTA($C$5:C17),"000"))
+  B18: =IF(C18="","","STG-"&TEXT(COUNTA($C$5:C18),"000"))
+  B19: =IF(C19="","","STG-"&TEXT(COUNTA($C$5:C19),"000"))
+  B20: =IF(C20="","","STG-"&TEXT(COUNTA($C$5:C20),"000"))
+  B21: =IF(C21="","","STG-"&TEXT(COUNTA($C$5:C21),"000"))
+  B22: =IF(C22="","","STG-"&TEXT(COUNTA($C$5:C22),"000"))
+  B23: =IF(C23="","","STG-"&TEXT(COUNTA($C$5:C23),"000"))
+  B24: =IF(C24="","","STG-"&TEXT(COUNTA($C$5:C24),"000"))
+  B25: =IF(C25="","","STG-"&TEXT(COUNTA($C$5:C25),"000"))
+  B26: =IF(C26="","","STG-"&TEXT(COUNTA($C$5:C26),"000"))
+  ... (64 formules supplementaires)
+
+--- 16-Saisonniers Temporaires (84 formules) ---
+  B7: =IF(C7="","","SAI-"&TEXT(COUNTA($C$5:C7),"000"))
+  B8: =IF(C8="","","SAI-"&TEXT(COUNTA($C$5:C8),"000"))
+  B9: =IF(C9="","","SAI-"&TEXT(COUNTA($C$5:C9),"000"))
+  B10: =IF(C10="","","SAI-"&TEXT(COUNTA($C$5:C10),"000"))
+  B11: =IF(C11="","","SAI-"&TEXT(COUNTA($C$5:C11),"000"))
+  B12: =IF(C12="","","SAI-"&TEXT(COUNTA($C$5:C12),"000"))
+  B13: =IF(C13="","","SAI-"&TEXT(COUNTA($C$5:C13),"000"))
+  B14: =IF(C14="","","SAI-"&TEXT(COUNTA($C$5:C14),"000"))
+  B15: =IF(C15="","","SAI-"&TEXT(COUNTA($C$5:C15),"000"))
+  B16: =IF(C16="","","SAI-"&TEXT(COUNTA($C$5:C16),"000"))
+  B17: =IF(C17="","","SAI-"&TEXT(COUNTA($C$5:C17),"000"))
+  B18: =IF(C18="","","SAI-"&TEXT(COUNTA($C$5:C18),"000"))
+  B19: =IF(C19="","","SAI-"&TEXT(COUNTA($C$5:C19),"000"))
+  B20: =IF(C20="","","SAI-"&TEXT(COUNTA($C$5:C20),"000"))
+  B21: =IF(C21="","","SAI-"&TEXT(COUNTA($C$5:C21),"000"))
+  B22: =IF(C22="","","SAI-"&TEXT(COUNTA($C$5:C22),"000"))
+  B23: =IF(C23="","","SAI-"&TEXT(COUNTA($C$5:C23),"000"))
+  B24: =IF(C24="","","SAI-"&TEXT(COUNTA($C$5:C24),"000"))
+  B25: =IF(C25="","","SAI-"&TEXT(COUNTA($C$5:C25),"000"))
+  B26: =IF(C26="","","SAI-"&TEXT(COUNTA($C$5:C26),"000"))
+  ... (64 formules supplementaires)
+
+--- 18-Pipeline Candidatures (164 formules) ---
+  B10: =IF(C10="","","PPL-"&TEXT(COUNTA($C$5:C10),"000"))
+  J10: =IF(OR(I10="",G10=""),"",I10-G10)
+  B11: =IF(C11="","","PPL-"&TEXT(COUNTA($C$5:C11),"000"))
+  J11: =IF(OR(I11="",G11=""),"",I11-G11)
+  B12: =IF(C12="","","PPL-"&TEXT(COUNTA($C$5:C12),"000"))
+  J12: =IF(OR(I12="",G12=""),"",I12-G12)
+  B13: =IF(C13="","","PPL-"&TEXT(COUNTA($C$5:C13),"000"))
+  J13: =IF(OR(I13="",G13=""),"",I13-G13)
+  B14: =IF(C14="","","PPL-"&TEXT(COUNTA($C$5:C14),"000"))
+  J14: =IF(OR(I14="",G14=""),"",I14-G14)
+  B15: =IF(C15="","","PPL-"&TEXT(COUNTA($C$5:C15),"000"))
+  J15: =IF(OR(I15="",G15=""),"",I15-G15)
+  B16: =IF(C16="","","PPL-"&TEXT(COUNTA($C$5:C16),"000"))
+  J16: =IF(OR(I16="",G16=""),"",I16-G16)
+  B17: =IF(C17="","","PPL-"&TEXT(COUNTA($C$5:C17),"000"))
+  J17: =IF(OR(I17="",G17=""),"",I17-G17)
+  B18: =IF(C18="","","PPL-"&TEXT(COUNTA($C$5:C18),"000"))
+  J18: =IF(OR(I18="",G18=""),"",I18-G18)
+  B19: =IF(C19="","","PPL-"&TEXT(COUNTA($C$5:C19),"000"))
+  J19: =IF(OR(I19="",G19=""),"",I19-G19)
+  ... (144 formules supplementaires)
+
+--- 17-Suivi Post-Embauche (82 formules) ---
+  B7: =IF(C7="","","SPE-"&TEXT(COUNTA($C$5:C7),"000"))
+  B8: =IF(C8="","","SPE-"&TEXT(COUNTA($C$5:C8),"000"))
+  B9: =IF(C9="","","SPE-"&TEXT(COUNTA($C$5:C9),"000"))
+  B10: =IF(C10="","","SPE-"&TEXT(COUNTA($C$5:C10),"000"))
+  B11: =IF(C11="","","SPE-"&TEXT(COUNTA($C$5:C11),"000"))
+  B12: =IF(C12="","","SPE-"&TEXT(COUNTA($C$5:C12),"000"))
+  B13: =IF(C13="","","SPE-"&TEXT(COUNTA($C$5:C13),"000"))
+  B14: =IF(C14="","","SPE-"&TEXT(COUNTA($C$5:C14),"000"))
+  B15: =IF(C15="","","SPE-"&TEXT(COUNTA($C$5:C15),"000"))
+  B16: =IF(C16="","","SPE-"&TEXT(COUNTA($C$5:C16),"000"))
+  B17: =IF(C17="","","SPE-"&TEXT(COUNTA($C$5:C17),"000"))
+  B18: =IF(C18="","","SPE-"&TEXT(COUNTA($C$5:C18),"000"))
+  B19: =IF(C19="","","SPE-"&TEXT(COUNTA($C$5:C19),"000"))
+  B20: =IF(C20="","","SPE-"&TEXT(COUNTA($C$5:C20),"000"))
+  B21: =IF(C21="","","SPE-"&TEXT(COUNTA($C$5:C21),"000"))
+  B22: =IF(C22="","","SPE-"&TEXT(COUNTA($C$5:C22),"000"))
+  B23: =IF(C23="","","SPE-"&TEXT(COUNTA($C$5:C23),"000"))
+  B24: =IF(C24="","","SPE-"&TEXT(COUNTA($C$5:C24),"000"))
+  B25: =IF(C25="","","SPE-"&TEXT(COUNTA($C$5:C25),"000"))
+  B26: =IF(C26="","","SPE-"&TEXT(COUNTA($C$5:C26),"000"))
+  ... (62 formules supplementaires)
+
+--- 18-Tableau de Bord (36 formules) ---
+  E6: =COUNTIF('1-Demandes Recrutement'!L5:L85,"En cours")
+  E7: =COUNTIF('1-Demandes Recrutement'!L5:L85,"Pourvue")
+  E8: =COUNTIF('2-Base Candidats'!D6:D86,"<>")
+  E9: =COUNTIF('2-Base Candidats'!Z6:Z86,"Retenu")
+  E10: =COUNTIF('3-Planning Entretiens'!K5:K85,"Realise")
+  E13: =COUNTIF('6-Suivi Contrats'!K5:K85,"En cours")
+  E14: =COUNTIF('13-Periode Essai'!M5:M85,"En cours")
+  E15: =COUNTIF('13-Periode Essai'!M5:M85,"Embauche confirmee")
+  E16: =COUNTIF('15-Stagiaires'!M5:M85,"En cours")
+  B40: =COUNTIF('11-Integration Employe'!M5:M85,"En cours")
+  E40: =COUNTIF('17-Suivi Post-Embauche'!C5:C86,"<>")
+  H40: =COUNTIF('18-Pipeline Candidatures'!C5:C88,"<>")
+  K40: =COUNTIF('18-Pipeline Candidatures'!M5:M88,"Haute")
+  B44: =COUNTIF('15-Stagiaires'!M5:M85,"En cours")
+  E44: =COUNTIF('16-Saisonniers Temporaires'!M5:M85,"En cours")
+  J48: =COUNTIF('1-Demandes Recrutement'!L5:L85,"En cours")
+  J49: =COUNTIF('1-Demandes Recrutement'!L5:L85,"Pourvue")
+  J50: =COUNTIF('1-Demandes Recrutement'!L5:L85,"Annulee")
+  J51: =COUNTIF('1-Demandes Recrutement'!L5:L85,"En attente")
+  J52: =COUNTIF('1-Demandes Recrutement'!L5:L85,"Reportee")
+  ... (16 formules supplementaires)
+
+=== VALIDATIONS DE DONNEES ===
+
+--- 1-Demandes Recrutement (8 validations) ---
+  F5:F89: type=list, formula1='_Lists'!$E$2:$E$6
+  G5:G89: type=list, formula1='_Lists'!$D$2:$D$7
+  I5:I89: type=list, formula1='_Lists'!$F$2:$F$6
+  K5:K89: type=list, formula1='_Lists'!$C$2:$C$5
+  L5:L89: type=list, formula1='_Lists'!$B$2:$B$6
+  D5:D89: type=list, formula1='_Lists'!$U$2:$U$18
+  O5:O89: type=list, formula1='_Lists'!$V$2:$V$10
+  P5:P89: type=list, formula1='_Lists'!$W$2:$W$10
+
+--- 2-Base Candidats (11 validations) ---
+  C6:C89: type=list, formula1='_Lists'!$P$2:$P$4
+  F6:F89: type=list, formula1='_Lists'!$S$2:$S$3
+  I6:I89: type=list, formula1='_Lists'!$T$2:$T$5
+  N6:N89: type=list, formula1='_Lists'!$Q$2:$Q$8
+  U6:U89: type=list, formula1='_Lists'!$R$2:$R$7
+  X6:X89: type=list, formula1='_Lists'!$G$2:$G$10
+  Z6:Z89: type=list, formula1='_Lists'!$H$2:$H$9
+  AB6:AB89: type=list, formula1='_Lists'!$D$2:$D$7
+  AG6:AG89: type=list, formula1='_Lists'!$O$2:$O$3
+  AH6:AH89: type=list, formula1='_Lists'!$O$2:$O$3
+  AI6:AI89: type=list, formula1='_Lists'!$O$2:$O$3
+
+--- 3-Planning Entretiens (3 validations) ---
+  H5:H87: type=list, formula1='_Lists'!$J$2:$J$7
+  K5:K87: type=list, formula1='_Lists'!$I$2:$I$5
+  L5:L87: type=list, formula1='_Lists'!$K$2:$K$5
+
+--- 4-Grille Evaluation (2 validations) ---
+  L5:L87: type=list, formula1='_Lists'!$N$2:$N$5
+  O5:O87: type=list, formula1='_Lists'!$N$2:$N$5
+
+--- 5-Verification References (2 validations) ---
+  K5:K87: type=list, formula1='_Lists'!$M$2:$M$6
+  N5:N87: type=list, formula1='_Lists'!$N$2:$N$5
+
+--- 6-Suivi Contrats (4 validations) ---
+  E5:E86: type=list, formula1='_Lists'!$D$2:$D$7
+  D5:D86: type=list, formula1='_Lists'!$U$2:$U$18
+  J5:J86: type=list, formula1='_Lists'!$X$2:$X$6
+  L5:L86: type=list, formula1='_Lists'!$Y$2:$Y$8
+
+--- 7-Gestion Cabinets (3 validations) ---
+  C5:C87: type=list, formula1='_Lists'!$Z$2:$Z$9
+  L5:L87: type=list, formula1='_Lists'!$AA$2:$AA$6
+  M5:M87: type=list, formula1='_Lists'!$O$2:$O$3
+
+--- 8-Prevision Postes Offres (5 validations) ---
+  C5:C86: type=list, formula1='_Lists'!$U$2:$U$18
+  G5:G86: type=list, formula1='_Lists'!$F$2:$F$6
+  I5:I86: type=list, formula1='_Lists'!$C$2:$C$5
+  J5:J86: type=list, formula1='_Lists'!$AC$2:$AC$6
+  M5:M86: type=list, formula1='_Lists'!$AB$2:$AB$11
+
+--- 9-Sources Recrutement (1 validations) ---
+  C5:C88: type=list, formula1='_Lists'!$G$2:$G$10
+
+--- 10-Analyse Couts (2 validations) ---
+  E5:E87: type=list, formula1='_Lists'!$W$2:$W$10
+  K5:K87: type=list, formula1='_Lists'!$U$2:$U$18
+
+--- 11-Integration Employe (7 validations) ---
+  D5:D86: type=list, formula1='_Lists'!$U$2:$U$18
+  G5:G86: type=list, formula1='_Lists'!$O$2:$O$3
+  H5:H86: type=list, formula1='_Lists'!$AE$2:$AE$5
+  I5:I86: type=list, formula1='_Lists'!$AE$2:$AE$5
+  J5:J86: type=list, formula1='_Lists'!$AE$2:$AE$5
+  K5:K86: type=list, formula1='_Lists'!$AE$2:$AE$5
+  L5:L86: type=list, formula1='_Lists'!$AG$2:$AG$5
+
+--- 12-Checklist Integration (2 validations) ---
+  E5:E88: type=list, formula1='_Lists'!$AD$2:$AD$9
+  I5:I88: type=list, formula1='_Lists'!$AE$2:$AE$5
+
+--- 13-Periode Essai (3 validations) ---
+  E5:E86: type=list, formula1='_Lists'!$D$2:$D$7
+  D5:D86: type=list, formula1='_Lists'!$U$2:$U$18
+  M5:M86: type=list, formula1='_Lists'!$AF$2:$AF$5
+
+--- 14-Plan Accueil Formation (1 validations) ---
+  I5:I87: type=list, formula1='_Lists'!$AH$2:$AH$5
+
+--- 15-Stagiaires (2 validations) ---
+  F5:F86: type=list, formula1='_Lists'!$U$2:$U$18
+  L5:L86: type=list, formula1='_Lists'!$AI$2:$AI$5
+
+--- 16-Saisonniers Temporaires (4 validations) ---
+  E5:E86: type=list, formula1='_Lists'!$U$2:$U$18
+  K5:K86: type=list, formula1='_Lists'!$X$2:$X$6
+  L5:L86: type=list, formula1='_Lists'!$F$2:$F$6
+  M5:M86: type=list, formula1='_Lists'!$G$2:$G$10
+
+--- 18-Pipeline Candidatures (4 validations) ---
+  H5:H88: type=list, formula1='_Lists'!$AL$2:$AL$12
+  M5:M88: type=list, formula1='_Lists'!$AM$2:$AM$5
+  E5:E88: type=list, formula1='_Lists'!$U$2:$U$20
+  F5:F88: type=list, formula1='_Lists'!$G$2:$G$12
+
+--- 17-Suivi Post-Embauche (4 validations) ---
+  D5:D86: type=list, formula1='_Lists'!$U$2:$U$18
+  I5:I86: type=list, formula1='_Lists'!$AJ$2:$AJ$6
+  J5:J86: type=list, formula1='_Lists'!$AJ$2:$AJ$6
+  K5:K86: type=list, formula1='_Lists'!$AK$2:$AK$5
