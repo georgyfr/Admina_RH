@@ -1,0 +1,539 @@
+     1→import { useState, useMemo, useCallback } from 'react';
+     2→import {
+     3→  Box, Typography, Button, Paper, Chip, Table, TableBody, TableCell,
+     4→  TableContainer, TableHead, TableRow, IconButton, Tooltip, Select, MenuItem,
+     5→  FormControl, InputLabel, Badge, Alert, Snackbar, Collapse, TextField,
+     6→  InputAdornment, Divider, Fab, Drawer, List, ListItemButton, ListItemText,
+     7→  ListItemIcon, Slider, Switch, FormControlLabel,
+     8→} from '@mui/material';
+     9→import {
+    10→  Download, Refresh, FilterListOff, Send, CheckCircle, Visibility,
+    11→  Schedule, Warning, TrendingUp, TrendingDown, FiberManualRecord,
+    12→  Search, Tune, Close, Person, Business, AdminPanelSettings,
+    13→  ArrowUpward, ArrowDownward,
+    14→} from '@mui/icons-material';
+    15→import {
+    16→  LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis,
+    17→  CartesianGrid, ResponsiveContainer, Legend, Tooltip as RTooltip,
+    18→} from 'recharts';
+    19→import { useDashboardFilters } from '../context/DashboardFilterContext';
+    20→import { useApp } from '../context/AppContext';
+    21→import { useRole } from '../context/RoleContext';
+    22→
+    23→const COLORS = ['#1976d2', '#42a5f5', '#0D7C66', '#ffa726', '#ef5350', '#ab47bc', '#26c6da', '#8d6e63'];
+    24→
+    25→/* ─── Enriched data ─── */
+    26→const allDemandes = [
+    27→  { numero: 'DR-2025-008', poste: 'Chef Approvisionnement', departement: 'Logistique', statut: 'Validée', date: '2025-02-20', site: 'Siège', joursAttente: 0, alerte: false, priorite: 'haute' },
+    28→  { numero: 'DR-2025-006', poste: 'Développeur Full Stack', departement: 'Informatique', statut: 'En attente', date: '2025-02-10', site: 'Siège', joursAttente: 20, alerte: true, priorite: 'haute' },
+    29→  { numero: 'DR-2025-003', poste: 'Comptable Senior', departement: 'Finance', statut: 'Validée', date: '2025-01-25', site: 'Annexe', joursAttente: 0, alerte: false, priorite: 'moyenne' },
+    30→  { numero: 'DR-2025-004', poste: 'Agent Accueil', departement: 'Service Client', statut: 'Pourvue', date: '2025-02-01', site: 'Hôtel Sawa', joursAttente: 0, alerte: false, priorite: 'basse' },
+    31→  { numero: 'DR-2025-002', poste: 'Réceptionniste Nuit', departement: 'Hébergement', statut: 'En cours', date: '2025-01-20', site: 'Hôtel Sawa', joursAttente: 41, alerte: true, priorite: 'moyenne' },
+    32→  { numero: 'DR-2025-001', poste: 'Chef Cuisinier', departement: 'Restauration', statut: 'En attente', date: '2025-01-15', site: 'Hôtel Sawa', joursAttente: 46, alerte: true, priorite: 'haute' },
+    33→  { numero: 'DR-2024-012', poste: 'Agent Sécurité', departement: 'Sécurité', statut: 'Clôturée', date: '2024-12-10', site: 'Siège', joursAttente: 0, alerte: false, priorite: 'basse' },
+    34→  { numero: 'DR-2025-009', poste: 'Community Manager', departement: 'Marketing', statut: 'En attente', date: '2025-02-25', site: 'Siège', joursAttente: 5, alerte: false, priorite: 'moyenne' },
+    35→  { numero: 'DR-2025-010', poste: 'Serveur', departement: 'Restauration', statut: 'Validée', date: '2025-02-28', site: 'Hôtel Sawa', joursAttente: 0, alerte: false, priorite: 'basse' },
+    36→  { numero: 'DR-2025-011', poste: 'Commercial Senior', departement: 'Commercial', statut: 'En attente', date: '2025-02-18', site: 'Annexe', joursAttente: 12, alerte: false, priorite: 'haute' },
+    37→];
+    38→
+    39→const allCandidats = [
+    40→  { nom: 'Eyenga Clarisse', numero: 'CAN-006', source: 'Cooptation', etape: 'CV reçu', score: null, departement: 'Marketing', date: '2025-02-22', site: 'Siège', enAttente: false, experience: 3 },
+    41→  { nom: 'Bikay Jean-Pierre', numero: 'CAN-004', source: 'LinkedIn', etape: 'Entretien HR', score: 14, departement: 'Informatique', date: '2025-02-05', site: 'Siège', enAttente: true, experience: 6 },
+    42→  { nom: 'Nkoulou Brandon', numero: 'CAN-003', source: 'Site web', etape: 'Test technique', score: 10, departement: 'Informatique', date: '2025-01-28', site: 'Siège', enAttente: false, experience: 1 },
+    43→  { nom: 'Kamga Blaise', numero: 'CAN-005', source: 'Cabinet', etape: 'Entretien HR', score: null, departement: 'Finance', date: '2025-02-12', site: 'Annexe', enAttente: true, experience: 4 },
+    44→  { nom: 'Mebara Nadège', numero: 'CAN-007', source: 'Site web', etape: 'Offre envoyée', score: 17, departement: 'Service Client', date: '2025-01-20', site: 'Hôtel Sawa', enAttente: false, experience: 8 },
+    45→  { nom: 'Ndiaye Moussa', numero: 'CAN-001', source: 'Cooptation', etape: 'Sélectionné', score: 18, departement: 'Restauration', date: '2025-01-10', site: 'Hôtel Sawa', enAttente: false, experience: 9 },
+    46→  { nom: 'Nganou André', numero: 'CAN-002', source: 'Indeed', etape: 'Entretien technique', score: 12, departement: 'Sécurité', date: '2025-01-18', site: 'Siège', enAttente: false, experience: 5 },
+    47→  { nom: 'Fotso Amandine', numero: 'CAN-008', source: 'LinkedIn', etape: 'CV reçu', score: null, departement: 'Hébergement', date: '2025-02-26', site: 'Hôtel Sawa', enAttente: false, experience: 2 },
+    48→  { nom: 'Tabi Sandrine', numero: 'CAN-009', source: 'Site web', etape: 'Entretien HR', score: 15, departement: 'Restauration', date: '2025-02-15', site: 'Hôtel Sawa', enAttente: true, experience: 3 },
+    49→  { nom: 'Ateba Chantal', numero: 'CAN-010', source: 'Cabinet', etape: 'Vérification refs', score: 16, departement: 'Hébergement', date: '2025-01-30', site: 'Annexe', enAttente: false, experience: 7 },
+    50→];
+    51→
+    52→const allEvolution = [
+    53→  { mois: 'Oct 2024', demandes: 3, pourvues: 1 },
+    54→  { mois: 'Nov 2024', demandes: 5, pourvues: 2 },
+    55→  { mois: 'Dec 2024', demandes: 4, pourvues: 3 },
+    56→  { mois: 'Jan 2025', demandes: 8, pourvues: 4 },
+    57→  { mois: 'Fev 2025', demandes: 10, pourvues: 5 },
+    58→];
+    59→
+    60→const allSources = [
+    61→  { source: 'Site web', valeur: 32 }, { source: 'Cooptation', valeur: 28 },
+    62→  { source: 'LinkedIn', valeur: 25 }, { source: 'Indeed', valeur: 18 },
+    63→  { source: 'Cabinet', valeur: 22 }, { source: 'Autres', valeur: 27 },
+    64→];
+    65→
+    66→const allDepart = [
+    67→  { name: 'Restauration', value: 18 }, { name: 'Hébergement', value: 15 },
+    68→  { name: 'Finance', value: 12 }, { name: 'Informatique', value: 10 },
+    69→  { name: 'Sécurité', value: 9 }, { name: 'Service Client', value: 13 },
+    70→  { name: 'Marketing', value: 11 }, { name: 'Logistique', value: 12 },
+    71→];
+    72→
+    73→const allStatuts = [
+    74→  { statut: 'Brouillon', valeur: 1 }, { statut: 'En attente', valeur: 3 },
+    75→  { statut: 'Validée', valeur: 3 }, { statut: 'Publiée', valeur: 1 },
+    76→  { statut: 'Pourvue', valeur: 1 }, { statut: 'En cours', valeur: 1 },
+    77→  { statut: 'Clôturée', valeur: 1 },
+    78→];
+    79→
+    80→const statutColor = { 'Pourvue': 'success', 'En cours': 'warning', 'Validée': 'info', 'En attente': 'warning', 'Annulee': 'error', 'Brouillon': 'default', 'Publiée': 'info', 'Clôturée': 'default' };
+    81→const statutSeverity = { 'En attente': 'warning', 'En cours': 'error' };
+    82→
+    83→const ETAPES = ['CV reçu', 'Entretien HR', 'Test technique', 'Entretien technique', 'Vérification refs', 'Offre envoyée', 'Sélectionné', 'Rejeté'];
+    84→const SOURCES = ['Site web', 'Cooptation', 'LinkedIn', 'Indeed', 'Cabinet', 'Autres'];
+    85→
+    86→function filterByPeriod(items, periode) {
+    87→  if (periode === 'tout') return items;
+    88→  const cutoff = periode === 'mois' ? new Date('2025-02-01') : new Date('2025-01-01');
+    89→  return items.filter(i => new Date(i.date) >= cutoff);
+    90→}
+    91→
+    92→function ChartTooltip({ active, payload, label, clickable }) {
+    93→  if (!active || !payload?.length) return null;
+    94→  return (
+    95→    <Paper sx={{ p: 1.5, boxShadow: 3, maxWidth: 220 }}>
+    96→      <Typography variant="caption" fontWeight="bold">{label}</Typography>
+    97→      {payload.map((p, i) => (
+    98→        <Typography key={i} variant="body2" sx={{ color: p.color, mt: 0.3 }}>{p.name}: <strong>{p.value}</strong></Typography>
+    99→      ))}
+   100→      {clickable && <Typography variant="caption" sx={{ color: 'text.secondary', mt: 0.5, display: 'block', fontStyle: 'italic' }}>Cliquer pour filtrer</Typography>}
+   101→    </Paper>
+   102→  );
+   103→}
+   104→
+   105→function FilterChip({ label, onRemove }) {
+   106→  return <Chip label={label} size="small" onDelete={onRemove} sx={{ ml: 1, bgcolor: 'rgba(13,124,102,0.1)', borderColor: '#0D7C66', '& .MuiChip-deleteIcon': { color: '#0D7C66' } }} variant="outlined" />;
+   107→}
+   108→
+   109→/* ═════════════════ FACETED SEARCH DRAWER ═════════════════ */
+   110→function FacetedSearchDrawer({ open, onClose, facets, onChange }) {
+   111→  return (
+   112→    <Drawer anchor="right" open={open} onClose={onClose} PaperProps={{ sx: { width: 320, p: 2 } }}>
+   113→      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+   114→        <Typography variant="h6" fontWeight="bold" fontSize="1rem">Recherche avancée</Typography>
+   115→        <IconButton onClick={onClose}><Close /></IconButton>
+   116→      </Box>
+   117→      <Divider sx={{ mb: 2 }} />
+   118→
+   119→      {/* Text search */}
+   120→      <TextField
+   121→        fullWidth size="small" placeholder="Rechercher..." value={facets.text || ''}
+   122→        onChange={e => onChange('text', e.target.value)}
+   123→        InputProps={{ startAdornment: <InputAdornment position="start"><Search sx={{ fontSize: 18 }} /></InputAdornment> }}
+   124→        sx={{ mb: 2.5 }}
+   125→      />
+   126→
+   127→      {/* Statut */}
+   128→      <Typography variant="subtitle2" fontWeight="bold" sx={{ mb: 1, fontSize: '0.8rem' }}>Statut</Typography>
+   129→      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, mb: 2.5 }}>
+   130→        {[...new Set(allDemandes.map(d => d.statut))].map(s => (
+   131→          <Chip key={s} label={s} size="small" variant={facets.statut === s ? 'filled' : 'outlined'}
+   132→            color={facets.statut === s ? 'primary' : 'default'}
+   133→            onClick={() => onChange('statut', facets.statut === s ? null : s)} />
+   134→        ))}
+   135→      </Box>
+   136→
+   137→      {/* Source */}
+   138→      <Typography variant="subtitle2" fontWeight="bold" sx={{ mb: 1, fontSize: '0.8rem' }}>Source candidat</Typography>
+   139→      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, mb: 2.5 }}>
+   140→        {SOURCES.map(s => (
+   141→          <Chip key={s} label={s} size="small" variant={facets.source === s ? 'filled' : 'outlined'}
+   142→            color={facets.source === s ? 'primary' : 'default'}
+   143→            onClick={() => onChange('source', facets.source === s ? null : s)} />
+   144→        ))}
+   145→      </Box>
+   146→
+   147→      {/* Étape */}
+   148→      <Typography variant="subtitle2" fontWeight="bold" sx={{ mb: 1, fontSize: '0.8rem' }}>Étape recrutement</Typography>
+   149→      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, mb: 2.5 }}>
+   150→        {ETAPES.map(e => (
+   151→          <Chip key={e} label={e} size="small" variant={facets.etape === e ? 'filled' : 'outlined'}
+   152→            color={facets.etape === e ? 'primary' : 'default'}
+   153→            onClick={() => onChange('etape', facets.etape === e ? null : e)} />
+   154→        ))}
+   155→      </Box>
+   156→
+   157→      {/* Score range */}
+   158→      <Typography variant="subtitle2" fontWeight="bold" sx={{ mb: 0.5, fontSize: '0.8rem' }}>Score minimum</Typography>
+   159→      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2.5 }}>
+   160→        <Slider value={facets.minScore || 0} min={0} max={20} step={1} valueLabelDisplay="auto"
+   161→          marks={[{ value: 0, label: '0' }, { value: 10, label: '10' }, { value: 20, label: '20' }]}
+   162→          onChange={(_, v) => onChange('minScore', v)} />
+   163→      </Box>
+   164→
+   165→      {/* Expérience range */}
+   166→      <Typography variant="subtitle2" fontWeight="bold" sx={{ mb: 0.5, fontSize: '0.8rem' }}>Expérience min. (années)</Typography>
+   167→      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2.5 }}>
+   168→        <Slider value={facets.minExp || 0} min={0} max={15} step={1} valueLabelDisplay="auto"
+   169→          marks={[{ value: 0, label: '0' }, { value: 5, label: '5' }, { value: 10, label: '10+' }]}
+   170→          onChange={(_, v) => onChange('minExp', v)} />
+   171→      </Box>
+   172→
+   173→      {/* Alertes only */}
+   174→      <FormControlLabel
+   175→        control={<Switch checked={facets.alertesOnly || false} onChange={e => onChange('alertesOnly', e.target.checked)} color="warning" />}
+   176→        label={<Typography variant="body2" fontSize="0.8rem">Afficher uniquement les alertes</Typography>}
+   177→        sx={{ mb: 2 }}
+   178→      />
+   179→
+   180→      <Divider sx={{ mb: 2 }} />
+   181→      <Button fullWidth variant="outlined" startIcon={<FilterListOff />} onClick={() => { onChange('reset', null); onClose(); }}>
+   182→        Réinitialiser tous les filtres
+   183→      </Button>
+   184→    </Drawer>
+   185→  );
+   186→}
+   187→
+   188→/* ═══════════════════════════════════════════════════════════════
+   189→   MAIN COMPONENT
+   190→   ═══════════════════════════════════════════════════════════════ */
+   191→export default function TableauDeBord() {
+   192→  const {
+   193→    periode, setPeriode, departement, setDepartement, site, setSite,
+   194→    activeSource, setActiveSource, activeStatut, setActiveStatut,
+   195→    resetFilters, hasActiveFilters, PERIODES, DEPARTEMENTS, SITES,
+   196→  } = useDashboardFilters();
+   197→  const { addNotification } = useApp();
+   198→  const { currentRole } = useRole();
+   199→  const [snack, setSnack] = useState(null);
+   200→  const [facetDrawer, setFacetDrawer] = useState(false);
+   201→  const [facets, setFacets] = useState({ text: '', statut: null, source: null, etape: null, minScore: 0, minExp: 0, alertesOnly: false });
+   202→
+   203→  const handleFacetChange = useCallback((key, val) => {
+   204→    if (key === 'reset') { setFacets({ text: '', statut: null, source: null, etape: null, minScore: 0, minExp: 0, alertesOnly: false }); return; }
+   205→    setFacets(prev => ({ ...prev, [key]: val }));
+   206→  }, []);
+   207→
+   208→  /* ─── Filtered data with facets ─── */
+   209→  const filteredDemandes = useMemo(() => {
+   210→    let data = filterByPeriod(allDemandes, periode);
+   211→    if (departement !== 'tout') data = data.filter(d => d.departement === departement);
+   212→    if (site !== 'tout') data = data.filter(d => d.site === site);
+   213→    if (activeStatut) data = data.filter(d => d.statut === activeStatut);
+   214→    if (facets.statut) data = data.filter(d => d.statut === facets.statut);
+   215→    if (facets.text) { const q = facets.text.toLowerCase(); data = data.filter(d => d.poste.toLowerCase().includes(q) || d.numero.toLowerCase().includes(q) || d.departement.toLowerCase().includes(q)); }
+   216→    if (facets.alertesOnly) data = data.filter(d => d.alerte);
+   217→    return data;
+   218→  }, [periode, departement, site, activeStatut, facets]);
+   219→
+   220→  const filteredCandidats = useMemo(() => {
+   221→    let data = filterByPeriod(allCandidats, periode);
+   222→    if (departement !== 'tout') data = data.filter(c => c.departement === departement);
+   223→    if (site !== 'tout') data = data.filter(c => c.site === site);
+   224→    if (activeSource) data = data.filter(c => c.source === activeSource);
+   225→    if (facets.source) data = data.filter(c => c.source === facets.source);
+   226→    if (facets.etape) data = data.filter(c => c.etape === facets.etape);
+   227→    if (facets.minScore > 0) data = data.filter(c => c.score !== null && c.score >= facets.minScore);
+   228→    if (facets.minExp > 0) data = data.filter(c => c.experience >= facets.minExp);
+   229→    if (facets.text) { const q = facets.text.toLowerCase(); data = data.filter(c => c.nom.toLowerCase().includes(q) || c.numero.toLowerCase().includes(q) || c.etape.toLowerCase().includes(q)); }
+   230→    if (facets.alertesOnly) data = data.filter(c => c.enAttente);
+   231→    return data;
+   232→  }, [periode, departement, site, activeSource, facets]);
+   233→
+   234→  /* ─── KPIs ─── */
+   235→  const kpis = useMemo(() => {
+   236→    const totalD = filteredDemandes.length;
+   237→    const ouvertes = filteredDemandes.filter(d => ['En attente', 'En cours', 'Validée', 'Publiée'].includes(d.statut)).length;
+   238→    const totalC = filteredCandidats.length;
+   239→    const actifs = filteredCandidats.filter(c => !['Sélectionné', 'Rejeté'].includes(c.etape)).length;
+   240→    const pourvues = filteredDemandes.filter(d => d.statut === 'Pourvue').length;
+   241→    const taux = totalC > 0 ? ((pourvues / totalC) * 100).toFixed(1) : '0.0';
+   242→    const enRetard = filteredDemandes.filter(d => d.alerte).length;
+   243→    const enAttente = filteredCandidats.filter(c => c.enAttente).length;
+   244→    const delai = totalD > 0 ? Math.round(filteredDemandes.reduce((s, d) => s + (d.joursAttente || 0), 0) / totalD) : 0;
+   245→    return [
+   246→      { titre: 'Total Demandes', valeur: totalD, sousTexte: `${ouvertes} ouvertes`, tendance: '+12%', up: true, alerte: enRetard > 0, alerteMsg: `${enRetard} en retard` },
+   247→      { titre: 'Total Candidats', valeur: totalC, sousTexte: `${actifs} actifs`, tendance: '+8%', up: true, alerte: false },
+   248→      { titre: 'Taux de Conversion', valeur: `${taux}%`, sousTexte: `${pourvues} retenus / ${totalC}`, tendance: '+3.2%', up: true, alerte: parseFloat(taux) < 15, alerteMsg: 'Sous objectif' },
+   249→      { titre: 'Délai Moyen', valeur: delai ? `${delai} j` : '—', sousTexte: 'jours ouvrés', tendance: '-5 j', up: false, alerte: delai > 30, alerteMsg: 'Objectif dépassé' },
+   250→      { titre: 'En Attente Décision', valeur: enAttente, sousTexte: 'candidats bloqués', tendance: enAttente > 3 ? '+2' : '0', up: enAttente > 3, alerte: enAttente >= 3, alerteMsg: 'Relance nécessaire' },
+   251→      { titre: 'Alertes', valeur: enRetard, sousTexte: 'demandes en retard', tendance: null, up: null, alerte: enRetard > 0, alerteMsg: `${enRetard} action(s) requise(s)` },
+   252→    ];
+   253→  }, [filteredDemandes, filteredCandidats]);
+   254→
+   255→  /* ─── Chart data ─── */
+   256→  const filteredSources = useMemo(() => activeSource ? allSources.map(s => ({ ...s, valeur: s.source === activeSource ? s.valeur : 0 })) : allSources, [activeSource]);
+   257→  const filteredDepart = useMemo(() => departement === 'tout' ? allDepart : allDepart.map(d => ({ ...d, value: d.name === departement ? d.value : 0 })), [departement]);
+   258→  const filteredStatuts = useMemo(() => activeStatut ? allStatuts.map(s => ({ ...s, valeur: s.statut === activeStatut ? s.valeur : 0 })) : allStatuts, [activeStatut]);
+   259→
+   260→  /* ─── Handlers ─── */
+   261→  const handleRelancer = useCallback((c) => { setSnack({ msg: `Relance envoyée à ${c.nom}`, severity: 'success' }); addNotification({ icon: 'send', color: '#0D7C66', msg: `Relance envoyée : ${c.nom}`, path: '/candidats' }); }, [addNotification]);
+   262→  const handleValider = useCallback((d) => { setSnack({ msg: `Demande ${d.numero} validée`, severity: 'success' }); addNotification({ icon: 'check_circle', color: '#2e7d32', msg: `Demande ${d.numero} validée`, path: '/offres' }); }, [addNotification]);
+   263→  const handleExporter = useCallback(() => {
+   264→    const rows = ['N°,Poste,Département,Statut,Date,Jours attente,Site'];
+   265→    filteredDemandes.forEach(d => rows.push(`${d.numero},${d.poste},${d.departement},${d.statut},${d.date},${d.joursAttente},${d.site}`));
+   266→    const blob = new Blob([rows.join('\n')], { type: 'text/csv' });
+   267→    const url = URL.createObjectURL(blob);
+   268→    const a = document.createElement('a'); a.href = url; a.download = 'dashboard_export.csv'; a.click();
+   269→    URL.revokeObjectURL(url); setSnack({ msg: 'Export CSV téléchargé', severity: 'info' });
+   270→  }, [filteredDemandes]);
+   271→  const handleSourceClick = useCallback((data) => { if (data?.activePayload?.[0]) { const src = data.activePayload[0].payload.source; setActiveSource(prev => prev === src ? null : src); } }, [setActiveSource]);
+   272→  const handleStatutClick = useCallback((data) => { if (data?.activePayload?.[0]) { const st = data.activePayload[0].payload.statut; setActiveStatut(prev => prev === st ? null : st); } }, [setActiveStatut]);
+   273→
+   274→  const activeFacetCount = useMemo(() => [facets.statut, facets.source, facets.etape, facets.minScore > 0, facets.minExp > 0, facets.alertesOnly].filter(Boolean).length, [facets]);
+   275→
+   276→  /* ─── Role-based section visibility ─── */
+   277→  const show = useMemo(() => {
+   278→    const s = currentRole.sections;
+   279→    return {
+   280→      kpi: true, evolution: s.includes('evolution'), sources: s.includes('sources'),
+   281→      depart: s.includes('departement'), statuts: s.includes('statuts'),
+   282→      demandes: s.includes('demandesRecentes'), candidats: s.includes('candidatsRecents'),
+   283→      couts: s.includes('coutsResume'), conformite: s.includes('conformiteResume'),
+   284→      pipeline: s.includes('pipelineResume'), entretiens: s.includes('entretiensJour'),
+   285→    };
+   286→  }, [currentRole]);
+   287→
+   288→  const selectSx = { minWidth: 150, '& .MuiSelect-select': { py: 1, fontSize: '0.8rem' } };
+   289→
+   290→  /* ─── Entretiens du jour (Recruteur view) ─── */
+   291→  const entretiensJour = [
+   292→    { heure: '09:00', candidat: 'Bikay Jean-Pierre', poste: 'Développeur Full Stack', type: 'HR' },
+   293→    { heure: '10:30', candidat: 'Tabi Sandrine', poste: 'Serveuse', type: 'Technique' },
+   294→    { heure: '14:00', candidat: 'Kamga Blaise', poste: 'Comptable', type: 'HR' },
+   295→  ];
+   296→
+   297→  return (
+   298→    <Box>
+   299→      {/* Header */}
+   300→      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+   301→        <Box>
+   302→          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+   303→            <Typography variant="h5" fontWeight="bold">Tableau de Bord</Typography>
+   304→            <Chip label={currentRole.label} size="small" sx={{ bgcolor: `${currentRole.color}18`, color: currentRole.color, fontWeight: 600, fontSize: '0.7rem', height: 22 }} />
+   305→          </Box>
+   306→          <Typography variant="body2" color="text.secondary">Vue d'ensemble interactif — {currentRole.desc}</Typography>
+   307→        </Box>
+   308→        <Box sx={{ display: 'flex', gap: 1 }}>
+   309→          <Button variant="outlined" startIcon={<Tune />} onClick={() => setFacetDrawer(true)} size="small">Filtres</Button>
+   310→          <Button variant="outlined" startIcon={<Download fontSize="small" />} onClick={handleExporter} size="small">Export</Button>
+   311→        </Box>
+   312→      </Box>
+   313→
+   314→      {/* Global Filter Bar */}
+   315→      <Paper elevation={0} sx={{ display: 'flex', gap: 1.5, alignItems: 'center', flexWrap: 'wrap', p: 1.5, mb: 2, borderRadius: 2, bgcolor: 'background.paper', border: '1px solid', borderColor: 'divider' }}>
+   316→        <FilterListOff sx={{ color: 'text.secondary', fontSize: 20 }} />
+   317→        <FormControl size="small" sx={selectSx}><InputLabel>Période</InputLabel><Select value={periode} label="Période" onChange={e => setPeriode(e.target.value)}>{PERIODES.map(p => <MenuItem key={p.key} value={p.key}>{p.label}</MenuItem>)}</Select></FormControl>
+   318→        <FormControl size="small" sx={selectSx}><InputLabel>Département</InputLabel><Select value={departement} label="Département" onChange={e => setDepartement(e.target.value)}>{DEPARTEMENTS.map(d => <MenuItem key={d.key} value={d.key}>{d.label}</MenuItem>)}</Select></FormControl>
+   319→        <FormControl size="small" sx={selectSx}><InputLabel>Site</InputLabel><Select value={site} label="Site" onChange={e => setSite(e.target.value)}>{SITES.map(s => <MenuItem key={s.key} value={s.key}>{s.label}</MenuItem>)}</Select></FormControl>
+   320→        <Box sx={{ flex: 1 }} />
+   321→        {activeSource && <FilterChip label={`Source: ${activeSource}`} onRemove={() => setActiveSource(null)} />}
+   322→        {activeStatut && <FilterChip label={`Statut: ${activeStatut}`} onRemove={() => setActiveStatut(null)} />}
+   323→        {activeFacetCount > 0 && <FilterChip label={`${activeFacetCount} filtre(s) avancé(s)`} onRemove={() => handleFacetChange('reset', null)} />}
+   324→        {hasActiveFilters && <Button size="small" variant="text" startIcon={<FilterListOff />} onClick={resetFilters} sx={{ ml: 1, color: '#ef5350' }}>Réinitialiser</Button>}
+   325→      </Paper>
+   326→
+   327→      {/* Alert banner */}
+   328→      {kpis[5].valeur > 0 && show.kpi && (
+   329→        <Alert severity="warning" sx={{ mb: 2, borderRadius: 2 }} action={<Button size="small" color="inherit" variant="outlined" onClick={() => setDepartement('tout')}>Voir les détails</Button>}>
+   330→          <strong>{kpis[5].valeur} demande(s) en retard</strong> — Le délai moyen dépasse la cible sur certains postes.
+   331→        </Alert>
+   332→      )}
+   333→
+   334→      {/* KPI Cards */}
+   335→      {show.kpi && (
+   336→        <Box sx={{ display: 'flex', gap: 1.5, mb: 3, flexWrap: 'wrap' }}>
+   337→          {kpis.map(k => (
+   338→            <Paper key={k.titre} sx={{ p: 2, flex: '1 1 150px', minWidth: 145, position: 'relative', borderLeft: k.alerte ? '4px solid #ef5350' : '4px solid transparent', transition: 'all 0.2s', '&:hover': { boxShadow: 3, transform: 'translateY(-2px)' } }}>
+   339→              {k.alerte && <Tooltip title={k.alerteMsg}><Warning sx={{ position: 'absolute', top: 8, right: 8, fontSize: 18, color: '#ef5350' }} /></Tooltip>}
+   340→              <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: 0.5 }}>{k.titre}</Typography>
+   341→              <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 1, my: 0.5 }}>
+   342→                <Typography variant="h5" fontWeight="bold">{k.valeur}</Typography>
+   343→                {k.tendance && <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.3 }}>{k.up ? <TrendingUp sx={{ fontSize: 14, color: '#2e7d32' }} /> : <TrendingDown sx={{ fontSize: 14, color: k.alerte ? '#ef5350' : '#2e7d32' }} />}<Typography variant="caption" sx={{ color: k.up ? '#2e7d32' : '#ef5350', fontWeight: 600, fontSize: '0.7rem' }}>{k.tendance}</Typography></Box>}
+   344→              </Box>
+   345→              <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.75rem' }}>{k.sousTexte}</Typography>
+   346→            </Paper>
+   347→          ))}
+   348→        </Box>
+   349→      )}
+   350→
+   351→      {/* Entretiens du jour — Recruteur only */}
+   352→      {show.entretiens && (
+   353→        <Paper sx={{ p: 2, mb: 2, borderLeft: '4px solid #1976d2' }}>
+   354→          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
+   355→            <Typography variant="subtitle2" fontWeight="bold">Entretiens du jour</Typography>
+   356→            <Chip label={`${entretiensJour.length} prévus`} size="small" color="primary" />
+   357→          </Box>
+   358→          <Box sx={{ display: 'flex', gap: 1.5, overflowX: 'auto', pb: 1 }}>
+   359→            {entretiensJour.map((e, i) => (
+   360→              <Paper key={i} variant="outlined" sx={{ p: 1.5, minWidth: 220, flexShrink: 0, borderColor: '#e0e0e0' }}>
+   361→                <Typography variant="h6" fontWeight="bold" sx={{ color: '#1976d2', fontSize: '1.1rem' }}>{e.heure}</Typography>
+   362→                <Typography variant="body2" fontWeight={500} sx={{ mt: 0.5 }}>{e.candidat}</Typography>
+   363→                <Typography variant="caption" color="text.secondary">{e.poste}</Typography>
+   364→                <Chip label={e.type} size="small" sx={{ mt: 1, bgcolor: e.type === 'HR' ? '#e3f2fd' : '#fff3e0', color: e.type === 'HR' ? '#1976d2' : '#e65100', fontSize: '0.65rem' }} />
+   365→              </Paper>
+   366→            ))}
+   367→          </Box>
+   368→        </Paper>
+   369→      )}
+   370→
+   371→      {/* Pipeline résumé — Recruteur only */}
+   372→      {show.pipeline && (
+   373→        <Paper sx={{ p: 2, mb: 2 }}>
+   374→          <Typography variant="subtitle2" fontWeight="bold" sx={{ mb: 1.5 }}>Pipeline candidatures</Typography>
+   375→          <Box sx={{ display: 'flex', gap: 1, overflowX: 'auto', pb: 1 }}>
+   376→            {ETAPES.slice(0, 6).map(etape => {
+   377→              const count = allCandidats.filter(c => c.etape === etape).length;
+   378→              return (
+   379→                <Paper key={etape} variant="outlined" sx={{ p: 1.5, minWidth: 100, textAlign: 'center', flexShrink: 0, borderColor: '#e0e0e0' }}>
+   380→                  <Typography variant="h5" fontWeight="bold" color="#1976d2">{count}</Typography>
+   381→                  <Typography variant="caption" sx={{ fontSize: '0.65rem' }}>{etape}</Typography>
+   382→                </Paper>
+   383→              );
+   384→            })}
+   385→          </Box>
+   386→        </Paper>
+   387→      )}
+   388→
+   389→      {/* Charts Row 1 */}
+   390→      <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: show.sources ? '1fr 1fr' : '1fr' }, gap: 2, mb: 2 }}>
+   391→        {show.evolution && (
+   392→          <Paper sx={{ p: 2 }}>
+   393→            <Typography variant="subtitle2" fontWeight="bold" sx={{ mb: 1 }}>Évolution du Recrutement</Typography>
+   394→            <ResponsiveContainer width="100%" height={240}>
+   395→              <LineChart data={allEvolution}><CartesianGrid strokeDasharray="3 3" /><XAxis dataKey="mois" tick={{ fontSize: 11 }} /><YAxis tick={{ fontSize: 11 }} /><RTooltip content={<ChartTooltip />} /><Legend wrapperStyle={{ fontSize: 12 }} /><Line type="monotone" dataKey="demandes" stroke="#1976d2" name="Demandes créées" strokeWidth={2} dot={{ r: 4 }} /><Line type="monotone" dataKey="pourvues" stroke="#0D7C66" name="Demandes pourvues" strokeWidth={2} dot={{ r: 4 }} /></LineChart>
+   396→            </ResponsiveContainer>
+   397→          </Paper>
+   398→        )}
+   399→        {show.sources && (
+   400→          <Paper sx={{ p: 2, border: activeSource ? '2px solid #0D7C66' : 'none' }}>
+   401→            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+   402→              <Typography variant="subtitle2" fontWeight="bold">Sources de Recrutement</Typography>
+   403→              {activeSource && <Chip label={activeSource} size="small" color="primary" onDelete={() => setActiveSource(null)} />}
+   404→            </Box>
+   405→            <Typography variant="caption" color="text.secondary" sx={{ mb: 1, display: 'block' }}>Cliquer sur une barre pour filtrer</Typography>
+   406→            <ResponsiveContainer width="100%" height={220}>
+   407→              <BarChart data={filteredSources} layout="vertical" onClick={handleSourceClick} style={{ cursor: 'pointer' }}><CartesianGrid strokeDasharray="3 3" /><XAxis type="number" tick={{ fontSize: 11 }} /><YAxis dataKey="source" type="category" tick={{ fontSize: 11 }} width={80} /><RTooltip content={<ChartTooltip clickable />} /><Bar dataKey="valeur" name="Candidats" radius={[0, 4, 4, 0]}>{filteredSources.map((s, i) => <Cell key={i} fill={activeSource && s.source !== activeSource ? '#e0e0e0' : COLORS[i % COLORS.length]} />)}</Bar></BarChart>
+   408→            </ResponsiveContainer>
+   409→          </Paper>
+   410→        )}
+   411→      </Box>
+   412→
+   413→      {/* Charts Row 2 */}
+   414→      {(show.depart || show.statuts) && (
+   415→        <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: show.depart && show.statuts ? '1fr 1fr' : '1fr' }, gap: 2, mb: 3 }}>
+   416→          {show.depart && (
+   417→            <Paper sx={{ p: 2 }}>
+   418→              <Typography variant="subtitle2" fontWeight="bold" sx={{ mb: 1 }}>Répartition par Département</Typography>
+   419→              <ResponsiveContainer width="100%" height={240}><PieChart><Pie data={filteredDepart} cx="50%" cy="50%" innerRadius={50} outerRadius={85} dataKey="value" label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`} labelLine={{ strokeWidth: 1 }}>{filteredDepart.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}</Pie><RTooltip /></PieChart></ResponsiveContainer>
+   420→            </Paper>
+   421→          )}
+   422→          {show.statuts && (
+   423→            <Paper sx={{ p: 2, border: activeStatut ? '2px solid #0D7C66' : 'none' }}>
+   424→              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}><Typography variant="subtitle2" fontWeight="bold">Statuts des Demandes</Typography>{activeStatut && <Chip label={activeStatut} size="small" color="primary" onDelete={() => setActiveStatut(null)} />}</Box>
+   425→              <Typography variant="caption" color="text.secondary" sx={{ mb: 1, display: 'block' }}>Cliquer pour filtrer</Typography>
+   426→              <ResponsiveContainer width="100%" height={220}>
+   427→                <BarChart data={filteredStatuts} onClick={handleStatutClick} style={{ cursor: 'pointer' }}><CartesianGrid strokeDasharray="3 3" /><XAxis dataKey="statut" tick={{ fontSize: 10 }} angle={-20} textAnchor="end" height={50} /><YAxis tick={{ fontSize: 11 }} /><RTooltip content={<ChartTooltip clickable />} /><Bar dataKey="valeur" name="Demandes" radius={[4, 4, 0, 0]}>{filteredStatuts.map((s, i) => { const sev = statutSeverity[s.statut]; return <Cell key={i} fill={activeStatut && s.statut !== activeStatut ? '#e0e0e0' : sev === 'error' ? '#ef5350' : sev === 'warning' ? '#ffa726' : '#42a5f5'} />; })}</Bar></BarChart>
+   428→              </ResponsiveContainer>
+   429→            </Paper>
+   430→          )}
+   431→        </Box>
+   432→      )}
+   433→
+   434→      {/* Coûts résumé — Manager / DRH */}
+   435→      {show.couts && (
+   436→        <Paper sx={{ p: 2, mb: 2, borderLeft: '4px solid #7b1fa2' }}>
+   437→          <Typography variant="subtitle2" fontWeight="bold" sx={{ mb: 1 }}>Résumé des Coûts</Typography>
+   438→          <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+   439→            {[{ label: 'Budget annuel', val: '12 500 000 FCFA', sub: 'Prévisionnel 2025' }, { label: 'Coût moyen / embauche', val: '285 000 FCFA', sub: '-8% vs 2024' }, { label: 'Coût par source', val: 'LinkedIn: 42 000 FCFA', sub: 'Source la + chère' }].map((c, i) => (
+   440→              <Paper key={i} variant="outlined" sx={{ p: 1.5, flex: '1 1 180px' }}>
+   441→                <Typography variant="caption" color="text.secondary">{c.label}</Typography>
+   442→                <Typography variant="h6" fontWeight="bold" sx={{ color: '#7b1fa2' }}>{c.val}</Typography>
+   443→                <Typography variant="caption" color="text.secondary">{c.sub}</Typography>
+   444→              </Paper>
+   445→            ))}
+   446→          </Box>
+   447→        </Paper>
+   448→      )}
+   449→
+   450→      {/* Conformité résumé — DRH only */}
+   451→      {show.conformite && (
+   452→        <Paper sx={{ p: 2, mb: 2, borderLeft: '4px solid #d32f2f' }}>
+   453→          <Typography variant="subtitle2" fontWeight="bold" sx={{ mb: 1 }}>Conformité & Risques</Typography>
+   454→          <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+   455→            {[{ label: 'Taux conformité', val: '92%', ok: true }, { label: 'Documents manquants', val: '3', ok: false }, { label: 'Contrats expirant < 30j', val: '1', ok: false }].map((c, i) => (
+   456→              <Paper key={i} variant="outlined" sx={{ p: 1.5, flex: '1 1 150px', borderLeft: `3px solid ${c.ok ? '#2e7d32' : '#ef5350'}` }}>
+   457→                <Typography variant="caption" color="text.secondary">{c.label}</Typography>
+   458→                <Typography variant="h6" fontWeight="bold" sx={{ color: c.ok ? '#2e7d32' : '#ef5350' }}>{c.val}</Typography>
+   459→              </Paper>
+   460→            ))}
+   461→          </Box>
+   462→        </Paper>
+   463→      )}
+   464→
+   465→      {/* Tables */}
+   466→      <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: (show.demandes && show.candidats) ? '1fr 1fr' : '1fr' }, gap: 2 }}>
+   467→        {show.demandes && (
+   468→          <Paper sx={{ p: 2 }}>
+   469→            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+   470→              <Typography variant="subtitle2" fontWeight="bold">Demandes ({filteredDemandes.length})</Typography>
+   471→              <Badge badgeContent={filteredDemandes.filter(d => d.alerte).length} color="error"><Warning sx={{ color: '#ef5350' }} /></Badge>
+   472→            </Box>
+   473→            <TableContainer sx={{ maxHeight: 340 }}><Table size="small" stickyHeader><TableHead><TableRow>
+   474→              <TableCell sx={{ fontWeight: 'bold', bgcolor: '#f5f5f5', fontSize: '0.75rem' }}>N°</TableCell>
+   475→              <TableCell sx={{ fontWeight: 'bold', bgcolor: '#f5f5f5', fontSize: '0.75rem' }}>Poste</TableCell>
+   476→              <TableCell sx={{ fontWeight: 'bold', bgcolor: '#f5f5f5', fontSize: '0.75rem' }}>Statut</TableCell>
+   477→              <TableCell sx={{ fontWeight: 'bold', bgcolor: '#f5f5f5', fontSize: '0.75rem' }}>Action</TableCell>
+   478→            </TableRow></TableHead><TableBody>
+   479→              {filteredDemandes.length === 0 && <TableRow><TableCell colSpan={4} align="center" sx={{ py: 4, color: 'text.secondary' }}>Aucun résultat</TableCell></TableRow>}
+   480→              {filteredDemandes.map(d => (
+   481→                <TableRow key={d.numero} hover sx={{ bgcolor: d.alerte ? 'rgba(239,83,80,0.04)' : 'inherit' }}>
+   482→                  <TableCell sx={{ fontSize: '0.75rem', color: 'text.secondary' }}>{d.numero}</TableCell>
+   483→                  <TableCell><Box><Typography variant="body2" fontWeight={500} sx={{ fontSize: '0.8rem' }}>{d.poste}</Typography><Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.65rem' }}>{d.departement}</Typography></Box></TableCell>
+   484→                  <TableCell><Chip label={d.statut} size="small" color={statutColor[d.statut]} /></TableCell>
+   485→                  <TableCell>
+   486→                    {d.alerte && <Tooltip title={`${d.joursAttente}j d'attente`}><Chip icon={<Schedule sx={{ fontSize: '0.9rem !important' }} />} label={`${d.joursAttente}j`} size="small" color="error" variant="outlined" sx={{ mr: 0.5 }} /></Tooltip>}
+   487→                    {d.statut === 'En attente' && <Tooltip title="Valider"><IconButton size="small" color="success" onClick={() => handleValider(d)}><CheckCircle sx={{ fontSize: 18 }} /></IconButton></Tooltip>}
+   488→                    <Tooltip title="Détails"><IconButton size="small"><Visibility sx={{ fontSize: 18 }} /></IconButton></Tooltip>
+   489→                  </TableCell>
+   490→                </TableRow>
+   491→              ))}
+   492→            </TableBody></Table></TableContainer>
+   493→          </Paper>
+   494→        )}
+   495→        {show.candidats && (
+   496→          <Paper sx={{ p: 2 }}>
+   497→            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+   498→              <Typography variant="subtitle2" fontWeight="bold">Candidats ({filteredCandidats.length})</Typography>
+   499→              <Badge badgeContent={filteredCandidats.filter(c => c.enAttente).length} color="warning"><Schedule sx={{ color: '#ffa726' }} /></Badge>
+   500→            </Box>
+   501→            <TableContainer sx={{ maxHeight: 340 }}><Table size="small" stickyHeader><TableHead><TableRow>
+   502→              <TableCell sx={{ fontWeight: 'bold', bgcolor: '#f5f5f5', fontSize: '0.75rem' }}>Nom</TableCell>
+   503→              <TableCell sx={{ fontWeight: 'bold', bgcolor: '#f5f5f5', fontSize: '0.75rem' }}>Source</TableCell>
+   504→              <TableCell sx={{ fontWeight: 'bold', bgcolor: '#f5f5f5', fontSize: '0.75rem' }}>Étape</TableCell>
+   505→              <TableCell sx={{ fontWeight: 'bold', bgcolor: '#f5f5f5', fontSize: '0.75rem' }}>Score</TableCell>
+   506→              <TableCell sx={{ fontWeight: 'bold', bgcolor: '#f5f5f5', fontSize: '0.75rem' }}>Action</TableCell>
+   507→            </TableRow></TableHead><TableBody>
+   508→              {filteredCandidats.length === 0 && <TableRow><TableCell colSpan={5} align="center" sx={{ py: 4, color: 'text.secondary' }}>Aucun résultat</TableCell></TableRow>}
+   509→              {filteredCandidats.map(c => (
+   510→                <TableRow key={c.numero} hover sx={{ bgcolor: c.enAttente ? 'rgba(255,167,38,0.04)' : 'inherit' }}>
+   511→                  <TableCell><Box><Typography variant="body2" fontWeight={500} sx={{ fontSize: '0.8rem' }}>{c.nom}</Typography><Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.65rem' }}>{c.departement} · {c.experience} ans</Typography></Box></TableCell>
+   512→                  <TableCell><Chip label={c.source} size="small" variant="outlined" /></TableCell>
+   513→                  <TableCell><Chip label={c.etape} size="small" color={c.etape === 'Offre envoyée' ? 'success' : c.enAttente ? 'warning' : 'default'} /></TableCell>
+   514→                  <TableCell sx={{ fontSize: '0.8rem' }}>{c.score !== null ? `${c.score}/20` : '—'}</TableCell>
+   515→                  <TableCell>
+   516→                    {c.enAttente && <Tooltip title="Relancer"><IconButton size="small" color="primary" onClick={() => handleRelancer(c)}><Send sx={{ fontSize: 16 }} /></IconButton></Tooltip>}
+   517→                    <Tooltip title="Fiche"><IconButton size="small"><Visibility sx={{ fontSize: 18 }} /></IconButton></Tooltip>
+   518→                  </TableCell>
+   519→                </TableRow>
+   520→              ))}
+   521→            </TableBody></Table></TableContainer>
+   522→          </Paper>
+   523→        )}
+   524→      </Box>
+   525→
+   526→      {/* Faceted Search Drawer */}
+   527→      <FacetedSearchDrawer open={facetDrawer} onClose={() => setFacetDrawer(false)} facets={facets} onChange={handleFacetChange} />
+   528→
+   529→      {/* FAB for quick faceted search */}
+   530→      <Fab color="primary" size="small" sx={{ position: 'fixed', bottom: 24, right: 24, bgcolor: currentRole.color }} onClick={() => setFacetDrawer(true)}>
+   531→        <Badge badgeContent={activeFacetCount} color="warning"><Tune /></Badge>
+   532→      </Fab>
+   533→
+   534→      <Snackbar open={Boolean(snack)} autoHideDuration={3000} onClose={() => setSnack(null)} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
+   535→        {snack && <Alert onClose={() => setSnack(null)} severity={snack.severity} variant="filled" sx={{ borderRadius: 2 }}>{snack.msg}</Alert>}
+   536→      </Snackbar>
+   537→    </Box>
+   538→  );
+   539→}

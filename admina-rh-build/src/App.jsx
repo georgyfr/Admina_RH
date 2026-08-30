@@ -69,12 +69,13 @@ function AppContent() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <AppProvider darkMode={darkMode} toggleDark={toggleDark}>
+        <RoleProvider>
         <Sidebar drawerWidth={dw} />
         <Header title={title} />
         <Box sx={{ ml: `${dw}px`, mt: `${headerH}px`, p: 3, width: `calc(100% - ${dw}px)`, minHeight: `calc(100vh - ${headerH}px)` }}>
           <Suspense fallback={<Box p={3}>Chargement...</Box>}>
             <Routes>
-              <Route path='/' element={<RoleProvider><DashboardFilterProvider><TableauDeBord /></DashboardFilterProvider></RoleProvider>} />
+              <Route path='/' element={<DashboardFilterProvider><TableauDeBord /></DashboardFilterProvider>} />
               <Route path='/offres' element={<Demandes />} />
               <Route path='/candidats' element={<Candidats />} />
               <Route path='/pipeline' element={<Pipeline />} />
@@ -109,6 +110,7 @@ function AppContent() {
             </Routes>
           </Suspense>
         </Box>
+        </RoleProvider>
       </AppProvider>
     </ThemeProvider>
   );
