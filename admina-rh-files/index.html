@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admina RH - Fichiers</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f5f5f5; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+  .card { background: #fff; border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); padding: 48px; text-align: center; max-width: 520px; width: 90%; }
+  h1 { color: #1B2A4A; font-size: 24px; margin-bottom: 8px; }
+  p.sub { color: #8C8A84; margin-bottom: 32px; font-size: 14px; }
+  .file-card { border: 2px solid #E9E9E8; border-radius: 12px; padding: 24px; margin-bottom: 24px; text-align: left; transition: border-color 0.2s; }
+  .file-card:hover { border-color: #1B2A4A; }
+  .file-name { color: #1B2A4A; font-weight: 600; font-size: 16px; margin-bottom: 6px; }
+  .file-desc { color: #8C8A84; font-size: 13px; margin-bottom: 16px; }
+  .file-meta { display: flex; gap: 16px; font-size: 12px; color: #8C8A84; margin-bottom: 16px; }
+  .badge { background: #E8F5E9; color: #1B7D46; padding: 2px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+  .btn { display: inline-block; background: #1B2A4A; color: #fff; text-decoration: none; padding: 12px 32px; border-radius: 8px; font-size: 15px; font-weight: 600; transition: background 0.2s; }
+  .btn:hover { background: #2a3f6b; }
+  .version { color: #8C8A84; font-size: 12px; margin-top: 24px; }
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>Admina RH</h1>
+  <p class="sub">Fichiers de gestion du recrutement</p>
+  <div class="file-card">
+    <div class="file-name">Domaine1_Recrutement_Candidats_KPIs.xlsx</div>
+    <div class="file-desc">Base de donnees complete du Domaine 1 avec 20 feuilles incluant la feuille KPIs & Objectifs RH</div>
+    <div class="file-meta">
+      <span>20 feuilles</span>
+      <span>8 KPIs automatiques</span>
+      <span class="badge">V1.1 + KPIs</span>
+    </div>
+    <a class="btn" href="./Domaine1_Recrutement_Candidats_KPIs.xlsx" download>Télécharger le fichier</a>
+  </div>
+  <p class="version">Version 1.1 — Mis à jour le 30 août 2025</p>
+</div>
+</body>
+</html>
