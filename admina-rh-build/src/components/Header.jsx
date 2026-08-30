@@ -9,7 +9,7 @@ import {
   Settings as SettingsIcon, Business as BusinessIcon, Logout as LogoutIcon,
   CheckCircle, ManageAccounts, Dashboard, DarkMode as DarkModeIcon,
   LightMode as LightModeIcon, AddCircle, Event, Description as DescIcon,
-  HourglassTop, Work, KeyboardCommandKey, FileDownload,
+  HourglassTop, Work, FileDownload,
   NavigateNext, Warning as WarningIcon, Translate
 } from '@mui/icons-material';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -41,9 +41,9 @@ const statIconMap = {
 
 const accountMenuItems = [
   { icon: <PersonIcon />, label: 'Mon Profil', desc: 'Voir mes informations', path: '/parametres' },
-  { icon: <ManageAccounts />, label: 'Gestion des Comptes', desc: 'Utilisateurs et rôles', path: '/parametres' },
-  { icon: <BusinessIcon />, label: 'Départements', desc: 'Structure organisationnelle', path: '/departements' },
-  { icon: <SettingsIcon />, label: 'Paramètres', desc: 'Configuration du système', path: '/parametres' },
+  { icon: <ManageAccounts />, label: 'Gestion des Comptes', desc: 'Utilisateurs et r\u00f4les', path: '/parametres' },
+  { icon: <BusinessIcon />, label: 'D\u00e9partements', desc: 'Structure organisationnelle', path: '/departements' },
+  { icon: <SettingsIcon />, label: 'Param\u00e8tres', desc: 'Configuration du syst\u00e8me', path: '/parametres' },
 ];
 
 export default function Header({ title }) {
@@ -97,41 +97,98 @@ export default function Header({ title }) {
     setNotifAnchor(null); setAccountAnchor(null); setActionsAnchor(null); setDeadlineAnchor(null);
   };
 
-  const headerBg = isDark ? '#141428' : '#fff';
-  const headerColor = isDark ? '#e8e8e8' : '#333';
-  const statsBarBg = isDark ? '#0f0f22' : '#f0f2f8';
-  const paperBg = isDark ? '#1e1e3a' : '#fff';
-  const hoverBg = isDark ? 'rgba(14,166,133,0.12)' : 'rgba(13,124,102,0.08)';
-  const borderClr = isDark ? '#2a2a4a' : '#e0e0e0';
-  const chipBg = isDark ? '#1a1a3a' : '#f5f6fa';
+  // Couleurs th\u00e8me
+  const headerBg = isDark ? '#141428' : '#ffffff';
+  const headerColor = isDark ? '#e0e0e0' : '#374151';
+  const statsBarBg = isDark ? '#0d0d1f' : '#f8f9fc';
+  const paperBg = isDark ? '#1a1a36' : '#ffffff';
+  const hoverBg = isDark ? 'rgba(14,166,133,0.10)' : 'rgba(13,124,102,0.06)';
+  const borderClr = isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.07)';
+  const chipBg = isDark ? 'rgba(255,255,255,0.05)' : '#f3f4f6';
+  const dividerClr = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)';
+
+  // Hauteur du header principal (utilisé pour positionner la stats bar)
+  const headerHeight = 52;
 
   return (
     <Box>
       {/* ===== MAIN TOOLBAR ===== */}
-      <AppBar position="fixed" sx={{ ml: '260px', width: 'calc(100% - 260px)', bgcolor: headerBg, color: headerColor, boxShadow: isDark ? '0 1px 4px rgba(0,0,0,0.4)' : '0 1px 3px rgba(0,0,0,0.08)', zIndex: 1200 }} elevation={0}>
-        <Toolbar sx={{ gap: 0.5, minHeight: '48px !important' }}>
-          {/* Breadcrumb */}
-          <Box sx={{ display: 'flex', alignItems: 'center', mr: 2, minWidth: 0, flexShrink: 0 }}>
-            <Typography variant="caption" sx={{ color: isDark ? '#888' : '#999', cursor: 'pointer', '&:hover': { color: '#0D7C66' } }} onClick={() => navigate('/')}>Accueil</Typography>
+      <AppBar
+        position="fixed"
+        sx={{
+          ml: '260px',
+          width: 'calc(100% - 260px)',
+          bgcolor: headerBg,
+          color: headerColor,
+          boxShadow: 'none',
+          borderBottom: `1px solid ${borderClr}`,
+          zIndex: 1200,
+        }}
+        elevation={0}
+      >
+        <Toolbar sx={{ minHeight: `${headerHeight}px !important`, height: headerHeight, px: 2.5 }}>
+
+          {/* ---- LEFT SECTION: Breadcrumb ---- */}
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              minWidth: 0,
+              flexShrink: 0,
+              maxWidth: '30%',
+              mr: 2,
+            }}
+          >
+            <Typography
+              variant="caption"
+              noWrap
+              sx={{
+                color: isDark ? '#6b7280' : '#9ca3af',
+                cursor: 'pointer',
+                fontSize: '0.75rem',
+                '&:hover': { color: '#0D7C66' },
+                transition: 'color 0.2s',
+              }}
+              onClick={() => navigate('/')}
+            >
+              Accueil
+            </Typography>
             {breadcrumb.map((crumb, idx) => (
               <Box key={idx} sx={{ display: 'flex', alignItems: 'center' }}>
-                <NavigateNext sx={{ fontSize: 14, color: isDark ? '#555' : '#ccc', mx: 0.3 }} />
+                <NavigateNext sx={{ fontSize: 12, color: isDark ? '#4b5563' : '#d1d5db', mx: 0.25 }} />
                 <Typography
                   variant="caption"
+                  noWrap
                   sx={{
-                    color: idx === breadcrumb.length - 1 ? (isDark ? '#e8e8e8' : '#1a1a2e') : (isDark ? '#888' : '#999'),
+                    color: idx === breadcrumb.length - 1
+                      ? (isDark ? '#e5e7eb' : '#111827')
+                      : (isDark ? '#6b7280' : '#9ca3af'),
                     fontWeight: idx === breadcrumb.length - 1 ? 600 : 400,
-                    cursor: 'pointer', '&:hover': { color: '#0D7C66' },
-                    whiteSpace: 'nowrap',
+                    cursor: idx < breadcrumb.length - 1 ? 'pointer' : 'default',
+                    fontSize: '0.75rem',
+                    '&:hover': { color: '#0D7C66' },
+                    transition: 'color 0.2s',
                   }}
-                  onClick={() => { if (idx === 0 && location.pathname !== '/') navigate('/'); }}
-                >{crumb}</Typography>
+                  onClick={() => {
+                    if (idx < breadcrumb.length - 1 && location.pathname !== '/') navigate('/');
+                  }}
+                >
+                  {crumb}
+                </Typography>
               </Box>
             ))}
           </Box>
 
-          {/* Search */}
-          <Box ref={searchRef} sx={{ position: 'relative', flexGrow: 1, maxWidth: 380 }}>
+          {/* ---- CENTER: Search ---- */}
+          <Box
+            ref={searchRef}
+            sx={{
+              position: 'relative',
+              flexGrow: 1,
+              maxWidth: 420,
+              mx: 'auto',
+            }}
+          >
             <TextField
               size="small"
               placeholder={t.search}
@@ -140,18 +197,44 @@ export default function Header({ title }) {
               onFocus={() => { if (query.length >= 2) setSearchOpen(true); }}
               sx={{
                 width: '100%',
-                '& .MuiOutlinedInput-root': { borderRadius: 2.5, bgcolor: isDark ? '#1a1a3a' : '#f5f6fa', fontSize: '0.8rem', color: headerColor },
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: 2,
+                  bgcolor: isDark ? 'rgba(255,255,255,0.04)' : '#f3f4f6',
+                  fontSize: '0.8rem',
+                  color: headerColor,
+                  transition: 'all 0.2s',
+                  '&:hover': { bgcolor: isDark ? 'rgba(255,255,255,0.07)' : '#eef0f4' },
+                },
                 '& .MuiOutlinedInput-notchedOutline': { borderColor: 'transparent' },
-                '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': { borderColor: '#0D7C66' },
-                '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: '#0D7C66' },
+                '& .MuiOutlinedInput-root.Mui-focused': {
+                  bgcolor: isDark ? 'rgba(255,255,255,0.06)' : '#fff',
+                  boxShadow: isDark
+                    ? '0 0 0 2px rgba(13,124,102,0.3)'
+                    : '0 0 0 2px rgba(13,124,102,0.2)',
+                },
+                '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                  borderColor: '#0D7C66',
+                },
               }}
               InputProps={{
-                startAdornment: <InputAdornment position="start"><SearchIcon sx={{ color: '#999', fontSize: 18 }} /></InputAdornment>,
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon sx={{ color: isDark ? '#6b7280' : '#9ca3af', fontSize: 18 }} />
+                  </InputAdornment>
+                ),
                 endAdornment: (
                   <InputAdornment position="end">
                     <Chip
-                      label="Ctrl+K" size="small"
-                      sx={{ fontSize: '0.6rem', height: 20, bgcolor: isDark ? '#252545' : '#e8e8e8', color: isDark ? '#888' : '#999', fontWeight: 600 }}
+                      label="Ctrl+K"
+                      size="small"
+                      sx={{
+                        fontSize: '0.6rem',
+                        height: 18,
+                        bgcolor: isDark ? 'rgba(255,255,255,0.06)' : '#e5e7eb',
+                        color: isDark ? '#6b7280' : '#9ca3af',
+                        fontWeight: 600,
+                        letterSpacing: 0.3,
+                      }}
                     />
                   </InputAdornment>
                 ),
@@ -160,32 +243,62 @@ export default function Header({ title }) {
 
             {/* Search Results Dropdown */}
             {searchOpen && query.length >= 2 && (
-              <Paper elevation={8} sx={{ position: 'absolute', top: '100%', left: 0, right: 0, zIndex: 1400, mt: 0.5, maxHeight: 380, overflow: 'auto', borderRadius: 2, border: `1px solid ${borderClr}`, bgcolor: paperBg }}>
+              <Paper
+                elevation={6}
+                sx={{
+                  position: 'absolute',
+                  top: 'calc(100% + 4px)',
+                  left: 0,
+                  right: 0,
+                  zIndex: 1400,
+                  maxHeight: 380,
+                  overflow: 'auto',
+                  borderRadius: 2,
+                  border: `1px solid ${borderClr}`,
+                  bgcolor: paperBg,
+                }}
+              >
                 {results.length === 0 ? (
-                  <Box sx={{ p: 2, textAlign: 'center', color: '#999' }}>
-                    <Typography variant="body2">{t.noResult} « {query} »</Typography>
+                  <Box sx={{ p: 2.5, textAlign: 'center', color: '#9ca3af' }}>
+                    <Typography variant="body2">{t.noResult} \u00ab {query} \u00bb</Typography>
                   </Box>
                 ) : (
                   <>
-                    <Box sx={{ px: 1.5, py: 0.5, bgcolor: chipBg }}>
-                      <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 600 }}>{results.length} {t.result}</Typography>
+                    <Box sx={{ px: 2, py: 1, bgcolor: chipBg, borderBottom: `1px solid ${borderClr}` }}>
+                      <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 600, fontSize: '0.7rem' }}>
+                        {results.length} {t.result}
+                      </Typography>
                     </Box>
                     <List dense sx={{ py: 0.5 }}>
                       {results.map((item) => {
                         const parts = item.label.split(new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi'));
                         return (
-                          <ListItemButton key={item.id} onClick={() => { setSearchOpen(false); setQuery(''); navigate(item.path); }} sx={{ borderRadius: 1, mx: 0.5, '&:hover': { bgcolor: hoverBg } }}>
+                          <ListItemButton
+                            key={item.id}
+                            onClick={() => { setSearchOpen(false); setQuery(''); navigate(item.path); }}
+                            sx={{
+                              borderRadius: 1.5,
+                              mx: 1,
+                              my: 0.15,
+                              py: 0.8,
+                              '&:hover': { bgcolor: hoverBg },
+                            }}
+                          >
                             <ListItemText
                               primary={
                                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                                  <Typography component="span" variant="body2" sx={{ fontWeight: 500 }}>
-                                    {parts.map((part, i) => part.toLowerCase() === query.toLowerCase() ? <Box key={i} component="span" sx={{ bgcolor: '#ffeb3b', borderRadius: 0.5, px: 0.3, py: 0 }}>{part}</Box> : part)}
+                                  <Typography component="span" variant="body2" sx={{ fontWeight: 500, fontSize: '0.8rem' }}>
+                                    {parts.map((part, i) =>
+                                      part.toLowerCase() === query.toLowerCase()
+                                        ? <Box key={i} component="span" sx={{ bgcolor: '#ffeb3b', borderRadius: 0.5, px: 0.3, py: 0 }}>{part}</Box>
+                                        : part
+                                    )}
                                   </Typography>
-                                  <Chip label={item.cat} size="small" sx={{ fontSize: '0.6rem', height: 18, bgcolor: '#e8f5e9', color: '#2e7d32' }} />
+                                  <Chip label={item.cat} size="small" sx={{ fontSize: '0.58rem', height: 17, bgcolor: '#e8f5e9', color: '#2e7d32', fontWeight: 500 }} />
                                 </Box>
                               }
                               secondary={item.sub}
-                              secondaryTypographyProps={{ variant: 'caption', sx: { color: isDark ? '#777' : '#888' } }}
+                              secondaryTypographyProps={{ variant: 'caption', sx: { color: isDark ? '#6b7280' : '#9ca3af', fontSize: '0.7rem' } }}
                             />
                           </ListItemButton>
                         );
@@ -197,167 +310,423 @@ export default function Header({ title }) {
             )}
           </Box>
 
-          {/* Quick Actions */}
-          <Tooltip title={t.actions}>
-            <IconButton onClick={(e) => setActionsAnchor(e.currentTarget)}><AddCircle sx={{ color: '#0D7C66', fontSize: 22 }} /></IconButton>
-          </Tooltip>
-          <Popover open={Boolean(actionsAnchor)} anchorEl={actionsAnchor} onClose={handleCloseAll} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} transformOrigin={{ vertical: 'top', horizontal: 'right' }} disableAutoFocus disableEnforceFocus sx={{ mt: 0.5 }}>
-            <Paper sx={{ width: 300, bgcolor: paperBg }}>
-              <Box sx={{ px: 2, py: 1.5, borderBottom: `1px solid ${borderClr}` }}>
-                <Typography variant="subtitle2" fontWeight="bold">{t.actions}</Typography>
-              </Box>
-              <List dense sx={{ py: 0.5 }}>
-                {quickActions.map((a, idx) => (
-                  <ListItemButton key={idx} onClick={() => { handleCloseAll(); navigate(a.path); }} sx={{ borderRadius: 1, mx: 1, my: 0.25, '&:hover': { bgcolor: hoverBg } }}>
-                    <ListItemIcon sx={{ minWidth: 40, color: a.color }}>{actionIconMap[a.icon]}</ListItemIcon>
-                    <ListItemText primary={a.label} primaryTypographyProps={{ variant: 'body2', fontWeight: 500 }} secondary={a.desc} secondaryTypographyProps={{ variant: 'caption', sx: { color: isDark ? '#777' : '#888' } }} />
-                  </ListItemButton>
-                ))}
-              </List>
-            </Paper>
-          </Popover>
+          {/* ---- RIGHT SECTION ---- */}
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.25, flexShrink: 0, ml: 2 }}>
 
-          {/* Export */}
-          <Tooltip title={t.export}>
-            <IconButton onClick={() => {
-              const tables = document.querySelectorAll('table');
-              if (tables.length > 0) {
-                const rows = Array.from(tables[0].querySelectorAll('tr'));
-                const csv = rows.map(r => Array.from(r.querySelectorAll('th,td')).map(c => c.textContent.trim().replace(/\s+/g, ' ')).join(';')).join('\n');
-                const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a'); a.href = url; a.download = 'export_admina_rh.csv'; a.click(); URL.revokeObjectURL(url);
-              }
-            }}><FileDownload sx={{ color: headerColor, fontSize: 20 }} /></IconButton>
-          </Tooltip>
+            {/* === Groupe Utilitaires : Actions + Export + \u00c9ch\u00e9ances === */}
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.25 }}>
+              <Tooltip title={t.actions} arrow>
+                <IconButton
+                  size="small"
+                  onClick={(e) => setActionsAnchor(e.currentTarget)}
+                  sx={{ color: headerColor, '&:hover': { bgcolor: hoverBg } }}
+                >
+                  <AddCircle sx={{ fontSize: 20, color: '#0D7C66' }} />
+                </IconButton>
+              </Tooltip>
 
-          {/* Deadlines */}
-          <Tooltip title={t.deadlines}>
-            <IconButton onClick={(e) => setDeadlineAnchor(e.currentTarget)}>
-              <Badge badgeContent={deadlines.filter(d => d.urgent).length} color="warning" sx={{ '& .MuiBadge-badge': { fontSize: 9, minWidth: 16, height: 16, bgcolor: '#e65100' } }}>
-                <Event sx={{ color: headerColor, fontSize: 20 }} />
-              </Badge>
-            </IconButton>
-          </Tooltip>
-          <Popover open={Boolean(deadlineAnchor)} anchorEl={deadlineAnchor} onClose={handleCloseAll} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} transformOrigin={{ vertical: 'top', horizontal: 'right' }} disableAutoFocus disableEnforceFocus sx={{ mt: 0.5 }}>
-            <Paper sx={{ width: 320, bgcolor: paperBg }}>
-              <Box sx={{ px: 2, py: 1.5, borderBottom: `1px solid ${borderClr}` }}>
-                <Typography variant="subtitle2" fontWeight="bold">{t.deadlines}</Typography>
-              </Box>
-              <List dense sx={{ py: 0.5 }}>
-                {deadlines.map((dl) => (
-                  <ListItemButton key={dl.id} onClick={() => { handleCloseAll(); navigate(dl.path); }} sx={{ borderRadius: 1, mx: 1, my: 0.25, '&:hover': { bgcolor: hoverBg } }}>
-                    <ListItemIcon sx={{ minWidth: 36 }}>
-                      <Box sx={{ width: 8, height: 8, borderRadius: '50%', bgcolor: dl.urgent ? '#d32f2f' : '#ffb300' }} />
-                    </ListItemIcon>
-                    <ListItemText primary={dl.label} primaryTypographyProps={{ variant: 'body2', fontWeight: 600 }} secondary={dl.sub} secondaryTypographyProps={{ variant: 'caption', sx: { color: isDark ? '#777' : '#888' } }} />
-                  </ListItemButton>
-                ))}
-              </List>
-            </Paper>
-          </Popover>
+              <Tooltip title={t.export} arrow>
+                <IconButton
+                  size="small"
+                  onClick={() => {
+                    const tables = document.querySelectorAll('table');
+                    if (tables.length > 0) {
+                      const rows = Array.from(tables[0].querySelectorAll('tr'));
+                      const csv = rows.map(r => Array.from(r.querySelectorAll('th,td')).map(c => c.textContent.trim().replace(/\s+/g, ' ')).join(';')).join('\n');
+                      const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+                      const url = URL.createObjectURL(blob);
+                      const a = document.createElement('a'); a.href = url; a.download = 'export_admina_rh.csv'; a.click(); URL.revokeObjectURL(url);
+                    }
+                  }}
+                  sx={{ color: headerColor, '&:hover': { bgcolor: hoverBg } }}
+                >
+                  <FileDownload sx={{ fontSize: 19 }} />
+                </IconButton>
+              </Tooltip>
 
-          {/* Dark Mode */}
-          <Tooltip title={darkMode ? t.lightHint : t.darkHint}>
-            <IconButton onClick={toggleDark}>{darkMode ? <LightModeIcon sx={{ fontSize: 20, color: '#ffb300' }} /> : <DarkModeIcon sx={{ fontSize: 20, color: '#555' }} />}</IconButton>
-          </Tooltip>
+              <Tooltip title={t.deadlines} arrow>
+                <IconButton
+                  size="small"
+                  onClick={(e) => setDeadlineAnchor(e.currentTarget)}
+                  sx={{ color: headerColor, '&:hover': { bgcolor: hoverBg } }}
+                >
+                  <Badge
+                    badgeContent={deadlines.filter(d => d.urgent).length}
+                    color="warning"
+                    sx={{ '& .MuiBadge-badge': { fontSize: 9, minWidth: 15, height: 15, bgcolor: '#e65100' } }}
+                  >
+                    <Event sx={{ fontSize: 19 }} />
+                  </Badge>
+                </IconButton>
+              </Tooltip>
+            </Box>
 
-          {/* Language */}
-          <Tooltip title={lang === 'fr' ? 'Switch to English' : 'Passer en Français'}>
-            <IconButton onClick={toggleLang}>
-              <Translate sx={{ fontSize: 20, color: headerColor }} />
-            </IconButton>
-          </Tooltip>
-          <Chip label={lang.toUpperCase()} size="small" sx={{ fontSize: '0.6rem', height: 20, fontWeight: 700, bgcolor: isDark ? '#252545' : '#e8e8e8', color: isDark ? '#aaa' : '#555' }} />
+            {/* S\u00e9parateur vertical */}
+            <Divider orientation="vertical" flexItem sx={{ mx: 1, height: 22, borderColor: dividerClr }} />
 
-          {/* Notifications */}
-          <IconButton onClick={(e) => setNotifAnchor(e.currentTarget)}>
-            <Badge badgeContent={unreadCount} color="error" sx={{ '& .MuiBadge-badge': { fontSize: 10, minWidth: 18, height: 18 } }}>
-              <NotifIcon sx={{ color: headerColor }} />
-            </Badge>
-          </IconButton>
-          <Popover open={Boolean(notifAnchor)} anchorEl={notifAnchor} onClose={handleCloseAll} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} transformOrigin={{ vertical: 'top', horizontal: 'right' }} disableAutoFocus disableEnforceFocus sx={{ mt: 0.5 }}>
-            <Paper sx={{ width: 380, maxHeight: 420, overflow: 'auto', bgcolor: paperBg }}>
-              <Box sx={{ px: 2, py: 1.5, display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: `1px solid ${borderClr}` }}>
-                <Typography variant="subtitle2" fontWeight="bold">{t.notifications}</Typography>
-                {unreadCount > 0 && (
-                  <Typography variant="caption" sx={{ color: '#0D7C66', cursor: 'pointer', '&:hover': { textDecoration: 'underline' } }} onClick={(e) => { e.stopPropagation(); markAllRead(); }}>{t.allRead}</Typography>
-                )}
-              </Box>
-              <List dense sx={{ py: 0 }}>
-                {notifications.slice(0, 8).map((notif) => (
-                  <ListItemButton key={notif.id} onClick={() => { markRead(notif.id); handleCloseAll(); if (notif.path) navigate(notif.path); }} sx={{ py: 1.2, px: 2, bgcolor: notif.read ? 'transparent' : 'rgba(13,124,102,0.04)', borderLeft: notif.read ? '3px solid transparent' : '3px solid #0D7C66', '&:hover': { bgcolor: hoverBg } }}>
-                    <ListItemIcon sx={{ minWidth: 36 }}>
-                      <Box sx={{ width: 32, height: 32, borderRadius: '50%', bgcolor: notif.read ? chipBg : (notif.color + '15'), display: 'flex', alignItems: 'center', justifyContent: 'center', color: notif.color }}>
-                        {notifIconMap[notif.icon] || <NotifIcon sx={{ fontSize: 16 }} />}
-                      </Box>
-                    </ListItemIcon>
-                    <ListItemText primary={<Typography variant="body2" sx={{ fontWeight: notif.read ? 400 : 600, fontSize: '0.8rem', lineHeight: 1.3 }}>{notif.msg}</Typography>} secondary={notif.time} secondaryTypographyProps={{ variant: 'caption', sx: { mt: 0.3 } }} />
-                  </ListItemButton>
-                ))}
-              </List>
-              <Divider />
-              <Box sx={{ px: 2, py: 1, textAlign: 'center' }}>
-                <Typography variant="caption" sx={{ color: '#0D7C66', cursor: 'pointer', fontWeight: 600, '&:hover': { textDecoration: 'underline' } }} onClick={() => { handleCloseAll(); navigate('/audit'); }}>{t.seeAll}</Typography>
-              </Box>
-            </Paper>
-          </Popover>
+            {/* === Groupe Pr\u00e9f\u00e9rences : Dark mode + Langue === */}
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.25 }}>
+              <Tooltip title={darkMode ? t.lightHint : t.darkHint} arrow>
+                <IconButton
+                  size="small"
+                  onClick={toggleDark}
+                  sx={{ color: headerColor, '&:hover': { bgcolor: hoverBg } }}
+                >
+                  {darkMode
+                    ? <LightModeIcon sx={{ fontSize: 19, color: '#fbbf24' }} />
+                    : <DarkModeIcon sx={{ fontSize: 19, color: '#6b7280' }} />
+                  }
+                </IconButton>
+              </Tooltip>
 
-          {/* Account */}
-          <IconButton onClick={(e) => setAccountAnchor(e.currentTarget)} sx={{ p: 0, ml: 0.5 }}>
-            <Avatar sx={{ width: 32, height: 32, bgcolor: '#0D7C66', fontSize: '0.75rem', fontWeight: 'bold', border: `2px solid ${borderClr}` }}>{user.initials}</Avatar>
-          </IconButton>
-          <Popover open={Boolean(accountAnchor)} anchorEl={accountAnchor} onClose={handleCloseAll} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} transformOrigin={{ vertical: 'top', horizontal: 'right' }} disableAutoFocus disableEnforceFocus sx={{ mt: 0.5 }}>
-            <Paper sx={{ width: 280, bgcolor: paperBg }}>
-              <Box sx={{ px: 2.5, py: 2, background: 'linear-gradient(135deg, #0D7C66 0%, #095e4d 100%)', color: '#fff', borderRadius: '12px 12px 0 0' }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                  <Avatar sx={{ width: 42, height: 42, bgcolor: 'rgba(255,255,255,0.2)', fontSize: '0.95rem', fontWeight: 'bold' }}>{user.initials}</Avatar>
-                  <Box>
-                    <Typography variant="subtitle2" fontWeight="bold" sx={{ color: '#fff' }}>{user.name}</Typography>
-                    <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.8)' }}>{user.role}</Typography>
-                  </Box>
-                </Box>
-              </Box>
-              <List dense sx={{ py: 0.5 }}>
-                {accountMenuItems.map((item, idx) => (
-                  <ListItemButton key={idx} onClick={() => { handleCloseAll(); navigate(item.path); }} sx={{ borderRadius: 1, mx: 1, my: 0.25, '&:hover': { bgcolor: hoverBg } }}>
-                    <ListItemIcon sx={{ minWidth: 36, color: headerColor }}>{item.icon}</ListItemIcon>
-                    <ListItemText primary={item.label} primaryTypographyProps={{ variant: 'body2', fontWeight: 500 }} secondary={item.desc} secondaryTypographyProps={{ variant: 'caption', sx: { color: isDark ? '#777' : '#999' } }} />
-                  </ListItemButton>
-                ))}
-              </List>
-              <Divider />
-              <Box sx={{ px: 1.5, py: 0.5 }}>
-                <ListItemButton sx={{ borderRadius: 1, '&:hover': { bgcolor: '#ffebee' } }} onClick={handleCloseAll}>
-                  <ListItemIcon sx={{ minWidth: 36, color: '#d32f2f' }}><LogoutIcon /></ListItemIcon>
-                  <ListItemText primary="Déconnexion" primaryTypographyProps={{ variant: 'body2', color: '#d32f2f', fontWeight: 500 }} />
-                </ListItemButton>
-              </Box>
-            </Paper>
-          </Popover>
+              <Tooltip title={lang === 'fr' ? 'Switch to English' : 'Passer en Fran\u00e7ais'} arrow>
+                <IconButton
+                  size="small"
+                  onClick={toggleLang}
+                  sx={{ color: headerColor, '&:hover': { bgcolor: hoverBg } }}
+                >
+                  <Translate sx={{ fontSize: 19 }} />
+                </IconButton>
+              </Tooltip>
+              <Chip
+                label={lang.toUpperCase()}
+                size="small"
+                sx={{
+                  fontSize: '0.58rem',
+                  height: 18,
+                  fontWeight: 700,
+                  letterSpacing: 0.5,
+                  bgcolor: isDark ? 'rgba(255,255,255,0.06)' : '#f3f4f6',
+                  color: isDark ? '#9ca3af' : '#6b7280',
+                  border: `1px solid ${borderClr}`,
+                }}
+              />
+            </Box>
+
+            {/* S\u00e9parateur vertical */}
+            <Divider orientation="vertical" flexItem sx={{ mx: 1, height: 22, borderColor: dividerClr }} />
+
+            {/* === Groupe Notifications + Compte === */}
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.25 }}>
+              <Tooltip title={t.notifications} arrow>
+                <IconButton
+                  size="small"
+                  onClick={(e) => setNotifAnchor(e.currentTarget)}
+                  sx={{ color: headerColor, '&:hover': { bgcolor: hoverBg } }}
+                >
+                  <Badge
+                    badgeContent={unreadCount}
+                    color="error"
+                    sx={{ '& .MuiBadge-badge': { fontSize: 9, minWidth: 16, height: 16 } }}
+                  >
+                    <NotifIcon sx={{ fontSize: 19 }} />
+                  </Badge>
+                </IconButton>
+              </Tooltip>
+
+              <Tooltip title="Mon compte" arrow>
+                <IconButton
+                  size="small"
+                  onClick={(e) => setAccountAnchor(e.currentTarget)}
+                  sx={{ p: 0.25, ml: 0.5 }}
+                >
+                  <Avatar
+                    sx={{
+                      width: 30,
+                      height: 30,
+                      bgcolor: '#0D7C66',
+                      fontSize: '0.7rem',
+                      fontWeight: 'bold',
+                      border: `2px solid ${borderClr}`,
+                      transition: 'border-color 0.2s',
+                      '&:hover': { borderColor: '#0D7C66' },
+                    }}
+                  >
+                    {user.initials}
+                  </Avatar>
+                </IconButton>
+              </Tooltip>
+            </Box>
+          </Box>
         </Toolbar>
       </AppBar>
 
       {/* ===== STATS BAR ===== */}
-      <Box sx={{ position: 'fixed', top: 48, left: '260px', right: 0, height: 36, bgcolor: statsBarBg, borderBottom: `1px solid ${borderClr}`, display: 'flex', alignItems: 'center', px: 2, gap: 1, zIndex: 1199, overflowX: 'auto' }}>
+      <Box
+        sx={{
+          position: 'fixed',
+          top: headerHeight,
+          left: '260px',
+          right: 0,
+          height: 34,
+          bgcolor: statsBarBg,
+          borderBottom: `1px solid ${borderClr}`,
+          display: 'flex',
+          alignItems: 'center',
+          px: 2.5,
+          gap: 0.75,
+          zIndex: 1199,
+          overflowX: 'auto',
+          '&::-webkit-scrollbar': { display: 'none' },
+        }}
+      >
         {recrutementStats.map((stat) => (
           <Chip
             key={stat.key}
             icon={statIconMap[stat.icon]}
-            label={<Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-              <Typography variant="caption" sx={{ fontWeight: 600, color: stat.color }}>{stat.value}</Typography>
-              <Typography variant="caption" sx={{ color: isDark ? '#888' : '#777' }}>{stat.label}</Typography>
-            </Box>}
+            label={(
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                <Typography variant="caption" sx={{ fontWeight: 700, color: stat.color, fontSize: '0.72rem' }}>
+                  {stat.value}
+                </Typography>
+                <Typography variant="caption" sx={{ color: isDark ? '#6b7280' : '#9ca3af', fontSize: '0.7rem' }}>
+                  {stat.label}
+                </Typography>
+              </Box>
+            )}
             onClick={() => navigate(stat.path)}
             size="small"
             sx={{
-              cursor: 'pointer', bgcolor: 'transparent', border: `1px solid ${borderClr}`,
-              '&:hover': { bgcolor: hoverBg, borderColor: '#0D7C66' },
+              cursor: 'pointer',
+              bgcolor: 'transparent',
+              border: `1px solid ${borderClr}`,
+              height: 26,
+              fontSize: '0.7rem',
+              transition: 'all 0.2s',
+              '&:hover': { bgcolor: hoverBg, borderColor: '#0D7C66', transform: 'translateY(-1px)' },
               '& .MuiChip-icon': { color: stat.color },
             }}
           />
         ))}
       </Box>
+
+      {/* ===== POPOVERS ===== */}
+
+      {/* Quick Actions Popover */}
+      <Popover
+        open={Boolean(actionsAnchor)}
+        anchorEl={actionsAnchor}
+        onClose={handleCloseAll}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+        disableAutoFocus
+        disableEnforceFocus
+        slotProps={{ paper: { sx: { mt: 0.5, borderRadius: 2, border: `1px solid ${borderClr}` } } }}
+      >
+        <Paper sx={{ width: 300, bgcolor: paperBg, borderRadius: 2 }}>
+          <Box sx={{ px: 2, py: 1.5, borderBottom: `1px solid ${borderClr}` }}>
+            <Typography variant="subtitle2" fontWeight="bold" fontSize="0.82rem">{t.actions}</Typography>
+          </Box>
+          <List dense sx={{ py: 0.5 }}>
+            {quickActions.map((a, idx) => (
+              <ListItemButton
+                key={idx}
+                onClick={() => { handleCloseAll(); navigate(a.path); }}
+                sx={{ borderRadius: 1.5, mx: 1, my: 0.2, py: 0.8, '&:hover': { bgcolor: hoverBg } }}
+              >
+                <ListItemIcon sx={{ minWidth: 38, color: a.color }}>{actionIconMap[a.icon]}</ListItemIcon>
+                <ListItemText
+                  primary={a.label}
+                  primaryTypographyProps={{ variant: 'body2', fontWeight: 500, fontSize: '0.8rem' }}
+                  secondary={a.desc}
+                  secondaryTypographyProps={{ variant: 'caption', sx: { color: isDark ? '#6b7280' : '#9ca3af', fontSize: '0.7rem' } }}
+                />
+              </ListItemButton>
+            ))}
+          </List>
+        </Paper>
+      </Popover>
+
+      {/* Deadlines Popover */}
+      <Popover
+        open={Boolean(deadlineAnchor)}
+        anchorEl={deadlineAnchor}
+        onClose={handleCloseAll}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+        disableAutoFocus
+        disableEnforceFocus
+        slotProps={{ paper: { sx: { mt: 0.5, borderRadius: 2, border: `1px solid ${borderClr}` } } }}
+      >
+        <Paper sx={{ width: 320, bgcolor: paperBg, borderRadius: 2 }}>
+          <Box sx={{ px: 2, py: 1.5, borderBottom: `1px solid ${borderClr}` }}>
+            <Typography variant="subtitle2" fontWeight="bold" fontSize="0.82rem">{t.deadlines}</Typography>
+          </Box>
+          <List dense sx={{ py: 0.5 }}>
+            {deadlines.map((dl) => (
+              <ListItemButton
+                key={dl.id}
+                onClick={() => { handleCloseAll(); navigate(dl.path); }}
+                sx={{ borderRadius: 1.5, mx: 1, my: 0.2, py: 0.8, '&:hover': { bgcolor: hoverBg } }}
+              >
+                <ListItemIcon sx={{ minWidth: 34 }}>
+                  <Box sx={{
+                    width: 8, height: 8, borderRadius: '50%',
+                    bgcolor: dl.urgent ? '#d32f2f' : '#ffb300',
+                    boxShadow: dl.urgent ? '0 0 6px rgba(211,47,47,0.4)' : 'none',
+                  }} />
+                </ListItemIcon>
+                <ListItemText
+                  primary={dl.label}
+                  primaryTypographyProps={{ variant: 'body2', fontWeight: 600, fontSize: '0.8rem' }}
+                  secondary={dl.sub}
+                  secondaryTypographyProps={{ variant: 'caption', sx: { color: isDark ? '#6b7280' : '#9ca3af', fontSize: '0.7rem' } }}
+                />
+              </ListItemButton>
+            ))}
+          </List>
+        </Paper>
+      </Popover>
+
+      {/* Notifications Popover */}
+      <Popover
+        open={Boolean(notifAnchor)}
+        anchorEl={notifAnchor}
+        onClose={handleCloseAll}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+        disableAutoFocus
+        disableEnforceFocus
+        slotProps={{ paper: { sx: { mt: 0.5, borderRadius: 2, border: `1px solid ${borderClr}` } } }}
+      >
+        <Paper sx={{ width: 380, maxHeight: 420, overflow: 'auto', bgcolor: paperBg, borderRadius: 2 }}>
+          <Box sx={{
+            px: 2, py: 1.5,
+            display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+            borderBottom: `1px solid ${borderClr}`,
+          }}>
+            <Typography variant="subtitle2" fontWeight="bold" fontSize="0.82rem">{t.notifications}</Typography>
+            {unreadCount > 0 && (
+              <Typography
+                variant="caption"
+                sx={{ color: '#0D7C66', cursor: 'pointer', fontSize: '0.7rem', '&:hover': { textDecoration: 'underline' } }}
+                onClick={(e) => { e.stopPropagation(); markAllRead(); }}
+              >
+                {t.allRead}
+              </Typography>
+            )}
+          </Box>
+          <List dense sx={{ py: 0 }}>
+            {notifications.slice(0, 8).map((notif) => (
+              <ListItemButton
+                key={notif.id}
+                onClick={() => { markRead(notif.id); handleCloseAll(); if (notif.path) navigate(notif.path); }}
+                sx={{
+                  py: 1.1, px: 2,
+                  bgcolor: notif.read ? 'transparent' : (isDark ? 'rgba(13,124,102,0.06)' : 'rgba(13,124,102,0.03)'),
+                  borderLeft: notif.read ? '3px solid transparent' : '3px solid #0D7C66',
+                  '&:hover': { bgcolor: hoverBg },
+                  transition: 'background-color 0.2s',
+                }}
+              >
+                <ListItemIcon sx={{ minWidth: 36 }}>
+                  <Box sx={{
+                    width: 30, height: 30, borderRadius: '50%',
+                    bgcolor: notif.read ? chipBg : (notif.color + '12'),
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    color: notif.color,
+                  }}>
+                    {notifIconMap[notif.icon] || <NotifIcon sx={{ fontSize: 15 }} />}
+                  </Box>
+                </ListItemIcon>
+                <ListItemText
+                  primary={(
+                    <Typography variant="body2" sx={{
+                      fontWeight: notif.read ? 400 : 600,
+                      fontSize: '0.78rem',
+                      lineHeight: 1.35,
+                      color: notif.read ? (isDark ? '#9ca3af' : '#6b7280') : headerColor,
+                    }}>
+                      {notif.msg}
+                    </Typography>
+                  )}
+                  secondary={notif.time}
+                  secondaryTypographyProps={{ variant: 'caption', sx: { mt: 0.3, fontSize: '0.65rem', color: isDark ? '#6b7280' : '#9ca3af' } }}
+                />
+              </ListItemButton>
+            ))}
+          </List>
+          <Divider />
+          <Box sx={{ px: 2, py: 1, textAlign: 'center' }}>
+            <Typography
+              variant="caption"
+              sx={{ color: '#0D7C66', cursor: 'pointer', fontWeight: 600, fontSize: '0.7rem', '&:hover': { textDecoration: 'underline' } }}
+              onClick={() => { handleCloseAll(); navigate('/audit'); }}
+            >
+              {t.seeAll}
+            </Typography>
+          </Box>
+        </Paper>
+      </Popover>
+
+      {/* Account Popover */}
+      <Popover
+        open={Boolean(accountAnchor)}
+        anchorEl={accountAnchor}
+        onClose={handleCloseAll}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+        disableAutoFocus
+        disableEnforceFocus
+        slotProps={{ paper: { sx: { mt: 0.5, borderRadius: 2, border: `1px solid ${borderClr}`, overflow: 'hidden' } } }}
+      >
+        <Paper sx={{ width: 280, bgcolor: paperBg }}>
+          <Box sx={{
+            px: 2.5, py: 2,
+            background: 'linear-gradient(135deg, #0D7C66 0%, #095e4d 100%)',
+            color: '#fff',
+          }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+              <Avatar sx={{
+                width: 40, height: 40,
+                bgcolor: 'rgba(255,255,255,0.2)',
+                fontSize: '0.9rem', fontWeight: 'bold',
+              }}>
+                {user.initials}
+              </Avatar>
+              <Box>
+                <Typography variant="subtitle2" fontWeight="bold" sx={{ color: '#fff', fontSize: '0.85rem' }}>
+                  {user.name}
+                </Typography>
+                <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.75)', fontSize: '0.7rem' }}>
+                  {user.role}
+                </Typography>
+              </Box>
+            </Box>
+          </Box>
+          <List dense sx={{ py: 0.5 }}>
+            {accountMenuItems.map((item, idx) => (
+              <ListItemButton
+                key={idx}
+                onClick={() => { handleCloseAll(); navigate(item.path); }}
+                sx={{ borderRadius: 1.5, mx: 1, my: 0.2, py: 0.7, '&:hover': { bgcolor: hoverBg } }}
+              >
+                <ListItemIcon sx={{ minWidth: 36, color: headerColor }}>{item.icon}</ListItemIcon>
+                <ListItemText
+                  primary={item.label}
+                  primaryTypographyProps={{ variant: 'body2', fontWeight: 500, fontSize: '0.8rem' }}
+                  secondary={item.desc}
+                  secondaryTypographyProps={{ variant: 'caption', sx: { color: isDark ? '#6b7280' : '#9ca3af', fontSize: '0.7rem' } }}
+                />
+              </ListItemButton>
+            ))}
+          </List>
+          <Divider />
+          <Box sx={{ px: 1.5, py: 0.5 }}>
+            <ListItemButton
+              sx={{ borderRadius: 1.5, py: 0.7, '&:hover': { bgcolor: '#fef2f2' } }}
+              onClick={handleCloseAll}
+            >
+              <ListItemIcon sx={{ minWidth: 36, color: '#d32f2f' }}><LogoutIcon /></ListItemIcon>
+              <ListItemText
+                primary="D\u00e9connexion"
+                primaryTypographyProps={{ variant: 'body2', color: '#d32f2f', fontWeight: 500, fontSize: '0.8rem' }}
+              />
+            </ListItemButton>
+          </Box>
+        </Paper>
+      </Popover>
+
     </Box>
   );
 }

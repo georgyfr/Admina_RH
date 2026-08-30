@@ -41,7 +41,7 @@ const Statuts = lazy(() => import('./pages/Statuts'));
 const titles = { '/': 'Tableau de Bord', '/offres': 'Demandes', '/candidats': 'Base Candidats', '/pipeline': 'Pipeline Candidatures', '/entretiens': 'Planning Entretiens', '/evaluations': 'Grille Evaluation', '/verifications': 'Verification References', '/selections': 'Selections', '/cabinets': 'Gestion Cabinets', '/contrats': 'Suivi Contrats', '/integration': 'Integration Employe', '/checklist': 'Checklist Integration', '/periode-essai': "Periodes d'Essai", '/formation': "Plan d'Accueil & Formations", '/post-embauche': 'Suivi Post-Embauche', '/stagiaires': 'Stagiaires', '/saisonniers': 'Saisonniers & Temporaires', '/previsions': 'Previsions', '/sources': 'Sources de Recrutement', '/couts': 'Analyse des Couts', '/documents': 'Gestion des Documents', '/conformite': 'Conformite', '/parametres': 'Parametres du Systeme', '/audit': 'Journal d\'Audit', '/types-contrats': 'Types de Contrats', '/departements': 'Departements', '/sources-roi': 'Sources & ROI', '/experiences': 'Experiences des Candidats', '/formations': 'Formations des Candidats', '/competences': 'Competences des Candidats', '/statuts': 'Gestion des Statuts' };
 
 const dw = 260;
-const headerH = 84;
+const headerH = 86;
 
 function AppContent() {
   const loc = useLocation();
