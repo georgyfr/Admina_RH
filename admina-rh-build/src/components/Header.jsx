@@ -387,9 +387,15 @@ export default function Header({ title }) {
                 <IconButton
                   size="small"
                   onClick={(e) => setLangAnchor(e.currentTarget)}
-                  sx={{ color: headerColor, '&:hover': { bgcolor: hoverBg }, gap: 0.5 }}
+                  sx={{ color: headerColor, '&:hover': { bgcolor: hoverBg }, p: 0.5 }}
                 >
-                  <Box sx={{ fontSize: '1.15rem', lineHeight: 1 }}>{currentLang.flag}</Box>
+                  <Box
+                    component="img"
+                    src={`https://flagcdn.com/w40/${currentLang.cc}.png`}
+                    srcSet={`https://flagcdn.com/w80/${currentLang.cc}.png 2x`}
+                    alt={currentLang.label}
+                    sx={{ width: 22, height: 16, objectFit: 'cover', borderRadius: 0.3, display: 'block' }}
+                  />
                 </IconButton>
               </Tooltip>
             </Box>
@@ -751,7 +757,13 @@ export default function Header({ title }) {
                 }}
               >
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, width: '100%' }}>
-                  <Box sx={{ fontSize: '1.25rem', lineHeight: 1, flexShrink: 0 }}>{l.flag}</Box>
+                  <Box
+                    component="img"
+                    src={`https://flagcdn.com/w40/${l.cc}.png`}
+                    srcSet={`https://flagcdn.com/w80/${l.cc}.png 2x`}
+                    alt={l.label}
+                    sx={{ width: 26, height: 18, objectFit: 'cover', borderRadius: 0.3, flexShrink: 0 }}
+                  />
                   <Box sx={{ flexGrow: 1 }}>
                     <Typography
                       variant="body2"

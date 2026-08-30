@@ -117,18 +117,18 @@ const breadcrumbMap = {
 };
 
 const languages = [
-  { code: 'fr',  flag: '🇫🇷', label: 'Français' },
-  { code: 'en',  flag: '🇬🇧', label: 'English' },
-  { code: 'es',  flag: '🇪🇸', label: 'Español' },
-  { code: 'de',  flag: '🇩🇪', label: 'Deutsch' },
-  { code: 'pt',  flag: '🇧🇷', label: 'Português' },
-  { code: 'it',  flag: '🇮🇹', label: 'Italiano' },
-  { code: 'ar',  flag: '🇸🇦', label: 'العربية' },
-  { code: 'zh',  flag: '🇨🇳', label: '中文' },
-  { code: 'ja',  flag: '🇯🇵', label: '日本語' },
-  { code: 'ko',  flag: '🇰🇷', label: '한국어' },
-  { code: 'ru',  flag: '🇷🇺', label: 'Русский' },
-  { code: 'tr',  flag: '🇹🇷', label: 'Türkçe' },
+  { code: 'fr', cc: 'fr', label: 'Français' },
+  { code: 'en', cc: 'gb', label: 'English' },
+  { code: 'es', cc: 'es', label: 'Español' },
+  { code: 'de', cc: 'de', label: 'Deutsch' },
+  { code: 'pt', cc: 'br', label: 'Português' },
+  { code: 'it', cc: 'it', label: 'Italiano' },
+  { code: 'ar', cc: 'sa', label: 'العربية' },
+  { code: 'zh', cc: 'cn', label: '中文' },
+  { code: 'ja', cc: 'jp', label: '日本語' },
+  { code: 'ko', cc: 'kr', label: '한국어' },
+  { code: 'ru', cc: 'ru', label: 'Русский' },
+  { code: 'tr', cc: 'tr', label: 'Türkçe' },
 ];
 
 const labels = {
