@@ -21,6 +21,7 @@ export const nomenclatures = {
   departement: ['Direction Generale', 'Ressources Humaines', 'Finance & Comptabilite', 'Marketing & Communication', 'Informatique', 'Commercial', 'Logistique & Approvisionnement', 'Production', 'Service Client', 'Juridique', 'Administration', 'Securite', 'Restauration', 'Herbergement', 'Maintenance', 'Lingerie', 'Audiovisuel'],
   role_responsable: ['Directeur General', 'Directeur Adjoint', 'DRH', 'DRH Adjoint', 'Chef de Departement', 'Chef de Service', 'Responsable de Pole', 'Superviseur', 'Manager Operationnel'],
   cabinet_recrutement: ['HRC Cameroon', 'Activa RH', 'Skillmatch Africa', 'Michael Page Cameroon', 'Pedarec', 'AfricSearch', 'Manpower Cameroon', 'Interne (sans cabinet)', 'Autre'],
+  site: ['Siege (Douala)', 'Annexe (Yaounde)', 'Hotel Sawa', 'Campus Formation'],
   statut_contrat: ['En cours', 'Renouvele', 'Echu', 'Resilie', 'En negociation'],
   motif_fin_contrat: ['Fin de contrat', 'Demission', 'Licenciement', 'Depart retraite', 'Mutation', 'Force majeure'],
   specialite_cabinet: ['Generaliste', 'Cadres dirigeants', 'Informatique', 'Finance', 'Hotellerie & Tourisme', 'Commerce', 'BTP', 'Logistique'],
