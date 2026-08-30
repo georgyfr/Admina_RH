@@ -116,24 +116,37 @@ const breadcrumbMap = {
   '/statuts': ['Organisation', 'Statuts'],
 };
 
+const languages = [
+  { code: 'fr',  flag: '🇫🇷', label: 'Français' },
+  { code: 'en',  flag: '🇬🇧', label: 'English' },
+  { code: 'es',  flag: '🇪🇸', label: 'Español' },
+  { code: 'de',  flag: '🇩🇪', label: 'Deutsch' },
+  { code: 'pt',  flag: '🇧🇷', label: 'Português' },
+  { code: 'it',  flag: '🇮🇹', label: 'Italiano' },
+  { code: 'ar',  flag: '🇸🇦', label: 'العربية' },
+  { code: 'zh',  flag: '🇨🇳', label: '中文' },
+  { code: 'ja',  flag: '🇯🇵', label: '日本語' },
+  { code: 'ko',  flag: '🇰🇷', label: '한국어' },
+  { code: 'ru',  flag: '🇷🇺', label: 'Русский' },
+  { code: 'tr',  flag: '🇹🇷', label: 'Türkçe' },
+];
+
 const labels = {
-  fr: { search: 'Rechercher un candidat, département, contrat...', noResult: 'Aucun résultat pour', result: 'résultat(s)', allRead: 'Tout marquer comme lu', seeAll: 'Voir tout l\'historique', notifications: 'Notifications', deadlines: 'Échéances', actions: 'Actions rapides', export: 'Exporter', darkHint: 'Mode sombre', lightHint: 'Mode clair' },
-  en: { search: 'Search candidate, department, contract...', noResult: 'No results for', result: 'result(s)', allRead: 'Mark all as read', seeAll: 'See full history', notifications: 'Notifications', deadlines: 'Deadlines', actions: 'Quick actions', export: 'Export', darkHint: 'Dark mode', lightHint: 'Light mode' },
+  fr: { search: 'Rechercher un candidat, département, contrat...', noResult: 'Aucun résultat pour', result: 'résultat(s)', allRead: 'Tout marquer comme lu', seeAll: 'Voir tout l\'historique', notifications: 'Notifications', deadlines: 'Échéances', actions: 'Actions rapides', export: 'Exporter', darkHint: 'Mode sombre', lightHint: 'Mode clair', langTitle: 'Langue' },
+  en: { search: 'Search candidate, department, contract...', noResult: 'No results for', result: 'result(s)', allRead: 'Mark all as read', seeAll: 'See full history', notifications: 'Notifications', deadlines: 'Deadlines', actions: 'Quick actions', export: 'Export', darkHint: 'Dark mode', lightHint: 'Light mode', langTitle: 'Language' },
 };
 
 export function AppProvider({ children, darkMode, toggleDark }) {
   const [notifications, setNotifications] = useState(initialNotifications);
-  const [lang, setLang] = useState(() => {
+  const [langState, setLangState] = useState(() => {
     try { return localStorage.getItem('admina-lang') || 'fr'; } catch { return 'fr'; }
   });
   const [user] = useState({ name: 'Georgy F.', role: 'Responsable RH', initials: 'GF' });
 
-  const toggleLang = useCallback(() => {
-    setLang(prev => {
-      const next = prev === 'fr' ? 'en' : 'fr';
-      try { localStorage.setItem('admina-lang', next); } catch {}
-      return next;
-    });
+  const lang = langState;
+  const changeLang = useCallback((code) => {
+    setLangState(code);
+    try { localStorage.setItem('admina-lang', code); } catch {}
   }, []);
 
   const t = useMemo(() => labels[lang] || labels.fr, [lang]);
@@ -167,9 +180,9 @@ export function AppProvider({ children, darkMode, toggleDark }) {
 
   const value = useMemo(() => ({
     user, notifications, unreadCount, addNotification, markAllRead, markRead, search, searchIndex,
-    darkMode, toggleDark, lang, toggleLang, t,
+    darkMode, toggleDark, lang, changeLang, t, languages,
     deadlines, quickActions, recrutementStats, getBreadcrumb,
-  }), [user, notifications, unreadCount, addNotification, markAllRead, markRead, search, darkMode, toggleDark, lang, toggleLang, t, getBreadcrumb]);
+  }), [user, notifications, unreadCount, addNotification, markAllRead, markRead, search, darkMode, toggleDark, lang, changeLang, t, getBreadcrumb]);
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 }

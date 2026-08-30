@@ -10,7 +10,7 @@ import {
   CheckCircle, ManageAccounts, Dashboard, DarkMode as DarkModeIcon,
   LightMode as LightModeIcon, AddCircle, Event, Description as DescIcon,
   HourglassTop, Work, FileDownload,
-  NavigateNext, Warning as WarningIcon, Translate
+  NavigateNext, Warning as WarningIcon, KeyboardArrowDown
 } from '@mui/icons-material';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
@@ -53,9 +53,11 @@ export default function Header({ title }) {
   const isDark = theme.palette.mode === 'dark';
   const {
     user, notifications, unreadCount, search, markAllRead, markRead,
-    darkMode, toggleDark, lang, toggleLang, t,
+    darkMode, toggleDark, lang, changeLang, t, languages,
     deadlines, quickActions, recrutementStats, getBreadcrumb,
   } = useApp();
+
+  const currentLang = languages.find(l => l.code === lang) || languages[0];
 
   // Recherche
   const [query, setQuery] = useState('');
@@ -67,6 +69,7 @@ export default function Header({ title }) {
   const [accountAnchor, setAccountAnchor] = useState(null);
   const [actionsAnchor, setActionsAnchor] = useState(null);
   const [deadlineAnchor, setDeadlineAnchor] = useState(null);
+  const [langAnchor, setLangAnchor] = useState(null);
 
   const results = useMemo(() => search(query), [query, search]);
   const breadcrumb = useMemo(() => getBreadcrumb(location.pathname), [location.pathname, getBreadcrumb]);
@@ -94,7 +97,7 @@ export default function Header({ title }) {
   }, []);
 
   const handleCloseAll = () => {
-    setNotifAnchor(null); setAccountAnchor(null); setActionsAnchor(null); setDeadlineAnchor(null);
+    setNotifAnchor(null); setAccountAnchor(null); setActionsAnchor(null); setDeadlineAnchor(null); setLangAnchor(null);
   };
 
   // Couleurs th\u00e8me
@@ -379,28 +382,16 @@ export default function Header({ title }) {
                 </IconButton>
               </Tooltip>
 
-              <Tooltip title={lang === 'fr' ? 'Switch to English' : 'Passer en Fran\u00e7ais'} arrow>
+              {/* Langue avec drapeau */}
+              <Tooltip title={t.langTitle} arrow>
                 <IconButton
                   size="small"
-                  onClick={toggleLang}
-                  sx={{ color: headerColor, '&:hover': { bgcolor: hoverBg } }}
+                  onClick={(e) => setLangAnchor(e.currentTarget)}
+                  sx={{ color: headerColor, '&:hover': { bgcolor: hoverBg }, gap: 0.5 }}
                 >
-                  <Translate sx={{ fontSize: 19 }} />
+                  <Box sx={{ fontSize: '1.15rem', lineHeight: 1 }}>{currentLang.flag}</Box>
                 </IconButton>
               </Tooltip>
-              <Chip
-                label={lang.toUpperCase()}
-                size="small"
-                sx={{
-                  fontSize: '0.58rem',
-                  height: 18,
-                  fontWeight: 700,
-                  letterSpacing: 0.5,
-                  bgcolor: isDark ? 'rgba(255,255,255,0.06)' : '#f3f4f6',
-                  color: isDark ? '#9ca3af' : '#6b7280',
-                  border: `1px solid ${borderClr}`,
-                }}
-              />
             </Box>
 
             {/* S\u00e9parateur vertical */}
@@ -724,6 +715,62 @@ export default function Header({ title }) {
               />
             </ListItemButton>
           </Box>
+        </Paper>
+      </Popover>
+
+      {/* Language Popover */}
+      <Popover
+        open={Boolean(langAnchor)}
+        anchorEl={langAnchor}
+        onClose={handleCloseAll}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+        disableAutoFocus
+        disableEnforceFocus
+        slotProps={{ paper: { sx: { mt: 0.5, borderRadius: 2, border: `1px solid ${borderClr}`, overflow: 'hidden' } } }}
+      >
+        <Paper sx={{ width: 220, bgcolor: paperBg }}>
+          <Box sx={{ px: 2, py: 1.5, borderBottom: `1px solid ${borderClr}` }}>
+            <Typography variant="subtitle2" fontWeight="bold" fontSize="0.82rem">{t.langTitle}</Typography>
+          </Box>
+          <List dense sx={{ py: 0.5, maxHeight: 320, overflow: 'auto' }}>
+            {languages.map((l) => (
+              <ListItemButton
+                key={l.code}
+                onClick={() => { changeLang(l.code); handleCloseAll(); }}
+                sx={{
+                  borderRadius: 1.5,
+                  mx: 1,
+                  my: 0.15,
+                  py: 0.6,
+                  px: 1.5,
+                  bgcolor: lang === l.code ? (isDark ? 'rgba(13,124,102,0.12)' : 'rgba(13,124,102,0.08)') : 'transparent',
+                  borderLeft: lang === l.code ? '3px solid #0D7C66' : '3px solid transparent',
+                  '&:hover': { bgcolor: hoverBg },
+                  transition: 'all 0.15s',
+                }}
+              >
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, width: '100%' }}>
+                  <Box sx={{ fontSize: '1.25rem', lineHeight: 1, flexShrink: 0 }}>{l.flag}</Box>
+                  <Box sx={{ flexGrow: 1 }}>
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        fontWeight: lang === l.code ? 600 : 400,
+                        fontSize: '0.8rem',
+                        color: lang === l.code ? '#0D7C66' : headerColor,
+                      }}
+                    >
+                      {l.label}
+                    </Typography>
+                  </Box>
+                  {lang === l.code && (
+                    <CheckCircle sx={{ fontSize: 16, color: '#0D7C66', flexShrink: 0 }} />
+                  )}
+                </Box>
+              </ListItemButton>
+            ))}
+          </List>
         </Paper>
       </Popover>
 
