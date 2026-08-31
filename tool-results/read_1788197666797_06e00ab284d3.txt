@@ -1,0 +1,486 @@
+     1→import { useState, useRef, useMemo, useEffect, useCallback } from 'react';
+     2→import ReactQuill from 'react-quill';
+     3→import 'react-quill/dist/quill.snow.css';
+     4→import {
+     5→  Dialog, DialogTitle, DialogContent, DialogActions,
+     6→  Button, TextField, MenuItem, Box, IconButton, Typography,
+     7→  Chip, FormControlLabel, Checkbox, Switch, Divider, Tooltip,
+     8→  Paper, Alert, InputAdornment, FormControl, Select, InputLabel, CircularProgress,
+     9→} from '@mui/material';
+    10→import {
+    11→  Close, AutoAwesome, PictureAsPdf, Description as DescIcon,
+    12→  Add, DragIndicator, Rocket, Save, Publish, Cancel,
+    13→} from '@mui/icons-material';
+    14→import {
+    15→  DndContext, closestCenter, PointerSensor, useSensor, useSensors,
+    16→} from '@dnd-kit/core';
+    17→import { arrayMove, SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
+    18→import { CSS } from '@dnd-kit/utilities';
+    19→import TagInput from './TagInput';
+    20→import { nomenclatures } from '../data/nomenclatures';
+    21→import { exportPosteAsPdf } from '../utils/exportPdf';
+    22→import { exportPosteAsDocx } from '../utils/exportDocx';
+    23→
+    24→/* ═══ HELPERS ═══ */
+    25→const fmtFCFA = (n) => (n ? n.toLocaleString('fr-FR') + ' FCFA' : '—');
+    26→const todayISO = () => new Date().toISOString().split('T')[0];
+    27→const addDays = (iso, n) => { if (!iso) return ''; const d = new Date(iso); d.setDate(d.getDate() + n); return d.toISOString().split('T')[0]; };
+    28→const toFrDate = (iso) => { if (!iso) return ''; const [y, m, d] = iso.split('-'); return `${d}/${m}/${y}`; };
+    29→const stripHtml = (h) => { if (!h) return ''; const t = document.createElement('div'); t.innerHTML = h; return t.textContent || ''; };
+    30→
+    31→const QUILL_MODULES = {
+    32→  toolbar: [
+    33→    ['bold', 'italic', 'underline'],
+    34→    [{ list: 'ordered' }, { list: 'bullet' }],
+    35→    [{ header: [1, 2, 3, false] }],
+    36→  ],
+    37→};
+    38→
+    39→const INITIAL_FORM = {
+    40→  intitule: '', departement: '', typePoste: '', typeContrat: '', priorite: '', site: 'Siege (Douala)',
+    41→  salaireMin: '', salaireMax: '', budgetAlloue: '', responsable: '', roleResponsable: '', dateRequise: '',
+    42→  /* Studio */
+    43→  contexte: '', missions: [{ id: 'm-1', text: '' }],
+    44→  niveauEtude: '', experience: '',
+    45→  hardSkills: [], softSkills: [],
+    46→  langues: [],
+    47→  avantages: [],
+    48→  canaux: { siteCarriere: true, linkedIn: false, jobboards: false, cabinets: false },
+    49→};
+    50→
+    51→/* ═══ SORTABLE MISSION ═══ */
+    52→function SortableMission({ mission, onUpdate, onRemove }) {
+    53→  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: mission.id });
+    54→  const style = {
+    55→    transform: CSS.Transform.toString(transform),
+    56→    transition,
+    57→    opacity: isDragging ? 0.5 : 1,
+    58→  };
+    59→  return (
+    60→    <Box ref={setNodeRef} style={style} sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
+    61→      <IconButton {...attributes} {...listeners} size="small" sx={{ cursor: 'grab', color: 'action.disabled' }}>
+    62→        <DragIndicator sx={{ fontSize: 18 }} />
+    63→      </IconButton>
+    64→      <TextField
+    65→        size="small" fullWidth placeholder="Decrire la mission..."
+    66→        value={mission.text}
+    67→        onChange={(e) => onUpdate(mission.id, e.target.value)}
+    68→        sx={{ '& input': { fontSize: '0.85rem' } }}
+    69→      />
+    70→      <IconButton size="small" onClick={() => onRemove(mission.id)} sx={{ color: '#d32f2f' }}>
+    71→        <Cancel sx={{ fontSize: 18 }} />
+    72→      </IconButton>
+    73→    </Box>
+    74→  );
+    75→}
+    76→
+    77→/* ═══ SECTION HEADER ═══ */
+    78→function SectionHeader({ children, icon }) {
+    79→  return (
+    80→    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1.5, mt: 3, '&:first-of-type': { mt: 0 } }}>
+    81→      {icon}
+    82→      <Typography variant="subtitle2" fontWeight="bold" sx={{ color: 'primary.main', fontSize: '0.92rem' }}>
+    83→        {children}
+    84→      </Typography>
+    85→    </Box>
+    86→  );
+    87→}
+    88→
+    89→/* ═══ COMPOSANT PRINCIPAL ═══ */
+    90→export default function JobStudioModal({ open, onClose, onSubmit, responsablesList = [] }) {
+    91→  const [form, setForm] = useState(INITIAL_FORM);
+    92→  const [errors, setErrors] = useState({});
+    93→  const [exporting, setExporting] = useState(null); // 'pdf' | 'docx' | null
+    94→  const previewRef = useRef(null);
+    95→  const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 5 } }));
+    96→
+    97→  /* Reset */
+    98→  useEffect(() => {
+    99→    if (open) {
+   100→      setForm({ ...INITIAL_FORM, missions: [{ id: 'm-1', text: '' }] });
+   101→      setErrors({});
+   102→      setExporting(null);
+   103→    }
+   104→  }, [open]);
+   105→
+   106→  /* Budget auto */
+   107→  const budgetSuggere = useMemo(() => (Number(form.salaireMax) || 0) * 3, [form.salaireMax]);
+   108→  useEffect(() => {
+   109→    if (budgetSuggere > 0 && !form._budgetManuel) setForm((p) => ({ ...p, budgetAlloue: budgetSuggere }));
+   110→  }, [budgetSuggere, form._budgetManuel]);
+   111→
+   112→  /* Auto role */
+   113→  useEffect(() => {
+   114→    if (form.responsable && responsablesList.length) {
+   115→      const r = responsablesList.find((x) => x.nom === form.responsable);
+   116→      if (r) setForm((p) => ({ ...p, roleResponsable: r.role }));
+   117→    }
+   118→  }, [form.responsable, responsablesList]);
+   119→
+   120→  /* Handlers */
+   121→  const h = useCallback((key, val) => {
+   122→    setForm((p) => ({ ...p, [key]: val }));
+   123→    if (errors[key]) setErrors((p) => { const n = { ...p }; delete n[key]; return n; });
+   124→  }, [errors]);
+   125→
+   126→  const addMission = () => setForm((p) => ({ ...p, missions: [...p.missions, { id: `m-${Date.now()}`, text: '' }] }));
+   127→  const updateMission = (id, text) => setForm((p) => ({ ...p, missions: p.missions.map((m) => (m.id === id ? { ...m, text } : m)) }));
+   128→  const removeMission = (id) => setForm((p) => ({ ...p, missions: p.missions.length > 1 ? p.missions.filter((m) => m.id !== id) : p.missions }));
+   129→  const handleDragEnd = (event) => {
+   130→    const { active, over } = event;
+   131→    if (active.id !== over?.id) {
+   132→      setForm((p) => {
+   133→        const old = p.missions.findIndex((m) => m.id === active.id);
+   134→        const nw = p.missions.findIndex((m) => m.id === over.id);
+   135→        return { ...p, missions: arrayMove(p.missions, old, nw) };
+   136→      });
+   137→    }
+   138→  };
+   139→
+   140→  const toggleCanal = (key) => setForm((p) => ({ ...p, canaux: { ...p.canaux, [key]: !p.canaux[key] } }));
+   141→  const toggleAvantage = (av) => setForm((p) => ({ ...p, avantages: p.avantages.includes(av) ? p.avantages.filter((a) => a !== av) : [...p.avantages, av] }));
+   142→  const toggleSoftSkill = (sk) => setForm((p) => ({ ...p, softSkills: p.softSkills.includes(sk) ? p.softSkills.filter((s) => s !== sk) : [...p.softSkills, sk] }));
+   143→  const addLangue = () => setForm((p) => ({ ...p, langues: [...p.langues, { id: `l-${Date.now()}`, langue: '', niveau: '' }] }));
+   144→  const updateLangue = (id, field, val) => setForm((p) => ({ ...p, langues: p.langues.map((l) => (l.id === id ? { ...l, [field]: val } : l)) }));
+   145→  const removeLangue = (id) => setForm((p) => ({ ...p, langues: p.langues.filter((l) => l.id !== id) }));
+   146→
+   147→  /* Exports */
+   148→  const handlePdf = async () => {
+   149→    setExporting('pdf');
+   150→    try { await exportPosteAsPdf(previewRef.current, form.intitule); } catch (e) { console.error(e); }
+   151→    setExporting(null);
+   152→  };
+   153→  const handleDocx = async () => {
+   154→    setExporting('docx');
+   155→    try { await exportPosteAsDocx(form); } catch (e) { console.error(e); }
+   156→    setExporting(null);
+   157→  };
+   158→
+   159→  /* Submit */
+   160→  const handleSubmit = (asDraft) => {
+   161→    if (!asDraft && !form.intitule?.trim()) { setErrors({ intitule: 'Requis pour publier' }); return; }
+   162→    const activeCanaux = Object.entries(form.canaux).filter(([, v]) => v).map(([k]) => k);
+   163→    if (!asDraft && activeCanaux.length === 0) { setErrors({ canaux: 'Selectionnez au moins un canal' }); return; }
+   164→    const canalLabels = { siteCarriere: 'Site Carriere', linkedIn: 'LinkedIn', jobboards: 'Jobboards', cabinets: 'Cabinets' };
+   165→    const canalStr = activeCanaux.map((k) => canalLabels[k]).join(', ');
+   166→    const today = new Date().toLocaleDateString('fr-FR');
+   167→    const { _budgetManuel, canaux, ...clean } = form;
+   168→    const result = {
+   169→      ...clean,
+   170→      canalDiffusion: asDraft ? '' : canalStr,
+   171→      datePublication: asDraft ? '' : today,
+   172→      dateRequise: toFrDate(form.dateRequise),
+   173→      statutOffre: asDraft ? 'A creer' : 'Publiee',
+   174→      _studioData: { canaux: activeCanaux, missions: form.missions.filter((m) => m.text?.trim()), source: 'studio' },
+   175→    };
+   176→    const toastMsg = asDraft ? 'Brouillon Studio enregistre' : `Offre publiee sur ${activeCanaux.length} canal(aux) via Studio`;
+   177→    if (onSubmit) onSubmit(result, toastMsg);
+   178→  };
+   179→
+   180→  /* Preview data */
+   181→  const preview = useMemo(() => ({
+   182→    intitule: form.intitule || 'Poste a definir',
+   183→    departement: form.departement, typePoste: form.typePoste, typeContrat: form.typeContrat,
+   184→    contexteHtml: form.contexte,
+   185→    contexteText: stripHtml(form.contexte),
+   186→    missions: form.missions.filter((m) => m.text?.trim()),
+   187→    niveauEtude: form.niveauEtude, experience: form.experience,
+   188→    hardSkills: form.hardSkills, softSkills: form.softSkills, langues: form.langues,
+   189→    salaireMin: form.salaireMin, salaireMax: form.salaireMax,
+   190→    avantages: form.avantages,
+   191→  }), [form]);
+   192→
+   193→  /* ═══ RENDER ═══ */
+   194→  return (
+   195→    <Dialog open={open} onClose={onClose}
+   196→      PaperProps={{ sx: { width: '95vw', maxWidth: 1400, height: '90vh', maxHeight: '90vh', display: 'flex', flexDirection: 'column', borderRadius: 3, overflow: 'hidden' } }}
+   197→    >
+   198→      <DialogTitle sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', pb: 1.5, pt: 2, px: 3, background: 'linear-gradient(135deg, #1565c0 0%, #7c3aed 100%)', color: '#fff', flexShrink: 0 }}>
+   199→        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+   200→          <AutoAwesome sx={{ fontSize: 24 }} />
+   201→          <Box>
+   202→            <Typography variant="h6" fontWeight="bold" sx={{ fontSize: '1.1rem' }}>Studio d'Analyse & Publication</Typography>
+   203→            <Typography variant="caption" sx={{ opacity: 0.85, fontSize: '0.78rem' }}>
+   204→              {form.intitule || 'Nouvelle offre en cours de redaction...'}
+   205→            </Typography>
+   206→          </Box>
+   207→        </Box>
+   208→        <IconButton onClick={onClose} size="small" sx={{ color: '#fff' }}><Close /></IconButton>
+   209→      </DialogTitle>
+   210→
+   211→      <Box sx={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
+   212→        <Box sx={{ flex: '0 0 60%', overflow: 'auto', p: 3, borderRight: '1px solid', borderColor: 'divider' }}>
+   213→
+   214→          <SectionHeader icon={<Typography variant="body2">1.</Typography>}>Informations de base</SectionHeader>
+   215→          <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, gap: 2 }}>
+   216→            <TextField label="Intitule du Poste" size="small" fullWidth value={form.intitule} onChange={(e) => h('intitule', e.target.value)} error={!!errors.intitule} helperText={errors.intitule || ' '} />
+   217→            <FormControl size="small" fullWidth>
+   218→              <InputLabel>Departement</InputLabel>
+   219→              <Select value={form.departement} label="Departement" onChange={(e) => h('departement', e.target.value)}>
+   220→                {nomenclatures.departement.map((d) => <MenuItem key={d} value={d} sx={{ fontSize: '0.85rem' }}>{d}</MenuItem>)}
+   221→              </Select>
+   222→            </FormControl>
+   223→            <FormControl size="small" fullWidth>
+   224→              <InputLabel>Type de Poste</InputLabel>
+   225→              <Select value={form.typePoste} label="Type de Poste" onChange={(e) => h('typePoste', e.target.value)}>
+   226→                {nomenclatures.type_poste.map((t) => <MenuItem key={t} value={t} sx={{ fontSize: '0.85rem' }}>{t}</MenuItem>)}
+   227→              </Select>
+   228→            </FormControl>
+   229→            <FormControl size="small" fullWidth>
+   230→              <InputLabel>Type de Contrat</InputLabel>
+   231→              <Select value={form.typeContrat} label="Type de Contrat" onChange={(e) => h('typeContrat', e.target.value)}>
+   232→                {nomenclatures.type_contrat.map((t) => <MenuItem key={t} value={t} sx={{ fontSize: '0.85rem' }}>{t}</MenuItem>)}
+   233→              </Select>
+   234→            </FormControl>
+   235→            <FormControl size="small" fullWidth>
+   236→              <InputLabel>Priorite</InputLabel>
+   237→              <Select value={form.priorite} label="Priorite" onChange={(e) => h('priorite', e.target.value)}>
+   238→                {nomenclatures.priorite.map((p) => <MenuItem key={p} value={p} sx={{ fontSize: '0.85rem' }}>{p}</MenuItem>)}
+   239→              </Select>
+   240→            </FormControl>
+   241→            <FormControl size="small" fullWidth>
+   242→              <InputLabel>Site</InputLabel>
+   243→              <Select value={form.site} label="Site" onChange={(e) => h('site', e.target.value)}>
+   244→                {nomenclatures.site.map((s) => <MenuItem key={s} value={s} sx={{ fontSize: '0.85rem' }}>{s}</MenuItem>)}
+   245→              </Select>
+   246→            </FormControl>
+   247→            <FormControl size="small" fullWidth>
+   248→              <InputLabel>Responsable</InputLabel>
+   249→              <Select value={form.responsable} label="Responsable" onChange={(e) => h('responsable', e.target.value)}>
+   250→                {responsablesList.map((r) => <MenuItem key={r.nom} value={r.nom} sx={{ fontSize: '0.85rem' }}>{r.nom}</MenuItem>)}
+   251→              </Select>
+   252→            </FormControl>
+   253→            <FormControl size="small" fullWidth>
+   254→              <InputLabel>Role du Responsable</InputLabel>
+   255→              <Select value={form.roleResponsable} label="Role du Responsable" onChange={(e) => h('roleResponsable', e.target.value)}>
+   256→                {nomenclatures.role_responsable.map((r) => <MenuItem key={r} value={r} sx={{ fontSize: '0.85rem' }}>{r}</MenuItem>)}
+   257→              </Select>
+   258→            </FormControl>
+   259→          </Box>
+   260→
+   261→          <SectionHeader icon={<Typography variant="body2">2.</Typography>}>Contexte & Analyse du Besoin</SectionHeader>
+   262→          <Box sx={{ '& .ql-toolbar': { borderRadius: '4px 4px 0 0', borderColor: 'divider' }, '& .ql-container': { borderRadius: '0 0 4px 4px', borderColor: 'divider', minHeight: 120, fontSize: '0.9rem', fontFamily: 'inherit' }, '& .ql-editor': { minHeight: 120 } }}>
+   263→            <ReactQuill theme="snow" modules={QUILL_MODULES} value={form.contexte} onChange={(val) => h('contexte', val)} placeholder="Decrivez l'equipe, les enjeux et les raisons du recrutement..." />
+   264→          </Box>
+   265→
+   266→          <SectionHeader icon={<Typography variant="body2">3.</Typography>}>Missions & Responsabilites Principales</SectionHeader>
+   267→          <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+   268→            <SortableContext items={form.missions.map((m) => m.id)} strategy={verticalListSortingStrategy}>
+   269→              {form.missions.map((m) => (
+   270→                <SortableMission key={m.id} mission={m} onUpdate={updateMission} onRemove={removeMission} />
+   271→              ))}
+   272→            </SortableContext>
+   273→          </DndContext>
+   274→          <Button size="small" startIcon={<Add sx={{ fontSize: 16 }} />} onClick={addMission} sx={{ textTransform: 'none', mt: 0.5 }}>
+   275→            Ajouter une mission
+   276→          </Button>
+   277→
+   278→          <SectionHeader icon={<Typography variant="body2">4.</Typography>}>Profil Recherche</SectionHeader>
+   279→          <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, gap: 2 }}>
+   280→            <FormControl size="small" fullWidth>
+   281→              <InputLabel>Niveau d'etudes</InputLabel>
+   282→              <Select value={form.niveauEtude} label="Niveau d'etudes" onChange={(e) => h('niveauEtude', e.target.value)}>
+   283→                {nomenclatures.niveau_etude_studio.map((n) => <MenuItem key={n} value={n} sx={{ fontSize: '0.85rem' }}>{n}</MenuItem>)}
+   284→              </Select>
+   285→            </FormControl>
+   286→            <FormControl size="small" fullWidth>
+   287→              <InputLabel>Experience</InputLabel>
+   288→              <Select value={form.experience} label="Experience" onChange={(e) => h('experience', e.target.value)}>
+   289→                {nomenclatures.experience_studio.map((e) => <MenuItem key={e} value={e} sx={{ fontSize: '0.85rem' }}>{e}</MenuItem>)}
+   290→              </Select>
+   291→            </FormControl>
+   292→          </Box>
+   293→
+   294→          <Box sx={{ mt: 2 }}>
+   295→            <TagInput label="Hard Skills (Savoir-faire)" value={form.hardSkills} onChange={(v) => h('hardSkills', v)} placeholder="Ex: React, Gestion de projet..." />
+   296→          </Box>
+   297→
+   298→          <Box sx={{ mt: 2 }}>
+   299→            <Typography variant="caption" sx={{ fontSize: '0.7rem', fontWeight: 600, color: 'text.secondary', textTransform: 'uppercase', letterSpacing: 0.5, display: 'block', mb: 0.5 }}>Soft Skills (Savoir-etre)</Typography>
+   300→            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.8 }}>
+   301→              {nomenclatures.soft_skills.map((sk) => {
+   302→                const active = form.softSkills.includes(sk);
+   303→                return (
+   304→                  <Chip
+   305→                    key={sk} label={sk} size="small" variant={active ? 'filled' : 'outlined'}
+   306→                    color={active ? 'success' : 'default'}
+   307→                    onClick={() => toggleSoftSkill(sk)}
+   308→                    sx={{ cursor: 'pointer', fontWeight: active ? 600 : 400, transition: 'all 0.15s' }}
+   309→                  />
+   310→                );
+   311→              })}
+   312→            </Box>
+   313→          </Box>
+   314→
+   315→          <Box sx={{ mt: 2.5 }}>
+   316→            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 0.5 }}>
+   317→              <Typography variant="caption" sx={{ fontSize: '0.7rem', fontWeight: 600, color: 'text.secondary', textTransform: 'uppercase', letterSpacing: 0.5 }}>Langues requises</Typography>
+   318→              <Button size="small" startIcon={<Add sx={{ fontSize: 14 }} />} onClick={addLangue} sx={{ textTransform: 'none', fontSize: '0.75rem' }}>Ajouter</Button>
+   319→            </Box>
+   320→            {form.langues.map((l) => (
+   321→              <Box key={l.id} sx={{ display: 'flex', gap: 1, mb: 1, alignItems: 'center' }}>
+   322→                <FormControl size="small" sx={{ flex: 1 }}>
+   323→                  <Select value={l.langue} onChange={(e) => updateLangue(l.id, 'langue', e.target.value)} displayEmpty>
+   324→                    <MenuItem value="" sx={{ color: 'text.disabled' }}>Langue...</MenuItem>
+   325→                    {nomenclatures.langues_studio.map((lng) => <MenuItem key={lng} value={lng} sx={{ fontSize: '0.85rem' }}>{lng}</MenuItem>)}
+   326→                  </Select>
+   327→                </FormControl>
+   328→                <FormControl size="small" sx={{ flex: 1 }}>
+   329→                  <Select value={l.niveau} onChange={(e) => updateLangue(l.id, 'niveau', e.target.value)} displayEmpty>
+   330→                    <MenuItem value="" sx={{ color: 'text.disabled' }}>Niveau...</MenuItem>
+   331→                    {nomenclatures.niveau_langue_studio.map((n) => <MenuItem key={n} value={n} sx={{ fontSize: '0.85rem' }}>{n}</MenuItem>)}
+   332→                  </Select>
+   333→                </FormControl>
+   334→                <IconButton size="small" onClick={() => removeLangue(l.id)} sx={{ color: '#d32f2f' }}><Close sx={{ fontSize: 16 }} /></IconButton>
+   335→              </Box>
+   336→            ))}
+   337→          </Box>
+   338→
+   339→          <SectionHeader icon={<Typography variant="body2">5.</Typography>}>Conditions & Avantages</SectionHeader>
+   340→          <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, gap: 2 }}>
+   341→            <TextField label="Salaire Min" size="small" type="number" fullWidth value={form.salaireMin} onChange={(e) => h('salaireMin', e.target.value ? Number(e.target.value) : '')} InputProps={{ inputProps: { min: 0 }, endAdornment: <InputAdornment position="end" style={{ fontSize: '0.8rem' }}>FCFA</InputAdornment> }} />
+   342→            <TextField label="Salaire Max" size="small" type="number" fullWidth value={form.salaireMax} onChange={(e) => h('salaireMax', e.target.value ? Number(e.target.value) : '')} InputProps={{ inputProps: { min: 0 }, endAdornment: <InputAdornment position="end" style={{ fontSize: '0.8rem' }}>FCFA</InputAdornment> }} />
+   343→          </Box>
+   344→          {budgetSuggere > 0 && (
+   345→            <Alert severity="info" variant="outlined" sx={{ mt: 1.5, borderRadius: 2, py: 0.3 }} icon={<span />}>Budget suggere : <strong>{fmtFCFA(budgetSuggere)}</strong> (3x salaire max)</Alert>
+   346→          )}
+   347→          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 2 }}>
+   348→            {nomenclatures.avantages_sociaux.map((av) => (
+   349→              <FormControlLabel key={av} control={<Checkbox size="small" checked={form.avantages.includes(av)} onChange={() => toggleAvantage(av)} sx={{ '& .MuiSvgIcon-root': { fontSize: 18 } }} />} label={av} sx={{ '& .MuiTypography-body1': { fontSize: '0.85rem' } }} />
+   350→            ))}
+   351→          </Box>
+   352→          <TextField label="Date requise" size="small" type="date" fullWidth value={form.dateRequise} onChange={(e) => h('dateRequise', e.target.value)} InputLabelProps={{ shrink: true }} sx={{ mt: 2 }} />
+   353→
+   354→          <Box sx={{ height: 40 }} />
+   355→        </Box>
+   356→
+   357→        <Box sx={{ flex: '0 0 40%', overflow: 'auto', p: 3, bgcolor: '#f8f9fa' }}>
+   358→
+   359→          <Typography variant="caption" sx={{ fontWeight: 700, color: 'text.secondary', textTransform: 'uppercase', letterSpacing: 1, fontSize: '0.7rem' }}>Apercu en direct</Typography>
+   360→          <Paper ref={previewRef} variant="outlined" sx={{ p: 2.5, mt: 0.5, mb: 3, bgcolor: '#fff', borderRadius: 2 }}>
+   361→            <Box sx={{ borderBottom: '3px solid #0D7C66', pb: 1.5, mb: 2 }}>
+   362→              <Typography variant="h6" fontWeight="bold" sx={{ fontSize: '1.05rem', color: '#1565c0' }}>{preview.intitule}</Typography>
+   363→              <Typography variant="caption" color="text.secondary">
+   364→                {[preview.departement, preview.typePoste, preview.typeContrat].filter(Boolean).join(' | ')}
+   365→              </Typography>
+   366→            </Box>
+   367→            {preview.contexteHtml && (
+   368→              <Box sx={{ mb: 2 }}>
+   369→                <Typography variant="subtitle2" fontWeight="bold" sx={{ fontSize: '0.82rem', color: '#0D7C66', mb: 0.5 }}>Contexte</Typography>
+   370→                <Box sx={{ fontSize: '0.82rem', color: 'text.secondary', lineHeight: 1.6, '& p': { m: 0 }, '& ul, & ol': { pl: 2 } }} dangerouslySetInnerHTML={{ __html: preview.contexteHtml }} />
+   371→              </Box>
+   372→            )}
+   373→            {preview.missions.length > 0 && (
+   374→              <Box sx={{ mb: 2 }}>
+   375→                <Typography variant="subtitle2" fontWeight="bold" sx={{ fontSize: '0.82rem', color: '#0D7C66', mb: 0.5 }}>Missions principales</Typography>
+   376→                <Box component="ol" sx={{ pl: 2.5, m: 0 }}>
+   377→                  {preview.missions.map((m, i) => (
+   378→                    <Typography key={m.id || i} component="li" variant="body2" sx={{ fontSize: '0.82rem', color: 'text.secondary', mb: 0.3 }}>{m.text}</Typography>
+   379→                  ))}
+   380→                </Box>
+   381→              </Box>
+   382→            )}
+   383→            {(preview.niveauEtude || preview.experience) && (
+   384→              <Box sx={{ mb: 2 }}>
+   385→                <Typography variant="subtitle2" fontWeight="bold" sx={{ fontSize: '0.82rem', color: '#0D7C66', mb: 0.5 }}>Profil</Typography>
+   386→                <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+   387→                  {preview.niveauEtude && <Chip label={preview.niveauEtude} size="small" variant="outlined" />}
+   388→                  {preview.experience && <Chip label={preview.experience} size="small" variant="outlined" />}
+   389→                </Box>
+   390→              </Box>
+   391→            )}
+   392→            {preview.hardSkills.length > 0 && (
+   393→              <Box sx={{ mb: 1.5 }}>
+   394→                <Typography variant="caption" sx={{ fontWeight: 600, fontSize: '0.72rem', color: 'text.secondary' }}>Savoir-faire</Typography>
+   395→                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, mt: 0.3 }}>
+   396→                  {preview.hardSkills.map((s) => <Chip key={s} label={s} size="small" sx={{ bgcolor: '#e3f2fd', color: '#1565c0', fontWeight: 500, fontSize: '0.75rem' }} />)}
+   397→                </Box>
+   398→              </Box>
+   399→            )}
+   400→            {preview.softSkills.length > 0 && (
+   401→              <Box sx={{ mb: 1.5 }}>
+   402→                <Typography variant="caption" sx={{ fontWeight: 600, fontSize: '0.72rem', color: 'text.secondary' }}>Savoir-etre</Typography>
+   403→                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, mt: 0.3 }}>
+   404→                  {preview.softSkills.map((s) => <Chip key={s} label={s} size="small" color="success" variant="outlined" sx={{ fontWeight: 500, fontSize: '0.75rem' }} />)}
+   405→                </Box>
+   406→              </Box>
+   407→            )}
+   408→            {preview.langues.filter((l) => l.langue).length > 0 && (
+   409→              <Box sx={{ mb: 1.5 }}>
+   410→                <Typography variant="caption" sx={{ fontWeight: 600, fontSize: '0.72rem', color: 'text.secondary' }}>Langues</Typography>
+   411→                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, mt: 0.3 }}>
+   412→                  {preview.langues.filter((l) => l.langue).map((l) => <Chip key={l.id} label={`${l.langue} - ${l.niveau}`} size="small" variant="outlined" sx={{ fontSize: '0.75rem' }} />)}
+   413→                </Box>
+   414→              </Box>
+   415→            )}
+   416→            {(preview.salaireMin || preview.salaireMax || preview.avantages.length > 0) && (
+   417→              <Box sx={{ mt: 1.5, pt: 1.5, borderTop: '1px dashed', borderColor: 'divider' }}>
+   418→                {(preview.salaireMin || preview.salaireMax) && (
+   419→                  <Typography variant="body2" sx={{ fontSize: '0.82rem', color: 'text.secondary' }}>
+   420→                    Remuneration : <strong>{fmtFCFA(preview.salaireMin)}</strong> - <strong>{fmtFCFA(preview.salaireMax)}</strong>
+   421→                  </Typography>
+   422→                )}
+   423→                {preview.avantages.length > 0 && (
+   424→                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, mt: 0.5 }}>
+   425→                    {preview.avantages.map((a) => <Chip key={a} label={a} size="small" color="success" sx={{ fontSize: '0.72rem', height: 22 }} />)}
+   426→                  </Box>
+   427→                )}
+   428→              </Box>
+   429→            )}
+   430→          </Paper>
+   431→
+   432→          <Typography variant="caption" sx={{ fontWeight: 700, color: 'text.secondary', textTransform: 'uppercase', letterSpacing: 1, fontSize: '0.7rem' }}>Canaux de diffusion</Typography>
+   433→          {errors.canaux && <Alert severity="error" sx={{ mt: 0.5, borderRadius: 2, py: 0.3, fontSize: '0.82rem' }}>{errors.canaux}</Alert>}
+   434→          <Paper variant="outlined" sx={{ p: 2, mt: 0.5, mb: 3, bgcolor: '#fff', borderRadius: 2 }}>
+   435→            {nomenclatures.canaux_studio.map((c) => (
+   436→              <Box key={c.key} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', py: 0.8, '& + &': { borderTop: '1px solid', borderColor: 'divider' } }}>
+   437→                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+   438→                  <span style={{ fontSize: '1.1rem' }}>{c.icon}</span>
+   439→                  <Typography variant="body2" sx={{ fontSize: '0.85rem' }}>{c.label}</Typography>
+   440→                </Box>
+   441→                <Switch size="small" checked={form.canaux[c.key]} onChange={() => toggleCanal(c.key)} />
+   442→              </Box>
+   443→            ))}
+   444→          </Paper>
+   445→
+   446→          <Typography variant="caption" sx={{ fontWeight: 700, color: 'text.secondary', textTransform: 'uppercase', letterSpacing: 1, fontSize: '0.7rem' }}>Telechargements</Typography>
+   447→          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, mt: 0.5 }}>
+   448→            <Button
+   449→              variant="outlined" startIcon={exporting === 'pdf' ? <CircularProgress size={16} /> : <PictureAsPdf />}
+   450→              onClick={handlePdf} disabled={!!exporting}
+   451→              sx={{ textTransform: 'none', borderColor: '#d32f2f', color: '#d32f2f', '&:hover': { borderColor: '#b71c1c', bgcolor: 'rgba(211,47,47,0.04)' } }}
+   452→            >
+   453→              Telecharger PDF
+   454→            </Button>
+   455→            <Button
+   456→              variant="outlined" startIcon={exporting === 'docx' ? <CircularProgress size={16} /> : <DescIcon />}
+   457→              onClick={handleDocx} disabled={!!exporting}
+   458→              sx={{ textTransform: 'none', borderColor: '#1565c0', color: '#1565c0', '&:hover': { borderColor: '#0d47a1', bgcolor: 'rgba(21,101,192,0.04)' } }}
+   459→            >
+   460→              Exporter Word (.docx)
+   461→            </Button>
+   462→          </Box>
+   463→        </Box>
+   464→      </Box>
+   465→
+   466→      <Divider />
+   467→      <DialogActions sx={{ px: 3, py: 2, justifyContent: 'space-between', flexShrink: 0, bgcolor: '#fff' }}>
+   468→        <Button onClick={onClose} color="inherit" sx={{ textTransform: 'none' }}>Annuler</Button>
+   469→        <Box sx={{ display: 'flex', gap: 1.5 }}>
+   470→          <Button onClick={() => handleSubmit(true)} startIcon={<Save sx={{ fontSize: 18 }} />} variant="outlined" sx={{ textTransform: 'none' }}>
+   471→            Enregistrer le brouillon
+   472→          </Button>
+   473→          <Button
+   474→            onClick={() => handleSubmit(false)}
+   475→            startIcon={<Rocket sx={{ fontSize: 18 }} />}
+   476→            variant="contained"
+   477→            sx={{ textTransform: 'none', fontWeight: 600, bgcolor: '#0D7C66', '&:hover': { bgcolor: '#0a5c4a' } }}
+   478→          >
+   479→            Lancer & Publier
+   480→          </Button>
+   481→        </Box>
+   482→      </DialogActions>
+   483→    </Dialog>
+   484→  );
+   485→}
+   486→
