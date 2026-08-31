@@ -1,0 +1,592 @@
+   601→   601→            <EditableField label="Statut" value={form.statutOffre} editKey="statutOffre" editing={editing} onEdit={handleEdit} onChange={handleChange} type="select"
+   602→   602→              options={{ list: nomenclatures.statut_offre, colorMap: statutOffreColor }} />
+   603→   603→          </Box>
+   604→   604→        </Box>
+   605→   605→
+   606→   606→        <Divider sx={{ my: 2.5 }} />
+   607→   607→
+   608→   608→        {/* ─── SECTION 2 : RESPONSABLE & BUDGET ─── */}
+   609→   609→        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8, mb: 2 }}>
+   610→   610→          <Person sx={{ fontSize: 18, color: 'primary.main' }} />
+   611→   611→          <Typography variant="subtitle2" fontWeight="bold" sx={{ fontSize: '0.9rem' }}>Responsable & Budget</Typography>
+   612→   612→        </Box>
+   613→   613→
+   614→   614→        <EditableField label="Responsable" value={form.responsable} editKey="responsable" editing={editing} onEdit={handleEdit} onChange={handleChange} type="select"
+   615→   615→          options={{ list: responsablesList.map(r => r.nom) }} />
+   616→   616→        <EditableField label="R\u00f4le" value={form.roleResponsable} editKey="roleResponsable" editing={editing} onEdit={handleEdit} onChange={handleChange} type="select"
+   617→   617→          options={{ list: nomenclatures.role_responsable }} />
+   618→   618→
+   619→   619→        <EditableField label="Budget allou\u00e9" value={form.budgetAlloue} editKey="budgetAlloue" editing={editing} onEdit={handleEdit} onChange={handleChange} type="number"
+   620→   620→          endAdornment="FCFA" />
+   621→   621→
+   622→   622→        <Box sx={{ display: 'flex', gap: 2 }}>
+   623→   623→          <Box sx={{ flex: 1 }}>
+   624→   624→            <EditableField label="Salaire Min" value={form.salaireMin} editKey="salaireMin" editing={editing} onEdit={handleEdit} onChange={handleChange} type="number"
+   625→   625→              endAdornment="FCFA" />
+   626→   626→          </Box>
+   627→   627→          <Box sx={{ flex: 1 }}>
+   628→   628→            <EditableField label="Salaire Max" value={form.salaireMax} editKey="salaireMax" editing={editing} onEdit={handleEdit} onChange={handleChange} type="number"
+   629→   629→              endAdornment="FCFA" />
+   630→   630→          </Box>
+   631→   631→        </Box>
+   632→   632→
+   633→   633→        <Divider sx={{ my: 2.5 }} />
+   634→   634→
+   635→   635→        {/* ─── CANAL DE DIFFUSION ─── */}
+   636→   636→        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8, mb: 2 }}>
+   637→   637→          <Campaign sx={{ fontSize: 18, color: 'primary.main' }} />
+   638→   638→          <Typography variant="subtitle2" fontWeight="bold" sx={{ fontSize: '0.9rem' }}>Diffusion</Typography>
+   639→   639→        </Box>
+   640→   640→        <EditableField label="Canal de diffusion" value={form.canalDiffusion} editKey="canalDiffusion" editing={editing} onEdit={handleEdit} onChange={handleChange} type="select"
+   641→   641→          options={{ list: nomenclatures.canal_diffusion }} />
+   642→   642→        <EditableField label="Description de l'offre" value={form.description} editKey="description" editing={editing} onEdit={handleEdit} onChange={handleChange} multiline />
+   643→   643→
+   644→   644→        <Divider sx={{ my: 2.5 }} />
+   645→   645→
+   646→   646→        {/* ─── SECTION 3 : CANDIDATURES LIÉES ─── */}
+   647→   647→        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
+   648→   648→          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8 }}>
+   649→   649→            <Groups sx={{ fontSize: 18, color: 'primary.main' }} />
+   650→   650→            <Typography variant="subtitle2" fontWeight="bold" sx={{ fontSize: '0.9rem' }}>Candidatures li\u00e9es</Typography>
+   651→   651→            <Badge badgeContent={d.candidatsAssocies?.length || 0} color="primary" sx={{ '& .MuiBadge-badge': { fontSize: '0.7rem' } }} />
+   652→   652→          </Box>
+   653→   653→          <Chip label={`${d.nbCandidaturesRecues} / ${d.nbCandidatures} re\u00e7ues`} size="small" variant="outlined" sx={{ fontSize: '0.72rem' }} />
+   654→   654→        </Box>
+   655→   655→
+   656→   656→        {d.candidatsAssocies?.length > 0 ? (
+   657→   657→          <Paper variant="outlined" sx={{ mb: 1 }}>
+   658→   658→            {d.candidatsAssocies.map((c, i) => {
+   659→   659→              const scoreColor = c.score === null ? 'default' : c.score >= 16 ? 'success' : c.score >= 12 ? 'warning' : 'error';
+   660→   660→              const etatC = candidatEtatColor[c.etatCandidature] || 'default';
+   661→   661→              return (
+   662→   662→                <Box key={i} sx={{
+   663→   663→                  display: 'flex', alignItems: 'center', gap: 1.5, p: 1.5,
+   664→   664→                  borderBottom: i < d.candidatsAssocies.length - 1 ? '1px solid' : 'none',
+   665→   665→                  borderColor: 'divider',
+   666→   666→                  '&:hover': { bgcolor: 'rgba(0,0,0,0.02)' },
+   667→   667→                }}>
+   668→   668→                  <Avatar sx={{ width: 34, height: 34, fontSize: '0.75rem', bgcolor: '#1976d2' }}>
+   669→   669→                    {c.nom.split(' ').map(n => n[0]).join('')}
+   670→   670→                  </Avatar>
+   671→   671→                  <Box sx={{ flex: 1, minWidth: 0 }}>
+   672→   672→                    <Typography variant="body2" fontWeight={600} sx={{ fontSize: '0.85rem' }}>{c.nom}</Typography>
+   673→   673→                    <Box sx={{ display: 'flex', gap: 0.5, mt: 0.3 }}>
+   674→   674→                      <Chip label={c.etatCandidature} size="small" color={etatC} sx={{ height: 20, fontSize: '0.65rem' }} />
+   675→   675→                      <Chip label={c.source} size="small" variant="outlined" sx={{ height: 20, fontSize: '0.65rem' }} />
+   676→   676→                    </Box>
+   677→   677→                  </Box>
+   678→   678→                  <Box sx={{ textAlign: 'center' }}>
+   679→   679→                    <Typography variant="body2" fontWeight="bold" sx={{ color: scoreColor === 'success' ? '#2e7d32' : scoreColor === 'warning' ? '#f57f17' : scoreColor === 'error' ? '#d32f2f' : 'text.primary', fontSize: '0.9rem' }}>
+   680→   680→                      {c.score !== null ? `${c.score}/20` : '\u2014'}
+   681→   681→                    </Typography>
+   682→   682→                    <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.6rem' }}>Score</Typography>
+   683→   683→                  </Box>
+   684→   684→                  <Tooltip title="Voir le profil">
+   685→   685→                    <IconButton size="small"><ArrowForward sx={{ fontSize: 16 }} /></IconButton>
+   686→   686→                  </Tooltip>
+   687→   687→                </Box>
+   688→   688→              );
+   689→   689→            })}
+   690→   690→          </Paper>
+   691→   691→        ) : (
+   692→   692→          <Paper variant="outlined" sx={{ p: 3, textAlign: 'center', mb: 1 }}>
+   693→   693→            <Typography variant="body2" color="text.secondary">Aucune candidature associ\u00e9e</Typography>
+   694→   694→          </Paper>
+   695→   695→        )}
+   696→   696→
+   697→   697→        <Divider sx={{ my: 2.5 }} />
+   698→   698→
+   699→   699→        {/* ─── HISTORIQUE ─── */}
+   700→   700→        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8, mb: 2 }}>
+   701→   701→          <AccessTime sx={{ fontSize: 18, color: 'primary.main' }} />
+   702→   702→          <Typography variant="subtitle2" fontWeight="bold" sx={{ fontSize: '0.9rem' }}>Historique</Typography>
+   703→   703→          <Badge badgeContent={d.historique?.length || 0} color="primary" sx={{ '& .MuiBadge-badge': { fontSize: '0.7rem' } }} />
+   704→   704→        </Box>
+   705→   705→        {d.historique?.length > 0 ? (
+   706→   706→          <Box sx={{ position: 'relative', ml: 1.5, pl: 3, borderLeft: '2px solid #e0e0e0' }}>
+   707→   707→            {d.historique.map((h, i) => (
+   708→   708→              <Box key={i} sx={{ position: 'relative', pb: i < d.historique.length - 1 ? 2 : 0 }}>
+   709→   709→                <Box sx={{
+   710→   710→                  position: 'absolute', left: -25, top: 2, width: 12, height: 12,
+   711→   711→                  borderRadius: '50%',
+   712→   712→                  bgcolor: histColor[h.type] || '#9e9e9e',
+   713→   713→                  border: '2px solid white',
+   714→   714→                  boxShadow: '0 0 0 1px ' + (histColor[h.type] || '#9e9e9e'),
+   715→   715→                }} />
+   716→   716→                <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.7rem' }}>{h.date}</Typography>
+   717→   717→                <Typography variant="body2" fontWeight={500} sx={{ fontSize: '0.85rem' }}>{h.evenement}</Typography>
+   718→   718→                <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.7rem' }}>par {h.auteur}</Typography>
+   719→   719→              </Box>
+   720→   720→            ))}
+   721→   721→          </Box>
+   722→   722→        ) : (
+   723→   723→          <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'center', py: 2 }}>Aucun historique</Typography>
+   724→   724→        )}
+   725→   725→
+   726→   726→      </Box>
+   727→   727→
+   728→   728→      {/* ═══ FOOTER ═══ */}
+   729→   729→      <Box sx={{
+   730→   730→        p: 2, borderTop: '1px solid', borderColor: 'divider', bgcolor: 'background.paper',
+   731→   731→        display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexShrink: 0,
+   732→   732→      }}>
+   733→   733→        <Button
+   734→   734→          color="inherit" onClick={handleCancel} disabled={!hasChanges}
+   735→   735→          sx={{ textTransform: 'none', fontSize: '0.85rem' }}
+   736→   736→        >
+   737→   737→          Annuler
+   738→   738→        </Button>
+   739→   739→        <Button
+   740→   740→          variant="contained"
+   741→   741→          startIcon={<Save sx={{ fontSize: 18 }} />}
+   742→   742→          onClick={handleSave}
+   743→   743→          disabled={!hasChanges}
+   744→   744→          sx={{
+   745→   745→            textTransform: 'none', fontSize: '0.85rem', fontWeight: 600,
+   746→   746→            bgcolor: '#1565c0', '&:hover': { bgcolor: '#0d47a1' },
+   747→   747→          }}
+   748→   748→        >
+   749→   749→          Enregistrer les modifications
+   750→   750→        </Button>
+   751→   751→      </Box>
+   752→   752→    </Drawer>
+   753→   753→  );
+   754→   754→}
+   755→   755→
+   756→   756→/* ═══ PAGE PRINCIPALE ═══ */
+   757→   757→export default function Offres() {
+   758→   758→  const [data, setData] = useState(initialData);
+   759→   759→  const [dlg, setDlg] = useState(false);
+   760→   760→  const [filterDep, setFilterDep] = useState('Tous');
+   761→   761→  const [filterStatut, setFilterStatut] = useState('Tous');
+   762→   762→  const [filterCanal, setFilterCanal] = useState('Tous');
+   763→   763→  const [page, setPage] = useState(0);
+   764→   764→  const [rpp, setRpp] = useState(10);
+   765→   765→  const [drawerOffre, setDrawerOffre] = useState(null);
+   766→   766→  const [snack, setSnack] = useState(null);
+   767→   767→  /* Quick Actions states */
+   768→   768→  const [loadingStatus, setLoadingStatus] = useState({ id: null, statut: null });
+   769→   769→  const [confirmDlg, setConfirmDlg] = useState(null); /* { type: 'archive'|'delete', offre: {...} } */
+   770→   770→
+   771→   771→  /* ═══ RECHERCHE & FILTRES AVANCÉS ═══ */
+   772→   772→  const [searchQuery, setSearchQuery] = useState('');
+   773→   773→  const [searchParams, setSearchParams] = useSearchParams();
+   774→   774→  const debouncedQuery = useDebounce(searchQuery, 250);
+   775→   775→  const isInitialized = useRef(false);
+   776→   776→
+   777→   777→  /* Indicateur : y a-t-il des filtres actifs ? */
+   778→   778→  const hasActiveFilters = filterDep !== 'Tous' || filterStatut !== 'Tous' || filterCanal !== 'Tous' || searchQuery !== '';
+   779→   779→
+   780→   780→  /* Initialisation depuis les query params URL (au premier mount uniquement) */
+   781→   781→  useEffect(() => {
+   782→   782→    const p = searchParams;
+   783→   783→    const dept = p.get('dept');
+   784→   784→    const statut = p.get('statut');
+   785→   785→    const canal = p.get('canal');
+   786→   786→    const q = p.get('q');
+   787→   787→    if (dept) setFilterDep(dept);
+   788→   788→    if (statut) setFilterStatut(statut);
+   789→   789→    if (canal) setFilterCanal(canal);
+   790→   790→    if (q) setSearchQuery(q);
+   791→   791→    isInitialized.current = true;
+   792→   792→  }, []);
+   793→   793→
+   794→   794→  /* Synchroniser les filtres dans l'URL (après init) */
+   795→   795→  useEffect(() => {
+   796→   796→    if (!isInitialized.current) return;
+   797→   797→    const p = new URLSearchParams();
+   798→   798→    if (filterDep !== 'Tous') p.set('dept', filterDep);
+   799→   799→    if (filterStatut !== 'Tous') p.set('statut', filterStatut);
+   800→   800→    if (filterCanal !== 'Tous') p.set('canal', filterCanal);
+   801→   801→    if (searchQuery) p.set('q', searchQuery);
+   802→   802→    setSearchParams(p, { replace: true });
+   803→   803→  }, [filterDep, filterStatut, filterCanal, searchQuery, setSearchParams]);
+   804→   804→
+   805→   805→  /* Réinitialiser tous les filtres */
+   806→   806→  const handleResetFilters = useCallback(() => {
+   807→   807→    setFilterDep('Tous');
+   808→   808→    setFilterStatut('Tous');
+   809→   809→    setFilterCanal('Tous');
+   810→   810→    setSearchQuery('');
+   811→   811→    setPage(0);
+   812→   812→  }, []);
+   813→   813→
+   814→   814→  const filtered = useMemo(() => {
+   815→   815→    const q = debouncedQuery.toLowerCase().trim();
+   816→   816→    return data.filter(o =>
+   817→   817→      (filterDep === 'Tous' || o.departement === filterDep) &&
+   818→   818→      (filterStatut === 'Tous' || o.statutOffre === filterStatut) &&
+   819→   819→      (filterCanal === 'Tous' || o.canalDiffusion === filterCanal) &&
+   820→   820→      (!q || o.numero.toLowerCase().includes(q) ||
+   821→   821→           o.intitule.toLowerCase().includes(q) ||
+   822→   822→           o.departement.toLowerCase().includes(q) ||
+   823→   823→           o.responsable.toLowerCase().includes(q))
+   824→   824→    );
+   825→   825→  }, [data, filterDep, filterStatut, filterCanal, debouncedQuery]);
+   826→   826→
+   827→   827→  const handleSaveOffre = useCallback((id, formData) => {
+   828→   828→    const today = new Date().toLocaleDateString('fr-FR');
+   829→   829→    setData(prev => prev.map(o => {
+   830→   830→      if (o.id !== id) return o;
+   831→   831→      const changes = [];
+   832→   832→      if (o.statutOffre !== formData.statutOffre) changes.push(`Statut : ${o.statutOffre} \u2192 ${formData.statutOffre}`);
+   833→   833→      if (o.priorite !== formData.priorite) changes.push(`Priorit\u00e9 : ${o.priorite} \u2192 ${formData.priorite}`);
+   834→   834→      if (o.intitule !== formData.intitule) changes.push('Intitul\u00e9 modifi\u00e9');
+   835→   835→      if (o.responsable !== formData.responsable) changes.push(`Responsable : ${o.responsable} \u2192 ${formData.responsable}`);
+   836→   836→      if (o.budgetAlloue !== formData.budgetAlloue) changes.push('Budget modifi\u00e9');
+   837→   837→      if (o.canalDiffusion !== formData.canalDiffusion) changes.push(`Canal : ${o.canalDiffusion} \u2192 ${formData.canalDiffusion}`);
+   838→   838→
+   839→   839→      const newHist = [...(o.historique || [])];
+   840→   840→      changes.forEach(ch => {
+   841→   841→        newHist.push({ date: today, evenement: ch, auteur: 'Utilisateur', type: 'modification' });
+   842→   842→      });
+   843→   843→      if (changes.length === 0) {
+   844→   844→        newHist.push({ date: today, evenement: 'Offre modifi\u00e9e', auteur: 'Utilisateur', type: 'modification' });
+   845→   845→      }
+   846→   846→
+   847→   847→      return {
+   848→   848→        ...o,
+   849→   849→        ...formData,
+   850→   850→        historique: newHist,
+   851→   851→      };
+   852→   852→    }));
+   853→   853→    /* Mettre à jour le drawer avec les nouvelles données */
+   854→   854→    setDrawerOffre(prev => prev && prev.id === id ? { ...prev, ...formData } : prev);
+   855→   855→    setSnack({ msg: 'Offre mise \u00e0 jour avec succ\u00e8s', severity: 'success' });
+   856→   856→  }, []);
+   857→   857→
+   858→   858→  /* ═══ QUICK STATUS CHANGE (optimiste + spinner 300ms) ═══ */
+   859→   859→  const handleQuickStatutChange = useCallback((id, newStatut) => {
+   860→   860→    const offre = data.find(o => o.id === id);
+   861→   861→    if (!offre || offre.statutOffre === newStatut) return;
+   862→   862→
+   863→   863→    /* Spinner + affichage du nouveau statut immédiatement (optimiste) */
+   864→   864→    setLoadingStatus({ id, statut: newStatut });
+   865→   865→
+   866→   866→    const today = new Date().toLocaleDateString('fr-FR');
+   867→   867→    const oldStatut = offre.statutOffre;
+   868→   868→
+   869→   869→    /* Mise à jour optimiste du state */
+   870→   870→    setData(prev => prev.map(o => {
+   871→   871→      if (o.id !== id) return o;
+   872→   872→      return {
+   873→   873→        ...o,
+   874→   874→        statutOffre: newStatut,
+   875→   875→        historique: [...(o.historique || []), {
+   876→   876→          date: today,
+   877→   877→          evenement: `Statut chang\u00e9 : ${oldStatut} \u2192 ${newStatut}`,
+   878→   878→          auteur: 'Utilisateur',
+   879→   879→          type: newStatut === 'Annulee' ? 'annulation' : newStatut === 'Cloturee' ? 'cloture' : 'modification',
+   880→   880→        }],
+   881→   881→        ...(newStatut === 'Cloturee' ? { dateCloture: today } : {}),
+   882→   882→        ...(newStatut === 'Publiee' && !o.datePublication ? { datePublication: today } : {}),
+   883→   883→      };
+   884→   884→    }));
+   885→   885→
+   886→   886→    /* Mettre à jour le drawer si ouvert */
+   887→   887→    setDrawerOffre(prev => prev && prev.id === id ? { ...prev, statutOffre: newStatut } : prev);
+   888→   888→
+   889→   889→    /* Simuler un délai API de 300ms puis effacer le spinner */
+   890→   890→    setTimeout(() => {
+   891→   891→      setLoadingStatus({ id: null, statut: null });
+   892→   892→      setSnack({ msg: `Statut de ${offre.numero} mis \u00e0 jour vers '${newStatut}'`, severity: 'success' });
+   893→   893→    }, 300);
+   894→   894→  }, [data]);
+   895→   895→
+   896→   896→  /* ═══ ARCHIVER UNE OFFRE ═══ */
+   897→   897→  const handleArchive = useCallback((offre) => {
+   898→   898→    setConfirmDlg({ type: 'archive', offre });
+   899→   899→  }, []);
+   900→   900→
+   901→   901→  /* ═══ SUPPRIMER UNE OFFRE ═══ */
+   902→   902→  const handleDelete = useCallback((offre) => {
+   903→   903→    setConfirmDlg({ type: 'delete', offre });
+   904→   904→  }, []);
+   905→   905→
+   906→   906→  /* ═══ CONFIRMER ACTION CRITIQUE ═══ */
+   907→   907→  const handleConfirmAction = useCallback(() => {
+   908→   908→    if (!confirmDlg) return;
+   909→   909→    const { type, offre } = confirmDlg;
+   910→   910→    const today = new Date().toLocaleDateString('fr-FR');
+   911→   911→
+   912→   912→    if (type === 'archive') {
+   913→   913→      setData(prev => prev.map(o => o.id === offre.id ? {
+   914→   914→        ...o, statutOffre: 'Cloturee',
+   915→   915→        historique: [...(o.historique || []), { date: today, evenement: 'Offre archiv\u00e9e (cl\u00f4tur\u00e9e)', auteur: 'Utilisateur', type: 'cloture' }],
+   916→   916→        dateCloture: o.dateCloture || today,
+   917→   917→      } : o));
+   918→   918→      setDrawerOffre(prev => prev && prev.id === offre.id ? { ...prev, statutOffre: 'Cloturee' } : prev);
+   919→   919→      setSnack({ msg: `${offre.numero} archiv\u00e9e avec succ\u00e8s`, severity: 'info' });
+   920→   920→    } else if (type === 'delete') {
+   921→   921→      setData(prev => prev.filter(o => o.id !== offre.id));
+   922→   922→      if (drawerOffre?.id === offre.id) setDrawerOffre(null);
+   923→   923→      setSnack({ msg: `${offre.numero} supprim\u00e9e`, severity: 'warning' });
+   924→   924→    }
+   925→   925→
+   926→   926→    setConfirmDlg(null);
+   927→   927→  }, [confirmDlg, drawerOffre]);
+   928→   928→
+   929→   929→  const handleExport = useCallback(() => {
+   930→   930→    const cols = ['N\u00b0','Intitul\u00e9','D\u00e9partement','Type Poste','Type Contrat','Canal','Statut Offre','Date Publication','Date Cl\u00f4ture','Date Requise','Responsable','Priorit\u00e9','Budget Allou\u00e9','Salaire Min','Salaire Max','Candidatures Re\u00e7ues','Site'];
+   931→   931→    const rows = [cols.join(';')];
+   932→   932→    filtered.forEach(o => rows.push([o.numero, o.intitule, o.departement, o.typePoste, o.typeContrat, o.canalDiffusion, o.statutOffre, o.datePublication, o.dateCloture, o.dateRequise, o.responsable, o.priorite, o.budgetAlloue, o.salaireMin, o.salaireMax, o.nbCandidaturesRecues, o.site].map(v => `"${v}"`).join(';')));
+   933→   933→    const blob = new Blob(['\uFEFF' + rows.join('\n')], { type: 'text/csv;charset=utf-8' });
+   934→   934→    const url = URL.createObjectURL(blob);
+   935→   935→    const a = document.createElement('a');
+   936→   936→    a.href = url;
+   937→   937→    a.download = 'offres_emploi.csv';
+   938→   938→    a.click();
+   939→   939→    URL.revokeObjectURL(url);
+   940→   940→    setSnack({ msg: 'Export CSV t\u00e9l\u00e9charg\u00e9', severity: 'info' });
+   941→   941→  }, [filtered]);
+   942→   942→
+   943→   943→  return (
+   944→   944→    <Box>
+   945→   945→      <Typography variant="h5" fontWeight="bold">Offres d'Emploi</Typography>
+   946→   946→      <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+   947→   947→        {hasActiveFilters
+   948→   948→          ? <><strong>{filtered.length}</strong> offre(s) trouvée(s) sur <strong>{data.length}</strong></>
+   949→   949→          : <>{data.length} offre(s) d'emploi</>
+   950→   950→        }
+   951→   951→      </Typography>
+   952→   952→
+   953→   953→      <Box sx={{ display: 'flex', gap: 1, mb: 2, alignItems: 'center' }}>
+   954→   954→        <Button variant="outlined" startIcon={<Download fontSize="small" />} onClick={handleExport}>Exporter CSV</Button>
+   955→   955→        <Button variant="contained" startIcon={<Add fontSize="small" />} onClick={() => setDlg(true)}>Nouvelle Offre</Button>
+   956→   956→      </Box>
+   957→   957→
+   958→   958→      {/* KPIs */}
+   959→   959→      <Box sx={{ display: 'flex', gap: 2, mb: 3, flexWrap: 'wrap' }}>
+   960→   960→        <KPICard titre="TOTAL OFFRES" valeur={filtered.length} sousTexte={`${filtered.length} offre(s) enregistr\u00e9e(s)`} />
+   961→   961→        <Box
+   962→   962→          onClick={() => { setFilterStatut('Publiee'); setPage(0); }}
+   963→   963→          sx={{ cursor: 'pointer', transition: 'transform 0.15s, box-shadow 0.15s', '&:hover': { transform: 'translateY(-2px)' }, '&:active': { transform: 'translateY(0)' } }}
+   964→   964→        >
+   965→   965→          <KPICard titre="PUBLI\u00c9ES" valeur={filtered.filter(o => o.statutOffre === 'Publiee').length} sousTexte={`${Math.round(filtered.filter(o => o.statutOffre === 'Publiee').length / Math.max(filtered.length, 1) * 100)}% du total`} />
+   966→   966→        </Box>
+   967→   967→        <KPICard titre="CANDIDATURES EN COURS" valeur={filtered.filter(o => o.statutOffre === 'Candidatures en cours').length} sousTexte="offres actives" />
+   968→   968→        <KPICard titre="TOTAL CANDIDATURES" valeur={filtered.reduce((s, o) => s + (o.nbCandidaturesRecues || 0), 0)} sousTexte="candidatures re\u00e7ues" />
+   969→   969→      </Box>
+   970→   970→
+   971→   971→      {/* ═══ Recherche + Filtres avancés ═══ */}
+   972→   972→      <Box sx={{ display: 'flex', gap: 2, mb: 1, flexWrap: 'wrap', alignItems: 'center' }}>
+   973→   973→        <TextField
+   974→   974→          size="small"
+   975→   975→          placeholder="Rechercher par N°, intitulé, département, responsable..."
+   976→   976→          value={searchQuery}
+   977→   977→          onChange={e => { setSearchQuery(e.target.value); setPage(0); }}
+   978→   978→          sx={{ flex: '1 1 320px', minWidth: 280 }}
+   979→   979→          InputProps={{
+   980→   980→            startAdornment: <InputAdornment position="start"><Search sx={{ fontSize: 20, color: 'action.active' }} /></InputAdornment>,
+   981→   981→            endAdornment: searchQuery ? (
+   982→   982→              <InputAdornment position="end">
+   983→   983→                <IconButton size="small" onClick={() => { setSearchQuery(''); setPage(0); }} sx={{ color: 'text.secondary' }} aria-label="Effacer la recherche">
+   984→   984→                  <Close sx={{ fontSize: 18 }} />
+   985→   985→                </IconButton>
+   986→   986→              </InputAdornment>
+   987→   987→            ) : null,
+   988→   988→          }}
+   989→   989→        />
+   990→   990→      </Box>
+   991→   991→      <Box sx={{ display: 'flex', gap: 2, mb: 2, flexWrap: 'wrap', alignItems: 'center' }}>
+   992→   992→        <FormControl size="small" sx={{ minWidth: 180 }}>
+   993→   993→          <Select value={filterDep} onChange={e => { setFilterDep(e.target.value); setPage(0); }} displayEmpty>
+   994→   994→            <MenuItem value="Tous">Tous les d\u00e9partements</MenuItem>
+   995→   995→            {nomenclatures.departement.map(d => <MenuItem key={d} value={d}>{d}</MenuItem>)}
+   996→   996→          </Select>
+   997→   997→        </FormControl>
+   998→   998→        <FormControl size="small" sx={{ minWidth: 170 }}>
+   999→   999→          <Select value={filterStatut} onChange={e => { setFilterStatut(e.target.value); setPage(0); }} displayEmpty>
+  1000→  1000→            <MenuItem value="Tous">Tous les statuts</MenuItem>
+  1001→  1001→            {nomenclatures.statut_offre.map(s => <MenuItem key={s} value={s}>{s}</MenuItem>)}
+  1002→  1002→          </Select>
+  1003→  1003→        </FormControl>
+  1004→  1004→        <FormControl size="small" sx={{ minWidth: 170 }}>
+  1005→  1005→          <Select value={filterCanal} onChange={e => { setFilterCanal(e.target.value); setPage(0); }} displayEmpty>
+  1006→  1006→            <MenuItem value="Tous">Tous les canaux</MenuItem>
+  1007→  1007→            {nomenclatures.canal_diffusion.map(c => <MenuItem key={c} value={c}>{c}</MenuItem>)}
+  1008→  1008→          </Select>
+  1009→  1009→        </FormControl>
+  1010→  1010→        <Fade in={hasActiveFilters}>
+  1011→  1011→          <Button
+  1012→  1012→            variant="outlined"
+  1013→  1013→            size="small"
+  1014→  1014→            startIcon={<FilterListOff sx={{ fontSize: 18 }} />}
+  1015→  1015→            onClick={handleResetFilters}
+  1016→  1016→            sx={{ textTransform: 'none', borderColor: 'grey.400', color: 'text.secondary' }}
+  1017→  1017→          >
+  1018→  1018→            Effacer les filtres
+  1019→  1019→          </Button>
+  1020→  1020→        </Fade>
+  1021→  1021→      </Box>
+  1022→  1022→
+  1023→  1023→      {/* Tableau */}
+  1024→  1024→      <Paper>
+  1025→  1025→        <TableContainer><Table size="small">
+  1026→  1026→          <TableHead><TableRow>
+  1027→  1027→            {tableCols.map(c => (
+  1028→  1028→              <TableCell key={c.key} sx={{ fontWeight: 'bold', bgcolor: '#f5f5f5', whiteSpace: 'nowrap', width: c.width }}>{c.label}</TableCell>
+  1029→  1029→            ))}
+  1030→  1030→            <TableCell sx={{ fontWeight: 'bold', bgcolor: '#f5f5f5', width: 230, textAlign: 'center' }}>Actions</TableCell>
+  1031→  1031→          </TableRow></TableHead>
+  1032→  1032→          <TableBody>
+  1033→  1033→            {filtered.length === 0 ? (
+  1034→  1034→              <TableRow><TableCell colSpan={tableCols.length + 1} sx={{ p: 0, border: 'none' }}>
+  1035→  1035→                <Box sx={{ py: 8, textAlign: 'center' }}>
+  1036→  1036→                  <SearchOff sx={{ fontSize: 64, color: 'grey.300', mb: 2 }} />
+  1037→  1037→                  <Typography variant="h6" color="text.secondary" gutterBottom>
+  1038→  1038→                    Aucune offre ne correspond à vos critères de recherche.
+  1039→  1039→                  </Typography>
+  1040→  1040→                  <Typography variant="body2" color="text.disabled" sx={{ mb: 3 }}>
+  1041→  1041→                    Essayez de modifier vos filtres ou votre recherche.
+  1042→  1042→                  </Typography>
+  1043→  1043→                  <Button variant="outlined" startIcon={<FilterListOff />} onClick={handleResetFilters} sx={{ textTransform: 'none' }}>
+  1044→  1044→                    Réinitialiser les filtres
+  1045→  1045→                  </Button>
+  1046→  1046→                </Box>
+  1047→  1047→              </TableCell></TableRow>
+  1048→  1048→            ) : (
+  1049→  1049→              filtered.slice(page * rpp, page * rpp + rpp).map(row => (
+  1050→  1050→              <TableRow key={row.id} hover sx={{ cursor: 'pointer' }} onClick={() => setDrawerOffre(row)}>
+  1051→  1051→                {tableCols.map(c => (
+  1052→  1052→                  <TableCell key={c.key} sx={{ whiteSpace: 'nowrap' }}>
+  1053→  1053→                    {c.chip ? <Chip label={row[c.key]} size="small" variant="outlined" /> :
+  1054→  1054→                     row[c.key]}
+  1055→  1055→                  </TableCell>
+  1056→  1056→                ))}
+  1057→  1057→                <TableCell>
+  1058→  1058→                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8, justifyContent: 'center' }} onClick={e => e.stopPropagation()}>
+  1059→  1059→                    <StatusChipMenu
+  1060→  1060→                      offre={row}
+  1061→  1061→                      onStatutChange={handleQuickStatutChange}
+  1062→  1062→                      loadingId={loadingStatus.id}
+  1063→  1063→                      loadingStatut={loadingStatus.statut}
+  1064→  1064→                    />
+  1065→  1065→                    <Box sx={{ width: 1, height: 24, bgcolor: 'divider', borderRadius: 1 }} />
+  1066→  1066→                    <QuickActions
+  1067→  1067→                      offre={row}
+  1068→  1068→                      onView={o => setDrawerOffre(o)}
+  1069→  1069→                      onArchive={handleArchive}
+  1070→  1070→                      onDelete={handleDelete}
+  1071→  1071→                    />
+  1072→  1072→                  </Box>
+  1073→  1073→                </TableCell>
+  1074→  1074→              </TableRow>
+  1075→  1075→              ))
+  1076→  1076→            )}
+  1077→  1077→          </TableBody>
+  1078→  1078→        </Table></TableContainer>
+  1079→  1079→        <TablePagination
+  1080→  1080→          component="div" count={filtered.length} page={page}
+  1081→  1081→          onPageChange={(e, p) => setPage(p)} rowsPerPage={rpp}
+  1082→  1082→          onRowsPerPageChange={e => { setRpp(parseInt(e.target.value, 10)); setPage(0); }}
+  1083→  1083→          rowsPerPageOptions={[5, 10, 25]} labelRowsPerPage="Lignes par page"
+  1084→  1084→        />
+  1085→  1085→      </Paper>
+  1086→  1086→
+  1087→  1087→      {/* Drawer d'\u00e9dition */}
+  1088→  1088→      <OffreDrawer
+  1089→  1089→        offre={drawerOffre}
+  1090→  1090→        open={Boolean(drawerOffre)}
+  1091→  1091→        onClose={() => setDrawerOffre(null)}
+  1092→  1092→        onSave={handleSaveOffre}
+  1093→  1093→      />
+  1094→  1094→
+  1095→  1095→      {/* Dialogue d'ajout */}
+  1096→  1096→      <AddDialog
+  1097→  1097→        open={dlg} onClose={() => setDlg(false)} title="Nouvelle Offre d'Emploi"
+  1098→  1098→        fields={[
+  1099→  1099→          { key: 'intitule', label: 'Intitul\u00e9 du Poste', required: true },
+  1100→  1100→          { key: 'departement', label: 'D\u00e9partement', type: 'select', options: nomenclatures.departement, required: true },
+  1101→  1101→          { key: 'typePoste', label: 'Type Poste', type: 'select', options: nomenclatures.type_poste, required: true },
+  1102→  1102→          { key: 'typeContrat', label: 'Type Contrat', type: 'select', options: nomenclatures.type_contrat, required: true },
+  1103→  1103→          { key: 'canalDiffusion', label: 'Canal de Diffusion', type: 'select', options: nomenclatures.canal_diffusion, required: true },
+  1104→  1104→          { key: 'priorite', label: 'Priorit\u00e9', type: 'select', options: nomenclatures.priorite, required: true },
+  1105→  1105→          { key: 'dateRequise', label: 'Date Requise', required: true },
+  1106→  1106→          { key: 'dateCloture', label: 'Date de Cl\u00f4ture' },
+  1107→  1107→          { key: 'site', label: 'Site', type: 'select', options: nomenclatures.site },
+  1108→  1108→          { key: 'responsable', label: 'Responsable', required: true },
+  1109→  1109→          { key: 'roleResponsable', label: 'R\u00f4le du Responsable', type: 'select', options: nomenclatures.role_responsable },
+  1110→  1110→          { key: 'budgetAlloue', label: 'Budget Allou\u00e9 (FCFA)', type: 'number' },
+  1111→  1111→          { key: 'salaireMin', label: 'Salaire Min (FCFA)', type: 'number' },
+  1112→  1112→          { key: 'salaireMax', label: 'Salaire Max (FCFA)', type: 'number' },
+  1113→  1113→          { key: 'description', label: 'Description', multiline: true },
+  1114→  1114→        ]}
+  1115→  1115→        onSubmit={(vals) => {
+  1116→  1116→          const nid = data.length + 1;
+  1117→  1117→          const today = new Date().toLocaleDateString('fr-FR');
+  1118→  1118→          setData(prev => [...prev, {
+  1119→  1119→            id: nid, numero: 'OF-2025-' + String(nid).padStart(3, '0'),
+  1120→  1120→            statutOffre: 'A creer', datePublication: '',
+  1121→  1121→            nbCandidatures: 0, nbCandidaturesRecues: 0,
+  1122→  1122→            candidatsAssocies: [],
+  1123→  1123→            historique: [{ date: today, evenement: 'Offre cr\u00e9\u00e9e', auteur: vals.responsable || 'Utilisateur', type: 'creation' }],
+  1124→  1124→            site: vals.site || 'Siege (Douala)',
+  1125→  1125→            ...vals,
+  1126→  1126→          }]);
+  1127→  1127→        }}
+  1128→  1128→      />
+  1129→  1129→
+  1130→  1130→      <Snackbar open={Boolean(snack)} autoHideDuration={3000} onClose={() => setSnack(null)} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
+  1131→  1131→        {snack && <Alert onClose={() => setSnack(null)} severity={snack.severity} variant="filled" sx={{ borderRadius: 2 }}>{snack.msg}</Alert>}
+  1132→  1132→      </Snackbar>
+  1133→  1133→
+  1134→  1134→      {/* ═══ DIALOGUE DE CONFIRMATION (Archive / Supprimer) ═══ */}
+  1135→  1135→      <Dialog
+  1136→  1136→        open={Boolean(confirmDlg)}
+  1137→  1137→        onClose={() => setConfirmDlg(null)}
+  1138→  1138→        maxWidth="xs"
+  1139→  1139→        PaperProps={{ sx: { borderRadius: 3, p: 0.5 } }}
+  1140→  1140→      >
+  1141→  1141→        {confirmDlg && (
+  1142→  1142→          <>
+  1143→  1143→            <DialogTitle sx={{ display: 'flex', alignItems: 'center', gap: 1.5, pb: 1 }}>
+  1144→  1144→              <Box sx={{
+  1145→  1145→                width: 40, height: 40, borderRadius: '50%',
+  1146→  1146→                display: 'flex', alignItems: 'center', justifyContent: 'center',
+  1147→  1147→                bgcolor: confirmDlg.type === 'delete' ? 'rgba(211,47,47,0.1)' : 'rgba(245,127,23,0.1)',
+  1148→  1148→              }}>
+  1149→  1149→                {confirmDlg.type === 'delete'
+  1150→  1150→                  ? <Delete sx={{ color: '#d32f2f', fontSize: 22 }} />
+  1151→  1151→                  : <Archive sx={{ color: '#f57f17', fontSize: 22 }} />
+  1152→  1152→                }
+  1153→  1153→              </Box>
+  1154→  1154→              <Box>
+  1155→  1155→                <Typography variant="subtitle1" fontWeight="bold" sx={{ fontSize: '1rem' }}>
+  1156→  1156→                  {confirmDlg.type === 'delete' ? 'Supprimer cette offre' : 'Archiver cette offre'}
+  1157→  1157→                </Typography>
+  1158→  1158→                <Typography variant="caption" color="text.secondary">
+  1159→  1159→                  {confirmDlg.offre.numero} — {confirmDlg.offre.intitule}
+  1160→  1160→                </Typography>
+  1161→  1161→              </Box>
+  1162→  1162→            </DialogTitle>
+  1163→  1163→            <DialogContent>
+  1164→  1164→              <Typography variant="body2" sx={{ color: 'text.secondary', lineHeight: 1.6 }}>
+  1165→  1165→                {confirmDlg.type === 'delete'
+  1166→  1166→                  ? `Cette action est irréversible. L'offre ${confirmDlg.offre.numero} et toutes ses données associées (candidatures, historique) seront définitivement supprimées.`
+  1167→  1167→                  : `L'offre ${confirmDlg.offre.numero} sera marquée comme clôturée et archivée. Elle ne recevra plus de candidatures.`
+  1168→  1168→                }
+  1169→  1169→              </Typography>
+  1170→  1170→            </DialogContent>
+  1171→  1171→            <DialogActions sx={{ px: 3, pb: 2 }}>
+  1172→  1172→              <Button onClick={() => setConfirmDlg(null)} color="inherit" sx={{ textTransform: 'none' }}>
+  1173→  1173→                Annuler
+  1174→  1174→              </Button>
+  1175→  1175→              <Button
+  1176→  1176→                onClick={handleConfirmAction} variant="contained"
+  1177→  1177→                sx={{
+  1178→  1178→                  textTransform: 'none', fontWeight: 600,
+  1179→  1179→                  bgcolor: confirmDlg.type === 'delete' ? '#d32f2f' : '#f57f17',
+  1180→  1180→                  '&:hover': { bgcolor: confirmDlg.type === 'delete' ? '#b71c1c' : '#e65100' },
+  1181→  1181→                }}
+  1182→  1182→              >
+  1183→  1183→                {confirmDlg.type === 'delete' ? 'Supprimer définitivement' : 'Confirmer l\'archivage'}
+  1184→  1184→              </Button>
+  1185→  1185→            </DialogActions>
+  1186→  1186→          </>
+  1187→  1187→        )}
+  1188→  1188→      </Dialog>
+  1189→  1189→    </Box>
+  1190→  1190→  );
+  1191→  1191→}
+  1192→  1192→
