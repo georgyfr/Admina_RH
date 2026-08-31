@@ -1,4 +1,5 @@
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import {
   Box, Typography, Button, Table, TableBody, TableCell, TableContainer, TableHead,
   TableRow, TablePagination, Chip, FormControl, Select, MenuItem, Tooltip, Paper,
@@ -10,13 +11,24 @@ import {
   Add, Download, Close, Save, Edit, CalendarToday, Person,
   AccountBalanceWallet, Publish, Campaign, ArrowForward, Work,
   Create, Groups, AccessTime, Visibility, Delete, Archive,
-  MoreVert, CheckCircle, KeyboardArrowDown, WarningAmber
+  MoreVert, CheckCircle, KeyboardArrowDown, WarningAmber,
+  Search, SearchOff, FilterListOff
 } from '@mui/icons-material';
 import KPICard from '../components/KPICard';
 import AddDialog from '../components/AddDialog';
 import { nomenclatures } from '../data/nomenclatures';
 
 const formatFCFA = (a) => (!a && a !== 0) ? '\u2014' : a.toLocaleString('fr-FR') + ' FCFA';
+
+/* \u2550\u2550\u2550 HOOK DEBOUNCE \u2550\u2550\u2550 */
+function useDebounce(value, delay) {
+  const [debounced, setDebounced] = useState(value);
+  useEffect(() => {
+    const t = setTimeout(() => setDebounced(value), delay);
+    return () => clearTimeout(t);
+  }, [value, delay]);
+  return debounced;
+}
 
 /* ═══ COULEURS ═══ */
 const statutOffreColor = {
@@ -756,11 +768,61 @@ export default function Offres() {
   const [loadingStatus, setLoadingStatus] = useState({ id: null, statut: null });
   const [confirmDlg, setConfirmDlg] = useState(null); /* { type: 'archive'|'delete', offre: {...} } */
 
-  const filtered = useMemo(() => data.filter(o =>
-    (filterDep === 'Tous' || o.departement === filterDep) &&
-    (filterStatut === 'Tous' || o.statutOffre === filterStatut) &&
-    (filterCanal === 'Tous' || o.canalDiffusion === filterCanal)
-  ), [data, filterDep, filterStatut, filterCanal]);
+  /* ═══ RECHERCHE & FILTRES AVANCÉS ═══ */
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const debouncedQuery = useDebounce(searchQuery, 250);
+  const isInitialized = useRef(false);
+
+  /* Indicateur : y a-t-il des filtres actifs ? */
+  const hasActiveFilters = filterDep !== 'Tous' || filterStatut !== 'Tous' || filterCanal !== 'Tous' || searchQuery !== '';
+
+  /* Initialisation depuis les query params URL (au premier mount uniquement) */
+  useEffect(() => {
+    const p = searchParams;
+    const dept = p.get('dept');
+    const statut = p.get('statut');
+    const canal = p.get('canal');
+    const q = p.get('q');
+    if (dept) setFilterDep(dept);
+    if (statut) setFilterStatut(statut);
+    if (canal) setFilterCanal(canal);
+    if (q) setSearchQuery(q);
+    isInitialized.current = true;
+  }, []);
+
+  /* Synchroniser les filtres dans l'URL (après init) */
+  useEffect(() => {
+    if (!isInitialized.current) return;
+    const p = new URLSearchParams();
+    if (filterDep !== 'Tous') p.set('dept', filterDep);
+    if (filterStatut !== 'Tous') p.set('statut', filterStatut);
+    if (filterCanal !== 'Tous') p.set('canal', filterCanal);
+    if (searchQuery) p.set('q', searchQuery);
+    setSearchParams(p, { replace: true });
+  }, [filterDep, filterStatut, filterCanal, searchQuery, setSearchParams]);
+
+  /* Réinitialiser tous les filtres */
+  const handleResetFilters = useCallback(() => {
+    setFilterDep('Tous');
+    setFilterStatut('Tous');
+    setFilterCanal('Tous');
+    setSearchQuery('');
+    setPage(0);
+  }, []);
+
+  const filtered = useMemo(() => {
+    const q = debouncedQuery.toLowerCase().trim();
+    return data.filter(o =>
+      (filterDep === 'Tous' || o.departement === filterDep) &&
+      (filterStatut === 'Tous' || o.statutOffre === filterStatut) &&
+      (filterCanal === 'Tous' || o.canalDiffusion === filterCanal) &&
+      (!q || o.numero.toLowerCase().includes(q) ||
+           o.intitule.toLowerCase().includes(q) ||
+           o.departement.toLowerCase().includes(q) ||
+           o.responsable.toLowerCase().includes(q))
+    );
+  }, [data, filterDep, filterStatut, filterCanal, debouncedQuery]);
 
   const handleSaveOffre = useCallback((id, formData) => {
     const today = new Date().toLocaleDateString('fr-FR');
@@ -881,7 +943,12 @@ export default function Offres() {
   return (
     <Box>
       <Typography variant="h5" fontWeight="bold">Offres d'Emploi</Typography>
-      <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>{filtered.length} offre(s) d'emploi</Typography>
+      <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+        {hasActiveFilters
+          ? <><strong>{filtered.length}</strong> offre(s) trouvée(s) sur <strong>{data.length}</strong></>
+          : <>{data.length} offre(s) d'emploi</>
+        }
+      </Typography>
 
       <Box sx={{ display: 'flex', gap: 1, mb: 2, alignItems: 'center' }}>
         <Button variant="outlined" startIcon={<Download fontSize="small" />} onClick={handleExport}>Exporter CSV</Button>
@@ -891,13 +958,37 @@ export default function Offres() {
       {/* KPIs */}
       <Box sx={{ display: 'flex', gap: 2, mb: 3, flexWrap: 'wrap' }}>
         <KPICard titre="TOTAL OFFRES" valeur={filtered.length} sousTexte={`${filtered.length} offre(s) enregistr\u00e9e(s)`} />
-        <KPICard titre="PUBLI\u00c9ES" valeur={filtered.filter(o => o.statutOffre === 'Publiee').length} sousTexte={`${Math.round(filtered.filter(o => o.statutOffre === 'Publiee').length / Math.max(filtered.length, 1) * 100)}% du total`} />
+        <Box
+          onClick={() => { setFilterStatut('Publiee'); setPage(0); }}
+          sx={{ cursor: 'pointer', transition: 'transform 0.15s, box-shadow 0.15s', '&:hover': { transform: 'translateY(-2px)' }, '&:active': { transform: 'translateY(0)' } }}
+        >
+          <KPICard titre="PUBLI\u00c9ES" valeur={filtered.filter(o => o.statutOffre === 'Publiee').length} sousTexte={`${Math.round(filtered.filter(o => o.statutOffre === 'Publiee').length / Math.max(filtered.length, 1) * 100)}% du total`} />
+        </Box>
         <KPICard titre="CANDIDATURES EN COURS" valeur={filtered.filter(o => o.statutOffre === 'Candidatures en cours').length} sousTexte="offres actives" />
         <KPICard titre="TOTAL CANDIDATURES" valeur={filtered.reduce((s, o) => s + (o.nbCandidaturesRecues || 0), 0)} sousTexte="candidatures re\u00e7ues" />
       </Box>
 
-      {/* Filtres */}
-      <Box sx={{ display: 'flex', gap: 2, mb: 2, flexWrap: 'wrap' }}>
+      {/* ═══ Recherche + Filtres avancés ═══ */}
+      <Box sx={{ display: 'flex', gap: 2, mb: 1, flexWrap: 'wrap', alignItems: 'center' }}>
+        <TextField
+          size="small"
+          placeholder="Rechercher par N°, intitulé, département, responsable..."
+          value={searchQuery}
+          onChange={e => { setSearchQuery(e.target.value); setPage(0); }}
+          sx={{ flex: '1 1 320px', minWidth: 280 }}
+          InputProps={{
+            startAdornment: <InputAdornment position="start"><Search sx={{ fontSize: 20, color: 'action.active' }} /></InputAdornment>,
+            endAdornment: searchQuery ? (
+              <InputAdornment position="end">
+                <IconButton size="small" onClick={() => { setSearchQuery(''); setPage(0); }} sx={{ color: 'text.secondary' }} aria-label="Effacer la recherche">
+                  <Close sx={{ fontSize: 18 }} />
+                </IconButton>
+              </InputAdornment>
+            ) : null,
+          }}
+        />
+      </Box>
+      <Box sx={{ display: 'flex', gap: 2, mb: 2, flexWrap: 'wrap', alignItems: 'center' }}>
         <FormControl size="small" sx={{ minWidth: 180 }}>
           <Select value={filterDep} onChange={e => { setFilterDep(e.target.value); setPage(0); }} displayEmpty>
             <MenuItem value="Tous">Tous les d\u00e9partements</MenuItem>
@@ -916,6 +1007,17 @@ export default function Offres() {
             {nomenclatures.canal_diffusion.map(c => <MenuItem key={c} value={c}>{c}</MenuItem>)}
           </Select>
         </FormControl>
+        <Fade in={hasActiveFilters}>
+          <Button
+            variant="outlined"
+            size="small"
+            startIcon={<FilterListOff sx={{ fontSize: 18 }} />}
+            onClick={handleResetFilters}
+            sx={{ textTransform: 'none', borderColor: 'grey.400', color: 'text.secondary' }}
+          >
+            Effacer les filtres
+          </Button>
+        </Fade>
       </Box>
 
       {/* Tableau */}
@@ -928,7 +1030,23 @@ export default function Offres() {
             <TableCell sx={{ fontWeight: 'bold', bgcolor: '#f5f5f5', width: 230, textAlign: 'center' }}>Actions</TableCell>
           </TableRow></TableHead>
           <TableBody>
-            {filtered.slice(page * rpp, page * rpp + rpp).map(row => (
+            {filtered.length === 0 ? (
+              <TableRow><TableCell colSpan={tableCols.length + 1} sx={{ p: 0, border: 'none' }}>
+                <Box sx={{ py: 8, textAlign: 'center' }}>
+                  <SearchOff sx={{ fontSize: 64, color: 'grey.300', mb: 2 }} />
+                  <Typography variant="h6" color="text.secondary" gutterBottom>
+                    Aucune offre ne correspond à vos critères de recherche.
+                  </Typography>
+                  <Typography variant="body2" color="text.disabled" sx={{ mb: 3 }}>
+                    Essayez de modifier vos filtres ou votre recherche.
+                  </Typography>
+                  <Button variant="outlined" startIcon={<FilterListOff />} onClick={handleResetFilters} sx={{ textTransform: 'none' }}>
+                    Réinitialiser les filtres
+                  </Button>
+                </Box>
+              </TableCell></TableRow>
+            ) : (
+              filtered.slice(page * rpp, page * rpp + rpp).map(row => (
               <TableRow key={row.id} hover sx={{ cursor: 'pointer' }} onClick={() => setDrawerOffre(row)}>
                 {tableCols.map(c => (
                   <TableCell key={c.key} sx={{ whiteSpace: 'nowrap' }}>
@@ -954,9 +1072,7 @@ export default function Offres() {
                   </Box>
                 </TableCell>
               </TableRow>
-            ))}
-            {filtered.length === 0 && (
-              <TableRow><TableCell colSpan={tableCols.length + 1} align="center" sx={{ py: 4, color: 'text.secondary' }}>Aucune offre trouv\u00e9e</TableCell></TableRow>
+              ))
             )}
           </TableBody>
         </Table></TableContainer>

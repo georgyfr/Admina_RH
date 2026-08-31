@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 const sections = [
   { title: 'VUE D\'ENSEMBLE', items: [{ label: 'Tableau de Bord', path: '/' }] },
   { title: 'GESTION DES OFFRES', items: [
-    { label: "Offres d'Emploi", path: '/offres' },
+    { label: 'Offres d\'Emploi', path: '/offres' },
     { label: 'Demandes', path: '/demandes' },
     { label: 'Prévisions Postes', path: '/previsions' },
     { label: 'Sources Recrutement', path: '/sources' },
