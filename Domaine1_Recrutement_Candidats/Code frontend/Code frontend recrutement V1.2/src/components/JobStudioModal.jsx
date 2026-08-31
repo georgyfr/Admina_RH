@@ -28,6 +28,67 @@ const stripHtml = (h) => { if (!h) return ''; const t = document.createElement('
 
 
 
+
+/* ═══ RESIZABLE FIELD WRAPPER ═══ */
+function ResizableField({ children, fieldKey, onResize, sx = {}, ...props }) {
+  const ref = useRef(null);
+  const handleMouseDown = useCallback((e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const startX = e.clientX;
+    const startY = e.clientY;
+    const el = ref.current;
+    if (!el) return;
+    const startW = el.offsetWidth;
+    const startH = el.offsetHeight;
+    const onMove = (ev) => {
+      const newW = Math.max(100, startW + (ev.clientX - startX));
+      const newH = Math.max(28, startH + (ev.clientY - startY));
+      el.style.width = newW + 'px';
+      el.style.height = newH + 'px';
+      el.style.flex = '0 0 auto';
+      onResize?.(fieldKey, newW, newH);
+    };
+    const onUp = () => {
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseup', onUp);
+    };
+    document.body.style.cursor = 'nwse-resize';
+    document.body.style.userSelect = 'none';
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onUp);
+  }, [fieldKey, onResize]);
+
+  return (
+    <Box ref={ref} sx={{ position: 'relative', ...sx }} {...props}>
+      <Box sx={{
+        height: '100%', width: '100%',
+        display: 'flex', flexDirection: 'column',
+        '& .MuiFormControl-root': { flex: 1, display: 'flex', flexDirection: 'column' },
+        '& .MuiTextField-root': { flex: 1, display: 'flex', flexDirection: 'column' },
+        '& .MuiInputBase-root': { flex: 1, alignItems: 'stretch' },
+        '& textarea': { height: '100% !important', resize: 'none' },
+      }}>
+        {children}
+      </Box>
+      <Box onMouseDown={handleMouseDown} sx={{
+        position: 'absolute', bottom: 0, right: 0, width: 16, height: 16,
+        cursor: 'nwse-resize', zIndex: 10,
+        '&::after': {
+          content: '""', position: 'absolute', bottom: 2, right: 2,
+          width: 8, height: 8,
+          borderRight: '2px solid', borderBottom: '2px solid',
+          borderColor: 'grey.400', borderRadius: '0 0 2px 0',
+          opacity: 0, transition: 'opacity 0.15s',
+        },
+        '&:hover::after': { opacity: 1, borderColor: 'primary.main' },
+      }} />
+    </Box>
+  );
+}
+
 const INITIAL_FORM = {
   intitule: '', departement: '', typePoste: '', typeContrat: '', priorite: '', site: 'Siege (Douala)',
   salaireMin: '', salaireMax: '', budgetAlloue: '', responsable: '', roleResponsable: '', dateRequise: '',
@@ -85,6 +146,8 @@ export default function JobStudioModal({ open, onClose, onSubmit, responsablesLi
   const [exporting, setExporting] = useState(null); // 'pdf' | 'docx' | null
   const previewRef = useRef(null);
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 5 } }));
+  const [splitPercent, setSplitPercent] = useState(58);
+  const splitterRef = useRef(null);
 
   /* Reset */
   useEffect(() => {
@@ -182,6 +245,35 @@ export default function JobStudioModal({ open, onClose, onSubmit, responsablesLi
     avantages: form.avantages,
   }), [form]);
 
+
+  /* Column splitter drag */
+  const handleSplitterDown = useCallback((e) => {
+    e.preventDefault();
+    const container = splitterRef.current?.parentElement;
+    if (!container) return;
+    const startX = e.clientX;
+    const startPct = splitPercent;
+    const onMove = (ev) => {
+      const rect = container.getBoundingClientRect();
+      const dp = ((ev.clientX - startX) / rect.width) * 100;
+      setSplitPercent(Math.min(80, Math.max(30, startPct + dp)));
+    };
+    const onUp = () => {
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseup', onUp);
+    };
+    document.body.style.cursor = 'col-resize';
+    document.body.style.userSelect = 'none';
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onUp);
+  }, [splitPercent]);
+
+  const handleFieldResize = useCallback((key, w, h) => {
+    /* future: persist sizes to localStorage */
+  }, []);
+
   /* ═══ RENDER ═══ */
   return (
     <Dialog open={open} onClose={onClose}
@@ -200,66 +292,84 @@ export default function JobStudioModal({ open, onClose, onSubmit, responsablesLi
         <IconButton onClick={onClose} size="small" sx={{ color: '#fff' }}><Close /></IconButton>
       </DialogTitle>
 
-      <Box sx={{ display: 'grid', gridTemplateColumns: '7fr 5fr', flex: 1, overflow: 'hidden', gap: 0 }}>
-        <Box sx={{ overflow: 'auto', p: 3, borderRight: '1px solid', borderColor: 'divider' }}>
+      <Box ref={splitterRef} sx={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
+        <Box sx={{ width: splitPercent + '%', minWidth: 350, overflow: 'auto', p: 3 }}>
 
           <SectionHeader icon={<Typography variant="body2">1.</Typography>}>Informations de base</SectionHeader>
-          <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, gap: 2 }}>
-            <TextField label="Intitule du Poste" size="small" fullWidth value={form.intitule} onChange={(e) => h('intitule', e.target.value)} error={!!errors.intitule} helperText={errors.intitule || ' '} />
-            <FormControl size="small" fullWidth>
-              <InputLabel>Departement</InputLabel>
-              <Select value={form.departement} label="Departement" onChange={(e) => h('departement', e.target.value)}>
-                {nomenclatures.departement.map((d) => <MenuItem key={d} value={d} sx={{ fontSize: '0.85rem' }}>{d}</MenuItem>)}
-              </Select>
-            </FormControl>
-            <FormControl size="small" fullWidth>
-              <InputLabel>Type de Poste</InputLabel>
-              <Select value={form.typePoste} label="Type de Poste" onChange={(e) => h('typePoste', e.target.value)}>
-                {nomenclatures.type_poste.map((t) => <MenuItem key={t} value={t} sx={{ fontSize: '0.85rem' }}>{t}</MenuItem>)}
-              </Select>
-            </FormControl>
-            <FormControl size="small" fullWidth>
-              <InputLabel>Type de Contrat</InputLabel>
-              <Select value={form.typeContrat} label="Type de Contrat" onChange={(e) => h('typeContrat', e.target.value)}>
-                {nomenclatures.type_contrat.map((t) => <MenuItem key={t} value={t} sx={{ fontSize: '0.85rem' }}>{t}</MenuItem>)}
-              </Select>
-            </FormControl>
-            <FormControl size="small" fullWidth>
-              <InputLabel>Priorite</InputLabel>
-              <Select value={form.priorite} label="Priorite" onChange={(e) => h('priorite', e.target.value)}>
-                {nomenclatures.priorite.map((p) => <MenuItem key={p} value={p} sx={{ fontSize: '0.85rem' }}>{p}</MenuItem>)}
-              </Select>
-            </FormControl>
-            <FormControl size="small" fullWidth>
-              <InputLabel>Site</InputLabel>
-              <Select value={form.site} label="Site" onChange={(e) => h('site', e.target.value)}>
-                {nomenclatures.site.map((s) => <MenuItem key={s} value={s} sx={{ fontSize: '0.85rem' }}>{s}</MenuItem>)}
-              </Select>
-            </FormControl>
-            <FormControl size="small" fullWidth>
-              <InputLabel>Responsable</InputLabel>
-              <Select value={form.responsable} label="Responsable" onChange={(e) => h('responsable', e.target.value)}>
-                {responsablesList.map((r) => <MenuItem key={r.nom} value={r.nom} sx={{ fontSize: '0.85rem' }}>{r.nom}</MenuItem>)}
-              </Select>
-            </FormControl>
-            <FormControl size="small" fullWidth>
-              <InputLabel>Role du Responsable</InputLabel>
-              <Select value={form.roleResponsable} label="Role du Responsable" onChange={(e) => h('roleResponsable', e.target.value)}>
-                {nomenclatures.role_responsable.map((r) => <MenuItem key={r} value={r} sx={{ fontSize: '0.85rem' }}>{r}</MenuItem>)}
-              </Select>
-            </FormControl>
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
+            <ResizableField fieldKey="intitule" onResize={handleFieldResize} sx={{ flex: '1 1 calc(50% - 8px)', minWidth: 150 }}>
+              <TextField label="Intitule du Poste" size="small" fullWidth value={form.intitule} onChange={(e) => h('intitule', e.target.value)} error={!!errors.intitule} helperText={errors.intitule || ' '} />
+            </ResizableField>
+            <ResizableField fieldKey="departement" onResize={handleFieldResize} sx={{ flex: '1 1 calc(50% - 8px)', minWidth: 150 }}>
+              <FormControl size="small" fullWidth>
+                <InputLabel>Departement</InputLabel>
+                <Select value={form.departement} label="Departement" onChange={(e) => h('departement', e.target.value)}>
+                  {nomenclatures.departement.map((d) => <MenuItem key={d} value={d} sx={{ fontSize: '0.85rem' }}>{d}</MenuItem>)}
+                </Select>
+              </FormControl>
+            </ResizableField>
+            <ResizableField fieldKey="typePoste" onResize={handleFieldResize} sx={{ flex: '1 1 calc(50% - 8px)', minWidth: 150 }}>
+              <FormControl size="small" fullWidth>
+                <InputLabel>Type de Poste</InputLabel>
+                <Select value={form.typePoste} label="Type de Poste" onChange={(e) => h('typePoste', e.target.value)}>
+                  {nomenclatures.type_poste.map((t) => <MenuItem key={t} value={t} sx={{ fontSize: '0.85rem' }}>{t}</MenuItem>)}
+                </Select>
+              </FormControl>
+            </ResizableField>
+            <ResizableField fieldKey="typeContrat" onResize={handleFieldResize} sx={{ flex: '1 1 calc(50% - 8px)', minWidth: 150 }}>
+              <FormControl size="small" fullWidth>
+                <InputLabel>Type de Contrat</InputLabel>
+                <Select value={form.typeContrat} label="Type de Contrat" onChange={(e) => h('typeContrat', e.target.value)}>
+                  {nomenclatures.type_contrat.map((t) => <MenuItem key={t} value={t} sx={{ fontSize: '0.85rem' }}>{t}</MenuItem>)}
+                </Select>
+              </FormControl>
+            </ResizableField>
+            <ResizableField fieldKey="priorite" onResize={handleFieldResize} sx={{ flex: '1 1 calc(50% - 8px)', minWidth: 150 }}>
+              <FormControl size="small" fullWidth>
+                <InputLabel>Priorite</InputLabel>
+                <Select value={form.priorite} label="Priorite" onChange={(e) => h('priorite', e.target.value)}>
+                  {nomenclatures.priorite.map((p) => <MenuItem key={p} value={p} sx={{ fontSize: '0.85rem' }}>{p}</MenuItem>)}
+                </Select>
+              </FormControl>
+            </ResizableField>
+            <ResizableField fieldKey="site" onResize={handleFieldResize} sx={{ flex: '1 1 calc(50% - 8px)', minWidth: 150 }}>
+              <FormControl size="small" fullWidth>
+                <InputLabel>Site</InputLabel>
+                <Select value={form.site} label="Site" onChange={(e) => h('site', e.target.value)}>
+                  {nomenclatures.site.map((s) => <MenuItem key={s} value={s} sx={{ fontSize: '0.85rem' }}>{s}</MenuItem>)}
+                </Select>
+              </FormControl>
+            </ResizableField>
+            <ResizableField fieldKey="responsable" onResize={handleFieldResize} sx={{ flex: '1 1 calc(50% - 8px)', minWidth: 150 }}>
+              <FormControl size="small" fullWidth>
+                <InputLabel>Responsable</InputLabel>
+                <Select value={form.responsable} label="Responsable" onChange={(e) => h('responsable', e.target.value)}>
+                  {responsablesList.map((r) => <MenuItem key={r.nom} value={r.nom} sx={{ fontSize: '0.85rem' }}>{r.nom}</MenuItem>)}
+                </Select>
+              </FormControl>
+            </ResizableField>
+            <ResizableField fieldKey="roleResponsable" onResize={handleFieldResize} sx={{ flex: '1 1 calc(50% - 8px)', minWidth: 150 }}>
+              <FormControl size="small" fullWidth>
+                <InputLabel>Role du Responsable</InputLabel>
+                <Select value={form.roleResponsable} label="Role du Responsable" onChange={(e) => h('roleResponsable', e.target.value)}>
+                  {nomenclatures.role_responsable.map((r) => <MenuItem key={r} value={r} sx={{ fontSize: '0.85rem' }}>{r}</MenuItem>)}
+                </Select>
+              </FormControl>
+            </ResizableField>
           </Box>
 
           <SectionHeader icon={<Typography variant="body2">2.</Typography>}>Contexte & Analyse du Besoin</SectionHeader>
-          <TextField
-            multiline
-            rows={6}
-            fullWidth
-            value={form.contexte}
-            onChange={(e) => h('contexte', e.target.value)}
-            placeholder="Decrivez l'equipe, les enjeux et les raisons du recrutement..."
-            sx={{ '& textarea': { fontSize: '0.9rem' } }}
-          />
+          <ResizableField fieldKey="contexte" onResize={handleFieldResize} sx={{ width: '100%' }}>
+            <TextField
+              multiline
+              rows={6}
+              fullWidth
+              value={form.contexte}
+              onChange={(e) => h('contexte', e.target.value)}
+              placeholder="Decrivez l'equipe, les enjeux et les raisons du recrutement..."
+              sx={{ '& textarea': { fontSize: '0.9rem' } }}
+            />
+          </ResizableField>
 
           <SectionHeader icon={<Typography variant="body2">3.</Typography>}>Missions & Responsabilites Principales</SectionHeader>
           <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
@@ -274,24 +384,28 @@ export default function JobStudioModal({ open, onClose, onSubmit, responsablesLi
           </Button>
 
           <SectionHeader icon={<Typography variant="body2">4.</Typography>}>Profil Recherche</SectionHeader>
-          <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, gap: 2 }}>
-            <FormControl size="small" fullWidth>
-              <InputLabel>Niveau d'etudes</InputLabel>
-              <Select value={form.niveauEtude} label="Niveau d'etudes" onChange={(e) => h('niveauEtude', e.target.value)}>
-                {nomenclatures.niveau_etude_studio.map((n) => <MenuItem key={n} value={n} sx={{ fontSize: '0.85rem' }}>{n}</MenuItem>)}
-              </Select>
-            </FormControl>
-            <FormControl size="small" fullWidth>
-              <InputLabel>Experience</InputLabel>
-              <Select value={form.experience} label="Experience" onChange={(e) => h('experience', e.target.value)}>
-                {nomenclatures.experience_studio.map((e) => <MenuItem key={e} value={e} sx={{ fontSize: '0.85rem' }}>{e}</MenuItem>)}
-              </Select>
-            </FormControl>
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
+            <ResizableField fieldKey="niveauEtude" onResize={handleFieldResize} sx={{ flex: '1 1 calc(50% - 8px)', minWidth: 150 }}>
+              <FormControl size="small" fullWidth>
+                <InputLabel>Niveau d'etudes</InputLabel>
+                <Select value={form.niveauEtude} label="Niveau d'etudes" onChange={(e) => h('niveauEtude', e.target.value)}>
+                  {nomenclatures.niveau_etude_studio.map((n) => <MenuItem key={n} value={n} sx={{ fontSize: '0.85rem' }}>{n}</MenuItem>)}
+                </Select>
+              </FormControl>
+            </ResizableField>
+            <ResizableField fieldKey="experience" onResize={handleFieldResize} sx={{ flex: '1 1 calc(50% - 8px)', minWidth: 150 }}>
+              <FormControl size="small" fullWidth>
+                <InputLabel>Experience</InputLabel>
+                <Select value={form.experience} label="Experience" onChange={(e) => h('experience', e.target.value)}>
+                  {nomenclatures.experience_studio.map((e) => <MenuItem key={e} value={e} sx={{ fontSize: '0.85rem' }}>{e}</MenuItem>)}
+                </Select>
+              </FormControl>
+            </ResizableField>
           </Box>
 
-          <Box sx={{ mt: 2 }}>
+          <ResizableField fieldKey="hardSkills" onResize={handleFieldResize} sx={{ mt: 2, width: '100%' }}>
             <TagInput label="Hard Skills (Savoir-faire)" value={form.hardSkills} onChange={(v) => h('hardSkills', v)} placeholder="Ex: React, Gestion de projet..." />
-          </Box>
+          </ResizableField>
 
           <Box sx={{ mt: 2 }}>
             <Typography variant="caption" sx={{ fontSize: '0.7rem', fontWeight: 600, color: 'text.secondary', textTransform: 'uppercase', letterSpacing: 0.5, display: 'block', mb: 0.5 }}>Soft Skills (Savoir-etre)</Typography>
@@ -335,9 +449,13 @@ export default function JobStudioModal({ open, onClose, onSubmit, responsablesLi
           </Box>
 
           <SectionHeader icon={<Typography variant="body2">5.</Typography>}>Conditions & Avantages</SectionHeader>
-          <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, gap: 2 }}>
-            <TextField label="Salaire Min" size="small" type="number" fullWidth value={form.salaireMin} onChange={(e) => h('salaireMin', e.target.value ? Number(e.target.value) : '')} InputProps={{ inputProps: { min: 0 }, endAdornment: <InputAdornment position="end" style={{ fontSize: '0.8rem' }}>FCFA</InputAdornment> }} />
-            <TextField label="Salaire Max" size="small" type="number" fullWidth value={form.salaireMax} onChange={(e) => h('salaireMax', e.target.value ? Number(e.target.value) : '')} InputProps={{ inputProps: { min: 0 }, endAdornment: <InputAdornment position="end" style={{ fontSize: '0.8rem' }}>FCFA</InputAdornment> }} />
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
+            <ResizableField fieldKey="salaireMin" onResize={handleFieldResize} sx={{ flex: '1 1 calc(50% - 8px)', minWidth: 150 }}>
+              <TextField label="Salaire Min" size="small" type="number" fullWidth value={form.salaireMin} onChange={(e) => h('salaireMin', e.target.value ? Number(e.target.value) : '')} InputProps={{ inputProps: { min: 0 }, endAdornment: <InputAdornment position="end" style={{ fontSize: '0.8rem' }}>FCFA</InputAdornment> }} />
+            </ResizableField>
+            <ResizableField fieldKey="salaireMax" onResize={handleFieldResize} sx={{ flex: '1 1 calc(50% - 8px)', minWidth: 150 }}>
+              <TextField label="Salaire Max" size="small" type="number" fullWidth value={form.salaireMax} onChange={(e) => h('salaireMax', e.target.value ? Number(e.target.value) : '')} InputProps={{ inputProps: { min: 0 }, endAdornment: <InputAdornment position="end" style={{ fontSize: '0.8rem' }}>FCFA</InputAdornment> }} />
+            </ResizableField>
           </Box>
           {budgetSuggere > 0 && (
             <Alert severity="info" variant="outlined" sx={{ mt: 1.5, borderRadius: 2, py: 0.3 }} icon={<span />}>Budget suggere : <strong>{fmtFCFA(budgetSuggere)}</strong> (3x salaire max)</Alert>
@@ -347,12 +465,23 @@ export default function JobStudioModal({ open, onClose, onSubmit, responsablesLi
               <FormControlLabel key={av} control={<Checkbox size="small" checked={form.avantages.includes(av)} onChange={() => toggleAvantage(av)} sx={{ '& .MuiSvgIcon-root': { fontSize: 18 } }} />} label={av} sx={{ '& .MuiTypography-body1': { fontSize: '0.85rem' } }} />
             ))}
           </Box>
-          <TextField label="Date requise" size="small" type="date" fullWidth value={form.dateRequise} onChange={(e) => h('dateRequise', e.target.value)} InputLabelProps={{ shrink: true }} sx={{ mt: 2, '& input[type="date"]': { height: 40, lineHeight: '40px', boxSizing: 'border-box' } }} />
+          <ResizableField fieldKey="dateRequise" onResize={handleFieldResize} sx={{ mt: 2, width: '100%' }}>
+            <TextField label="Date requise" size="small" type="date" fullWidth value={form.dateRequise} onChange={(e) => h('dateRequise', e.target.value)} InputLabelProps={{ shrink: true }} sx={{ '& input[type="date"]': { height: 40, lineHeight: '40px', boxSizing: 'border-box' } }} />
+          </ResizableField>
 
           <Box sx={{ height: 40 }} />
         </Box>
 
-        <Box sx={{ overflow: 'auto', p: 4, bgcolor: '#f8f9fa' }}>
+        <Box
+          onMouseDown={handleSplitterDown}
+          sx={{ width: 8, cursor: 'col-resize', bgcolor: 'transparent', flexShrink: 0,
+            borderLeft: '1px solid', borderColor: 'divider',
+            transition: 'bgcolor 0.2s',
+            '&:hover': { bgcolor: 'rgba(25,118,210,0.12)' },
+            '&:active': { bgcolor: 'rgba(25,118,210,0.25)' },
+          }}
+        />
+        <Box sx={{ flex: 1, minWidth: 300, overflow: 'auto', p: 4, bgcolor: '#f8f9fa' }}>
 
           <Typography variant="caption" sx={{ fontWeight: 700, color: 'text.secondary', textTransform: 'uppercase', letterSpacing: 1, fontSize: '0.7rem' }}>Apercu en direct</Typography>
           <Paper ref={previewRef} variant="outlined" sx={{ p: 2.5, mt: 0.5, mb: 3, bgcolor: '#fff', borderRadius: 2 }}>
