@@ -1,0 +1,578 @@
+   500→   500→  const handleCancel = () => {
+   501→   501→    /* Restaurer les valeurs originales */
+   502→   502→    setForm({
+   503→   503→      numero: d.numero, intitule: d.intitule, departement: d.departement,
+   504→   504→      dateRequise: d.dateRequise, datePublication: d.datePublication, dateCloture: d.dateCloture,
+   505→   505→      priorite: d.priorite, statutOffre: d.statutOffre, responsable: d.responsable,
+   506→   506→      roleResponsable: d.roleResponsable, typeContrat: d.typeContrat, typePoste: d.typePoste,
+   507→   507→      canalDiffusion: d.canalDiffusion, budgetAlloue: d.budgetAlloue,
+   508→   508→      salaireMin: d.salaireMin, salaireMax: d.salaireMax, description: d.description, site: d.site,
+   509→   509→    });
+   510→   510→    setHasChanges(false);
+   511→   511→    setEditing(null);
+   512→   512→  };
+   513→   513→
+   514→   514→  return (
+   515→   515→    <Drawer
+   516→   516→      anchor="right"
+   517→   517→      open={open}
+   518→   518→      onClose={onClose}
+   519→   519→      ModalProps={{ BackdropProps: { sx: { bgcolor: 'rgba(0,0,0,0.25)' } } }}
+   520→   520→      PaperProps={{
+   521→   521→        sx: {
+   522→   522→          width: { xs: '100%', sm: 560 },
+   523→   523→          display: 'flex',
+   524→   524→          flexDirection: 'column',
+   525→   525→          p: 0,
+   526→   526→        }
+   527→   527→      }}
+   528→   528→    >
+   529→   529→      {/* ═══ EN-TÊTE ═══ */}
+   530→   530→      <Box sx={{
+   531→   531→        p: 2.5, pb: 2,
+   532→   532→        background: 'linear-gradient(135deg, #1565c0 0%, #0D7C66 100%)',
+   533→   533→        color: 'white', flexShrink: 0,
+   534→   534→      }}>
+   535→   535→        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+   536→   536→          <Box sx={{ flex: 1, minWidth: 0 }}>
+   537→   537→            <Typography variant="overline" sx={{ opacity: 0.85, letterSpacing: 1.5, fontSize: '0.7rem' }}>D\u00e9tails et \u00c9dition</Typography>
+   538→   538→            <Typography variant="h6" fontWeight="bold" sx={{ mt: 0.3, lineHeight: 1.2, fontSize: '1.15rem' }}>{d.numero}</Typography>
+   539→   539→            <Typography variant="body2" sx={{ mt: 0.5, opacity: 0.9, fontSize: '0.85rem' }}>
+   540→   540→              Poste : <Box component="span" fontWeight="bold">{form.intitule}</Box> | D\u00e9partement : <Box component="span" fontWeight="bold">{form.departement}</Box>
+   541→   541→            </Typography>
+   542→   542→          </Box>
+   543→   543→          <IconButton onClick={onClose} sx={{ color: 'white', ml: 1 }}><Close /></IconButton>
+   544→   544→        </Box>
+   545→   545→      </Box>
+   546→   546→
+   547→   547→      {/* ═══ CONTENU SCROLLABLE ═══ */}
+   548→   548→      <Box sx={{ overflow: 'auto', flex: 1, px: 3, py: 2.5 }}>
+   549→   549→
+   550→   550→        {/* ─── SECTION 1 : INFORMATIONS CLÉS ─── */}
+   551→   551→        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8, mb: 2 }}>
+   552→   552→          <Work sx={{ fontSize: 18, color: 'primary.main' }} />
+   553→   553→          <Typography variant="subtitle2" fontWeight="bold" sx={{ fontSize: '0.9rem' }}>Informations Cl\u00e9s</Typography>
+   554→   554→        </Box>
+   555→   555→
+   556→   556→        {/* N° Offre (lecture seule) */}
+   557→   557→        <Box sx={{ mb: 2 }}>
+   558→   558→          <Box sx={{ display: 'flex', alignItems: 'center', mb: 0.5, gap: 0.5 }}>
+   559→   559→            <Typography variant="caption" sx={{ fontSize: '0.7rem', fontWeight: 600, color: 'text.secondary', textTransform: 'uppercase', letterSpacing: 0.5 }}>N\u00b0 d'offre</Typography>
+   560→   560→          </Box>
+   561→   561→          <TextField
+   562→   562→            size="small" fullWidth value={form.numero || ''} disabled
+   563→   563→            sx={{ '& input': { fontSize: '0.85rem', fontWeight: 600, color: 'text.primary' }, '& .MuiOutlinedInput-root.Mui-disabled': { bgcolor: '#f5f5f5' } }}
+   564→   564→          />
+   565→   565→        </Box>
+   566→   566→
+   567→   567→        <EditableField label="Date requise" value={form.dateRequise} editKey="dateRequise" editing={editing} onEdit={handleEdit} onChange={handleChange} type="date" />
+   568→   568→        <EditableField label="Date de publication" value={form.datePublication} editKey="datePublication" editing={editing} onEdit={handleEdit} onChange={handleChange} type="date" />
+   569→   569→        <EditableField label="Date de cl\u00f4ture" value={form.dateCloture} editKey="dateCloture" editing={editing} onEdit={handleEdit} onChange={handleChange} type="date" />
+   570→   570→        <EditableField label="D\u00e9partement" value={form.departement} editKey="departement" editing={editing} onEdit={handleEdit} onChange={handleChange} type="select"
+   571→   571→          options={{ list: nomenclatures.departement }} />
+   572→   572→        <EditableField label="Intitul\u00e9 du Poste" value={form.intitule} editKey="intitule" editing={editing} onEdit={handleEdit} onChange={handleChange} />
+   573→   573→        <EditableField label="Type de poste" value={form.typePoste} editKey="typePoste" editing={editing} onEdit={handleEdit} onChange={handleChange} type="select"
+   574→   574→          options={{ list: nomenclatures.type_poste }} />
+   575→   575→        <EditableField label="Type de contrat" value={form.typeContrat} editKey="typeContrat" editing={editing} onEdit={handleEdit} onChange={handleChange} type="select"
+   576→   576→          options={{ list: nomenclatures.type_contrat }} />
+   577→   577→        <EditableField label="Site" value={form.site} editKey="site" editing={editing} onEdit={handleEdit} onChange={handleChange} type="select"
+   578→   578→          options={{ list: nomenclatures.site }} />
+   579→   579→
+   580→   580→        <Divider sx={{ my: 2.5 }} />
+   581→   581→
+   582→   582→        {/* ─── PRIORITÉ & STATUT ─── */}
+   583→   583→        <Box sx={{ display: 'flex', gap: 2 }}>
+   584→   584→          <Box sx={{ flex: 1 }}>
+   585→   585→            <EditableField label="Priorit\u00e9" value={form.priorite} editKey="priorite" editing={editing} onEdit={handleEdit} onChange={handleChange} type="select"
+   586→   586→              options={{ list: nomenclatures.priorite, colorMap: prioriteColor }} />
+   587→   587→          </Box>
+   588→   588→          <Box sx={{ flex: 1 }}>
+   589→   589→            <EditableField label="Statut" value={form.statutOffre} editKey="statutOffre" editing={editing} onEdit={handleEdit} onChange={handleChange} type="select"
+   590→   590→              options={{ list: nomenclatures.statut_offre, colorMap: statutOffreColor }} />
+   591→   591→          </Box>
+   592→   592→        </Box>
+   593→   593→
+   594→   594→        <Divider sx={{ my: 2.5 }} />
+   595→   595→
+   596→   596→        {/* ─── SECTION 2 : RESPONSABLE & BUDGET ─── */}
+   597→   597→        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8, mb: 2 }}>
+   598→   598→          <Person sx={{ fontSize: 18, color: 'primary.main' }} />
+   599→   599→          <Typography variant="subtitle2" fontWeight="bold" sx={{ fontSize: '0.9rem' }}>Responsable & Budget</Typography>
+   600→   600→        </Box>
+   601→   601→
+   602→   602→        <EditableField label="Responsable" value={form.responsable} editKey="responsable" editing={editing} onEdit={handleEdit} onChange={handleChange} type="select"
+   603→   603→          options={{ list: responsablesList.map(r => r.nom) }} />
+   604→   604→        <EditableField label="R\u00f4le" value={form.roleResponsable} editKey="roleResponsable" editing={editing} onEdit={handleEdit} onChange={handleChange} type="select"
+   605→   605→          options={{ list: nomenclatures.role_responsable }} />
+   606→   606→
+   607→   607→        <EditableField label="Budget allou\u00e9" value={form.budgetAlloue} editKey="budgetAlloue" editing={editing} onEdit={handleEdit} onChange={handleChange} type="number"
+   608→   608→          endAdornment="FCFA" />
+   609→   609→
+   610→   610→        <Box sx={{ display: 'flex', gap: 2 }}>
+   611→   611→          <Box sx={{ flex: 1 }}>
+   612→   612→            <EditableField label="Salaire Min" value={form.salaireMin} editKey="salaireMin" editing={editing} onEdit={handleEdit} onChange={handleChange} type="number"
+   613→   613→              endAdornment="FCFA" />
+   614→   614→          </Box>
+   615→   615→          <Box sx={{ flex: 1 }}>
+   616→   616→            <EditableField label="Salaire Max" value={form.salaireMax} editKey="salaireMax" editing={editing} onEdit={handleEdit} onChange={handleChange} type="number"
+   617→   617→              endAdornment="FCFA" />
+   618→   618→          </Box>
+   619→   619→        </Box>
+   620→   620→
+   621→   621→        <Divider sx={{ my: 2.5 }} />
+   622→   622→
+   623→   623→        {/* ─── CANAL DE DIFFUSION ─── */}
+   624→   624→        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8, mb: 2 }}>
+   625→   625→          <Campaign sx={{ fontSize: 18, color: 'primary.main' }} />
+   626→   626→          <Typography variant="subtitle2" fontWeight="bold" sx={{ fontSize: '0.9rem' }}>Diffusion</Typography>
+   627→   627→        </Box>
+   628→   628→        <EditableField label="Canal de diffusion" value={form.canalDiffusion} editKey="canalDiffusion" editing={editing} onEdit={handleEdit} onChange={handleChange} type="select"
+   629→   629→          options={{ list: nomenclatures.canal_diffusion }} />
+   630→   630→        <EditableField label="Description de l'offre" value={form.description} editKey="description" editing={editing} onEdit={handleEdit} onChange={handleChange} multiline />
+   631→   631→
+   632→   632→        <Divider sx={{ my: 2.5 }} />
+   633→   633→
+   634→   634→        {/* ─── SECTION 3 : CANDIDATURES LIÉES ─── */}
+   635→   635→        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
+   636→   636→          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8 }}>
+   637→   637→            <Groups sx={{ fontSize: 18, color: 'primary.main' }} />
+   638→   638→            <Typography variant="subtitle2" fontWeight="bold" sx={{ fontSize: '0.9rem' }}>Candidatures li\u00e9es</Typography>
+   639→   639→            <Badge badgeContent={d.candidatsAssocies?.length || 0} color="primary" sx={{ '& .MuiBadge-badge': { fontSize: '0.7rem' } }} />
+   640→   640→          </Box>
+   641→   641→          <Chip label={`${d.nbCandidaturesRecues} / ${d.nbCandidatures} re\u00e7ues`} size="small" variant="outlined" sx={{ fontSize: '0.72rem' }} />
+   642→   642→        </Box>
+   643→   643→
+   644→   644→        {d.candidatsAssocies?.length > 0 ? (
+   645→   645→          <Paper variant="outlined" sx={{ mb: 1 }}>
+   646→   646→            {d.candidatsAssocies.map((c, i) => {
+   647→   647→              const scoreColor = c.score === null ? 'default' : c.score >= 16 ? 'success' : c.score >= 12 ? 'warning' : 'error';
+   648→   648→              const etatC = candidatEtatColor[c.etatCandidature] || 'default';
+   649→   649→              return (
+   650→   650→                <Box key={i} sx={{
+   651→   651→                  display: 'flex', alignItems: 'center', gap: 1.5, p: 1.5,
+   652→   652→                  borderBottom: i < d.candidatsAssocies.length - 1 ? '1px solid' : 'none',
+   653→   653→                  borderColor: 'divider',
+   654→   654→                  '&:hover': { bgcolor: 'rgba(0,0,0,0.02)' },
+   655→   655→                }}>
+   656→   656→                  <Avatar sx={{ width: 34, height: 34, fontSize: '0.75rem', bgcolor: '#1976d2' }}>
+   657→   657→                    {c.nom.split(' ').map(n => n[0]).join('')}
+   658→   658→                  </Avatar>
+   659→   659→                  <Box sx={{ flex: 1, minWidth: 0 }}>
+   660→   660→                    <Typography variant="body2" fontWeight={600} sx={{ fontSize: '0.85rem' }}>{c.nom}</Typography>
+   661→   661→                    <Box sx={{ display: 'flex', gap: 0.5, mt: 0.3 }}>
+   662→   662→                      <Chip label={c.etatCandidature} size="small" color={etatC} sx={{ height: 20, fontSize: '0.65rem' }} />
+   663→   663→                      <Chip label={c.source} size="small" variant="outlined" sx={{ height: 20, fontSize: '0.65rem' }} />
+   664→   664→                    </Box>
+   665→   665→                  </Box>
+   666→   666→                  <Box sx={{ textAlign: 'center' }}>
+   667→   667→                    <Typography variant="body2" fontWeight="bold" sx={{ color: scoreColor === 'success' ? '#2e7d32' : scoreColor === 'warning' ? '#f57f17' : scoreColor === 'error' ? '#d32f2f' : 'text.primary', fontSize: '0.9rem' }}>
+   668→   668→                      {c.score !== null ? `${c.score}/20` : '\u2014'}
+   669→   669→                    </Typography>
+   670→   670→                    <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.6rem' }}>Score</Typography>
+   671→   671→                  </Box>
+   672→   672→                  <Tooltip title="Voir le profil">
+   673→   673→                    <IconButton size="small"><ArrowForward sx={{ fontSize: 16 }} /></IconButton>
+   674→   674→                  </Tooltip>
+   675→   675→                </Box>
+   676→   676→              );
+   677→   677→            })}
+   678→   678→          </Paper>
+   679→   679→        ) : (
+   680→   680→          <Paper variant="outlined" sx={{ p: 3, textAlign: 'center', mb: 1 }}>
+   681→   681→            <Typography variant="body2" color="text.secondary">Aucune candidature associ\u00e9e</Typography>
+   682→   682→          </Paper>
+   683→   683→        )}
+   684→   684→
+   685→   685→        <Divider sx={{ my: 2.5 }} />
+   686→   686→
+   687→   687→        {/* ─── HISTORIQUE ─── */}
+   688→   688→        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8, mb: 2 }}>
+   689→   689→          <AccessTime sx={{ fontSize: 18, color: 'primary.main' }} />
+   690→   690→          <Typography variant="subtitle2" fontWeight="bold" sx={{ fontSize: '0.9rem' }}>Historique</Typography>
+   691→   691→          <Badge badgeContent={d.historique?.length || 0} color="primary" sx={{ '& .MuiBadge-badge': { fontSize: '0.7rem' } }} />
+   692→   692→        </Box>
+   693→   693→        {d.historique?.length > 0 ? (
+   694→   694→          <Box sx={{ position: 'relative', ml: 1.5, pl: 3, borderLeft: '2px solid #e0e0e0' }}>
+   695→   695→            {d.historique.map((h, i) => (
+   696→   696→              <Box key={i} sx={{ position: 'relative', pb: i < d.historique.length - 1 ? 2 : 0 }}>
+   697→   697→                <Box sx={{
+   698→   698→                  position: 'absolute', left: -25, top: 2, width: 12, height: 12,
+   699→   699→                  borderRadius: '50%',
+   700→   700→                  bgcolor: histColor[h.type] || '#9e9e9e',
+   701→   701→                  border: '2px solid white',
+   702→   702→                  boxShadow: '0 0 0 1px ' + (histColor[h.type] || '#9e9e9e'),
+   703→   703→                }} />
+   704→   704→                <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.7rem' }}>{h.date}</Typography>
+   705→   705→                <Typography variant="body2" fontWeight={500} sx={{ fontSize: '0.85rem' }}>{h.evenement}</Typography>
+   706→   706→                <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.7rem' }}>par {h.auteur}</Typography>
+   707→   707→              </Box>
+   708→   708→            ))}
+   709→   709→          </Box>
+   710→   710→        ) : (
+   711→   711→          <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'center', py: 2 }}>Aucun historique</Typography>
+   712→   712→        )}
+   713→   713→
+   714→   714→      </Box>
+   715→   715→
+   716→   716→      {/* ═══ FOOTER ═══ */}
+   717→   717→      <Box sx={{
+   718→   718→        p: 2, borderTop: '1px solid', borderColor: 'divider', bgcolor: 'background.paper',
+   719→   719→        display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexShrink: 0,
+   720→   720→      }}>
+   721→   721→        <Button
+   722→   722→          color="inherit" onClick={handleCancel} disabled={!hasChanges}
+   723→   723→          sx={{ textTransform: 'none', fontSize: '0.85rem' }}
+   724→   724→        >
+   725→   725→          Annuler
+   726→   726→        </Button>
+   727→   727→        <Button
+   728→   728→          variant="contained"
+   729→   729→          startIcon={<Save sx={{ fontSize: 18 }} />}
+   730→   730→          onClick={handleSave}
+   731→   731→          disabled={!hasChanges}
+   732→   732→          sx={{
+   733→   733→            textTransform: 'none', fontSize: '0.85rem', fontWeight: 600,
+   734→   734→            bgcolor: '#1565c0', '&:hover': { bgcolor: '#0d47a1' },
+   735→   735→          }}
+   736→   736→        >
+   737→   737→          Enregistrer les modifications
+   738→   738→        </Button>
+   739→   739→      </Box>
+   740→   740→    </Drawer>
+   741→   741→  );
+   742→   742→}
+   743→   743→
+   744→   744→/* ═══ PAGE PRINCIPALE ═══ */
+   745→   745→export default function Offres() {
+   746→   746→  const [data, setData] = useState(initialData);
+   747→   747→  const [dlg, setDlg] = useState(false);
+   748→   748→  const [filterDep, setFilterDep] = useState('Tous');
+   749→   749→  const [filterStatut, setFilterStatut] = useState('Tous');
+   750→   750→  const [filterCanal, setFilterCanal] = useState('Tous');
+   751→   751→  const [page, setPage] = useState(0);
+   752→   752→  const [rpp, setRpp] = useState(10);
+   753→   753→  const [drawerOffre, setDrawerOffre] = useState(null);
+   754→   754→  const [snack, setSnack] = useState(null);
+   755→   755→  /* Quick Actions states */
+   756→   756→  const [loadingStatus, setLoadingStatus] = useState({ id: null, statut: null });
+   757→   757→  const [confirmDlg, setConfirmDlg] = useState(null); /* { type: 'archive'|'delete', offre: {...} } */
+   758→   758→
+   759→   759→  const filtered = useMemo(() => data.filter(o =>
+   760→   760→    (filterDep === 'Tous' || o.departement === filterDep) &&
+   761→   761→    (filterStatut === 'Tous' || o.statutOffre === filterStatut) &&
+   762→   762→    (filterCanal === 'Tous' || o.canalDiffusion === filterCanal)
+   763→   763→  ), [data, filterDep, filterStatut, filterCanal]);
+   764→   764→
+   765→   765→  const handleSaveOffre = useCallback((id, formData) => {
+   766→   766→    const today = new Date().toLocaleDateString('fr-FR');
+   767→   767→    setData(prev => prev.map(o => {
+   768→   768→      if (o.id !== id) return o;
+   769→   769→      const changes = [];
+   770→   770→      if (o.statutOffre !== formData.statutOffre) changes.push(`Statut : ${o.statutOffre} \u2192 ${formData.statutOffre}`);
+   771→   771→      if (o.priorite !== formData.priorite) changes.push(`Priorit\u00e9 : ${o.priorite} \u2192 ${formData.priorite}`);
+   772→   772→      if (o.intitule !== formData.intitule) changes.push('Intitul\u00e9 modifi\u00e9');
+   773→   773→      if (o.responsable !== formData.responsable) changes.push(`Responsable : ${o.responsable} \u2192 ${formData.responsable}`);
+   774→   774→      if (o.budgetAlloue !== formData.budgetAlloue) changes.push('Budget modifi\u00e9');
+   775→   775→      if (o.canalDiffusion !== formData.canalDiffusion) changes.push(`Canal : ${o.canalDiffusion} \u2192 ${formData.canalDiffusion}`);
+   776→   776→
+   777→   777→      const newHist = [...(o.historique || [])];
+   778→   778→      changes.forEach(ch => {
+   779→   779→        newHist.push({ date: today, evenement: ch, auteur: 'Utilisateur', type: 'modification' });
+   780→   780→      });
+   781→   781→      if (changes.length === 0) {
+   782→   782→        newHist.push({ date: today, evenement: 'Offre modifi\u00e9e', auteur: 'Utilisateur', type: 'modification' });
+   783→   783→      }
+   784→   784→
+   785→   785→      return {
+   786→   786→        ...o,
+   787→   787→        ...formData,
+   788→   788→        historique: newHist,
+   789→   789→      };
+   790→   790→    }));
+   791→   791→    /* Mettre à jour le drawer avec les nouvelles données */
+   792→   792→    setDrawerOffre(prev => prev && prev.id === id ? { ...prev, ...formData } : prev);
+   793→   793→    setSnack({ msg: 'Offre mise \u00e0 jour avec succ\u00e8s', severity: 'success' });
+   794→   794→  }, []);
+   795→   795→
+   796→   796→  /* ═══ QUICK STATUS CHANGE (optimiste + spinner 300ms) ═══ */
+   797→   797→  const handleQuickStatutChange = useCallback((id, newStatut) => {
+   798→   798→    const offre = data.find(o => o.id === id);
+   799→   799→    if (!offre || offre.statutOffre === newStatut) return;
+   800→   800→
+   801→   801→    /* Spinner + affichage du nouveau statut immédiatement (optimiste) */
+   802→   802→    setLoadingStatus({ id, statut: newStatut });
+   803→   803→
+   804→   804→    const today = new Date().toLocaleDateString('fr-FR');
+   805→   805→    const oldStatut = offre.statutOffre;
+   806→   806→
+   807→   807→    /* Mise à jour optimiste du state */
+   808→   808→    setData(prev => prev.map(o => {
+   809→   809→      if (o.id !== id) return o;
+   810→   810→      return {
+   811→   811→        ...o,
+   812→   812→        statutOffre: newStatut,
+   813→   813→        historique: [...(o.historique || []), {
+   814→   814→          date: today,
+   815→   815→          evenement: `Statut chang\u00e9 : ${oldStatut} \u2192 ${newStatut}`,
+   816→   816→          auteur: 'Utilisateur',
+   817→   817→          type: newStatut === 'Annulee' ? 'annulation' : newStatut === 'Cloturee' ? 'cloture' : 'modification',
+   818→   818→        }],
+   819→   819→        ...(newStatut === 'Cloturee' ? { dateCloture: today } : {}),
+   820→   820→        ...(newStatut === 'Publiee' && !o.datePublication ? { datePublication: today } : {}),
+   821→   821→      };
+   822→   822→    }));
+   823→   823→
+   824→   824→    /* Mettre à jour le drawer si ouvert */
+   825→   825→    setDrawerOffre(prev => prev && prev.id === id ? { ...prev, statutOffre: newStatut } : prev);
+   826→   826→
+   827→   827→    /* Simuler un délai API de 300ms puis effacer le spinner */
+   828→   828→    setTimeout(() => {
+   829→   829→      setLoadingStatus({ id: null, statut: null });
+   830→   830→      setSnack({ msg: `Statut de ${offre.numero} mis \u00e0 jour vers '${newStatut}'`, severity: 'success' });
+   831→   831→    }, 300);
+   832→   832→  }, [data]);
+   833→   833→
+   834→   834→  /* ═══ ARCHIVER UNE OFFRE ═══ */
+   835→   835→  const handleArchive = useCallback((offre) => {
+   836→   836→    setConfirmDlg({ type: 'archive', offre });
+   837→   837→  }, []);
+   838→   838→
+   839→   839→  /* ═══ SUPPRIMER UNE OFFRE ═══ */
+   840→   840→  const handleDelete = useCallback((offre) => {
+   841→   841→    setConfirmDlg({ type: 'delete', offre });
+   842→   842→  }, []);
+   843→   843→
+   844→   844→  /* ═══ CONFIRMER ACTION CRITIQUE ═══ */
+   845→   845→  const handleConfirmAction = useCallback(() => {
+   846→   846→    if (!confirmDlg) return;
+   847→   847→    const { type, offre } = confirmDlg;
+   848→   848→    const today = new Date().toLocaleDateString('fr-FR');
+   849→   849→
+   850→   850→    if (type === 'archive') {
+   851→   851→      setData(prev => prev.map(o => o.id === offre.id ? {
+   852→   852→        ...o, statutOffre: 'Cloturee',
+   853→   853→        historique: [...(o.historique || []), { date: today, evenement: 'Offre archiv\u00e9e (cl\u00f4tur\u00e9e)', auteur: 'Utilisateur', type: 'cloture' }],
+   854→   854→        dateCloture: o.dateCloture || today,
+   855→   855→      } : o));
+   856→   856→      setDrawerOffre(prev => prev && prev.id === offre.id ? { ...prev, statutOffre: 'Cloturee' } : prev);
+   857→   857→      setSnack({ msg: `${offre.numero} archiv\u00e9e avec succ\u00e8s`, severity: 'info' });
+   858→   858→    } else if (type === 'delete') {
+   859→   859→      setData(prev => prev.filter(o => o.id !== offre.id));
+   860→   860→      if (drawerOffre?.id === offre.id) setDrawerOffre(null);
+   861→   861→      setSnack({ msg: `${offre.numero} supprim\u00e9e`, severity: 'warning' });
+   862→   862→    }
+   863→   863→
+   864→   864→    setConfirmDlg(null);
+   865→   865→  }, [confirmDlg, drawerOffre]);
+   866→   866→
+   867→   867→  const handleExport = useCallback(() => {
+   868→   868→    const cols = ['N\u00b0','Intitul\u00e9','D\u00e9partement','Type Poste','Type Contrat','Canal','Statut Offre','Date Publication','Date Cl\u00f4ture','Date Requise','Responsable','Priorit\u00e9','Budget Allou\u00e9','Salaire Min','Salaire Max','Candidatures Re\u00e7ues','Site'];
+   869→   869→    const rows = [cols.join(';')];
+   870→   870→    filtered.forEach(o => rows.push([o.numero, o.intitule, o.departement, o.typePoste, o.typeContrat, o.canalDiffusion, o.statutOffre, o.datePublication, o.dateCloture, o.dateRequise, o.responsable, o.priorite, o.budgetAlloue, o.salaireMin, o.salaireMax, o.nbCandidaturesRecues, o.site].map(v => `"${v}"`).join(';')));
+   871→   871→    const blob = new Blob(['\uFEFF' + rows.join('\n')], { type: 'text/csv;charset=utf-8' });
+   872→   872→    const url = URL.createObjectURL(blob);
+   873→   873→    const a = document.createElement('a');
+   874→   874→    a.href = url;
+   875→   875→    a.download = 'offres_emploi.csv';
+   876→   876→    a.click();
+   877→   877→    URL.revokeObjectURL(url);
+   878→   878→    setSnack({ msg: 'Export CSV t\u00e9l\u00e9charg\u00e9', severity: 'info' });
+   879→   879→  }, [filtered]);
+   880→   880→
+   881→   881→  return (
+   882→   882→    <Box>
+   883→   883→      <Typography variant="h5" fontWeight="bold">Offres d'Emploi</Typography>
+   884→   884→      <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>{filtered.length} offre(s) d'emploi</Typography>
+   885→   885→
+   886→   886→      <Box sx={{ display: 'flex', gap: 1, mb: 2, alignItems: 'center' }}>
+   887→   887→        <Button variant="outlined" startIcon={<Download fontSize="small" />} onClick={handleExport}>Exporter CSV</Button>
+   888→   888→        <Button variant="contained" startIcon={<Add fontSize="small" />} onClick={() => setDlg(true)}>Nouvelle Offre</Button>
+   889→   889→      </Box>
+   890→   890→
+   891→   891→      {/* KPIs */}
+   892→   892→      <Box sx={{ display: 'flex', gap: 2, mb: 3, flexWrap: 'wrap' }}>
+   893→   893→        <KPICard titre="TOTAL OFFRES" valeur={filtered.length} sousTexte={`${filtered.length} offre(s) enregistr\u00e9e(s)`} />
+   894→   894→        <KPICard titre="PUBLI\u00c9ES" valeur={filtered.filter(o => o.statutOffre === 'Publiee').length} sousTexte={`${Math.round(filtered.filter(o => o.statutOffre === 'Publiee').length / Math.max(filtered.length, 1) * 100)}% du total`} />
+   895→   895→        <KPICard titre="CANDIDATURES EN COURS" valeur={filtered.filter(o => o.statutOffre === 'Candidatures en cours').length} sousTexte="offres actives" />
+   896→   896→        <KPICard titre="TOTAL CANDIDATURES" valeur={filtered.reduce((s, o) => s + (o.nbCandidaturesRecues || 0), 0)} sousTexte="candidatures re\u00e7ues" />
+   897→   897→      </Box>
+   898→   898→
+   899→   899→      {/* Filtres */}
+   900→   900→      <Box sx={{ display: 'flex', gap: 2, mb: 2, flexWrap: 'wrap' }}>
+   901→   901→        <FormControl size="small" sx={{ minWidth: 180 }}>
+   902→   902→          <Select value={filterDep} onChange={e => { setFilterDep(e.target.value); setPage(0); }} displayEmpty>
+   903→   903→            <MenuItem value="Tous">Tous les d\u00e9partements</MenuItem>
+   904→   904→            {nomenclatures.departement.map(d => <MenuItem key={d} value={d}>{d}</MenuItem>)}
+   905→   905→          </Select>
+   906→   906→        </FormControl>
+   907→   907→        <FormControl size="small" sx={{ minWidth: 170 }}>
+   908→   908→          <Select value={filterStatut} onChange={e => { setFilterStatut(e.target.value); setPage(0); }} displayEmpty>
+   909→   909→            <MenuItem value="Tous">Tous les statuts</MenuItem>
+   910→   910→            {nomenclatures.statut_offre.map(s => <MenuItem key={s} value={s}>{s}</MenuItem>)}
+   911→   911→          </Select>
+   912→   912→        </FormControl>
+   913→   913→        <FormControl size="small" sx={{ minWidth: 170 }}>
+   914→   914→          <Select value={filterCanal} onChange={e => { setFilterCanal(e.target.value); setPage(0); }} displayEmpty>
+   915→   915→            <MenuItem value="Tous">Tous les canaux</MenuItem>
+   916→   916→            {nomenclatures.canal_diffusion.map(c => <MenuItem key={c} value={c}>{c}</MenuItem>)}
+   917→   917→          </Select>
+   918→   918→        </FormControl>
+   919→   919→      </Box>
+   920→   920→
+   921→   921→      {/* Tableau */}
+   922→   922→      <Paper>
+   923→   923→        <TableContainer><Table size="small">
+   924→   924→          <TableHead><TableRow>
+   925→   925→            {tableCols.map(c => (
+   926→   926→              <TableCell key={c.key} sx={{ fontWeight: 'bold', bgcolor: '#f5f5f5', whiteSpace: 'nowrap', width: c.width }}>{c.label}</TableCell>
+   927→   927→            ))}
+   928→   928→            <TableCell sx={{ fontWeight: 'bold', bgcolor: '#f5f5f5', width: 230, textAlign: 'center' }}>Actions</TableCell>
+   929→   929→          </TableRow></TableHead>
+   930→   930→          <TableBody>
+   931→   931→            {filtered.slice(page * rpp, page * rpp + rpp).map(row => (
+   932→   932→              <TableRow key={row.id} hover sx={{ cursor: 'pointer' }} onClick={() => setDrawerOffre(row)}>
+   933→   933→                {tableCols.map(c => (
+   934→   934→                  <TableCell key={c.key} sx={{ whiteSpace: 'nowrap' }}>
+   935→   935→                    {c.chip ? <Chip label={row[c.key]} size="small" variant="outlined" /> :
+   936→   936→                     row[c.key]}
+   937→   937→                  </TableCell>
+   938→   938→                ))}
+   939→   939→                <TableCell>
+   940→   940→                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8, justifyContent: 'center' }} onClick={e => e.stopPropagation()}>
+   941→   941→                    <StatusChipMenu
+   942→   942→                      offre={row}
+   943→   943→                      onStatutChange={handleQuickStatutChange}
+   944→   944→                      loadingId={loadingStatus.id}
+   945→   945→                      loadingStatut={loadingStatus.statut}
+   946→   946→                    />
+   947→   947→                    <Box sx={{ width: 1, height: 24, bgcolor: 'divider', borderRadius: 1 }} />
+   948→   948→                    <QuickActions
+   949→   949→                      offre={row}
+   950→   950→                      onView={o => setDrawerOffre(o)}
+   951→   951→                      onArchive={handleArchive}
+   952→   952→                      onDelete={handleDelete}
+   953→   953→                    />
+   954→   954→                  </Box>
+   955→   955→                </TableCell>
+   956→   956→              </TableRow>
+   957→   957→            ))}
+   958→   958→            {filtered.length === 0 && (
+   959→   959→              <TableRow><TableCell colSpan={tableCols.length + 1} align="center" sx={{ py: 4, color: 'text.secondary' }}>Aucune offre trouv\u00e9e</TableCell></TableRow>
+   960→   960→            )}
+   961→   961→          </TableBody>
+   962→   962→        </Table></TableContainer>
+   963→   963→        <TablePagination
+   964→   964→          component="div" count={filtered.length} page={page}
+   965→   965→          onPageChange={(e, p) => setPage(p)} rowsPerPage={rpp}
+   966→   966→          onRowsPerPageChange={e => { setRpp(parseInt(e.target.value, 10)); setPage(0); }}
+   967→   967→          rowsPerPageOptions={[5, 10, 25]} labelRowsPerPage="Lignes par page"
+   968→   968→        />
+   969→   969→      </Paper>
+   970→   970→
+   971→   971→      {/* Drawer d'\u00e9dition */}
+   972→   972→      <OffreDrawer
+   973→   973→        offre={drawerOffre}
+   974→   974→        open={Boolean(drawerOffre)}
+   975→   975→        onClose={() => setDrawerOffre(null)}
+   976→   976→        onSave={handleSaveOffre}
+   977→   977→      />
+   978→   978→
+   979→   979→      {/* Dialogue d'ajout */}
+   980→   980→      <AddDialog
+   981→   981→        open={dlg} onClose={() => setDlg(false)} title="Nouvelle Offre d'Emploi"
+   982→   982→        fields={[
+   983→   983→          { key: 'intitule', label: 'Intitul\u00e9 du Poste', required: true },
+   984→   984→          { key: 'departement', label: 'D\u00e9partement', type: 'select', options: nomenclatures.departement, required: true },
+   985→   985→          { key: 'typePoste', label: 'Type Poste', type: 'select', options: nomenclatures.type_poste, required: true },
+   986→   986→          { key: 'typeContrat', label: 'Type Contrat', type: 'select', options: nomenclatures.type_contrat, required: true },
+   987→   987→          { key: 'canalDiffusion', label: 'Canal de Diffusion', type: 'select', options: nomenclatures.canal_diffusion, required: true },
+   988→   988→          { key: 'priorite', label: 'Priorit\u00e9', type: 'select', options: nomenclatures.priorite, required: true },
+   989→   989→          { key: 'dateRequise', label: 'Date Requise', required: true },
+   990→   990→          { key: 'dateCloture', label: 'Date de Cl\u00f4ture' },
+   991→   991→          { key: 'site', label: 'Site', type: 'select', options: nomenclatures.site },
+   992→   992→          { key: 'responsable', label: 'Responsable', required: true },
+   993→   993→          { key: 'roleResponsable', label: 'R\u00f4le du Responsable', type: 'select', options: nomenclatures.role_responsable },
+   994→   994→          { key: 'budgetAlloue', label: 'Budget Allou\u00e9 (FCFA)', type: 'number' },
+   995→   995→          { key: 'salaireMin', label: 'Salaire Min (FCFA)', type: 'number' },
+   996→   996→          { key: 'salaireMax', label: 'Salaire Max (FCFA)', type: 'number' },
+   997→   997→          { key: 'description', label: 'Description', multiline: true },
+   998→   998→        ]}
+   999→   999→        onSubmit={(vals) => {
+  1000→  1000→          const nid = data.length + 1;
+  1001→  1001→          const today = new Date().toLocaleDateString('fr-FR');
+  1002→  1002→          setData(prev => [...prev, {
+  1003→  1003→            id: nid, numero: 'OF-2025-' + String(nid).padStart(3, '0'),
+  1004→  1004→            statutOffre: 'A creer', datePublication: '',
+  1005→  1005→            nbCandidatures: 0, nbCandidaturesRecues: 0,
+  1006→  1006→            candidatsAssocies: [],
+  1007→  1007→            historique: [{ date: today, evenement: 'Offre cr\u00e9\u00e9e', auteur: vals.responsable || 'Utilisateur', type: 'creation' }],
+  1008→  1008→            site: vals.site || 'Siege (Douala)',
+  1009→  1009→            ...vals,
+  1010→  1010→          }]);
+  1011→  1011→        }}
+  1012→  1012→      />
+  1013→  1013→
+  1014→  1014→      <Snackbar open={Boolean(snack)} autoHideDuration={3000} onClose={() => setSnack(null)} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
+  1015→  1015→        {snack && <Alert onClose={() => setSnack(null)} severity={snack.severity} variant="filled" sx={{ borderRadius: 2 }}>{snack.msg}</Alert>}
+  1016→  1016→      </Snackbar>
+  1017→  1017→
+  1018→  1018→      {/* ═══ DIALOGUE DE CONFIRMATION (Archive / Supprimer) ═══ */}
+  1019→  1019→      <Dialog
+  1020→  1020→        open={Boolean(confirmDlg)}
+  1021→  1021→        onClose={() => setConfirmDlg(null)}
+  1022→  1022→        maxWidth="xs"
+  1023→  1023→        PaperProps={{ sx: { borderRadius: 3, p: 0.5 } }}
+  1024→  1024→      >
+  1025→  1025→        {confirmDlg && (
+  1026→  1026→          <>
+  1027→  1027→            <DialogTitle sx={{ display: 'flex', alignItems: 'center', gap: 1.5, pb: 1 }}>
+  1028→  1028→              <Box sx={{
+  1029→  1029→                width: 40, height: 40, borderRadius: '50%',
+  1030→  1030→                display: 'flex', alignItems: 'center', justifyContent: 'center',
+  1031→  1031→                bgcolor: confirmDlg.type === 'delete' ? 'rgba(211,47,47,0.1)' : 'rgba(245,127,23,0.1)',
+  1032→  1032→              }}>
+  1033→  1033→                {confirmDlg.type === 'delete'
+  1034→  1034→                  ? <Delete sx={{ color: '#d32f2f', fontSize: 22 }} />
+  1035→  1035→                  : <Archive sx={{ color: '#f57f17', fontSize: 22 }} />
+  1036→  1036→                }
+  1037→  1037→              </Box>
+  1038→  1038→              <Box>
+  1039→  1039→                <Typography variant="subtitle1" fontWeight="bold" sx={{ fontSize: '1rem' }}>
+  1040→  1040→                  {confirmDlg.type === 'delete' ? 'Supprimer cette offre' : 'Archiver cette offre'}
+  1041→  1041→                </Typography>
+  1042→  1042→                <Typography variant="caption" color="text.secondary">
+  1043→  1043→                  {confirmDlg.offre.numero} — {confirmDlg.offre.intitule}
+  1044→  1044→                </Typography>
+  1045→  1045→              </Box>
+  1046→  1046→            </DialogTitle>
+  1047→  1047→            <DialogContent>
+  1048→  1048→              <Typography variant="body2" sx={{ color: 'text.secondary', lineHeight: 1.6 }}>
+  1049→  1049→                {confirmDlg.type === 'delete'
+  1050→  1050→                  ? `Cette action est irréversible. L'offre ${confirmDlg.offre.numero} et toutes ses données associées (candidatures, historique) seront définitivement supprimées.`
+  1051→  1051→                  : `L'offre ${confirmDlg.offre.numero} sera marquée comme clôturée et archivée. Elle ne recevra plus de candidatures.`
+  1052→  1052→                }
+  1053→  1053→              </Typography>
+  1054→  1054→            </DialogContent>
+  1055→  1055→            <DialogActions sx={{ px: 3, pb: 2 }}>
+  1056→  1056→              <Button onClick={() => setConfirmDlg(null)} color="inherit" sx={{ textTransform: 'none' }}>
+  1057→  1057→                Annuler
+  1058→  1058→              </Button>
+  1059→  1059→              <Button
+  1060→  1060→                onClick={handleConfirmAction} variant="contained"
+  1061→  1061→                sx={{
+  1062→  1062→                  textTransform: 'none', fontWeight: 600,
+  1063→  1063→                  bgcolor: confirmDlg.type === 'delete' ? '#d32f2f' : '#f57f17',
+  1064→  1064→                  '&:hover': { bgcolor: confirmDlg.type === 'delete' ? '#b71c1c' : '#e65100' },
+  1065→  1065→                }}
+  1066→  1066→              >
+  1067→  1067→                {confirmDlg.type === 'delete' ? 'Supprimer définitivement' : 'Confirmer l\'archivage'}
+  1068→  1068→              </Button>
+  1069→  1069→            </DialogActions>
+  1070→  1070→          </>
+  1071→  1071→        )}
+  1072→  1072→      </Dialog>
+  1073→  1073→    </Box>
+  1074→  1074→  );
+  1075→  1075→}
+
+[showing lines 500-1075 of 1076; use offset=1076 with limit to continue reading]

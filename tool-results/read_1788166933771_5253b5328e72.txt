@@ -1,0 +1,1076 @@
+     1→import { useState, useMemo, useCallback, useEffect } from 'react';
+     2→import {
+     3→  Box, Typography, Button, Table, TableBody, TableCell, TableContainer, TableHead,
+     4→  TableRow, TablePagination, Chip, FormControl, Select, MenuItem, Tooltip, Paper,
+     5→  Drawer, Divider, IconButton, TextField, Avatar, Alert, Snackbar,
+     6→  Stack, InputAdornment, Badge, Menu, CircularProgress, Dialog, DialogTitle,
+     7→  DialogContent, DialogActions, Popover, Fade
+     8→} from '@mui/material';
+     9→import {
+    10→  Add, Download, Close, Save, Edit, CalendarToday, Person,
+    11→  AccountBalanceWallet, Publish, Campaign, ArrowForward, Work,
+    12→  Create, Groups, AccessTime, Visibility, Delete, Archive,
+    13→  MoreVert, CheckCircle, KeyboardArrowDown, WarningAmber
+    14→} from '@mui/icons-material';
+    15→import KPICard from '../components/KPICard';
+    16→import AddDialog from '../components/AddDialog';
+    17→import { nomenclatures } from '../data/nomenclatures';
+    18→
+    19→const formatFCFA = (a) => (!a && a !== 0) ? '\u2014' : a.toLocaleString('fr-FR') + ' FCFA';
+    20→
+    21→/* ═══ COULEURS ═══ */
+    22→const statutOffreColor = {
+    23→  'A creer': 'default',
+    24→  'Publiee': 'primary',
+    25→  'Candidatures en cours': 'warning',
+    26→  'Cloturee': 'success',
+    27→  'Annulee': 'error',
+    28→};
+    29→const prioriteColor = {
+    30→  'Urgente': 'error',
+    31→  'Haute': 'warning',
+    32→  'Moyenne': 'info',
+    33→  'Basse': 'default',
+    34→};
+    35→
+    36→/* ═══ DONNÉES INITIALES ═══ */
+    37→const initialData = [
+    38→  { id: 1, numero: 'OF-2025-001', intitule: 'Chef Cuisinier', departement: 'Restauration', typePoste: 'Cadre', typeContrat: 'CDI',
+    39→    canalDiffusion: 'Site web', statutOffre: 'Publiee', datePublication: '20/01/2025', dateCloture: '20/02/2025',
+    40→    dateRequise: '01/02/2025', responsable: 'M. Nkoulou Paul', roleResponsable: 'DRH',
+    41→    priorite: 'Urgente', budgetAlloue: 500000, salaireMin: 350000, salaireMax: 450000,
+    42→    nbCandidatures: 12, nbCandidaturesRecues: 8,
+    43→    candidatsAssocies: [
+    44→      { nom: 'Kamga Marie', score: 17, etatCandidature: 'Entretien realise', source: 'Cabinet' },
+    45→      { nom: 'Tchinda Jean', score: 14, etatCandidature: 'En cours d\'etude', source: 'Site web' },
+    46→      { nom: 'Fotso Anne', score: 19, etatCandidature: 'Retenu', source: 'Cooptation' },
+    47→    ],
+    48→    description: 'Recherchons un Chef Cuisinier experimente pour diriger la brigade de cuisine de l\'Hotel Sawa. Experience minimale 5 ans en hotellerie.',
+    49→    historique: [
+    50→      { date: '15/01/2025', evenement: 'Offre creee a partir de la demande DR-2025-001', auteur: 'M. Nkoulou Paul', type: 'creation' },
+    51→      { date: '20/01/2025', evenement: 'Offre publiee sur le site web', auteur: 'DRH', type: 'publication' },
+    52→      { date: '25/01/2025', evenement: '8 candidatures recues', auteur: 'Systeme', type: 'candidature' },
+    53→    ],
+    54→    site: 'Hotel Sawa',
+    55→  },
+    56→  { id: 2, numero: 'OF-2025-002', intitule: 'Responsable Marketing', departement: 'Marketing & Communication', typePoste: 'Cadre', typeContrat: 'CDI',
+    57→    canalDiffusion: 'LinkedIn', statutOffre: 'Candidatures en cours', datePublication: '01/02/2025', dateCloture: '15/03/2025',
+    58→    dateRequise: '01/04/2025', responsable: 'Mme. Mbarga Sophie', roleResponsable: 'Directrice Marketing',
+    59→    priorite: 'Haute', budgetAlloue: 800000, salaireMin: 600000, salaireMax: 750000,
+    60→    nbCandidatures: 25, nbCandidaturesRecues: 18,
+    61→    candidatsAssocies: [
+    62→      { nom: 'Nganou Yves', score: 15, etatCandidature: 'Entretien planifie', source: 'LinkedIn' },
+    63→      { nom: 'Epoh Clarisse', score: 16, etatCandidature: 'Entretien realise', source: 'Reseaux sociaux' },
+    64→    ],
+    65→    description: 'Poste de responsable pour piloter la strategie marketing digitale et traditionnelle du groupe. Competences en SEO/SEM requises.',
+    66→    historique: [
+    67→      { date: '28/01/2025', evenement: 'Offre creee', auteur: 'Mme. Mbarga Sophie', type: 'creation' },
+    68→      { date: '01/02/2025', evenement: 'Publication LinkedIn + Facebook', auteur: 'DRH', type: 'publication' },
+    69→    ],
+    70→    site: 'Siege (Douala)',
+    71→  },
+    72→  { id: 3, numero: 'OF-2025-003', intitule: 'Technicien de Maintenance', departement: 'Maintenance', typePoste: 'Agent de maitrise', typeContrat: 'CDI',
+    73→    canalDiffusion: 'Presse ecrite', statutOffre: 'Cloturee', datePublication: '10/01/2025', dateCloture: '10/02/2025',
+    74→    dateRequise: '01/03/2025', responsable: 'M. Essomba Andre', roleResponsable: 'Chef de Departement',
+    75→    priorite: 'Moyenne', budgetAlloue: 250000, salaireMin: 180000, salaireMax: 220000,
+    76→    nbCandidatures: 30, nbCandidaturesRecues: 30,
+    77→    candidatsAssocies: [
+    78→      { nom: 'Ngo Meli Patrick', score: 13, etatCandidature: 'Retenu', source: 'Presse ecrite' },
+    79→      { nom: 'Happi Brice', score: 11, etatCandidature: 'Refuse', source: 'Candidature spontanee' },
+    80→      { nom: 'Tcheumeni Kevin', score: 12, etatCandidature: 'En reserve', source: 'Presse ecrite' },
+    81→    ],
+    82→    description: 'Technicien polyvalent pour la maintenance courante des equipements hoteliers. CAGEC ou equivalent requis.',
+    83→    historique: [
+    84→      { date: '05/01/2025', evenement: 'Offre creee', auteur: 'M. Essomba Andre', type: 'creation' },
+    85→      { date: '10/01/2025', evenement: 'Publication presse', auteur: 'DRH', type: 'publication' },
+    86→      { date: '10/02/2025', evenement: 'Cloture de l\'offre - 30 candidatures', auteur: 'Systeme', type: 'cloture' },
+    87→      { date: '20/02/2025', evenement: 'Candidat retenu : Ngo Meli Patrick', auteur: 'DRH', type: 'selection' },
+    88→    ],
+    89→    site: 'Annexe (Yaounde)',
+    90→  },
+    91→  { id: 4, numero: 'OF-2025-004', intitule: 'Receptionniste Nuit', departement: 'Herbergement', typePoste: 'Operationnel', typeContrat: 'CDD',
+    92→    canalDiffusion: 'Site web', statutOffre: 'Publiee', datePublication: '15/02/2025', dateCloture: '15/03/2025',
+    93→    dateRequise: '01/03/2025', responsable: 'M. Nkoulou Paul', roleResponsable: 'DRH',
+    94→    priorite: 'Haute', budgetAlloue: 200000, salaireMin: 150000, salaireMax: 180000,
+    95→    nbCandidatures: 8, nbCandidaturesRecues: 5,
+    96→    candidatsAssocies: [
+    97→      { nom: 'Kouamo Lea', score: 14, etatCandidature: 'En cours d\'etude', source: 'Site web' },
+    98→    ],
+    99→    description: 'Receptionniste pour le service de nuit a l\'Hotel Sawa. Anglais courant indispensable.',
+   100→    historique: [
+   101→      { date: '12/02/2025', evenement: 'Offre creee', auteur: 'M. Nkoulou Paul', type: 'creation' },
+   102→      { date: '15/02/2025', evenement: 'Publication site web', auteur: 'DRH', type: 'publication' },
+   103→    ],
+   104→    site: 'Hotel Sawa',
+   105→  },
+   106→  { id: 5, numero: 'OF-2025-005', intitule: 'Developpeur Full-Stack', departement: 'Informatique', typePoste: 'Cadre', typeContrat: 'CDI',
+   107→    canalDiffusion: 'LinkedIn', statutOffre: 'A creer', datePublication: '', dateCloture: '',
+   108→    dateRequise: '01/04/2025', responsable: 'M. Tchinda Rene', roleResponsable: 'DSI',
+   109→    priorite: 'Urgente', budgetAlloue: 1200000, salaireMin: 900000, salaireMax: 1100000,
+   110→    nbCandidatures: 0, nbCandidaturesRecues: 0,
+   111→    candidatsAssocies: [],
+   112→    description: 'Developpeur Full-Stack pour le projet de transformation digitale. React, Node.js, PostgreSQL requis.',
+   113→    historique: [
+   114→      { date: '25/02/2025', evenement: 'Offre en cours de redaction', auteur: 'M. Tchinda Rene', type: 'creation' },
+   115→    ],
+   116→    site: 'Siege (Douala)',
+   117→  },
+   118→  { id: 6, numero: 'OF-2025-006', intitule: 'Agent de Securite', departement: 'Securite', typePoste: 'Operationnel', typeContrat: 'CDI',
+   119→    canalDiffusion: 'Affichage', statutOffre: 'Annulee', datePublication: '', dateCloture: '',
+   120→    dateRequise: '01/03/2025', responsable: 'M. Fotso Victor', roleResponsable: 'Chef de Service Securite',
+   121→    priorite: 'Basse', budgetAlloue: 150000, salaireMin: 120000, salaireMax: 140000,
+   122→    nbCandidatures: 0, nbCandidaturesRecues: 0,
+   123→    candidatsAssocies: [],
+   124→    description: 'Poste annule - reorganisation du service de securite interne.',
+   125→    historique: [
+   126→      { date: '10/02/2025', evenement: 'Offre creee', auteur: 'M. Fotso Victor', type: 'creation' },
+   127→      { date: '18/02/2025', evenement: 'Offre annulee - reorganisation', auteur: 'DSI', type: 'annulation' },
+   128→    ],
+   129→    site: 'Siege (Douala)',
+   130→  },
+   131→  { id: 7, numero: 'OF-2025-007', intitule: 'Comptable Senior', departement: 'Finance & Comptabilite', typePoste: 'Cadre', typeContrat: 'CDI',
+   132→    canalDiffusion: 'Cabinet', statutOffre: 'Candidatures en cours', datePublication: '05/02/2025', dateCloture: '05/04/2025',
+   133→    dateRequise: '01/05/2025', responsable: 'Mme. Ngassa Clarisse', roleResponsable: 'Directrice Financiere',
+   134→    priorite: 'Haute', budgetAlloue: 700000, salaireMin: 500000, salaireMax: 650000,
+   135→    nbCandidatures: 15, nbCandidaturesRecues: 9,
+   136→    candidatsAssocies: [
+   137→      { nom: 'Djoumessi Franck', score: 18, etatCandidature: 'Entretien realise', source: 'Cabinet' },
+   138→      { nom: 'Mbassi Carine', score: 15, etatCandidature: 'En cours d\'etude', source: 'Cabinet' },
+   139→      { nom: 'Atangana Paul', score: 16, etatCandidature: 'Entretien planifie', source: 'LinkedIn' },
+   140→    ],
+   141→    description: 'Comptable avec experience en hotellerie/tourisme. Maitrise de Sage comptable et Excel avance.',
+   142→    historique: [
+   143→      { date: '01/02/2025', evenement: 'Offre creee', auteur: 'Mme. Ngassa Clarisse', type: 'creation' },
+   144→      { date: '05/02/2025', evenement: 'Mandat confie au cabinet HRC Cameroon', auteur: 'DRH', type: 'cabinet' },
+   145→    ],
+   146→    site: 'Siege (Douala)',
+   147→  },
+   148→  { id: 8, numero: 'OF-2025-008', intitule: 'Plongeur', departement: 'Restauration', typePoste: 'Operationnel', typeContrat: 'CDD',
+   149→    canalDiffusion: 'Affichage', statutOffre: 'Cloturee', datePublication: '01/01/2025', dateCloture: '15/01/2025',
+   150→    dateRequise: '01/02/2025', responsable: 'M. Nkoulou Paul', roleResponsable: 'DRH',
+   151→    priorite: 'Moyenne', budgetAlloue: 100000, salaireMin: 75000, salaireMax: 90000,
+   152→    nbCandidatures: 20, nbCandidaturesRecues: 20,
+   153→    candidatsAssocies: [
+   154→      { nom: 'Mbane Joseph', score: null, etatCandidature: 'Retenu', source: 'Affichage' },
+   155→    ],
+   156→    description: 'Plongeur pour la cuisine de l\'Hotel Sawa. Aucune qualification requise.',
+   157→    historique: [
+   158→      { date: '28/12/2024', evenement: 'Offre creee', auteur: 'M. Nkoulou Paul', type: 'creation' },
+   159→      { date: '01/01/2025', evenement: 'Publication par affichage', auteur: 'DRH', type: 'publication' },
+   160→      { date: '15/01/2025', evenement: 'Cloture - candidat retenu', auteur: 'DRH', type: 'cloture' },
+   161→    ],
+   162→    site: 'Hotel Sawa',
+   163→  },
+   164→];
+   165→
+   166→/* ═══ RESPONSABLES AVEC AVATARS ═══ */
+   167→const responsablesList = [
+   168→  { nom: 'M. Nkoulou Paul', role: 'DRH', initials: 'NP', color: '#0D7C66' },
+   169→  { nom: 'Mme. Mbarga Sophie', role: 'Directrice Marketing', initials: 'MS', color: '#1976d2' },
+   170→  { nom: 'M. Essomba Andre', role: 'Chef de Departement', initials: 'EA', color: '#f57c00' },
+   171→  { nom: 'M. Tchinda Rene', role: 'DSI', initials: 'TR', color: '#7b1fa2' },
+   172→  { nom: 'M. Fotso Victor', role: 'Chef de Service Securite', initials: 'FV', color: '#c62828' },
+   173→  { nom: 'Mme. Ngassa Clarisse', role: 'Directrice Financiere', initials: 'NC', color: '#00838f' },
+   174→];
+   175→
+   176→/* ═══ HISTOIRE COLORS ═══ */
+   177→const histColor = {
+   178→  creation: '#1976d2', publication: '#0D7C66', candidature: '#f57c00',
+   179→  cloture: '#9e9e9e', selection: '#2e7d32', annulation: '#d32f2f', cabinet: '#7b1fa2',
+   180→  modification: '#0288d1',
+   181→};
+   182→
+   183→/* ═══ CANDIDAT STATE COLOR ═══ */
+   184→const candidatEtatColor = {
+   185→  'Entretien planifie': 'info',
+   186→  'Entretien realise': 'warning',
+   187→  'En cours d\'etude': 'default',
+   188→  'Retenu': 'success',
+   189→  'Refuse': 'error',
+   190→  'En reserve': 'default',
+   191→};
+   192→
+   193→/* ═══ STATUTS DANGEREUX (nécessitent confirmation) ═══ */
+   194→const dangerousStatuses = ['Annulee', 'Cloturee'];
+   195→
+   196→/* ═══ COMPOSANT QUICK STATUS CHIP MENU ═══ */
+   197→function StatusChipMenu({ offre, onStatutChange, loadingId, loadingStatut }) {
+   198→  const [anchorEl, setAnchorEl] = useState(null);
+   199→  const [confirmAnchor, setConfirmAnchor] = useState(null);
+   200→  const [pendingStatut, setPendingStatut] = useState(null);
+   201→  const open = Boolean(anchorEl);
+   202→  const isLoading = loadingId === offre.id;
+   203→  const currentColor = statutOffreColor[offre.statutOffre] || 'default';
+   204→
+   205→  const handleClick = (e) => { e.stopPropagation(); setAnchorEl(e.currentTarget); };
+   206→  const handleClose = () => { setAnchorEl(null); setConfirmAnchor(null); setPendingStatut(null); };
+   207→
+   208→  const handleSelect = (e, newStatut) => {
+   209→    e.stopPropagation();
+   210→    setAnchorEl(null);
+   211→    if (newStatut === offre.statutOffre) return;
+   212→    if (dangerousStatuses.includes(newStatut)) { setPendingStatut(newStatut); setConfirmAnchor(e.currentTarget); return; }
+   213→    onStatutChange(offre.id, newStatut);
+   214→  };
+   215→
+   216→  const handleConfirm = (e) => {
+   217→    e.stopPropagation(); setConfirmAnchor(null);
+   218→    if (pendingStatut) { onStatutChange(offre.id, pendingStatut); setPendingStatut(null); }
+   219→  };
+   220→  const handleCancelConfirm = (e) => { e.stopPropagation(); setConfirmAnchor(null); setPendingStatut(null); };
+   221→
+   222→  const statusDotColor = { 'A creer': '#9e9e9e', 'Publiee': '#2e7d32', 'Candidatures en cours': '#f57f17', 'Cloturee': '#616161', 'Annulee': '#d32f2f' };
+   223→
+   224→  const chipEl = (
+   225→    <Chip
+   226→      icon={isLoading ? <CircularProgress size={14} sx={{ color: 'inherit', ml: 0.5 }} /> : undefined}
+   227→      label={isLoading && loadingStatut ? loadingStatut : offre.statutOffre}
+   228→      color={isLoading ? 'default' : currentColor}
+   229→      size="small" onClick={handleClick} onDelete={handleClick}
+   230→      deleteIcon={<KeyboardArrowDown sx={{ fontSize: 16, color: 'inherit' }} />}
+   231→      sx={{ fontWeight: 600, height: 26, fontSize: '0.75rem', cursor: 'pointer', transition: 'all 0.2s' }}
+   232→      aria-expanded={open} aria-haspopup="true" role="button" tabIndex={0}
+   233→      onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick(e); } }}
+   234→    />
+   235→  );
+   236→
+   237→  const menuEl = (
+   238→    <Menu anchorEl={anchorEl} open={open} onClose={handleClose}
+   239→      PaperProps={{ sx: { minWidth: 200, py: 0.5, borderRadius: 2 } }} transitionDuration={150}
+   240→    >
+   241→      <Typography variant="caption" sx={{ px: 2, py: 0.5, display: 'block', fontWeight: 700, color: 'text.secondary', fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: 1 }}>Changer le statut</Typography>
+   242→      {nomenclatures.statut_offre.map(s => {
+   243→        const isActive = s === offre.statutOffre;
+   244→        const dot = statusDotColor[s] || '#9e9e9e';
+   245→        return (
+   246→          <MenuItem key={s} value={s} onClick={(e) => handleSelect(e, s)} selected={isActive} disabled={isActive}
+   247→            sx={{ py: 0.8, px: 1.5, gap: 1.5, fontSize: '0.85rem' }}
+   248→          >
+   249→            <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: dot, flexShrink: 0 }} />
+   250→            {s}
+   251→            {isActive && <CheckCircle sx={{ fontSize: 16, ml: 'auto', color: '#1976d2' }} />}
+   252→          </MenuItem>
+   253→        );
+   254→      })}
+   255→    </Menu>
+   256→  );
+   257→
+   258→  const confirmMsg = pendingStatut === 'Annulee' ? 'Etes-vous sur de vouloir annuler cette offre ?' : 'Etes-vous sur de vouloir clore cette offre ?';
+   259→  const confirmBtnColor = pendingStatut === 'Annulee' ? '#d32f2f' : '#616161';
+   260→
+   261→  const popoverEl = (
+   262→    <Popover anchorEl={confirmAnchor} open={Boolean(confirmAnchor)} onClose={handleCancelConfirm}
+   263→      anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} transformOrigin={{ vertical: 'top', horizontal: 'center' }}
+   264→      PaperProps={{ sx: { borderRadius: 2, p: 2, maxWidth: 280 } }} disablePortal
+   265→    >
+   266→      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1.5 }}>
+   267→        <WarningAmber sx={{ fontSize: 20, color: pendingStatut === 'Annulee' ? '#d32f2f' : '#f57f17' }} />
+   268→        <Typography variant="subtitle2" fontWeight="bold" sx={{ fontSize: '0.85rem' }}>Confirmer le changement</Typography>
+   269→      </Box>
+   270→      <Typography variant="body2" sx={{ fontSize: '0.82rem', color: 'text.secondary', mb: 2, lineHeight: 1.5 }}>{confirmMsg}</Typography>
+   271→      <Box sx={{ display: 'flex', gap: 1, justifyContent: 'flex-end' }}>
+   272→        <Button size="small" onClick={handleCancelConfirm} sx={{ textTransform: 'none', fontSize: '0.8rem' }}>Annuler</Button>
+   273→        <Button size="small" variant="contained" onClick={handleConfirm} sx={{ textTransform: 'none', fontSize: '0.8rem', fontWeight: 600, bgcolor: confirmBtnColor }}>Confirmer</Button>
+   274→      </Box>
+   275→    </Popover>
+   276→  );
+   277→
+   278→  return <>{chipEl}{menuEl}{popoverEl}</>;
+   279→}
+   280→
+   281→/* ═══ COMPOSANT QUICK ACTION BUTTONS (ligne) ═══ */
+   282→function QuickActions({ offre, onView, onArchive, onDelete }) {
+   283→  return (
+   284→    <Stack direction="row" spacing={0.3} onClick={e => e.stopPropagation()}>
+   285→      <Tooltip title="Voir / Editer" arrow placement="top">
+   286→        <IconButton
+   287→          size="small"
+   288→          onClick={(e) => { e.stopPropagation(); onView(offre); }}
+   289→          sx={{ color: '#1976d2', '&:hover': { bgcolor: 'rgba(25,118,210,0.08)' } }}
+   290→          aria-label={`Voir l'offre ${offre.numero}`}
+   291→        >
+   292→          <Visibility sx={{ fontSize: 18 }} />
+   293→        </IconButton>
+   294→      </Tooltip>
+   295→      <Tooltip title="Archiver" arrow placement="top">
+   296→        <IconButton
+   297→          size="small"
+   298→          onClick={(e) => { e.stopPropagation(); onArchive(offre); }}
+   299→          sx={{ color: '#f57f17', '&:hover': { bgcolor: 'rgba(245,127,23,0.08)' } }}
+   300→          aria-label={`Archiver l'offre ${offre.numero}`}
+   301→        >
+   302→          <Archive sx={{ fontSize: 17 }} />
+   303→        </IconButton>
+   304→      </Tooltip>
+   305→      <Tooltip title="Supprimer" arrow placement="top">
+   306→        <IconButton
+   307→          size="small"
+   308→          onClick={(e) => { e.stopPropagation(); onDelete(offre); }}
+   309→          sx={{ color: '#d32f2f', '&:hover': { bgcolor: 'rgba(211,47,47,0.08)' } }}
+   310→          aria-label={`Supprimer l'offre ${offre.numero}`}
+   311→        >
+   312→          <Delete sx={{ fontSize: 17 }} />
+   313→        </IconButton>
+   314→      </Tooltip>
+   315→    </Stack>
+   316→  );
+   317→}
+   318→
+   319→/* ═══ TABLEAU COLONNES ═══ */
+   320→const tableCols = [
+   321→  { key: 'numero', label: 'N\u00b0 Offre', width: 110 },
+   322→  { key: 'datePublication', label: 'Publication', width: 95 },
+   323→  { key: 'departement', label: 'D\u00e9partement', width: 145, chip: true },
+   324→  { key: 'intitule', label: 'Intitul\u00e9 du Poste', width: 200 },
+   325→  { key: 'canalDiffusion', label: 'Canal', width: 110 },
+   326→  { key: 'nbCandidaturesRecues', label: 'Candidatures', width: 90 },
+   327→  { key: 'responsable', label: 'Responsable', width: 150 },
+   328→];
+   329→
+   330→/* ═══ COMPOSANT CHAMP ÉDITABLE ═══ */
+   331→function EditableField({ label, value, type = 'text', editKey, editing, onEdit, onChange, options, disabled, endAdornment, multiline }) {
+   332→  if (type === 'select') {
+   333→    return (
+   334→      <Box sx={{ mb: 2 }}>
+   335→        <Box sx={{ display: 'flex', alignItems: 'center', mb: 0.5, gap: 0.5 }}>
+   336→          <Typography variant="caption" sx={{ fontSize: '0.7rem', fontWeight: 600, color: 'text.secondary', textTransform: 'uppercase', letterSpacing: 0.5 }}>{label}</Typography>
+   337→          {!disabled && <Edit sx={{ fontSize: 13, color: 'text.disabled', cursor: 'pointer', '&:hover': { color: 'primary.main' } }} onClick={() => onEdit(editKey)} />}
+   338→        </Box>
+   339→        <FormControl size="small" fullWidth disabled={disabled}>
+   340→          <Select
+   341→            value={value || ''}
+   342→            onChange={e => onChange(editKey, e.target.value)}
+   343→            sx={{
+   344→              bgcolor: editing === editKey ? '#fffde7' : 'transparent',
+   345→              '& .MuiSelect-select': { fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: 1 },
+   346→              transition: 'background-color 0.2s',
+   347→            }}
+   348→            renderValue={(v) => (
+   349→              <Chip
+   350→                label={v}
+   351→                size="small"
+   352→                color={options?.colorMap?.[v] || 'default'}
+   353→                sx={{ fontWeight: 600, height: 26, fontSize: '0.78rem' }}
+   354→              />
+   355→            )}
+   356→          >
+   357→            {(options?.list || []).map(opt => (
+   358→              <MenuItem key={opt} value={opt} sx={{ fontSize: '0.85rem' }}>{opt}</MenuItem>
+   359→            ))}
+   360→          </Select>
+   361→        </FormControl>
+   362→      </Box>
+   363→    );
+   364→  }
+   365→
+   366→  if (type === 'date') {
+   367→    return (
+   368→      <Box sx={{ mb: 2 }}>
+   369→        <Box sx={{ display: 'flex', alignItems: 'center', mb: 0.5, gap: 0.5 }}>
+   370→          <Typography variant="caption" sx={{ fontSize: '0.7rem', fontWeight: 600, color: 'text.secondary', textTransform: 'uppercase', letterSpacing: 0.5 }}>{label}</Typography>
+   371→          {!disabled && <Edit sx={{ fontSize: 13, color: 'text.disabled', cursor: 'pointer', '&:hover': { color: 'primary.main' } }} onClick={() => onEdit(editKey)} />}
+   372→        </Box>
+   373→        <TextField
+   374→          size="small"
+   375→          type="date"
+   376→          fullWidth
+   377→          value={value || ''}
+   378→          onChange={e => onChange(editKey, e.target.value)}
+   379→          disabled={disabled}
+   380→          InputProps={{
+   381→            startAdornment: <InputAdornment position="start"><CalendarToday sx={{ fontSize: 16, color: 'action.active' }} /></InputAdornment>,
+   382→            sx: { fontSize: '0.85rem' },
+   383→          }}
+   384→          sx={{
+   385→            '& input': { fontSize: '0.85rem' },
+   386→            bgcolor: editing === editKey ? '#fffde7' : 'transparent',
+   387→            transition: 'background-color 0.2s',
+   388→          }}
+   389→        />
+   390→      </Box>
+   391→    );
+   392→  }
+   393→
+   394→  if (type === 'number') {
+   395→    return (
+   396→      <Box sx={{ mb: 2 }}>
+   397→        <Box sx={{ display: 'flex', alignItems: 'center', mb: 0.5, gap: 0.5 }}>
+   398→          <Typography variant="caption" sx={{ fontSize: '0.7rem', fontWeight: 600, color: 'text.secondary', textTransform: 'uppercase', letterSpacing: 0.5 }}>{label}</Typography>
+   399→          {!disabled && <Edit sx={{ fontSize: 13, color: 'text.disabled', cursor: 'pointer', '&:hover': { color: 'primary.main' } }} onClick={() => onEdit(editKey)} />}
+   400→        </Box>
+   401→        <TextField
+   402→          size="small"
+   403→          type="number"
+   404→          fullWidth
+   405→          value={value ?? ''}
+   406→          onChange={e => onChange(editKey, e.target.value ? Number(e.target.value) : '')}
+   407→          disabled={disabled}
+   408→          InputProps={{
+   409→            endAdornment: endAdornment ? <InputAdornment position="end">{endAdornment}</InputAdornment> : null,
+   410→            sx: { fontSize: '0.85rem' },
+   411→            inputProps: { min: 0 },
+   412→          }}
+   413→          sx={{
+   414→            '& input': { fontSize: '0.85rem' },
+   415→            bgcolor: editing === editKey ? '#fffde7' : 'transparent',
+   416→            transition: 'background-color 0.2s',
+   417→          }}
+   418→        />
+   419→      </Box>
+   420→    );
+   421→  }
+   422→
+   423→  return (
+   424→    <Box sx={{ mb: 2 }}>
+   425→      <Box sx={{ display: 'flex', alignItems: 'center', mb: 0.5, gap: 0.5 }}>
+   426→        <Typography variant="caption" sx={{ fontSize: '0.7rem', fontWeight: 600, color: 'text.secondary', textTransform: 'uppercase', letterSpacing: 0.5 }}>{label}</Typography>
+   427→        {!disabled && <Edit sx={{ fontSize: 13, color: 'text.disabled', cursor: 'pointer', '&:hover': { color: 'primary.main' } }} onClick={() => onEdit(editKey)} />}
+   428→      </Box>
+   429→      <TextField
+   430→        size="small"
+   431→        fullWidth
+   432→        value={value || ''}
+   433→        onChange={e => onChange(editKey, e.target.value)}
+   434→        disabled={disabled}
+   435→        multiline={multiline}
+   436→        rows={multiline ? 3 : 1}
+   437→        sx={{
+   438→          '& textarea, & input': { fontSize: '0.85rem' },
+   439→          bgcolor: editing === editKey ? '#fffde7' : 'transparent',
+   440→          transition: 'background-color 0.2s',
+   441→        }}
+   442→      />
+   443→    </Box>
+   444→  );
+   445→}
+   446→
+   447→/* ═══ DRAWER D'ÉDITION INTERACTIVE ═══ */
+   448→function OffreDrawer({ offre, open, onClose, onSave }) {
+   449→  const [form, setForm] = useState({});
+   450→  const [editing, setEditing] = useState(null);
+   451→  const [hasChanges, setHasChanges] = useState(false);
+   452→
+   453→  /* Synchroniser le formulaire quand l'offre change */
+   454→  useEffect(() => {
+   455→    if (offre) {
+   456→      setForm({
+   457→        numero: offre.numero,
+   458→        intitule: offre.intitule,
+   459→        departement: offre.departement,
+   460→        dateRequise: offre.dateRequise,
+   461→        datePublication: offre.datePublication,
+   462→        dateCloture: offre.dateCloture,
+   463→        priorite: offre.priorite,
+   464→        statutOffre: offre.statutOffre,
+   465→        responsable: offre.responsable,
+   466→        roleResponsable: offre.roleResponsable,
+   467→        typeContrat: offre.typeContrat,
+   468→        typePoste: offre.typePoste,
+   469→        canalDiffusion: offre.canalDiffusion,
+   470→        budgetAlloue: offre.budgetAlloue,
+   471→        salaireMin: offre.salaireMin,
+   472→        salaireMax: offre.salaireMax,
+   473→        description: offre.description,
+   474→        site: offre.site,
+   475→      });
+   476→      setHasChanges(false);
+   477→      setEditing(null);
+   478→    }
+   479→  }, [offre]);
+   480→
+   481→  if (!offre) return null;
+   482→
+   483→  const d = offre;
+   484→
+   485→  const handleChange = (key, val) => {
+   486→    setForm(prev => ({ ...prev, [key]: val }));
+   487→    setHasChanges(true);
+   488→  };
+   489→
+   490→  const handleEdit = (key) => setEditing(key);
+   491→
+   492→  const handleSave = () => {
+   493→    if (onSave && hasChanges) {
+   494→      onSave(d.id, form);
+   495→      setHasChanges(false);
+   496→      setEditing(null);
+   497→    }
+   498→  };
+   499→
+   500→  const handleCancel = () => {
+   501→    /* Restaurer les valeurs originales */
+   502→    setForm({
+   503→      numero: d.numero, intitule: d.intitule, departement: d.departement,
+   504→      dateRequise: d.dateRequise, datePublication: d.datePublication, dateCloture: d.dateCloture,
+   505→      priorite: d.priorite, statutOffre: d.statutOffre, responsable: d.responsable,
+   506→      roleResponsable: d.roleResponsable, typeContrat: d.typeContrat, typePoste: d.typePoste,
+   507→      canalDiffusion: d.canalDiffusion, budgetAlloue: d.budgetAlloue,
+   508→      salaireMin: d.salaireMin, salaireMax: d.salaireMax, description: d.description, site: d.site,
+   509→    });
+   510→    setHasChanges(false);
+   511→    setEditing(null);
+   512→  };
+   513→
+   514→  return (
+   515→    <Drawer
+   516→      anchor="right"
+   517→      open={open}
+   518→      onClose={onClose}
+   519→      ModalProps={{ BackdropProps: { sx: { bgcolor: 'rgba(0,0,0,0.25)' } } }}
+   520→      PaperProps={{
+   521→        sx: {
+   522→          width: { xs: '100%', sm: 560 },
+   523→          display: 'flex',
+   524→          flexDirection: 'column',
+   525→          p: 0,
+   526→        }
+   527→      }}
+   528→    >
+   529→      {/* ═══ EN-TÊTE ═══ */}
+   530→      <Box sx={{
+   531→        p: 2.5, pb: 2,
+   532→        background: 'linear-gradient(135deg, #1565c0 0%, #0D7C66 100%)',
+   533→        color: 'white', flexShrink: 0,
+   534→      }}>
+   535→        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+   536→          <Box sx={{ flex: 1, minWidth: 0 }}>
+   537→            <Typography variant="overline" sx={{ opacity: 0.85, letterSpacing: 1.5, fontSize: '0.7rem' }}>D\u00e9tails et \u00c9dition</Typography>
+   538→            <Typography variant="h6" fontWeight="bold" sx={{ mt: 0.3, lineHeight: 1.2, fontSize: '1.15rem' }}>{d.numero}</Typography>
+   539→            <Typography variant="body2" sx={{ mt: 0.5, opacity: 0.9, fontSize: '0.85rem' }}>
+   540→              Poste : <Box component="span" fontWeight="bold">{form.intitule}</Box> | D\u00e9partement : <Box component="span" fontWeight="bold">{form.departement}</Box>
+   541→            </Typography>
+   542→          </Box>
+   543→          <IconButton onClick={onClose} sx={{ color: 'white', ml: 1 }}><Close /></IconButton>
+   544→        </Box>
+   545→      </Box>
+   546→
+   547→      {/* ═══ CONTENU SCROLLABLE ═══ */}
+   548→      <Box sx={{ overflow: 'auto', flex: 1, px: 3, py: 2.5 }}>
+   549→
+   550→        {/* ─── SECTION 1 : INFORMATIONS CLÉS ─── */}
+   551→        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8, mb: 2 }}>
+   552→          <Work sx={{ fontSize: 18, color: 'primary.main' }} />
+   553→          <Typography variant="subtitle2" fontWeight="bold" sx={{ fontSize: '0.9rem' }}>Informations Cl\u00e9s</Typography>
+   554→        </Box>
+   555→
+   556→        {/* N° Offre (lecture seule) */}
+   557→        <Box sx={{ mb: 2 }}>
+   558→          <Box sx={{ display: 'flex', alignItems: 'center', mb: 0.5, gap: 0.5 }}>
+   559→            <Typography variant="caption" sx={{ fontSize: '0.7rem', fontWeight: 600, color: 'text.secondary', textTransform: 'uppercase', letterSpacing: 0.5 }}>N\u00b0 d'offre</Typography>
+   560→          </Box>
+   561→          <TextField
+   562→            size="small" fullWidth value={form.numero || ''} disabled
+   563→            sx={{ '& input': { fontSize: '0.85rem', fontWeight: 600, color: 'text.primary' }, '& .MuiOutlinedInput-root.Mui-disabled': { bgcolor: '#f5f5f5' } }}
+   564→          />
+   565→        </Box>
+   566→
+   567→        <EditableField label="Date requise" value={form.dateRequise} editKey="dateRequise" editing={editing} onEdit={handleEdit} onChange={handleChange} type="date" />
+   568→        <EditableField label="Date de publication" value={form.datePublication} editKey="datePublication" editing={editing} onEdit={handleEdit} onChange={handleChange} type="date" />
+   569→        <EditableField label="Date de cl\u00f4ture" value={form.dateCloture} editKey="dateCloture" editing={editing} onEdit={handleEdit} onChange={handleChange} type="date" />
+   570→        <EditableField label="D\u00e9partement" value={form.departement} editKey="departement" editing={editing} onEdit={handleEdit} onChange={handleChange} type="select"
+   571→          options={{ list: nomenclatures.departement }} />
+   572→        <EditableField label="Intitul\u00e9 du Poste" value={form.intitule} editKey="intitule" editing={editing} onEdit={handleEdit} onChange={handleChange} />
+   573→        <EditableField label="Type de poste" value={form.typePoste} editKey="typePoste" editing={editing} onEdit={handleEdit} onChange={handleChange} type="select"
+   574→          options={{ list: nomenclatures.type_poste }} />
+   575→        <EditableField label="Type de contrat" value={form.typeContrat} editKey="typeContrat" editing={editing} onEdit={handleEdit} onChange={handleChange} type="select"
+   576→          options={{ list: nomenclatures.type_contrat }} />
+   577→        <EditableField label="Site" value={form.site} editKey="site" editing={editing} onEdit={handleEdit} onChange={handleChange} type="select"
+   578→          options={{ list: nomenclatures.site }} />
+   579→
+   580→        <Divider sx={{ my: 2.5 }} />
+   581→
+   582→        {/* ─── PRIORITÉ & STATUT ─── */}
+   583→        <Box sx={{ display: 'flex', gap: 2 }}>
+   584→          <Box sx={{ flex: 1 }}>
+   585→            <EditableField label="Priorit\u00e9" value={form.priorite} editKey="priorite" editing={editing} onEdit={handleEdit} onChange={handleChange} type="select"
+   586→              options={{ list: nomenclatures.priorite, colorMap: prioriteColor }} />
+   587→          </Box>
+   588→          <Box sx={{ flex: 1 }}>
+   589→            <EditableField label="Statut" value={form.statutOffre} editKey="statutOffre" editing={editing} onEdit={handleEdit} onChange={handleChange} type="select"
+   590→              options={{ list: nomenclatures.statut_offre, colorMap: statutOffreColor }} />
+   591→          </Box>
+   592→        </Box>
+   593→
+   594→        <Divider sx={{ my: 2.5 }} />
+   595→
+   596→        {/* ─── SECTION 2 : RESPONSABLE & BUDGET ─── */}
+   597→        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8, mb: 2 }}>
+   598→          <Person sx={{ fontSize: 18, color: 'primary.main' }} />
+   599→          <Typography variant="subtitle2" fontWeight="bold" sx={{ fontSize: '0.9rem' }}>Responsable & Budget</Typography>
+   600→        </Box>
+   601→
+   602→        <EditableField label="Responsable" value={form.responsable} editKey="responsable" editing={editing} onEdit={handleEdit} onChange={handleChange} type="select"
+   603→          options={{ list: responsablesList.map(r => r.nom) }} />
+   604→        <EditableField label="R\u00f4le" value={form.roleResponsable} editKey="roleResponsable" editing={editing} onEdit={handleEdit} onChange={handleChange} type="select"
+   605→          options={{ list: nomenclatures.role_responsable }} />
+   606→
+   607→        <EditableField label="Budget allou\u00e9" value={form.budgetAlloue} editKey="budgetAlloue" editing={editing} onEdit={handleEdit} onChange={handleChange} type="number"
+   608→          endAdornment="FCFA" />
+   609→
+   610→        <Box sx={{ display: 'flex', gap: 2 }}>
+   611→          <Box sx={{ flex: 1 }}>
+   612→            <EditableField label="Salaire Min" value={form.salaireMin} editKey="salaireMin" editing={editing} onEdit={handleEdit} onChange={handleChange} type="number"
+   613→              endAdornment="FCFA" />
+   614→          </Box>
+   615→          <Box sx={{ flex: 1 }}>
+   616→            <EditableField label="Salaire Max" value={form.salaireMax} editKey="salaireMax" editing={editing} onEdit={handleEdit} onChange={handleChange} type="number"
+   617→              endAdornment="FCFA" />
+   618→          </Box>
+   619→        </Box>
+   620→
+   621→        <Divider sx={{ my: 2.5 }} />
+   622→
+   623→        {/* ─── CANAL DE DIFFUSION ─── */}
+   624→        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8, mb: 2 }}>
+   625→          <Campaign sx={{ fontSize: 18, color: 'primary.main' }} />
+   626→          <Typography variant="subtitle2" fontWeight="bold" sx={{ fontSize: '0.9rem' }}>Diffusion</Typography>
+   627→        </Box>
+   628→        <EditableField label="Canal de diffusion" value={form.canalDiffusion} editKey="canalDiffusion" editing={editing} onEdit={handleEdit} onChange={handleChange} type="select"
+   629→          options={{ list: nomenclatures.canal_diffusion }} />
+   630→        <EditableField label="Description de l'offre" value={form.description} editKey="description" editing={editing} onEdit={handleEdit} onChange={handleChange} multiline />
+   631→
+   632→        <Divider sx={{ my: 2.5 }} />
+   633→
+   634→        {/* ─── SECTION 3 : CANDIDATURES LIÉES ─── */}
+   635→        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
+   636→          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8 }}>
+   637→            <Groups sx={{ fontSize: 18, color: 'primary.main' }} />
+   638→            <Typography variant="subtitle2" fontWeight="bold" sx={{ fontSize: '0.9rem' }}>Candidatures li\u00e9es</Typography>
+   639→            <Badge badgeContent={d.candidatsAssocies?.length || 0} color="primary" sx={{ '& .MuiBadge-badge': { fontSize: '0.7rem' } }} />
+   640→          </Box>
+   641→          <Chip label={`${d.nbCandidaturesRecues} / ${d.nbCandidatures} re\u00e7ues`} size="small" variant="outlined" sx={{ fontSize: '0.72rem' }} />
+   642→        </Box>
+   643→
+   644→        {d.candidatsAssocies?.length > 0 ? (
+   645→          <Paper variant="outlined" sx={{ mb: 1 }}>
+   646→            {d.candidatsAssocies.map((c, i) => {
+   647→              const scoreColor = c.score === null ? 'default' : c.score >= 16 ? 'success' : c.score >= 12 ? 'warning' : 'error';
+   648→              const etatC = candidatEtatColor[c.etatCandidature] || 'default';
+   649→              return (
+   650→                <Box key={i} sx={{
+   651→                  display: 'flex', alignItems: 'center', gap: 1.5, p: 1.5,
+   652→                  borderBottom: i < d.candidatsAssocies.length - 1 ? '1px solid' : 'none',
+   653→                  borderColor: 'divider',
+   654→                  '&:hover': { bgcolor: 'rgba(0,0,0,0.02)' },
+   655→                }}>
+   656→                  <Avatar sx={{ width: 34, height: 34, fontSize: '0.75rem', bgcolor: '#1976d2' }}>
+   657→                    {c.nom.split(' ').map(n => n[0]).join('')}
+   658→                  </Avatar>
+   659→                  <Box sx={{ flex: 1, minWidth: 0 }}>
+   660→                    <Typography variant="body2" fontWeight={600} sx={{ fontSize: '0.85rem' }}>{c.nom}</Typography>
+   661→                    <Box sx={{ display: 'flex', gap: 0.5, mt: 0.3 }}>
+   662→                      <Chip label={c.etatCandidature} size="small" color={etatC} sx={{ height: 20, fontSize: '0.65rem' }} />
+   663→                      <Chip label={c.source} size="small" variant="outlined" sx={{ height: 20, fontSize: '0.65rem' }} />
+   664→                    </Box>
+   665→                  </Box>
+   666→                  <Box sx={{ textAlign: 'center' }}>
+   667→                    <Typography variant="body2" fontWeight="bold" sx={{ color: scoreColor === 'success' ? '#2e7d32' : scoreColor === 'warning' ? '#f57f17' : scoreColor === 'error' ? '#d32f2f' : 'text.primary', fontSize: '0.9rem' }}>
+   668→                      {c.score !== null ? `${c.score}/20` : '\u2014'}
+   669→                    </Typography>
+   670→                    <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.6rem' }}>Score</Typography>
+   671→                  </Box>
+   672→                  <Tooltip title="Voir le profil">
+   673→                    <IconButton size="small"><ArrowForward sx={{ fontSize: 16 }} /></IconButton>
+   674→                  </Tooltip>
+   675→                </Box>
+   676→              );
+   677→            })}
+   678→          </Paper>
+   679→        ) : (
+   680→          <Paper variant="outlined" sx={{ p: 3, textAlign: 'center', mb: 1 }}>
+   681→            <Typography variant="body2" color="text.secondary">Aucune candidature associ\u00e9e</Typography>
+   682→          </Paper>
+   683→        )}
+   684→
+   685→        <Divider sx={{ my: 2.5 }} />
+   686→
+   687→        {/* ─── HISTORIQUE ─── */}
+   688→        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8, mb: 2 }}>
+   689→          <AccessTime sx={{ fontSize: 18, color: 'primary.main' }} />
+   690→          <Typography variant="subtitle2" fontWeight="bold" sx={{ fontSize: '0.9rem' }}>Historique</Typography>
+   691→          <Badge badgeContent={d.historique?.length || 0} color="primary" sx={{ '& .MuiBadge-badge': { fontSize: '0.7rem' } }} />
+   692→        </Box>
+   693→        {d.historique?.length > 0 ? (
+   694→          <Box sx={{ position: 'relative', ml: 1.5, pl: 3, borderLeft: '2px solid #e0e0e0' }}>
+   695→            {d.historique.map((h, i) => (
+   696→              <Box key={i} sx={{ position: 'relative', pb: i < d.historique.length - 1 ? 2 : 0 }}>
+   697→                <Box sx={{
+   698→                  position: 'absolute', left: -25, top: 2, width: 12, height: 12,
+   699→                  borderRadius: '50%',
+   700→                  bgcolor: histColor[h.type] || '#9e9e9e',
+   701→                  border: '2px solid white',
+   702→                  boxShadow: '0 0 0 1px ' + (histColor[h.type] || '#9e9e9e'),
+   703→                }} />
+   704→                <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.7rem' }}>{h.date}</Typography>
+   705→                <Typography variant="body2" fontWeight={500} sx={{ fontSize: '0.85rem' }}>{h.evenement}</Typography>
+   706→                <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.7rem' }}>par {h.auteur}</Typography>
+   707→              </Box>
+   708→            ))}
+   709→          </Box>
+   710→        ) : (
+   711→          <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'center', py: 2 }}>Aucun historique</Typography>
+   712→        )}
+   713→
+   714→      </Box>
+   715→
+   716→      {/* ═══ FOOTER ═══ */}
+   717→      <Box sx={{
+   718→        p: 2, borderTop: '1px solid', borderColor: 'divider', bgcolor: 'background.paper',
+   719→        display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexShrink: 0,
+   720→      }}>
+   721→        <Button
+   722→          color="inherit" onClick={handleCancel} disabled={!hasChanges}
+   723→          sx={{ textTransform: 'none', fontSize: '0.85rem' }}
+   724→        >
+   725→          Annuler
+   726→        </Button>
+   727→        <Button
+   728→          variant="contained"
+   729→          startIcon={<Save sx={{ fontSize: 18 }} />}
+   730→          onClick={handleSave}
+   731→          disabled={!hasChanges}
+   732→          sx={{
+   733→            textTransform: 'none', fontSize: '0.85rem', fontWeight: 600,
+   734→            bgcolor: '#1565c0', '&:hover': { bgcolor: '#0d47a1' },
+   735→          }}
+   736→        >
+   737→          Enregistrer les modifications
+   738→        </Button>
+   739→      </Box>
+   740→    </Drawer>
+   741→  );
+   742→}
+   743→
+   744→/* ═══ PAGE PRINCIPALE ═══ */
+   745→export default function Offres() {
+   746→  const [data, setData] = useState(initialData);
+   747→  const [dlg, setDlg] = useState(false);
+   748→  const [filterDep, setFilterDep] = useState('Tous');
+   749→  const [filterStatut, setFilterStatut] = useState('Tous');
+   750→  const [filterCanal, setFilterCanal] = useState('Tous');
+   751→  const [page, setPage] = useState(0);
+   752→  const [rpp, setRpp] = useState(10);
+   753→  const [drawerOffre, setDrawerOffre] = useState(null);
+   754→  const [snack, setSnack] = useState(null);
+   755→  /* Quick Actions states */
+   756→  const [loadingStatus, setLoadingStatus] = useState({ id: null, statut: null });
+   757→  const [confirmDlg, setConfirmDlg] = useState(null); /* { type: 'archive'|'delete', offre: {...} } */
+   758→
+   759→  const filtered = useMemo(() => data.filter(o =>
+   760→    (filterDep === 'Tous' || o.departement === filterDep) &&
+   761→    (filterStatut === 'Tous' || o.statutOffre === filterStatut) &&
+   762→    (filterCanal === 'Tous' || o.canalDiffusion === filterCanal)
+   763→  ), [data, filterDep, filterStatut, filterCanal]);
+   764→
+   765→  const handleSaveOffre = useCallback((id, formData) => {
+   766→    const today = new Date().toLocaleDateString('fr-FR');
+   767→    setData(prev => prev.map(o => {
+   768→      if (o.id !== id) return o;
+   769→      const changes = [];
+   770→      if (o.statutOffre !== formData.statutOffre) changes.push(`Statut : ${o.statutOffre} \u2192 ${formData.statutOffre}`);
+   771→      if (o.priorite !== formData.priorite) changes.push(`Priorit\u00e9 : ${o.priorite} \u2192 ${formData.priorite}`);
+   772→      if (o.intitule !== formData.intitule) changes.push('Intitul\u00e9 modifi\u00e9');
+   773→      if (o.responsable !== formData.responsable) changes.push(`Responsable : ${o.responsable} \u2192 ${formData.responsable}`);
+   774→      if (o.budgetAlloue !== formData.budgetAlloue) changes.push('Budget modifi\u00e9');
+   775→      if (o.canalDiffusion !== formData.canalDiffusion) changes.push(`Canal : ${o.canalDiffusion} \u2192 ${formData.canalDiffusion}`);
+   776→
+   777→      const newHist = [...(o.historique || [])];
+   778→      changes.forEach(ch => {
+   779→        newHist.push({ date: today, evenement: ch, auteur: 'Utilisateur', type: 'modification' });
+   780→      });
+   781→      if (changes.length === 0) {
+   782→        newHist.push({ date: today, evenement: 'Offre modifi\u00e9e', auteur: 'Utilisateur', type: 'modification' });
+   783→      }
+   784→
+   785→      return {
+   786→        ...o,
+   787→        ...formData,
+   788→        historique: newHist,
+   789→      };
+   790→    }));
+   791→    /* Mettre à jour le drawer avec les nouvelles données */
+   792→    setDrawerOffre(prev => prev && prev.id === id ? { ...prev, ...formData } : prev);
+   793→    setSnack({ msg: 'Offre mise \u00e0 jour avec succ\u00e8s', severity: 'success' });
+   794→  }, []);
+   795→
+   796→  /* ═══ QUICK STATUS CHANGE (optimiste + spinner 300ms) ═══ */
+   797→  const handleQuickStatutChange = useCallback((id, newStatut) => {
+   798→    const offre = data.find(o => o.id === id);
+   799→    if (!offre || offre.statutOffre === newStatut) return;
+   800→
+   801→    /* Spinner + affichage du nouveau statut immédiatement (optimiste) */
+   802→    setLoadingStatus({ id, statut: newStatut });
+   803→
+   804→    const today = new Date().toLocaleDateString('fr-FR');
+   805→    const oldStatut = offre.statutOffre;
+   806→
+   807→    /* Mise à jour optimiste du state */
+   808→    setData(prev => prev.map(o => {
+   809→      if (o.id !== id) return o;
+   810→      return {
+   811→        ...o,
+   812→        statutOffre: newStatut,
+   813→        historique: [...(o.historique || []), {
+   814→          date: today,
+   815→          evenement: `Statut chang\u00e9 : ${oldStatut} \u2192 ${newStatut}`,
+   816→          auteur: 'Utilisateur',
+   817→          type: newStatut === 'Annulee' ? 'annulation' : newStatut === 'Cloturee' ? 'cloture' : 'modification',
+   818→        }],
+   819→        ...(newStatut === 'Cloturee' ? { dateCloture: today } : {}),
+   820→        ...(newStatut === 'Publiee' && !o.datePublication ? { datePublication: today } : {}),
+   821→      };
+   822→    }));
+   823→
+   824→    /* Mettre à jour le drawer si ouvert */
+   825→    setDrawerOffre(prev => prev && prev.id === id ? { ...prev, statutOffre: newStatut } : prev);
+   826→
+   827→    /* Simuler un délai API de 300ms puis effacer le spinner */
+   828→    setTimeout(() => {
+   829→      setLoadingStatus({ id: null, statut: null });
+   830→      setSnack({ msg: `Statut de ${offre.numero} mis \u00e0 jour vers '${newStatut}'`, severity: 'success' });
+   831→    }, 300);
+   832→  }, [data]);
+   833→
+   834→  /* ═══ ARCHIVER UNE OFFRE ═══ */
+   835→  const handleArchive = useCallback((offre) => {
+   836→    setConfirmDlg({ type: 'archive', offre });
+   837→  }, []);
+   838→
+   839→  /* ═══ SUPPRIMER UNE OFFRE ═══ */
+   840→  const handleDelete = useCallback((offre) => {
+   841→    setConfirmDlg({ type: 'delete', offre });
+   842→  }, []);
+   843→
+   844→  /* ═══ CONFIRMER ACTION CRITIQUE ═══ */
+   845→  const handleConfirmAction = useCallback(() => {
+   846→    if (!confirmDlg) return;
+   847→    const { type, offre } = confirmDlg;
+   848→    const today = new Date().toLocaleDateString('fr-FR');
+   849→
+   850→    if (type === 'archive') {
+   851→      setData(prev => prev.map(o => o.id === offre.id ? {
+   852→        ...o, statutOffre: 'Cloturee',
+   853→        historique: [...(o.historique || []), { date: today, evenement: 'Offre archiv\u00e9e (cl\u00f4tur\u00e9e)', auteur: 'Utilisateur', type: 'cloture' }],
+   854→        dateCloture: o.dateCloture || today,
+   855→      } : o));
+   856→      setDrawerOffre(prev => prev && prev.id === offre.id ? { ...prev, statutOffre: 'Cloturee' } : prev);
+   857→      setSnack({ msg: `${offre.numero} archiv\u00e9e avec succ\u00e8s`, severity: 'info' });
+   858→    } else if (type === 'delete') {
+   859→      setData(prev => prev.filter(o => o.id !== offre.id));
+   860→      if (drawerOffre?.id === offre.id) setDrawerOffre(null);
+   861→      setSnack({ msg: `${offre.numero} supprim\u00e9e`, severity: 'warning' });
+   862→    }
+   863→
+   864→    setConfirmDlg(null);
+   865→  }, [confirmDlg, drawerOffre]);
+   866→
+   867→  const handleExport = useCallback(() => {
+   868→    const cols = ['N\u00b0','Intitul\u00e9','D\u00e9partement','Type Poste','Type Contrat','Canal','Statut Offre','Date Publication','Date Cl\u00f4ture','Date Requise','Responsable','Priorit\u00e9','Budget Allou\u00e9','Salaire Min','Salaire Max','Candidatures Re\u00e7ues','Site'];
+   869→    const rows = [cols.join(';')];
+   870→    filtered.forEach(o => rows.push([o.numero, o.intitule, o.departement, o.typePoste, o.typeContrat, o.canalDiffusion, o.statutOffre, o.datePublication, o.dateCloture, o.dateRequise, o.responsable, o.priorite, o.budgetAlloue, o.salaireMin, o.salaireMax, o.nbCandidaturesRecues, o.site].map(v => `"${v}"`).join(';')));
+   871→    const blob = new Blob(['\uFEFF' + rows.join('\n')], { type: 'text/csv;charset=utf-8' });
+   872→    const url = URL.createObjectURL(blob);
+   873→    const a = document.createElement('a');
+   874→    a.href = url;
+   875→    a.download = 'offres_emploi.csv';
+   876→    a.click();
+   877→    URL.revokeObjectURL(url);
+   878→    setSnack({ msg: 'Export CSV t\u00e9l\u00e9charg\u00e9', severity: 'info' });
+   879→  }, [filtered]);
+   880→
+   881→  return (
+   882→    <Box>
+   883→      <Typography variant="h5" fontWeight="bold">Offres d'Emploi</Typography>
+   884→      <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>{filtered.length} offre(s) d'emploi</Typography>
+   885→
+   886→      <Box sx={{ display: 'flex', gap: 1, mb: 2, alignItems: 'center' }}>
+   887→        <Button variant="outlined" startIcon={<Download fontSize="small" />} onClick={handleExport}>Exporter CSV</Button>
+   888→        <Button variant="contained" startIcon={<Add fontSize="small" />} onClick={() => setDlg(true)}>Nouvelle Offre</Button>
+   889→      </Box>
+   890→
+   891→      {/* KPIs */}
+   892→      <Box sx={{ display: 'flex', gap: 2, mb: 3, flexWrap: 'wrap' }}>
+   893→        <KPICard titre="TOTAL OFFRES" valeur={filtered.length} sousTexte={`${filtered.length} offre(s) enregistr\u00e9e(s)`} />
+   894→        <KPICard titre="PUBLI\u00c9ES" valeur={filtered.filter(o => o.statutOffre === 'Publiee').length} sousTexte={`${Math.round(filtered.filter(o => o.statutOffre === 'Publiee').length / Math.max(filtered.length, 1) * 100)}% du total`} />
+   895→        <KPICard titre="CANDIDATURES EN COURS" valeur={filtered.filter(o => o.statutOffre === 'Candidatures en cours').length} sousTexte="offres actives" />
+   896→        <KPICard titre="TOTAL CANDIDATURES" valeur={filtered.reduce((s, o) => s + (o.nbCandidaturesRecues || 0), 0)} sousTexte="candidatures re\u00e7ues" />
+   897→      </Box>
+   898→
+   899→      {/* Filtres */}
+   900→      <Box sx={{ display: 'flex', gap: 2, mb: 2, flexWrap: 'wrap' }}>
+   901→        <FormControl size="small" sx={{ minWidth: 180 }}>
+   902→          <Select value={filterDep} onChange={e => { setFilterDep(e.target.value); setPage(0); }} displayEmpty>
+   903→            <MenuItem value="Tous">Tous les d\u00e9partements</MenuItem>
+   904→            {nomenclatures.departement.map(d => <MenuItem key={d} value={d}>{d}</MenuItem>)}
+   905→          </Select>
+   906→        </FormControl>
+   907→        <FormControl size="small" sx={{ minWidth: 170 }}>
+   908→          <Select value={filterStatut} onChange={e => { setFilterStatut(e.target.value); setPage(0); }} displayEmpty>
+   909→            <MenuItem value="Tous">Tous les statuts</MenuItem>
+   910→            {nomenclatures.statut_offre.map(s => <MenuItem key={s} value={s}>{s}</MenuItem>)}
+   911→          </Select>
+   912→        </FormControl>
+   913→        <FormControl size="small" sx={{ minWidth: 170 }}>
+   914→          <Select value={filterCanal} onChange={e => { setFilterCanal(e.target.value); setPage(0); }} displayEmpty>
+   915→            <MenuItem value="Tous">Tous les canaux</MenuItem>
+   916→            {nomenclatures.canal_diffusion.map(c => <MenuItem key={c} value={c}>{c}</MenuItem>)}
+   917→          </Select>
+   918→        </FormControl>
+   919→      </Box>
+   920→
+   921→      {/* Tableau */}
+   922→      <Paper>
+   923→        <TableContainer><Table size="small">
+   924→          <TableHead><TableRow>
+   925→            {tableCols.map(c => (
+   926→              <TableCell key={c.key} sx={{ fontWeight: 'bold', bgcolor: '#f5f5f5', whiteSpace: 'nowrap', width: c.width }}>{c.label}</TableCell>
+   927→            ))}
+   928→            <TableCell sx={{ fontWeight: 'bold', bgcolor: '#f5f5f5', width: 230, textAlign: 'center' }}>Actions</TableCell>
+   929→          </TableRow></TableHead>
+   930→          <TableBody>
+   931→            {filtered.slice(page * rpp, page * rpp + rpp).map(row => (
+   932→              <TableRow key={row.id} hover sx={{ cursor: 'pointer' }} onClick={() => setDrawerOffre(row)}>
+   933→                {tableCols.map(c => (
+   934→                  <TableCell key={c.key} sx={{ whiteSpace: 'nowrap' }}>
+   935→                    {c.chip ? <Chip label={row[c.key]} size="small" variant="outlined" /> :
+   936→                     row[c.key]}
+   937→                  </TableCell>
+   938→                ))}
+   939→                <TableCell>
+   940→                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8, justifyContent: 'center' }} onClick={e => e.stopPropagation()}>
+   941→                    <StatusChipMenu
+   942→                      offre={row}
+   943→                      onStatutChange={handleQuickStatutChange}
+   944→                      loadingId={loadingStatus.id}
+   945→                      loadingStatut={loadingStatus.statut}
+   946→                    />
+   947→                    <Box sx={{ width: 1, height: 24, bgcolor: 'divider', borderRadius: 1 }} />
+   948→                    <QuickActions
+   949→                      offre={row}
+   950→                      onView={o => setDrawerOffre(o)}
+   951→                      onArchive={handleArchive}
+   952→                      onDelete={handleDelete}
+   953→                    />
+   954→                  </Box>
+   955→                </TableCell>
+   956→              </TableRow>
+   957→            ))}
+   958→            {filtered.length === 0 && (
+   959→              <TableRow><TableCell colSpan={tableCols.length + 1} align="center" sx={{ py: 4, color: 'text.secondary' }}>Aucune offre trouv\u00e9e</TableCell></TableRow>
+   960→            )}
+   961→          </TableBody>
+   962→        </Table></TableContainer>
+   963→        <TablePagination
+   964→          component="div" count={filtered.length} page={page}
+   965→          onPageChange={(e, p) => setPage(p)} rowsPerPage={rpp}
+   966→          onRowsPerPageChange={e => { setRpp(parseInt(e.target.value, 10)); setPage(0); }}
+   967→          rowsPerPageOptions={[5, 10, 25]} labelRowsPerPage="Lignes par page"
+   968→        />
+   969→      </Paper>
+   970→
+   971→      {/* Drawer d'\u00e9dition */}
+   972→      <OffreDrawer
+   973→        offre={drawerOffre}
+   974→        open={Boolean(drawerOffre)}
+   975→        onClose={() => setDrawerOffre(null)}
+   976→        onSave={handleSaveOffre}
+   977→      />
+   978→
+   979→      {/* Dialogue d'ajout */}
+   980→      <AddDialog
+   981→        open={dlg} onClose={() => setDlg(false)} title="Nouvelle Offre d'Emploi"
+   982→        fields={[
+   983→          { key: 'intitule', label: 'Intitul\u00e9 du Poste', required: true },
+   984→          { key: 'departement', label: 'D\u00e9partement', type: 'select', options: nomenclatures.departement, required: true },
+   985→          { key: 'typePoste', label: 'Type Poste', type: 'select', options: nomenclatures.type_poste, required: true },
+   986→          { key: 'typeContrat', label: 'Type Contrat', type: 'select', options: nomenclatures.type_contrat, required: true },
+   987→          { key: 'canalDiffusion', label: 'Canal de Diffusion', type: 'select', options: nomenclatures.canal_diffusion, required: true },
+   988→          { key: 'priorite', label: 'Priorit\u00e9', type: 'select', options: nomenclatures.priorite, required: true },
+   989→          { key: 'dateRequise', label: 'Date Requise', required: true },
+   990→          { key: 'dateCloture', label: 'Date de Cl\u00f4ture' },
+   991→          { key: 'site', label: 'Site', type: 'select', options: nomenclatures.site },
+   992→          { key: 'responsable', label: 'Responsable', required: true },
+   993→          { key: 'roleResponsable', label: 'R\u00f4le du Responsable', type: 'select', options: nomenclatures.role_responsable },
+   994→          { key: 'budgetAlloue', label: 'Budget Allou\u00e9 (FCFA)', type: 'number' },
+   995→          { key: 'salaireMin', label: 'Salaire Min (FCFA)', type: 'number' },
+   996→          { key: 'salaireMax', label: 'Salaire Max (FCFA)', type: 'number' },
+   997→          { key: 'description', label: 'Description', multiline: true },
+   998→        ]}
+   999→        onSubmit={(vals) => {
+  1000→          const nid = data.length + 1;
+  1001→          const today = new Date().toLocaleDateString('fr-FR');
+  1002→          setData(prev => [...prev, {
+  1003→            id: nid, numero: 'OF-2025-' + String(nid).padStart(3, '0'),
+  1004→            statutOffre: 'A creer', datePublication: '',
+  1005→            nbCandidatures: 0, nbCandidaturesRecues: 0,
+  1006→            candidatsAssocies: [],
+  1007→            historique: [{ date: today, evenement: 'Offre cr\u00e9\u00e9e', auteur: vals.responsable || 'Utilisateur', type: 'creation' }],
+  1008→            site: vals.site || 'Siege (Douala)',
+  1009→            ...vals,
+  1010→          }]);
+  1011→        }}
+  1012→      />
+  1013→
+  1014→      <Snackbar open={Boolean(snack)} autoHideDuration={3000} onClose={() => setSnack(null)} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
+  1015→        {snack && <Alert onClose={() => setSnack(null)} severity={snack.severity} variant="filled" sx={{ borderRadius: 2 }}>{snack.msg}</Alert>}
+  1016→      </Snackbar>
+  1017→
+  1018→      {/* ═══ DIALOGUE DE CONFIRMATION (Archive / Supprimer) ═══ */}
+  1019→      <Dialog
+  1020→        open={Boolean(confirmDlg)}
+  1021→        onClose={() => setConfirmDlg(null)}
+  1022→        maxWidth="xs"
+  1023→        PaperProps={{ sx: { borderRadius: 3, p: 0.5 } }}
+  1024→      >
+  1025→        {confirmDlg && (
+  1026→          <>
+  1027→            <DialogTitle sx={{ display: 'flex', alignItems: 'center', gap: 1.5, pb: 1 }}>
+  1028→              <Box sx={{
+  1029→                width: 40, height: 40, borderRadius: '50%',
+  1030→                display: 'flex', alignItems: 'center', justifyContent: 'center',
+  1031→                bgcolor: confirmDlg.type === 'delete' ? 'rgba(211,47,47,0.1)' : 'rgba(245,127,23,0.1)',
+  1032→              }}>
+  1033→                {confirmDlg.type === 'delete'
+  1034→                  ? <Delete sx={{ color: '#d32f2f', fontSize: 22 }} />
+  1035→                  : <Archive sx={{ color: '#f57f17', fontSize: 22 }} />
+  1036→                }
+  1037→              </Box>
+  1038→              <Box>
+  1039→                <Typography variant="subtitle1" fontWeight="bold" sx={{ fontSize: '1rem' }}>
+  1040→                  {confirmDlg.type === 'delete' ? 'Supprimer cette offre' : 'Archiver cette offre'}
+  1041→                </Typography>
+  1042→                <Typography variant="caption" color="text.secondary">
+  1043→                  {confirmDlg.offre.numero} — {confirmDlg.offre.intitule}
+  1044→                </Typography>
+  1045→              </Box>
+  1046→            </DialogTitle>
+  1047→            <DialogContent>
+  1048→              <Typography variant="body2" sx={{ color: 'text.secondary', lineHeight: 1.6 }}>
+  1049→                {confirmDlg.type === 'delete'
+  1050→                  ? `Cette action est irréversible. L'offre ${confirmDlg.offre.numero} et toutes ses données associées (candidatures, historique) seront définitivement supprimées.`
+  1051→                  : `L'offre ${confirmDlg.offre.numero} sera marquée comme clôturée et archivée. Elle ne recevra plus de candidatures.`
+  1052→                }
+  1053→              </Typography>
+  1054→            </DialogContent>
+  1055→            <DialogActions sx={{ px: 3, pb: 2 }}>
+  1056→              <Button onClick={() => setConfirmDlg(null)} color="inherit" sx={{ textTransform: 'none' }}>
+  1057→                Annuler
+  1058→              </Button>
+  1059→              <Button
+  1060→                onClick={handleConfirmAction} variant="contained"
+  1061→                sx={{
+  1062→                  textTransform: 'none', fontWeight: 600,
+  1063→                  bgcolor: confirmDlg.type === 'delete' ? '#d32f2f' : '#f57f17',
+  1064→                  '&:hover': { bgcolor: confirmDlg.type === 'delete' ? '#b71c1c' : '#e65100' },
+  1065→                }}
+  1066→              >
+  1067→                {confirmDlg.type === 'delete' ? 'Supprimer définitivement' : 'Confirmer l\'archivage'}
+  1068→              </Button>
+  1069→            </DialogActions>
+  1070→          </>
+  1071→        )}
+  1072→      </Dialog>
+  1073→    </Box>
+  1074→  );
+  1075→}
+  1076→
