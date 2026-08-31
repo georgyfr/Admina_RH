@@ -1,0 +1,251 @@
+Found 250 files limit: 250
+/home/z/my-project/Domaine1_Recrutement_Candidats/AI_GUIDE.md
+/home/z/my-project/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.1/src/pages/Sources.jsx
+/home/z/my-project/Admina_RH/Domaine1_Recrutement_Candidats/AI_GUIDE.md
+/home/z/my-project/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.1/src/pages/Entretiens.jsx
+/home/z/my-project/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.1/src/pages/PeriodeEssai.jsx
+/home/z/my-project/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.1/src/pages/Integration.jsx
+/home/z/my-project/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.1/src/pages/Departements.jsx
+/home/z/my-project/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.1/src/pages/Candidats.jsx
+/home/z/my-project/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.1/src/pages/Evaluations.jsx
+/home/z/my-project/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.1/src/pages/Cabinets.jsx
+/home/z/my-project/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.1/src/pages/Competences.jsx
+/home/z/my-project/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.1/src/pages/Checklist.jsx
+/home/z/my-project/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.1/src/data/nomenclatures.js
+/home/z/my-project/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.1/src/components/Sidebar.jsx
+/home/z/my-project/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.1/src/context/AppContext.jsx
+/home/z/my-project/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.1/src/App.jsx
+/home/z/my-project/Admina_RH/Supabase/Departement 1/supabase_dept1_seed_data.sql
+/home/z/my-project/Admina_RH/Supabase/Departement 1/supabase_dept1_schema.sql
+/home/z/my-project/Admina_RH/scripts/audit_v3_full_migration.sql
+/home/z/my-project/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1/src/pages/Sources.jsx
+/home/z/my-project/Admina_RH/Pages frontend/Frontend — Département 1 : Administration et Gestion des Carrières/Domaine2_Gestion_Administrative/D2_Employe_Detail/page.tsx
+/home/z/my-project/Admina_RH/Pages frontend/Frontend — Département 1 : Administration et Gestion des Carrières/Domaine2_Gestion_Administrative/Dashboard_D2.tsx
+/home/z/my-project/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1/src/pages/Entretiens.jsx
+/home/z/my-project/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1/src/pages/PeriodeEssai.jsx
+/home/z/my-project/Admina_RH/Pages frontend/Frontend — Département 1 : Administration et Gestion des Carrières/Domaine12_Absences_Conges/Dashboard_D12.tsx
+/home/z/my-project/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1/src/pages/Integration.jsx
+/home/z/my-project/Admina_RH/Pages frontend/Frontend — Département 1 : Administration et Gestion des Carrières/Domaine12_Absences_Conges/D12_Conges.tsx
+/home/z/my-project/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1/src/pages/Departements.jsx
+/home/z/my-project/Admina_RH/Pages frontend/Frontend — Département 1 : Administration et Gestion des Carrières/Domaine23_Organisation_Travail/D23_Entites.tsx
+/home/z/my-project/Admina_RH/Pages frontend/Frontend — Département 1 : Administration et Gestion des Carrières/Domaine23_Organisation_Travail/D23_Structures.tsx
+/home/z/my-project/Admina_RH/Pages frontend/Frontend — Département 1 : Administration et Gestion des Carrières/Domaine23_Organisation_Travail/Dashboard_D23.tsx
+/home/z/my-project/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1/src/pages/Candidats.jsx
+/home/z/my-project/Admina_RH/Pages frontend/Frontend — Département 1 : Administration et Gestion des Carrières/Domaine21_Fiches_Postes_Cartographie/D21_Competences.tsx
+/home/z/my-project/Admina_RH/Pages frontend/Frontend — Département 1 : Administration et Gestion des Carrières/Domaine21_Fiches_Postes_Cartographie/D21_Ecarts.tsx
+/home/z/my-project/Admina_RH/Pages frontend/Frontend — Département 1 : Administration et Gestion des Carrières/Domaine21_Fiches_Postes_Cartographie/D21_Poste_Competences.tsx
+/home/z/my-project/Admina_RH/Pages frontend/Frontend — Département 1 : Administration et Gestion des Carrières/Domaine21_Fiches_Postes_Cartographie/D21_Fiches_Poste.tsx
+/home/z/my-project/Admina_RH/Pages frontend/Frontend — Département 1 : Administration et Gestion des Carrières/Domaine21_Fiches_Postes_Cartographie/D21_Referentiel.tsx
+/home/z/my-project/Admina_RH/Pages frontend/Frontend — Département 1 : Administration et Gestion des Carrières/Domaine21_Fiches_Postes_Cartographie/Dashboard_D21.tsx
+/home/z/my-project/Admina_RH/Pages frontend/Frontend — Département 1 : Administration et Gestion des Carrières/Domaine21_Fiches_Postes_Cartographie/D21_Passerelles.tsx
+/home/z/my-project/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1/src/pages/Evaluations.jsx
+/home/z/my-project/Admina_RH/Pages frontend/Frontend — Département 1 : Administration et Gestion des Carrières/Domaine24_Pilotage_Effectifs/D24_Previsions.tsx
+/home/z/my-project/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1/src/pages/Cabinets.jsx
+/home/z/my-project/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1/src/pages/Competences.jsx
+/home/z/my-project/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1/src/pages/Checklist.jsx
+/home/z/my-project/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1/src/data/nomenclatures.js
+/home/z/my-project/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1/src/components/Sidebar.jsx
+/home/z/my-project/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1/src/App.jsx
+/home/z/my-project/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.2/package-lock.json
+/home/z/my-project/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.2/src/pages/Sources.jsx
+/home/z/my-project/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.2/src/pages/Entretiens.jsx
+/home/z/my-project/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.2/src/pages/PeriodeEssai.jsx
+/home/z/my-project/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.2/src/pages/Offres.jsx
+/home/z/my-project/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.2/src/pages/Integration.jsx
+/home/z/my-project/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.2/src/pages/Departements.jsx
+/home/z/my-project/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.2/src/pages/Candidats.jsx
+/home/z/my-project/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.2/src/pages/TableauDeBord.jsx
+/home/z/my-project/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.2/src/pages/Evaluations.jsx
+/home/z/my-project/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.2/src/pages/Cabinets.jsx
+/home/z/my-project/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.2/src/pages/Competences.jsx
+/home/z/my-project/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.2/src/pages/Checklist.jsx
+/home/z/my-project/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.2/src/data/nomenclatures.js
+/home/z/my-project/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.2/src/components/Sidebar.jsx
+/home/z/my-project/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.2/src/context/DashboardFilterContext.jsx
+/home/z/my-project/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.2/src/context/AppContext.jsx
+/home/z/my-project/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.2/src/App.jsx
+/home/z/my-project/Admina_RH/Domaine2_Gestion_Administrative_Personnel/PROMPT_DEV_Domaine2_Complet_V2.md
+/home/z/my-project/Admina_RH/Domaine2_Gestion_Administrative_Personnel/PROMPT_DEV_Domaine2_Complet.md
+/home/z/my-project/Admina_RH/Domaine2_Gestion_Administrative_Personnel/Manuels de procedure des feuilles de excel Domaine 2/04_Avenants/04_Interface_Dynamique_Avenants_AdminRH_2026-08-03.html
+/home/z/my-project/Admina_RH/Domaine2_Gestion_Administrative_Personnel/Manuels de procedure des feuilles de excel Domaine 2/INDEX.md
+/home/z/my-project/tool-results/read_1788024047076_7b30187254c6.txt
+/home/z/my-project/tool-results/read_1788123525331_cf526c3c150e.txt
+/home/z/my-project/tool-results/bash_1788070085252_e61365751412.txt
+/home/z/my-project/Admina_RH/Domaine2_Gestion_Administrative_Personnel/Manuels de procedure des feuilles de excel Domaine 2/02_Employes/02_Interface_Dynamique_Employes_AdminRH_2026-08-02.html
+/home/z/my-project/tool-results/read_1788063924820_53c0d29e932a.txt
+/home/z/my-project/tool-results/read_1787984270240_53c0d29e932a.txt
+/home/z/my-project/tool-results/read_1788026569043_53c0d29e932a.txt
+/home/z/my-project/tool-results/read_1788163023145_0ff4531ad130.txt
+/home/z/my-project/tool-results/read_1788126801120_d412846074bd.txt
+/home/z/my-project/Admina_RH/Domaine2_Gestion_Administrative_Personnel/Manuels de procedure des feuilles de excel Domaine 2/03_Contrats/03_Interface_Dynamique_Contrats_AdminRH_2026-08-03.html
+/home/z/my-project/tool-results/read_1787936405553_0f12f46fc242.txt
+/home/z/my-project/tool-results/read_1788023856347_1593cadbfa2f.txt
+/home/z/my-project/tool-results/bash_1788069813946_69e617cff547.txt
+/home/z/my-project/tool-results/read_1788160006132_6fd57d2c2e2c.txt
+/home/z/my-project/tool-results/read_1788122857312_3eeeeb6c09a9.txt
+/home/z/my-project/tool-results/read_1788109535452_c71832c2e8e4.txt
+/home/z/my-project/tool-results/read_1788126795060_d412846074bd.txt
+/home/z/my-project/tool-results/read_1788126781716_d412846074bd.txt
+/home/z/my-project/tool-results/read_1787931069439_409d6fb4a7ab.txt
+/home/z/my-project/tool-results/read_1788160382053_51817feb4261.txt
+/home/z/my-project/tool-results/read_1788087528669_0f12f46fc242.txt
+/home/z/my-project/tool-results/read_1788126807725_fef43eebc056.txt
+/home/z/my-project/tool-results/read_1788109528770_883d2d88eeac.txt
+/home/z/my-project/tool-results/read_1788160147051_51817feb4261.txt
+/home/z/my-project/tool-results/bash_1788085214385_7374b66ac498.txt
+/home/z/my-project/tool-results/read_1788160847161_51817feb4261.txt
+/home/z/my-project/tool-results/read_1787984274369_0f12f46fc242.txt
+/home/z/my-project/tool-results/read_1788160378974_51817feb4261.txt
+/home/z/my-project/tool-results/read_1788023713483_53c0d29e932a.txt
+/home/z/my-project/tool-results/read_1788166958402_0ad8df74ce46.txt
+/home/z/my-project/tool-results/read_1788021260812_7b30187254c6.txt
+/home/z/my-project/tool-results/read_1788160854832_6fd57d2c2e2c.txt
+/home/z/my-project/tool-results/read_1788172605707_5253b5328e72.txt
+/home/z/my-project/tool-results/read_1788021309687_982378ed49f6.txt
+/home/z/my-project/tool-results/read_1788166972923_9a1717d5e590.txt
+/home/z/my-project/tool-results/read_1788160003369_51817feb4261.txt
+/home/z/my-project/tool-results/read_1788117599986_9d77de182b36.txt
+/home/z/my-project/tool-results/read_1788087522263_53c0d29e932a.txt
+/home/z/my-project/tool-results/read_1787936401991_53c0d29e932a.txt
+/home/z/my-project/tool-results/read_1788166933771_5253b5328e72.txt
+/home/z/my-project/tool-results/read_1788160022278_51817feb4261.txt
+/home/z/my-project/tool-results/read_1788118268443_9d45efa972fa.txt
+/home/z/my-project/Supabase/Departement 1/supabase_dept1_seed_data.sql
+/home/z/my-project/Supabase/Departement 1/supabase_dept1_schema.sql
+/home/z/my-project/scripts/generate_ai_guide_docx.js
+/home/z/my-project/scripts/conformity_analysis.py
+/home/z/my-project/scripts/excel_fields.json
+/home/z/my-project/scripts/audit_report_body.py
+/home/z/my-project/scripts/dialog_configs.json
+/home/z/my-project/scripts/audit_v3_full_migration.sql
+/home/z/my-project/Pages frontend/Frontend — Département 1 : Administration et Gestion des Carrières/Domaine2_Gestion_Administrative/D2_Employe_Detail/page.tsx
+/home/z/my-project/Pages frontend/Frontend — Département 1 : Administration et Gestion des Carrières/Domaine2_Gestion_Administrative/Dashboard_D2.tsx
+/home/z/my-project/Pages frontend/Frontend — Département 1 : Administration et Gestion des Carrières/Domaine12_Absences_Conges/Dashboard_D12.tsx
+/home/z/my-project/Pages frontend/Frontend — Département 1 : Administration et Gestion des Carrières/Domaine12_Absences_Conges/D12_Conges.tsx
+/home/z/my-project/Pages frontend/Frontend — Département 1 : Administration et Gestion des Carrières/Domaine23_Organisation_Travail/D23_Entites.tsx
+/home/z/my-project/Pages frontend/Frontend — Département 1 : Administration et Gestion des Carrières/Domaine23_Organisation_Travail/D23_Structures.tsx
+/home/z/my-project/Pages frontend/Frontend — Département 1 : Administration et Gestion des Carrières/Domaine23_Organisation_Travail/Dashboard_D23.tsx
+/home/z/my-project/Pages frontend/Frontend — Département 1 : Administration et Gestion des Carrières/Domaine21_Fiches_Postes_Cartographie/D21_Competences.tsx
+/home/z/my-project/Pages frontend/Frontend — Département 1 : Administration et Gestion des Carrières/Domaine21_Fiches_Postes_Cartographie/D21_Ecarts.tsx
+/home/z/my-project/Pages frontend/Frontend — Département 1 : Administration et Gestion des Carrières/Domaine21_Fiches_Postes_Cartographie/D21_Poste_Competences.tsx
+/home/z/my-project/Pages frontend/Frontend — Département 1 : Administration et Gestion des Carrières/Domaine21_Fiches_Postes_Cartographie/D21_Fiches_Poste.tsx
+/home/z/my-project/Pages frontend/Frontend — Département 1 : Administration et Gestion des Carrières/Domaine21_Fiches_Postes_Cartographie/D21_Referentiel.tsx
+/home/z/my-project/Pages frontend/Frontend — Département 1 : Administration et Gestion des Carrières/Domaine21_Fiches_Postes_Cartographie/Dashboard_D21.tsx
+/home/z/my-project/Pages frontend/Frontend — Département 1 : Administration et Gestion des Carrières/Domaine21_Fiches_Postes_Cartographie/D21_Passerelles.tsx
+/home/z/my-project/Pages frontend/Frontend — Département 1 : Administration et Gestion des Carrières/Domaine24_Pilotage_Effectifs/D24_Previsions.tsx
+/home/z/my-project/admina-rh-repo/Domaine1_Recrutement_Candidats/AI_GUIDE.md
+/home/z/my-project/admina-rh-repo/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.1/src/pages/Sources.jsx
+/home/z/my-project/admina-rh-repo/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.1/src/pages/Entretiens.jsx
+/home/z/my-project/admina-rh-repo/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.1/src/pages/PeriodeEssai.jsx
+/home/z/my-project/admina-rh-repo/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.1/src/pages/Integration.jsx
+/home/z/my-project/admina-rh-repo/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.1/src/pages/Departements.jsx
+/home/z/my-project/admina-rh-repo/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.1/src/pages/Candidats.jsx
+/home/z/my-project/admina-rh-repo/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.1/src/pages/Evaluations.jsx
+/home/z/my-project/admina-rh-repo/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.1/src/pages/Cabinets.jsx
+/home/z/my-project/admina-rh-repo/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.1/src/pages/Competences.jsx
+/home/z/my-project/admina-rh-repo/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.1/src/pages/Checklist.jsx
+/home/z/my-project/admina-rh-repo/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.1/src/data/nomenclatures.js
+/home/z/my-project/admina-rh-repo/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.1/src/components/Sidebar.jsx
+/home/z/my-project/Admina_RH/prompt-et-correction/Prompt_V4_Execution_Autonome_AdminaRH_2026-08-07.md
+/home/z/my-project/Admina_RH/prompt-et-correction/PROMPT_CORRECTION_DEP1_AdminRH_2026-08-06.md
+/home/z/my-project/Admina_RH/prompt-et-correction/AdminaRH_Departement1_Interface.html
+/home/z/my-project/admina-rh-repo/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.1/src/context/AppContext.jsx
+/home/z/my-project/Admina_RH/prompt-et-correction/AdminaRH_Portail_Navigation.html
+/home/z/my-project/Admina_RH/prompt-et-correction/AdminaRH_Portail_Navigation_HEADER_CORRIGE.html
+/home/z/my-project/Admina_RH/prompt-et-correction/Audit base de donnee/Prompt_Execution_Deploiement_AdminaRH_2026-08-07.md
+/home/z/my-project/Admina_RH/prompt-et-correction/Audit base de donnee/Prompt_Correction_AdminaRH_Database_Comptes.md
+/home/z/my-project/Admina_RH/prompt-et-correction/Audit base de donnee/Prompt_Correction_V3_AdminaRH_PostAudit_2026-08-07.md
+/home/z/my-project/admina-rh-repo/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.1/src/App.jsx
+/home/z/my-project/Admina_RH/prompt-et-correction/Audit base de donnee/Prompt_Correction_V2_AdminaRH_PostAudit.md
+/home/z/my-project/Admina_RH/prompt-et-correction/Domaine2_Conformite_Excel_vs_Supabase_2026-08-09/Domaine2_Analyse_Complete.json
+/home/z/my-project/admina-rh-repo/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1/src/pages/Sources.jsx
+/home/z/my-project/admina-rh-repo/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1/src/pages/Entretiens.jsx
+/home/z/my-project/admina-rh-repo/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1/src/pages/PeriodeEssai.jsx
+/home/z/my-project/admina-rh-repo/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1/src/pages/Integration.jsx
+/home/z/my-project/admina-rh-repo/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1/src/pages/Departements.jsx
+/home/z/my-project/admina-rh-repo/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1/src/pages/Candidats.jsx
+/home/z/my-project/admina-rh-repo/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1/src/pages/Evaluations.jsx
+/home/z/my-project/admina-rh-repo/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1/src/pages/Cabinets.jsx
+/home/z/my-project/admina-rh-repo/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1/src/pages/Competences.jsx
+/home/z/my-project/admina-rh-repo/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1/src/pages/Checklist.jsx
+/home/z/my-project/admina-rh-repo/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1/src/data/nomenclatures.js
+/home/z/my-project/admina-rh-repo/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1/src/components/Sidebar.jsx
+/home/z/my-project/admina-rh-repo/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1/src/App.jsx
+/home/z/my-project/admina-rh-repo/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.2/package-lock.json
+/home/z/my-project/admina-rh-repo/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.2/src/pages/Sources.jsx
+/home/z/my-project/admina-rh-repo/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.2/src/pages/Entretiens.jsx
+/home/z/my-project/Admina_RH/Concurrents/comparatif-meilleurs-saas-rh-2026.md
+/home/z/my-project/Admina_RH/Concurrents/sap-successfactors-fonctionnalites-completes.md
+/home/z/my-project/admina-rh-repo/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.2/src/pages/PeriodeEssai.jsx
+/home/z/my-project/admina-rh-repo/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.2/src/pages/Integration.jsx
+/home/z/my-project/admina-rh-repo/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.2/src/pages/Departements.jsx
+/home/z/my-project/admina-rh-repo/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.2/src/pages/Candidats.jsx
+/home/z/my-project/admina-rh-repo/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.2/src/pages/TableauDeBord.jsx
+/home/z/my-project/admina-rh-repo/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.2/src/pages/Evaluations.jsx
+/home/z/my-project/admina-rh-repo/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.2/src/pages/Cabinets.jsx
+/home/z/my-project/admina-rh-repo/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.2/src/pages/Competences.jsx
+/home/z/my-project/admina-rh-repo/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.2/src/pages/Checklist.jsx
+/home/z/my-project/worklog.md
+/home/z/my-project/admina-rh-repo/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.2/src/data/nomenclatures.js
+/home/z/my-project/admina-rh-repo/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.2/src/components/Sidebar.jsx
+/home/z/my-project/admina-rh-repo/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.2/src/context/DashboardFilterContext.jsx
+/home/z/my-project/admina-rh-repo/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.2/src/context/AppContext.jsx
+/home/z/my-project/admina-rh-repo/Domaine1_Recrutement_Candidats/Code frontend/Code frontend recrutement V1.2/src/App.jsx
+/home/z/my-project/admina-rh-repo/Supabase/Departement 1/supabase_dept1_seed_data.sql
+/home/z/my-project/admina-rh-repo/Supabase/Departement 1/supabase_dept1_schema.sql
+/home/z/my-project/admina-rh-repo/scripts/audit_v3_full_migration.sql
+/home/z/my-project/admina-rh-repo/Pages frontend/Frontend — Département 1 : Administration et Gestion des Carrières/Domaine2_Gestion_Administrative/D2_Employe_Detail/page.tsx
+/home/z/my-project/admina-rh-repo/Pages frontend/Frontend — Département 1 : Administration et Gestion des Carrières/Domaine2_Gestion_Administrative/Dashboard_D2.tsx
+/home/z/my-project/admina-rh-repo/Pages frontend/Frontend — Département 1 : Administration et Gestion des Carrières/Domaine12_Absences_Conges/Dashboard_D12.tsx
+/home/z/my-project/admina-rh-repo/Pages frontend/Frontend — Département 1 : Administration et Gestion des Carrières/Domaine12_Absences_Conges/D12_Conges.tsx
+/home/z/my-project/admina-rh-repo/Pages frontend/Frontend — Département 1 : Administration et Gestion des Carrières/Domaine23_Organisation_Travail/D23_Entites.tsx
+/home/z/my-project/admina-rh-repo/Pages frontend/Frontend — Département 1 : Administration et Gestion des Carrières/Domaine23_Organisation_Travail/D23_Structures.tsx
+/home/z/my-project/admina-rh-repo/Pages frontend/Frontend — Département 1 : Administration et Gestion des Carrières/Domaine23_Organisation_Travail/Dashboard_D23.tsx
+/home/z/my-project/admina-rh-repo/Pages frontend/Frontend — Département 1 : Administration et Gestion des Carrières/Domaine21_Fiches_Postes_Cartographie/D21_Competences.tsx
+/home/z/my-project/admina-rh-repo/Pages frontend/Frontend — Département 1 : Administration et Gestion des Carrières/Domaine21_Fiches_Postes_Cartographie/D21_Ecarts.tsx
+/home/z/my-project/admina-rh-repo/Pages frontend/Frontend — Département 1 : Administration et Gestion des Carrières/Domaine21_Fiches_Postes_Cartographie/D21_Poste_Competences.tsx
+/home/z/my-project/admina-rh-repo/Pages frontend/Frontend — Département 1 : Administration et Gestion des Carrières/Domaine21_Fiches_Postes_Cartographie/D21_Fiches_Poste.tsx
+/home/z/my-project/admina-rh-repo/Pages frontend/Frontend — Département 1 : Administration et Gestion des Carrières/Domaine21_Fiches_Postes_Cartographie/D21_Referentiel.tsx
+/home/z/my-project/admina-rh-repo/Pages frontend/Frontend — Département 1 : Administration et Gestion des Carrières/Domaine21_Fiches_Postes_Cartographie/Dashboard_D21.tsx
+/home/z/my-project/admina-rh-repo/Pages frontend/Frontend — Département 1 : Administration et Gestion des Carrières/Domaine21_Fiches_Postes_Cartographie/D21_Passerelles.tsx
+/home/z/my-project/admina-rh-repo/Pages frontend/Frontend — Département 1 : Administration et Gestion des Carrières/Domaine24_Pilotage_Effectifs/D24_Previsions.tsx
+/home/z/my-project/admina-rh-src/Domaine1_Recrutement_Candidats/AI_GUIDE.md
+/home/z/my-project/admina-rh-src/Supabase/Departement 1/supabase_dept1_seed_data.sql
+/home/z/my-project/admina-rh-src/Supabase/Departement 1/supabase_dept1_schema.sql
+/home/z/my-project/admina-rh-src/scripts/audit_v3_full_migration.sql
+/home/z/my-project/admina-rh-src/Pages frontend/Frontend — Département 1 : Administration et Gestion des Carrières/Domaine2_Gestion_Administrative/D2_Employe_Detail/page.tsx
+/home/z/my-project/admina-rh-src/Pages frontend/Frontend — Département 1 : Administration et Gestion des Carrières/Domaine2_Gestion_Administrative/Dashboard_D2.tsx
+/home/z/my-project/admina-rh-src/Pages frontend/Frontend — Département 1 : Administration et Gestion des Carrières/Domaine12_Absences_Conges/Dashboard_D12.tsx
+/home/z/my-project/admina-rh-src/Pages frontend/Frontend — Département 1 : Administration et Gestion des Carrières/Domaine12_Absences_Conges/D12_Conges.tsx
+/home/z/my-project/admina-rh-src/Pages frontend/Frontend — Département 1 : Administration et Gestion des Carrières/Domaine23_Organisation_Travail/D23_Entites.tsx
+/home/z/my-project/admina-rh-src/Pages frontend/Frontend — Département 1 : Administration et Gestion des Carrières/Domaine23_Organisation_Travail/D23_Structures.tsx
+/home/z/my-project/admina-rh-src/Pages frontend/Frontend — Département 1 : Administration et Gestion des Carrières/Domaine23_Organisation_Travail/Dashboard_D23.tsx
+/home/z/my-project/admina-rh-src/Pages frontend/Frontend — Département 1 : Administration et Gestion des Carrières/Domaine21_Fiches_Postes_Cartographie/D21_Competences.tsx
+/home/z/my-project/admina-rh-src/Pages frontend/Frontend — Département 1 : Administration et Gestion des Carrières/Domaine21_Fiches_Postes_Cartographie/D21_Ecarts.tsx
+/home/z/my-project/admina-rh-src/Pages frontend/Frontend — Département 1 : Administration et Gestion des Carrières/Domaine21_Fiches_Postes_Cartographie/D21_Poste_Competences.tsx
+/home/z/my-project/admina-rh-src/Pages frontend/Frontend — Département 1 : Administration et Gestion des Carrières/Domaine21_Fiches_Postes_Cartographie/D21_Fiches_Poste.tsx
+/home/z/my-project/admina-rh-src/Pages frontend/Frontend — Département 1 : Administration et Gestion des Carrières/Domaine21_Fiches_Postes_Cartographie/D21_Referentiel.tsx
+/home/z/my-project/admina-rh-src/Pages frontend/Frontend — Département 1 : Administration et Gestion des Carrières/Domaine21_Fiches_Postes_Cartographie/Dashboard_D21.tsx
+/home/z/my-project/admina-rh-src/Pages frontend/Frontend — Département 1 : Administration et Gestion des Carrières/Domaine21_Fiches_Postes_Cartographie/D21_Passerelles.tsx
+/home/z/my-project/admina-rh-src/Pages frontend/Frontend — Département 1 : Administration et Gestion des Carrières/Domaine24_Pilotage_Effectifs/D24_Previsions.tsx
+/home/z/my-project/admina-rh-repo/Domaine2_Gestion_Administrative_Personnel/PROMPT_DEV_Domaine2_Complet_V2.md
+/home/z/my-project/admina-rh-repo/Domaine2_Gestion_Administrative_Personnel/PROMPT_DEV_Domaine2_Complet.md
+/home/z/my-project/admina-rh-repo/Domaine2_Gestion_Administrative_Personnel/Manuels de procedure des feuilles de excel Domaine 2/04_Avenants/04_Interface_Dynamique_Avenants_AdminRH_2026-08-03.html
+/home/z/my-project/admina-rh-repo/Domaine2_Gestion_Administrative_Personnel/Manuels de procedure des feuilles de excel Domaine 2/INDEX.md
+/home/z/my-project/admina-rh-repo/Domaine2_Gestion_Administrative_Personnel/Manuels de procedure des feuilles de excel Domaine 2/02_Employes/02_Interface_Dynamique_Employes_AdminRH_2026-08-02.html
+/home/z/my-project/admina-rh-repo/Domaine2_Gestion_Administrative_Personnel/Manuels de procedure des feuilles de excel Domaine 2/03_Contrats/03_Interface_Dynamique_Contrats_AdminRH_2026-08-03.html
+/home/z/my-project/admina-rh-src/Domaine2_Gestion_Administrative_Personnel/PROMPT_DEV_Domaine2_Complet_V2.md
+/home/z/my-project/admina-rh-src/Domaine2_Gestion_Administrative_Personnel/PROMPT_DEV_Domaine2_Complet.md
+/home/z/my-project/admina-rh-src/Domaine2_Gestion_Administrative_Personnel/Manuels de procedure des feuilles de excel Domaine 2/04_Avenants/04_Interface_Dynamique_Avenants_AdminRH_2026-08-03.html
+/home/z/my-project/admina-rh-src/Domaine2_Gestion_Administrative_Personnel/Manuels de procedure des feuilles de excel Domaine 2/INDEX.md
+/home/z/my-project/admina-rh-src/Domaine2_Gestion_Administrative_Personnel/Manuels de procedure des feuilles de excel Domaine 2/02_Employes/02_Interface_Dynamique_Employes_AdminRH_2026-08-02.html
+/home/z/my-project/admina-rh-src/Domaine2_Gestion_Administrative_Personnel/Manuels de procedure des feuilles de excel Domaine 2/03_Contrats/03_Interface_Dynamique_Contrats_AdminRH_2026-08-03.html
+/home/z/my-project/admina-rh-repo/prompt-et-correction/Prompt_V4_Execution_Autonome_AdminaRH_2026-08-07.md
+/home/z/my-project/admina-rh-repo/prompt-et-correction/PROMPT_CORRECTION_DEP1_AdminRH_2026-08-06.md
+/home/z/my-project/admina-rh-repo/prompt-et-correction/AdminaRH_Departement1_Interface.html
+/home/z/my-project/admina-rh-repo/prompt-et-correction/AdminaRH_Portail_Navigation.html
+/home/z/my-project/admina-rh-repo/prompt-et-correction/AdminaRH_Portail_Navigation_HEADER_CORRIGE.html
+/home/z/my-project/admina-rh-repo/prompt-et-correction/Audit base de donnee/Prompt_Execution_Deploiement_AdminaRH_2026-08-07.md
+/home/z/my-project/admina-rh-repo/prompt-et-correction/Audit base de donnee/Prompt_Correction_AdminaRH_Database_Comptes.md
+/home/z/my-project/admina-rh-repo/prompt-et-correction/Audit base de donnee/Prompt_Correction_V3_AdminaRH_PostAudit_2026-08-07.md
+/home/z/my-project/admina-rh-repo/prompt-et-correction/Audit base de donnee/Prompt_Correction_V2_AdminaRH_PostAudit.md
