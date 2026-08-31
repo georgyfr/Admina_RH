@@ -200,8 +200,8 @@ export default function JobStudioModal({ open, onClose, onSubmit, responsablesLi
         <IconButton onClick={onClose} size="small" sx={{ color: '#fff' }}><Close /></IconButton>
       </DialogTitle>
 
-      <Box sx={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
-        <Box sx={{ flex: '0 0 60%', overflow: 'auto', p: 3, borderRight: '1px solid', borderColor: 'divider' }}>
+      <Box sx={{ display: 'grid', gridTemplateColumns: '7fr 5fr', flex: 1, overflow: 'hidden', gap: 0 }}>
+        <Box sx={{ overflow: 'auto', p: 3, borderRight: '1px solid', borderColor: 'divider' }}>
 
           <SectionHeader icon={<Typography variant="body2">1.</Typography>}>Informations de base</SectionHeader>
           <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, gap: 2 }}>
@@ -347,12 +347,12 @@ export default function JobStudioModal({ open, onClose, onSubmit, responsablesLi
               <FormControlLabel key={av} control={<Checkbox size="small" checked={form.avantages.includes(av)} onChange={() => toggleAvantage(av)} sx={{ '& .MuiSvgIcon-root': { fontSize: 18 } }} />} label={av} sx={{ '& .MuiTypography-body1': { fontSize: '0.85rem' } }} />
             ))}
           </Box>
-          <TextField label="Date requise" size="small" type="date" fullWidth value={form.dateRequise} onChange={(e) => h('dateRequise', e.target.value)} InputLabelProps={{ shrink: true }} sx={{ mt: 2 }} />
+          <TextField label="Date requise" size="small" type="date" fullWidth value={form.dateRequise} onChange={(e) => h('dateRequise', e.target.value)} InputLabelProps={{ shrink: true }} sx={{ mt: 2, '& input[type="date"]': { height: 40, lineHeight: '40px', boxSizing: 'border-box' } }} />
 
           <Box sx={{ height: 40 }} />
         </Box>
 
-        <Box sx={{ flex: '0 0 40%', overflow: 'auto', p: 3, bgcolor: '#f8f9fa' }}>
+        <Box sx={{ overflow: 'auto', p: 4, bgcolor: '#f8f9fa' }}>
 
           <Typography variant="caption" sx={{ fontWeight: 700, color: 'text.secondary', textTransform: 'uppercase', letterSpacing: 1, fontSize: '0.7rem' }}>Apercu en direct</Typography>
           <Paper ref={previewRef} variant="outlined" sx={{ p: 2.5, mt: 0.5, mb: 3, bgcolor: '#fff', borderRadius: 2 }}>
