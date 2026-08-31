@@ -38,6 +38,8 @@ export const nomenclatures = {
   stade_pipeline: ['CV recu', 'Pre-selection', 'Entretien HR', 'Test technique', 'Entretien final', 'Offre envoyee', 'Accepte', 'Refuse', 'Retraite'],
   priorite_pipeline: ['Haute', 'Moyenne', 'Basse'],
 
+  site: ['Siege (Douala)', 'Hotel Sawa', 'Annexe (Yaounde)'],
+
   /* ═══ STUDIO D'ANALYSE & PUBLICATION ═══ */
   niveau_etude_studio: ['Sans diplome', 'Bac', 'Bac+2 (BTS/DUT)', 'Bac+3 (Licence)', 'Bac+5 (Master)', 'Bac+8 (Doctorat)', 'Ecole d\'ingenieur', 'Autre'],
   experience_studio: ['Aucune', '1-2 ans', '3-5 ans', '5-10 ans', '10+ ans'],
