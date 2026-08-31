@@ -9,6 +9,7 @@ import { RoleProvider } from './context/RoleContext';
 import { lightTheme, darkTheme } from './theme';
 
 const TableauDeBord = lazy(() => import('./pages/TableauDeBord'));
+const Offres = lazy(() => import('./pages/Offres'));
 const Demandes = lazy(() => import('./pages/Demandes'));
 const Candidats = lazy(() => import('./pages/Candidats'));
 const Pipeline = lazy(() => import('./pages/Pipeline'));
@@ -41,7 +42,7 @@ const Competences = lazy(() => import('./pages/Competences'));
 const Statuts = lazy(() => import('./pages/Statuts'));
 const KPIObjectifsRH = lazy(() => import('./pages/KPIObjectifsRH'));
 
-const titles = { '/': 'Tableau de Bord', '/offres': 'Demandes', '/candidats': 'Base Candidats', '/pipeline': 'Pipeline Candidatures', '/entretiens': 'Planning Entretiens', '/evaluations': 'Grille Evaluation', '/verifications': 'Verification References', '/selections': 'Selections', '/cabinets': 'Gestion Cabinets', '/contrats': 'Suivi Contrats', '/integration': 'Integration Employe', '/checklist': 'Checklist Integration', '/periode-essai': "Periodes d'Essai", '/formation': "Plan d'Accueil & Formations", '/post-embauche': 'Suivi Post-Embauche', '/stagiaires': 'Stagiaires', '/saisonniers': 'Saisonniers & Temporaires', '/previsions': 'Previsions', '/sources': 'Sources de Recrutement', '/couts': 'Analyse des Couts', '/documents': 'Gestion des Documents', '/conformite': 'Conformite', '/parametres': 'Parametres du Systeme', '/audit': 'Journal d\'Audit', '/types-contrats': 'Types de Contrats', '/departements': 'Departements', '/sources-roi': 'Sources & ROI', '/experiences': 'Experiences des Candidats', '/formations': 'Formations des Candidats', '/competences': 'Competences des Candidats', '/statuts': 'Gestion des Statuts', '/kpi-objectifs': 'KPIs & Objectifs RH' };
+const titles = { '/': 'Tableau de Bord', '/offres': 'Offres d\'Emploi', '/demandes': 'Demandes', '/candidats': 'Base Candidats', '/pipeline': 'Pipeline Candidatures', '/entretiens': 'Planning Entretiens', '/evaluations': 'Grille Evaluation', '/verifications': 'Verification References', '/selections': 'Selections', '/cabinets': 'Gestion Cabinets', '/contrats': 'Suivi Contrats', '/integration': 'Integration Employe', '/checklist': 'Checklist Integration', '/periode-essai': "Periodes d'Essai", '/formation': "Plan d'Accueil & Formations", '/post-embauche': 'Suivi Post-Embauche', '/stagiaires': 'Stagiaires', '/saisonniers': 'Saisonniers & Temporaires', '/previsions': 'Previsions', '/sources': 'Sources de Recrutement', '/couts': 'Analyse des Couts', '/documents': 'Gestion des Documents', '/conformite': 'Conformite', '/parametres': 'Parametres du Systeme', '/audit': 'Journal d\'Audit', '/types-contrats': 'Types de Contrats', '/departements': 'Departements', '/sources-roi': 'Sources & ROI', '/experiences': 'Experiences des Candidats', '/formations': 'Formations des Candidats', '/competences': 'Competences des Candidats', '/statuts': 'Gestion des Statuts', '/kpi-objectifs': 'KPIs & Objectifs RH' };
 
 const dw = 260;
 const headerH = 86;
@@ -76,7 +77,8 @@ function AppContent() {
           <Suspense fallback={<Box p={3}>Chargement...</Box>}>
             <Routes>
               <Route path='/' element={<DashboardFilterProvider><TableauDeBord /></DashboardFilterProvider>} />
-              <Route path='/offres' element={<Demandes />} />
+              <Route path='/offres' element={<Offres />} />
+              <Route path='/demandes' element={<Demandes />} />
               <Route path='/candidats' element={<Candidats />} />
               <Route path='/pipeline' element={<Pipeline />} />
               <Route path='/entretiens' element={<Entretiens />} />
