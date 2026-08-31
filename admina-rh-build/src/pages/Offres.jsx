@@ -3,12 +3,14 @@ import {
   Box, Typography, Button, Table, TableBody, TableCell, TableContainer, TableHead,
   TableRow, TablePagination, Chip, FormControl, Select, MenuItem, Tooltip, Paper,
   Drawer, Divider, IconButton, TextField, Avatar, Alert, Snackbar,
-  Stack, InputAdornment, Badge
+  Stack, InputAdornment, Badge, Menu, CircularProgress, Dialog, DialogTitle,
+  DialogContent, DialogActions, Popover, Fade
 } from '@mui/material';
 import {
   Add, Download, Close, Save, Edit, CalendarToday, Person,
   AccountBalanceWallet, Publish, Campaign, ArrowForward, Work,
-  Create, Groups, AccessTime
+  Create, Groups, AccessTime, Visibility, Delete, Archive,
+  MoreVert, CheckCircle, KeyboardArrowDown, WarningAmber
 } from '@mui/icons-material';
 import KPICard from '../components/KPICard';
 import AddDialog from '../components/AddDialog';
@@ -188,16 +190,141 @@ const candidatEtatColor = {
   'En reserve': 'default',
 };
 
+/* ═══ STATUTS DANGEREUX (nécessitent confirmation) ═══ */
+const dangerousStatuses = ['Annulee', 'Cloturee'];
+
+/* ═══ COMPOSANT QUICK STATUS CHIP MENU ═══ */
+function StatusChipMenu({ offre, onStatutChange, loadingId, loadingStatut }) {
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [confirmAnchor, setConfirmAnchor] = useState(null);
+  const [pendingStatut, setPendingStatut] = useState(null);
+  const open = Boolean(anchorEl);
+  const isLoading = loadingId === offre.id;
+  const currentColor = statutOffreColor[offre.statutOffre] || 'default';
+
+  const handleClick = (e) => { e.stopPropagation(); setAnchorEl(e.currentTarget); };
+  const handleClose = () => { setAnchorEl(null); setConfirmAnchor(null); setPendingStatut(null); };
+
+  const handleSelect = (e, newStatut) => {
+    e.stopPropagation();
+    setAnchorEl(null);
+    if (newStatut === offre.statutOffre) return;
+    if (dangerousStatuses.includes(newStatut)) { setPendingStatut(newStatut); setConfirmAnchor(e.currentTarget); return; }
+    onStatutChange(offre.id, newStatut);
+  };
+
+  const handleConfirm = (e) => {
+    e.stopPropagation(); setConfirmAnchor(null);
+    if (pendingStatut) { onStatutChange(offre.id, pendingStatut); setPendingStatut(null); }
+  };
+  const handleCancelConfirm = (e) => { e.stopPropagation(); setConfirmAnchor(null); setPendingStatut(null); };
+
+  const statusDotColor = { 'A creer': '#9e9e9e', 'Publiee': '#2e7d32', 'Candidatures en cours': '#f57f17', 'Cloturee': '#616161', 'Annulee': '#d32f2f' };
+
+  const chipEl = (
+    <Chip
+      icon={isLoading ? <CircularProgress size={14} sx={{ color: 'inherit', ml: 0.5 }} /> : undefined}
+      label={isLoading && loadingStatut ? loadingStatut : offre.statutOffre}
+      color={isLoading ? 'default' : currentColor}
+      size="small" onClick={handleClick} onDelete={handleClick}
+      deleteIcon={<KeyboardArrowDown sx={{ fontSize: 16, color: 'inherit' }} />}
+      sx={{ fontWeight: 600, height: 26, fontSize: '0.75rem', cursor: 'pointer', transition: 'all 0.2s' }}
+      aria-expanded={open} aria-haspopup="true" role="button" tabIndex={0}
+      onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick(e); } }}
+    />
+  );
+
+  const menuEl = (
+    <Menu anchorEl={anchorEl} open={open} onClose={handleClose}
+      PaperProps={{ sx: { minWidth: 200, py: 0.5, borderRadius: 2 } }} transitionDuration={150}
+    >
+      <Typography variant="caption" sx={{ px: 2, py: 0.5, display: 'block', fontWeight: 700, color: 'text.secondary', fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: 1 }}>Changer le statut</Typography>
+      {nomenclatures.statut_offre.map(s => {
+        const isActive = s === offre.statutOffre;
+        const dot = statusDotColor[s] || '#9e9e9e';
+        return (
+          <MenuItem key={s} value={s} onClick={(e) => handleSelect(e, s)} selected={isActive} disabled={isActive}
+            sx={{ py: 0.8, px: 1.5, gap: 1.5, fontSize: '0.85rem' }}
+          >
+            <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: dot, flexShrink: 0 }} />
+            {s}
+            {isActive && <CheckCircle sx={{ fontSize: 16, ml: 'auto', color: '#1976d2' }} />}
+          </MenuItem>
+        );
+      })}
+    </Menu>
+  );
+
+  const confirmMsg = pendingStatut === 'Annulee' ? 'Etes-vous sur de vouloir annuler cette offre ?' : 'Etes-vous sur de vouloir clore cette offre ?';
+  const confirmBtnColor = pendingStatut === 'Annulee' ? '#d32f2f' : '#616161';
+
+  const popoverEl = (
+    <Popover anchorEl={confirmAnchor} open={Boolean(confirmAnchor)} onClose={handleCancelConfirm}
+      anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} transformOrigin={{ vertical: 'top', horizontal: 'center' }}
+      PaperProps={{ sx: { borderRadius: 2, p: 2, maxWidth: 280 } }} disablePortal
+    >
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1.5 }}>
+        <WarningAmber sx={{ fontSize: 20, color: pendingStatut === 'Annulee' ? '#d32f2f' : '#f57f17' }} />
+        <Typography variant="subtitle2" fontWeight="bold" sx={{ fontSize: '0.85rem' }}>Confirmer le changement</Typography>
+      </Box>
+      <Typography variant="body2" sx={{ fontSize: '0.82rem', color: 'text.secondary', mb: 2, lineHeight: 1.5 }}>{confirmMsg}</Typography>
+      <Box sx={{ display: 'flex', gap: 1, justifyContent: 'flex-end' }}>
+        <Button size="small" onClick={handleCancelConfirm} sx={{ textTransform: 'none', fontSize: '0.8rem' }}>Annuler</Button>
+        <Button size="small" variant="contained" onClick={handleConfirm} sx={{ textTransform: 'none', fontSize: '0.8rem', fontWeight: 600, bgcolor: confirmBtnColor }}>Confirmer</Button>
+      </Box>
+    </Popover>
+  );
+
+  return <>{chipEl}{menuEl}{popoverEl}</>;
+}
+
+/* ═══ COMPOSANT QUICK ACTION BUTTONS (ligne) ═══ */
+function QuickActions({ offre, onView, onArchive, onDelete }) {
+  return (
+    <Stack direction="row" spacing={0.3} onClick={e => e.stopPropagation()}>
+      <Tooltip title="Voir / Editer" arrow placement="top">
+        <IconButton
+          size="small"
+          onClick={(e) => { e.stopPropagation(); onView(offre); }}
+          sx={{ color: '#1976d2', '&:hover': { bgcolor: 'rgba(25,118,210,0.08)' } }}
+          aria-label={`Voir l'offre ${offre.numero}`}
+        >
+          <Visibility sx={{ fontSize: 18 }} />
+        </IconButton>
+      </Tooltip>
+      <Tooltip title="Archiver" arrow placement="top">
+        <IconButton
+          size="small"
+          onClick={(e) => { e.stopPropagation(); onArchive(offre); }}
+          sx={{ color: '#f57f17', '&:hover': { bgcolor: 'rgba(245,127,23,0.08)' } }}
+          aria-label={`Archiver l'offre ${offre.numero}`}
+        >
+          <Archive sx={{ fontSize: 17 }} />
+        </IconButton>
+      </Tooltip>
+      <Tooltip title="Supprimer" arrow placement="top">
+        <IconButton
+          size="small"
+          onClick={(e) => { e.stopPropagation(); onDelete(offre); }}
+          sx={{ color: '#d32f2f', '&:hover': { bgcolor: 'rgba(211,47,47,0.08)' } }}
+          aria-label={`Supprimer l'offre ${offre.numero}`}
+        >
+          <Delete sx={{ fontSize: 17 }} />
+        </IconButton>
+      </Tooltip>
+    </Stack>
+  );
+}
+
 /* ═══ TABLEAU COLONNES ═══ */
 const tableCols = [
-  { key: 'numero', label: 'N\u00b0 Offre', width: 120 },
-  { key: 'datePublication', label: 'Publication', width: 100 },
-  { key: 'departement', label: 'D\u00e9partement', width: 160, chip: true },
-  { key: 'intitule', label: 'Intitul\u00e9 du Poste', width: 220 },
-  { key: 'canalDiffusion', label: 'Canal', width: 120 },
-  { key: 'statutOffre', label: 'Statut Offre', width: 150, chipColor: statutOffreColor },
-  { key: 'nbCandidaturesRecues', label: 'Candidatures', width: 100 },
-  { key: 'responsable', label: 'Responsable', width: 160 },
+  { key: 'numero', label: 'N\u00b0 Offre', width: 110 },
+  { key: 'datePublication', label: 'Publication', width: 95 },
+  { key: 'departement', label: 'D\u00e9partement', width: 145, chip: true },
+  { key: 'intitule', label: 'Intitul\u00e9 du Poste', width: 200 },
+  { key: 'canalDiffusion', label: 'Canal', width: 110 },
+  { key: 'nbCandidaturesRecues', label: 'Candidatures', width: 90 },
+  { key: 'responsable', label: 'Responsable', width: 150 },
 ];
 
 /* ═══ COMPOSANT CHAMP ÉDITABLE ═══ */
@@ -625,6 +752,9 @@ export default function Offres() {
   const [rpp, setRpp] = useState(10);
   const [drawerOffre, setDrawerOffre] = useState(null);
   const [snack, setSnack] = useState(null);
+  /* Quick Actions states */
+  const [loadingStatus, setLoadingStatus] = useState({ id: null, statut: null });
+  const [confirmDlg, setConfirmDlg] = useState(null); /* { type: 'archive'|'delete', offre: {...} } */
 
   const filtered = useMemo(() => data.filter(o =>
     (filterDep === 'Tous' || o.departement === filterDep) &&
@@ -662,6 +792,77 @@ export default function Offres() {
     setDrawerOffre(prev => prev && prev.id === id ? { ...prev, ...formData } : prev);
     setSnack({ msg: 'Offre mise \u00e0 jour avec succ\u00e8s', severity: 'success' });
   }, []);
+
+  /* ═══ QUICK STATUS CHANGE (optimiste + spinner 300ms) ═══ */
+  const handleQuickStatutChange = useCallback((id, newStatut) => {
+    const offre = data.find(o => o.id === id);
+    if (!offre || offre.statutOffre === newStatut) return;
+
+    /* Spinner + affichage du nouveau statut immédiatement (optimiste) */
+    setLoadingStatus({ id, statut: newStatut });
+
+    const today = new Date().toLocaleDateString('fr-FR');
+    const oldStatut = offre.statutOffre;
+
+    /* Mise à jour optimiste du state */
+    setData(prev => prev.map(o => {
+      if (o.id !== id) return o;
+      return {
+        ...o,
+        statutOffre: newStatut,
+        historique: [...(o.historique || []), {
+          date: today,
+          evenement: `Statut chang\u00e9 : ${oldStatut} \u2192 ${newStatut}`,
+          auteur: 'Utilisateur',
+          type: newStatut === 'Annulee' ? 'annulation' : newStatut === 'Cloturee' ? 'cloture' : 'modification',
+        }],
+        ...(newStatut === 'Cloturee' ? { dateCloture: today } : {}),
+        ...(newStatut === 'Publiee' && !o.datePublication ? { datePublication: today } : {}),
+      };
+    }));
+
+    /* Mettre à jour le drawer si ouvert */
+    setDrawerOffre(prev => prev && prev.id === id ? { ...prev, statutOffre: newStatut } : prev);
+
+    /* Simuler un délai API de 300ms puis effacer le spinner */
+    setTimeout(() => {
+      setLoadingStatus({ id: null, statut: null });
+      setSnack({ msg: `Statut de ${offre.numero} mis \u00e0 jour vers '${newStatut}'`, severity: 'success' });
+    }, 300);
+  }, [data]);
+
+  /* ═══ ARCHIVER UNE OFFRE ═══ */
+  const handleArchive = useCallback((offre) => {
+    setConfirmDlg({ type: 'archive', offre });
+  }, []);
+
+  /* ═══ SUPPRIMER UNE OFFRE ═══ */
+  const handleDelete = useCallback((offre) => {
+    setConfirmDlg({ type: 'delete', offre });
+  }, []);
+
+  /* ═══ CONFIRMER ACTION CRITIQUE ═══ */
+  const handleConfirmAction = useCallback(() => {
+    if (!confirmDlg) return;
+    const { type, offre } = confirmDlg;
+    const today = new Date().toLocaleDateString('fr-FR');
+
+    if (type === 'archive') {
+      setData(prev => prev.map(o => o.id === offre.id ? {
+        ...o, statutOffre: 'Cloturee',
+        historique: [...(o.historique || []), { date: today, evenement: 'Offre archiv\u00e9e (cl\u00f4tur\u00e9e)', auteur: 'Utilisateur', type: 'cloture' }],
+        dateCloture: o.dateCloture || today,
+      } : o));
+      setDrawerOffre(prev => prev && prev.id === offre.id ? { ...prev, statutOffre: 'Cloturee' } : prev);
+      setSnack({ msg: `${offre.numero} archiv\u00e9e avec succ\u00e8s`, severity: 'info' });
+    } else if (type === 'delete') {
+      setData(prev => prev.filter(o => o.id !== offre.id));
+      if (drawerOffre?.id === offre.id) setDrawerOffre(null);
+      setSnack({ msg: `${offre.numero} supprim\u00e9e`, severity: 'warning' });
+    }
+
+    setConfirmDlg(null);
+  }, [confirmDlg, drawerOffre]);
 
   const handleExport = useCallback(() => {
     const cols = ['N\u00b0','Intitul\u00e9','D\u00e9partement','Type Poste','Type Contrat','Canal','Statut Offre','Date Publication','Date Cl\u00f4ture','Date Requise','Responsable','Priorit\u00e9','Budget Allou\u00e9','Salaire Min','Salaire Max','Candidatures Re\u00e7ues','Site'];
@@ -724,7 +925,7 @@ export default function Offres() {
             {tableCols.map(c => (
               <TableCell key={c.key} sx={{ fontWeight: 'bold', bgcolor: '#f5f5f5', whiteSpace: 'nowrap', width: c.width }}>{c.label}</TableCell>
             ))}
-            <TableCell sx={{ fontWeight: 'bold', bgcolor: '#f5f5f5', width: 60 }}>Actions</TableCell>
+            <TableCell sx={{ fontWeight: 'bold', bgcolor: '#f5f5f5', width: 230, textAlign: 'center' }}>Actions</TableCell>
           </TableRow></TableHead>
           <TableBody>
             {filtered.slice(page * rpp, page * rpp + rpp).map(row => (
@@ -732,12 +933,25 @@ export default function Offres() {
                 {tableCols.map(c => (
                   <TableCell key={c.key} sx={{ whiteSpace: 'nowrap' }}>
                     {c.chip ? <Chip label={row[c.key]} size="small" variant="outlined" /> :
-                     c.chipColor ? <Chip label={row[c.key]} size="small" color={c.chipColor[row[c.key]]} sx={{ fontWeight: 600 }} /> :
                      row[c.key]}
                   </TableCell>
                 ))}
                 <TableCell>
-                  <Tooltip title="Ouvrir le d\u00e9tail"><IconButton size="small" onClick={e => { e.stopPropagation(); setDrawerOffre(row); }}><ArrowForward sx={{ fontSize: 16 }} /></IconButton></Tooltip>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8, justifyContent: 'center' }} onClick={e => e.stopPropagation()}>
+                    <StatusChipMenu
+                      offre={row}
+                      onStatutChange={handleQuickStatutChange}
+                      loadingId={loadingStatus.id}
+                      loadingStatut={loadingStatus.statut}
+                    />
+                    <Box sx={{ width: 1, height: 24, bgcolor: 'divider', borderRadius: 1 }} />
+                    <QuickActions
+                      offre={row}
+                      onView={o => setDrawerOffre(o)}
+                      onArchive={handleArchive}
+                      onDelete={handleDelete}
+                    />
+                  </Box>
                 </TableCell>
               </TableRow>
             ))}
@@ -800,6 +1014,62 @@ export default function Offres() {
       <Snackbar open={Boolean(snack)} autoHideDuration={3000} onClose={() => setSnack(null)} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
         {snack && <Alert onClose={() => setSnack(null)} severity={snack.severity} variant="filled" sx={{ borderRadius: 2 }}>{snack.msg}</Alert>}
       </Snackbar>
+
+      {/* ═══ DIALOGUE DE CONFIRMATION (Archive / Supprimer) ═══ */}
+      <Dialog
+        open={Boolean(confirmDlg)}
+        onClose={() => setConfirmDlg(null)}
+        maxWidth="xs"
+        PaperProps={{ sx: { borderRadius: 3, p: 0.5 } }}
+      >
+        {confirmDlg && (
+          <>
+            <DialogTitle sx={{ display: 'flex', alignItems: 'center', gap: 1.5, pb: 1 }}>
+              <Box sx={{
+                width: 40, height: 40, borderRadius: '50%',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                bgcolor: confirmDlg.type === 'delete' ? 'rgba(211,47,47,0.1)' : 'rgba(245,127,23,0.1)',
+              }}>
+                {confirmDlg.type === 'delete'
+                  ? <Delete sx={{ color: '#d32f2f', fontSize: 22 }} />
+                  : <Archive sx={{ color: '#f57f17', fontSize: 22 }} />
+                }
+              </Box>
+              <Box>
+                <Typography variant="subtitle1" fontWeight="bold" sx={{ fontSize: '1rem' }}>
+                  {confirmDlg.type === 'delete' ? 'Supprimer cette offre' : 'Archiver cette offre'}
+                </Typography>
+                <Typography variant="caption" color="text.secondary">
+                  {confirmDlg.offre.numero} — {confirmDlg.offre.intitule}
+                </Typography>
+              </Box>
+            </DialogTitle>
+            <DialogContent>
+              <Typography variant="body2" sx={{ color: 'text.secondary', lineHeight: 1.6 }}>
+                {confirmDlg.type === 'delete'
+                  ? `Cette action est irréversible. L'offre ${confirmDlg.offre.numero} et toutes ses données associées (candidatures, historique) seront définitivement supprimées.`
+                  : `L'offre ${confirmDlg.offre.numero} sera marquée comme clôturée et archivée. Elle ne recevra plus de candidatures.`
+                }
+              </Typography>
+            </DialogContent>
+            <DialogActions sx={{ px: 3, pb: 2 }}>
+              <Button onClick={() => setConfirmDlg(null)} color="inherit" sx={{ textTransform: 'none' }}>
+                Annuler
+              </Button>
+              <Button
+                onClick={handleConfirmAction} variant="contained"
+                sx={{
+                  textTransform: 'none', fontWeight: 600,
+                  bgcolor: confirmDlg.type === 'delete' ? '#d32f2f' : '#f57f17',
+                  '&:hover': { bgcolor: confirmDlg.type === 'delete' ? '#b71c1c' : '#e65100' },
+                }}
+              >
+                {confirmDlg.type === 'delete' ? 'Supprimer définitivement' : 'Confirmer l\'archivage'}
+              </Button>
+            </DialogActions>
+          </>
+        )}
+      </Dialog>
     </Box>
   );
 }
