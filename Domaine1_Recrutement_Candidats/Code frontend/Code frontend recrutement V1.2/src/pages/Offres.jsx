@@ -16,6 +16,7 @@ import {
 } from '@mui/icons-material';
 import KPICard from '../components/KPICard';
 import AddDialog from '../components/AddDialog';
+import NouvelleOffreStepper from '../components/NouvelleOffreStepper';
 import { nomenclatures } from '../data/nomenclatures';
 
 const formatFCFA = (a) => (!a && a !== 0) ? '\u2014' : a.toLocaleString('fr-FR') + ' FCFA';
@@ -1092,38 +1093,36 @@ export default function Offres() {
         onSave={handleSaveOffre}
       />
 
-      {/* Dialogue d'ajout */}
-      <AddDialog
-        open={dlg} onClose={() => setDlg(false)} title="Nouvelle Offre d'Emploi"
-        fields={[
-          { key: 'intitule', label: 'Intitul\u00e9 du Poste', required: true },
-          { key: 'departement', label: 'D\u00e9partement', type: 'select', options: nomenclatures.departement, required: true },
-          { key: 'typePoste', label: 'Type Poste', type: 'select', options: nomenclatures.type_poste, required: true },
-          { key: 'typeContrat', label: 'Type Contrat', type: 'select', options: nomenclatures.type_contrat, required: true },
-          { key: 'canalDiffusion', label: 'Canal de Diffusion', type: 'select', options: nomenclatures.canal_diffusion, required: true },
-          { key: 'priorite', label: 'Priorit\u00e9', type: 'select', options: nomenclatures.priorite, required: true },
-          { key: 'dateRequise', label: 'Date Requise', required: true },
-          { key: 'dateCloture', label: 'Date de Cl\u00f4ture' },
-          { key: 'site', label: 'Site', type: 'select', options: nomenclatures.site },
-          { key: 'responsable', label: 'Responsable', required: true },
-          { key: 'roleResponsable', label: 'R\u00f4le du Responsable', type: 'select', options: nomenclatures.role_responsable },
-          { key: 'budgetAlloue', label: 'Budget Allou\u00e9 (FCFA)', type: 'number' },
-          { key: 'salaireMin', label: 'Salaire Min (FCFA)', type: 'number' },
-          { key: 'salaireMax', label: 'Salaire Max (FCFA)', type: 'number' },
-          { key: 'description', label: 'Description', multiline: true },
-        ]}
-        onSubmit={(vals) => {
+      {/* Stepper Modal - Nouvelle Offre */}
+      <NouvelleOffreStepper
+        open={dlg}
+        onClose={() => setDlg(false)}
+        responsablesList={responsablesList}
+        onSubmit={(vals, toastMsg) => {
           const nid = data.length + 1;
           const today = new Date().toLocaleDateString('fr-FR');
-          setData(prev => [...prev, {
-            id: nid, numero: 'OF-2025-' + String(nid).padStart(3, '0'),
-            statutOffre: 'A creer', datePublication: '',
-            nbCandidatures: 0, nbCandidaturesRecues: 0,
+          const newOffre = {
+            id: nid,
+            numero: 'OF-2025-' + String(nid).padStart(3, '0'),
+            statutOffre: 'A creer',
+            datePublication: '',
+            nbCandidatures: 0,
+            nbCandidaturesRecues: 0,
             candidatsAssocies: [],
-            historique: [{ date: today, evenement: 'Offre cr\u00e9\u00e9e', auteur: vals.responsable || 'Utilisateur', type: 'creation' }],
+            historique: [
+              {
+                date: today,
+                evenement: vals.statutOffre === 'Publiee' ? 'Offre créée et publiée' : 'Offre créée (brouillon)',
+                auteur: vals.responsable || 'Utilisateur',
+                type: 'creation',
+              },
+            ],
             site: vals.site || 'Siege (Douala)',
             ...vals,
-          }]);
+          };
+          setData(prev => [newOffre, ...prev]);
+          setSnack({ msg: toastMsg, severity: 'success' });
+          setDlg(false);
         }}
       />
 
