@@ -37,5 +37,19 @@ export const nomenclatures = {
   risque_depart: ['Faible', 'Moyen', 'Eleve', 'Critique'],
   stade_pipeline: ['CV recu', 'Pre-selection', 'Entretien HR', 'Test technique', 'Entretien final', 'Offre envoyee', 'Accepte', 'Refuse', 'Retraite'],
   priorite_pipeline: ['Haute', 'Moyenne', 'Basse'],
+
+  /* ═══ STUDIO D'ANALYSE & PUBLICATION ═══ */
+  niveau_etude_studio: ['Sans diplome', 'Bac', 'Bac+2 (BTS/DUT)', 'Bac+3 (Licence)', 'Bac+5 (Master)', 'Bac+8 (Doctorat)', 'Ecole d\'ingenieur', 'Autre'],
+  experience_studio: ['Aucune', '1-2 ans', '3-5 ans', '5-10 ans', '10+ ans'],
+  soft_skills: ['Autonomie', 'Rigueur', 'Esprit d\'equipe', 'Leadership', 'Communication', 'Adaptabilite', 'Creativite', 'Sens de l\'organisation', 'Gestion du stress', 'Orientation resultat'],
+  langues_studio: ['Francais', 'Anglais', 'Espagnol', 'Allemand', 'Portugais', 'Chinois', 'Arabe'],
+  niveau_langue_studio: ['Aucun', 'Debutant', 'Intermediaire', 'Courant', 'Avance', 'Bilingue', 'Natif'],
+  avantages_sociaux: ['Assurance sante', 'Prime de transport', 'Cantine', 'Teletravail'],
+  canaux_studio: [
+    { key: 'siteCarriere', label: 'Site Carriere / Portal RH Interne', icon: '🌐' },
+    { key: 'linkedIn', label: 'LinkedIn Jobs', icon: '💼' },
+    { key: 'jobboards', label: 'Jobboards Partenaires / Presse', icon: '📰' },
+    { key: 'cabinets', label: 'Cabinets de Recrutement Externe', icon: '🏢' },
+  ],
 };
 

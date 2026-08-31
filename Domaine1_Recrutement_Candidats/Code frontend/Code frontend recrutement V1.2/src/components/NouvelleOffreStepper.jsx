@@ -42,7 +42,6 @@ const INITIAL_FORM = {
   canalDiffusion: '',
   datePublication: '',
   dateCloture: '',
-  description: '',
   _budgetManuel: false,
   _clotureManuel: false,
 };
@@ -360,9 +359,6 @@ export default function NouvelleOffreStepper({ open, onClose, onSubmit, responsa
                         ? 'Date modifiée manuellement'
                         : ' ',
                 })}
-                <Box sx={{ gridColumn: { xs: '1 / -1', sm: '1 / -1' } }}>
-                  {renderField('description', 'Description du Poste', { multiline: true, rows: 4 })}
-                </Box>
               </>
             )}
           </Box>

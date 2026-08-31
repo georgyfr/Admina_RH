@@ -12,11 +12,12 @@ import {
   AccountBalanceWallet, Publish, Campaign, ArrowForward, Work,
   Create, Groups, AccessTime, Visibility, Delete, Archive,
   MoreVert, CheckCircle, KeyboardArrowDown, WarningAmber,
-  Search, SearchOff, FilterListOff
+  Search, SearchOff, FilterListOff, AutoAwesome
 } from '@mui/icons-material';
 import KPICard from '../components/KPICard';
 import AddDialog from '../components/AddDialog';
 import NouvelleOffreStepper from '../components/NouvelleOffreStepper';
+import JobStudioModal from '../components/JobStudioModal';
 import { nomenclatures } from '../data/nomenclatures';
 
 const formatFCFA = (a) => (!a && a !== 0) ? '\u2014' : a.toLocaleString('fr-FR') + ' FCFA';
@@ -758,6 +759,7 @@ function OffreDrawer({ offre, open, onClose, onSave }) {
 export default function Offres() {
   const [data, setData] = useState(initialData);
   const [dlg, setDlg] = useState(false);
+  const [studioOpen, setStudioOpen] = useState(false);
   const [filterDep, setFilterDep] = useState('Tous');
   const [filterStatut, setFilterStatut] = useState('Tous');
   const [filterCanal, setFilterCanal] = useState('Tous');
@@ -951,9 +953,33 @@ export default function Offres() {
         }
       </Typography>
 
-      <Box sx={{ display: 'flex', gap: 1, mb: 2, alignItems: 'center' }}>
+      <Box sx={{ display: 'flex', gap: 1, mb: 2, alignItems: 'center', flexWrap: 'wrap' }}>
         <Button variant="outlined" startIcon={<Download fontSize="small" />} onClick={handleExport}>Exporter CSV</Button>
-        <Button variant="contained" startIcon={<Add fontSize="small" />} onClick={() => setDlg(true)}>Nouvelle Offre</Button>
+        <Button variant="contained" startIcon={<Add fontSize="small" />} onClick={() => setDlg(true)} sx={{ bgcolor: '#0D7C66', '&:hover': { bgcolor: '#0a5c4a' } }}>Offre Rapide</Button>
+        <Button
+          variant="outlined"
+          startIcon={<AutoAwesome sx={{ fontSize: 18 }} />}
+          onClick={() => setStudioOpen(true)}
+          sx={{
+            textTransform: 'none',
+            fontWeight: 600,
+            borderWidth: 2,
+            borderRadius: 2,
+            background: 'linear-gradient(135deg, #7c3aed 0%, #2563eb 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            borderColor: '#7c3aed',
+            '&:hover': {
+              borderColor: '#5b21b6',
+              background: 'linear-gradient(135deg, #7c3aed 0%, #2563eb 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              bgcolor: 'rgba(124,58,237,0.04)',
+            },
+          }}
+        >
+          Studio d'Analyse & Publication
+        </Button>
       </Box>
 
       {/* KPIs */}
@@ -1123,6 +1149,42 @@ export default function Offres() {
           setData(prev => [newOffre, ...prev]);
           setSnack({ msg: toastMsg, severity: 'success' });
           setDlg(false);
+        }}
+      />
+
+      {/* Studio d'Analyse & Publication (Modal XXL) */}
+      <JobStudioModal
+        open={studioOpen}
+        onClose={() => setStudioOpen(false)}
+        responsablesList={responsablesList}
+        onSubmit={(vals, toastMsg) => {
+          const nid = data.length + 1;
+          const today = new Date().toLocaleDateString('fr-FR');
+          const studioD = vals._studioData || {};
+          const newOffre = {
+            id: nid,
+            numero: 'OF-2025-' + String(nid).padStart(3, '0'),
+            statutOffre: 'A creer',
+            datePublication: '',
+            nbCandidatures: 0,
+            nbCandidaturesRecues: 0,
+            candidatsAssocies: [],
+            historique: [
+              {
+                date: today,
+                evenement: vals.statutOffre === 'Publiee'
+                  ? `Offre creee via Studio et publiee sur ${studioD.canaux?.length || 0} canal(aux)`
+                  : 'Offre creee via Studio (brouillon)',
+                auteur: vals.responsable || 'Utilisateur',
+                type: 'creation',
+              },
+            ],
+            site: vals.site || 'Siege (Douala)',
+            ...vals,
+          };
+          setData(prev => [newOffre, ...prev]);
+          setSnack({ msg: toastMsg, severity: 'success' });
+          setStudioOpen(false);
         }}
       />
 
