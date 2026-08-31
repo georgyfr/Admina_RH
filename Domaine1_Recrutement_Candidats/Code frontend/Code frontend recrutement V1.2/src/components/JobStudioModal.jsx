@@ -277,7 +277,7 @@ export default function JobStudioModal({ open, onClose, onSubmit, responsablesLi
   /* ═══ RENDER ═══ */
   return (
     <Dialog open={open} onClose={onClose}
-      PaperProps={{ sx: { width: '95vw', maxWidth: 1400, height: '90vh', maxHeight: '90vh', display: 'flex', flexDirection: 'column', borderRadius: 3, overflow: 'hidden' } }}
+      PaperProps={{ sx: { width: '97vw', maxWidth: 1700, height: '92vh', maxHeight: '92vh', display: 'flex', flexDirection: 'column', borderRadius: 3, overflow: 'hidden' } }}
     >
       <DialogTitle sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', pb: 1.5, pt: 2, px: 3, background: 'linear-gradient(135deg, #1565c0 0%, #7c3aed 100%)', color: '#fff', flexShrink: 0 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
