@@ -1,0 +1,860 @@
+     1→import { useState, useRef, useEffect, useMemo } from 'react';
+     2→import {
+     3→  AppBar, Toolbar, Typography, TextField, IconButton, Badge, Avatar,
+     4→  Box, Paper, Popover, List, ListItemButton, ListItemIcon, ListItemText,
+     5→  Divider, Chip, InputAdornment, Tooltip, useTheme
+     6→} from '@mui/material';
+     7→import {
+     8→  Notifications as NotifIcon, Search as SearchIcon, Person as PersonIcon,
+     9→  Settings as SettingsIcon, Business as BusinessIcon, Logout as LogoutIcon,
+    10→  CheckCircle, ManageAccounts, Dashboard, DarkMode as DarkModeIcon,
+    11→  LightMode as LightModeIcon, AddCircle, Event, Description as DescIcon,
+    12→  HourglassTop, Work, FileDownload,
+    13→  NavigateNext, Warning as WarningIcon, KeyboardArrowDown
+    14→} from '@mui/icons-material';
+    15→import { useNavigate, useLocation } from 'react-router-dom';
+    16→import { useApp } from '../context/AppContext';
+    17→import { useRole, ROLES } from '../context/RoleContext';
+    18→import { Person, BusinessCenter, AdminPanelSettings } from '@mui/icons-material';
+    19→
+    20→const notifIconMap = {
+    21→  person_add: <PersonIcon sx={{ fontSize: 18 }} />,
+    22→  event: <Dashboard sx={{ fontSize: 18 }} />,
+    23→  warning: <WarningIcon sx={{ fontSize: 18 }} />,
+    24→  business: <BusinessIcon sx={{ fontSize: 18 }} />,
+    25→  description: <DescIcon sx={{ fontSize: 18 }} />,
+    26→  check_circle: <CheckCircle sx={{ fontSize: 18 }} />,
+    27→  school: <Dashboard sx={{ fontSize: 18 }} />,
+    28→};
+    29→
+    30→const actionIconMap = {
+    31→  add_circle: <AddCircle />,
+    32→  person_add: <PersonIcon />,
+    33→  event: <Event />,
+    34→  description: <DescIcon />,
+    35→};
+    36→
+    37→const statIconMap = {
+    38→  work: <Work sx={{ fontSize: 16 }} />,
+    39→  event: <Event sx={{ fontSize: 16 }} />,
+    40→  description: <DescIcon sx={{ fontSize: 16 }} />,
+    41→  hourglass_top: <HourglassTop sx={{ fontSize: 16 }} />,
+    42→};
+    43→
+    44→const accountMenuItems = [
+    45→  { icon: <PersonIcon />, label: 'Mon Profil', desc: 'Voir mes informations', path: '/parametres' },
+    46→  { icon: <ManageAccounts />, label: 'Gestion des Comptes', desc: 'Utilisateurs et r\u00f4les', path: '/parametres' },
+    47→  { icon: <BusinessIcon />, label: 'D\u00e9partements', desc: 'Structure organisationnelle', path: '/departements' },
+    48→  { icon: <SettingsIcon />, label: 'Param\u00e8tres', desc: 'Configuration du syst\u00e8me', path: '/parametres' },
+    49→];
+    50→
+    51→export default function Header({ title }) {
+    52→  const navigate = useNavigate();
+    53→  const location = useLocation();
+    54→  const theme = useTheme();
+    55→  const isDark = theme.palette.mode === 'dark';
+    56→  const {
+    57→    user, notifications, unreadCount, search, markAllRead, markRead,
+    58→    darkMode, toggleDark, lang, changeLang, t, languages,
+    59→    deadlines, quickActions, recrutementStats, getBreadcrumb,
+    60→  } = useApp();
+    61→
+    62→  const currentLang = languages.find(l => l.code === lang) || languages[0];
+    63→
+    64→  // Recherche
+    65→  const [query, setQuery] = useState('');
+    66→  const [searchOpen, setSearchOpen] = useState(false);
+    67→  const searchRef = useRef(null);
+    68→
+    69→  // Popovers
+    70→  const [notifAnchor, setNotifAnchor] = useState(null);
+    71→  const [accountAnchor, setAccountAnchor] = useState(null);
+    72→  const [actionsAnchor, setActionsAnchor] = useState(null);
+    73→  const [deadlineAnchor, setDeadlineAnchor] = useState(null);
+    74→  const [langAnchor, setLangAnchor] = useState(null);
+    75→  const [roleAnchor, setRoleAnchor] = useState(null);
+    76→
+    77→  const { currentRole, changeRole } = useRole();
+    78→  const roleIconMap = { person: <Person sx={{ fontSize: 16 }} />, business: <BusinessCenter sx={{ fontSize: 16 }} />, admin_panel_settings: <AdminPanelSettings sx={{ fontSize: 16 }} /> };
+    79→
+    80→  const results = useMemo(() => search(query), [query, search]);
+    81→  const breadcrumb = useMemo(() => getBreadcrumb(location.pathname), [location.pathname, getBreadcrumb]);
+    82→
+    83→  // Ctrl+K pour ouvrir la recherche
+    84→  useEffect(() => {
+    85→    const handler = (e) => {
+    86→      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+    87→        e.preventDefault();
+    88→        searchRef.current?.querySelector('input')?.focus();
+    89→      }
+    90→      if (e.key === 'Escape') setSearchOpen(false);
+    91→    };
+    92→    document.addEventListener('keydown', handler);
+    93→    return () => document.removeEventListener('keydown', handler);
+    94→  }, []);
+    95→
+    96→  // Fermer la recherche si on clique ailleurs
+    97→  useEffect(() => {
+    98→    const handler = (e) => {
+    99→      if (searchRef.current && !searchRef.current.contains(e.target)) setSearchOpen(false);
+   100→    };
+   101→    document.addEventListener('mousedown', handler);
+   102→    return () => document.removeEventListener('mousedown', handler);
+   103→  }, []);
+   104→
+   105→  const handleCloseAll = () => {
+   106→    setNotifAnchor(null); setAccountAnchor(null); setActionsAnchor(null); setDeadlineAnchor(null); setLangAnchor(null);
+   107→  };
+   108→
+   109→  // Couleurs th\u00e8me
+   110→  const headerBg = isDark ? '#141428' : '#ffffff';
+   111→  const headerColor = isDark ? '#e0e0e0' : '#374151';
+   112→  const statsBarBg = isDark ? '#0d0d1f' : '#f8f9fc';
+   113→  const paperBg = isDark ? '#1a1a36' : '#ffffff';
+   114→  const hoverBg = isDark ? 'rgba(14,166,133,0.10)' : 'rgba(13,124,102,0.06)';
+   115→  const borderClr = isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.07)';
+   116→  const chipBg = isDark ? 'rgba(255,255,255,0.05)' : '#f3f4f6';
+   117→  const dividerClr = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)';
+   118→
+   119→  // Hauteur du header principal (utilisé pour positionner la stats bar)
+   120→  const headerHeight = 52;
+   121→
+   122→  return (
+   123→    <Box>
+   124→      {/* ===== MAIN TOOLBAR ===== */}
+   125→      <AppBar
+   126→        position="fixed"
+   127→        sx={{
+   128→          ml: '260px',
+   129→          width: 'calc(100% - 260px)',
+   130→          bgcolor: headerBg,
+   131→          color: headerColor,
+   132→          boxShadow: 'none',
+   133→          borderBottom: `1px solid ${borderClr}`,
+   134→          zIndex: 1200,
+   135→        }}
+   136→        elevation={0}
+   137→      >
+   138→        <Toolbar sx={{ minHeight: `${headerHeight}px !important`, height: headerHeight, px: 2.5 }}>
+   139→
+   140→          {/* ---- LEFT SECTION: Breadcrumb ---- */}
+   141→          <Box
+   142→            sx={{
+   143→              display: 'flex',
+   144→              alignItems: 'center',
+   145→              minWidth: 0,
+   146→              flexShrink: 0,
+   147→              maxWidth: '30%',
+   148→              mr: 2,
+   149→            }}
+   150→          >
+   151→            <Typography
+   152→              variant="caption"
+   153→              noWrap
+   154→              sx={{
+   155→                color: isDark ? '#6b7280' : '#9ca3af',
+   156→                cursor: 'pointer',
+   157→                fontSize: '0.75rem',
+   158→                '&:hover': { color: '#0D7C66' },
+   159→                transition: 'color 0.2s',
+   160→              }}
+   161→              onClick={() => navigate('/')}
+   162→            >
+   163→              Accueil
+   164→            </Typography>
+   165→            {breadcrumb.map((crumb, idx) => (
+   166→              <Box key={idx} sx={{ display: 'flex', alignItems: 'center' }}>
+   167→                <NavigateNext sx={{ fontSize: 12, color: isDark ? '#4b5563' : '#d1d5db', mx: 0.25 }} />
+   168→                <Typography
+   169→                  variant="caption"
+   170→                  noWrap
+   171→                  sx={{
+   172→                    color: idx === breadcrumb.length - 1
+   173→                      ? (isDark ? '#e5e7eb' : '#111827')
+   174→                      : (isDark ? '#6b7280' : '#9ca3af'),
+   175→                    fontWeight: idx === breadcrumb.length - 1 ? 600 : 400,
+   176→                    cursor: idx < breadcrumb.length - 1 ? 'pointer' : 'default',
+   177→                    fontSize: '0.75rem',
+   178→                    '&:hover': { color: '#0D7C66' },
+   179→                    transition: 'color 0.2s',
+   180→                  }}
+   181→                  onClick={() => {
+   182→                    if (idx < breadcrumb.length - 1 && location.pathname !== '/') navigate('/');
+   183→                  }}
+   184→                >
+   185→                  {crumb}
+   186→                </Typography>
+   187→              </Box>
+   188→            ))}
+   189→          </Box>
+   190→
+   191→          {/* ---- CENTER: Search ---- */}
+   192→          <Box
+   193→            ref={searchRef}
+   194→            sx={{
+   195→              position: 'relative',
+   196→              flexGrow: 1,
+   197→              maxWidth: 420,
+   198→              mx: 'auto',
+   199→            }}
+   200→          >
+   201→            <TextField
+   202→              size="small"
+   203→              placeholder={t.search}
+   204→              value={query}
+   205→              onChange={(e) => { setQuery(e.target.value); setSearchOpen(true); }}
+   206→              onFocus={() => { if (query.length >= 2) setSearchOpen(true); }}
+   207→              sx={{
+   208→                width: '100%',
+   209→                '& .MuiOutlinedInput-root': {
+   210→                  borderRadius: 2,
+   211→                  bgcolor: isDark ? 'rgba(255,255,255,0.04)' : '#f3f4f6',
+   212→                  fontSize: '0.8rem',
+   213→                  color: headerColor,
+   214→                  transition: 'all 0.2s',
+   215→                  '&:hover': { bgcolor: isDark ? 'rgba(255,255,255,0.07)' : '#eef0f4' },
+   216→                },
+   217→                '& .MuiOutlinedInput-notchedOutline': { borderColor: 'transparent' },
+   218→                '& .MuiOutlinedInput-root.Mui-focused': {
+   219→                  bgcolor: isDark ? 'rgba(255,255,255,0.06)' : '#fff',
+   220→                  boxShadow: isDark
+   221→                    ? '0 0 0 2px rgba(13,124,102,0.3)'
+   222→                    : '0 0 0 2px rgba(13,124,102,0.2)',
+   223→                },
+   224→                '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+   225→                  borderColor: '#0D7C66',
+   226→                },
+   227→              }}
+   228→              InputProps={{
+   229→                startAdornment: (
+   230→                  <InputAdornment position="start">
+   231→                    <SearchIcon sx={{ color: isDark ? '#6b7280' : '#9ca3af', fontSize: 18 }} />
+   232→                  </InputAdornment>
+   233→                ),
+   234→                endAdornment: (
+   235→                  <InputAdornment position="end">
+   236→                    <Chip
+   237→                      label="Ctrl+K"
+   238→                      size="small"
+   239→                      sx={{
+   240→                        fontSize: '0.6rem',
+   241→                        height: 18,
+   242→                        bgcolor: isDark ? 'rgba(255,255,255,0.06)' : '#e5e7eb',
+   243→                        color: isDark ? '#6b7280' : '#9ca3af',
+   244→                        fontWeight: 600,
+   245→                        letterSpacing: 0.3,
+   246→                      }}
+   247→                    />
+   248→                  </InputAdornment>
+   249→                ),
+   250→              }}
+   251→            />
+   252→
+   253→            {/* Search Results Dropdown */}
+   254→            {searchOpen && query.length >= 2 && (
+   255→              <Paper
+   256→                elevation={6}
+   257→                sx={{
+   258→                  position: 'absolute',
+   259→                  top: 'calc(100% + 4px)',
+   260→                  left: 0,
+   261→                  right: 0,
+   262→                  zIndex: 1400,
+   263→                  maxHeight: 380,
+   264→                  overflow: 'auto',
+   265→                  borderRadius: 2,
+   266→                  border: `1px solid ${borderClr}`,
+   267→                  bgcolor: paperBg,
+   268→                }}
+   269→              >
+   270→                {results.length === 0 ? (
+   271→                  <Box sx={{ p: 2.5, textAlign: 'center', color: '#9ca3af' }}>
+   272→                    <Typography variant="body2">{t.noResult} \u00ab {query} \u00bb</Typography>
+   273→                  </Box>
+   274→                ) : (
+   275→                  <>
+   276→                    <Box sx={{ px: 2, py: 1, bgcolor: chipBg, borderBottom: `1px solid ${borderClr}` }}>
+   277→                      <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 600, fontSize: '0.7rem' }}>
+   278→                        {results.length} {t.result}
+   279→                      </Typography>
+   280→                    </Box>
+   281→                    <List dense sx={{ py: 0.5 }}>
+   282→                      {results.map((item) => {
+   283→                        const parts = item.label.split(new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi'));
+   284→                        return (
+   285→                          <ListItemButton
+   286→                            key={item.id}
+   287→                            onClick={() => { setSearchOpen(false); setQuery(''); navigate(item.path); }}
+   288→                            sx={{
+   289→                              borderRadius: 1.5,
+   290→                              mx: 1,
+   291→                              my: 0.15,
+   292→                              py: 0.8,
+   293→                              '&:hover': { bgcolor: hoverBg },
+   294→                            }}
+   295→                          >
+   296→                            <ListItemText
+   297→                              primary={
+   298→                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+   299→                                  <Typography component="span" variant="body2" sx={{ fontWeight: 500, fontSize: '0.8rem' }}>
+   300→                                    {parts.map((part, i) =>
+   301→                                      part.toLowerCase() === query.toLowerCase()
+   302→                                        ? <Box key={i} component="span" sx={{ bgcolor: '#ffeb3b', borderRadius: 0.5, px: 0.3, py: 0 }}>{part}</Box>
+   303→                                        : part
+   304→                                    )}
+   305→                                  </Typography>
+   306→                                  <Chip label={item.cat} size="small" sx={{ fontSize: '0.58rem', height: 17, bgcolor: '#e8f5e9', color: '#2e7d32', fontWeight: 500 }} />
+   307→                                </Box>
+   308→                              }
+   309→                              secondary={item.sub}
+   310→                              secondaryTypographyProps={{ variant: 'caption', sx: { color: isDark ? '#6b7280' : '#9ca3af', fontSize: '0.7rem' } }}
+   311→                            />
+   312→                          </ListItemButton>
+   313→                        );
+   314→                      })}
+   315→                    </List>
+   316→                  </>
+   317→                )}
+   318→              </Paper>
+   319→            )}
+   320→          </Box>
+   321→
+   322→          {/* ---- RIGHT SECTION ---- */}
+   323→          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.25, flexShrink: 0, ml: 2 }}>
+   324→
+   325→            {/* === Groupe Utilitaires : Actions + Export + \u00c9ch\u00e9ances === */}
+   326→            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.25 }}>
+   327→              <Tooltip title={t.actions} arrow>
+   328→                <IconButton
+   329→                  size="small"
+   330→                  onClick={(e) => setActionsAnchor(e.currentTarget)}
+   331→                  sx={{ color: headerColor, '&:hover': { bgcolor: hoverBg } }}
+   332→                >
+   333→                  <AddCircle sx={{ fontSize: 20, color: '#0D7C66' }} />
+   334→                </IconButton>
+   335→              </Tooltip>
+   336→
+   337→              <Tooltip title={t.export} arrow>
+   338→                <IconButton
+   339→                  size="small"
+   340→                  onClick={() => {
+   341→                    const tables = document.querySelectorAll('table');
+   342→                    if (tables.length > 0) {
+   343→                      const rows = Array.from(tables[0].querySelectorAll('tr'));
+   344→                      const csv = rows.map(r => Array.from(r.querySelectorAll('th,td')).map(c => c.textContent.trim().replace(/\s+/g, ' ')).join(';')).join('\n');
+   345→                      const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+   346→                      const url = URL.createObjectURL(blob);
+   347→                      const a = document.createElement('a'); a.href = url; a.download = 'export_admina_rh.csv'; a.click(); URL.revokeObjectURL(url);
+   348→                    }
+   349→                  }}
+   350→                  sx={{ color: headerColor, '&:hover': { bgcolor: hoverBg } }}
+   351→                >
+   352→                  <FileDownload sx={{ fontSize: 19 }} />
+   353→                </IconButton>
+   354→              </Tooltip>
+   355→
+   356→              <Tooltip title={t.deadlines} arrow>
+   357→                <IconButton
+   358→                  size="small"
+   359→                  onClick={(e) => setDeadlineAnchor(e.currentTarget)}
+   360→                  sx={{ color: headerColor, '&:hover': { bgcolor: hoverBg } }}
+   361→                >
+   362→                  <Badge
+   363→                    badgeContent={deadlines.filter(d => d.urgent).length}
+   364→                    color="warning"
+   365→                    sx={{ '& .MuiBadge-badge': { fontSize: 9, minWidth: 15, height: 15, bgcolor: '#e65100' } }}
+   366→                  >
+   367→                    <Event sx={{ fontSize: 19 }} />
+   368→                  </Badge>
+   369→                </IconButton>
+   370→              </Tooltip>
+   371→            </Box>
+   372→
+   373→            {/* S\u00e9parateur vertical */}
+   374→            <Divider orientation="vertical" flexItem sx={{ mx: 1, height: 22, borderColor: dividerClr }} />
+   375→
+   376→            {/* === Groupe Pr\u00e9f\u00e9rences : Dark mode + Langue === */}
+   377→            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.25 }}>
+   378→              <Tooltip title={darkMode ? t.lightHint : t.darkHint} arrow>
+   379→                <IconButton
+   380→                  size="small"
+   381→                  onClick={toggleDark}
+   382→                  sx={{ color: headerColor, '&:hover': { bgcolor: hoverBg } }}
+   383→                >
+   384→                  {darkMode
+   385→                    ? <LightModeIcon sx={{ fontSize: 19, color: '#fbbf24' }} />
+   386→                    : <DarkModeIcon sx={{ fontSize: 19, color: '#6b7280' }} />
+   387→                  }
+   388→                </IconButton>
+   389→              </Tooltip>
+   390→
+   391→              {/* Langue avec drapeau */}
+   392→              <Tooltip title={t.langTitle} arrow>
+   393→                <IconButton
+   394→                  size="small"
+   395→                  onClick={(e) => setLangAnchor(e.currentTarget)}
+   396→                  sx={{ color: headerColor, '&:hover': { bgcolor: hoverBg }, p: 0.5 }}
+   397→                >
+   398→                  <Box
+   399→                    component="img"
+   400→                    src={`https://flagcdn.com/w40/${currentLang.cc}.png`}
+   401→                    srcSet={`https://flagcdn.com/w80/${currentLang.cc}.png 2x`}
+   402→                    alt={currentLang.label}
+   403→                    sx={{ width: 22, height: 16, objectFit: 'cover', borderRadius: 0.3, display: 'block' }}
+   404→                  />
+   405→                </IconButton>
+   406→              </Tooltip>
+   407→            </Box>
+   408→
+   409→            {/* S\u00e9parateur vertical */}
+   410→            <Divider orientation="vertical" flexItem sx={{ mx: 1, height: 22, borderColor: dividerClr }} />
+   411→
+   412→            {/* === Role Switcher === */}
+   413→            <Tooltip title="Vue par rôle" arrow>
+   414→              <Chip
+   415→                icon={roleIconMap[currentRole.icon]}
+   416→                label={currentRole.label}
+   417→                size="small"
+   418→                onClick={(e) => setRoleAnchor(e.currentTarget)}
+   419→                onDelete={(e) => { e.stopPropagation(); const idx = ROLES.findIndex(r => r.key === currentRole.key); changeRole(ROLES[(idx + 1) % ROLES.length].key); }}
+   420→                deleteIcon={<KeyboardArrowDown sx={{ fontSize: 14 }} />}
+   421→                sx={{
+   422→                  height: 26, fontSize: '0.7rem', fontWeight: 600, cursor: 'pointer',
+   423→                  bgcolor: `${currentRole.color}18`, color: currentRole.color,
+   424→                  border: `1px solid ${currentRole.color}40`,
+   425→                  '& .MuiChip-icon': { color: currentRole.color },
+   426→                  '& .MuiChip-deleteIcon': { color: currentRole.color },
+   427→                  '&:hover': { bgcolor: `${currentRole.color}25` },
+   428→                }}
+   429→              />
+   430→            </Tooltip>
+   431→
+   432→            {/* === Groupe Notifications + Compte === */}
+   433→            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.25 }}>
+   434→              <Tooltip title={t.notifications} arrow>
+   435→                <IconButton
+   436→                  size="small"
+   437→                  onClick={(e) => setNotifAnchor(e.currentTarget)}
+   438→                  sx={{ color: headerColor, '&:hover': { bgcolor: hoverBg } }}
+   439→                >
+   440→                  <Badge
+   441→                    badgeContent={unreadCount}
+   442→                    color="error"
+   443→                    sx={{ '& .MuiBadge-badge': { fontSize: 9, minWidth: 16, height: 16 } }}
+   444→                  >
+   445→                    <NotifIcon sx={{ fontSize: 19 }} />
+   446→                  </Badge>
+   447→                </IconButton>
+   448→              </Tooltip>
+   449→
+   450→              <Tooltip title="Mon compte" arrow>
+   451→                <IconButton
+   452→                  size="small"
+   453→                  onClick={(e) => setAccountAnchor(e.currentTarget)}
+   454→                  sx={{ p: 0.25, ml: 0.5 }}
+   455→                >
+   456→                  <Avatar
+   457→                    sx={{
+   458→                      width: 30,
+   459→                      height: 30,
+   460→                      bgcolor: '#0D7C66',
+   461→                      fontSize: '0.7rem',
+   462→                      fontWeight: 'bold',
+   463→                      border: `2px solid ${borderClr}`,
+   464→                      transition: 'border-color 0.2s',
+   465→                      '&:hover': { borderColor: '#0D7C66' },
+   466→                    }}
+   467→                  >
+   468→                    {user.initials}
+   469→                  </Avatar>
+   470→                </IconButton>
+   471→              </Tooltip>
+   472→            </Box>
+   473→          </Box>
+   474→        </Toolbar>
+   475→      </AppBar>
+   476→
+   477→      {/* ===== STATS BAR ===== */}
+   478→      <Box
+   479→        sx={{
+   480→          position: 'fixed',
+   481→          top: headerHeight,
+   482→          left: '260px',
+   483→          right: 0,
+   484→          height: 34,
+   485→          bgcolor: statsBarBg,
+   486→          borderBottom: `1px solid ${borderClr}`,
+   487→          display: 'flex',
+   488→          alignItems: 'center',
+   489→          px: 2.5,
+   490→          gap: 0.75,
+   491→          zIndex: 1199,
+   492→          overflowX: 'auto',
+   493→          '&::-webkit-scrollbar': { display: 'none' },
+   494→        }}
+   495→      >
+   496→        {recrutementStats.map((stat) => (
+   497→          <Chip
+   498→            key={stat.key}
+   499→            icon={statIconMap[stat.icon]}
+   500→            label={(
+   501→              <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+   502→                <Typography variant="caption" sx={{ fontWeight: 700, color: stat.color, fontSize: '0.72rem' }}>
+   503→                  {stat.value}
+   504→                </Typography>
+   505→                <Typography variant="caption" sx={{ color: isDark ? '#6b7280' : '#9ca3af', fontSize: '0.7rem' }}>
+   506→                  {stat.label}
+   507→                </Typography>
+   508→              </Box>
+   509→            )}
+   510→            onClick={() => navigate(stat.path)}
+   511→            size="small"
+   512→            sx={{
+   513→              cursor: 'pointer',
+   514→              bgcolor: 'transparent',
+   515→              border: `1px solid ${borderClr}`,
+   516→              height: 26,
+   517→              fontSize: '0.7rem',
+   518→              transition: 'all 0.2s',
+   519→              '&:hover': { bgcolor: hoverBg, borderColor: '#0D7C66', transform: 'translateY(-1px)' },
+   520→              '& .MuiChip-icon': { color: stat.color },
+   521→            }}
+   522→          />
+   523→        ))}
+   524→      </Box>
+   525→
+   526→      {/* ===== POPOVERS ===== */}
+   527→
+   528→      {/* Quick Actions Popover */}
+   529→      <Popover
+   530→        open={Boolean(actionsAnchor)}
+   531→        anchorEl={actionsAnchor}
+   532→        onClose={handleCloseAll}
+   533→        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+   534→        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+   535→        disableAutoFocus
+   536→        disableEnforceFocus
+   537→        slotProps={{ paper: { sx: { mt: 0.5, borderRadius: 2, border: `1px solid ${borderClr}` } } }}
+   538→      >
+   539→        <Paper sx={{ width: 300, bgcolor: paperBg, borderRadius: 2 }}>
+   540→          <Box sx={{ px: 2, py: 1.5, borderBottom: `1px solid ${borderClr}` }}>
+   541→            <Typography variant="subtitle2" fontWeight="bold" fontSize="0.82rem">{t.actions}</Typography>
+   542→          </Box>
+   543→          <List dense sx={{ py: 0.5 }}>
+   544→            {quickActions.map((a, idx) => (
+   545→              <ListItemButton
+   546→                key={idx}
+   547→                onClick={() => { handleCloseAll(); navigate(a.path); }}
+   548→                sx={{ borderRadius: 1.5, mx: 1, my: 0.2, py: 0.8, '&:hover': { bgcolor: hoverBg } }}
+   549→              >
+   550→                <ListItemIcon sx={{ minWidth: 38, color: a.color }}>{actionIconMap[a.icon]}</ListItemIcon>
+   551→                <ListItemText
+   552→                  primary={a.label}
+   553→                  primaryTypographyProps={{ variant: 'body2', fontWeight: 500, fontSize: '0.8rem' }}
+   554→                  secondary={a.desc}
+   555→                  secondaryTypographyProps={{ variant: 'caption', sx: { color: isDark ? '#6b7280' : '#9ca3af', fontSize: '0.7rem' } }}
+   556→                />
+   557→              </ListItemButton>
+   558→            ))}
+   559→          </List>
+   560→        </Paper>
+   561→      </Popover>
+   562→
+   563→      {/* Deadlines Popover */}
+   564→      <Popover
+   565→        open={Boolean(deadlineAnchor)}
+   566→        anchorEl={deadlineAnchor}
+   567→        onClose={handleCloseAll}
+   568→        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+   569→        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+   570→        disableAutoFocus
+   571→        disableEnforceFocus
+   572→        slotProps={{ paper: { sx: { mt: 0.5, borderRadius: 2, border: `1px solid ${borderClr}` } } }}
+   573→      >
+   574→        <Paper sx={{ width: 320, bgcolor: paperBg, borderRadius: 2 }}>
+   575→          <Box sx={{ px: 2, py: 1.5, borderBottom: `1px solid ${borderClr}` }}>
+   576→            <Typography variant="subtitle2" fontWeight="bold" fontSize="0.82rem">{t.deadlines}</Typography>
+   577→          </Box>
+   578→          <List dense sx={{ py: 0.5 }}>
+   579→            {deadlines.map((dl) => (
+   580→              <ListItemButton
+   581→                key={dl.id}
+   582→                onClick={() => { handleCloseAll(); navigate(dl.path); }}
+   583→                sx={{ borderRadius: 1.5, mx: 1, my: 0.2, py: 0.8, '&:hover': { bgcolor: hoverBg } }}
+   584→              >
+   585→                <ListItemIcon sx={{ minWidth: 34 }}>
+   586→                  <Box sx={{
+   587→                    width: 8, height: 8, borderRadius: '50%',
+   588→                    bgcolor: dl.urgent ? '#d32f2f' : '#ffb300',
+   589→                    boxShadow: dl.urgent ? '0 0 6px rgba(211,47,47,0.4)' : 'none',
+   590→                  }} />
+   591→                </ListItemIcon>
+   592→                <ListItemText
+   593→                  primary={dl.label}
+   594→                  primaryTypographyProps={{ variant: 'body2', fontWeight: 600, fontSize: '0.8rem' }}
+   595→                  secondary={dl.sub}
+   596→                  secondaryTypographyProps={{ variant: 'caption', sx: { color: isDark ? '#6b7280' : '#9ca3af', fontSize: '0.7rem' } }}
+   597→                />
+   598→              </ListItemButton>
+   599→            ))}
+   600→          </List>
+   601→        </Paper>
+   602→      </Popover>
+   603→
+   604→      {/* Notifications Popover */}
+   605→      <Popover
+   606→        open={Boolean(notifAnchor)}
+   607→        anchorEl={notifAnchor}
+   608→        onClose={handleCloseAll}
+   609→        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+   610→        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+   611→        disableAutoFocus
+   612→        disableEnforceFocus
+   613→        slotProps={{ paper: { sx: { mt: 0.5, borderRadius: 2, border: `1px solid ${borderClr}` } } }}
+   614→      >
+   615→        <Paper sx={{ width: 380, maxHeight: 420, overflow: 'auto', bgcolor: paperBg, borderRadius: 2 }}>
+   616→          <Box sx={{
+   617→            px: 2, py: 1.5,
+   618→            display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+   619→            borderBottom: `1px solid ${borderClr}`,
+   620→          }}>
+   621→            <Typography variant="subtitle2" fontWeight="bold" fontSize="0.82rem">{t.notifications}</Typography>
+   622→            {unreadCount > 0 && (
+   623→              <Typography
+   624→                variant="caption"
+   625→                sx={{ color: '#0D7C66', cursor: 'pointer', fontSize: '0.7rem', '&:hover': { textDecoration: 'underline' } }}
+   626→                onClick={(e) => { e.stopPropagation(); markAllRead(); }}
+   627→              >
+   628→                {t.allRead}
+   629→              </Typography>
+   630→            )}
+   631→          </Box>
+   632→          <List dense sx={{ py: 0 }}>
+   633→            {notifications.slice(0, 8).map((notif) => (
+   634→              <ListItemButton
+   635→                key={notif.id}
+   636→                onClick={() => { markRead(notif.id); handleCloseAll(); if (notif.path) navigate(notif.path); }}
+   637→                sx={{
+   638→                  py: 1.1, px: 2,
+   639→                  bgcolor: notif.read ? 'transparent' : (isDark ? 'rgba(13,124,102,0.06)' : 'rgba(13,124,102,0.03)'),
+   640→                  borderLeft: notif.read ? '3px solid transparent' : '3px solid #0D7C66',
+   641→                  '&:hover': { bgcolor: hoverBg },
+   642→                  transition: 'background-color 0.2s',
+   643→                }}
+   644→              >
+   645→                <ListItemIcon sx={{ minWidth: 36 }}>
+   646→                  <Box sx={{
+   647→                    width: 30, height: 30, borderRadius: '50%',
+   648→                    bgcolor: notif.read ? chipBg : (notif.color + '12'),
+   649→                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+   650→                    color: notif.color,
+   651→                  }}>
+   652→                    {notifIconMap[notif.icon] || <NotifIcon sx={{ fontSize: 15 }} />}
+   653→                  </Box>
+   654→                </ListItemIcon>
+   655→                <ListItemText
+   656→                  primary={(
+   657→                    <Typography variant="body2" sx={{
+   658→                      fontWeight: notif.read ? 400 : 600,
+   659→                      fontSize: '0.78rem',
+   660→                      lineHeight: 1.35,
+   661→                      color: notif.read ? (isDark ? '#9ca3af' : '#6b7280') : headerColor,
+   662→                    }}>
+   663→                      {notif.msg}
+   664→                    </Typography>
+   665→                  )}
+   666→                  secondary={notif.time}
+   667→                  secondaryTypographyProps={{ variant: 'caption', sx: { mt: 0.3, fontSize: '0.65rem', color: isDark ? '#6b7280' : '#9ca3af' } }}
+   668→                />
+   669→              </ListItemButton>
+   670→            ))}
+   671→          </List>
+   672→          <Divider />
+   673→          <Box sx={{ px: 2, py: 1, textAlign: 'center' }}>
+   674→            <Typography
+   675→              variant="caption"
+   676→              sx={{ color: '#0D7C66', cursor: 'pointer', fontWeight: 600, fontSize: '0.7rem', '&:hover': { textDecoration: 'underline' } }}
+   677→              onClick={() => { handleCloseAll(); navigate('/audit'); }}
+   678→            >
+   679→              {t.seeAll}
+   680→            </Typography>
+   681→          </Box>
+   682→        </Paper>
+   683→      </Popover>
+   684→
+   685→      {/* Account Popover */}
+   686→      <Popover
+   687→        open={Boolean(accountAnchor)}
+   688→        anchorEl={accountAnchor}
+   689→        onClose={handleCloseAll}
+   690→        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+   691→        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+   692→        disableAutoFocus
+   693→        disableEnforceFocus
+   694→        slotProps={{ paper: { sx: { mt: 0.5, borderRadius: 2, border: `1px solid ${borderClr}`, overflow: 'hidden' } } }}
+   695→      >
+   696→        <Paper sx={{ width: 280, bgcolor: paperBg }}>
+   697→          <Box sx={{
+   698→            px: 2.5, py: 2,
+   699→            background: 'linear-gradient(135deg, #0D7C66 0%, #095e4d 100%)',
+   700→            color: '#fff',
+   701→          }}>
+   702→            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+   703→              <Avatar sx={{
+   704→                width: 40, height: 40,
+   705→                bgcolor: 'rgba(255,255,255,0.2)',
+   706→                fontSize: '0.9rem', fontWeight: 'bold',
+   707→              }}>
+   708→                {user.initials}
+   709→              </Avatar>
+   710→              <Box>
+   711→                <Typography variant="subtitle2" fontWeight="bold" sx={{ color: '#fff', fontSize: '0.85rem' }}>
+   712→                  {user.name}
+   713→                </Typography>
+   714→                <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.75)', fontSize: '0.7rem' }}>
+   715→                  {user.role}
+   716→                </Typography>
+   717→              </Box>
+   718→            </Box>
+   719→          </Box>
+   720→          <List dense sx={{ py: 0.5 }}>
+   721→            {accountMenuItems.map((item, idx) => (
+   722→              <ListItemButton
+   723→                key={idx}
+   724→                onClick={() => { handleCloseAll(); navigate(item.path); }}
+   725→                sx={{ borderRadius: 1.5, mx: 1, my: 0.2, py: 0.7, '&:hover': { bgcolor: hoverBg } }}
+   726→              >
+   727→                <ListItemIcon sx={{ minWidth: 36, color: headerColor }}>{item.icon}</ListItemIcon>
+   728→                <ListItemText
+   729→                  primary={item.label}
+   730→                  primaryTypographyProps={{ variant: 'body2', fontWeight: 500, fontSize: '0.8rem' }}
+   731→                  secondary={item.desc}
+   732→                  secondaryTypographyProps={{ variant: 'caption', sx: { color: isDark ? '#6b7280' : '#9ca3af', fontSize: '0.7rem' } }}
+   733→                />
+   734→              </ListItemButton>
+   735→            ))}
+   736→          </List>
+   737→          <Divider />
+   738→          <Box sx={{ px: 1.5, py: 0.5 }}>
+   739→            <ListItemButton
+   740→              sx={{ borderRadius: 1.5, py: 0.7, '&:hover': { bgcolor: '#fef2f2' } }}
+   741→              onClick={handleCloseAll}
+   742→            >
+   743→              <ListItemIcon sx={{ minWidth: 36, color: '#d32f2f' }}><LogoutIcon /></ListItemIcon>
+   744→              <ListItemText
+   745→                primary="D\u00e9connexion"
+   746→                primaryTypographyProps={{ variant: 'body2', color: '#d32f2f', fontWeight: 500, fontSize: '0.8rem' }}
+   747→              />
+   748→            </ListItemButton>
+   749→          </Box>
+   750→        </Paper>
+   751→      </Popover>
+   752→
+   753→      {/* Language Popover */}
+   754→      <Popover
+   755→        open={Boolean(langAnchor)}
+   756→        anchorEl={langAnchor}
+   757→        onClose={handleCloseAll}
+   758→        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+   759→        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+   760→        disableAutoFocus
+   761→        disableEnforceFocus
+   762→        slotProps={{ paper: { sx: { mt: 0.5, borderRadius: 2, border: `1px solid ${borderClr}`, overflow: 'hidden' } } }}
+   763→      >
+   764→        <Paper sx={{ width: 220, bgcolor: paperBg }}>
+   765→          <Box sx={{ px: 2, py: 1.5, borderBottom: `1px solid ${borderClr}` }}>
+   766→            <Typography variant="subtitle2" fontWeight="bold" fontSize="0.82rem">{t.langTitle}</Typography>
+   767→          </Box>
+   768→          <List dense sx={{ py: 0.5, maxHeight: 320, overflow: 'auto' }}>
+   769→            {languages.map((l) => (
+   770→              <ListItemButton
+   771→                key={l.code}
+   772→                onClick={() => { changeLang(l.code); handleCloseAll(); }}
+   773→                sx={{
+   774→                  borderRadius: 1.5,
+   775→                  mx: 1,
+   776→                  my: 0.15,
+   777→                  py: 0.6,
+   778→                  px: 1.5,
+   779→                  bgcolor: lang === l.code ? (isDark ? 'rgba(13,124,102,0.12)' : 'rgba(13,124,102,0.08)') : 'transparent',
+   780→                  borderLeft: lang === l.code ? '3px solid #0D7C66' : '3px solid transparent',
+   781→                  '&:hover': { bgcolor: hoverBg },
+   782→                  transition: 'all 0.15s',
+   783→                }}
+   784→              >
+   785→                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, width: '100%' }}>
+   786→                  <Box
+   787→                    component="img"
+   788→                    src={`https://flagcdn.com/w40/${l.cc}.png`}
+   789→                    srcSet={`https://flagcdn.com/w80/${l.cc}.png 2x`}
+   790→                    alt={l.label}
+   791→                    sx={{ width: 26, height: 18, objectFit: 'cover', borderRadius: 0.3, flexShrink: 0 }}
+   792→                  />
+   793→                  <Box sx={{ flexGrow: 1 }}>
+   794→                    <Typography
+   795→                      variant="body2"
+   796→                      sx={{
+   797→                        fontWeight: lang === l.code ? 600 : 400,
+   798→                        fontSize: '0.8rem',
+   799→                        color: lang === l.code ? '#0D7C66' : headerColor,
+   800→                      }}
+   801→                    >
+   802→                      {l.label}
+   803→                    </Typography>
+   804→                  </Box>
+   805→                  {lang === l.code && (
+   806→                    <CheckCircle sx={{ fontSize: 16, color: '#0D7C66', flexShrink: 0 }} />
+   807→                  )}
+   808→                </Box>
+   809→              </ListItemButton>
+   810→            ))}
+   811→          </List>
+   812→        </Paper>
+   813→      </Popover>
+   814→
+   815→      {/* Role Switcher Popover */}
+   816→      <Popover
+   817→        open={Boolean(roleAnchor)}
+   818→        anchorEl={roleAnchor}
+   819→        onClose={handleCloseAll}
+   820→        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+   821→        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+   822→        disableAutoFocus
+   823→        disableEnforceFocus
+   824→        slotProps={{ paper: { sx: { mt: 0.5, borderRadius: 2, border: `1px solid ${borderClr}`, overflow: 'hidden' } } }}
+   825→      >
+   826→        <Paper sx={{ width: 260, bgcolor: paperBg }}>
+   827→          <Box sx={{ px: 2, py: 1.5, borderBottom: `1px solid ${borderClr}` }}>
+   828→            <Typography variant="subtitle2" fontWeight="bold" fontSize="0.82rem">Vue par rôle</Typography>
+   829→            <Typography variant="caption" color="text.secondary" fontSize="0.65rem">Adapte le tableau de bord selon votre fonction</Typography>
+   830→          </Box>
+   831→          <List dense sx={{ py: 0.5 }}>
+   832→            {ROLES.map((r) => (
+   833→              <ListItemButton
+   834→                key={r.key}
+   835→                onClick={() => { changeRole(r.key); handleCloseAll(); }}
+   836→                sx={{
+   837→                  borderRadius: 1.5, mx: 1, my: 0.15, py: 1,
+   838→                  bgcolor: currentRole.key === r.key ? `${r.color}12` : 'transparent',
+   839→                  borderLeft: currentRole.key === r.key ? `3px solid ${r.color}` : '3px solid transparent',
+   840→                  '&:hover': { bgcolor: hoverBg }, transition: 'all 0.15s',
+   841→                }}
+   842→              >
+   843→                <ListItemIcon sx={{ minWidth: 36, color: r.color }}>{roleIconMap[r.icon]}</ListItemIcon>
+   844→                <ListItemText
+   845→                  primary={r.label}
+   846→                  primaryTypographyProps={{ fontWeight: currentRole.key === r.key ? 600 : 400, fontSize: '0.8rem', color: currentRole.key === r.key ? r.color : headerColor }}
+   847→                  secondary={r.desc}
+   848→                  secondaryTypographyProps={{ variant: 'caption', fontSize: '0.65rem' }}
+   849→                />
+   850→                {currentRole.key === r.key && <CheckCircle sx={{ fontSize: 16, color: r.color }} />}
+   851→              </ListItemButton>
+   852→            ))}
+   853→          </List>
+   854→        </Paper>
+   855→      </Popover>
+   856→
+   857→    </Box>
+   858→  );
+   859→}
+   860→
