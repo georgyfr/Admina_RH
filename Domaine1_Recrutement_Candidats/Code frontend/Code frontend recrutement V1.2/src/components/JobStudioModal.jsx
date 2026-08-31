@@ -1,6 +1,4 @@
 import { useState, useRef, useMemo, useEffect, useCallback } from 'react';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
 import {
   Dialog, DialogTitle, DialogContent, DialogActions,
   Button, TextField, MenuItem, Box, IconButton, Typography,
@@ -28,13 +26,7 @@ const addDays = (iso, n) => { if (!iso) return ''; const d = new Date(iso); d.se
 const toFrDate = (iso) => { if (!iso) return ''; const [y, m, d] = iso.split('-'); return `${d}/${m}/${y}`; };
 const stripHtml = (h) => { if (!h) return ''; const t = document.createElement('div'); t.innerHTML = h; return t.textContent || ''; };
 
-const QUILL_MODULES = {
-  toolbar: [
-    ['bold', 'italic', 'underline'],
-    [{ list: 'ordered' }, { list: 'bullet' }],
-    [{ header: [1, 2, 3, false] }],
-  ],
-};
+
 
 const INITIAL_FORM = {
   intitule: '', departement: '', typePoste: '', typeContrat: '', priorite: '', site: 'Siege (Douala)',
@@ -181,8 +173,8 @@ export default function JobStudioModal({ open, onClose, onSubmit, responsablesLi
   const preview = useMemo(() => ({
     intitule: form.intitule || 'Poste a definir',
     departement: form.departement, typePoste: form.typePoste, typeContrat: form.typeContrat,
-    contexteHtml: form.contexte,
-    contexteText: stripHtml(form.contexte),
+    contexteHtml: '',
+    contexteText: form.contexte || '',
     missions: form.missions.filter((m) => m.text?.trim()),
     niveauEtude: form.niveauEtude, experience: form.experience,
     hardSkills: form.hardSkills, softSkills: form.softSkills, langues: form.langues,
@@ -259,9 +251,15 @@ export default function JobStudioModal({ open, onClose, onSubmit, responsablesLi
           </Box>
 
           <SectionHeader icon={<Typography variant="body2">2.</Typography>}>Contexte & Analyse du Besoin</SectionHeader>
-          <Box sx={{ '& .ql-toolbar': { borderRadius: '4px 4px 0 0', borderColor: 'divider' }, '& .ql-container': { borderRadius: '0 0 4px 4px', borderColor: 'divider', minHeight: 120, fontSize: '0.9rem', fontFamily: 'inherit' }, '& .ql-editor': { minHeight: 120 } }}>
-            <ReactQuill theme="snow" modules={QUILL_MODULES} value={form.contexte} onChange={(val) => h('contexte', val)} placeholder="Decrivez l'equipe, les enjeux et les raisons du recrutement..." />
-          </Box>
+          <TextField
+            multiline
+            rows={6}
+            fullWidth
+            value={form.contexte}
+            onChange={(e) => h('contexte', e.target.value)}
+            placeholder="Decrivez l'equipe, les enjeux et les raisons du recrutement..."
+            sx={{ '& textarea': { fontSize: '0.9rem' } }}
+          />
 
           <SectionHeader icon={<Typography variant="body2">3.</Typography>}>Missions & Responsabilites Principales</SectionHeader>
           <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
@@ -364,10 +362,10 @@ export default function JobStudioModal({ open, onClose, onSubmit, responsablesLi
                 {[preview.departement, preview.typePoste, preview.typeContrat].filter(Boolean).join(' | ')}
               </Typography>
             </Box>
-            {preview.contexteHtml && (
+            {preview.contexteText && (
               <Box sx={{ mb: 2 }}>
                 <Typography variant="subtitle2" fontWeight="bold" sx={{ fontSize: '0.82rem', color: '#0D7C66', mb: 0.5 }}>Contexte</Typography>
-                <Box sx={{ fontSize: '0.82rem', color: 'text.secondary', lineHeight: 1.6, '& p': { m: 0 }, '& ul, & ol': { pl: 2 } }} dangerouslySetInnerHTML={{ __html: preview.contexteHtml }} />
+                <Typography variant="body2" sx={{ fontSize: '0.82rem', color: 'text.secondary', lineHeight: 1.6, whiteSpace: 'pre-wrap' }}>{preview.contexteText}</Typography>
               </Box>
             )}
             {preview.missions.length > 0 && (
