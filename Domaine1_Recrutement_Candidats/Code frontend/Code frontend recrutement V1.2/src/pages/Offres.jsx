@@ -12,7 +12,7 @@ import {
   AccountBalanceWallet, Publish, Campaign, ArrowForward, Work,
   Create, Groups, AccessTime, Visibility, Delete, Archive,
   MoreVert, CheckCircle, KeyboardArrowDown, WarningAmber,
-  Search, SearchOff, FilterListOff, AutoAwesome
+  Search, SearchOff, FilterListOff, AutoAwesome, DragIndicator
 } from '@mui/icons-material';
 import KPICard from '../components/KPICard';
 import AddDialog from '../components/AddDialog';
