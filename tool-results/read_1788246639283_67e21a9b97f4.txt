@@ -1,0 +1,1289 @@
+     1→import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
+     2→import { useSearchParams } from 'react-router-dom';
+     3→import {
+     4→  Box, Typography, Button, Table, TableBody, TableCell, TableContainer, TableHead,
+     5→  TableRow, TablePagination, Chip, FormControl, Select, MenuItem, Tooltip, Paper,
+     6→  Drawer, Divider, IconButton, TextField, Avatar, Alert, Snackbar,
+     7→  Stack, InputAdornment, Badge, Menu, CircularProgress, Dialog, DialogTitle,
+     8→  DialogContent, DialogActions, Popover, Fade
+     9→} from '@mui/material';
+    10→import {
+    11→  Add, Download, Close, Save, Edit, CalendarToday, Person,
+    12→  AccountBalanceWallet, Publish, Campaign, ArrowForward, Work,
+    13→  Create, Groups, AccessTime, Visibility, Delete, Archive,
+    14→  MoreVert, CheckCircle, KeyboardArrowDown, WarningAmber,
+    15→  Search, SearchOff, FilterListOff, AutoAwesome
+    16→} from '@mui/icons-material';
+    17→import KPICard from '../components/KPICard';
+    18→import AddDialog from '../components/AddDialog';
+    19→import NouvelleOffreStepper from '../components/NouvelleOffreStepper';
+    20→import JobStudioModal from '../components/JobStudioModal';
+    21→import { nomenclatures } from '../data/nomenclatures';
+    22→
+    23→const formatFCFA = (a) => (!a && a !== 0) ? '\u2014' : a.toLocaleString('fr-FR') + ' FCFA';
+    24→
+    25→/* \u2550\u2550\u2550 HOOK DEBOUNCE \u2550\u2550\u2550 */
+    26→function useDebounce(value, delay) {
+    27→  const [debounced, setDebounced] = useState(value);
+    28→  useEffect(() => {
+    29→    const t = setTimeout(() => setDebounced(value), delay);
+    30→    return () => clearTimeout(t);
+    31→  }, [value, delay]);
+    32→  return debounced;
+    33→}
+    34→
+    35→/* ═══ COULEURS ═══ */
+    36→const statutOffreColor = {
+    37→  'A creer': 'default',
+    38→  'Publiee': 'primary',
+    39→  'Candidatures en cours': 'warning',
+    40→  'Cloturee': 'success',
+    41→  'Annulee': 'error',
+    42→};
+    43→const prioriteColor = {
+    44→  'Urgente': 'error',
+    45→  'Haute': 'warning',
+    46→  'Moyenne': 'info',
+    47→  'Basse': 'default',
+    48→};
+    49→
+    50→/* ═══ DONNÉES INITIALES ═══ */
+    51→const initialData = [
+    52→  { id: 1, numero: 'OF-2025-001', intitule: 'Chef Cuisinier', departement: 'Restauration', typePoste: 'Cadre', typeContrat: 'CDI',
+    53→    canalDiffusion: 'Site web', statutOffre: 'Publiee', datePublication: '20/01/2025', dateCloture: '20/02/2025',
+    54→    dateRequise: '01/02/2025', responsable: 'M. Nkoulou Paul', roleResponsable: 'DRH',
+    55→    priorite: 'Urgente', budgetAlloue: 500000, salaireMin: 350000, salaireMax: 450000,
+    56→    nbCandidatures: 12, nbCandidaturesRecues: 8,
+    57→    candidatsAssocies: [
+    58→      { nom: 'Kamga Marie', score: 17, etatCandidature: 'Entretien realise', source: 'Cabinet' },
+    59→      { nom: 'Tchinda Jean', score: 14, etatCandidature: 'En cours d\'etude', source: 'Site web' },
+    60→      { nom: 'Fotso Anne', score: 19, etatCandidature: 'Retenu', source: 'Cooptation' },
+    61→    ],
+    62→    description: 'Recherchons un Chef Cuisinier experimente pour diriger la brigade de cuisine de l\'Hotel Sawa. Experience minimale 5 ans en hotellerie.',
+    63→    historique: [
+    64→      { date: '15/01/2025', evenement: 'Offre creee a partir de la demande DR-2025-001', auteur: 'M. Nkoulou Paul', type: 'creation' },
+    65→      { date: '20/01/2025', evenement: 'Offre publiee sur le site web', auteur: 'DRH', type: 'publication' },
+    66→      { date: '25/01/2025', evenement: '8 candidatures recues', auteur: 'Systeme', type: 'candidature' },
+    67→    ],
+    68→    site: 'Hotel Sawa',
+    69→  },
+    70→  { id: 2, numero: 'OF-2025-002', intitule: 'Responsable Marketing', departement: 'Marketing & Communication', typePoste: 'Cadre', typeContrat: 'CDI',
+    71→    canalDiffusion: 'LinkedIn', statutOffre: 'Candidatures en cours', datePublication: '01/02/2025', dateCloture: '15/03/2025',
+    72→    dateRequise: '01/04/2025', responsable: 'Mme. Mbarga Sophie', roleResponsable: 'Directrice Marketing',
+    73→    priorite: 'Haute', budgetAlloue: 800000, salaireMin: 600000, salaireMax: 750000,
+    74→    nbCandidatures: 25, nbCandidaturesRecues: 18,
+    75→    candidatsAssocies: [
+    76→      { nom: 'Nganou Yves', score: 15, etatCandidature: 'Entretien planifie', source: 'LinkedIn' },
+    77→      { nom: 'Epoh Clarisse', score: 16, etatCandidature: 'Entretien realise', source: 'Reseaux sociaux' },
+    78→    ],
+    79→    description: 'Poste de responsable pour piloter la strategie marketing digitale et traditionnelle du groupe. Competences en SEO/SEM requises.',
+    80→    historique: [
+    81→      { date: '28/01/2025', evenement: 'Offre creee', auteur: 'Mme. Mbarga Sophie', type: 'creation' },
+    82→      { date: '01/02/2025', evenement: 'Publication LinkedIn + Facebook', auteur: 'DRH', type: 'publication' },
+    83→    ],
+    84→    site: 'Siege (Douala)',
+    85→  },
+    86→  { id: 3, numero: 'OF-2025-003', intitule: 'Technicien de Maintenance', departement: 'Maintenance', typePoste: 'Agent de maitrise', typeContrat: 'CDI',
+    87→    canalDiffusion: 'Presse ecrite', statutOffre: 'Cloturee', datePublication: '10/01/2025', dateCloture: '10/02/2025',
+    88→    dateRequise: '01/03/2025', responsable: 'M. Essomba Andre', roleResponsable: 'Chef de Departement',
+    89→    priorite: 'Moyenne', budgetAlloue: 250000, salaireMin: 180000, salaireMax: 220000,
+    90→    nbCandidatures: 30, nbCandidaturesRecues: 30,
+    91→    candidatsAssocies: [
+    92→      { nom: 'Ngo Meli Patrick', score: 13, etatCandidature: 'Retenu', source: 'Presse ecrite' },
+    93→      { nom: 'Happi Brice', score: 11, etatCandidature: 'Refuse', source: 'Candidature spontanee' },
+    94→      { nom: 'Tcheumeni Kevin', score: 12, etatCandidature: 'En reserve', source: 'Presse ecrite' },
+    95→    ],
+    96→    description: 'Technicien polyvalent pour la maintenance courante des equipements hoteliers. CAGEC ou equivalent requis.',
+    97→    historique: [
+    98→      { date: '05/01/2025', evenement: 'Offre creee', auteur: 'M. Essomba Andre', type: 'creation' },
+    99→      { date: '10/01/2025', evenement: 'Publication presse', auteur: 'DRH', type: 'publication' },
+   100→      { date: '10/02/2025', evenement: 'Cloture de l\'offre - 30 candidatures', auteur: 'Systeme', type: 'cloture' },
+   101→      { date: '20/02/2025', evenement: 'Candidat retenu : Ngo Meli Patrick', auteur: 'DRH', type: 'selection' },
+   102→    ],
+   103→    site: 'Annexe (Yaounde)',
+   104→  },
+   105→  { id: 4, numero: 'OF-2025-004', intitule: 'Receptionniste Nuit', departement: 'Herbergement', typePoste: 'Operationnel', typeContrat: 'CDD',
+   106→    canalDiffusion: 'Site web', statutOffre: 'Publiee', datePublication: '15/02/2025', dateCloture: '15/03/2025',
+   107→    dateRequise: '01/03/2025', responsable: 'M. Nkoulou Paul', roleResponsable: 'DRH',
+   108→    priorite: 'Haute', budgetAlloue: 200000, salaireMin: 150000, salaireMax: 180000,
+   109→    nbCandidatures: 8, nbCandidaturesRecues: 5,
+   110→    candidatsAssocies: [
+   111→      { nom: 'Kouamo Lea', score: 14, etatCandidature: 'En cours d\'etude', source: 'Site web' },
+   112→    ],
+   113→    description: 'Receptionniste pour le service de nuit a l\'Hotel Sawa. Anglais courant indispensable.',
+   114→    historique: [
+   115→      { date: '12/02/2025', evenement: 'Offre creee', auteur: 'M. Nkoulou Paul', type: 'creation' },
+   116→      { date: '15/02/2025', evenement: 'Publication site web', auteur: 'DRH', type: 'publication' },
+   117→    ],
+   118→    site: 'Hotel Sawa',
+   119→  },
+   120→  { id: 5, numero: 'OF-2025-005', intitule: 'Developpeur Full-Stack', departement: 'Informatique', typePoste: 'Cadre', typeContrat: 'CDI',
+   121→    canalDiffusion: 'LinkedIn', statutOffre: 'A creer', datePublication: '', dateCloture: '',
+   122→    dateRequise: '01/04/2025', responsable: 'M. Tchinda Rene', roleResponsable: 'DSI',
+   123→    priorite: 'Urgente', budgetAlloue: 1200000, salaireMin: 900000, salaireMax: 1100000,
+   124→    nbCandidatures: 0, nbCandidaturesRecues: 0,
+   125→    candidatsAssocies: [],
+   126→    description: 'Developpeur Full-Stack pour le projet de transformation digitale. React, Node.js, PostgreSQL requis.',
+   127→    historique: [
+   128→      { date: '25/02/2025', evenement: 'Offre en cours de redaction', auteur: 'M. Tchinda Rene', type: 'creation' },
+   129→    ],
+   130→    site: 'Siege (Douala)',
+   131→  },
+   132→  { id: 6, numero: 'OF-2025-006', intitule: 'Agent de Securite', departement: 'Securite', typePoste: 'Operationnel', typeContrat: 'CDI',
+   133→    canalDiffusion: 'Affichage', statutOffre: 'Annulee', datePublication: '', dateCloture: '',
+   134→    dateRequise: '01/03/2025', responsable: 'M. Fotso Victor', roleResponsable: 'Chef de Service Securite',
+   135→    priorite: 'Basse', budgetAlloue: 150000, salaireMin: 120000, salaireMax: 140000,
+   136→    nbCandidatures: 0, nbCandidaturesRecues: 0,
+   137→    candidatsAssocies: [],
+   138→    description: 'Poste annule - reorganisation du service de securite interne.',
+   139→    historique: [
+   140→      { date: '10/02/2025', evenement: 'Offre creee', auteur: 'M. Fotso Victor', type: 'creation' },
+   141→      { date: '18/02/2025', evenement: 'Offre annulee - reorganisation', auteur: 'DSI', type: 'annulation' },
+   142→    ],
+   143→    site: 'Siege (Douala)',
+   144→  },
+   145→  { id: 7, numero: 'OF-2025-007', intitule: 'Comptable Senior', departement: 'Finance & Comptabilite', typePoste: 'Cadre', typeContrat: 'CDI',
+   146→    canalDiffusion: 'Cabinet', statutOffre: 'Candidatures en cours', datePublication: '05/02/2025', dateCloture: '05/04/2025',
+   147→    dateRequise: '01/05/2025', responsable: 'Mme. Ngassa Clarisse', roleResponsable: 'Directrice Financiere',
+   148→    priorite: 'Haute', budgetAlloue: 700000, salaireMin: 500000, salaireMax: 650000,
+   149→    nbCandidatures: 15, nbCandidaturesRecues: 9,
+   150→    candidatsAssocies: [
+   151→      { nom: 'Djoumessi Franck', score: 18, etatCandidature: 'Entretien realise', source: 'Cabinet' },
+   152→      { nom: 'Mbassi Carine', score: 15, etatCandidature: 'En cours d\'etude', source: 'Cabinet' },
+   153→      { nom: 'Atangana Paul', score: 16, etatCandidature: 'Entretien planifie', source: 'LinkedIn' },
+   154→    ],
+   155→    description: 'Comptable avec experience en hotellerie/tourisme. Maitrise de Sage comptable et Excel avance.',
+   156→    historique: [
+   157→      { date: '01/02/2025', evenement: 'Offre creee', auteur: 'Mme. Ngassa Clarisse', type: 'creation' },
+   158→      { date: '05/02/2025', evenement: 'Mandat confie au cabinet HRC Cameroon', auteur: 'DRH', type: 'cabinet' },
+   159→    ],
+   160→    site: 'Siege (Douala)',
+   161→  },
+   162→  { id: 8, numero: 'OF-2025-008', intitule: 'Plongeur', departement: 'Restauration', typePoste: 'Operationnel', typeContrat: 'CDD',
+   163→    canalDiffusion: 'Affichage', statutOffre: 'Cloturee', datePublication: '01/01/2025', dateCloture: '15/01/2025',
+   164→    dateRequise: '01/02/2025', responsable: 'M. Nkoulou Paul', roleResponsable: 'DRH',
+   165→    priorite: 'Moyenne', budgetAlloue: 100000, salaireMin: 75000, salaireMax: 90000,
+   166→    nbCandidatures: 20, nbCandidaturesRecues: 20,
+   167→    candidatsAssocies: [
+   168→      { nom: 'Mbane Joseph', score: null, etatCandidature: 'Retenu', source: 'Affichage' },
+   169→    ],
+   170→    description: 'Plongeur pour la cuisine de l\'Hotel Sawa. Aucune qualification requise.',
+   171→    historique: [
+   172→      { date: '28/12/2024', evenement: 'Offre creee', auteur: 'M. Nkoulou Paul', type: 'creation' },
+   173→      { date: '01/01/2025', evenement: 'Publication par affichage', auteur: 'DRH', type: 'publication' },
+   174→      { date: '15/01/2025', evenement: 'Cloture - candidat retenu', auteur: 'DRH', type: 'cloture' },
+   175→    ],
+   176→    site: 'Hotel Sawa',
+   177→  },
+   178→];
+   179→
+   180→/* ═══ RESPONSABLES AVEC AVATARS ═══ */
+   181→const responsablesList = [
+   182→  { nom: 'M. Nkoulou Paul', role: 'DRH', initials: 'NP', color: '#0D7C66' },
+   183→  { nom: 'Mme. Mbarga Sophie', role: 'Directrice Marketing', initials: 'MS', color: '#1976d2' },
+   184→  { nom: 'M. Essomba Andre', role: 'Chef de Departement', initials: 'EA', color: '#f57c00' },
+   185→  { nom: 'M. Tchinda Rene', role: 'DSI', initials: 'TR', color: '#7b1fa2' },
+   186→  { nom: 'M. Fotso Victor', role: 'Chef de Service Securite', initials: 'FV', color: '#c62828' },
+   187→  { nom: 'Mme. Ngassa Clarisse', role: 'Directrice Financiere', initials: 'NC', color: '#00838f' },
+   188→];
+   189→
+   190→/* ═══ HISTOIRE COLORS ═══ */
+   191→const histColor = {
+   192→  creation: '#1976d2', publication: '#0D7C66', candidature: '#f57c00',
+   193→  cloture: '#9e9e9e', selection: '#2e7d32', annulation: '#d32f2f', cabinet: '#7b1fa2',
+   194→  modification: '#0288d1',
+   195→};
+   196→
+   197→/* ═══ CANDIDAT STATE COLOR ═══ */
+   198→const candidatEtatColor = {
+   199→  'Entretien planifie': 'info',
+   200→  'Entretien realise': 'warning',
+   201→  'En cours d\'etude': 'default',
+   202→  'Retenu': 'success',
+   203→  'Refuse': 'error',
+   204→  'En reserve': 'default',
+   205→};
+   206→
+   207→/* ═══ STATUTS DANGEREUX (nécessitent confirmation) ═══ */
+   208→const dangerousStatuses = ['Annulee', 'Cloturee'];
+   209→
+   210→/* ═══ COMPOSANT QUICK STATUS CHIP MENU ═══ */
+   211→function StatusChipMenu({ offre, onStatutChange, loadingId, loadingStatut }) {
+   212→  const [anchorEl, setAnchorEl] = useState(null);
+   213→  const [confirmAnchor, setConfirmAnchor] = useState(null);
+   214→  const [pendingStatut, setPendingStatut] = useState(null);
+   215→  const open = Boolean(anchorEl);
+   216→  const isLoading = loadingId === offre.id;
+   217→  const currentColor = statutOffreColor[offre.statutOffre] || 'default';
+   218→
+   219→  const handleClick = (e) => { e.stopPropagation(); setAnchorEl(e.currentTarget); };
+   220→  const handleClose = () => { setAnchorEl(null); setConfirmAnchor(null); setPendingStatut(null); };
+   221→
+   222→  const handleSelect = (e, newStatut) => {
+   223→    e.stopPropagation();
+   224→    setAnchorEl(null);
+   225→    if (newStatut === offre.statutOffre) return;
+   226→    if (dangerousStatuses.includes(newStatut)) { setPendingStatut(newStatut); setConfirmAnchor(e.currentTarget); return; }
+   227→    onStatutChange(offre.id, newStatut);
+   228→  };
+   229→
+   230→  const handleConfirm = (e) => {
+   231→    e.stopPropagation(); setConfirmAnchor(null);
+   232→    if (pendingStatut) { onStatutChange(offre.id, pendingStatut); setPendingStatut(null); }
+   233→  };
+   234→  const handleCancelConfirm = (e) => { e.stopPropagation(); setConfirmAnchor(null); setPendingStatut(null); };
+   235→
+   236→  const statusDotColor = { 'A creer': '#9e9e9e', 'Publiee': '#2e7d32', 'Candidatures en cours': '#f57f17', 'Cloturee': '#616161', 'Annulee': '#d32f2f' };
+   237→
+   238→  const chipEl = (
+   239→    <Chip
+   240→      icon={isLoading ? <CircularProgress size={14} sx={{ color: 'inherit', ml: 0.5 }} /> : undefined}
+   241→      label={isLoading && loadingStatut ? loadingStatut : offre.statutOffre}
+   242→      color={isLoading ? 'default' : currentColor}
+   243→      size="small" onClick={handleClick} onDelete={handleClick}
+   244→      deleteIcon={<KeyboardArrowDown sx={{ fontSize: 16, color: 'inherit' }} />}
+   245→      sx={{ fontWeight: 600, height: 26, fontSize: '0.75rem', cursor: 'pointer', transition: 'all 0.2s' }}
+   246→      aria-expanded={open} aria-haspopup="true" role="button" tabIndex={0}
+   247→      onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick(e); } }}
+   248→    />
+   249→  );
+   250→
+   251→  const menuEl = (
+   252→    <Menu anchorEl={anchorEl} open={open} onClose={handleClose}
+   253→      PaperProps={{ sx: { minWidth: 200, py: 0.5, borderRadius: 2 } }} transitionDuration={150}
+   254→    >
+   255→      <Typography variant="caption" sx={{ px: 2, py: 0.5, display: 'block', fontWeight: 700, color: 'text.secondary', fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: 1 }}>Changer le statut</Typography>
+   256→      {nomenclatures.statut_offre.map(s => {
+   257→        const isActive = s === offre.statutOffre;
+   258→        const dot = statusDotColor[s] || '#9e9e9e';
+   259→        return (
+   260→          <MenuItem key={s} value={s} onClick={(e) => handleSelect(e, s)} selected={isActive} disabled={isActive}
+   261→            sx={{ py: 0.8, px: 1.5, gap: 1.5, fontSize: '0.85rem' }}
+   262→          >
+   263→            <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: dot, flexShrink: 0 }} />
+   264→            {s}
+   265→            {isActive && <CheckCircle sx={{ fontSize: 16, ml: 'auto', color: '#1976d2' }} />}
+   266→          </MenuItem>
+   267→        );
+   268→      })}
+   269→    </Menu>
+   270→  );
+   271→
+   272→  const confirmMsg = pendingStatut === 'Annulee' ? 'Etes-vous sur de vouloir annuler cette offre ?' : 'Etes-vous sur de vouloir clore cette offre ?';
+   273→  const confirmBtnColor = pendingStatut === 'Annulee' ? '#d32f2f' : '#616161';
+   274→
+   275→  const popoverEl = (
+   276→    <Popover anchorEl={confirmAnchor} open={Boolean(confirmAnchor)} onClose={handleCancelConfirm}
+   277→      anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} transformOrigin={{ vertical: 'top', horizontal: 'center' }}
+   278→      PaperProps={{ sx: { borderRadius: 2, p: 2, maxWidth: 280 } }} disablePortal
+   279→    >
+   280→      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1.5 }}>
+   281→        <WarningAmber sx={{ fontSize: 20, color: pendingStatut === 'Annulee' ? '#d32f2f' : '#f57f17' }} />
+   282→        <Typography variant="subtitle2" fontWeight="bold" sx={{ fontSize: '0.85rem' }}>Confirmer le changement</Typography>
+   283→      </Box>
+   284→      <Typography variant="body2" sx={{ fontSize: '0.82rem', color: 'text.secondary', mb: 2, lineHeight: 1.5 }}>{confirmMsg}</Typography>
+   285→      <Box sx={{ display: 'flex', gap: 1, justifyContent: 'flex-end' }}>
+   286→        <Button size="small" onClick={handleCancelConfirm} sx={{ textTransform: 'none', fontSize: '0.8rem' }}>Annuler</Button>
+   287→        <Button size="small" variant="contained" onClick={handleConfirm} sx={{ textTransform: 'none', fontSize: '0.8rem', fontWeight: 600, bgcolor: confirmBtnColor }}>Confirmer</Button>
+   288→      </Box>
+   289→    </Popover>
+   290→  );
+   291→
+   292→  return <>{chipEl}{menuEl}{popoverEl}</>;
+   293→}
+   294→
+   295→/* ═══ COMPOSANT QUICK ACTION BUTTONS (ligne) ═══ */
+   296→function QuickActions({ offre, onView, onArchive, onDelete }) {
+   297→  return (
+   298→    <Stack direction="row" spacing={0.3} onClick={e => e.stopPropagation()}>
+   299→      <Tooltip title="Voir / Editer" arrow placement="top">
+   300→        <IconButton
+   301→          size="small"
+   302→          onClick={(e) => { e.stopPropagation(); onView(offre); }}
+   303→          sx={{ color: '#1976d2', '&:hover': { bgcolor: 'rgba(25,118,210,0.08)' } }}
+   304→          aria-label={`Voir l'offre ${offre.numero}`}
+   305→        >
+   306→          <Visibility sx={{ fontSize: 18 }} />
+   307→        </IconButton>
+   308→      </Tooltip>
+   309→      <Tooltip title="Archiver" arrow placement="top">
+   310→        <IconButton
+   311→          size="small"
+   312→          onClick={(e) => { e.stopPropagation(); onArchive(offre); }}
+   313→          sx={{ color: '#f57f17', '&:hover': { bgcolor: 'rgba(245,127,23,0.08)' } }}
+   314→          aria-label={`Archiver l'offre ${offre.numero}`}
+   315→        >
+   316→          <Archive sx={{ fontSize: 17 }} />
+   317→        </IconButton>
+   318→      </Tooltip>
+   319→      <Tooltip title="Supprimer" arrow placement="top">
+   320→        <IconButton
+   321→          size="small"
+   322→          onClick={(e) => { e.stopPropagation(); onDelete(offre); }}
+   323→          sx={{ color: '#d32f2f', '&:hover': { bgcolor: 'rgba(211,47,47,0.08)' } }}
+   324→          aria-label={`Supprimer l'offre ${offre.numero}`}
+   325→        >
+   326→          <Delete sx={{ fontSize: 17 }} />
+   327→        </IconButton>
+   328→      </Tooltip>
+   329→    </Stack>
+   330→  );
+   331→}
+   332→
+   333→/* ═══ TABLEAU COLONNES ═══ */
+   334→
+   335→/* Columnne de tableau draggable */
+   336→function SortableColHeader({ col }) {
+   337→  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: col.key });
+   338→  const style = {
+   339→    transform: CSS.Transform.toString(transform),
+   340→    transition,
+   341→    opacity: isDragging ? 0.5 : 1,
+   342→  };
+   343→  return (
+   344→    <TableCell ref={setNodeRef} style={style} sx={{ fontWeight: 'bold', bgcolor: '#f5f5f5', whiteSpace: 'nowrap', width: col.width, cursor: 'grab' }}>
+   345→      <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }} {...attributes} {...listeners}>
+   346→        <DragIndicator sx={{ fontSize: 14, color: 'grey.500' }} />
+   347→        {col.label}
+   348→      </Box>
+   349→    </TableCell>
+   350→  );
+   351→}
+   352→const INITIAL_TABLE_COLS = [
+   353→  { key: 'numero', label: 'N° Offre', width: 110 },
+   354→  { key: 'datePublication', label: 'Publication', width: 95 },
+   355→  { key: 'departement', label: 'Département', width: 145, chip: true },
+   356→  { key: 'intitule', label: 'Intitulé du Poste', width: 200 },
+   357→  { key: 'canalDiffusion', label: 'Canal', width: 110 },
+   358→  { key: 'nbCandidaturesRecues', label: 'Candidatures', width: 90 },
+   359→  { key: 'responsable', label: 'Responsable', width: 150 },
+   360→];
+   361→
+   362→/* ═══ COMPOSANT CHAMP ÉDITABLE ═══ */
+   363→function EditableField({ label, value, type = 'text', editKey, editing, onEdit, onChange, options, disabled, endAdornment, multiline }) {
+   364→  if (type === 'select') {
+   365→    return (
+   366→      <Box sx={{ mb: 2 }}>
+   367→        <Box sx={{ display: 'flex', alignItems: 'center', mb: 0.5, gap: 0.5 }}>
+   368→          <Typography variant="caption" sx={{ fontSize: '0.7rem', fontWeight: 600, color: 'text.secondary', textTransform: 'uppercase', letterSpacing: 0.5 }}>{label}</Typography>
+   369→          {!disabled && <Edit sx={{ fontSize: 13, color: 'text.disabled', cursor: 'pointer', '&:hover': { color: 'primary.main' } }} onClick={() => onEdit(editKey)} />}
+   370→        </Box>
+   371→        <FormControl size="small" fullWidth disabled={disabled}>
+   372→          <Select
+   373→            value={value || ''}
+   374→            onChange={e => onChange(editKey, e.target.value)}
+   375→            sx={{
+   376→              bgcolor: editing === editKey ? '#fffde7' : 'transparent',
+   377→              '& .MuiSelect-select': { fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: 1 },
+   378→              transition: 'background-color 0.2s',
+   379→            }}
+   380→            renderValue={(v) => (
+   381→              <Chip
+   382→                label={v}
+   383→                size="small"
+   384→                color={options?.colorMap?.[v] || 'default'}
+   385→                sx={{ fontWeight: 600, height: 26, fontSize: '0.78rem' }}
+   386→              />
+   387→            )}
+   388→          >
+   389→            {(options?.list || []).map(opt => (
+   390→              <MenuItem key={opt} value={opt} sx={{ fontSize: '0.85rem' }}>{opt}</MenuItem>
+   391→            ))}
+   392→          </Select>
+   393→        </FormControl>
+   394→      </Box>
+   395→    );
+   396→  }
+   397→
+   398→  if (type === 'date') {
+   399→    return (
+   400→      <Box sx={{ mb: 2 }}>
+   401→        <Box sx={{ display: 'flex', alignItems: 'center', mb: 0.5, gap: 0.5 }}>
+   402→          <Typography variant="caption" sx={{ fontSize: '0.7rem', fontWeight: 600, color: 'text.secondary', textTransform: 'uppercase', letterSpacing: 0.5 }}>{label}</Typography>
+   403→          {!disabled && <Edit sx={{ fontSize: 13, color: 'text.disabled', cursor: 'pointer', '&:hover': { color: 'primary.main' } }} onClick={() => onEdit(editKey)} />}
+   404→        </Box>
+   405→        <TextField
+   406→          size="small"
+   407→          type="date"
+   408→          fullWidth
+   409→          value={value || ''}
+   410→          onChange={e => onChange(editKey, e.target.value)}
+   411→          disabled={disabled}
+   412→          InputProps={{
+   413→            startAdornment: <InputAdornment position="start"><CalendarToday sx={{ fontSize: 16, color: 'action.active' }} /></InputAdornment>,
+   414→            sx: { fontSize: '0.85rem' },
+   415→          }}
+   416→          sx={{
+   417→            '& input': { fontSize: '0.85rem' },
+   418→            bgcolor: editing === editKey ? '#fffde7' : 'transparent',
+   419→            transition: 'background-color 0.2s',
+   420→          }}
+   421→        />
+   422→      </Box>
+   423→    );
+   424→  }
+   425→
+   426→  if (type === 'number') {
+   427→    return (
+   428→      <Box sx={{ mb: 2 }}>
+   429→        <Box sx={{ display: 'flex', alignItems: 'center', mb: 0.5, gap: 0.5 }}>
+   430→          <Typography variant="caption" sx={{ fontSize: '0.7rem', fontWeight: 600, color: 'text.secondary', textTransform: 'uppercase', letterSpacing: 0.5 }}>{label}</Typography>
+   431→          {!disabled && <Edit sx={{ fontSize: 13, color: 'text.disabled', cursor: 'pointer', '&:hover': { color: 'primary.main' } }} onClick={() => onEdit(editKey)} />}
+   432→        </Box>
+   433→        <TextField
+   434→          size="small"
+   435→          type="number"
+   436→          fullWidth
+   437→          value={value ?? ''}
+   438→          onChange={e => onChange(editKey, e.target.value ? Number(e.target.value) : '')}
+   439→          disabled={disabled}
+   440→          InputProps={{
+   441→            endAdornment: endAdornment ? <InputAdornment position="end">{endAdornment}</InputAdornment> : null,
+   442→            sx: { fontSize: '0.85rem' },
+   443→            inputProps: { min: 0 },
+   444→          }}
+   445→          sx={{
+   446→            '& input': { fontSize: '0.85rem' },
+   447→            bgcolor: editing === editKey ? '#fffde7' : 'transparent',
+   448→            transition: 'background-color 0.2s',
+   449→          }}
+   450→        />
+   451→      </Box>
+   452→    );
+   453→  }
+   454→
+   455→  return (
+   456→    <Box sx={{ mb: 2 }}>
+   457→      <Box sx={{ display: 'flex', alignItems: 'center', mb: 0.5, gap: 0.5 }}>
+   458→        <Typography variant="caption" sx={{ fontSize: '0.7rem', fontWeight: 600, color: 'text.secondary', textTransform: 'uppercase', letterSpacing: 0.5 }}>{label}</Typography>
+   459→        {!disabled && <Edit sx={{ fontSize: 13, color: 'text.disabled', cursor: 'pointer', '&:hover': { color: 'primary.main' } }} onClick={() => onEdit(editKey)} />}
+   460→      </Box>
+   461→      <TextField
+   462→        size="small"
+   463→        fullWidth
+   464→        value={value || ''}
+   465→        onChange={e => onChange(editKey, e.target.value)}
+   466→        disabled={disabled}
+   467→        multiline={multiline}
+   468→        rows={multiline ? 3 : 1}
+   469→        sx={{
+   470→          '& textarea, & input': { fontSize: '0.85rem' },
+   471→          bgcolor: editing === editKey ? '#fffde7' : 'transparent',
+   472→          transition: 'background-color 0.2s',
+   473→        }}
+   474→      />
+   475→    </Box>
+   476→  );
+   477→}
+   478→
+   479→/* ═══ DRAWER D'ÉDITION INTERACTIVE ═══ */
+   480→function OffreDrawer({ offre, open, onClose, onSave }) {
+   481→  const [form, setForm] = useState({});
+   482→  const [editing, setEditing] = useState(null);
+   483→  const [hasChanges, setHasChanges] = useState(false);
+   484→
+   485→  /* Synchroniser le formulaire quand l'offre change */
+   486→  useEffect(() => {
+   487→    if (offre) {
+   488→      setForm({
+   489→        numero: offre.numero,
+   490→        intitule: offre.intitule,
+   491→        departement: offre.departement,
+   492→        dateRequise: offre.dateRequise,
+   493→        datePublication: offre.datePublication,
+   494→        dateCloture: offre.dateCloture,
+   495→        priorite: offre.priorite,
+   496→        statutOffre: offre.statutOffre,
+   497→        responsable: offre.responsable,
+   498→        roleResponsable: offre.roleResponsable,
+   499→        typeContrat: offre.typeContrat,
+   500→        typePoste: offre.typePoste,
+   501→        canalDiffusion: offre.canalDiffusion,
+   502→        budgetAlloue: offre.budgetAlloue,
+   503→        salaireMin: offre.salaireMin,
+   504→        salaireMax: offre.salaireMax,
+   505→        description: offre.description,
+   506→        site: offre.site,
+   507→      });
+   508→      setHasChanges(false);
+   509→      setEditing(null);
+   510→    }
+   511→  }, [offre]);
+   512→
+   513→  if (!offre) return null;
+   514→
+   515→  const d = offre;
+   516→
+   517→  const handleChange = (key, val) => {
+   518→    setForm(prev => ({ ...prev, [key]: val }));
+   519→    setHasChanges(true);
+   520→  };
+   521→
+   522→  const handleEdit = (key) => setEditing(key);
+   523→
+   524→  const handleSave = () => {
+   525→    if (onSave && hasChanges) {
+   526→      onSave(d.id, form);
+   527→      setHasChanges(false);
+   528→      setEditing(null);
+   529→    }
+   530→  };
+   531→
+   532→  const handleCancel = () => {
+   533→    /* Restaurer les valeurs originales */
+   534→    setForm({
+   535→      numero: d.numero, intitule: d.intitule, departement: d.departement,
+   536→      dateRequise: d.dateRequise, datePublication: d.datePublication, dateCloture: d.dateCloture,
+   537→      priorite: d.priorite, statutOffre: d.statutOffre, responsable: d.responsable,
+   538→      roleResponsable: d.roleResponsable, typeContrat: d.typeContrat, typePoste: d.typePoste,
+   539→      canalDiffusion: d.canalDiffusion, budgetAlloue: d.budgetAlloue,
+   540→      salaireMin: d.salaireMin, salaireMax: d.salaireMax, description: d.description, site: d.site,
+   541→    });
+   542→    setHasChanges(false);
+   543→    setEditing(null);
+   544→  };
+   545→
+   546→  return (
+   547→    <Drawer
+   548→      anchor="right"
+   549→      open={open}
+   550→      onClose={onClose}
+   551→      ModalProps={{ BackdropProps: { sx: { bgcolor: 'rgba(0,0,0,0.25)' } } }}
+   552→      PaperProps={{
+   553→        sx: {
+   554→          width: { xs: '100%', sm: 560 },
+   555→          display: 'flex',
+   556→          flexDirection: 'column',
+   557→          p: 0,
+   558→        }
+   559→      }}
+   560→    >
+   561→      {/* ═══ EN-TÊTE ═══ */}
+   562→      <Box sx={{
+   563→        p: 2.5, pb: 2,
+   564→        background: 'linear-gradient(135deg, #1565c0 0%, #0D7C66 100%)',
+   565→        color: 'white', flexShrink: 0,
+   566→      }}>
+   567→        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+   568→          <Box sx={{ flex: 1, minWidth: 0 }}>
+   569→            <Typography variant="overline" sx={{ opacity: 0.85, letterSpacing: 1.5, fontSize: '0.7rem' }}>Détails et Édition</Typography>
+   570→            <Typography variant="h6" fontWeight="bold" sx={{ mt: 0.3, lineHeight: 1.2, fontSize: '1.15rem' }}>{d.numero}</Typography>
+   571→            <Typography variant="body2" sx={{ mt: 0.5, opacity: 0.9, fontSize: '0.85rem' }}>
+   572→              Poste : <Box component="span" fontWeight="bold">{form.intitule}</Box> | Département : <Box component="span" fontWeight="bold">{form.departement}</Box>
+   573→            </Typography>
+   574→          </Box>
+   575→          <IconButton onClick={onClose} sx={{ color: 'white', ml: 1 }}><Close /></IconButton>
+   576→        </Box>
+   577→      </Box>
+   578→
+   579→      {/* ═══ CONTENU SCROLLABLE ═══ */}
+   580→      <Box sx={{ overflow: 'auto', flex: 1, px: 3, py: 2.5 }}>
+   581→
+   582→        {/* ─── SECTION 1 : INFORMATIONS CLÉS ─── */}
+   583→        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8, mb: 2 }}>
+   584→          <Work sx={{ fontSize: 18, color: 'primary.main' }} />
+   585→          <Typography variant="subtitle2" fontWeight="bold" sx={{ fontSize: '0.9rem' }}>Informations Clés</Typography>
+   586→        </Box>
+   587→
+   588→        {/* N° Offre (lecture seule) */}
+   589→        <Box sx={{ mb: 2 }}>
+   590→          <Box sx={{ display: 'flex', alignItems: 'center', mb: 0.5, gap: 0.5 }}>
+   591→            <Typography variant="caption" sx={{ fontSize: '0.7rem', fontWeight: 600, color: 'text.secondary', textTransform: 'uppercase', letterSpacing: 0.5 }}>N° d'offre</Typography>
+   592→          </Box>
+   593→          <TextField
+   594→            size="small" fullWidth value={form.numero || ''} disabled
+   595→            sx={{ '& input': { fontSize: '0.85rem', fontWeight: 600, color: 'text.primary' }, '& .MuiOutlinedInput-root.Mui-disabled': { bgcolor: '#f5f5f5' } }}
+   596→          />
+   597→        </Box>
+   598→
+   599→        <EditableField label="Date requise" value={form.dateRequise} editKey="dateRequise" editing={editing} onEdit={handleEdit} onChange={handleChange} type="date" />
+   600→        <EditableField label="Date de publication" value={form.datePublication} editKey="datePublication" editing={editing} onEdit={handleEdit} onChange={handleChange} type="date" />
+   601→        <EditableField label="Date de clôture" value={form.dateCloture} editKey="dateCloture" editing={editing} onEdit={handleEdit} onChange={handleChange} type="date" />
+   602→        <EditableField label="Département" value={form.departement} editKey="departement" editing={editing} onEdit={handleEdit} onChange={handleChange} type="select"
+   603→          options={{ list: nomenclatures.departement }} />
+   604→        <EditableField label="Intitulé du Poste" value={form.intitule} editKey="intitule" editing={editing} onEdit={handleEdit} onChange={handleChange} />
+   605→        <EditableField label="Type de poste" value={form.typePoste} editKey="typePoste" editing={editing} onEdit={handleEdit} onChange={handleChange} type="select"
+   606→          options={{ list: nomenclatures.type_poste }} />
+   607→        <EditableField label="Type de contrat" value={form.typeContrat} editKey="typeContrat" editing={editing} onEdit={handleEdit} onChange={handleChange} type="select"
+   608→          options={{ list: nomenclatures.type_contrat }} />
+   609→        <EditableField label="Site" value={form.site} editKey="site" editing={editing} onEdit={handleEdit} onChange={handleChange} type="select"
+   610→          options={{ list: nomenclatures.site }} />
+   611→
+   612→        <Divider sx={{ my: 2.5 }} />
+   613→
+   614→        {/* ─── PRIORITÉ & STATUT ─── */}
+   615→        <Box sx={{ display: 'flex', gap: 2 }}>
+   616→          <Box sx={{ flex: 1 }}>
+   617→            <EditableField label="Priorité" value={form.priorite} editKey="priorite" editing={editing} onEdit={handleEdit} onChange={handleChange} type="select"
+   618→              options={{ list: nomenclatures.priorite, colorMap: prioriteColor }} />
+   619→          </Box>
+   620→          <Box sx={{ flex: 1 }}>
+   621→            <EditableField label="Statut" value={form.statutOffre} editKey="statutOffre" editing={editing} onEdit={handleEdit} onChange={handleChange} type="select"
+   622→              options={{ list: nomenclatures.statut_offre, colorMap: statutOffreColor }} />
+   623→          </Box>
+   624→        </Box>
+   625→
+   626→        <Divider sx={{ my: 2.5 }} />
+   627→
+   628→        {/* ─── SECTION 2 : RESPONSABLE & BUDGET ─── */}
+   629→        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8, mb: 2 }}>
+   630→          <Person sx={{ fontSize: 18, color: 'primary.main' }} />
+   631→          <Typography variant="subtitle2" fontWeight="bold" sx={{ fontSize: '0.9rem' }}>Responsable & Budget</Typography>
+   632→        </Box>
+   633→
+   634→        <EditableField label="Responsable" value={form.responsable} editKey="responsable" editing={editing} onEdit={handleEdit} onChange={handleChange} type="select"
+   635→          options={{ list: responsablesList.map(r => r.nom) }} />
+   636→        <EditableField label="Rôle" value={form.roleResponsable} editKey="roleResponsable" editing={editing} onEdit={handleEdit} onChange={handleChange} type="select"
+   637→          options={{ list: nomenclatures.role_responsable }} />
+   638→
+   639→        <EditableField label="Budget alloué" value={form.budgetAlloue} editKey="budgetAlloue" editing={editing} onEdit={handleEdit} onChange={handleChange} type="number"
+   640→          endAdornment="FCFA" />
+   641→
+   642→        <Box sx={{ display: 'flex', gap: 2 }}>
+   643→          <Box sx={{ flex: 1 }}>
+   644→            <EditableField label="Salaire Min" value={form.salaireMin} editKey="salaireMin" editing={editing} onEdit={handleEdit} onChange={handleChange} type="number"
+   645→              endAdornment="FCFA" />
+   646→          </Box>
+   647→          <Box sx={{ flex: 1 }}>
+   648→            <EditableField label="Salaire Max" value={form.salaireMax} editKey="salaireMax" editing={editing} onEdit={handleEdit} onChange={handleChange} type="number"
+   649→              endAdornment="FCFA" />
+   650→          </Box>
+   651→        </Box>
+   652→
+   653→        <Divider sx={{ my: 2.5 }} />
+   654→
+   655→        {/* ─── CANAL DE DIFFUSION ─── */}
+   656→        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8, mb: 2 }}>
+   657→          <Campaign sx={{ fontSize: 18, color: 'primary.main' }} />
+   658→          <Typography variant="subtitle2" fontWeight="bold" sx={{ fontSize: '0.9rem' }}>Diffusion</Typography>
+   659→        </Box>
+   660→        <EditableField label="Canal de diffusion" value={form.canalDiffusion} editKey="canalDiffusion" editing={editing} onEdit={handleEdit} onChange={handleChange} type="select"
+   661→          options={{ list: nomenclatures.canal_diffusion }} />
+   662→        <EditableField label="Description de l'offre" value={form.description} editKey="description" editing={editing} onEdit={handleEdit} onChange={handleChange} multiline />
+   663→
+   664→        <Divider sx={{ my: 2.5 }} />
+   665→
+   666→        {/* ─── SECTION 3 : CANDIDATURES LIÉES ─── */}
+   667→        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
+   668→          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8 }}>
+   669→            <Groups sx={{ fontSize: 18, color: 'primary.main' }} />
+   670→            <Typography variant="subtitle2" fontWeight="bold" sx={{ fontSize: '0.9rem' }}>Candidatures liées</Typography>
+   671→            <Badge badgeContent={d.candidatsAssocies?.length || 0} color="primary" sx={{ '& .MuiBadge-badge': { fontSize: '0.7rem' } }} />
+   672→          </Box>
+   673→          <Chip label={`${d.nbCandidaturesRecues} / ${d.nbCandidatures} reçues`} size="small" variant="outlined" sx={{ fontSize: '0.72rem' }} />
+   674→        </Box>
+   675→
+   676→        {d.candidatsAssocies?.length > 0 ? (
+   677→          <Paper variant="outlined" sx={{ mb: 1 }}>
+   678→            {d.candidatsAssocies.map((c, i) => {
+   679→              const scoreColor = c.score === null ? 'default' : c.score >= 16 ? 'success' : c.score >= 12 ? 'warning' : 'error';
+   680→              const etatC = candidatEtatColor[c.etatCandidature] || 'default';
+   681→              return (
+   682→                <Box key={i} sx={{
+   683→                  display: 'flex', alignItems: 'center', gap: 1.5, p: 1.5,
+   684→                  borderBottom: i < d.candidatsAssocies.length - 1 ? '1px solid' : 'none',
+   685→                  borderColor: 'divider',
+   686→                  '&:hover': { bgcolor: 'rgba(0,0,0,0.02)' },
+   687→                }}>
+   688→                  <Avatar sx={{ width: 34, height: 34, fontSize: '0.75rem', bgcolor: '#1976d2' }}>
+   689→                    {c.nom.split(' ').map(n => n[0]).join('')}
+   690→                  </Avatar>
+   691→                  <Box sx={{ flex: 1, minWidth: 0 }}>
+   692→                    <Typography variant="body2" fontWeight={600} sx={{ fontSize: '0.85rem' }}>{c.nom}</Typography>
+   693→                    <Box sx={{ display: 'flex', gap: 0.5, mt: 0.3 }}>
+   694→                      <Chip label={c.etatCandidature} size="small" color={etatC} sx={{ height: 20, fontSize: '0.65rem' }} />
+   695→                      <Chip label={c.source} size="small" variant="outlined" sx={{ height: 20, fontSize: '0.65rem' }} />
+   696→                    </Box>
+   697→                  </Box>
+   698→                  <Box sx={{ textAlign: 'center' }}>
+   699→                    <Typography variant="body2" fontWeight="bold" sx={{ color: scoreColor === 'success' ? '#2e7d32' : scoreColor === 'warning' ? '#f57f17' : scoreColor === 'error' ? '#d32f2f' : 'text.primary', fontSize: '0.9rem' }}>
+   700→                      {c.score !== null ? `${c.score}/20` : '\u2014'}
+   701→                    </Typography>
+   702→                    <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.6rem' }}>Score</Typography>
+   703→                  </Box>
+   704→                  <Tooltip title="Voir le profil">
+   705→                    <IconButton size="small"><ArrowForward sx={{ fontSize: 16 }} /></IconButton>
+   706→                  </Tooltip>
+   707→                </Box>
+   708→              );
+   709→            })}
+   710→          </Paper>
+   711→        ) : (
+   712→          <Paper variant="outlined" sx={{ p: 3, textAlign: 'center', mb: 1 }}>
+   713→            <Typography variant="body2" color="text.secondary">Aucune candidature associée</Typography>
+   714→          </Paper>
+   715→        )}
+   716→
+   717→        <Divider sx={{ my: 2.5 }} />
+   718→
+   719→        {/* ─── HISTORIQUE ─── */}
+   720→        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8, mb: 2 }}>
+   721→          <AccessTime sx={{ fontSize: 18, color: 'primary.main' }} />
+   722→          <Typography variant="subtitle2" fontWeight="bold" sx={{ fontSize: '0.9rem' }}>Historique</Typography>
+   723→          <Badge badgeContent={d.historique?.length || 0} color="primary" sx={{ '& .MuiBadge-badge': { fontSize: '0.7rem' } }} />
+   724→        </Box>
+   725→        {d.historique?.length > 0 ? (
+   726→          <Box sx={{ position: 'relative', ml: 1.5, pl: 3, borderLeft: '2px solid #e0e0e0' }}>
+   727→            {d.historique.map((h, i) => (
+   728→              <Box key={i} sx={{ position: 'relative', pb: i < d.historique.length - 1 ? 2 : 0 }}>
+   729→                <Box sx={{
+   730→                  position: 'absolute', left: -25, top: 2, width: 12, height: 12,
+   731→                  borderRadius: '50%',
+   732→                  bgcolor: histColor[h.type] || '#9e9e9e',
+   733→                  border: '2px solid white',
+   734→                  boxShadow: '0 0 0 1px ' + (histColor[h.type] || '#9e9e9e'),
+   735→                }} />
+   736→                <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.7rem' }}>{h.date}</Typography>
+   737→                <Typography variant="body2" fontWeight={500} sx={{ fontSize: '0.85rem' }}>{h.evenement}</Typography>
+   738→                <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.7rem' }}>par {h.auteur}</Typography>
+   739→              </Box>
+   740→            ))}
+   741→          </Box>
+   742→        ) : (
+   743→          <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'center', py: 2 }}>Aucun historique</Typography>
+   744→        )}
+   745→
+   746→      </Box>
+   747→
+   748→      {/* ═══ FOOTER ═══ */}
+   749→      <Box sx={{
+   750→        p: 2, borderTop: '1px solid', borderColor: 'divider', bgcolor: 'background.paper',
+   751→        display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexShrink: 0,
+   752→      }}>
+   753→        <Button
+   754→          color="inherit" onClick={handleCancel} disabled={!hasChanges}
+   755→          sx={{ textTransform: 'none', fontSize: '0.85rem' }}
+   756→        >
+   757→          Annuler
+   758→        </Button>
+   759→        <Button
+   760→          variant="contained"
+   761→          startIcon={<Save sx={{ fontSize: 18 }} />}
+   762→          onClick={handleSave}
+   763→          disabled={!hasChanges}
+   764→          sx={{
+   765→            textTransform: 'none', fontSize: '0.85rem', fontWeight: 600,
+   766→            bgcolor: '#1565c0', '&:hover': { bgcolor: '#0d47a1' },
+   767→          }}
+   768→        >
+   769→          Enregistrer les modifications
+   770→        </Button>
+   771→      </Box>
+   772→    </Drawer>
+   773→  );
+   774→import { DndContext, closestCenter, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
+   775→import { arrayMove, SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
+   776→import { CSS } from '@dnd-kit/utilities';
+   777→}
+   778→
+   779→/* ═══ PAGE PRINCIPALE ═══ */
+   780→export default function Offres() {
+   781→  const [data, setData] = useState(initialData);
+   782→  const [dlg, setDlg] = useState(false);
+   783→  const [studioOpen, setStudioOpen] = useState(false);
+   784→  const [filterDep, setFilterDep] = useState('Tous');
+   785→  const [filterStatut, setFilterStatut] = useState('Tous');
+   786→  const [filterCanal, setFilterCanal] = useState('Tous');
+   787→  const [page, setPage] = useState(0);
+   788→  const [rpp, setRpp] = useState(10);
+   789→  const [drawerOffre, setDrawerOffre] = useState(null);
+   790→  const [snack, setSnack] = useState(null);
+   791→  /* Quick Actions states */
+   792→  const [loadingStatus, setLoadingStatus] = useState({ id: null, statut: null });
+   793→  const [confirmDlg, setConfirmDlg] = useState(null); /* { type: 'archive'|'delete', offre: {...} } */
+   794→
+   795→  /* ═══ RECHERCHE & FILTRES AVANCÉS ═══ */
+   796→  const [searchQuery, setSearchQuery] = useState('');
+   797→  const [searchParams, setSearchParams] = useSearchParams();
+   798→  const debouncedQuery = useDebounce(searchQuery, 250);
+   799→  const isInitialized = useRef(false);
+   800→
+   801→  const [cols, setCols] = useState(INITIAL_TABLE_COLS);
+   802→  const colSensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 5 } }));
+   803→  const handleColDragEnd = (event) => {
+   804→    const { active, over } = event;
+   805→    if (active.id !== over?.id) {
+   806→      const oldIdx = cols.findIndex((c) => c.key === active.id);
+   807→      const newIdx = cols.findIndex((c) => c.key === over.id);
+   808→      setCols((items) => arrayMove(items, oldIdx, newIdx));
+   809→    }
+   810→  };
+   811→
+   812→  /* Indicateur : y a-t-il des filtres actifs ? */
+   813→  const hasActiveFilters = filterDep !== 'Tous' || filterStatut !== 'Tous' || filterCanal !== 'Tous' || searchQuery !== '';
+   814→
+   815→  /* Initialisation depuis les query params URL (au premier mount uniquement) */
+   816→  useEffect(() => {
+   817→    const p = searchParams;
+   818→    const dept = p.get('dept');
+   819→    const statut = p.get('statut');
+   820→    const canal = p.get('canal');
+   821→    const q = p.get('q');
+   822→    if (dept) setFilterDep(dept);
+   823→    if (statut) setFilterStatut(statut);
+   824→    if (canal) setFilterCanal(canal);
+   825→    if (q) setSearchQuery(q);
+   826→    isInitialized.current = true;
+   827→  }, []);
+   828→
+   829→  /* Synchroniser les filtres dans l'URL (après init) */
+   830→  useEffect(() => {
+   831→    if (!isInitialized.current) return;
+   832→    const p = new URLSearchParams();
+   833→    if (filterDep !== 'Tous') p.set('dept', filterDep);
+   834→    if (filterStatut !== 'Tous') p.set('statut', filterStatut);
+   835→    if (filterCanal !== 'Tous') p.set('canal', filterCanal);
+   836→    if (searchQuery) p.set('q', searchQuery);
+   837→    setSearchParams(p, { replace: true });
+   838→  }, [filterDep, filterStatut, filterCanal, searchQuery, setSearchParams]);
+   839→
+   840→  /* Réinitialiser tous les filtres */
+   841→  const handleResetFilters = useCallback(() => {
+   842→    setFilterDep('Tous');
+   843→    setFilterStatut('Tous');
+   844→    setFilterCanal('Tous');
+   845→    setSearchQuery('');
+   846→    setPage(0);
+   847→  }, []);
+   848→
+   849→  const filtered = useMemo(() => {
+   850→    const q = debouncedQuery.toLowerCase().trim();
+   851→    return data.filter(o =>
+   852→      (filterDep === 'Tous' || o.departement === filterDep) &&
+   853→      (filterStatut === 'Tous' || o.statutOffre === filterStatut) &&
+   854→      (filterCanal === 'Tous' || o.canalDiffusion === filterCanal) &&
+   855→      (!q || o.numero.toLowerCase().includes(q) ||
+   856→           o.intitule.toLowerCase().includes(q) ||
+   857→           o.departement.toLowerCase().includes(q) ||
+   858→           o.responsable.toLowerCase().includes(q))
+   859→    );
+   860→  }, [data, filterDep, filterStatut, filterCanal, debouncedQuery]);
+   861→
+   862→  const handleSaveOffre = useCallback((id, formData) => {
+   863→    const today = new Date().toLocaleDateString('fr-FR');
+   864→    setData(prev => prev.map(o => {
+   865→      if (o.id !== id) return o;
+   866→      const changes = [];
+   867→      if (o.statutOffre !== formData.statutOffre) changes.push(`Statut : ${o.statutOffre} → ${formData.statutOffre}`);
+   868→      if (o.priorite !== formData.priorite) changes.push(`Priorité : ${o.priorite} → ${formData.priorite}`);
+   869→      if (o.intitule !== formData.intitule) changes.push('Intitulé modifié');
+   870→      if (o.responsable !== formData.responsable) changes.push(`Responsable : ${o.responsable} → ${formData.responsable}`);
+   871→      if (o.budgetAlloue !== formData.budgetAlloue) changes.push('Budget modifié');
+   872→      if (o.canalDiffusion !== formData.canalDiffusion) changes.push(`Canal : ${o.canalDiffusion} → ${formData.canalDiffusion}`);
+   873→
+   874→      const newHist = [...(o.historique || [])];
+   875→      changes.forEach(ch => {
+   876→        newHist.push({ date: today, evenement: ch, auteur: 'Utilisateur', type: 'modification' });
+   877→      });
+   878→      if (changes.length === 0) {
+   879→        newHist.push({ date: today, evenement: 'Offre modifiée', auteur: 'Utilisateur', type: 'modification' });
+   880→      }
+   881→
+   882→      return {
+   883→        ...o,
+   884→        ...formData,
+   885→        historique: newHist,
+   886→      };
+   887→    }));
+   888→    /* Mettre à jour le drawer avec les nouvelles données */
+   889→    setDrawerOffre(prev => prev && prev.id === id ? { ...prev, ...formData } : prev);
+   890→    setSnack({ msg: 'Offre mise à jour avec succès', severity: 'success' });
+   891→  }, []);
+   892→
+   893→  /* ═══ QUICK STATUS CHANGE (optimiste + spinner 300ms) ═══ */
+   894→  const handleQuickStatutChange = useCallback((id, newStatut) => {
+   895→    const offre = data.find(o => o.id === id);
+   896→    if (!offre || offre.statutOffre === newStatut) return;
+   897→
+   898→    /* Spinner + affichage du nouveau statut immédiatement (optimiste) */
+   899→    setLoadingStatus({ id, statut: newStatut });
+   900→
+   901→    const today = new Date().toLocaleDateString('fr-FR');
+   902→    const oldStatut = offre.statutOffre;
+   903→
+   904→    /* Mise à jour optimiste du state */
+   905→    setData(prev => prev.map(o => {
+   906→      if (o.id !== id) return o;
+   907→      return {
+   908→        ...o,
+   909→        statutOffre: newStatut,
+   910→        historique: [...(o.historique || []), {
+   911→          date: today,
+   912→          evenement: `Statut changé : ${oldStatut} → ${newStatut}`,
+   913→          auteur: 'Utilisateur',
+   914→          type: newStatut === 'Annulee' ? 'annulation' : newStatut === 'Cloturee' ? 'cloture' : 'modification',
+   915→        }],
+   916→        ...(newStatut === 'Cloturee' ? { dateCloture: today } : {}),
+   917→        ...(newStatut === 'Publiee' && !o.datePublication ? { datePublication: today } : {}),
+   918→      };
+   919→    }));
+   920→
+   921→    /* Mettre à jour le drawer si ouvert */
+   922→    setDrawerOffre(prev => prev && prev.id === id ? { ...prev, statutOffre: newStatut } : prev);
+   923→
+   924→    /* Simuler un délai API de 300ms puis effacer le spinner */
+   925→    setTimeout(() => {
+   926→      setLoadingStatus({ id: null, statut: null });
+   927→      setSnack({ msg: `Statut de ${offre.numero} mis à jour vers '${newStatut}'`, severity: 'success' });
+   928→    }, 300);
+   929→  }, [data]);
+   930→
+   931→  /* ═══ ARCHIVER UNE OFFRE ═══ */
+   932→  const handleArchive = useCallback((offre) => {
+   933→    setConfirmDlg({ type: 'archive', offre });
+   934→  }, []);
+   935→
+   936→  /* ═══ SUPPRIMER UNE OFFRE ═══ */
+   937→  const handleDelete = useCallback((offre) => {
+   938→    setConfirmDlg({ type: 'delete', offre });
+   939→  }, []);
+   940→
+   941→  /* ═══ CONFIRMER ACTION CRITIQUE ═══ */
+   942→  const handleConfirmAction = useCallback(() => {
+   943→    if (!confirmDlg) return;
+   944→    const { type, offre } = confirmDlg;
+   945→    const today = new Date().toLocaleDateString('fr-FR');
+   946→
+   947→    if (type === 'archive') {
+   948→      setData(prev => prev.map(o => o.id === offre.id ? {
+   949→        ...o, statutOffre: 'Cloturee',
+   950→        historique: [...(o.historique || []), { date: today, evenement: 'Offre archivée (clôturée)', auteur: 'Utilisateur', type: 'cloture' }],
+   951→        dateCloture: o.dateCloture || today,
+   952→      } : o));
+   953→      setDrawerOffre(prev => prev && prev.id === offre.id ? { ...prev, statutOffre: 'Cloturee' } : prev);
+   954→      setSnack({ msg: `${offre.numero} archivée avec succès`, severity: 'info' });
+   955→    } else if (type === 'delete') {
+   956→      setData(prev => prev.filter(o => o.id !== offre.id));
+   957→      if (drawerOffre?.id === offre.id) setDrawerOffre(null);
+   958→      setSnack({ msg: `${offre.numero} supprimée`, severity: 'warning' });
+   959→    }
+   960→
+   961→    setConfirmDlg(null);
+   962→  }, [confirmDlg, drawerOffre]);
+   963→
+   964→  const handleExport = useCallback(() => {
+   965→    const cols = ['N°','Intitulé','Département','Type Poste','Type Contrat','Canal','Statut Offre','Date Publication','Date Clôture','Date Requise','Responsable','Priorité','Budget Alloué','Salaire Min','Salaire Max','Candidatures Reçues','Site'];
+   966→    const rows = [cols.join(';')];
+   967→    filtered.forEach(o => rows.push([o.numero, o.intitule, o.departement, o.typePoste, o.typeContrat, o.canalDiffusion, o.statutOffre, o.datePublication, o.dateCloture, o.dateRequise, o.responsable, o.priorite, o.budgetAlloue, o.salaireMin, o.salaireMax, o.nbCandidaturesRecues, o.site].map(v => `"${v}"`).join(';')));
+   968→    const blob = new Blob(['\uFEFF' + rows.join('\n')], { type: 'text/csv;charset=utf-8' });
+   969→    const url = URL.createObjectURL(blob);
+   970→    const a = document.createElement('a');
+   971→    a.href = url;
+   972→    a.download = 'offres_emploi.csv';
+   973→    a.click();
+   974→    URL.revokeObjectURL(url);
+   975→    setSnack({ msg: 'Export CSV téléchargé', severity: 'info' });
+   976→  }, [filtered]);
+   977→
+   978→  return (
+   979→    <Box>
+   980→      <Typography variant="h5" fontWeight="bold">Offres d'Emploi</Typography>
+   981→      <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+   982→        {hasActiveFilters
+   983→          ? <><strong>{filtered.length}</strong> offre(s) trouvée(s) sur <strong>{data.length}</strong></>
+   984→          : <>{data.length} offre(s) d'emploi</>
+   985→        }
+   986→      </Typography>
+   987→
+   988→      <Box sx={{ display: 'flex', gap: 1, mb: 2, alignItems: 'center', flexWrap: 'wrap' }}>
+   989→        <Button variant="outlined" startIcon={<Download fontSize="small" />} onClick={handleExport}>Exporter CSV</Button>
+   990→        <Button variant="contained" startIcon={<Add fontSize="small" />} onClick={() => setDlg(true)} sx={{ bgcolor: '#0D7C66', '&:hover': { bgcolor: '#0a5c4a' } }}>Offre Rapide</Button>
+   991→        <Button
+   992→          variant="outlined"
+   993→          startIcon={<AutoAwesome sx={{ fontSize: 18 }} />}
+   994→          onClick={() => setStudioOpen(true)}
+   995→          sx={{
+   996→            textTransform: 'none',
+   997→            fontWeight: 600,
+   998→            borderWidth: 2,
+   999→            borderRadius: 2,
+  1000→            background: 'linear-gradient(135deg, #7c3aed 0%, #2563eb 100%)',
+  1001→            WebkitBackgroundClip: 'text',
+  1002→            WebkitTextFillColor: 'transparent',
+  1003→            borderColor: '#7c3aed',
+  1004→            '&:hover': {
+  1005→              borderColor: '#5b21b6',
+  1006→              background: 'linear-gradient(135deg, #7c3aed 0%, #2563eb 100%)',
+  1007→              WebkitBackgroundClip: 'text',
+  1008→              WebkitTextFillColor: 'transparent',
+  1009→              bgcolor: 'rgba(124,58,237,0.04)',
+  1010→            },
+  1011→          }}
+  1012→        >
+  1013→          Studio d'Analyse & Publication
+  1014→        </Button>
+  1015→      </Box>
+  1016→
+  1017→      {/* KPIs */}
+  1018→      <Box sx={{ display: 'flex', gap: 2, mb: 3, flexWrap: 'wrap' }}>
+  1019→        <KPICard titre="TOTAL OFFRES" valeur={filtered.length} sousTexte={`${filtered.length} offre(s) enregistrée(s)`} />
+  1020→        <Box
+  1021→          onClick={() => { setFilterStatut('Publiee'); setPage(0); }}
+  1022→          sx={{ cursor: 'pointer', transition: 'transform 0.15s, box-shadow 0.15s', '&:hover': { transform: 'translateY(-2px)' }, '&:active': { transform: 'translateY(0)' } }}
+  1023→        >
+  1024→          <KPICard titre="PUBLIÉES" valeur={filtered.filter(o => o.statutOffre === 'Publiee').length} sousTexte={`${Math.round(filtered.filter(o => o.statutOffre === 'Publiee').length / Math.max(filtered.length, 1) * 100)}% du total`} />
+  1025→        </Box>
+  1026→        <KPICard titre="CANDIDATURES EN COURS" valeur={filtered.filter(o => o.statutOffre === 'Candidatures en cours').length} sousTexte="offres actives" />
+  1027→        <KPICard titre="TOTAL CANDIDATURES" valeur={filtered.reduce((s, o) => s + (o.nbCandidaturesRecues || 0), 0)} sousTexte="candidatures reçues" />
+  1028→      </Box>
+  1029→
+  1030→      {/* ═══ Recherche + Filtres avancés ═══ */}
+  1031→      <Box sx={{ display: 'flex', gap: 2, mb: 1, flexWrap: 'wrap', alignItems: 'center' }}>
+  1032→        <TextField
+  1033→          size="small"
+  1034→          placeholder="Rechercher par N°, intitulé, département, responsable..."
+  1035→          value={searchQuery}
+  1036→          onChange={e => { setSearchQuery(e.target.value); setPage(0); }}
+  1037→          sx={{ flex: '1 1 320px', minWidth: 280 }}
+  1038→          InputProps={{
+  1039→            startAdornment: <InputAdornment position="start"><Search sx={{ fontSize: 20, color: 'action.active' }} /></InputAdornment>,
+  1040→            endAdornment: searchQuery ? (
+  1041→              <InputAdornment position="end">
+  1042→                <IconButton size="small" onClick={() => { setSearchQuery(''); setPage(0); }} sx={{ color: 'text.secondary' }} aria-label="Effacer la recherche">
+  1043→                  <Close sx={{ fontSize: 18 }} />
+  1044→                </IconButton>
+  1045→              </InputAdornment>
+  1046→            ) : null,
+  1047→          }}
+  1048→        />
+  1049→      </Box>
+  1050→      <Box sx={{ display: 'flex', gap: 2, mb: 2, flexWrap: 'wrap', alignItems: 'center' }}>
+  1051→        <FormControl size="small" sx={{ minWidth: 180 }}>
+  1052→          <Select value={filterDep} onChange={e => { setFilterDep(e.target.value); setPage(0); }} displayEmpty>
+  1053→            <MenuItem value="Tous">Tous les départements</MenuItem>
+  1054→            {nomenclatures.departement.map(d => <MenuItem key={d} value={d}>{d}</MenuItem>)}
+  1055→          </Select>
+  1056→        </FormControl>
+  1057→        <FormControl size="small" sx={{ minWidth: 170 }}>
+  1058→          <Select value={filterStatut} onChange={e => { setFilterStatut(e.target.value); setPage(0); }} displayEmpty>
+  1059→            <MenuItem value="Tous">Tous les statuts</MenuItem>
+  1060→            {nomenclatures.statut_offre.map(s => <MenuItem key={s} value={s}>{s}</MenuItem>)}
+  1061→          </Select>
+  1062→        </FormControl>
+  1063→        <FormControl size="small" sx={{ minWidth: 170 }}>
+  1064→          <Select value={filterCanal} onChange={e => { setFilterCanal(e.target.value); setPage(0); }} displayEmpty>
+  1065→            <MenuItem value="Tous">Tous les canaux</MenuItem>
+  1066→            {nomenclatures.canal_diffusion.map(c => <MenuItem key={c} value={c}>{c}</MenuItem>)}
+  1067→          </Select>
+  1068→        </FormControl>
+  1069→        <Fade in={hasActiveFilters}>
+  1070→          <Button
+  1071→            variant="outlined"
+  1072→            size="small"
+  1073→            startIcon={<FilterListOff sx={{ fontSize: 18 }} />}
+  1074→            onClick={handleResetFilters}
+  1075→            sx={{ textTransform: 'none', borderColor: 'grey.400', color: 'text.secondary' }}
+  1076→          >
+  1077→            Effacer les filtres
+  1078→          </Button>
+  1079→        </Fade>
+  1080→      </Box>
+  1081→
+  1082→      {/* Tableau */}
+  1083→      <Paper>
+  1084→        <TableContainer sx={{ maxHeight: 700 }}><Table size="small" stickyHeader>
+  1085→          <TableHead><TableRow>
+  1086→            <DndContext sensors={colSensors} collisionDetection={closestCenter} onDragEnd={handleColDragEnd}>
+  1087→            <SortableContext items={cols.map(c => c.key)} strategy={verticalListSortingStrategy}>
+  1088→            {cols.map(c => (
+  1089→              <SortableColHeader key={c.key} col={c} />
+  1090→            ))}
+  1091→            </SortableContext>
+  1092→            </DndContext>
+  1093→            <TableCell sx={{ fontWeight: 'bold', bgcolor: '#f5f5f5', width: 230, textAlign: 'center', position: 'sticky', right: 0, zIndex: 3, boxShadow: '-4px 0 8px rgba(0,0,0,0.05)' }}>Actions</TableCell>
+  1094→          </TableRow></TableHead>
+  1095→          <TableBody>
+  1096→            {filtered.length === 0 ? (
+  1097→              <TableRow><TableCell colSpan={cols.length + 1} sx={{ p: 0, border: 'none' }}>
+  1098→                <Box sx={{ py: 8, textAlign: 'center' }}>
+  1099→                  <SearchOff sx={{ fontSize: 64, color: 'grey.300', mb: 2 }} />
+  1100→                  <Typography variant="h6" color="text.secondary" gutterBottom>
+  1101→                    Aucune offre ne correspond à vos critères de recherche.
+  1102→                  </Typography>
+  1103→                  <Typography variant="body2" color="text.disabled" sx={{ mb: 3 }}>
+  1104→                    Essayez de modifier vos filtres ou votre recherche.
+  1105→                  </Typography>
+  1106→                  <Button variant="outlined" startIcon={<FilterListOff />} onClick={handleResetFilters} sx={{ textTransform: 'none' }}>
+  1107→                    Réinitialiser les filtres
+  1108→                  </Button>
+  1109→                </Box>
+  1110→              </TableCell></TableRow>
+  1111→            ) : (
+  1112→              filtered.slice(page * rpp, page * rpp + rpp).map(row => (
+  1113→              <TableRow key={row.id} hover sx={{ cursor: 'pointer' }} onClick={() => setDrawerOffre(row)}>
+  1114→                {cols.map(c => (
+  1115→                  <TableCell key={c.key} sx={{ whiteSpace: 'nowrap' }}>
+  1116→                    {c.chip ? <Chip label={row[c.key]} size="small" variant="outlined" /> :
+  1117→                     row[c.key]}
+  1118→                  </TableCell>
+  1119→                ))}
+  1120→                <TableCell sx={{ position: 'sticky', right: 0, zIndex: 3, bgcolor: '#fff', boxShadow: '-4px 0 8px rgba(0,0,0,0.05)' }}>
+  1121→                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8, justifyContent: 'center' }} onClick={e => e.stopPropagation()}>
+  1122→                    <StatusChipMenu
+  1123→                      offre={row}
+  1124→                      onStatutChange={handleQuickStatutChange}
+  1125→                      loadingId={loadingStatus.id}
+  1126→                      loadingStatut={loadingStatus.statut}
+  1127→                    />
+  1128→                    <Box sx={{ width: 1, height: 24, bgcolor: 'divider', borderRadius: 1 }} />
+  1129→                    <QuickActions
+  1130→                      offre={row}
+  1131→                      onView={o => setDrawerOffre(o)}
+  1132→                      onArchive={handleArchive}
+  1133→                      onDelete={handleDelete}
+  1134→                    />
+  1135→                  </Box>
+  1136→                </TableCell>
+  1137→              </TableRow>
+  1138→              ))
+  1139→            )}
+  1140→          </TableBody>
+  1141→        </Table></TableContainer>
+  1142→        <TablePagination
+  1143→          component="div" count={filtered.length} page={page}
+  1144→          onPageChange={(e, p) => setPage(p)} rowsPerPage={rpp}
+  1145→          onRowsPerPageChange={e => { setRpp(parseInt(e.target.value, 10)); setPage(0); }}
+  1146→          rowsPerPageOptions={[5, 10, 25]} labelRowsPerPage="Lignes par page"
+  1147→        />
+  1148→      </Paper>
+  1149→
+  1150→      {/* Drawer d'édition */}
+  1151→      <OffreDrawer
+  1152→        offre={drawerOffre}
+  1153→        open={Boolean(drawerOffre)}
+  1154→        onClose={() => setDrawerOffre(null)}
+  1155→        onSave={handleSaveOffre}
+  1156→      />
+  1157→
+  1158→      {/* Stepper Modal - Nouvelle Offre */}
+  1159→      <NouvelleOffreStepper
+  1160→        open={dlg}
+  1161→        onClose={() => setDlg(false)}
+  1162→        responsablesList={responsablesList}
+  1163→        onSubmit={(vals, toastMsg) => {
+  1164→          const nid = data.length + 1;
+  1165→          const today = new Date().toLocaleDateString('fr-FR');
+  1166→          const newOffre = {
+  1167→            id: nid,
+  1168→            numero: 'OF-2025-' + String(nid).padStart(3, '0'),
+  1169→            statutOffre: 'A creer',
+  1170→            datePublication: '',
+  1171→            nbCandidatures: 0,
+  1172→            nbCandidaturesRecues: 0,
+  1173→            candidatsAssocies: [],
+  1174→            historique: [
+  1175→              {
+  1176→                date: today,
+  1177→                evenement: vals.statutOffre === 'Publiee' ? 'Offre créée et publiée' : 'Offre créée (brouillon)',
+  1178→                auteur: vals.responsable || 'Utilisateur',
+  1179→                type: 'creation',
+  1180→              },
+  1181→            ],
+  1182→            site: vals.site || 'Siege (Douala)',
+  1183→            ...vals,
+  1184→          };
+  1185→          setData(prev => [newOffre, ...prev]);
+  1186→          setSnack({ msg: toastMsg, severity: 'success' });
+  1187→          setDlg(false);
+  1188→        }}
+  1189→      />
+  1190→
+  1191→      {/* Studio d'Analyse & Publication (Modal XXL) */}
+  1192→      <JobStudioModal
+  1193→        open={studioOpen}
+  1194→        onClose={() => setStudioOpen(false)}
+  1195→        responsablesList={responsablesList}
+  1196→        onSubmit={(vals, toastMsg) => {
+  1197→          const nid = data.length + 1;
+  1198→          const today = new Date().toLocaleDateString('fr-FR');
+  1199→          const studioD = vals._studioData || {};
+  1200→          const newOffre = {
+  1201→            id: nid,
+  1202→            numero: 'OF-2025-' + String(nid).padStart(3, '0'),
+  1203→            statutOffre: 'A creer',
+  1204→            datePublication: '',
+  1205→            nbCandidatures: 0,
+  1206→            nbCandidaturesRecues: 0,
+  1207→            candidatsAssocies: [],
+  1208→            historique: [
+  1209→              {
+  1210→                date: today,
+  1211→                evenement: vals.statutOffre === 'Publiee'
+  1212→                  ? `Offre creee via Studio et publiee sur ${studioD.canaux?.length || 0} canal(aux)`
+  1213→                  : 'Offre creee via Studio (brouillon)',
+  1214→                auteur: vals.responsable || 'Utilisateur',
+  1215→                type: 'creation',
+  1216→              },
+  1217→            ],
+  1218→            site: vals.site || 'Siege (Douala)',
+  1219→            ...vals,
+  1220→          };
+  1221→          setData(prev => [newOffre, ...prev]);
+  1222→          setSnack({ msg: toastMsg, severity: 'success' });
+  1223→          setStudioOpen(false);
+  1224→        }}
+  1225→      />
+  1226→
+  1227→      <Snackbar open={Boolean(snack)} autoHideDuration={3000} onClose={() => setSnack(null)} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
+  1228→        {snack && <Alert onClose={() => setSnack(null)} severity={snack.severity} variant="filled" sx={{ borderRadius: 2 }}>{snack.msg}</Alert>}
+  1229→      </Snackbar>
+  1230→
+  1231→      {/* ═══ DIALOGUE DE CONFIRMATION (Archive / Supprimer) ═══ */}
+  1232→      <Dialog
+  1233→        open={Boolean(confirmDlg)}
+  1234→        onClose={() => setConfirmDlg(null)}
+  1235→        maxWidth="xs"
+  1236→        PaperProps={{ sx: { borderRadius: 3, p: 0.5 } }}
+  1237→      >
+  1238→        {confirmDlg && (
+  1239→          <>
+  1240→            <DialogTitle sx={{ display: 'flex', alignItems: 'center', gap: 1.5, pb: 1 }}>
+  1241→              <Box sx={{
+  1242→                width: 40, height: 40, borderRadius: '50%',
+  1243→                display: 'flex', alignItems: 'center', justifyContent: 'center',
+  1244→                bgcolor: confirmDlg.type === 'delete' ? 'rgba(211,47,47,0.1)' : 'rgba(245,127,23,0.1)',
+  1245→              }}>
+  1246→                {confirmDlg.type === 'delete'
+  1247→                  ? <Delete sx={{ color: '#d32f2f', fontSize: 22 }} />
+  1248→                  : <Archive sx={{ color: '#f57f17', fontSize: 22 }} />
+  1249→                }
+  1250→              </Box>
+  1251→              <Box>
+  1252→                <Typography variant="subtitle1" fontWeight="bold" sx={{ fontSize: '1rem' }}>
+  1253→                  {confirmDlg.type === 'delete' ? 'Supprimer cette offre' : 'Archiver cette offre'}
+  1254→                </Typography>
+  1255→                <Typography variant="caption" color="text.secondary">
+  1256→                  {confirmDlg.offre.numero} — {confirmDlg.offre.intitule}
+  1257→                </Typography>
+  1258→              </Box>
+  1259→            </DialogTitle>
+  1260→            <DialogContent>
+  1261→              <Typography variant="body2" sx={{ color: 'text.secondary', lineHeight: 1.6 }}>
+  1262→                {confirmDlg.type === 'delete'
+  1263→                  ? `Cette action est irréversible. L'offre ${confirmDlg.offre.numero} et toutes ses données associées (candidatures, historique) seront définitivement supprimées.`
+  1264→                  : `L'offre ${confirmDlg.offre.numero} sera marquée comme clôturée et archivée. Elle ne recevra plus de candidatures.`
+  1265→                }
+  1266→              </Typography>
+  1267→            </DialogContent>
+  1268→            <DialogActions sx={{ px: 3, pb: 2 }}>
+  1269→              <Button onClick={() => setConfirmDlg(null)} color="inherit" sx={{ textTransform: 'none' }}>
+  1270→                Annuler
+  1271→              </Button>
+  1272→              <Button
+  1273→                onClick={handleConfirmAction} variant="contained"
+  1274→                sx={{
+  1275→                  textTransform: 'none', fontWeight: 600,
+  1276→                  bgcolor: confirmDlg.type === 'delete' ? '#d32f2f' : '#f57f17',
+  1277→                  '&:hover': { bgcolor: confirmDlg.type === 'delete' ? '#b71c1c' : '#e65100' },
+  1278→                }}
+  1279→              >
+  1280→                {confirmDlg.type === 'delete' ? 'Supprimer définitivement' : 'Confirmer l\'archivage'}
+  1281→              </Button>
+  1282→            </DialogActions>
+  1283→          </>
+  1284→        )}
+  1285→      </Dialog>
+  1286→    </Box>
+  1287→  );
+  1288→}
+  1289→

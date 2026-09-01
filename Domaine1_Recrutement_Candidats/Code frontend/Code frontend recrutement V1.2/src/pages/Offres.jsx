@@ -331,11 +331,13 @@ function QuickActions({ offre, onView, onArchive, onDelete }) {
 }
 
 /* ═══ TABLEAU COLONNES ═══ */
-const tableCols = [
-  { key: 'numero', label: 'N\u00b0 Offre', width: 110 },
+
+
+const INITIAL_TABLE_COLS = [
+  { key: 'numero', label: 'N° Offre', width: 110 },
   { key: 'datePublication', label: 'Publication', width: 95 },
-  { key: 'departement', label: 'D\u00e9partement', width: 145, chip: true },
-  { key: 'intitule', label: 'Intitul\u00e9 du Poste', width: 200 },
+  { key: 'departement', label: 'Département', width: 145, chip: true },
+  { key: 'intitule', label: 'Intitulé du Poste', width: 200 },
   { key: 'canalDiffusion', label: 'Canal', width: 110 },
   { key: 'nbCandidaturesRecues', label: 'Candidatures', width: 90 },
   { key: 'responsable', label: 'Responsable', width: 150 },
@@ -548,10 +550,10 @@ function OffreDrawer({ offre, open, onClose, onSave }) {
       }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           <Box sx={{ flex: 1, minWidth: 0 }}>
-            <Typography variant="overline" sx={{ opacity: 0.85, letterSpacing: 1.5, fontSize: '0.7rem' }}>D\u00e9tails et \u00c9dition</Typography>
+            <Typography variant="overline" sx={{ opacity: 0.85, letterSpacing: 1.5, fontSize: '0.7rem' }}>Détails et Édition</Typography>
             <Typography variant="h6" fontWeight="bold" sx={{ mt: 0.3, lineHeight: 1.2, fontSize: '1.15rem' }}>{d.numero}</Typography>
             <Typography variant="body2" sx={{ mt: 0.5, opacity: 0.9, fontSize: '0.85rem' }}>
-              Poste : <Box component="span" fontWeight="bold">{form.intitule}</Box> | D\u00e9partement : <Box component="span" fontWeight="bold">{form.departement}</Box>
+              Poste : <Box component="span" fontWeight="bold">{form.intitule}</Box> | Département : <Box component="span" fontWeight="bold">{form.departement}</Box>
             </Typography>
           </Box>
           <IconButton onClick={onClose} sx={{ color: 'white', ml: 1 }}><Close /></IconButton>
@@ -564,13 +566,13 @@ function OffreDrawer({ offre, open, onClose, onSave }) {
         {/* ─── SECTION 1 : INFORMATIONS CLÉS ─── */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8, mb: 2 }}>
           <Work sx={{ fontSize: 18, color: 'primary.main' }} />
-          <Typography variant="subtitle2" fontWeight="bold" sx={{ fontSize: '0.9rem' }}>Informations Cl\u00e9s</Typography>
+          <Typography variant="subtitle2" fontWeight="bold" sx={{ fontSize: '0.9rem' }}>Informations Clés</Typography>
         </Box>
 
         {/* N° Offre (lecture seule) */}
         <Box sx={{ mb: 2 }}>
           <Box sx={{ display: 'flex', alignItems: 'center', mb: 0.5, gap: 0.5 }}>
-            <Typography variant="caption" sx={{ fontSize: '0.7rem', fontWeight: 600, color: 'text.secondary', textTransform: 'uppercase', letterSpacing: 0.5 }}>N\u00b0 d'offre</Typography>
+            <Typography variant="caption" sx={{ fontSize: '0.7rem', fontWeight: 600, color: 'text.secondary', textTransform: 'uppercase', letterSpacing: 0.5 }}>N° d'offre</Typography>
           </Box>
           <TextField
             size="small" fullWidth value={form.numero || ''} disabled
@@ -580,10 +582,10 @@ function OffreDrawer({ offre, open, onClose, onSave }) {
 
         <EditableField label="Date requise" value={form.dateRequise} editKey="dateRequise" editing={editing} onEdit={handleEdit} onChange={handleChange} type="date" />
         <EditableField label="Date de publication" value={form.datePublication} editKey="datePublication" editing={editing} onEdit={handleEdit} onChange={handleChange} type="date" />
-        <EditableField label="Date de cl\u00f4ture" value={form.dateCloture} editKey="dateCloture" editing={editing} onEdit={handleEdit} onChange={handleChange} type="date" />
-        <EditableField label="D\u00e9partement" value={form.departement} editKey="departement" editing={editing} onEdit={handleEdit} onChange={handleChange} type="select"
+        <EditableField label="Date de clôture" value={form.dateCloture} editKey="dateCloture" editing={editing} onEdit={handleEdit} onChange={handleChange} type="date" />
+        <EditableField label="Département" value={form.departement} editKey="departement" editing={editing} onEdit={handleEdit} onChange={handleChange} type="select"
           options={{ list: nomenclatures.departement }} />
-        <EditableField label="Intitul\u00e9 du Poste" value={form.intitule} editKey="intitule" editing={editing} onEdit={handleEdit} onChange={handleChange} />
+        <EditableField label="Intitulé du Poste" value={form.intitule} editKey="intitule" editing={editing} onEdit={handleEdit} onChange={handleChange} />
         <EditableField label="Type de poste" value={form.typePoste} editKey="typePoste" editing={editing} onEdit={handleEdit} onChange={handleChange} type="select"
           options={{ list: nomenclatures.type_poste }} />
         <EditableField label="Type de contrat" value={form.typeContrat} editKey="typeContrat" editing={editing} onEdit={handleEdit} onChange={handleChange} type="select"
@@ -596,7 +598,7 @@ function OffreDrawer({ offre, open, onClose, onSave }) {
         {/* ─── PRIORITÉ & STATUT ─── */}
         <Box sx={{ display: 'flex', gap: 2 }}>
           <Box sx={{ flex: 1 }}>
-            <EditableField label="Priorit\u00e9" value={form.priorite} editKey="priorite" editing={editing} onEdit={handleEdit} onChange={handleChange} type="select"
+            <EditableField label="Priorité" value={form.priorite} editKey="priorite" editing={editing} onEdit={handleEdit} onChange={handleChange} type="select"
               options={{ list: nomenclatures.priorite, colorMap: prioriteColor }} />
           </Box>
           <Box sx={{ flex: 1 }}>
@@ -615,10 +617,10 @@ function OffreDrawer({ offre, open, onClose, onSave }) {
 
         <EditableField label="Responsable" value={form.responsable} editKey="responsable" editing={editing} onEdit={handleEdit} onChange={handleChange} type="select"
           options={{ list: responsablesList.map(r => r.nom) }} />
-        <EditableField label="R\u00f4le" value={form.roleResponsable} editKey="roleResponsable" editing={editing} onEdit={handleEdit} onChange={handleChange} type="select"
+        <EditableField label="Rôle" value={form.roleResponsable} editKey="roleResponsable" editing={editing} onEdit={handleEdit} onChange={handleChange} type="select"
           options={{ list: nomenclatures.role_responsable }} />
 
-        <EditableField label="Budget allou\u00e9" value={form.budgetAlloue} editKey="budgetAlloue" editing={editing} onEdit={handleEdit} onChange={handleChange} type="number"
+        <EditableField label="Budget alloué" value={form.budgetAlloue} editKey="budgetAlloue" editing={editing} onEdit={handleEdit} onChange={handleChange} type="number"
           endAdornment="FCFA" />
 
         <Box sx={{ display: 'flex', gap: 2 }}>
@@ -649,10 +651,10 @@ function OffreDrawer({ offre, open, onClose, onSave }) {
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8 }}>
             <Groups sx={{ fontSize: 18, color: 'primary.main' }} />
-            <Typography variant="subtitle2" fontWeight="bold" sx={{ fontSize: '0.9rem' }}>Candidatures li\u00e9es</Typography>
+            <Typography variant="subtitle2" fontWeight="bold" sx={{ fontSize: '0.9rem' }}>Candidatures liées</Typography>
             <Badge badgeContent={d.candidatsAssocies?.length || 0} color="primary" sx={{ '& .MuiBadge-badge': { fontSize: '0.7rem' } }} />
           </Box>
-          <Chip label={`${d.nbCandidaturesRecues} / ${d.nbCandidatures} re\u00e7ues`} size="small" variant="outlined" sx={{ fontSize: '0.72rem' }} />
+          <Chip label={`${d.nbCandidaturesRecues} / ${d.nbCandidatures} reçues`} size="small" variant="outlined" sx={{ fontSize: '0.72rem' }} />
         </Box>
 
         {d.candidatsAssocies?.length > 0 ? (
@@ -692,7 +694,7 @@ function OffreDrawer({ offre, open, onClose, onSave }) {
           </Paper>
         ) : (
           <Paper variant="outlined" sx={{ p: 3, textAlign: 'center', mb: 1 }}>
-            <Typography variant="body2" color="text.secondary">Aucune candidature associ\u00e9e</Typography>
+            <Typography variant="body2" color="text.secondary">Aucune candidature associée</Typography>
           </Paper>
         )}
 
@@ -777,6 +779,25 @@ export default function Offres() {
   const debouncedQuery = useDebounce(searchQuery, 250);
   const isInitialized = useRef(false);
 
+  const [cols, setCols] = useState(INITIAL_TABLE_COLS);
+  const dragColRef = useRef(null); // key being dragged
+  const handleColDragStart = (e, key) => { dragColRef.current = key; e.dataTransfer.effectAllowed = 'move'; };
+  const handleColDragOver = (e, key) => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; };
+  const handleColDrop = (e, targetKey) => {
+    e.preventDefault();
+    const srcKey = dragColRef.current;
+    if (!srcKey || srcKey === targetKey) return;
+    setCols(prev => {
+      const arr = [...prev];
+      const si = arr.findIndex(c => c.key === srcKey);
+      const ti = arr.findIndex(c => c.key === targetKey);
+      const [moved] = arr.splice(si, 1);
+      arr.splice(ti, 0, moved);
+      return arr;
+    });
+    dragColRef.current = null;
+  };
+
   /* Indicateur : y a-t-il des filtres actifs ? */
   const hasActiveFilters = filterDep !== 'Tous' || filterStatut !== 'Tous' || filterCanal !== 'Tous' || searchQuery !== '';
 
@@ -832,19 +853,19 @@ export default function Offres() {
     setData(prev => prev.map(o => {
       if (o.id !== id) return o;
       const changes = [];
-      if (o.statutOffre !== formData.statutOffre) changes.push(`Statut : ${o.statutOffre} \u2192 ${formData.statutOffre}`);
-      if (o.priorite !== formData.priorite) changes.push(`Priorit\u00e9 : ${o.priorite} \u2192 ${formData.priorite}`);
-      if (o.intitule !== formData.intitule) changes.push('Intitul\u00e9 modifi\u00e9');
-      if (o.responsable !== formData.responsable) changes.push(`Responsable : ${o.responsable} \u2192 ${formData.responsable}`);
-      if (o.budgetAlloue !== formData.budgetAlloue) changes.push('Budget modifi\u00e9');
-      if (o.canalDiffusion !== formData.canalDiffusion) changes.push(`Canal : ${o.canalDiffusion} \u2192 ${formData.canalDiffusion}`);
+      if (o.statutOffre !== formData.statutOffre) changes.push(`Statut : ${o.statutOffre} → ${formData.statutOffre}`);
+      if (o.priorite !== formData.priorite) changes.push(`Priorité : ${o.priorite} → ${formData.priorite}`);
+      if (o.intitule !== formData.intitule) changes.push('Intitulé modifié');
+      if (o.responsable !== formData.responsable) changes.push(`Responsable : ${o.responsable} → ${formData.responsable}`);
+      if (o.budgetAlloue !== formData.budgetAlloue) changes.push('Budget modifié');
+      if (o.canalDiffusion !== formData.canalDiffusion) changes.push(`Canal : ${o.canalDiffusion} → ${formData.canalDiffusion}`);
 
       const newHist = [...(o.historique || [])];
       changes.forEach(ch => {
         newHist.push({ date: today, evenement: ch, auteur: 'Utilisateur', type: 'modification' });
       });
       if (changes.length === 0) {
-        newHist.push({ date: today, evenement: 'Offre modifi\u00e9e', auteur: 'Utilisateur', type: 'modification' });
+        newHist.push({ date: today, evenement: 'Offre modifiée', auteur: 'Utilisateur', type: 'modification' });
       }
 
       return {
@@ -855,7 +876,7 @@ export default function Offres() {
     }));
     /* Mettre à jour le drawer avec les nouvelles données */
     setDrawerOffre(prev => prev && prev.id === id ? { ...prev, ...formData } : prev);
-    setSnack({ msg: 'Offre mise \u00e0 jour avec succ\u00e8s', severity: 'success' });
+    setSnack({ msg: 'Offre mise à jour avec succès', severity: 'success' });
   }, []);
 
   /* ═══ QUICK STATUS CHANGE (optimiste + spinner 300ms) ═══ */
@@ -877,7 +898,7 @@ export default function Offres() {
         statutOffre: newStatut,
         historique: [...(o.historique || []), {
           date: today,
-          evenement: `Statut chang\u00e9 : ${oldStatut} \u2192 ${newStatut}`,
+          evenement: `Statut changé : ${oldStatut} → ${newStatut}`,
           auteur: 'Utilisateur',
           type: newStatut === 'Annulee' ? 'annulation' : newStatut === 'Cloturee' ? 'cloture' : 'modification',
         }],
@@ -892,7 +913,7 @@ export default function Offres() {
     /* Simuler un délai API de 300ms puis effacer le spinner */
     setTimeout(() => {
       setLoadingStatus({ id: null, statut: null });
-      setSnack({ msg: `Statut de ${offre.numero} mis \u00e0 jour vers '${newStatut}'`, severity: 'success' });
+      setSnack({ msg: `Statut de ${offre.numero} mis à jour vers '${newStatut}'`, severity: 'success' });
     }, 300);
   }, [data]);
 
@@ -915,22 +936,22 @@ export default function Offres() {
     if (type === 'archive') {
       setData(prev => prev.map(o => o.id === offre.id ? {
         ...o, statutOffre: 'Cloturee',
-        historique: [...(o.historique || []), { date: today, evenement: 'Offre archiv\u00e9e (cl\u00f4tur\u00e9e)', auteur: 'Utilisateur', type: 'cloture' }],
+        historique: [...(o.historique || []), { date: today, evenement: 'Offre archivée (clôturée)', auteur: 'Utilisateur', type: 'cloture' }],
         dateCloture: o.dateCloture || today,
       } : o));
       setDrawerOffre(prev => prev && prev.id === offre.id ? { ...prev, statutOffre: 'Cloturee' } : prev);
-      setSnack({ msg: `${offre.numero} archiv\u00e9e avec succ\u00e8s`, severity: 'info' });
+      setSnack({ msg: `${offre.numero} archivée avec succès`, severity: 'info' });
     } else if (type === 'delete') {
       setData(prev => prev.filter(o => o.id !== offre.id));
       if (drawerOffre?.id === offre.id) setDrawerOffre(null);
-      setSnack({ msg: `${offre.numero} supprim\u00e9e`, severity: 'warning' });
+      setSnack({ msg: `${offre.numero} supprimée`, severity: 'warning' });
     }
 
     setConfirmDlg(null);
   }, [confirmDlg, drawerOffre]);
 
   const handleExport = useCallback(() => {
-    const cols = ['N\u00b0','Intitul\u00e9','D\u00e9partement','Type Poste','Type Contrat','Canal','Statut Offre','Date Publication','Date Cl\u00f4ture','Date Requise','Responsable','Priorit\u00e9','Budget Allou\u00e9','Salaire Min','Salaire Max','Candidatures Re\u00e7ues','Site'];
+    const cols = ['N°','Intitulé','Département','Type Poste','Type Contrat','Canal','Statut Offre','Date Publication','Date Clôture','Date Requise','Responsable','Priorité','Budget Alloué','Salaire Min','Salaire Max','Candidatures Reçues','Site'];
     const rows = [cols.join(';')];
     filtered.forEach(o => rows.push([o.numero, o.intitule, o.departement, o.typePoste, o.typeContrat, o.canalDiffusion, o.statutOffre, o.datePublication, o.dateCloture, o.dateRequise, o.responsable, o.priorite, o.budgetAlloue, o.salaireMin, o.salaireMax, o.nbCandidaturesRecues, o.site].map(v => `"${v}"`).join(';')));
     const blob = new Blob(['\uFEFF' + rows.join('\n')], { type: 'text/csv;charset=utf-8' });
@@ -940,7 +961,7 @@ export default function Offres() {
     a.download = 'offres_emploi.csv';
     a.click();
     URL.revokeObjectURL(url);
-    setSnack({ msg: 'Export CSV t\u00e9l\u00e9charg\u00e9', severity: 'info' });
+    setSnack({ msg: 'Export CSV téléchargé', severity: 'info' });
   }, [filtered]);
 
   return (
@@ -984,15 +1005,15 @@ export default function Offres() {
 
       {/* KPIs */}
       <Box sx={{ display: 'flex', gap: 2, mb: 3, flexWrap: 'wrap' }}>
-        <KPICard titre="TOTAL OFFRES" valeur={filtered.length} sousTexte={`${filtered.length} offre(s) enregistr\u00e9e(s)`} />
+        <KPICard titre="TOTAL OFFRES" valeur={filtered.length} sousTexte={`${filtered.length} offre(s) enregistrée(s)`} />
         <Box
           onClick={() => { setFilterStatut('Publiee'); setPage(0); }}
           sx={{ cursor: 'pointer', transition: 'transform 0.15s, box-shadow 0.15s', '&:hover': { transform: 'translateY(-2px)' }, '&:active': { transform: 'translateY(0)' } }}
         >
-          <KPICard titre="PUBLI\u00c9ES" valeur={filtered.filter(o => o.statutOffre === 'Publiee').length} sousTexte={`${Math.round(filtered.filter(o => o.statutOffre === 'Publiee').length / Math.max(filtered.length, 1) * 100)}% du total`} />
+          <KPICard titre="PUBLIÉES" valeur={filtered.filter(o => o.statutOffre === 'Publiee').length} sousTexte={`${Math.round(filtered.filter(o => o.statutOffre === 'Publiee').length / Math.max(filtered.length, 1) * 100)}% du total`} />
         </Box>
         <KPICard titre="CANDIDATURES EN COURS" valeur={filtered.filter(o => o.statutOffre === 'Candidatures en cours').length} sousTexte="offres actives" />
-        <KPICard titre="TOTAL CANDIDATURES" valeur={filtered.reduce((s, o) => s + (o.nbCandidaturesRecues || 0), 0)} sousTexte="candidatures re\u00e7ues" />
+        <KPICard titre="TOTAL CANDIDATURES" valeur={filtered.reduce((s, o) => s + (o.nbCandidaturesRecues || 0), 0)} sousTexte="candidatures reçues" />
       </Box>
 
       {/* ═══ Recherche + Filtres avancés ═══ */}
@@ -1018,7 +1039,7 @@ export default function Offres() {
       <Box sx={{ display: 'flex', gap: 2, mb: 2, flexWrap: 'wrap', alignItems: 'center' }}>
         <FormControl size="small" sx={{ minWidth: 180 }}>
           <Select value={filterDep} onChange={e => { setFilterDep(e.target.value); setPage(0); }} displayEmpty>
-            <MenuItem value="Tous">Tous les d\u00e9partements</MenuItem>
+            <MenuItem value="Tous">Tous les départements</MenuItem>
             {nomenclatures.departement.map(d => <MenuItem key={d} value={d}>{d}</MenuItem>)}
           </Select>
         </FormControl>
@@ -1049,16 +1070,26 @@ export default function Offres() {
 
       {/* Tableau */}
       <Paper>
-        <TableContainer><Table size="small">
+        <TableContainer sx={{ maxHeight: 700 }}><Table size="small" stickyHeader>
           <TableHead><TableRow>
-            {tableCols.map(c => (
-              <TableCell key={c.key} sx={{ fontWeight: 'bold', bgcolor: '#f5f5f5', whiteSpace: 'nowrap', width: c.width }}>{c.label}</TableCell>
+            {cols.map(c => (
+              <TableCell key={c.key} sx={{ fontWeight: 'bold', bgcolor: '#f5f5f5', whiteSpace: 'nowrap', width: c.width }}
+                draggable
+                onDragStart={e => handleColDragStart(e, c.key)}
+                onDragOver={e => handleColDragOver(e, c.key)}
+                onDrop={e => handleColDrop(e, c.key)}
+              >
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, cursor: 'grab' }}>
+                  <DragIndicator sx={{ fontSize: 14, color: 'grey.500' }} />
+                  {c.label}
+                </Box>
+              </TableCell>
             ))}
-            <TableCell sx={{ fontWeight: 'bold', bgcolor: '#f5f5f5', width: 230, textAlign: 'center' }}>Actions</TableCell>
+            <TableCell sx={{ fontWeight: 'bold', bgcolor: '#f5f5f5', width: 230, textAlign: 'center', position: 'sticky', right: 0, zIndex: 3, boxShadow: '-4px 0 8px rgba(0,0,0,0.05)' }}>Actions</TableCell>
           </TableRow></TableHead>
           <TableBody>
             {filtered.length === 0 ? (
-              <TableRow><TableCell colSpan={tableCols.length + 1} sx={{ p: 0, border: 'none' }}>
+              <TableRow><TableCell colSpan={cols.length + 1} sx={{ p: 0, border: 'none' }}>
                 <Box sx={{ py: 8, textAlign: 'center' }}>
                   <SearchOff sx={{ fontSize: 64, color: 'grey.300', mb: 2 }} />
                   <Typography variant="h6" color="text.secondary" gutterBottom>
@@ -1075,13 +1106,13 @@ export default function Offres() {
             ) : (
               filtered.slice(page * rpp, page * rpp + rpp).map(row => (
               <TableRow key={row.id} hover sx={{ cursor: 'pointer' }} onClick={() => setDrawerOffre(row)}>
-                {tableCols.map(c => (
+                {cols.map(c => (
                   <TableCell key={c.key} sx={{ whiteSpace: 'nowrap' }}>
                     {c.chip ? <Chip label={row[c.key]} size="small" variant="outlined" /> :
                      row[c.key]}
                   </TableCell>
                 ))}
-                <TableCell>
+                <TableCell sx={{ position: 'sticky', right: 0, zIndex: 3, bgcolor: '#fff', boxShadow: '-4px 0 8px rgba(0,0,0,0.05)' }}>
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8, justifyContent: 'center' }} onClick={e => e.stopPropagation()}>
                     <StatusChipMenu
                       offre={row}
@@ -1111,7 +1142,7 @@ export default function Offres() {
         />
       </Paper>
 
-      {/* Drawer d'\u00e9dition */}
+      {/* Drawer d'édition */}
       <OffreDrawer
         offre={drawerOffre}
         open={Boolean(drawerOffre)}
