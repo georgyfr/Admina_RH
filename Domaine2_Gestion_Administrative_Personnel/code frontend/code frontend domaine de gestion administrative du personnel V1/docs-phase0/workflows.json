@@ -1,0 +1,972 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "date": "2026-09-02",
+    "source": [
+      "PROMPT_DEV_Domaine2_Complet_V2.md",
+      "work-admina/app/src/pages/domaine2/data.js"
+    ],
+    "conformite": "ISO 30401:2018 + ISO 9001:2015 (cycle PDCA §9.2 + §9.3)",
+    "domaine": "D2 - Gestion Administrative du Personnel",
+    "workflows_count": 15
+  },
+  "workflows": [
+    {
+      "id": "WF-001",
+      "name": "Demande de Conge",
+      "description": "Workflow d'approbation a 2 niveaux : validation Manager (niveau 1) puis DRH (niveau 2) si conge > 5 jours ou sans solde. Mise a jour auto du solde de conges.",
+      "actors": [
+        "Employe",
+        "Manager Hierarchique",
+        "DRH"
+      ],
+      "steps": [
+        {
+          "id": "WF-001-001",
+          "action": "Employe soumet la demande (type_conge, date_debut, date_fin, motif)",
+          "actor": "Employe",
+          "status": "en_attente",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/conges",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 12.1 + 10 ECRAN 10 (l. 966)"
+        },
+        {
+          "id": "WF-001-002",
+          "action": "Auto-calcul du nombre de jours (exclut weekends et feries)",
+          "actor": "Systeme",
+          "status": "en_attente",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/conges",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 13.1 formules conges (l. 1101)"
+        },
+        {
+          "id": "WF-001-003",
+          "action": "Manager valide ou refuse (niveau 1)",
+          "actor": "Manager Hierarchique",
+          "status": "approuvee OU rejetee",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/conges",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 12.1 workflow conges (l. 969)"
+        },
+        {
+          "id": "WF-001-004",
+          "action": "Si nombre_jours > 5 OU type='conge_sans_solde' alors DRH valide (niveau 2)",
+          "actor": "DRH",
+          "status": "approuvee_definitive OU rejetee",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/conges",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 12.1 + 10 ECRAN 10 (l. 972)"
+        },
+        {
+          "id": "WF-001-005",
+          "action": "Mise a jour automatique du solde de conges (trigger update_leave_balance)",
+          "actor": "Systeme",
+          "status": "approuvee_definitive",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/conges/soldes",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 17.6 trigger 5 (l. 1176)"
+        },
+        {
+          "id": "WF-001-006",
+          "action": "Si type='conge_sans_solde' alors deduction automatique en paie",
+          "actor": "Systeme",
+          "status": "payee",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/paie",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 11.3 + 13.4 (l. 852)"
+        }
+      ],
+      "diagram": "flowchart TD\n  A([Employe soumet demande]) -->|en_attente| B[Auto-calc nombre_jours]\n  B --> C{Manager valide?}\n  C -->|Non| Z1([rejetee])\n  C -->|Oui, niveau 1| D{Conge > 5j OU sans solde?}\n  D -->|Non| E([approuvee_definitive])\n  D -->|Oui| F{DRH valide?}\n  F -->|Non| Z1\n  F -->|Oui| E\n  E --> G[MAJ auto solde conges]\n  G --> H{Type sans solde?}\n  H -->|Oui| I[Deduction en paie]\n  H -->|Non| J([Fin])\n  I --> J"
+    },
+    {
+      "id": "WF-002",
+      "name": "Creation d'un Contrat",
+      "description": "Creation d'un contrat de travail avec auto-calcul duree et jours restants. Alerte expiration < 30j + auto-rappel. Auto-bascule a 'echu' quand jours_restants < 0.",
+      "actors": [
+        "Responsable Admin RH",
+        "Assistant RH",
+        "DRH"
+      ],
+      "steps": [
+        {
+          "id": "WF-002-001",
+          "action": "Saisie contrat (employee_id, type, date_debut, date_fin, salaire_brut, regime, lieu)",
+          "actor": "Assistant RH",
+          "status": "brouillon",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/contrats",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 11.2 procedure contrats (l. 833)"
+        },
+        {
+          "id": "WF-002-002",
+          "action": "Auto-calcul duree_mois et jours_restants",
+          "actor": "Systeme",
+          "status": "brouillon",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/contrats",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 13.8 + 10 ECRAN 4 (l. 507)"
+        },
+        {
+          "id": "WF-002-003",
+          "action": "Validation DRH",
+          "actor": "DRH",
+          "status": "en_vigueur",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/contrats",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 5.2 matrice RACI (l. 145)"
+        },
+        {
+          "id": "WF-002-004",
+          "action": "Si jours_restants ≤ 30 alors alerte badge rouge + auto-creation rappel (type renouvellement_contrat)",
+          "actor": "Systeme",
+          "status": "en_vigueur",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/rappels",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 13.10 + 17.6 trigger 3 (l. 1179)"
+        },
+        {
+          "id": "WF-002-005",
+          "action": "Si jours_restants < 0 alors auto-bascule a 'echu' (trigger trg_contracts_status)",
+          "actor": "Systeme",
+          "status": "echu",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/contrats",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 13.9 + 17.6 trigger 1 (l. 1165)"
+        },
+        {
+          "id": "WF-002-006",
+          "action": "Si rupture anticipee alors action manuelle 'resilie' (irreversible, auditee)",
+          "actor": "Responsable Admin RH",
+          "status": "resilie",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/contrats",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 12.6 workflow contrats (l. 1064)"
+        }
+      ],
+      "diagram": "flowchart TD\n  A([Saisie contrat]) --> B[Auto-calc duree + jours_restants]\n  B --> C{DRH valide?}\n  C -->|Non| Z([brouillon])\n  C -->|Oui| D([en_vigueur])\n  D --> E{jours ≤ 30?}\n  E -->|Oui| F[Alerte rouge + rappel auto]\n  E -->|Non| G{jours < 0?}\n  F --> G\n  G -->|Oui| H([echu])\n  G -->|Non| I{Rupture anticipee?}\n  I -->|Oui| J([resilie])\n  I -->|Non| K([Fin])"
+    },
+    {
+      "id": "WF-003",
+      "name": "Creation d'Avenant",
+      "description": "Creation d'un avenant modifiant un contrat (salaire, poste, temps partiel, lieu, promotion). Auto-increment amendment_number + propagation auto vers employees.",
+      "actors": [
+        "Responsable Admin RH",
+        "DRH"
+      ],
+      "steps": [
+        {
+          "id": "WF-003-001",
+          "action": "Selection du contrat existant (FK contract_id obligatoire)",
+          "actor": "Responsable Admin RH",
+          "status": "brouillon",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/avenants",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 8.1 + 9.6 (l. 277)"
+        },
+        {
+          "id": "WF-003-002",
+          "action": "Saisie type_modification, ancienne_valeur, nouvelle_valeur, motif, date_effet",
+          "actor": "Responsable Admin RH",
+          "status": "brouillon",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/avenants",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 11.2 champs avenant (l. 841)"
+        },
+        {
+          "id": "WF-003-003",
+          "action": "Auto-increment amendment_number par contrat",
+          "actor": "Systeme",
+          "status": "brouillon",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/avenants",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 11.2 procedure (l. 836)"
+        },
+        {
+          "id": "WF-003-004",
+          "action": "Validation DRH",
+          "actor": "DRH",
+          "status": "valide",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/avenants",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 5.2 matrice RACI (l. 146)"
+        },
+        {
+          "id": "WF-003-005",
+          "action": "Propagation auto : si Salaire alors update employees.salaire_brut ; si Poste alors update employees.position_id ; si Temps partiel alors update employees.regime_travail",
+          "actor": "Systeme",
+          "status": "valide",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/employes",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 11.2 propagation avenant (l. 836)"
+        }
+      ],
+      "diagram": "flowchart TD\n  A([Selection contrat existant]) --> B[Saisie avenant: type, ancienne, nouvelle, motif, date_effet]\n  B --> C[Auto-increment amendment_number]\n  C --> D{DRH valide?}\n  D -->|Non| Z([brouillon])\n  D -->|Oui| E([valide])\n  E --> F{Type modification?}\n  F -->|Salaire| G[UPDATE employees.salaire_brut]\n  F -->|Poste| H[UPDATE employees.position_id]\n  F -->|Temps partiel| I[UPDATE employees.regime_travail]\n  F -->|Autre| J([Fin])\n  G --> J\n  H --> J\n  I --> J"
+    },
+    {
+      "id": "WF-004",
+      "name": "Upload et Validation d'un Document",
+      "description": "Upload d'un document employe (CNI, passeport, etc.) avec auto-bascule de statut selon date_expiration et generation auto de rappels.",
+      "actors": [
+        "Assistant RH",
+        "Responsable Admin RH",
+        "Systeme"
+      ],
+      "steps": [
+        {
+          "id": "WF-004-001",
+          "action": "Upload document (type, numero, date_emission, date_expiration, lieu_depot)",
+          "actor": "Assistant RH",
+          "status": "valide",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/documents",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 10 ECRAN 6 (l. 518)"
+        },
+        {
+          "id": "WF-004-002",
+          "action": "Validation format (PDF / JPG / PNG) + taille max",
+          "actor": "Systeme",
+          "status": "valide",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/documents",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 17.5 securite (l. 1448)"
+        },
+        {
+          "id": "WF-004-003",
+          "action": "Calcul automatique jours_restants",
+          "actor": "Systeme",
+          "status": "valide",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/documents",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 13.8 (l. 1156)"
+        },
+        {
+          "id": "WF-004-004",
+          "action": "Si jours_restants ≤ 30 alors trigger bascule statut a 'a_renouveler'",
+          "actor": "Systeme",
+          "status": "a_renouveler",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/documents",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 13.9 + 17.6 trigger 4 (l. 1167)"
+        },
+        {
+          "id": "WF-004-005",
+          "action": "Si jours_restants ≤ 15 alors auto-creation rappel (type expiration_document)",
+          "actor": "Systeme",
+          "status": "a_renouveler",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/rappels",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 13.10 + 17.6 trigger 3 (l. 1177)"
+        },
+        {
+          "id": "WF-004-006",
+          "action": "Si date_expiration < NOW() alors auto-bascule a 'expire'",
+          "actor": "Systeme",
+          "status": "expire",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/documents",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 13.9 + 17.6 trigger 4 (l. 1166)"
+        }
+      ],
+      "diagram": "flowchart TD\n  A([Upload document]) --> B[Validation format + taille]\n  B --> C{Format OK?}\n  C -->|Non| Z1([Erreur])\n  C -->|Oui| D[Calcul jours_restants]\n  D --> E([valide])\n  E --> F{jours ≤ 30?}\n  F -->|Oui| G([a_renouveler])\n  F -->|Non| H{jours ≤ 15?}\n  G --> H\n  H -->|Oui| I[Auto-creation rappel]\n  H -->|Non| J{date_exp < NOW?}\n  I --> J\n  J -->|Oui| K([expire])\n  J -->|Non| L([Fin])"
+    },
+    {
+      "id": "WF-005",
+      "name": "Validation Heures Supplementaires",
+      "description": "Declaration hebdomadaire d'heures supplementaires. Validation Manager OBLIGATOIRE avant integration paie. Seules les HS 'validees' vont en paie.",
+      "actors": [
+        "Employe",
+        "Manager Hierarchique",
+        "Comptable Paie"
+      ],
+      "steps": [
+        {
+          "id": "WF-005-001",
+          "action": "Declaration hebdomadaire (heures_normales, heures_supp, taux_majoration)",
+          "actor": "Employe",
+          "status": "en_attente",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/heures-supp",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 10 ECRAN 13 + 11.4 (l. 606)"
+        },
+        {
+          "id": "WF-005-002",
+          "action": "Auto-calcul salaire_horaire_base, montant_brut, montant_calcule",
+          "actor": "Systeme",
+          "status": "en_attente",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/heures-supp",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 13.3 (l. 1115)"
+        },
+        {
+          "id": "WF-005-003",
+          "action": "Manager valide ou refuse",
+          "actor": "Manager Hierarchique",
+          "status": "validee OU rejetee",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/heures-supp",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 11.4 + 12.2 (l. 607)"
+        },
+        {
+          "id": "WF-005-004",
+          "action": "Si 'validee' alors integration dans la fiche de paie du mois",
+          "actor": "Comptable Paie",
+          "status": "payee",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/paie",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 11.4 + 13.4 (l. 608)"
+        },
+        {
+          "id": "WF-005-005",
+          "action": "Si 'rejetee' alors ignoree (jamais en paie)",
+          "actor": "Systeme",
+          "status": "rejetee",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/heures-supp",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 11.4 regle imperative (l. 879)"
+        }
+      ],
+      "diagram": "flowchart TD\n  A([Declaration hebdo HS]) --> B[Auto-calc montant_brut + montant_calcule]\n  B --> C([en_attente])\n  C --> D{Manager valide?}\n  D -->|Oui| E([validee])\n  D -->|Non| F([rejetee])\n  F --> G([Ignoree - pas en paie])\n  E --> H[Integration fiche de paie]\n  H --> I([payee])"
+    },
+    {
+      "id": "WF-006",
+      "name": "Pointage Hebdomadaire",
+      "description": "Saisie quotidienne du pointage, validation hebdomadaire Manager, agregation mensuelle vers planning et export paie.",
+      "actors": [
+        "Employe",
+        "Manager Hierarchique",
+        "Comptable Paie"
+      ],
+      "steps": [
+        {
+          "id": "WF-006-001",
+          "action": "Saisie quotidienne pointage (badgeage auto ou manuel)",
+          "actor": "Employe",
+          "status": "brouillon",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/pointage",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 11.4 workflow pointage (l. 869)"
+        },
+        {
+          "id": "WF-006-002",
+          "action": "Auto-calcul taux_presence + retards_total_minutes",
+          "actor": "Systeme",
+          "status": "brouillon",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/pointage",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 13.2 formules presence (l. 1108)"
+        },
+        {
+          "id": "WF-006-003",
+          "action": "Validation hebdomadaire Manager",
+          "actor": "Manager Hierarchique",
+          "status": "valide OU rejete",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/pointage",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 11.4 + 8.5 (l. 870)"
+        },
+        {
+          "id": "WF-006-004",
+          "action": "Agregation mensuelle vers d02_monthly_planning",
+          "actor": "Systeme",
+          "status": "brouillon_planning",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/planning",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 10 ECRAN 15 + 11.4 (l. 630)"
+        },
+        {
+          "id": "WF-006-005",
+          "action": "Validation puis cloture mensuelle (gate Phase 3 -> Phase 4, irreversible)",
+          "actor": "DRH",
+          "status": "cloture",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/planning",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 7 regles de basculement + 10 ECRAN 15 (l. 264)"
+        },
+        {
+          "id": "WF-006-006",
+          "action": "Export vers paie",
+          "actor": "Comptable Paie",
+          "status": "cloture",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/paie",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 11.5 procedure paie (l. 887)"
+        }
+      ],
+      "diagram": "flowchart TD\n  A([Saisie quotidienne badgeage]) --> B[Auto-calc taux_presence + retards]\n  B --> C([brouillon])\n  C --> D{Manager valide?}\n  D -->|Non| Z([rejete])\n  D -->|Oui| E([valide])\n  E --> F[Agregation mensuelle planning]\n  F --> G{DRH cloture?}\n  G -->|Oui, irreversible| H([cloture])\n  G -->|Non| G\n  H --> I[Export vers paie]\n  I --> J([Fin])"
+    },
+    {
+      "id": "WF-007",
+      "name": "Generation Fiche de Paie",
+      "description": "Generation mensuelle des fiches de paie. Recuperation auto des donnees (pointage, conges, HS validees, prets) + calculs + validation DRH + paiement.",
+      "actors": [
+        "Comptable Paie",
+        "DRH"
+      ],
+      "steps": [
+        {
+          "id": "WF-007-001",
+          "action": "Recuperation auto : pointage valide, conges, HS validees, prets en_remboursement",
+          "actor": "Systeme",
+          "status": "generee",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/paie",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 11.5 processus paie (l. 887)"
+        },
+        {
+          "id": "WF-007-002",
+          "action": "Calcul salaire_brut = base + HS + primes - retenues_absences",
+          "actor": "Systeme",
+          "status": "generee",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/paie",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 13.4 (l. 1123)"
+        },
+        {
+          "id": "WF-007-003",
+          "action": "Calcul cotisations = salaire_brut x taux_charges",
+          "actor": "Systeme",
+          "status": "generee",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/paie",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 13.4 (l. 1124)"
+        },
+        {
+          "id": "WF-007-004",
+          "action": "Calcul net_a_payer = brut - cotisations - deductions_prets",
+          "actor": "Systeme",
+          "status": "generee",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/paie",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 13.4 (l. 1125)"
+        },
+        {
+          "id": "WF-007-005",
+          "action": "Validation DRH (validator_id + validation_date)",
+          "actor": "DRH",
+          "status": "validee",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/paie",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 11.5 etape 5 (l. 891)"
+        },
+        {
+          "id": "WF-007-006",
+          "action": "Paiement (virement / cheque / especes) + date_paiement",
+          "actor": "Comptable Paie",
+          "status": "payee",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/paie",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 11.5 etape 6 (l. 892)"
+        },
+        {
+          "id": "WF-007-007",
+          "action": "KPI Obj. 3 : generation avant le 5 du mois suivant",
+          "actor": "Comptable Paie",
+          "status": "payee",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/paie",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 3 Objectif 3 + 10 ECRAN 16 (l. 76)"
+        }
+      ],
+      "diagram": "flowchart TD\n  A([Recuperation auto donnees]) --> B[Calcul salaire_brut]\n  B --> C[Calcul cotisations]\n  C --> D[Calcul net_a_payer]\n  D --> E([generee])\n  E --> F{DRH valide?}\n  F -->|Non| E\n  F -->|Oui| G([validee])\n  G --> H[Paiement virement/cheque/especes]\n  H --> I([payee])\n  I --> J{Generee avant le 5?}\n  J -->|Oui| K([KPI OK])\n  J -->|Non| L([Alerte KPI Obj.3])"
+    },
+    {
+      "id": "WF-008",
+      "name": "Declaration Sociale",
+      "description": "Soumission des declarations sociales (CNPS, CNP, Impots). Alertes retard automatiques + KPI Obj. 5 (0 en retard).",
+      "actors": [
+        "Comptable Paie",
+        "DRH"
+      ],
+      "steps": [
+        {
+          "id": "WF-008-001",
+          "action": "Saisie declaration (organisme, type, periode, montant, date_echeance, nombre_salaries)",
+          "actor": "Comptable Paie",
+          "status": "brouillon",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/declarations",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 10 ECRAN 17 (l. 657)"
+        },
+        {
+          "id": "WF-008-002",
+          "action": "Soumission a l'organisme + date_soumission",
+          "actor": "Comptable Paie",
+          "status": "soumise",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/declarations",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 11.5 declarations sociales (l. 899)"
+        },
+        {
+          "id": "WF-008-003",
+          "action": "Validation par l'organisme",
+          "actor": "Organisme externe",
+          "status": "validee",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/declarations",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 11.5 (l. 901)"
+        },
+        {
+          "id": "WF-008-004",
+          "action": "Si date_echeance < NOW() et statut != 'soumise' alors auto-bascule 'en_retard' (cron quotidien)",
+          "actor": "Systeme",
+          "status": "en_retard",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/declarations",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 13.9 + 17.6 trigger 6 (l. 1170)"
+        },
+        {
+          "id": "WF-008-005",
+          "action": "Si 'en_retard' alors badge rouge + auto-creation rappel (type declaration_sociale)",
+          "actor": "Systeme",
+          "status": "en_retard",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/rappels",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 10 ECRAN 17 + 13.10 (l. 660)"
+        },
+        {
+          "id": "WF-008-006",
+          "action": "KPI Obj. 5 : 0 declaration en retard",
+          "actor": "DRH",
+          "status": "validee",
+          "interface": "/domaine2_Gestion_Administrative_Personnel",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 3 Objectif 5 + 14.1 (l. 78)"
+        }
+      ],
+      "diagram": "flowchart TD\n  A([Saisie declaration]) --> B[Soumission organisme]\n  B --> C([soumise])\n  C --> D{date_echeance < NOW et non soumise?}\n  D -->|Oui, cron| E([en_retard])\n  D -->|Non| F{Organisme valide?}\n  E --> G[Badge rouge + auto-rappel]\n  F -->|Oui| H([validee])\n  F -->|Non| C\n  G --> I{KPI Obj.5 = 0 en retard?}\n  H --> I\n  I -->|Oui| J([OK])\n  I -->|Non| K([Alerte critique TdB])"
+    },
+    {
+      "id": "WF-009",
+      "name": "Sanction Disciplinaire",
+      "description": "Procedure disciplinaire complete conforme au droit du travail : constat → verification → convocation (5j min) → entretien → notification (voies de recours) → validation DRH → execution.",
+      "actors": [
+        "Manager Hierarchique",
+        "Responsable Admin RH",
+        "DRH",
+        "Employe"
+      ],
+      "steps": [
+        {
+          "id": "WF-009-001",
+          "action": "Constat de la faute (par manager ou RH)",
+          "actor": "Manager Hierarchique",
+          "status": "brouillon",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/sanctions",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 11.7 procedure + 12.3 (l. 924)"
+        },
+        {
+          "id": "WF-009-002",
+          "action": "Verification des faits (audit, temoignages)",
+          "actor": "Responsable Admin RH",
+          "status": "en_verification",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/sanctions",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 12.3 workflow sanctions (l. 997)"
+        },
+        {
+          "id": "WF-009-003",
+          "action": "Convocation a entretien (delai legal ≥ 5 jours ouvres)",
+          "actor": "Responsable Admin RH",
+          "status": "convoque",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/sanctions",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 11.7 etape 3 + 12.3 (l. 1000)"
+        },
+        {
+          "id": "WF-009-004",
+          "action": "Entretien + defense de l'employe",
+          "actor": "Employe",
+          "status": "en_entretien",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/sanctions",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 12.3 (l. 1003)"
+        },
+        {
+          "id": "WF-009-005",
+          "action": "Notification sanction (mention voies de recours obligatoire)",
+          "actor": "Responsable Admin RH",
+          "status": "notifiee",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/sanctions",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 11.7 etape 5 + 12.3 (l. 1006)"
+        },
+        {
+          "id": "WF-009-006",
+          "action": "Validation DRH (valide_par FK employees)",
+          "actor": "DRH",
+          "status": "validee",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/sanctions",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 11.7 etape 7 + 5.2 RACI (l. 1009)"
+        },
+        {
+          "id": "WF-009-007",
+          "action": "Execution (date_execution) puis suivi",
+          "actor": "Responsable Admin RH",
+          "status": "en_execution puis executee",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/sanctions",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 12.3 (l. 1012)"
+        }
+      ],
+      "diagram": "flowchart TD\n  A([Constat faute]) --> B([brouillon])\n  B --> C[Verification faits]\n  C --> D([en_verification])\n  D --> E[Convocation entretien 5j min]\n  E --> F([convoque])\n  F --> G[Entretien + defense]\n  G --> H([en_entretien])\n  H --> I[Notification + voies de recours]\n  I --> J([notifiee])\n  J --> K{DRH valide?}\n  K -->|Non| J\n  K -->|Oui| L([validee])\n  L --> M[Execution]\n  M --> N([executee])"
+    },
+    {
+      "id": "WF-010",
+      "name": "Procedure de Depart",
+      "description": "Procedure complete de depart (5 motifs) : notification → calcul solde → checklist documents → restitution materiel → offboarding IT → remise documents + solde → archivage.",
+      "actors": [
+        "Responsable Admin RH",
+        "Assistant RH",
+        "DRH",
+        "Comptable Paie",
+        "IT",
+        "Employe"
+      ],
+      "steps": [
+        {
+          "id": "WF-010-001",
+          "action": "Notification du depart (lettre demission ou notification rupture)",
+          "actor": "Employe",
+          "status": "dossier_ouvert",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/departs",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 11.8 + 12.4 (l. 1017)"
+        },
+        {
+          "id": "WF-010-002",
+          "action": "Calcul solde_conges + dernier_salaire + indemnite (par motif)",
+          "actor": "Comptable Paie",
+          "status": "en_calcul",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/departs",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 13.6 formules indemnite (l. 1137)"
+        },
+        {
+          "id": "WF-010-003",
+          "action": "Checklist documents a remettre (5 items obligatoires)",
+          "actor": "Assistant RH",
+          "status": "en_preparation",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/departs",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 11.8 etape 6 (l. 936)"
+        },
+        {
+          "id": "WF-010-004",
+          "action": "Restitution materiel (badge, ordinateur, vehicule) - 100% obligatoire",
+          "actor": "Employe",
+          "status": "en_attente_restitution",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/departs",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 11.8 etape 7 (l. 937)"
+        },
+        {
+          "id": "WF-010-005",
+          "action": "Desactivation acces IT (offboarding)",
+          "actor": "IT",
+          "status": "it_offboarding",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/departs",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 11.8 etape 8 + 12.4 (l. 1029)"
+        },
+        {
+          "id": "WF-010-006",
+          "action": "Remise documents + versement solde de tout compte",
+          "actor": "Comptable Paie",
+          "status": "remis",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/departs",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 12.4 workflow depart (l. 1032)"
+        },
+        {
+          "id": "WF-010-007",
+          "action": "Archivage automatique du dossier (5 ans)",
+          "actor": "Systeme",
+          "status": "clos",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/archivage",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 11.8 etape 9 + 12.4 (l. 1035)"
+        }
+      ],
+      "diagram": "flowchart TD\n  A([Notification depart]) --> B([dossier_ouvert])\n  B --> C[Calcul solde + indemnite]\n  C --> D([en_calcul])\n  D --> E[Checklist 5 documents]\n  E --> F([en_preparation])\n  F --> G[Restitution materiel 100%]\n  G --> H([en_attente_restitution])\n  H --> I[Offboarding IT]\n  I --> J([it_offboarding])\n  J --> K[Remise docs + versement STC]\n  K --> L([remis])\n  L --> M[Archivage auto 5 ans]\n  M --> N([clos])"
+    },
+    {
+      "id": "WF-011",
+      "name": "Demande de Pret",
+      "description": "Demande de pret (3 types) avec calculateur de mensualite (amortissement constant) + validation DRH + deduction auto en paie + passage a 'solde' quand remboursement termine.",
+      "actors": [
+        "Employe",
+        "DRH",
+        "Comptable Paie"
+      ],
+      "steps": [
+        {
+          "id": "WF-011-001",
+          "action": "Saisie demande (type, montant_demande, taux_interet, duree_mois)",
+          "actor": "Employe",
+          "status": "demande",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/prets",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 10 ECRAN 18 + 12.5 (l. 666)"
+        },
+        {
+          "id": "WF-011-002",
+          "action": "Calculateur mensualite (amortissement constant) + cas taux 0%",
+          "actor": "Systeme",
+          "status": "demande",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/prets",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 13.5 formules prets (l. 1131)"
+        },
+        {
+          "id": "WF-011-003",
+          "action": "Validation DRH (accorde ou refuse)",
+          "actor": "DRH",
+          "status": "accorde OU refuse",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/prets",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 12.5 + 5.2 RACI (l. 1043)"
+        },
+        {
+          "id": "WF-011-004",
+          "action": "Debut remboursement (date_debut_remboursement)",
+          "actor": "Comptable Paie",
+          "status": "en_remboursement",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/prets",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 12.5 (l. 1046)"
+        },
+        {
+          "id": "WF-011-005",
+          "action": "Deduction mensuelle auto dans la paie (mensualite)",
+          "actor": "Systeme",
+          "status": "en_remboursement",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/paie",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 11.7 + 13.5 (l. 921)"
+        },
+        {
+          "id": "WF-011-006",
+          "action": "Si solde_restant = 0 alors auto-bascule a 'solde'",
+          "actor": "Systeme",
+          "status": "solde",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/prets",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 12.5 (l. 1051)"
+        }
+      ],
+      "diagram": "flowchart TD\n  A([Demande employe]) --> B[Calculateur mensualite]\n  B --> C([demande])\n  C --> D{DRH valide?}\n  D -->|Non| E([refuse])\n  D -->|Oui| F([accorde])\n  F --> G[Debut remboursement]\n  G --> H([en_remboursement])\n  H --> I[Deduction mensuelle paie]\n  I --> J{solde_restant = 0?}\n  J -->|Non| I\n  J -->|Oui| K([solde])"
+    },
+    {
+      "id": "WF-012",
+      "name": "Visite Medicale",
+      "description": "Visites medicales (4 types : embauche, periodique, reprise, demandee). 4 niveaux d'aptitude. Auto-creation visite de reprise si inapte_temporaire. Alerte rappel < 15j.",
+      "actors": [
+        "Assistant RH",
+        "Medecin du travail",
+        "Employe"
+      ],
+      "steps": [
+        {
+          "id": "WF-012-001",
+          "action": "Planification visite (type ∈ embauche / periodique / reprise / demandee)",
+          "actor": "Assistant RH",
+          "status": "planifiee",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/visites-medicales",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 10 ECRAN 20 + 12.8 (l. 1082)"
+        },
+        {
+          "id": "WF-012-002",
+          "action": "Realisation de la visite",
+          "actor": "Medecin du travail",
+          "status": "realisee",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/visites-medicales",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 12.8 (l. 1085)"
+        },
+        {
+          "id": "WF-012-003",
+          "action": "Saisie resultat + aptitude (4 niveaux) + restrictions + cout",
+          "actor": "Medecin du travail",
+          "status": "completee",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/visites-medicales",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 12.8 (l. 1088)"
+        },
+        {
+          "id": "WF-012-004",
+          "action": "Si aptitude='inapte_temporaire' alors auto-creation visite de reprise a +30 jours",
+          "actor": "Systeme",
+          "status": "completee",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/visites-medicales",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 12.8 (l. 1090)"
+        },
+        {
+          "id": "WF-012-005",
+          "action": "Calcul date_prochaine_visite (visite periodique = +12 mois)",
+          "actor": "Systeme",
+          "status": "completee",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/visites-medicales",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 11.6 (l. 912)"
+        },
+        {
+          "id": "WF-012-006",
+          "action": "Si date_prochaine_visite - NOW() ≤ 15j alors auto-creation rappel (type visite_medicale)",
+          "actor": "Systeme",
+          "status": "completee",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/rappels",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 13.10 + 17.6 trigger (l. 1181)"
+        }
+      ],
+      "diagram": "flowchart TD\n  A([Planification visite]) --> B([planifiee])\n  B --> C[Realisation visite]\n  C --> D([realisee])\n  D --> E[Saisie resultat + aptitude]\n  E --> F([completee])\n  F --> G{aptitude?}\n  G -->|apte| H[Calcul date prochaine +12 mois]\n  G -->|apte_avec_restrictions| H\n  G -->|inapte_temporaire| I[Auto-creation visite reprise +30j]\n  G -->|inapte_definitif| J[Alerte critique RH + paie]\n  I --> H\n  H --> K{prochaine ≤ 15j?}\n  K -->|Oui| L[Auto-creation rappel]\n  K -->|Non| M([Fin])\n  L --> M"
+    },
+    {
+      "id": "WF-013",
+      "name": "Archivage Documentaire",
+      "description": "Archivage documentaire avec durees de conservation 1/3/5 ans selon le type. Verrouillage lecture seule (gate Phase 5). Audit interne annuel.",
+      "actors": [
+        "Assistant RH",
+        "Responsable Admin RH",
+        "Auditeur Interne"
+      ],
+      "steps": [
+        {
+          "id": "WF-013-001",
+          "action": "Selection du document a archiver (depuis documents, departs, etc.)",
+          "actor": "Assistant RH",
+          "status": "brouillon",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/archivage",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 10 ECRAN 22 + 11.8 (l. 749)"
+        },
+        {
+          "id": "WF-013-002",
+          "action": "Attribution duree_conservation (1/3/5 ans selon type_document, auto-suggestion)",
+          "actor": "Systeme",
+          "status": "brouillon",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/archivage",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 10 ECRAN 22 regles (l. 753)"
+        },
+        {
+          "id": "WF-013-003",
+          "action": "Choix lieu_stockage (Archive numerique RH / Archive physique Salle B)",
+          "actor": "Responsable Admin RH",
+          "status": "archive",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/archivage",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 8.1 + 11.8 (l. 285)"
+        },
+        {
+          "id": "WF-013-004",
+          "action": "Verrouillage lecture seule (gate Phase 5 irreversible)",
+          "actor": "Systeme",
+          "status": "archive_lock",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/archivage",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 7 regles de basculement Phase 5 (l. 265)"
+        },
+        {
+          "id": "WF-013-005",
+          "action": "Tracabilite : responsable + date archive + observations",
+          "actor": "Responsable Admin RH",
+          "status": "archive_lock",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/archivage",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 8.1 table d02_document_archives (l. 285)"
+        },
+        {
+          "id": "WF-013-006",
+          "action": "Audit interne annuel (verification durees de conservation respectees)",
+          "actor": "Auditeur Interne",
+          "status": "audite",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/archivage",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 4.2 audits internes (l. 100)"
+        }
+      ],
+      "diagram": "flowchart TD\n  A([Selection document a archiver]) --> B[Auto-suggestion duree selon type]\n  B --> C[Choix lieu_stockage]\n  C --> D([archive])\n  D --> E[Verrouillage lecture seule Phase 5]\n  E --> F([archive_lock irreversible])\n  F --> G[Tracabilite responsable + date]\n  G --> H{Audit annuel?}\n  H -->|OK| I([audite conforme])\n  H -->|NC| J([Non-conformite])"
+    },
+    {
+      "id": "WF-014",
+      "name": "Generation automatique de Rappels",
+      "description": "Generation automatique de rappels par triggers SQL et cron quotidien. 5 sources (documents, contrats, essai, visites medicales, declarations).",
+      "actors": [
+        "Systeme (triggers / cron)",
+        "Responsable Admin RH",
+        "Assistant RH"
+      ],
+      "steps": [
+        {
+          "id": "WF-014-001",
+          "action": "Trigger sur d02_employee_documents : si jours ≤ 30 alors INSERT rappel (type expiration_document)",
+          "actor": "Systeme",
+          "status": "en_attente",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/rappels",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 13.10 + 17.6 trigger 3 (l. 1177)"
+        },
+        {
+          "id": "WF-014-002",
+          "action": "Trigger sur d02_work_permits : si jours ≤ 30 alors INSERT rappel (type expiration_document)",
+          "actor": "Systeme",
+          "status": "en_attente",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/rappels",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 13.10 (l. 1178)"
+        },
+        {
+          "id": "WF-014-003",
+          "action": "Trigger sur d02_contracts : si jours ≤ 30 alors INSERT rappel (type renouvellement_contrat)",
+          "actor": "Systeme",
+          "status": "en_attente",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/rappels",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 13.10 (l. 1179)"
+        },
+        {
+          "id": "WF-014-004",
+          "action": "Trigger sur d02_contracts essai : si echeance periode essai ≤ 7j alors INSERT rappel (type echeance_periode_essai)",
+          "actor": "Systeme",
+          "status": "en_attente",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/rappels",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 13.10 (l. 1180)"
+        },
+        {
+          "id": "WF-014-005",
+          "action": "Trigger sur d02_medical_visits : si date_prochaine ≤ NOW()+15j alors INSERT rappel (type visite_medicale)",
+          "actor": "Systeme",
+          "status": "en_attente",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/rappels",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 13.10 (l. 1181)"
+        },
+        {
+          "id": "WF-014-006",
+          "action": "Trigger sur d02_social_declarations : si date_echeance ≤ NOW()+7j alors INSERT rappel (type declaration_sociale)",
+          "actor": "Systeme",
+          "status": "en_attente",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/rappels",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 13.10 (l. 1182)"
+        },
+        {
+          "id": "WF-014-007",
+          "action": "Cron quotidien 00h00 : bascule 'en_retard' si date_echeance < NOW() et statut='en_attente'",
+          "actor": "Systeme",
+          "status": "en_retard",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/rappels",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 17.6 trigger 6 + 13.9 (l. 1482)"
+        },
+        {
+          "id": "WF-014-008",
+          "action": "Traitement par responsable_suivi (realisation action_requise) → 'traite'",
+          "actor": "Responsable Admin RH",
+          "status": "traite",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/rappels",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 11.9 + 10 ECRAN 22b (l. 778)"
+        }
+      ],
+      "diagram": "flowchart TD\n  subgraph Sources\n    A1[d02_employee_documents ≤ 30j]\n    A2[d02_work_permits ≤ 30j]\n    A3[d02_contracts ≤ 30j]\n    A4[d02_contracts essai ≤ 7j]\n    A5[d02_medical_visits ≤ 15j]\n    A6[d02_social_declarations ≤ 7j]\n  end\n  A1 --> B[INSERT rappel en_attente]\n  A2 --> B\n  A3 --> B\n  A4 --> B\n  A5 --> B\n  A6 --> B\n  B --> C{Cron quotidien 00h00}\n  C --> D{date_echeance < NOW?}\n  D -->|Oui| E([en_retard])\n  D -->|Non| F([en_attente])\n  E --> G[Traitement responsable_suivi]\n  F --> G\n  G --> H([traite])"
+    },
+    {
+      "id": "WF-015",
+      "name": "Cycle PDCA trimestriel",
+      "description": "Cycle PDCA (Plan-Do-Check-Act) de Deming. Revue trimestrielle de direction. Detection et traitement des non-conformites (5 Pourquoi / Ishikawa). Conformite ISO 9001 §9.2 + §9.3.",
+      "actors": [
+        "DRH",
+        "Responsable Admin RH",
+        "Auditeur Interne",
+        "Direction Generale"
+      ],
+      "steps": [
+        {
+          "id": "WF-015-001",
+          "action": "PLAN : Definition objectifs + KPIs cibles (annuel + trimestriel)",
+          "actor": "DRH",
+          "status": "plan",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/pdca",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 4 cycle PDCA + 10 ECRAN 23 (l. 88)"
+        },
+        {
+          "id": "WF-015-002",
+          "action": "DO : Mise en oeuvre des procedures (quotidien, 22 feuilles)",
+          "actor": "Responsable Admin RH",
+          "status": "do",
+          "interface": "/domaine2_Gestion_Administrative_Personnel",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 4 cycle PDCA (l. 91)"
+        },
+        {
+          "id": "WF-015-003",
+          "action": "CHECK : Audit interne semestriel + analyse KPIs trimestrielle",
+          "actor": "Auditeur Interne",
+          "status": "check",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/non-conformites",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 4.2 audits internes + 4 cycle PDCA (l. 100)"
+        },
+        {
+          "id": "WF-015-004",
+          "action": "Detection non-conformites → enregistrement dans registre d02_non_conformities",
+          "actor": "Auditeur Interne",
+          "status": "check",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/non-conformites",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 4.3 traitement NC + 8.3 table (l. 108)"
+        },
+        {
+          "id": "WF-015-005",
+          "action": "Analyse cause racine (methode 5 Pourquoi ou Ishikawa)",
+          "actor": "Responsable Admin RH",
+          "status": "check",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/non-conformites",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 4.3 traitement NC (l. 113)"
+        },
+        {
+          "id": "WF-015-006",
+          "action": "ACT : Mise en oeuvre actions correctives + maj procedures",
+          "actor": "DRH",
+          "status": "act",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/pdca",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 4 cycle PDCA + 10 ECRAN 23 (l. 93)"
+        },
+        {
+          "id": "WF-015-007",
+          "action": "Revue de direction trimestrielle (compte-rendu documente)",
+          "actor": "Direction Generale",
+          "status": "act",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/pdca",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 4.1 revues de direction (l. 95)"
+        },
+        {
+          "id": "WF-015-008",
+          "action": "Verification de l'efficacite des actions → feedback vers nouveau PLAN",
+          "actor": "Auditeur Interne",
+          "status": "plan",
+          "interface": "/domaine2_Gestion_Administrative_Personnel/pdca",
+          "source": "PROMPT_DEV_Domaine2_Complet_V2.md section 4.3 etape 6 verification (l. 116)"
+        }
+      ],
+      "diagram": "flowchart TD\n  A([PLAN: objectifs + KPIs]) --> B[DO: execution quotidienne]\n  B --> C[CHECK: audit semestriel + KPIs trimestriel]\n  C --> D{NC detectee?}\n  D -->|Oui| E[Enregistrement registre NC]\n  D -->|Non| K([Conforme])\n  E --> F[Analyse cause racine 5P/Ishikawa]\n  F --> G[ACT: actions correctives + maj procedures]\n  G --> H[Revue direction trimestrielle]\n  H --> I{Efficacite verifiee?}\n  I -->|Oui| A\n  I -->|Non| G\n  K --> H"
+    }
+  ]
+}
