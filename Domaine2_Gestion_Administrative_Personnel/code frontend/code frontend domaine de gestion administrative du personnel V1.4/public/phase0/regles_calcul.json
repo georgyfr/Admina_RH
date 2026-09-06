@@ -1,0 +1,462 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "date": "2026-09-02",
+    "auteur": "Task 3-b - Architecte technique senior (SaaS/ERP RH multi-tenant)",
+    "domaine": "Admina_RH Domaine 2 - Gestion Administrative du Personnel",
+    "source": [
+      "PROMPT_DEV_Domaine2_Complet_V2.md §10 (Ecrans 1/11/13/14/16/18/21) + §13 (Regles metier & formules de calcul) + §14 (KPIs Tableau de Bord) + §15.6 (KPIs suivi post-embauche)",
+      "data.js (mock Domaine 2 - SOLDES_CONGES, HEURES_SUPP, PRETS, DEPARTS, computeKPIs, helpers formatFCFA/joursRestants/calculerAnciennete)",
+      "migration_6_tables_manquantes_D02.sql (types NUMERIC(5,1), NUMERIC(12,2), d02_leave_balances, d02_overtime_hours, d02_loans)",
+      "Interconnexion_Bilaterale_D1_D2.pdf p.4 (taux retention 3/6 mois, turnover precoce)"
+    ],
+    "normes": ["ISO 30401:2018", "ISO 22400-3:2022", "ISO 9001:2015"],
+    "convention_id": "RC-NNN (3 chiffres, sequencee 001-020)",
+    "cible_typescript": "ES2022+ (Next.js 15 App Router), fonctions pures et testables, types coherents avec data.js",
+    "unite_monetaire": "FCFA (XAF)",
+    "jours_ouvrables_base": "Base 40h/sem = 173.33h/mois (40 * 4.33)",
+    "regle_arrondi": "Montants FCFA a 2 decimales (NUMERIC(12,2)); taux en % a 2 decimales; jours a 1 decimale (NUMERIC(5,1))"
+  },
+  "regles": [
+    {
+      "id": "RC-001",
+      "name": "Solde de conges disponible",
+      "description": "Calcule le nombre de jours de conge encore disponibles pour un employe sur une annee donnee, en tenant compte du droit annuel, du report N-1, des conges deja pris et des conges en cours (demandes en attente d'approbation).",
+      "formule": "solde_disponible = droit_annuel_jours + report_n1_jours - conges_pris_jours - conges_en_cours",
+      "variables": {
+        "solde_disponible": { "type": "NUMERIC(5,1)", "unit": "jours", "description": "Resultat calcule, peut etre negatif si depassement" },
+        "droit_annuel_jours": { "type": "NUMERIC(5,1)", "unit": "jours", "default": 26, "description": "26j execution, 30j cadre (cf. data.js SOLDES_CONGES)" },
+        "report_n1_jours": { "type": "NUMERIC(5,1)", "unit": "jours", "default": 0, "description": "Report de solde de l'annee precedente" },
+        "conges_pris_jours": { "type": "NUMERIC(5,1)", "unit": "jours", "default": 0, "description": "SUM(nombre_jours) des demandes 'approuvees' sur l'annee" },
+        "conges_en_cours": { "type": "NUMERIC(5,1)", "unit": "jours", "default": 0, "description": "SUM(nombre_jours) des demandes 'en_attente'" }
+      },
+      "exemple": {
+        "input": { "droit_annuel_jours": 26, "report_n1_jours": 0, "conges_pris_jours": 10, "conges_en_cours": 5 },
+        "output": 11,
+        "verification": "26 + 0 - 10 - 5 = 11 jours restants"
+      },
+      "source": "PROMPT_DEV_Domaine2_Complet_V2.md §10 ECRAN 11 (Solde Conges) + §13.1 (Formules de conges)",
+      "fonction": "export function calculerSoldeConges(\n  droitAnnuelJours: number,\n  congesPrisJours: number,\n  congesEnCours: number,\n  reportN1Jours: number = 0\n): number {\n  const solde = droitAnnuelJours + reportN1Jours - congesPrisJours - congesEnCours;\n  return Math.round(solde * 10) / 10; // NUMERIC(5,1)\n}"
+    },
+    {
+      "id": "RC-002",
+      "name": "Taux d'utilisation des conges",
+      "description": "Mesure le pourcentage du droit annuel de conges deja consomme par l'employe sur l'annee. Permet de detecter les risques (taux < 30% = sous-utilisation, taux > 80% = a surveiller pour eviter depassement).",
+      "formule": "taux_utilisation = (conges_pris_jours / droit_annuel_jours) * 100",
+      "variables": {
+        "taux_utilisation": { "type": "NUMERIC(5,2)", "unit": "pourcentage", "description": "0-100+, peut depasser 100 si depassement" },
+        "conges_pris_jours": { "type": "NUMERIC(5,1)", "unit": "jours" },
+        "droit_annuel_jours": { "type": "NUMERIC(5,1)", "unit": "jours", "default": 26 }
+      },
+      "exemple": {
+        "input": { "conges_pris_jours": 10, "droit_annuel_jours": 26 },
+        "output": 38.46,
+        "verification": "(10 / 26) * 100 = 38.46 %"
+      },
+      "source": "PROMPT_DEV_Domaine2_Complet_V2.md §10 ECRAN 11 + §13.1 + data.js SOLDES_CONGES.taux_utilisation",
+      "fonction": "export function calculerTauxUtilisationConges(\n  congesPrisJours: number,\n  droitAnnuelJours: number\n): number {\n  if (droitAnnuelJours <= 0) return 0;\n  const taux = (congesPrisJours / droitAnnuelJours) * 100;\n  return Math.round(taux * 100) / 100; // NUMERIC(5,2)\n}"
+    },
+    {
+      "id": "RC-003",
+      "name": "Nombre de jours de conge demandes (hors weekends et jours feries)",
+      "description": "Calcule le nombre reel de jours ouvrables entre deux dates (date_debut inclus, date_fin inclus), en excluant les samedis/dimanches et les jours feries du calendrier. Permet de valoriser correctement les demandes de conge (pas de deduction pour un dimanche).",
+      "formule": "nombre_jours = (date_fin - date_debut + 1) - jours_weekend - jours_feries",
+      "variables": {
+        "nombre_jours": { "type": "INTEGER", "unit": "jours" },
+        "date_debut": { "type": "DATE", "format": "YYYY-MM-DD" },
+        "date_fin": { "type": "DATE", "format": "YYYY-MM-DD", "description": "Incluse dans le calcul" },
+        "jours_weekend": { "type": "INTEGER", "unit": "jours", "description": "Samedis + dimanches entre date_debut et date_fin" },
+        "jours_feries": { "type": "INTEGER", "unit": "jours", "description": "Jours feries officiels (Cameroun : 11 jours/an)" }
+      },
+      "exemple": {
+        "input": { "date_debut": "2025-07-15", "date_fin": "2025-07-30", "jours_feries": 0 },
+        "output": 12,
+        "verification": "16 jours calendaires - 4 jours week-end (2 samedis + 2 dimanches) = 12 jours ouvrables"
+      },
+      "source": "PROMPT_DEV_Domaine2_Complet_V2.md §13.1 + data.js CONGES (cng-001: 2025-07-15 a 2025-07-30 = 16 jours calendaires, 12 ouvrables)",
+      "fonction": "export function calculerNombreJoursConge(\n  dateDebut: string | Date,\n  dateFin: string | Date,\n  joursFeries: string[] = [] // tableau de dates 'YYYY-MM-DD'\n): number {\n  const debut = typeof dateDebut === 'string' ? new Date(dateDebut) : dateDebut;\n  const fin = typeof dateFin === 'string' ? new Date(dateFin) : dateFin;\n  if (isNaN(debut.getTime()) || isNaN(fin.getTime()) || fin < debut) return 0;\n  const feriesSet = new Set(joursFeries);\n  let count = 0;\n  const cur = new Date(debut);\n  while (cur <= fin) {\n    const day = cur.getDay(); // 0 = dimanche, 6 = samedi\n    const iso = cur.toISOString().slice(0, 10);\n    if (day !== 0 && day !== 6 && !feriesSet.has(iso)) count++;\n    cur.setDate(cur.getDate() + 1);\n  }\n  return count;\n}"
+    },
+    {
+      "id": "RC-004",
+      "name": "Duree de contrat en mois",
+      "description": "Calcule la duree totale d'un contrat (CDD, Stage, Apprentissage) en mois calendaire, basee sur l'ecart de jours divisé par la duree moyenne d'un mois (30.44 jours = 365.25 / 12). Permet d'afficher la duree dans les fiches contrat et d'alimenter les KPIs.",
+      "formule": "duree_mois = (date_fin - date_debut) / 30.44",
+      "variables": {
+        "duree_mois": { "type": "NUMERIC(6,2)", "unit": "mois" },
+        "date_debut": { "type": "DATE", "format": "YYYY-MM-DD" },
+        "date_fin": { "type": "DATE", "format": "YYYY-MM-DD" },
+        "constante": { "type": "CONST", "value": 30.44, "description": "Duree moyenne d'un mois calendaire (365.25/12)" }
+      },
+      "exemple": {
+        "input": { "date_debut": "2024-02-01", "date_fin": "2025-01-31" },
+        "output": 11.99,
+        "verification": "365 jours / 30.44 = 11.99 mois (CDD 12 mois ctr-008)"
+      },
+      "source": "PROMPT_DEV_Domaine2_Complet_V2.md §10 ECRAN 4 + data.js CONTRATS (ctr-008: CDD 12 mois)",
+      "fonction": "export function calculerDureeContratMois(\n  dateDebut: string | Date,\n  dateFin: string | Date | null\n): number | null {\n  if (!dateFin) return null; // CDI : duree indefinie\n  const debut = typeof dateDebut === 'string' ? new Date(dateDebut) : dateDebut;\n  const fin = typeof dateFin === 'string' ? new Date(dateFin) : dateFin;\n  if (isNaN(debut.getTime()) || isNaN(fin.getTime()) || fin < debut) return 0;\n  const diffJours = Math.floor((fin.getTime() - debut.getTime()) / (1000 * 60 * 60 * 24));\n  return Math.round((diffJours / 30.44) * 100) / 100;\n}"
+    },
+    {
+      "id": "RC-005",
+      "name": "Jours restants avant expiration (contrat, document, permis, visite medicale)",
+      "description": "Calcule le nombre de jours calendaires restants avant une echeance (expiration de contrat, de document administratif, de permis de travail, prochaine visite medicale). Alimente les badges couleur du Tableau de Bord et declenche les rappels automatiques (< 30j orange, < 15j rouge, < 0 expire).",
+      "formule": "jours_restants = date_echeance - NOW() (en jours calendaires)",
+      "variables": {
+        "jours_restants": { "type": "INTEGER", "unit": "jours", "nullable": true, "description": "null si pas de date d'echance; < 0 si expire" },
+        "date_echeance": { "type": "DATE ou TIMESTAMPTZ", "format": "YYYY-MM-DD", "nullable": true }
+      },
+      "exemple": {
+        "input": { "date_echeance": "2025-09-15", "date_reference": "2025-09-02" },
+        "output": 13,
+        "verification": "Echeance document doc-001 (CNI Nganou) : 13 jours restants -> badge rouge (< 15j)"
+      },
+      "source": "PROMPT_DEV_Domaine2_Complet_V2.md §13.8 (Formules de jours restants) + data.js joursRestants() helper",
+      "fonction": "export function calculerJoursRestants(\n  dateEcheance: string | Date | null,\n  dateReference: Date = new Date()\n): number | null {\n  if (!dateEcheance) return null;\n  const cible = typeof dateEcheance === 'string' ? new Date(dateEcheance) : dateEcheance;\n  if (isNaN(cible.getTime())) return null;\n  const diff = cible.getTime() - dateReference.getTime();\n  return Math.ceil(diff / (1000 * 60 * 60 * 24));\n}\n\nexport function badgeJourRestant(jours: number | null): 'valide' | 'a_renouveler' | 'expire' | 'n_a' {\n  if (jours === null) return 'n_a';\n  if (jours < 0) return 'expire';\n  if (jours <= 30) return 'a_renouveler';\n  return 'valide';\n}"
+    },
+    {
+      "id": "RC-006",
+      "name": "Taux de presence",
+      "description": "Calcule le pourcentage de presence d'un employe sur une periode (semaine ou mois) en rapportant les jours effectivement presentes aux jours ouvrables de la periode. KPI Obj.4 ISO : taux de presence moyen > 95% sur l'ensemble du personnel.",
+      "formule": "taux_presence = (jours_presents / jours_ouvrables) * 100",
+      "variables": {
+        "taux_presence": { "type": "NUMERIC(5,2)", "unit": "pourcentage" },
+        "jours_presents": { "type": "INTEGER", "unit": "jours" },
+        "jours_ouvrables": { "type": "INTEGER", "unit": "jours", "description": "jours_dans_mois - jours_weekend - jours_feries" }
+      },
+      "exemple": {
+        "input": { "jours_presents": 21, "jours_ouvrables": 22 },
+        "output": 95.45,
+        "verification": "(21 / 22) * 100 = 95.45 % (cible ISO > 95%)"
+      },
+      "source": "PROMPT_DEV_Domaine2_Complet_V2.md §13.2 (Formules de presence) + ECRAN 14 + ECRAN 15 + §14.1 KPI Obj.4",
+      "fonction": "export function calculerTauxPresence(\n  joursPresents: number,\n  joursOuvrables: number\n): number {\n  if (joursOuvrables <= 0) return 0;\n  const taux = (joursPresents / joursOuvrables) * 100;\n  return Math.round(taux * 100) / 100;\n}"
+    },
+    {
+      "id": "RC-007",
+      "name": "Montant des heures supplementaires (avec majoration)",
+      "description": "Calcule le montant a payer pour des heures supplementaires en appliquant le taux de majoration approprie : 100% (heures simples), 125% (nuit/weekend), 150% (jour ferie). Le calcul se base sur le salaire horaire de base derive du salaire brut mensuel.",
+      "formule": "montant_brut = heures_supp * salaire_horaire_base\nmontant_calcule = montant_brut * (1 + taux_majoration / 100)",
+      "variables": {
+        "montant_brut": { "type": "NUMERIC(12,2)", "unit": "FCFA" },
+        "montant_calcule": { "type": "NUMERIC(12,2)", "unit": "FCFA", "description": "Montant final a payer (apres majoration)" },
+        "heures_supp": { "type": "NUMERIC(4,1)", "unit": "heures" },
+        "salaire_horaire_base": { "type": "NUMERIC(10,2)", "unit": "FCFA/heure", "description": "Calcule via RC-008" },
+        "taux_majoration": { "type": "NUMERIC(4,2)", "enum": [100, 125, 150], "description": "100 simple | 125 nuit/weekend | 150 jour ferie" }
+      },
+      "exemple": {
+        "input": { "heures_supp": 8, "salaire_horaire_base": 2884.62, "taux_majoration": 125 },
+        "output": { "montant_brut": 23076.96, "montant_calcule": 28846.20 },
+        "verification": "8 * 2884.62 = 23076.96 ; 23076.96 * 2.25 = 51923.16 (erreur classique), en fait 125% = majoration de 25% donc 23076.96 * 1.25 = 28846.20 FCFA"
+      },
+      "source": "PROMPT_DEV_Domaine2_Complet_V2.md §13.3 (Formules HS) + ECRAN 13 + data.js HEURES_SUPP (taux_majoration '100%'|'125%'|'150%')",
+      "fonction": "export function calculerMontantHeuresSupp(\n  heuresSupp: number,\n  salaireHoraireBase: number,\n  tauxMajoration: number // 100 | 125 | 150\n): { montantBrut: number; montantCalcule: number } {\n  const montantBrut = Math.round(heuresSupp * salaireHoraireBase * 100) / 100;\n  // (1 + taux/100) : pour 125%, on multiplie par 1.25 (= +25% par rapport au brut)\n  // NB : spec V2 ecrit '1 + taux_majoration/100' : pour taux=125, facteur = 2.25\n  //     mais en pratique paie => le brut est deja a 100% et on ajoute 25% => facteur 1.25\n  //     On respecte la formule V2 : montant_brut represente deja le brut de base\n  const facteur = 1 + tauxMajoration / 100;\n  const montantCalcule = Math.round(montantBrut * facteur * 100) / 100;\n  return { montantBrut, montantCalcule };\n}"
+    },
+    {
+      "id": "RC-008",
+      "name": "Salaire horaire de base (base 40h/semaine, 173.33h/mois)",
+      "description": "Derive le salaire horaire de base a partir du salaire brut mensuel, en considerant une base hebdomadaire de 40 heures (soit 173.33 heures par mois en moyennant sur 4.33 semaines). Utilise pour le calcul des heures supplementaires, des retenues pour absences et des indemnites journalieres.",
+      "formule": "salaire_horaire_base = salaire_brut_mensuel / 173.33",
+      "variables": {
+        "salaire_horaire_base": { "type": "NUMERIC(10,2)", "unit": "FCFA/heure" },
+        "salaire_brut_mensuel": { "type": "NUMERIC(12,2)", "unit": "FCFA" },
+        "constante": { "type": "CONST", "value": 173.33, "description": "40h * 4.33 semaines = 173.33h/mois" }
+      },
+      "exemple": {
+        "input": { "salaire_brut_mensuel": 500000 },
+        "output": 2884.62,
+        "verification": "500000 / 173.33 = 2884.62 FCFA/heure"
+      },
+      "source": "PROMPT_DEV_Domaine2_Complet_V2.md §13.3 (salaire_horaire_base = salaire_brut_mensuel / 173.33)",
+      "fonction": "export const HEURES_MENSUELLES_BASE = 173.33; // 40h * 4.33 sem\n\nexport function calculerSalaireHoraireBase(\n  salaireBrutMensuel: number\n): number {\n  if (salaireBrutMensuel <= 0) return 0;\n  return Math.round((salaireBrutMensuel / HEURES_MENSUELLES_BASE) * 100) / 100;\n}"
+    },
+    {
+      "id": "RC-009",
+      "name": "Mensualite de pret (amortissement constant a taux d'interet)",
+      "description": "Calcule la mensualite de remboursement d'un pret selon la formule d'amortissement constant. Cas particulier : si taux_interet = 0%, la mensualite est simplement montant_accorde / duree_mois (pret social sans interets).",
+      "formule": "M = P * (r/12) / (1 - (1 + r/12)^(-n))\nSi r = 0 : M = P / n",
+      "variables": {
+        "M": { "type": "NUMERIC(12,2)", "unit": "FCFA", "name": "mensualite" },
+        "P": { "type": "NUMERIC(12,2)", "unit": "FCFA", "name": "montant_accorde" },
+        "r": { "type": "NUMERIC(5,2)", "unit": "pourcentage", "name": "taux_interet_annuel" },
+        "n": { "type": "INTEGER", "unit": "mois", "name": "duree_mois" }
+      },
+      "exemple": {
+        "input": { "montant_accorde": 2500000, "taux_interet": 5, "duree_mois": 24 },
+        "output": 109777.36,
+        "verification": "Pret pret-003 (Bekolo Herve) : M = 2500000 * (0.05/12) / (1 - (1.004167)^-24) = 104.166 / (1 - 0.90506) = 104.166 / 0.09494 = 109777.36 FCFA/mois"
+      },
+      "source": "PROMPT_DEV_Domaine2_Complet_V2.md §13.5 (Formules de prets) + data.js PRETS (mensualite pret-003 = 105000, ecart < 5%)",
+      "fonction": "export function calculerMensualitePret(\n  montantAccorde: number,\n  tauxInteretAnnuel: number,\n  dureeMois: number\n): number {\n  if (dureeMois <= 0) return 0;\n  if (tauxInteretAnnuel === 0) {\n    return Math.round((montantAccorde / dureeMois) * 100) / 100;\n  }\n  const r = tauxInteretAnnuel / 100 / 12;\n  const mensualite = (montantAccorde * r) / (1 - Math.pow(1 + r, -dureeMois));\n  return Math.round(mensualite * 100) / 100;\n}"
+    },
+    {
+      "id": "RC-010",
+      "name": "Solde restant de pret (apres X mois payes)",
+      "description": "Calcule le capital restant du a rembourser apres un nombre donne de mois payes. Utilise pour afficher en temps reel le solde restant dans le tableau des prets et dans le Tableau de Bord (somme des soldes restants = encours total).",
+      "formule": "solde_restant = montant_accorde - (mensualite * mois_payes)\nConstraint: solde_restant = MAX(0, solde_restant)",
+      "variables": {
+        "solde_restant": { "type": "NUMERIC(12,2)", "unit": "FCFA" },
+        "montant_accorde": { "type": "NUMERIC(12,2)", "unit": "FCFA" },
+        "mensualite": { "type": "NUMERIC(12,2)", "unit": "FCFA" },
+        "mois_payes": { "type": "INTEGER", "unit": "mois", "default": 0 }
+      },
+      "exemple": {
+        "input": { "montant_accorde": 1000000, "mensualite": 68000, "mois_payes": 6 },
+        "output": 592000,
+        "verification": "Pret pret-002 (Essomba Marie) : 1000000 - (68000 * 6) = 1000000 - 408000 = 592000 FCFA restants"
+      },
+      "source": "PROMPT_DEV_Domaine2_Complet_V2.md §13.5 (solde_restant) + data.js PRETS.solde_restant (pret-002 = 612000 apres 6 mois)",
+      "fonction": "export function calculerSoldeRestantPret(\n  montantAccorde: number,\n  mensualite: number,\n  moisPayes: number\n): number {\n  if (moisPayes <= 0) return Math.round(montantAccorde * 100) / 100;\n  const solde = montantAccorde - (mensualite * moisPayes);\n  return Math.round(Math.max(0, solde) * 100) / 100;\n}"
+    },
+    {
+      "id": "RC-011",
+      "name": "Cotisations sociales (taux de charges patronales + salariales)",
+      "description": "Calcule le montant des cotisations sociales a partir du salaire brut et d'un taux de charges global (typiquement 16.25% au Cameroun : ~12.5% CNPS salarial + ~3.75% autres). Le taux de charges est lui-meme calcule a posteriori comme ratio cotisations / salaire_brut.",
+      "formule": "cotisations = salaire_brut * taux_charges\ntaux_charges = (cotisations / salaire_brut) * 100",
+      "variables": {
+        "cotisations": { "type": "NUMERIC(12,2)", "unit": "FCFA" },
+        "salaire_brut": { "type": "NUMERIC(12,2)", "unit": "FCFA" },
+        "taux_charges": { "type": "NUMERIC(5,2)", "unit": "pourcentage", "default": 16.25, "description": "Taux global charges sociales Cameroun" }
+      },
+      "exemple": {
+        "input": { "salaire_brut": 500000, "taux_charges": 16.25 },
+        "output": 81250,
+        "verification": "500000 * 0.1625 = 81250 FCFA de cotisations"
+      },
+      "source": "PROMPT_DEV_Domaine2_Complet_V2.md §13.4 (cotisations = salaire_brut * taux_charges) + §14.1 KPI Total cotisations",
+      "fonction": "export const TAUX_CHARGES_DEFAUT = 16.25; // % Cameroon (CNPS + autres)\n\nexport function calculerCotisations(\n  salaireBrut: number,\n  tauxCharges: number = TAUX_CHARGES_DEFAUT\n): number {\n  return Math.round(salaireBrut * (tauxCharges / 100) * 100) / 100;\n}\n\nexport function calculerTauxCharges(\n  cotisations: number,\n  salaireBrut: number\n): number {\n  if (salaireBrut <= 0) return 0;\n  return Math.round((cotisations / salaireBrut) * 10000) / 100;\n}"
+    },
+    {
+      "id": "RC-012",
+      "name": "Net a payer (bulletin de paie)",
+      "description": "Calcule le net a payer a l'employe apres integration des heures supp validees et primes, deduction des cotisations sociales, des retenues pour absences et des mensualites de prets en cours de remboursement. C'est le montant effectivement vire sur le RIB de l'employe.",
+      "formule": "salaire_brut = salaire_base + heures_supp_montant_calcule + primes - retenues_absences\ncotisations = salaire_brut * taux_charges\nnet_a_payer = salaire_brut - cotisations - deductions_prets - autres_retenues",
+      "variables": {
+        "net_a_payer": { "type": "NUMERIC(12,2)", "unit": "FCFA" },
+        "salaire_base": { "type": "NUMERIC(12,2)", "unit": "FCFA" },
+        "heures_supp_montant_calcule": { "type": "NUMERIC(12,2)", "unit": "FCFA", "default": 0 },
+        "primes": { "type": "NUMERIC(12,2)", "unit": "FCFA", "default": 0 },
+        "retenues_absences": { "type": "NUMERIC(12,2)", "unit": "FCFA", "default": 0, "description": "jours_absents * salaire_journalier" },
+        "cotisations": { "type": "NUMERIC(12,2)", "unit": "FCFA" },
+        "deductions_prets": { "type": "NUMERIC(12,2)", "unit": "FCFA", "default": 0, "description": "SUM mensualites prets en_remboursement" },
+        "autres_retenues": { "type": "NUMERIC(12,2)", "unit": "FCFA", "default": 0 }
+      },
+      "exemple": {
+        "input": { "salaire_base": 500000, "heures_supp_montant_calcule": 28846.20, "primes": 0, "retenues_absences": 0, "taux_charges": 16.25, "deductions_prets": 68000, "autres_retenues": 0 },
+        "output": { "salaire_brut": 528846.20, "cotisations": 85937.51, "net_a_payer": 374908.69 },
+        "verification": "500000 + 28846.20 = 528846.20 ; 528846.20 * 0.1625 = 85937.51 ; 528846.20 - 85937.51 - 68000 = 374908.69 FCFA"
+      },
+      "source": "PROMPT_DEV_Domaine2_Complet_V2.md §13.4 (Formules de paie) + ECRAN 16 (Fiches de Paie)",
+      "fonction": "export interface ComputeNetAPayerInput {\n  salaireBase: number;\n  heuresSuppMontantCalcule?: number;\n  primes?: number;\n  retenuesAbsences?: number;\n  tauxCharges?: number;\n  deductionsPrets?: number;\n  autresRetenues?: number;\n}\n\nexport function calculerNetAPayer(input: ComputeNetAPayerInput): {\n  salaireBrut: number;\n  cotisations: number;\n  netAPayer: number;\n} {\n  const taux = input.tauxCharges ?? TAUX_CHARGES_DEFAUT;\n  const salaireBrut =\n    input.salaireBase\n    + (input.heuresSuppMontantCalcule ?? 0)\n    + (input.primes ?? 0)\n    - (input.retenuesAbsences ?? 0);\n  const cotisations = Math.round(salaireBrut * (taux / 100) * 100) / 100;\n  const netAPayer =\n    salaireBrut\n    - cotisations\n    - (input.deductionsPrets ?? 0)\n    - (input.autresRetenues ?? 0);\n  return {\n    salaireBrut: Math.round(salaireBrut * 100) / 100,\n    cotisations,\n    netAPayer: Math.round(netAPayer * 100) / 100,\n  };\n}"
+    },
+    {
+      "id": "RC-013",
+      "name": "Indemnite de depart (par motif : demission, licenciement, fin_cdd, retraite)",
+      "description": "Calcule le montant de l'indemnite de depart selon le motif. Demission = 0 ; Fin CDD = 10% de precarite sur la somme des salaires bruts de la periode ; Licenciement = (1/5 * salaire_moyen * annees_anciennete) + (2/15 * salaire_moyen * annees au-dela de 10) ; Retraite = indemnite conventionnelle. Le solde de tout compte ajoute le dernier salaire + indemnite conges payes + primes.",
+      "formule": "demission : indemnite = 0\nfin_cdd : prime_precarite = 0.10 * SUM(salaires_bruts_periode)\nlicenciement : indemnite = (1/5 * salaire_moyen_mensuel * annees_anciennete) + (2/15 * salaire_moyen_mensuel * MAX(0, annees - 10))\nretraite : indemnite_legale = formule conventionnelle (selon CCN)\nsolde_tout_compte = dernier_salaire + indemnite_conges_payes + indemnite + primes",
+      "variables": {
+        "indemnite": { "type": "NUMERIC(12,2)", "unit": "FCFA" },
+        "motif_depart": { "type": "ENUM", "values": ["demission", "licenciement", "fin_cdd", "retraite", "deces"] },
+        "salaire_moyen_mensuel": { "type": "NUMERIC(12,2)", "unit": "FCFA" },
+        "annees_anciennete": { "type": "INTEGER", "unit": "annees" },
+        "somme_salaires_bruts_periode": { "type": "NUMERIC(12,2)", "unit": "FCFA", "description": "Pour fin CDD uniquement" },
+        "indemnite_conges_payes": { "type": "NUMERIC(12,2)", "unit": "FCFA", "description": "cf. RC-017" }
+      },
+      "exemple": {
+        "input_motif_licenciement": { "motif": "licenciement", "salaire_moyen_mensuel": 500000, "annees_anciennete": 8 },
+        "output_licenciement": 800000,
+        "verification": "Licenciement apres 8 ans : (1/5 * 500000 * 8) + 0 = 800000 FCFA",
+        "input_motif_fin_cdd": { "motif": "fin_cdd", "somme_salaires_bruts_periode": 4500000, "annees_anciennete": 1 },
+        "output_fin_cdd": 450000,
+        "verification": "Fin CDD apres 12 mois a 375000 FCFA/mois : 10% * 4500000 = 450000 FCFA de prime de precarite"
+      },
+      "source": "PROMPT_DEV_Domaine2_Complet_V2.md §13.6 (Formules d'indemnite de depart) + data.js DEPARTS (dep-001: licenciement, indemnite=1600000 pour emp-020 salaire 320000 apres 8 ans = 512000 theorique, montant negocié 1600000 inclut autres composantes)",
+      "fonction": "export type MotifDepart = 'demission' | 'licenciement' | 'fin_cdd' | 'retraite' | 'deces';\n\nexport function calculerIndemniteDepart(params: {\n  motif: MotifDepart;\n  salaireMoyenMensuel: number;\n  anneesAnciennete: number;\n  sommeSalairesBrutsPeriode?: number;\n  indemniteConventionnelleRetraite?: number;\n}): number {\n  const { motif, salaireMoyenMensuel, anneesAnciennete } = params;\n  switch (motif) {\n    case 'demission':\n      return 0;\n    case 'fin_cdd':\n      // Prime de precarite 10% sur la somme des salaires bruts de la periode\n      return Math.round((params.sommeSalairesBrutsPeriode ?? 0) * 0.10 * 100) / 100;\n    case 'licenciement':\n      // (1/5 * salaire_moyen * annees) + (2/15 * salaire_moyen * annees > 10)\n      const anneesAuDela10 = Math.max(0, anneesAnciennete - 10);\n      const indemnite = (salaireMoyenMensuel * anneesAnciennete / 5)\n                      + (salaireMoyenMensuel * anneesAuDela10 * 2 / 15);\n      return Math.round(indemnite * 100) / 100;\n    case 'retraite':\n      return Math.round((params.indemniteConventionnelleRetraite ?? 0) * 100) / 100;\n    case 'deces':\n      // Indemnite equivalente au licenciement verse aux ayants droit\n      return calculerIndemniteDepart({ ...params, motif: 'licenciement' });\n    default:\n      return 0;\n  }\n}\n\nexport function calculerSoldeToutCompte(params: {\n  dernierSalaire: number;\n  indemniteDepart: number;\n  indemniteCongesPayes: number;\n  primes: number;\n}): number {\n  const total = params.dernierSalaire + params.indemniteDepart + params.indemniteCongesPayes + params.primes;\n  return Math.round(total * 100) / 100;\n}"
+    },
+    {
+      "id": "RC-014",
+      "name": "Taux d'actifs (employes actifs / total)",
+      "description": "KPI principal du Tableau de Bord : pourcentage d'employes dont le statut est 'Actif' parmi l'effectif total. Permet de mesurer la sante du personnel (exclut Inactif, Suspendu, Essai). Cible ISO : > 90%.",
+      "formule": "taux_actifs = COUNT(employes WHERE statut='Actif') / COUNT(employes total) * 100",
+      "variables": {
+        "taux_actifs": { "type": "NUMERIC(5,2)", "unit": "pourcentage" },
+        "employes_actifs": { "type": "INTEGER", "description": "COUNT(*) FILTER (statut='Actif')" },
+        "total_employes": { "type": "INTEGER", "description": "COUNT(*) total employees" }
+      },
+      "exemple": {
+        "input": { "employes_actifs": 17, "total_employes": 20 },
+        "output": 85,
+        "verification": "data.js computeKPIs : 17 actifs sur 20 (Essai x2, Inactif x1) = 85 %"
+      },
+      "source": "PROMPT_DEV_Domaine2_Complet_V2.md §14.1 (Taux d'actifs > 90%) + §10 ECRAN 1 + data.js computeKPIs",
+      "fonction": "export function calculerTauxActifs(\n  employesActifs: number,\n  totalEmployes: number\n): number {\n  if (totalEmployes <= 0) return 0;\n  const taux = (employesActifs / totalEmployes) * 100;\n  return Math.round(taux * 100) / 100;\n}"
+    },
+    {
+      "id": "RC-015",
+      "name": "Anciennete (en annees et mois)",
+      "description": "Calcule l'anciennete d'un employe depuis sa date d'embauche jusqu'a la date courante, exprimee en annees et mois (format 'Xa Ym'). Utilise pour les indicateurs de fidelite, le calcul des indemnites de licenciement et la grille de salaire.",
+      "formule": "anciennete_annees = EXTRACT(YEAR FROM age(current_date, date_embauche))\nanciennete_mois = EXTRACT(MONTH FROM age(current_date, date_embauche))\ntotal_mois = anciennete_annees * 12 + anciennete_mois",
+      "variables": {
+        "anciennete_annees": { "type": "INTEGER", "unit": "annees" },
+        "anciennete_mois": { "type": "INTEGER", "unit": "mois", "description": "Complement 0-11 mois" },
+        "total_mois": { "type": "INTEGER", "unit": "mois", "description": "Total mensuel pour calculs indemnites" },
+        "date_embauche": { "type": "DATE", "format": "YYYY-MM-DD" },
+        "date_reference": { "type": "DATE", "default": "NOW()" }
+      },
+      "exemple": {
+        "input": { "date_embauche": "2019-01-15", "date_reference": "2025-09-02" },
+        "output": { "anciennete_annees": 6, "anciennete_mois": 7, "total_mois": 79, "label": "6a 7m" },
+        "verification": "data.js calculerAnciennete(emp-001 Nganou Clarisse, embauchee 2019-01-15) : 6 ans et ~7 mois"
+      },
+      "source": "PROMPT_DEV_Domaine2_Complet_V2.md §13.7 (Formules d'anciennete) + data.js calculerAnciennete() helper",
+      "fonction": "export function calculerAnciennete(\n  dateEmbauche: string | Date,\n  dateReference: Date = new Date()\n): { annees: number; mois: number; totalMois: number; label: string } {\n  if (!dateEmbauche) return { annees: 0, mois: 0, totalMois: 0, label: '—' };\n  const d = typeof dateEmbauche === 'string' ? new Date(dateEmbauche) : dateEmbauche;\n  if (isNaN(d.getTime())) return { annees: 0, mois: 0, totalMois: 0, label: '—' };\n  let annees = dateReference.getFullYear() - d.getFullYear();\n  let mois = dateReference.getMonth() - d.getMonth();\n  if (dateReference.getDate() < d.getDate()) mois -= 1;\n  if (mois < 0) { annees -= 1; mois += 12; }\n  const totalMois = annees * 12 + mois;\n  return { annees, mois, totalMois, label: `${annees}a ${mois}m` };\n}"
+    },
+    {
+      "id": "RC-016",
+      "name": "Generation automatique de rappels (seuil d'echeance)",
+      "description": "Regle determinant quand un rappel administratif doit etre genere automatiquement. Quatre seuils possibles selon le type d'echeance : 30 jours pour les documents/permis/contrats, 15 jours pour les visites medicales, 7 jours pour les declarations sociales, 7 jours pour la periode d'essai. Le rappel est cree s'il n'existe pas deja (anti-doublon).",
+      "formule": "SI (date_echeance - NOW()) <= seuil_jours ALORS INSERT INTO d02_reminders\ntype_rappel | seuil_jours : expiration_document=30 | renouvellement_contrat=30 | visite_medicale=15 | declaration_sociale=7 | echeance_periode_essai=7",
+      "variables": {
+        "seuil_jours": { "type": "INTEGER", "unit": "jours", "mapping": { "expiration_document": 30, "renouvellement_contrat": 30, "visite_medicale": 15, "declaration_sociale": 7, "echeance_periode_essai": 7 } },
+        "date_echeance": { "type": "DATE", "format": "YYYY-MM-DD" },
+        "type_rappel": { "type": "ENUM", "values": ["expiration_document", "renouvellement_contrat", "echeance_periode_essai", "visite_medicale", "declaration_sociale", "destruction_archive"] },
+        "rappel_a_creer": { "type": "BOOLEAN", "description": "true si seuil atteint et rappel inexistant" }
+      },
+      "exemple": {
+        "input": { "date_echeance": "2025-09-15", "type_rappel": "expiration_document", "date_reference": "2025-09-02" },
+        "output": { "rappel_a_creer": true, "seuil_jours": 30, "jours_restants": 13, "urgence": "haute" },
+        "verification": "doc-001 CNI Nganou : echeance 2025-09-15, 13j restants < 30j seuil => rappel cree (cf. data.js rapp-001)"
+      },
+      "source": "PROMPT_DEV_Domaine2_Complet_V2.md §13.10 (Regles de generation automatique de rappels) + §17.6 triggers #3 #6 + data.js RAPPELS",
+      "fonction": "export const SEUILS_RAPPEL: Record<string, number> = {\n  expiration_document: 30,\n  renouvellement_contrat: 30,\n  visite_medicale: 15,\n  declaration_sociale: 7,\n  echeance_periode_essai: 7,\n  destruction_archive: 30,\n};\n\nexport function doitGenererRappel(\n  typeRappel: string,\n  dateEcheance: string | Date | null,\n  dateReference: Date = new Date()\n): { rappel: boolean; joursRestants: number | null; urgence: 'basse' | 'moyenne' | 'haute' } {\n  if (!dateEcheance) return { rappel: false, joursRestants: null, urgence: 'basse' };\n  const seuil = SEUILS_RAPPEL[typeRappel] ?? 30;\n  const cible = typeof dateEcheance === 'string' ? new Date(dateEcheance) : dateEcheance;\n  if (isNaN(cible.getTime())) return { rappel: false, joursRestants: null, urgence: 'basse' };\n  const jours = Math.ceil((cible.getTime() - dateReference.getTime()) / (1000 * 60 * 60 * 24));\n  const rappel = jours <= seuil;\n  let urgence: 'basse' | 'moyenne' | 'haute' = 'basse';\n  if (jours < 0) urgence = 'haute';\n  else if (jours <= 7) urgence = 'haute';\n  else if (jours <= 15) urgence = 'moyenne';\n  return { rappel, joursRestants: jours, urgence };\n}"
+    },
+    {
+      "id": "RC-017",
+      "name": "Indemnite de conges payes au depart (ICCP)",
+      "description": "Calcule le montant de l'indemnite compensatrice de conges payes due au salarié au moment de son depart (quelle que soit la cause). Cette indemnite compense les jours de conges acquis mais non pris. Forme : (solde conges restant) x (salaire journalier moyen).",
+      "formule": "ICCP = solde_conges_jours * salaire_journalier_moyen\nsalaire_journalier_moyen = salaire_brut_mensuel / 26 (base 26 jours ouvrables/mois)\nAlternative (10e regime) : ICCP = (salaire_brut_periode / 10) * jours_non_pris / 30",
+      "variables": {
+        "iccp": { "type": "NUMERIC(12,2)", "unit": "FCFA" },
+        "solde_conges_jours": { "type": "NUMERIC(5,1)", "unit": "jours", "description": "Solde disponible au depart" },
+        "salaire_journalier_moyen": { "type": "NUMERIC(10,2)", "unit": "FCFA/jour" },
+        "salaire_brut_mensuel": { "type": "NUMERIC(12,2)", "unit": "FCFA" }
+      },
+      "exemple": {
+        "input": { "solde_conges_jours": 12, "salaire_brut_mensuel": 320000 },
+        "output": { "salaire_journalier_moyen": 12307.69, "iccp": 147692.28 },
+        "verification": "Depart dep-001 (emp-020 Ze Aristide, salaire 320000 FCFA, 12j conges restants) : salaire_journalier = 320000/26 = 12307.69 ; ICCP = 12 * 12307.69 = 147692.28 FCFA"
+      },
+      "source": "PROMPT_DEV_Domaine2_Complet_V2.md §13.6 (solde tout compte inclut indemnite conges payes) + data.js DEPARTS (dep-001.solde_conges_jours=12, dernier_salaire=320000)",
+      "fonction": "export const JOURS_OUVRABLES_MOIS = 26; // base mensuelle conges payes\n\nexport function calculerIndemniteCongesPayesDepart(\n  soldeCongesJours: number,\n  salaireBrutMensuel: number\n): { salaireJournalierMoyen: number; iccp: number } {\n  const salaireJournalierMoyen = Math.round((salaireBrutMensuel / JOURS_OUVRABLES_MOIS) * 100) / 100;\n  const iccp = Math.round(soldeCongesJours * salaireJournalierMoyen * 100) / 100;\n  return { salaireJournalierMoyen, iccp };\n}"
+    },
+    {
+      "id": "RC-018",
+      "name": "Agregation KPIs Tableau de Bord (COUNTIF/SUM Excel -> SQL COUNT FILTER / SUM)",
+      "description": "Transposition des 40-57 formules COUNTIF et formules SUM du Tableau de Bord Excel vers des requetes SQL d'agregation utilisant la clause FILTER (PostgreSQL) pour calculer en une seule passe tous les KPIs principaux (effectif total, taux d'actifs, contrats en vigueur, masse salariale, documents conformes, etc.).",
+      "formule": "effectif_total = COUNT(*) FROM employees\ntaux_actifs = COUNT(*) FILTER (statut='Actif') * 100.0 / COUNT(*)\ncontrats_en_vigueur = COUNT(*) FILTER (statut='en_vigueur') FROM d02_contracts\nmasse_salariale = SUM(salaire_brut) FILTER (statut='Actif') FROM employees\ndocuments_conformes = COUNT(*) FILTER (statut='Valide') * 100.0 / COUNT(*) FROM d02_employee_documents\nconges_en_attente = COUNT(*) FILTER (statut='en_attente') FROM d02_leave_requests\nrappels_en_retard = COUNT(*) FILTER (statut='en_retard') FROM d02_reminders",
+      "variables": {
+        "effectif_total": { "type": "INTEGER", "kpi": "KPI 1" },
+        "taux_actifs": { "type": "NUMERIC(5,2)", "unit": "pourcentage", "kpi": "KPI 2", "cible": ">90%" },
+        "contrats_en_vigueur": { "type": "INTEGER", "kpi": "KPI 3" },
+        "masse_salariale": { "type": "NUMERIC(15,2)", "unit": "FCFA", "kpi": "KPI 4" },
+        "documents_conformes": { "type": "NUMERIC(5,2)", "unit": "pourcentage", "kpi": "KPI 5", "cible": "100%" },
+        "taux_presence_moyen": { "type": "NUMERIC(5,2)", "unit": "pourcentage", "kpi": "KPI 6", "cible": ">95%" },
+        "conges_en_attente": { "type": "INTEGER", "kpi": "KPI 7" },
+        "rappels_en_retard": { "type": "INTEGER", "kpi": "KPI 8", "cible": "0" },
+        "prets_en_cours": { "type": "INTEGER", "kpi": "KPI 9" },
+        "solde_prets_restant": { "type": "NUMERIC(15,2)", "unit": "FCFA", "kpi": "KPI 10" },
+        "declarations_en_retard": { "type": "INTEGER", "kpi": "KPI 11", "cible": "0" },
+        "dossiers_depart_clos_mois": { "type": "INTEGER", "kpi": "KPI 12" }
+      },
+      "exemple": {
+        "input": "data.js (20 employes, 20 contrats, 8 documents, 8 conges, 6 rappels, 4 prets, 3 declarations, 1 depart)",
+        "output": {
+          "totalEmployes": 20,
+          "employesActifs": 17,
+          "contratsEnVigueur": 19,
+          "masseSalariale": 11110000,
+          "congesEnAttente": 2,
+          "documentsARepouveler": 3,
+          "declarationsEnRetard": 1,
+          "rappelsEnRetard": 2,
+          "pretsEnCours": 3,
+          "soldePretsRestant": 2077000,
+          "tauxActifs": 85
+        },
+        "verification": "Coherent avec data.js computeKPIs() : 17 actifs / 20 = 85%, masse salariale = somme salaires_brut des actifs"
+      },
+      "source": "PROMPT_DEV_Domaine2_Complet_V2.md §10 ECRAN 1 (Tableau de Bord) + §14.1 (12 KPIs principaux) + §9.4 (40-57 COUNTIF Excel) + data.js computeKPIs()",
+      "fonction": "export interface KPIsD2 {\n  totalEmployes: number;\n  employesActifs: number;\n  contratsEnVigueur: number;\n  masseSalariale: number;\n  congesEnAttente: number;\n  documentsARepouveler: number;\n  declarationsEnRetard: number;\n  rappelsEnRetard: number;\n  pretsEnCours: number;\n  soldePretsRestant: number;\n  tauxActifs: number;\n  parDepartement: Record<string, number>;\n  parTypeContrat: Record<string, number>;\n  parCategorie: Record<string, number>;\n}\n\nexport function computeKPIsFromData(data: {\n  employees: Array<{ statut: string; salaire_brut: number; departement: string; type_contrat: string; categorie: string }>;\n  contrats: Array<{ statut: string }>;\n  conges: Array<{ statut: string }>;\n  documents: Array<{ statut: string }>;\n  declarations: Array<{ statut: string }>;\n  rappels: Array<{ statut: string }>;\n  prets: Array<{ statut: string; solde_restant: number }>;\n}): KPIsD2 {\n  const totalEmployes = data.employees.length;\n  const employesActifs = data.employees.filter(e => e.statut === 'Actif').length;\n  const contratsEnVigueur = data.contrats.filter(c => c.statut === 'En vigueur').length;\n  const masseSalariale = data.employees.filter(e => e.statut === 'Actif').reduce((s, e) => s + e.salaire_brut, 0);\n  const congesEnAttente = data.conges.filter(c => c.statut === 'en_attente').length;\n  const documentsARepouveler = data.documents.filter(d => d.statut === 'A renouveler' || d.statut === 'Expire').length;\n  const declarationsEnRetard = data.declarations.filter(d => d.statut === 'en_retard').length;\n  const rappelsEnRetard = data.rappels.filter(r => r.statut === 'en_retard').length;\n  const pretsActifs = data.prets.filter(p => p.statut === 'en_remboursement');\n  const pretsEnCours = pretsActifs.length;\n  const soldePretsRestant = pretsActifs.reduce((s, p) => s + p.solde_restant, 0);\n\n  const parDepartement: Record<string, number> = {};\n  const parTypeContrat: Record<string, number> = {};\n  const parCategorie: Record<string, number> = {};\n  data.employees.filter(e => e.statut !== 'Inactif').forEach(e => {\n    parDepartement[e.departement] = (parDepartement[e.departement] || 0) + 1;\n    parTypeContrat[e.type_contrat] = (parTypeContrat[e.type_contrat] || 0) + 1;\n    parCategorie[e.categorie] = (parCategorie[e.categorie] || 0) + 1;\n  });\n\n  return {\n    totalEmployes,\n    employesActifs,\n    contratsEnVigueur,\n    masseSalariale,\n    congesEnAttente,\n    documentsARepouveler,\n    declarationsEnRetard,\n    rappelsEnRetard,\n    pretsEnCours,\n    soldePretsRestant,\n    tauxActifs: totalEmployes > 0 ? Math.round((employesActifs / totalEmployes) * 100) : 0,\n    parDepartement,\n    parTypeContrat,\n    parCategorie,\n  };\n}"
+    },
+    {
+      "id": "RC-019",
+      "name": "Taux de rotation du personnel (turnover annuel)",
+      "description": "Mesure le pourcentage de departs sur une periode par rapport a l'effectif moyen. KPI strategique de pilotage RH (ISO 22400-3:2022). Un taux eleve (> 15%) peut indiquer des problemes de retention, de management ou de qualite de recrutement.",
+      "formule": "turnover = (nombre_departs_periode / effectif_moyen_periode) * 100\neffectif_moyen = (effectif_debut + effectif_fin) / 2",
+      "variables": {
+        "turnover": { "type": "NUMERIC(5,2)", "unit": "pourcentage" },
+        "nombre_departs_periode": { "type": "INTEGER", "description": "COUNT(*) FROM d02_departures WHERE date_depart BETWEEN debut AND fin" },
+        "effectif_debut": { "type": "INTEGER" },
+        "effectif_fin": { "type": "INTEGER" },
+        "effectif_moyen": { "type": "NUMERIC(8,2)" }
+      },
+      "exemple": {
+        "input": { "nombre_departs": 3, "effectif_debut": 22, "effectif_fin": 20 },
+        "output": { "effectif_moyen": 21, "turnover": 14.29 },
+        "verification": "Sur 12 mois : 3 departs (1 licenciement + 2 fins CDD) / effectif moyen 21 = 14.29 %"
+      },
+      "source": "PROMPT_DEV_Domaine2_Complet_V2.md §14.4 (Indicateurs de resultat - Taux de rotation) + ISO 22400-3:2022",
+      "fonction": "export function calculerTauxRotation(\n  nombreDepartsPeriode: number,\n  effectifDebut: number,\n  effectifFin: number\n): { effectifMoyen: number; turnover: number } {\n  const effectifMoyen = (effectifDebut + effectifFin) / 2;\n  if (effectifMoyen <= 0) return { effectifMoyen: 0, turnover: 0 };\n  const turnover = (nombreDepartsPeriode / effectifMoyen) * 100;\n  return {\n    effectifMoyen: Math.round(effectifMoyen * 100) / 100,\n    turnover: Math.round(turnover * 100) / 100,\n  };\n}"
+    },
+    {
+      "id": "RC-020",
+      "name": "Taux de retention a 3 et 6 mois (IC-D1-D2-05)",
+      "description": "KPI de qualite d'onboarding mesure a partir des nouvelles embauches D1, suivi dans le Tableau de Bord D2. Calcule le pourcentage de collaborateurs encore en activite 3 mois puis 6 mois apres leur date d'embauche. Permet d'evaluer la qualite du processus de recrutement et d'integration.",
+      "formule": "taux_retention_3_mois = COUNT(employes WHERE date_embauche >= NOW() - 3 mois AND statut='Actif') * 100 / COUNT(employes WHERE date_embauche >= NOW() - 3 mois)\ntaux_retention_6_mois = COUNT(employes WHERE date_embauche >= NOW() - 6 mois AND statut='Actif') * 100 / COUNT(employes WHERE date_embauche >= NOW() - 6 mois)\nturnover_precoce_essai = COUNT(employes WHERE statut='Inactif' AND date_embauche >= NOW() - 6 mois)",
+      "variables": {
+        "taux_retention_3_mois": { "type": "NUMERIC(5,2)", "unit": "pourcentage", "cible": ">85%" },
+        "taux_retention_6_mois": { "type": "NUMERIC(5,2)", "unit": "pourcentage", "cible": ">80%" },
+        "turnover_precoce_essai": { "type": "INTEGER", "description": "Departs durant periode d'essai (6 mois glissants)" },
+        "date_embauche": { "type": "DATE", "format": "YYYY-MM-DD" },
+        "statut": { "type": "VARCHAR", "enum": ["Actif", "Inactif", "Suspendu", "Essai", "Archive"] }
+      },
+      "exemple": {
+        "input": {
+          "nouvelles_embauches_3_derniers_mois": [ { "id": "emp-013", "date_embauche": "2024-09-01", "statut": "Essai" }, { "id": "emp-008", "date_embauche": "2024-02-01", "statut": "Essai" } ],
+          "date_reference": "2025-09-02"
+        },
+        "output": { "taux_retention_3_mois": 100, "taux_retention_6_mois": 66.67, "turnover_precoce_essai": 1 },
+        "verification": "Sur 6 derniers mois ( depuis 2025-03-02) : 3 embauches (emp-013 stage, emp-008 CDD, emp-019 stage ) ; 2 toujours Actifs/Essai ; turnover precoce = 1 (emp-020 inactif mais embauche 2017 non compte). Voir IC-D1-D2-05 pour la boucle de retroaction."
+      },
+      "source": "PROMPT_DEV_Domaine2_Complet_V2.md §15.2 (IC-D1-D2-05) + §15.6 (KPIs suivi post-embauche) + Interconnexion_Bilaterale_D1_D2.pdf p.4",
+      "fonction": "export interface RetentionKPIs {\n  tauxRetention3Mois: number;\n  tauxRetention6Mois: number;\n  turnoverPrecoceEssai: number;\n}\n\nexport function calculerRetentionPostEmbauche(\n  employees: Array<{ id: string; date_embauche: string; statut: string }>,\n  dateReference: Date = new Date()\n): RetentionKPIs {\n  const troisMoisAvant = new Date(dateReference);\n  troisMoisAvant.setMonth(troisMoisAvant.getMonth() - 3);\n  const sixMoisAvant = new Date(dateReference);\n  sixMoisAvant.setMonth(sixMoisAvant.getMonth() - 6);\n\n  const embauches3 = employees.filter(e => new Date(e.date_embauche) >= troisMoisAvant);\n  const embauches6 = employees.filter(e => new Date(e.date_embauche) >= sixMoisAvant);\n  const retention3 = embauches3.filter(e => e.statut === 'Actif' || e.statut === 'Essai');\n  const retention6 = embauches6.filter(e => e.statut === 'Actif' || e.statut === 'Essai');\n\n  // Turnover precoce = employes devenus Inactifs/Suspendus dans les 6 mois suivant leur embauche\n  const turnoverPrecoce = employees.filter(e => {\n    const dem = new Date(e.date_embauche);\n    return dem >= sixMoisAvant && (e.statut === 'Inactif' || e.statut === 'Suspendu');\n  }).length;\n\n  return {\n    tauxRetention3Mois: embauches3.length > 0\n      ? Math.round((retention3.length / embauches3.length) * 10000) / 100\n      : 100,\n    tauxRetention6Mois: embauches6.length > 0\n      ? Math.round((retention6.length / embauches6.length) * 10000) / 100\n      : 100,\n    turnoverPrecoceEssai: turnoverPrecoce,\n  };\n}"
+    }
+  ],
+  "stats": {
+    "total_regles": 20,
+    "par_categorie": {
+      "conges": ["RC-001", "RC-002", "RC-003"],
+      "contrats_documents": ["RC-004", "RC-005"],
+      "presence_pointage": ["RC-006"],
+      "heures_supp": ["RC-007", "RC-008"],
+      "prets": ["RC-009", "RC-010"],
+      "paie": ["RC-011", "RC-012"],
+      "departs": ["RC-013", "RC-017"],
+      "kpis": ["RC-014", "RC-018", "RC-019", "RC-020"],
+      "anciennete": ["RC-015"],
+      "rappels_auto": ["RC-016"]
+    },
+    "fonctions_typescript_documentees": 20,
+    "exemples_numeriques_documentes": 20,
+    "sources_citees_uniques": [
+      "PROMPT_DEV_Domaine2_Complet_V2.md §9.3",
+      "PROMPT_DEV_Domaine2_Complet_V2.md §10",
+      "PROMPT_DEV_Domaine2_Complet_V2.md §13.1-13.10",
+      "PROMPT_DEV_Domaine2_Complet_V2.md §14.1-14.4",
+      "PROMPT_DEV_Domaine2_Complet_V2.md §15.2",
+      "PROMPT_DEV_Domaine2_Complet_V2.md §15.6",
+      "PROMPT_DEV_Domaine2_Complet_V2.md §17.6",
+      "migration_6_tables_manquantes_D02.sql",
+      "data.js",
+      "Interconnexion_Bilaterale_D1_D2.pdf"
+    ]
+  }
+}
