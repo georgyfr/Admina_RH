@@ -1,0 +1,3632 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width,initial-scale=1.0" /><link rel="icon" type="image/svg+xml" href="/favicon.svg" /><link rel="alternate icon" href="/favicon.ico" /><link rel="apple-touch-icon" href="/favicon.svg" /><title>Admina-RH | Domaine 2 — Gestion Administrative</title><meta name="description" content="Admina-RH — Domaine 2 : Gestion Administrative du Personnel. 22 écrans, 5 phases, conformité ISO 30401:2018 + ISO 9001:2015." /><link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin /><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />  <script type="module" crossorigin src="/assets/index-5-yT4YcR.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/rolldown-runtime-hePW80VL.js">
+  <link rel="modulepreload" crossorigin href="/assets/Box-CHFloNRC.js">
+  <link rel="modulepreload" crossorigin href="/assets/react-dom-BTphueI8.js">
+  <link rel="modulepreload" crossorigin href="/assets/Grow-BGmbCfxC.js">
+  <link rel="modulepreload" crossorigin href="/assets/Menu-CXTjhrpv.js">
+  <link rel="modulepreload" crossorigin href="/assets/isMuiElement-B_alkmYL.js">
+</head><body><div id="root"></div>
+
+
+<script>window.ADMINA_DOMAIN_ID = 2;</script>
+<script>// =============================================================================
+// Admina-RH — Navigation inter-domaines (injection runtime)
+// =============================================================================
+// Ce script injecte une section "Autres Domaines" en bas de la barre latérale
+// MUI. Il est conçu pour être ajouté dans le <head> ou <body> d'un index.html
+// d'une SPA React/MUI (Domaine 1 ou Domaine 2).
+//
+// IMPORTANT : la variable DOMAIN_ID doit être définie AVANT ce script
+// (ex: window.ADMINA_DOMAIN_ID = 1; pour le Domaine 1).
+// =============================================================================
+(function () {
+  if (window.__ADMINA_CDN_INJECTED__) return;
+  window.__ADMINA_CDN_INJECTED__ = true;
+  var DOMAIN_ID = window.ADMINA_DOMAIN_ID || 2;
+  var DOMAINS = [
+    {
+      label: "Domaine 1 — Recrutement",
+      desc: "Recrutement & Candidats",
+      href: "https://admina-recrutement.pages.dev/",
+      icon: "briefcase",
+      current: DOMAIN_ID === 1,
+      external: true,
+    },
+    {
+      label: "Domaine 2 — Gestion Administrative",
+      desc: "Administration du personnel",
+      href: "https://admina-rh-bd0.pages.dev/",
+      icon: "people",
+      current: DOMAIN_ID === 2,
+      external: false,
+    },
+    {
+      label: "Domaine 3 — Paie & Rémunération",
+      desc: "Paie, rémunération et avantages",
+      href: "https://admina-rh-bd0.pages.dev/Domaine3_Paie_Remuneration_Avantages/",
+      icon: "payments",
+      current: DOMAIN_ID === 3,
+      external: false,
+    },
+  ];
+  var ICONS = {
+    briefcase:
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>',
+    people:
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+    payments:
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>',
+    external:
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>',
+  };
+  var STYLE =
+    "#admina-cdn{border-top:1px solid rgba(255,255,255,0.12);background:rgba(0,0,0,0.25);position:sticky;bottom:0;z-index:5}" +
+    "#admina-cdn .cdn-title{padding:12px 16px 4px;font-size:0.62rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,0.45);margin:0;font-family:Inter,system-ui,sans-serif}" +
+    "#admina-cdn .cdn-item{display:flex;align-items:flex-start;gap:10px;padding:8px 16px;text-decoration:none;color:rgba(255,255,255,0.72);font-size:0.78rem;font-weight:500;transition:background .15s,color .15s;font-family:Inter,system-ui,sans-serif}" +
+    "#admina-cdn .cdn-item:hover{background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.95)}" +
+    "#admina-cdn .cdn-item.current{opacity:0.55;cursor:default;pointer-events:none}" +
+    "#admina-cdn .cdn-icon{width:16px;height:16px;flex-shrink:0;margin-top:2px;opacity:0.65;display:inline-block}" +
+    "#admina-cdn .cdn-icon svg{width:16px;height:16px;display:block}" +
+    "#admina-cdn .cdn-text{min-width:0;flex:1}" +
+    "#admina-cdn .cdn-label{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.2}" +
+    "#admina-cdn .cdn-desc{display:block;font-size:0.6rem;font-weight:400;color:rgba(255,255,255,0.42);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.2;margin-top:1px}" +
+    "#admina-cdn .cdn-external{width:12px;height:12px;flex-shrink:0;margin-top:3px;opacity:0.4;display:inline-block}" +
+    "#admina-cdn .cdn-external svg{width:12px;height:12px;display:block}" +
+    "#admina-cdn .cdn-badge{font-size:0.55rem;font-weight:700;background:rgba(255,255,255,0.15);color:rgba(255,255,255,0.7);padding:2px 6px;border-radius:4px;margin-top:2px;line-height:1;font-family:Inter,system-ui,sans-serif}" +
+    "@media (max-width:600px){#admina-cdn{position:static}}";
+  function buildNav() {
+    var container = document.createElement("div");
+    container.id = "admina-cdn";
+    container.setAttribute("data-admina-cdn", "true");
+    var style = document.createElement("style");
+    style.textContent = STYLE;
+    container.appendChild(style);
+    var title = document.createElement("p");
+    title.className = "cdn-title";
+    title.textContent = "Autres Domaines";
+    container.appendChild(title);
+    DOMAINS.forEach(function (d) {
+      var a = document.createElement("a");
+      a.className = "cdn-item" + (d.current ? " current" : "");
+      a.href = d.href;
+      if (d.external && !d.current) {
+        a.target = "_blank";
+        a.rel = "noopener noreferrer";
+      }
+      a.title = d.desc;
+      var icon = document.createElement("span");
+      icon.className = "cdn-icon";
+      icon.innerHTML = ICONS[d.icon] || "";
+      a.appendChild(icon);
+      var text = document.createElement("span");
+      text.className = "cdn-text";
+      var label = document.createElement("span");
+      label.className = "cdn-label";
+      label.textContent = d.label;
+      var desc = document.createElement("span");
+      desc.className = "cdn-desc";
+      desc.textContent = d.desc;
+      text.appendChild(label);
+      text.appendChild(desc);
+      a.appendChild(text);
+      if (d.external && !d.current) {
+        var ext = document.createElement("span");
+        ext.className = "cdn-external";
+        ext.innerHTML = ICONS.external;
+        a.appendChild(ext);
+      }
+      if (d.current) {
+        var badge = document.createElement("span");
+        badge.className = "cdn-badge";
+        badge.textContent = "ACTUEL";
+        a.appendChild(badge);
+      }
+      container.appendChild(a);
+    });
+    return container;
+  }
+  function inject() {
+    // Évite les doublons
+    if (document.getElementById("admina-cdn")) return;
+    // Cible le papier du Drawer MUI (permanent ou temporaire)
+    var drawer = document.querySelector(
+      ".MuiDrawer-paper, header.MuiAppBar-root + div .MuiDrawer-paper, [class*=Drawer-paper]"
+    );
+    if (!drawer) {
+      // Fallback : tout élément avec role navigation ou une liste dense MUI
+      drawer = document.querySelector(".MuiList")?.parentElement;
+    }
+    if (!drawer) return;
+    drawer.appendChild(buildNav());
+  }
+  // Observer pour réinjecter après changements de route SPA
+  var observer = new MutationObserver(function () {
+    inject();
+  });
+  observer.observe(document.documentElement, { childList: true, subtree: true });
+  // Tentatives initiales (le drawer peut mettre du temps à apparaître)
+  inject();
+  setTimeout(inject, 300);
+  setTimeout(inject, 800);
+  setTimeout(inject, 2000);
+  setTimeout(inject, 4000);
+})();</script>
+<!-- ADEM_V1_WIDGETS BEGIN -->
+<script>
+/* ADEM_V1 — Widgets KPI interactifs /demandes (Étape 1) — rebuild build index-C2oVdx8X */
+(function(){
+'use strict';
+if (window.__ADEM_V1__) { return; }
+var DATA = null, DATA_ERR = null;
+var CSS_DONE = false;
+
+function $(s, r){ return (r || document).querySelector(s); }
+function $$(s, r){ return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
+function ev(s){ return String(s).replace(/\\u([0-9a-fA-F]{4})/g, function(m, h){ return String.fromCharCode(parseInt(h, 16)); }); }
+function fmt(n){ return Math.round(n).toLocaleString('fr-FR').replace(/\u202f/g, ' '); }
+function pd(s){ var m = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(s || ''); return m ? new Date(+m[3], +m[2] - 1, +m[1]) : null; }
+function isDemandes(){ return /\/demandes/.test(location.pathname); }
+
+/* ---------- parsing chunk ---------- */
+function strField(seg, name){
+  var m = seg.match(new RegExp(name + ':`([^`]*)`'));
+  if (m) return m[1];
+  m = seg.match(new RegExp(name + ':"([^"]*)"'));
+  if (m) return m[1];
+  m = seg.match(new RegExp(name + ":'([^']*)'"));
+  return m ? m[1] : '';
+}
+function numField(seg, name){
+  var m = seg.match(new RegExp(name + ':(\\d+(?:e\\d+)?(?:\\.\\d+)?)'));
+  return m ? parseFloat(m[1]) : 0;
+}
+function parseChunk(src){
+  var out = [], re = /\{id:\d+,numero:/g, m;
+  while ((m = re.exec(src))){
+    var i = m.index, d = 0, j = i, q = null, esc = false;
+    for (; j < src.length; j++){
+      var c = src.charAt(j);
+      if (q){ if (esc) { esc = false; } else if (c === '\\') { esc = true; } else if (c === q) { q = null; } }
+      else {
+        if (c === '"' || c === "'" || c === '`') { q = c; }
+        else if (c === '{') { d++; }
+        else if (c === '}') { d--; if (!d){ out.push(src.slice(i, j + 1)); break; } }
+      }
+    }
+  }
+  return out.map(function(seg){
+    if (!/^\{id:\d+,numero:/.test(seg)) return null;
+    return {
+      num: ev(strField(seg, 'numero')),
+      date: ev(strField(seg, 'dateDemande')),
+      dept: ev(strField(seg, 'departement')),
+      poste: ev(strField(seg, 'posteRecherche')),
+      typePoste: ev(strField(seg, 'typePoste')),
+      typeContrat: ev(strField(seg, 'typeContrat')),
+      prio: ev(strField(seg, 'priorite')),
+      statut: ev(strField(seg, 'statut')),
+      datePourvue: ev(strField(seg, 'datePourvue')),
+      resp: ev(strField(seg, 'responsableDemande')),
+      cabinet: ev(strField(seg, 'cabinetAgence')),
+      budget: numField(seg, 'budgetSalaire'),
+      cout: numField(seg, 'coutRecrutement'),
+      delai: numField(seg, 'delai'),
+      notes: ev(strField(seg, 'notes')),
+      /* champs étendus (V8 préremplissage complet) */
+      site: ev(strField(seg, 'site')),
+      effectif: numField(seg, 'effectif'),
+      motif: ev(strField(seg, 'motif')),
+      dateBesoin: ev(strField(seg, 'dateBesoin')),
+      role: ev(strField(seg, 'roleResponsable'))
+    };
+  }).filter(Boolean);
+}
+function findChunkURL(){
+  try {
+    var names = performance.getEntriesByType('resource').map(function(r){ return r.name; })
+      .filter(function(u){ return /Demandes-[A-Za-z0-9_-]+\.js(\?|$)/.test(u); });
+    if (names.length) return names[names.length - 1];
+  } catch (e) {}
+  var els = $$('script[src],link[href]').map(function(e){ return e.src || e.href || ''; })
+    .filter(function(u){ return /Demandes-[A-Za-z0-9_-]+\.js/.test(u); });
+  return els[0] || null;
+}
+function loadData(){
+  if (DATA) return Promise.resolve(DATA);
+  var url = findChunkURL();
+  if (!url) return Promise.reject(new Error('chunk Demandes introuvable'));
+  return fetch(url, { cache: 'force-cache' }).then(function(r){ return r.text(); }).then(function(t){
+    var d = parseChunk(t);
+    if (!d.length) throw new Error('0 demande parsée');
+    DATA = d; DATA_ERR = null;
+    try { document.dispatchEvent(new CustomEvent('adem1:data', { detail: { count: d.length } })); } catch (e) {}
+    return d;
+  }).catch(function(e){ DATA_ERR = e; throw e; });
+}
+
+/* ---------- styles ---------- */
+function ensureCSS(){
+  if (CSS_DONE) return; CSS_DONE = true;
+  var st = document.createElement('style');
+  st.id = 'adem1-css';
+  st.textContent =
+    '.adem1-card{cursor:pointer;transition:box-shadow .18s,transform .18s;position:relative;}' +
+    '.adem1-card:hover{box-shadow:0 6px 18px rgba(13,124,102,.16)!important;transform:translateY(-2px);}' +
+    '.adem1-card:focus-visible{outline:2px solid #0D7C66;outline-offset:2px;}' +
+    '.adem1-card.adem1-active{outline:2px solid #0D7C66;outline-offset:-2px;}' +
+    '.adem1-x{position:absolute;top:8px;right:10px;font:600 12px/16px Inter,sans-serif;color:#fff;background:#0D7C66;border-radius:50%;width:18px;height:18px;text-align:center;line-height:18px;}' +
+    '.adem1-gauge{margin-top:10px;padding-top:8px;border-top:1px dashed #e0e0e0;}' +
+    '.adem1-gauge-head{display:flex;justify-content:space-between;gap:8px;font:500 11px/16px Inter,sans-serif;color:#616161;}' +
+    '.adem1-gauge-head b{color:#0D7C66;font-size:12px;}' +
+    '.adem1-gauge-track{height:6px;background:#eeeeee;border-radius:3px;overflow:hidden;margin-top:4px;}' +
+    '.adem1-gauge-fill{height:100%;background:linear-gradient(90deg,#0D7C66,#16a34a);border-radius:3px;transition:width .6s;}' +
+    '.adem1-gauge-sub{font:400 10px/14px Inter,sans-serif;color:#9e9e9e;margin-top:3px;}' +
+    '.adem1-back{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:4199;display:flex;align-items:center;justify-content:center;padding:16px;}' +
+    '.adem1-modal{background:#fff;border-radius:14px;max-width:680px;width:100%;max-height:86vh;overflow:auto;box-shadow:0 24px 60px rgba(0,0,0,.3);font-family:Inter,sans-serif;}' +
+    '.adem1-mhead{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid #eee;position:sticky;top:0;background:#fff;z-index:1;}' +
+    '.adem1-mhead h3{margin:0;font:600 16px/22px Inter,sans-serif;color:#1a1a2e;}' +
+    '.adem1-mclose{border:none;background:#f5f5f5;border-radius:50%;width:30px;height:30px;font-size:15px;cursor:pointer;color:#555;}' +
+    '.adem1-mclose:hover{background:#e8f5e9;color:#0D7C66;}' +
+    '.adem1-mbody{padding:16px 20px 20px;}' +
+    '.adem1-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px;}' +
+    '.adem1-stat{background:#f8faf9;border:1px solid #e6efec;border-radius:10px;padding:10px 12px;}' +
+    '.adem1-stat .l{font:500 10px/14px Inter,sans-serif;color:#78909c;text-transform:uppercase;letter-spacing:.4px;}' +
+    '.adem1-stat .v{font:700 17px/24px Inter,sans-serif;color:#0D7C66;margin-top:2px;}' +
+    '.adem1-stat .v.red{color:#d32f2f;}' +
+    '.adem1-mtable{width:100%;border-collapse:collapse;font:400 12px/18px Inter,sans-serif;}' +
+    '.adem1-mtable th{background:#f5f7f6;color:#546e7a;text-align:left;padding:7px 9px;font-weight:600;border-bottom:1px solid #e0e0e0;}' +
+    '.adem1-mtable td{padding:6px 9px;border-bottom:1px solid #f0f0f0;color:#37474f;}' +
+    '.adem1-mtable tr:hover td{background:#f8faf9;}' +
+    '.adem1-mnote{font:400 11px/16px Inter,sans-serif;color:#90a4ae;margin-top:12px;}' +
+    '.adem1-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#263238;color:#fff;padding:10px 18px;border-radius:24px;font:500 13px/18px Inter,sans-serif;z-index:4300;box-shadow:0 6px 20px rgba(0,0,0,.3);opacity:0;transition:opacity .25s;pointer-events:none;}' +
+    '.adem1-toast.on{opacity:1;}';
+  document.head.appendChild(st);
+}
+
+/* ---------- toast ---------- */
+var toastEl = null, toastTimer = null;
+function toast(msg){
+  ensureCSS();
+  if (!toastEl){ toastEl = document.createElement('div'); toastEl.className = 'adem1-toast'; document.body.appendChild(toastEl); }
+  toastEl.textContent = msg;
+  toastEl.classList.add('on');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function(){ toastEl.classList.remove('on'); }, 2200);
+}
+
+/* ---------- détection cartes KPI natives ---------- */
+function kpiCards(){
+  var map = {};
+  $$('.MuiPaper-root.MuiPaper-rounded').forEach(function(card){
+    var t = (card.textContent || '').replace(/\s+/g, ' ');
+    if (t.length > 140) return;
+    if (/TOTAL DEMANDES/.test(t)) map.total = card;
+    else if (/POURVUES/.test(t)) map.pourvues = card;
+    else if (/EN COURS/.test(t)) map.encours = card;
+    else if (/BUDGET TOTAL/.test(t)) map.budget = card;
+  });
+  return map;
+}
+
+/* ---------- enrichissement cartes ---------- */
+function v2(){ return window.__ADEM_V2__ || null; }
+function deco(card, key, label, fn, activeFn){
+  if (!card) return;
+  if (card.getAttribute('data-adem1') !== '1'){
+    card.setAttribute('data-adem1', '1');
+    card.setAttribute('role', 'button');
+    card.setAttribute('tabindex', '0');
+    card.classList.add('adem1-card');
+    var h = function(e){
+      if (e.type === 'keydown' && e.key !== 'Enter' && e.key !== ' ') return;
+      e.preventDefault();
+      fn();
+    };
+    card.addEventListener('click', h);
+    card.addEventListener('keydown', h);
+  }
+  card.setAttribute('aria-label', label);
+  card.setAttribute('title', label);
+  var active = activeFn ? activeFn() : false;
+  card.classList.toggle('adem1-active', !!active);
+  var x = card.querySelector('.adem1-x');
+  if (active && !x){ x = document.createElement('span'); x.className = 'adem1-x'; x.textContent = '\u2715'; card.appendChild(x); }
+  if (!active && x) x.remove();
+}
+function addGauge(card){
+  if (!card || card.querySelector('.adem1-gauge')) return;
+  var d = DATA || [];
+  if (!d.length) return;
+  var tot = d.reduce(function(s, x){ return s + x.budget; }, 0);
+  var pv = d.filter(function(x){ return x.statut === 'Pourvue'; }).reduce(function(s, x){ return s + x.budget; }, 0);
+  var pct = tot ? (pv / tot * 100) : 0;
+  var div = document.createElement('div');
+  div.className = 'adem1-gauge';
+  div.innerHTML =
+    '<div class="adem1-gauge-head"><span>Budget consommé (postes pourvus)</span><b>' + pct.toFixed(1).replace('.', ',') + ' %</b></div>' +
+    '<div class="adem1-gauge-track"><div class="adem1-gauge-fill" style="width:' + Math.min(pct, 100) + '%"></div></div>' +
+    '<div class="adem1-gauge-sub">' + fmt(pv) + ' / ' + fmt(tot) + ' FCFA — cliquez sur la carte pour l\u2019analyse des coûts</div>';
+  card.appendChild(div);
+}
+function decorate(){
+  var map = kpiCards();
+  if (!map.total) return false;
+  deco(map.total, 'total', 'Réinitialiser tous les filtres', function(){
+    if (v2()) v2().resetAll();
+    toast('Filtres réinitialisés');
+  });
+  deco(map.pourvues, 'pourvues', 'Filtrer : demandes pourvues', function(){
+    if (v2()) v2()._set('statut', 'Pourvue');
+    toast('Filtre appliqué : Pourvue');
+  }, function(){ return v2() && v2()._state().statut === 'Pourvue'; });
+  deco(map.encours, 'encours', 'Filtrer : En cours + Validée', function(){
+    if (v2()) v2()._set('statut', '__ECV__');
+    toast('Filtre appliqué : En cours + Validée');
+  }, function(){ return v2() && v2()._state().statut === '__ECV__'; });
+  deco(map.budget, 'budget', 'Analyse des coûts', function(){ openCosts(); });
+  addGauge(map.budget);
+  return true;
+}
+
+/* ---------- modal analyse des coûts ---------- */
+function openCosts(){
+  if (!DATA) { loadData().then(openCosts).catch(function(){}); return; }
+  ensureCSS();
+  var sel = DATA;
+  if (v2()){
+    var vn = v2().visibleNums();
+    if (vn && DATA.length && vn.size < DATA.length) sel = DATA.filter(function(x){ return vn.has(x.num); });
+  }
+  if (!sel.length){ toast('Aucune demande dans la vue courante'); return; }
+  var tot = sel.reduce(function(s, x){ return s + x.budget; }, 0);
+  var pvs = sel.filter(function(x){ return x.statut === 'Pourvue'; });
+  var pvB = pvs.reduce(function(s, x){ return s + x.budget; }, 0);
+  var couts = sel.reduce(function(s, x){ return s + x.cout; }, 0);
+  var pct = tot ? (pvB / tot * 100) : 0;
+  var rows = sel.slice().sort(function(a, b){ return b.budget - a.budget; }).map(function(x){
+    return '<tr><td><b>' + x.num + '</b></td><td>' + x.poste + '</td><td>' + x.statut + '</td><td style="text-align:right">' + fmt(x.budget) + '</td><td style="text-align:right">' + fmt(x.cout) + '</td></tr>';
+  }).join('');
+  var back = document.createElement('div');
+  back.className = 'adem1-back';
+  back.innerHTML =
+    '<div class="adem1-modal" role="dialog" aria-modal="true" aria-label="Analyse des coûts">' +
+    '<div class="adem1-mhead"><h3>Analyse des coûts — Demandes de recrutement</h3><button class="adem1-mclose" aria-label="Fermer la fenêtre">\u2715</button></div>' +
+    '<div class="adem1-mbody">' +
+    '<div class="adem1-stats">' +
+    '<div class="adem1-stat"><div class="l">Budget total alloué</div><div class="v">' + fmt(tot) + ' F</div></div>' +
+    '<div class="adem1-stat"><div class="l">Budget consommé (pourvues)</div><div class="v">' + fmt(pvB) + ' F</div></div>' +
+    '<div class="adem1-stat"><div class="l">Taux de consommation</div><div class="v">' + pct.toFixed(1).replace('.', ',') + ' %</div></div>' +
+    '<div class="adem1-stat"><div class="l">Coûts de recrutement</div><div class="v red">' + fmt(couts) + ' F</div></div>' +
+    '</div>' +
+    '<div class="adem1-gauge-track" style="height:10px;margin-bottom:14px"><div class="adem1-gauge-fill" style="width:' + Math.min(pct, 100) + '%"></div></div>' +
+    '<table class="adem1-mtable"><thead><tr><th>N°</th><th>Poste</th><th>Statut</th><th style="text-align:right">Budget (FCFA)</th><th style="text-align:right">Coût recrutement</th></tr></thead><tbody>' + rows + '</tbody></table>' +
+    '<div class="adem1-mnote">Calculé sur la vue courante : ' + sel.length + ' demande(s) — jauge = budget des postes pourvus / budget total alloué.</div>' +
+    '</div></div>';
+  function close(){ back.remove(); document.removeEventListener('keydown', onKey); }
+  function onKey(e){ if (e.key === 'Escape') close(); }
+  back.addEventListener('click', function(e){ if (e.target === back) close(); });
+  back.querySelector('.adem1-mclose').addEventListener('click', close);
+  document.addEventListener('keydown', onKey);
+  document.body.appendChild(back);
+}
+
+/* ---------- watchdog ---------- */
+var tickN = 0;
+function tick(){
+  if (!isDemandes()) return;
+  ensureCSS();
+  if (!DATA && tickN % 3 === 0){
+    loadData().then(function(){
+      decorate();
+      try { document.dispatchEvent(new CustomEvent('adem1:data')); } catch (e) {}
+    }).catch(function(){});
+  }
+  if (DATA) decorate();
+  tickN++;
+}
+setInterval(tick, 900);
+
+window.__ADEM_V1__ = {
+  _data: function(){ return DATA ? DATA.slice() : []; },
+  _reload: loadData,
+  _err: function(){ return DATA_ERR; },
+  toast: toast,
+  _version: '1.0'
+};
+})();
+</script>
+<!-- ADEM_V1_WIDGETS END -->
+<!-- ADEM_V2_FILTERS BEGIN -->
+<script>
+/* ADEM_V2 — Barre de filtres #adem2-bar /demandes (Étape 2) — rebuild build index-C2oVdx8X */
+(function(){
+'use strict';
+if (window.__ADEM_V2__) { return; }
+var BLANK = { q: '', dept: '', statut: '', prio: '', periode: '', type: '' };
+var ST = { q: '', dept: '', statut: '', prio: '', periode: '', type: '' };
+var VISIBLE = new Set();
+var BUILT = false, CSS_DONE = false, NATIVE_HIDDEN = false;
+var mo = null, moTimer = null;
+
+function $(s, r){ return (r || document).querySelector(s); }
+function $$(s, r){ return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
+function fmt(n){ return Math.round(n).toLocaleString('fr-FR').replace(/\u202f/g, ' '); }
+function pd(s){ var m = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(s || ''); return m ? new Date(+m[3], +m[2] - 1, +m[1]) : null; }
+function keyOf(dt){ return dt.getFullYear() + '-' + ('0' + (dt.getMonth() + 1)).slice(-2); }
+function isDemandes(){ return /\/demandes/.test(location.pathname); }
+function v1(){ return window.__ADEM_V1__ || null; }
+function data(){ return v1() ? v1()._data() : []; }
+var LAB_STATUT = { Annulee: 'Annulée' };
+var LAB_TYPE = { Operationnel: 'Opérationnel', 'Agent de maitrise': 'Agent de maîtrise', Cadre: 'Cadre' };
+var MOIS = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
+var MOIS_ABR = ['Janv.', 'Févr.', 'Mars', 'Avr.', 'Mai', 'Juin', 'Juil.', 'Août', 'Sept.', 'Oct.', 'Nov.', 'Déc.'];
+function labStatut(s){ return LAB_STATUT[s] || s; }
+function labType(s){ return LAB_TYPE[s] || s; }
+function labMois(key){ var p = key.split('-'); return MOIS[+p[1] - 1] + ' ' + p[0]; }
+
+/* ---------- CSS ---------- */
+function ensureCSS(){
+  if (CSS_DONE) return; CSS_DONE = true;
+  var st = document.createElement('style');
+  st.id = 'adem2-css';
+  st.textContent =
+    '#adem2-bar{background:#fff;border:1px solid #e0ece8;border-radius:14px;padding:12px 14px;margin:10px 0 14px;box-shadow:0 2px 10px rgba(13,124,102,.06);font-family:Inter,sans-serif;}' +
+    '.adem2-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;}' +
+    '.adem2-search{flex:1 1 220px;min-width:200px;display:flex;align-items:center;gap:6px;background:#f6f9f8;border:1px solid #dce7e3;border-radius:9px;padding:7px 10px;}' +
+    '.adem2-search:focus-within{border-color:#0D7C66;background:#fff;}' +
+    '.adem2-search svg{flex:none;width:15px;height:15px;stroke:#78909c;fill:none;stroke-width:2;}' +
+    '.adem2-search input{border:none;outline:none;background:transparent;font:400 12.5px/16px Inter,sans-serif;color:#263238;width:100%;}' +
+    '.adem2-search input::placeholder{color:#90a4ae;}' +
+    '.adem2-sel{appearance:none;-webkit-appearance:none;background:#f6f9f8 url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%2378909c\' stroke-width=\'2\'%3E%3Cpath d=\'M7 10l5 5 5-5z\'/%3E%3C/svg%3E") no-repeat right 8px center/13px;border:1px solid #dce7e3;border-radius:9px;padding:7px 26px 7px 10px;font:500 12px/16px Inter,sans-serif;color:#37474f;cursor:pointer;max-width:180px;}' +
+    '.adem2-sel:hover{border-color:#0D7C66;}' +
+    '.adem2-sel.adem2-on{border-color:#0D7C66;background-color:#e8f5f1;color:#0D7C66;font-weight:600;}' +
+    '.adem2-savebtn{background:#fff;border:1px solid #cfd8dc;border-radius:9px;padding:7px 12px;font:600 12px/16px Inter,sans-serif;color:#455a64;cursor:pointer;white-space:nowrap;}' +
+    '.adem2-savebtn:hover{border-color:#0D7C66;color:#0D7C66;}' +
+    '.adem2-count{font:400 12px/16px Inter,sans-serif;color:#607d8b;}' +
+    '.adem2-count b{color:#0D7C66;}' +
+    '.adem2-nf{font:600 11px/16px Inter,sans-serif;color:#8d6e63;background:#efebe9;border-radius:12px;padding:3px 10px;}' +
+    '.adem2-nf.zero{color:#90a4ae;background:#f5f5f5;font-weight:500;}' +
+    '.adem2-reset{background:none;border:1px solid #eceff1;border-radius:9px;padding:6px 12px;font:500 12px/16px Inter,sans-serif;color:#90a4ae;cursor:pointer;}' +
+    '.adem2-reset:hover{color:#d32f2f;border-color:#ffcdd2;}' +
+    '.adem2-menu{position:absolute;z-index:4150;background:#fff;border:1px solid #e0e0e0;border-radius:12px;box-shadow:0 10px 34px rgba(0,0,0,.18);padding:12px;width:280px;font-family:Inter,sans-serif;}' +
+    '.adem2-menu h4{margin:0 0 8px;font:600 12.5px/18px Inter,sans-serif;color:#37474f;}' +
+    '.adem2-menu .save-row{display:flex;gap:6px;margin-bottom:10px;}' +
+    '.adem2-menu input{flex:1;border:1px solid #dce7e3;border-radius:8px;padding:7px 9px;font:400 12px/16px Inter,sans-serif;outline:none;}' +
+    '.adem2-menu input:focus{border-color:#0D7C66;}' +
+    '.adem2-menu .ok{background:#0D7C66;border:none;color:#fff;border-radius:8px;padding:7px 11px;font:600 12px/16px Inter,sans-serif;cursor:pointer;}' +
+    '.adem2-menu .empty{font:400 12px/17px Inter,sans-serif;color:#90a4ae;padding:6px 2px;}' +
+    '.adem2-item{display:flex;align-items:center;gap:8px;padding:7px 6px;border-radius:8px;cursor:pointer;}' +
+    '.adem2-item:hover{background:#f1f8f6;}' +
+    '.adem2-item .nm{flex:1;font:500 12.5px/17px Inter,sans-serif;color:#263238;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}' +
+    '.adem2-item .nm small{color:#90a4ae;font-weight:400;}' +
+    '.adem2-item .del{border:none;background:none;color:#b0bec5;cursor:pointer;font-size:13px;padding:2px 4px;border-radius:6px;}' +
+    '.adem2-item .del:hover{color:#d32f2f;background:#ffebee;}' +
+    '.adem2-hide{display:none!important;}';
+  document.head.appendChild(st);
+}
+
+/* ---------- UI ---------- */
+function buildBar(){
+  if (BUILT) return;
+  var anchor = findAnchor();
+  if (!anchor) return;
+  ensureCSS();
+  var bar = document.createElement('div');
+  bar.id = 'adem2-bar';
+  bar.innerHTML =
+    '<div class="adem2-row">' +
+    '<label class="adem2-search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg><input type="text" class="adem2-q" placeholder="Rechercher (n°, poste, département, responsable…)" aria-label="Recherche textuelle" /></label>' +
+    '<select class="adem2-sel" data-k="dept" aria-label="Filtrer par département"></select>' +
+    '<select class="adem2-sel" data-k="statut" aria-label="Filtrer par statut"></select>' +
+    '<select class="adem2-sel" data-k="prio" aria-label="Filtrer par priorité"></select>' +
+    '<select class="adem2-sel" data-k="periode" aria-label="Filtrer par période"></select>' +
+    '<select class="adem2-sel" data-k="type" aria-label="Filtrer par type de poste"></select>' +
+    '<button type="button" class="adem2-savebtn">\u{1F4BE} Mes filtres</button>' +
+    '</div>' +
+    '<div class="adem2-row" style="margin-top:9px">' +
+    '<span class="adem2-count">Affichage : <b class="adem2-x-y">0/0</b> demandes</span>' +
+    '<span class="adem2-nf zero">0 filtre actif</span>' +
+    '<span style="flex:1"></span>' +
+    '<button type="button" class="adem2-reset">Réinitialiser</button>' +
+    '</div>';
+  anchor.parentNode.insertBefore(bar, anchor);
+  BUILT = true;
+  wire(bar);
+  fillOptions();
+  syncControls();
+  apply();
+}
+function findAnchor(){
+  var paper = $$('.MuiPaper-root').filter(function(p){ return p.querySelector('.MuiTableContainer-root'); })[0];
+  if (paper) return paper;
+  var box = nativeToolbar();
+  if (box) return box;
+  return null;
+}
+function nativeToolbar(){
+  var cands = $$('.MuiBox-root').filter(function(b){
+    var t = b.textContent || '';
+    return t.length < 320 && /Tous les départements/.test(t) && /Tous les statuts/.test(t) && /Toutes priorités/.test(t) && b.querySelectorAll('.MuiSelect-select').length >= 2;
+  });
+  return cands.length ? cands[cands.length - 1] : null;
+}
+function hideNativeToolbar(){
+  var box = nativeToolbar();
+  if (box && box.getAttribute('data-adem2-native') !== 'hidden'){
+    box.style.setProperty('display', 'none', 'important');
+    box.setAttribute('data-adem2-native', 'hidden');
+  }
+  NATIVE_HIDDEN = true;
+}
+function opts(sel, arr, cur){
+  var html = arr.map(function(o){ return '<option value="' + o.v + '"' + (o.v === cur ? ' selected' : '') + '>' + o.l + '</option>'; }).join('');
+  sel.innerHTML = html;
+}
+function fillOptions(){
+  var d = data();
+  var depts = [], mois = [], types = [];
+  var seenD = {}, seenM = {}, seenT = {};
+  d.forEach(function(x){
+    if (!seenD[x.dept]){ seenD[x.dept] = 1; depts.push(x.dept); }
+    if (!seenT[x.typePoste]){ seenT[x.typePoste] = 1; types.push(x.typePoste); }
+    var dt = pd(x.date);
+    if (dt && !seenM[keyOf(dt)]){ seenM[keyOf(dt)] = 1; mois.push(keyOf(dt)); }
+  });
+  depts.sort(); types.sort(); mois.sort();
+  var sDept = $('#adem2-bar select[data-k=dept]');
+  var o = [{ v: '', l: 'Département : tous' }].concat(depts.map(function(x){ return { v: x, l: x }; }));
+  if (sDept) opts(sDept, o, ST.dept);
+  var sSt = $('#adem2-bar select[data-k=statut]');
+  o = [{ v: '', l: 'Statut : tous' },
+    { v: 'Pourvue', l: 'Pourvue' },
+    { v: 'En cours', l: 'En cours' },
+    { v: 'Validée', l: 'Validée' },
+    { v: 'En attente', l: 'En attente' },
+    { v: 'Annulee', l: 'Annulée' },
+    { v: '__ECV__', l: 'En cours + Validée' }];
+  if (sSt) opts(sSt, o, ST.statut);
+  var sPrio = $('#adem2-bar select[data-k=prio]');
+  o = [{ v: '', l: 'Priorité : toutes' },
+    { v: 'Urgente', l: 'Urgente' }, { v: 'Haute', l: 'Haute' },
+    { v: 'Moyenne', l: 'Moyenne' }, { v: 'Basse', l: 'Basse' }];
+  if (sPrio) opts(sPrio, o, ST.prio);
+  var sPer = $('#adem2-bar select[data-k=periode]');
+  o = [{ v: '', l: 'Période : toute' }];
+  mois.forEach(function(m){ o.push({ v: 'm:' + m, l: 'Mois : ' + labMois(m) }); });
+  o.push({ v: 'd:30', l: '30 derniers jours' });
+  o.push({ v: 'd:90', l: '90 derniers jours' });
+  if (sPer) opts(sPer, o, ST.periode);
+  var sType = $('#adem2-bar select[data-k=type]');
+  o = [{ v: '', l: 'Type de poste : tous' }].concat(types.map(function(x){ return { v: x, l: labType(x) }; }));
+  if (sType) opts(sType, o, ST.type);
+}
+
+/* ---------- filtrage ---------- */
+function pass(d){
+  if (ST.q){
+    var hay = (d.num + ' ' + d.poste + ' ' + d.dept + ' ' + d.resp + ' ' + d.notes).toLowerCase();
+    if (hay.indexOf(ST.q.toLowerCase()) < 0) return false;
+  }
+  if (ST.dept && d.dept !== ST.dept) return false;
+  if (ST.statut){
+    if (ST.statut === '__ECV__'){ if (d.statut !== 'En cours' && d.statut !== 'Validée') return false; }
+    else if (d.statut !== ST.statut) return false;
+  }
+  if (ST.prio && d.prio !== ST.prio) return false;
+  if (ST.type && d.typePoste !== ST.type) return false;
+  if (ST.periode){
+    var dt = pd(d.date);
+    if (!dt) return false;
+    if (ST.periode.slice(0, 2) === 'm:'){ if (keyOf(dt) !== ST.periode.slice(2)) return false; }
+    else { var n = +ST.periode.slice(2); if (Date.now() - dt.getTime() > n * 864e5) return false; }
+  }
+  return true;
+}
+function apply(){
+  var d = data();
+  VISIBLE = new Set(d.filter(pass).map(function(x){ return x.num; }));
+  var rows = $$('table tbody tr');
+  var changed = false;
+  rows.forEach(function(tr){
+    var m = /DR-\d{4}-\d{3}/.exec(tr.textContent || '');
+    var hide = m && d.length ? (VISIBLE.size < d.length && !VISIBLE.has(m[0])) : false;
+    var isHidden = tr.classList.contains('adem2-hide');
+    if (hide !== isHidden){ tr.classList.toggle('adem2-hide', hide); changed = true; }
+  });
+  var bar = $('#adem2-bar');
+  if (bar){
+    var nAct = 0;
+    ['q', 'dept', 'statut', 'prio', 'periode', 'type'].forEach(function(k){ if (ST[k]) nAct++; });
+    var xy = bar.querySelector('.adem2-x-y');
+    if (xy) xy.textContent = (d.length ? VISIBLE.size : 0) + '/' + d.length;
+    var nf = bar.querySelector('.adem2-nf');
+    if (nf){
+      nf.textContent = nAct + ' filtre' + (nAct > 1 ? 's actifs' : ' actif');
+      nf.classList.toggle('zero', nAct === 0);
+    }
+    $$('#adem2-bar .adem2-sel').forEach(function(s){
+      var k = s.getAttribute('data-k');
+      s.classList.toggle('adem2-on', !!ST[k]);
+    });
+  }
+  hideNativeToolbar();
+  try { document.dispatchEvent(new CustomEvent('adem2:change', { detail: { visible: VISIBLE, actifs: nActifs(), total: d.length } })); } catch (e) {}
+  return changed;
+}
+function nActifs(){ var n = 0; ['q', 'dept', 'statut', 'prio', 'periode', 'type'].forEach(function(k){ if (ST[k]) n++; }); return n; }
+
+/* ---------- contrôles ---------- */
+function wire(bar){
+  var q = bar.querySelector('.adem2-q');
+  q.addEventListener('input', function(){ ST.q = q.value.trim(); apply(); });
+  $$('#adem2-bar .adem2-sel').forEach(function(s){
+    s.addEventListener('change', function(){ ST[s.getAttribute('data-k')] = s.value; apply(); });
+  });
+  bar.querySelector('.adem2-reset').addEventListener('click', function(){ resetAll(); });
+  var saveBtn = bar.querySelector('.adem2-savebtn');
+  saveBtn.addEventListener('click', function(e){ e.stopPropagation(); openMenu(saveBtn); });
+}
+function syncControls(){
+  var bar = $('#adem2-bar');
+  if (!bar) return;
+  var q = bar.querySelector('.adem2-q');
+  if (q && q.value !== ST.q) q.value = ST.q;
+  $$('#adem2-bar .adem2-sel').forEach(function(s){ s.value = ST[s.getAttribute('data-k')] || ''; });
+  fillOptions();
+}
+function resetAll(){
+  ST = { q: '', dept: '', statut: '', prio: '', periode: '', type: '' };
+  syncControls();
+  apply();
+  if (v1()) v1().toast('Filtres réinitialisés');
+}
+function _set(k, val){
+  if (!(k in BLANK)) return;
+  ST[k] = val || '';
+  if (k !== 'q') syncControls();
+  apply();
+}
+
+/* ---------- Mes filtres ---------- */
+function lsGet(){ try { return JSON.parse(localStorage.getItem('adem2.saved') || '[]'); } catch (e) { return []; } }
+function lsSet(a){ try { localStorage.setItem('adem2.saved', JSON.stringify(a)); } catch (e) {} }
+var menuEl = null;
+function openMenu(btn){
+  closeMenu();
+  ensureCSS();
+  var saved = lsGet();
+  menuEl = document.createElement('div');
+  menuEl.className = 'adem2-menu';
+  var items = saved.length ? saved.map(function(f, i){
+    var nf = 0; ['q', 'dept', 'statut', 'prio', 'periode', 'type'].forEach(function(k){ if (f.st[k]) nf++; });
+    return '<div class="adem2-item" data-i="' + i + '"><span class="nm">' + f.name + ' <small>(' + nf + ' filtre' + (nf > 1 ? 's' : '') + ')</small></span><button class="del" title="Supprimer" data-i="' + i + '">\u2715</button></div>';
+  }).join('') : '<div class="empty">Aucun filtre sauvegardé. Configurez des filtres puis enregistrez-les sous un nom.</div>';
+  menuEl.innerHTML =
+    '<h4>Mes filtres sauvegardés</h4>' +
+    '<div class="save-row"><input type="text" class="adem2-menu-name" placeholder="Nom du filtre (ex. Urgentes RH)" maxlength="40" /><button class="ok">Enregistrer</button></div>' +
+    items;
+  var r = btn.getBoundingClientRect();
+  menuEl.style.top = (r.bottom + 8) + 'px';
+  menuEl.style.left = Math.max(12, Math.min(r.left, window.innerWidth - 300)) + 'px';
+  menuEl.addEventListener('click', function(e){
+    e.stopPropagation();
+    var del = e.target.closest ? e.target.closest('.del') : null;
+    if (del){
+      var i = +del.getAttribute('data-i');
+      var a = lsGet(); a.splice(i, 1); lsSet(a);
+      openMenu(btn);
+      return;
+    }
+    var it = e.target.closest ? e.target.closest('.adem2-item') : null;
+    if (it){
+      var f = lsGet()[+it.getAttribute('data-i')];
+      if (f){
+        ST = { q: '', dept: '', statut: '', prio: '', periode: '', type: '' };
+        for (var k in f.st) if (k in ST) ST[k] = f.st[k] || '';
+        syncControls(); apply();
+        if (v1()) v1().toast('Filtre « ' + f.name + ' » appliqué');
+      }
+      closeMenu();
+      return;
+    }
+    if (e.target.classList && e.target.classList.contains('ok')){
+      var inp = menuEl.querySelector('.adem2-menu-name');
+      var name = (inp.value || '').trim();
+      if (!name){ inp.focus(); inp.style.borderColor = '#d32f2f'; return; }
+      var a2 = lsGet();
+      a2 = a2.filter(function(f2){ return f2.name !== name; });
+      a2.push({ name: name, st: { q: ST.q, dept: ST.dept, statut: ST.statut, prio: ST.prio, periode: ST.periode, type: ST.type } });
+      lsSet(a2);
+      if (v1()) v1().toast('Filtre « ' + name + ' » sauvegardé');
+      openMenu(btn);
+    }
+  });
+  document.body.appendChild(menuEl);
+  setTimeout(function(){
+    document.addEventListener('click', closeMenu);
+    document.addEventListener('keydown', escMenu);
+  }, 0);
+}
+function escMenu(e){ if (e.key === 'Escape') closeMenu(); }
+function closeMenu(){
+  if (menuEl){ menuEl.remove(); menuEl = null; document.removeEventListener('click', closeMenu); document.removeEventListener('keydown', escMenu); }
+}
+
+/* ---------- observer (re-renders React) ---------- */
+function startObserver(){
+  if (mo) return;
+  mo = new MutationObserver(function(){
+    if (!isDemandes()) return;
+    clearTimeout(moTimer);
+    moTimer = setTimeout(function(){
+      if (!document.getElementById('adem2-bar')){ BUILT = false; buildBar(); }
+      else apply();
+    }, 90);
+  });
+  mo.observe(document.body, { childList: true, subtree: true });
+}
+
+/* ---------- watchdog ---------- */
+function tick(){
+  if (!isDemandes()) return;
+  if (!document.getElementById('adem2-bar')){ BUILT = false; buildBar(); }
+  else apply();
+}
+setInterval(tick, 1100);
+
+window.__ADEM_V2__ = {
+  _set: _set,
+  resetAll: resetAll,
+  _state: function(){ var c = {}; for (var k in ST) c[k] = ST[k]; return c; },
+  visibleNums: function(){ return new Set(VISIBLE); },
+  _version: '2.0'
+};
+})();
+</script>
+<!-- ADEM_V2_FILTERS END -->
+<!-- ADEM_V5_CHARTS BEGIN -->
+<script>
+/* ADEM_V5 — Panneau de visualisations /demandes (Étape 5) : donut statuts cliquable,
+   évolution mensuelle, filtrage croisé, bouton masquer/afficher. */
+(function(){
+'use strict';
+if (window.__ADEM_V5__) { return; }
+var PANEL = null, BUILT = false, CSS_DONE = false;
+var LAST_SIG = '';
+var tipEl = null;
+
+function $(s, r){ return (r || document).querySelector(s); }
+function $$(s, r){ return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
+function pd(s){ var m = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(s || ''); return m ? new Date(+m[3], +m[2] - 1, +m[1]) : null; }
+function keyOf(dt){ return dt.getFullYear() + '-' + ('0' + (dt.getMonth() + 1)).slice(-2); }
+function isDemandes(){ return /\/demandes/.test(location.pathname); }
+function v1(){ return window.__ADEM_V1__ || null; }
+function v2(){ return window.__ADEM_V2__ || null; }
+function data(){ return v1() ? v1()._data() : []; }
+var MOIS = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
+var MOIS_ABR = ['Janv.', 'Févr.', 'Mars', 'Avr.', 'Mai', 'Juin', 'Juil.', 'Août', 'Sept.', 'Oct.', 'Nov.', 'Déc.'];
+/* couleurs officielles du build (chips natives) */
+var STCOLOR = {
+  'En attente': '#9e9e9e', 'Validée': '#1976d2', 'En cours': '#f57f17',
+  'Pourvue': '#2e7d32', 'Annulee': '#d32f2f'
+};
+var STORDER = ['En attente', 'Validée', 'En cours', 'Pourvue', 'Annulee'];
+var STLAB = { Annulee: 'Annulée' };
+function lab(s){ return STLAB[s] || s; }
+function visibleData(){
+  var d = data();
+  if (!d.length) return [];
+  if (v2()){
+    var vn = v2().visibleNums();
+    if (vn && d.length && vn.size < d.length) return d.filter(function(x){ return vn.has(x.num); });
+  }
+  return d;
+}
+function nActifs(){ return v2() ? Object.keys(v2()._state()).filter(function(k){ return v2()._state()[k]; }).length : 0; }
+
+/* ---------- CSS ---------- */
+function ensureCSS(){
+  if (CSS_DONE) return; CSS_DONE = true;
+  var st = document.createElement('style');
+  st.id = 'adem5-css';
+  st.textContent =
+    '#adem-charts-panel{background:#fff;border:1px solid #e0ece8;border-radius:14px;padding:14px 16px;margin:2px 0 12px;box-shadow:0 2px 10px rgba(13,124,102,.06);font-family:Inter,sans-serif;}' +
+    '.adem5-head{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;}' +
+    '.adem5-title{font:600 14px/20px Inter,sans-serif;color:#1a1a2e;}' +
+    '.adem5-sub{font:400 12px/18px Inter,sans-serif;color:#78909c;}' +
+    '.adem5-sub b{color:#0D7C66;}' +
+    '.adem5-chipf{font:600 11px/16px Inter,sans-serif;color:#8d6e63;background:#efebe9;border-radius:12px;padding:3px 10px;}' +
+    '.adem5-clearbtn{background:#fff;border:1px solid #ffcdd2;border-radius:9px;padding:5px 11px;font:600 11.5px/16px Inter,sans-serif;color:#d32f2f;cursor:pointer;}' +
+    '.adem5-clearbtn:hover{background:#ffebee;}' +
+    '.adem5-toggle{background:#0D7C66;border:none;color:#fff;border-radius:9px;padding:6px 13px;font:600 12px/16px Inter,sans-serif;cursor:pointer;}' +
+    '.adem5-toggle:hover{background:#0a6b58;}' +
+    '.adem5-body{display:grid;grid-template-columns:1fr 1.25fr;gap:18px;margin-top:12px;}' +
+    '@media (max-width:980px){.adem5-body{grid-template-columns:1fr;}}' +
+    '.adem5-chart{border:1px solid #eef3f1;border-radius:12px;padding:12px;min-width:0;}' +
+    '.adem5-chart h4{margin:0 0 8px;font:600 12.5px/18px Inter,sans-serif;color:#455a64;}' +
+    '.adem5-donutwrap{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}' +
+    '.adem5-donutsvg{flex:none;max-width:190px;}' +
+    '.adem5-legend{display:flex;flex-direction:column;gap:4px;min-width:150px;flex:1;}' +
+    '.adem5-legbtn{display:flex;align-items:center;gap:8px;background:none;border:1px solid transparent;border-radius:8px;padding:4px 8px;cursor:pointer;font:400 12px/16px Inter,sans-serif;color:#37474f;text-align:left;}' +
+    '.adem5-legbtn:hover{background:#f1f8f6;}' +
+    '.adem5-legbtn.on{border-color:#0D7C66;background:#e8f5f1;font-weight:600;}' +
+    '.adem5-legbtn .dot{width:10px;height:10px;border-radius:50%;flex:none;}' +
+    '.adem5-legbtn .cnt{margin-left:auto;font-weight:600;color:#0D7C66;}' +
+    '.adem5-legbtn .pct{color:#90a4ae;font-size:11px;}' +
+    '.adem5-barsvg{width:100%;height:auto;display:block;}' +
+    '.adem5-seg{cursor:pointer;transition:opacity .18s,stroke-width .18s;}' +
+    '.adem5-barrect{cursor:pointer;transition:opacity .15s;}' +
+    '.adem5-barrect:hover{opacity:.78;}' +
+    '.adem5-empty{font:400 13px/18px Inter,sans-serif;color:#90a4ae;text-align:center;padding:26px 6px;}' +
+    '.adem5-tip{position:fixed;z-index:4300;background:#263238;color:#fff;font:500 12px/17px Inter,sans-serif;padding:7px 11px;border-radius:8px;pointer-events:none;box-shadow:0 6px 18px rgba(0,0,0,.25);display:none;max-width:260px;}' +
+    '.adem5-legmonths{display:flex;gap:14px;margin:0 0 6px;font:400 11.5px/16px Inter,sans-serif;color:#607d8b;flex-wrap:wrap;}' +
+    '.adem5-legmonths .sw{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px;}' +
+    '.adem5-body.off{display:none;}';
+  document.head.appendChild(st);
+}
+
+/* ---------- tooltip ---------- */
+function tipShow(html, x, y){
+  if (!tipEl){ tipEl = document.createElement('div'); tipEl.className = 'adem5-tip'; document.body.appendChild(tipEl); }
+  tipEl.innerHTML = html;
+  tipEl.style.display = 'block';
+  var w = tipEl.offsetWidth || 140;
+  tipEl.style.left = Math.max(6, Math.min(x + 12, window.innerWidth - w - 10)) + 'px';
+  tipEl.style.top = (y + 14) + 'px';
+}
+function tipHide(){ if (tipEl) tipEl.style.display = 'none'; }
+
+/* ---------- donut ---------- */
+function arcPath(cx, cy, r, a0, a1){
+  function p(a){ return [cx + r * Math.cos(a), cy + r * Math.sin(a)]; }
+  var x0 = p(a0)[0], y0 = p(a0)[1], x1 = p(a1)[0], y1 = p(a1)[1];
+  var large = (a1 - a0) > Math.PI ? 1 : 0;
+  return 'M ' + x0.toFixed(2) + ' ' + y0.toFixed(2) + ' A ' + r + ' ' + r + ' 0 ' + large + ' 1 ' + x1.toFixed(2) + ' ' + y1.toFixed(2);
+}
+function statutsOf(sel){
+  var map = {};
+  sel.forEach(function(x){ map[x.statut] = (map[x.statut] || 0) + 1; });
+  var keys = STORDER.filter(function(s){ return map[s]; });
+  Object.keys(map).forEach(function(s){ if (STORDER.indexOf(s) < 0) keys.push(s); });
+  return keys.map(function(s){ return { id: s, label: lab(s), n: map[s], color: STCOLOR[s] || '#7e57c2' }; });
+}
+function renderDonut(host, sel){
+  var st = statutsOf(sel);
+  var cur = v2() ? v2()._state().statut : '';
+  var tot = sel.length;
+  var svgNs = 'http://www.w3.org/2000/svg';
+  host.innerHTML = '';
+  var svg = document.createElementNS(svgNs, 'svg');
+  svg.setAttribute('viewBox', '0 0 200 200');
+  svg.setAttribute('class', 'adem5-donutsvg');
+  svg.setAttribute('role', 'img');
+  svg.setAttribute('aria-label', 'Répartition des demandes par statut, ' + tot + ' au total');
+  if (!tot){
+    host.innerHTML = '<div class="adem5-empty">Aucune demande dans la vue courante.</div>';
+    return;
+  }
+  var a = -Math.PI / 2;
+  st.forEach(function(s){
+    var span = s.n / tot * Math.PI * 2;
+    var isOn = cur === s.id || (cur === '__ECV__' && (s.id === 'En cours' || s.id === 'Validée'));
+    var dimmed = cur && !isOn && cur !== s.id;
+    var el;
+    if (span >= Math.PI * 2 - 0.02){
+      el = document.createElementNS(svgNs, 'circle');
+      el.setAttribute('cx', '100'); el.setAttribute('cy', '100'); el.setAttribute('r', '70');
+      el.setAttribute('fill', 'none');
+      el.setAttribute('stroke', s.color);
+    } else {
+      el = document.createElementNS(svgNs, 'path');
+      el.setAttribute('d', arcPath(100, 100, 70, a + 0.012, a + span - 0.012));
+      el.setAttribute('fill', 'none');
+      el.setAttribute('stroke', s.color);
+    }
+    el.setAttribute('stroke-width', '34');
+    el.setAttribute('class', 'adem5-seg');
+    el.setAttribute('data-statut', s.id);
+    el.setAttribute('stroke-linecap', 'butt');
+    if (dimmed) el.setAttribute('opacity', '0.3');
+    if (isOn) el.setAttribute('stroke-width', '42');
+    var label = s.label + ' — ' + s.n + ' demande' + (s.n > 1 ? 's' : '') + ' (' + Math.round(s.n / tot * 100) + ' %). Cliquer pour filtrer le tableau.';
+    el.addEventListener('mousemove', function(e){ tipShow('<b>' + s.label + '</b> : ' + s.n + '/' + tot + ' (' + Math.round(s.n / tot * 100) + ' %)<br><span style="opacity:.8">Cliquer pour filtrer / défiltrer</span>', e.clientX, e.clientY); });
+    el.addEventListener('mouseleave', tipHide);
+    el.addEventListener('click', function(){ toggleStatut(s.id); });
+    svg.appendChild(el);
+    a += span;
+  });
+  var t1 = document.createElementNS(svgNs, 'text');
+  t1.setAttribute('x', '100'); t1.setAttribute('y', '95');
+  t1.setAttribute('text-anchor', 'middle');
+  t1.setAttribute('style', 'font:700 30px Inter,sans-serif;fill:#1a1a2e');
+  t1.textContent = String(tot);
+  var t2 = document.createElementNS(svgNs, 'text');
+  t2.setAttribute('x', '100'); t2.setAttribute('y', '116');
+  t2.setAttribute('text-anchor', 'middle');
+  t2.setAttribute('style', 'font:400 11px Inter,sans-serif;fill:#90a4ae');
+  t2.textContent = 'demande' + (tot > 1 ? 's' : '');
+  svg.appendChild(t1); svg.appendChild(t2);
+  host.appendChild(svg);
+  var leg = document.createElement('div');
+  leg.className = 'adem5-legend';
+  leg.innerHTML = st.map(function(s){
+    var isOn = cur === s.id || (cur === '__ECV__' && (s.id === 'En cours' || s.id === 'Validée'));
+    var on = isOn ? ' on' : '';
+    return '<button type="button" class="adem5-legbtn' + on + '" data-statut="' + s.id + '" aria-pressed="' + (on ? 'true' : 'false') + '" title="Filtrer : ' + s.label + '">' +
+      '<span class="dot" style="background:' + s.color + '"></span>' + s.label +
+      '<span class="pct">' + Math.round(s.n / tot * 100) + ' %</span><span class="cnt">' + s.n + '</span></button>';
+  }).join('');
+  leg.addEventListener('click', function(e){
+    var b = e.target.closest ? e.target.closest('.adem5-legbtn') : null;
+    if (b) toggleStatut(b.getAttribute('data-statut'));
+  });
+  host.appendChild(leg);
+}
+function toggleStatut(id){
+  if (!v2()) return;
+  var cur = v2()._state().statut;
+  if (cur === id) v2()._set('statut', '');
+  else { v2()._set('statut', id); if (v1()) v1().toast('Filtre statut : ' + lab(id)); }
+}
+
+/* ---------- barres mensuelles ---------- */
+function monthsOf(sel){
+  var keys = {};
+  sel.forEach(function(x){
+    var d1 = pd(x.date); if (d1) keys[keyOf(d1)] = 1;
+    var d2 = pd(x.datePourvue); if (d2) keys[keyOf(d2)] = 1;
+  });
+  var arr = Object.keys(keys).sort();
+  return arr.length ? arr.slice(-12) : [];
+}
+function renderBars(host, sel){
+  var months = monthsOf(sel);
+  if (!months.length){
+    host.innerHTML = '<div class="adem5-empty">Aucune donnée mensuelle dans la vue courante.</div>';
+    return;
+  }
+  var created = {}, pourvue = {};
+  sel.forEach(function(x){
+    var d1 = pd(x.date); if (d1) created[keyOf(d1)] = (created[keyOf(d1)] || 0) + 1;
+    var d2 = pd(x.datePourvue); if (d2) pourvue[keyOf(d2)] = (pourvue[keyOf(d2)] || 0) + 1;
+  });
+  var W = 560, H = 230, padL = 30, padB = 34, padT = 14, padR = 8;
+  var innerW = W - padL - padR, innerH = H - padT - padB;
+  var mx = Math.max.apply(null, months.map(function(m){ return Math.max(created[m] || 0, pourvue[m] || 0); }).concat([1]));
+  var yMax = mx <= 4 ? mx : Math.ceil(mx / 2) * 2;
+  var band = innerW / months.length;
+  var bw = Math.min(26, band * 0.28);
+  var svgNs = 'http://www.w3.org/2000/svg';
+  var curPer = v2() ? v2()._state().periode : '';
+  var s = '<svg viewBox="0 0 ' + W + ' ' + H + '" class="adem5-barsvg" role="img" aria-label="Évolution mensuelle : demandes créées et pourvues sur les derniers mois">';
+  var gridN = yMax <= 4 ? yMax : 4;
+  for (var g = 0; g <= gridN; g++){
+    var gv = Math.round(yMax * g / gridN);
+    var gy = padT + innerH - innerH * gv / yMax;
+    s += '<line x1="' + padL + '" y1="' + gy + '" x2="' + (W - padR) + '" y2="' + gy + '" stroke="#eceff1" stroke-width="1"/>';
+    s += '<text x="' + (padL - 6) + '" y="' + (gy + 4) + '" text-anchor="end" style="font:400 10px Inter,sans-serif;fill:#b0bec5">' + gv + '</text>';
+  }
+  months.forEach(function(m, i){
+    var cx = padL + band * i + band / 2;
+    var yc = padT + innerH - innerH * (created[m] || 0) / yMax;
+    var yp = padT + innerH - innerH * (pourvue[m] || 0) / yMax;
+    var on = curPer === ('m:' + m);
+    var op = curPer && !on ? '0.3' : '1';
+    var mm = m.split('-');
+    var labFull = MOIS[+mm[1] - 1] + ' ' + mm[0];
+    s += '<rect class="adem5-barrect" data-m="' + m + '" data-s="c" x="' + (cx - bw - 3) + '" y="' + yc + '" width="' + bw + '" height="' + (padT + innerH - yc) + '" rx="3" fill="#1976d2" opacity="' + op + '"/>';
+    s += '<rect class="adem5-barrect" data-m="' + m + '" data-s="p" x="' + (cx + 3) + '" y="' + yp + '" width="' + bw + '" height="' + (padT + innerH - yp) + '" rx="3" fill="#2e7d32" opacity="' + op + '"/>';
+    s += '<text x="' + cx + '" y="' + (H - padB + 16) + '" text-anchor="middle" style="font:500 10.5px Inter,sans-serif;fill:#546e7a' + (on ? ';font-weight:700' : '') + '">' + MOIS_ABR[+mm[1] - 1] + ' ' + mm[0].slice(2) + '</text>';
+    s += '<text x="' + cx + '" y="' + (H - padB + 29) + '" text-anchor="middle" style="font:400 9px Inter,sans-serif;fill:#b0bec5">' + ((created[m] || 0) + (pourvue[m] || 0) ? 'c:' + (created[m] || 0) + ' p:' + (pourvue[m] || 0) : '') + '</text>';
+  });
+  s += '<line x1="' + padL + '" y1="' + (padT + innerH) + '" x2="' + (W - padR) + '" y2="' + (padT + innerH) + '" stroke="#cfd8dc" stroke-width="1.4"/></svg>';
+  host.innerHTML = s;
+  var svgEl = host.querySelector('svg');
+  svgEl.addEventListener('mousemove', function(e){
+    var r = e.target.closest ? e.target.closest('.adem5-barrect') : null;
+    if (!r){ tipHide(); return; }
+    var m = r.getAttribute('data-m');
+    var mm = m.split('-');
+    var sc = r.getAttribute('data-s');
+    var v = sc === 'c' ? (created[m] || 0) : (pourvue[m] || 0);
+    tipShow('<b>' + MOIS[+mm[1] - 1] + ' ' + mm[0] + '</b> — ' + (sc === 'c' ? 'Créées : ' : 'Pourvues : ') + v +
+      '<br><span style="opacity:.8">Créées : ' + (created[m] || 0) + ' · Pourvues : ' + (pourvue[m] || 0) + '</span>' +
+      '<br><span style="opacity:.8">Cliquer pour filtrer ce mois</span>', e.clientX, e.clientY);
+  });
+  svgEl.addEventListener('mouseleave', tipHide);
+  svgEl.addEventListener('click', function(e){
+    var r = e.target.closest ? e.target.closest('.adem5-barrect') : null;
+    if (!r || !v2()) return;
+    var m = r.getAttribute('data-m');
+    if (v2()._state().periode === 'm:' + m) v2()._set('periode', '');
+    else {
+      v2()._set('periode', 'm:' + m);
+      var mp = m.split('-');
+      if (v1()) v1().toast('Filtre période : ' + MOIS[+mp[1] - 1] + ' ' + mp[0]);
+    }
+  });
+}
+
+/* ---------- panneau ---------- */
+function buildPanel(){
+  if (BUILT && document.getElementById('adem-charts-panel')) return true;
+  ensureCSS();
+  var bar = document.getElementById('adem2-bar');
+  var anchor = null;
+  if (bar) anchor = bar;
+  else {
+    var paper = $$('.MuiPaper-root').filter(function(p){ return p.querySelector('.MuiTableContainer-root'); })[0];
+    if (paper) anchor = paper;
+    else return false;
+  }
+  if (!PANEL){
+    PANEL = document.createElement('div');
+    PANEL.id = 'adem-charts-panel';
+    PANEL.innerHTML =
+      '<div class="adem5-head">' +
+      '<div class="adem5-title">\u{1F4CA} Visualisations <span class="adem5-sub">— <b class="adem5-nb">0</b> demande(s) en vue</span></div>' +
+      '<div style="display:flex;gap:8px;align-items:center">' +
+      '<span class="adem5-chipf" hidden>Vue filtrée</span>' +
+      '<button type="button" class="adem5-clearbtn" hidden>Effacer les filtres</button>' +
+      '<button type="button" class="adem5-toggle">Masquer</button>' +
+      '</div></div>' +
+      '<div class="adem5-body">' +
+      '<div class="adem5-chart adem5-donut"><h4>Répartition par statut</h4><div class="adem5-donutwrap"><div class="adem5-donut-host" style="flex:1;min-width:0"></div></div></div>' +
+      '<div class="adem5-chart adem5-monthly"><h4>Évolution mensuelle — créées vs pourvues</h4>' +
+      '<div class="adem5-legmonths"><span><span class="sw" style="background:#1976d2"></span>Créées (cliquer = filtrer le mois)</span><span><span class="sw" style="background:#2e7d32"></span>Pourvues</span></div>' +
+      '<div class="adem5-bars-host"></div></div>' +
+      '</div>';
+    var tog = PANEL.querySelector('.adem5-toggle');
+    tog.addEventListener('click', function(){
+      var body = PANEL.querySelector('.adem5-body');
+      var off = body.classList.toggle('off');
+      tog.textContent = off ? 'Afficher' : 'Masquer';
+      try { localStorage.setItem('adem5.visible', off ? '0' : '1'); } catch (e) {}
+    });
+    PANEL.querySelector('.adem5-clearbtn').addEventListener('click', function(){ if (v2()) v2().resetAll(); });
+  }
+  anchor.parentNode.insertBefore(PANEL, anchor);
+  var saved = '1';
+  try { saved = localStorage.getItem('adem5.visible') || '1'; } catch (e) {}
+  if (saved === '0'){
+    PANEL.querySelector('.adem5-body').classList.add('off');
+    PANEL.querySelector('.adem5-toggle').textContent = 'Afficher';
+  }
+  BUILT = true;
+  refresh(true);
+  return true;
+}
+var rfTimer = null;
+function refresh(force){
+  if (!PANEL) return;
+  var sel = visibleData();
+  var sig = sel.map(function(x){ return x.num; }).join(',') + '|' + nActifs() + '|' + data().length;
+  if (!force && sig === LAST_SIG) return;
+  LAST_SIG = sig;
+  renderDonut(PANEL.querySelector('.adem5-donut-host'), sel);
+  renderBars(PANEL.querySelector('.adem5-bars-host'), sel);
+  PANEL.querySelector('.adem5-nb').textContent = sel.length;
+  var na = nActifs();
+  PANEL.querySelector('.adem5-chipf').hidden = !na;
+  PANEL.querySelector('.adem5-chipf').textContent = 'Vue filtrée (' + na + ')';
+  PANEL.querySelector('.adem5-clearbtn').hidden = !na;
+}
+function startObserver(){
+  new MutationObserver(function(){
+    if (!isDemandes()) return;
+    clearTimeout(rfTimer);
+    rfTimer = setTimeout(function(){
+      buildPanel();
+      refresh();
+    }, 120);
+  }).observe(document.body, { childList: true, subtree: true });
+}
+document.addEventListener('adem2:change', function(){ setTimeout(function(){ refresh(); }, 30); });
+document.addEventListener('adem1:data', function(){ setTimeout(function(){ buildPanel(); refresh(true); }, 30); });
+function tick(){
+  if (!isDemandes()) return;
+  buildPanel();
+  refresh();
+}
+setInterval(tick, 1300);
+
+window.__ADEM_V5__ = {
+  refresh: function(){ refresh(true); },
+  _visible: visibleData,
+  _version: '5.0'
+};
+})();
+</script>
+<!-- ADEM_V5_CHARTS END -->
+<!-- ADEM_V7_UX BEGIN -->
+<script>
+/* ADEM_V7 — Étape 7 : Ergonomie & Design (ISO 9241) sur /demandes
+ * 1. Hiérarchie visuelle : titre agrandi, en-têtes renforcés, zèbre lisible, icônes d'action
+ * 2. Aération : padding cellules augmenté
+ * 3. Responsive : colonne Responsable masquée tablette, tableau en cartes mobile
+ * 4. Thème sombre/clair : S'APPUIE sur la bascule native (bouton « Mode sombre » + localStorage
+ *    admina-dark) — bouton ⚙ visible dans la barre ADEM_V2 + adaptation CSS de NOS composants
+ * 5. Accessibilité : contrastes WCAG AA des chips corrigés automatiquement, aria-labels,
+ *    focus-visible, toast role=status ; préférence système respectée à la 1re visite
+ * Zéro régression : aucun handler natif remplacé, le bouton natif « → » reste fonctionnel
+ * (masqué uniquement quand nos icônes sont rendues, qui appellent le même handler).
+ */
+(function(){
+'use strict';
+if (window.__ADEM_V7__) return;
+var D = document;
+
+/* ================= CONTRASTE WCAG ================= */
+function parseRgb(s){
+  var m = /rgba?\((\d+)[,\s]+(\d+)[,\s]+(\d+)(?:[,\s/]+([\d.]+))?/.exec(s||'');
+  return m ? {r:+m[1], g:+m[2], b:+m[3], a:m[4]===undefined?1:+m[4]} : null;
+}
+function chan(v){ v/=255; return v<=0.03928 ? v/12.92 : Math.pow((v+0.055)/1.055,2.4); }
+function lum(c){ return 0.2126*chan(c.r)+0.7152*chan(c.g)+0.0722*chan(c.b); }
+function contrast(c1,c2){ var a=lum(c1),b=lum(c2),hi=Math.max(a,b),lo=Math.min(a,b); return (hi+0.05)/(lo+0.05); }
+function darken(c,k){ /* mix vers noir, k=0..1 */
+  return {r:Math.round(c.r*(1-k)), g:Math.round(c.g*(1-k)), b:Math.round(c.b*(1-k)), a:1};
+}
+var WHITE = {r:255,g:255,b:255,a:1};
+/* Corrige un chip dont le texte blanc manque de contraste : assombrit le fond (préservation teinte) */
+function fixChip(chip){
+  var cs = getComputedStyle(chip);
+  var bg = parseRgb(cs.backgroundColor);
+  var fg = parseRgb(cs.color);
+  if (!bg || !fg || bg.a < 0.9) return;            /* chips transparents (Basse, depts) : laissés tels quels */
+  if (contrast(fg,WHITE) > 1.2) return;            /* texte non blanc : non ciblé */
+  var cr = contrast(fg,bg);
+  if (cr >= 4.5) return;                            /* déjà AA */
+  for (var k=0.06; k<=0.9; k+=0.05){
+    var cand = darken(bg,k);
+    if (contrast(fg,cand) >= 4.5){
+      chip.style.setProperty('background-color','rgb('+cand.r+','+cand.g+','+cand.b+')','important');
+      chip.style.setProperty('border-color','rgb('+cand.r+','+cand.g+','+cand.b+')','important');
+      return;
+    }
+  }
+}
+
+/* ================= CSS ================= */
+function ensureCSS(){
+  if (D.getElementById('adem7-style')) return;
+  var st = D.createElement('style');
+  st.id = 'adem7-style';
+  st.textContent =
+  /* ---- 1. Hiérarchie visuelle ---- */
+  '.adem7-title{font-size:32px!important;font-weight:800!important;letter-spacing:-.6px!important;line-height:1.15!important;margin:2px 0 4px!important;}' +
+  '.adem7-sub{font-size:14px!important;color:#5f6b7a!important;font-weight:400!important;}' +
+  /* ---- 2. Tableau aéré + en-têtes ---- */
+  'table.adem7-t thead th{padding:13px 16px!important;font-weight:800!important;font-size:12px!important;text-transform:uppercase;letter-spacing:.5px;color:#37474f!important;background:#f0f5f3!important;border-bottom:2px solid #cfd8dc!important;}' +
+  'table.adem7-t tbody td{padding:12px 16px!important;font-size:13.5px!important;}' +
+  'tbody tr.adem7-z1 td{background:#f6faf8!important;}' +
+  /* ---- 3. Icônes d'action ---- */
+  '.adem7-acts{display:inline-flex;gap:2px;align-items:center;}' +
+  '.adem7-ico{width:28px;height:28px;border:none;background:transparent;border-radius:7px;cursor:pointer;font-size:14px;line-height:1;display:inline-flex;align-items:center;justify-content:center;transition:background .15s;}' +
+  '.adem7-ico:hover{background:#e0f2f1;}' +
+  /* ---- 4. Focus visible (a11y) ---- */
+  '.adem7-ico:focus-visible{outline:2px solid #0D7C66!important;outline-offset:1px;}' +
+  '#adem2-bar :focus-visible{outline:2px solid #0D7C66!important;outline-offset:1px;}' +
+  /* ---- 5. Thème sombre : NOS composants (le reste est géré nativement) ---- */
+  'html.adem7-dark #adem2-bar{background:#14142a!important;border-color:#2c2c4a!important;box-shadow:none!important;}' +
+  'html.adem7-dark #adem2-bar .adem2-search{background:#1e1e3a!important;border-color:#3a3a5c!important;}' +
+  'html.adem7-dark #adem2-bar .adem2-q{color:#e8e8f0!important;background:transparent!important;}' +
+  'html.adem7-dark #adem2-bar .adem2-q::placeholder{color:#8f9bb3!important;}' +
+  'html.adem7-dark #adem2-bar .adem2-search svg{stroke:#8f9bb3!important;}' +
+  'html.adem7-dark #adem2-bar .adem2-sel{background:#1e1e3a!important;color:#e8e8f0!important;border-color:#3a3a5c!important;}' +
+  'html.adem7-dark #adem2-bar .adem2-count,html.adem7-dark #adem2-bar .adem2-count b{color:#c3c9e8!important;}' +
+  'html.adem7-dark #adem2-bar .adem2-nf{color:#d7c9b8!important;background:#26264a!important;}' +
+  'html.adem7-dark #adem2-bar .adem2-nf.zero{color:#8f9bb3!important;background:#1e1e3a!important;}' +
+  'html.adem7-dark #adem2-bar .adem2-savebtn,html.adem7-dark #adem2-bar .adem2-reset,html.adem7-dark #adem7-theme{background:#1e1e3a!important;color:#dfe3f0!important;border-color:#3a3a5c!important;}' +
+  'html.adem7-dark #adem2-bar .adem2-savebtn:hover,html.adem7-dark #adem2-bar .adem2-reset:hover{border-color:#0D7C66!important;color:#4fd1b5!important;}' +
+  'html.adem7-dark #adem2-bar .adem2-menu{background:#1e1e3a!important;color:#e8e8f0!important;border-color:#3a3a5c!important;}' +
+  'html.adem7-dark #adem2-bar .adem2-item .nm{color:#d0d5f0!important;}' +
+  'html.adem7-dark #adem2-bar .adem2-item:hover{background:#26264a!important;}' +
+  'html.adem7-dark #adem-charts-panel{background:#14142a!important;border-color:#2c2c4a!important;color:#e8e8f0!important;box-shadow:none!important;}' +
+  'html.adem7-dark #adem-charts-panel .adem5-head,html.adem7-dark #adem-charts-panel .adem5-title,html.adem7-dark #adem-charts-panel .adem5-sub{color:#e8e8f0!important;}' +
+  'html.adem7-dark #adem-charts-panel .adem5-nb{color:#4fd1b5!important;}' +
+  'html.adem7-dark #adem-charts-panel .adem5-chart{background:#1e1e3a!important;border-color:#2c2c4a!important;}' +
+  'html.adem7-dark #adem-charts-panel .adem5-legbtn{color:#d0d5f0!important;}' +
+  'html.adem7-dark #adem-charts-panel .adem5-empty{color:#8f9bb3!important;}' +
+  'html.adem7-dark #adem-charts-panel .adem5-tip{background:#26264a!important;color:#fff!important;}' +
+  'html.adem7-dark #adem-charts-panel .adem5-clearbtn{background:#1e1e3a!important;color:#dfe3f0!important;}' +
+  'html.adem7-dark .adem1-modal{background:#1e1e3a!important;color:#e8e8f0!important;}' +
+  'html.adem7-dark .adem1-mbody,html.adem7-dark .adem1-stats{color:#e8e8f0!important;}' +
+  'html.adem7-dark .adem1-stat{background:#26264a!important;}' +
+  'html.adem7-dark .adem1-mtable th{background:#26264a!important;color:#e8e8f0!important;}' +
+  'html.adem7-dark .adem1-mtable td{color:#d0d5f0!important;border-color:#3a3a5c!important;}' +
+  'html.adem7-dark .adem1-gauge-sub{color:#a9b2d0!important;}' +
+  'html.adem7-dark .adem1-toast{background:#26264a!important;color:#fff!important;}' +
+  'html.adem7-dark .adem7-ico:hover{background:#26264a!important;}' +
+  'html.adem7-dark .adem7-sub{color:#a9b2d0!important;}' +
+  'html.adem7-dark table.adem7-t thead th{background:#1e1e3a!important;color:#c3c9e8!important;border-bottom-color:#3a3a5c!important;}' +
+  'html.adem7-dark tbody tr.adem7-z1 td{background:#181834!important;}' +
+  /* ---- 6. Responsive ---- */
+  '@media (min-width:821px) and (max-width:1180px){table.adem7-t thead th:nth-child(7),table.adem7-t tbody td:nth-child(7){display:none;}}' +
+  '@media (max-width:820px){' +
+    '#adem2-bar .adem2-row{flex-wrap:wrap;gap:8px;}' +
+    '#adem2-bar .adem2-sel{flex:1 1 46%;min-width:0;}' +
+    '#adem2-bar .adem2-search{flex:1 1 100%;}' +
+    '#adem7-theme{flex:0 0 auto;}' +
+    '.adem7-t thead{display:none!important;}' +
+    '.adem7-t,.adem7-t tbody{display:block!important;}' +
+    '.adem7-t tbody tr{display:block;margin:0 0 12px;border:1px solid #e0e6e3;border-radius:14px;background:#fff!important;box-shadow:0 1px 5px rgba(16,24,40,.07);padding:6px 14px;}' +
+    '.adem7-t tbody tr.adem2-hide{display:none!important;}' +
+    '.adem7-t tbody td{display:flex!important;justify-content:space-between;align-items:center;gap:14px;padding:8px 2px!important;border:none!important;box-shadow:none!important;}' +
+    '.adem7-t tbody td::before{content:attr(data-l);font-weight:700;font-size:10.5px;letter-spacing:.5px;text-transform:uppercase;color:#607d8b;flex:0 0 auto;}' +
+    '.adem7-t tbody td:last-child{justify-content:flex-end;padding-bottom:4px!important;}' +
+    'html.adem7-dark .adem7-t tbody tr{background:#14142a!important;border-color:#2c2c4a!important;box-shadow:none;}' +
+    'html.adem7-dark .adem7-t tbody td::before{color:#8f9bb3!important;}' +
+  '}' +
+  '@media (prefers-reduced-motion:reduce){.adem7-ico{transition:none;}}' +
+  /* header natif + pagination sur petits écrans (débordement 375px) */
+  '@media (max-width:820px){header .MuiInputBase-root,.MuiAppBar-root .MuiInputBase-root{display:none!important;}.MuiTablePagination-root{display:none!important;}.adem7-chipstrip{flex-wrap:wrap;row-gap:6px;max-width:100%;}' +
+    '.MuiDrawer-root.MuiDrawer-docked{display:none!important;}.MuiAppBar-root{width:100%!important;left:0!important;}.adem7-main{margin-left:0!important;}}' +
+  '@media (max-width:480px){header button[aria-label="Langue"],header button[aria-label="Échéances"],header button[aria-label="Actions rapides"],header button[aria-label="Exporter"],.MuiAppBar-root button[aria-label="Langue"],.MuiAppBar-root button[aria-label="Échéances"],.MuiAppBar-root button[aria-label="Actions rapides"],.MuiAppBar-root button[aria-label="Exporter"]{display:none!important;}' +
+    '.MuiAppBar-root .MuiChip-root{display:none!important;}.MuiAppBar-root .MuiToolbar-root{padding-left:8px!important;padding-right:8px!important;gap:6px;}.adem7-chipstrip{display:none!important;}}' +
+  '.adem7-toolbar{flex-wrap:wrap;row-gap:10px;}';
+  D.head.appendChild(st);
+}
+
+/* ================= THÈME (branché sur la bascule native) ================= */
+function bodyIsDark(){
+  var c = parseRgb(getComputedStyle(D.body).backgroundColor);
+  return c ? lum(c) < 0.22 : false;
+}
+function applyDarkClass(){
+  var dark = bodyIsDark();
+  D.documentElement.classList.toggle('adem7-dark', dark);
+  var btn = D.getElementById('adem7-theme');
+  if (btn){
+    btn.textContent = dark ? '\u2600\uFE0F Clair' : '\uD83C\uDF19 Sombre';
+    btn.setAttribute('aria-pressed', dark ? 'true' : 'false');
+    btn.setAttribute('aria-label', dark ? 'Passer en mode clair' : 'Passer en mode sombre');
+    btn.title = dark ? 'Passer en mode clair' : 'Passer en mode sombre';
+  }
+}
+function nativeDarkBtn(){
+  return Array.from(D.querySelectorAll('button[aria-label]')).find(function(b){
+    return /^(Mode sombre|Mode clair|Dark mode|Light mode)/i.test(b.getAttribute('aria-label')||'');
+  });
+}
+function trySystemPref(){
+  /* préférence système : à la 1re visite seulement (aucune clé admina-dark posée).
+     Le bouton natif apparaît après montage React → polling. */
+  try {
+    if (localStorage.getItem('admina-dark') !== null) return true;
+    if (sessionStorage.getItem('adem7-sysdone')) return true;
+    if (!(window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches)) return true;
+    var nb = nativeDarkBtn();
+    if (nb){ nb.click(); sessionStorage.setItem('adem7-sysdone','1'); return true; }
+  } catch(e){}
+  return false;
+}
+function initTheme(){
+  applyDarkClass();
+  var tries = 0;
+  var t = setInterval(function(){
+    tries++;
+    if (trySystemPref() || tries > 20) clearInterval(t);
+  }, 300);
+  /* suit la bascule native (clic capture) + filet interval */
+  D.addEventListener('click', function(ev){
+    var b = ev.target && ev.target.closest ? ev.target.closest('button[aria-label]') : null;
+    if (b && /^Mode (sombre|clair)/i.test(b.getAttribute('aria-label')||'')) setTimeout(applyDarkClass, 250);
+  }, true);
+  setInterval(applyDarkClass, 1000);
+}
+function ensureToggle(){
+  var bar = D.getElementById('adem2-bar');
+  if (!bar || D.getElementById('adem7-theme')) return;
+  var row2 = bar.querySelectorAll('.adem2-row');
+  row2 = row2[row2.length-1];
+  var btn = D.createElement('button');
+  btn.type = 'button';
+  btn.id = 'adem7-theme';
+  btn.className = 'adem2-savebtn';
+  btn.setAttribute('aria-pressed','false');
+  btn.addEventListener('click', function(){
+    var nb = nativeDarkBtn();
+    if (nb){ nb.click(); setTimeout(applyDarkClass, 300); }
+  });
+  var reset = row2.querySelector('.adem2-reset');
+  if (reset) row2.insertBefore(btn, reset); else row2.appendChild(btn);
+  applyDarkClass();
+}
+
+/* ================= TOAST (a11y role=status) ================= */
+var TOAST = null;
+function toast(msg){
+  var t = D.getElementById('adem7-toast');
+  if (!t){
+    t = D.createElement('div');
+    t.id = 'adem7-toast';
+    t.setAttribute('role','status');
+    t.setAttribute('aria-live','polite');
+    t.style.cssText = 'position:fixed;bottom:22px;left:50%;transform:translateX(-50%);z-index:5200;background:#1e2b27;color:#fff;font:600 12.5px/17px Inter,sans-serif;padding:10px 18px;border-radius:10px;box-shadow:0 6px 24px rgba(0,0,0,.25);opacity:0;transition:opacity .25s;max-width:90vw;';
+    D.body.appendChild(t);
+  }
+  t.textContent = msg;
+  requestAnimationFrame(function(){ t.style.opacity = '1'; });
+  clearTimeout(TOAST);
+  TOAST = setTimeout(function(){ t.style.opacity = '0'; }, 4200);
+}
+
+/* ================= DONNÉES ================= */
+function rowData(tr){
+  var m = (tr.textContent||'').match(/DR-\d{4}-\d{3}/);
+  if (!m) return null;
+  var num = m[0];
+  var data = null;
+  try {
+    var all = (window.__ADEM_V1__ && window.__ADEM_V1__._data()) || [];
+    data = all.find(function(d){ return d.num === num; }) || null;
+  } catch(e){}
+  return {num: num, data: data};
+}
+
+/* ================= ACTIONS ================= */
+function seeDetail(tr){
+  var b = tr.querySelector('button[aria-label="Ouvrir le détail"]');
+  if (b){ b.click(); return true; }
+  return false;
+}
+function setNativeValue(el, val){
+  var proto = el.tagName === 'TEXTAREA' ? window.HTMLTextAreaElement.prototype : window.HTMLInputElement.prototype;
+  var desc = Object.getOwnPropertyDescriptor(proto, 'value');
+  if (desc && desc.set) desc.set.call(el, String(val)); else el.value = String(val);
+  el.dispatchEvent(new Event('input', {bubbles:true}));
+  el.dispatchEvent(new Event('change', {bubbles:true}));
+}
+function matchVal(L, d){
+  if (!d) return undefined;
+  if (/type de poste/.test(L)) return d.typePoste;
+  if (/contrat/.test(L)) return d.typeContrat;
+  if (/département|departement/.test(L)) return d.dept;
+  if (/priorité|priorite/.test(L)) return d.prio;
+  if (/statut/.test(L)) return d.statut;
+  if (/budget|salaire/.test(L)) return d.budget || undefined;
+  if (/coût|cout\b/.test(L)) return d.cout || undefined;
+  if (/responsable/.test(L)) return d.resp;
+  if (/cabinet|agence/.test(L)) return d.cabinet;
+  if (/note/.test(L)) return d.notes;
+  if (/délai|delai/.test(L)) return d.delai || undefined;
+  if (/poste/.test(L)) return d.poste;
+  return undefined;
+}
+/* Les listes MUI Select ne sont PAS manipulées (fermeture dialogue au clic option).
+   matchVal sert aux champs texte uniquement. */
+function prefillDialog(dlg, rd, mode){
+  /* Pré-remplissage LIMITÉ aux champs texte/numériques : les listes MUI Select ferment le
+     dialogue au clic d'option (comportement interne de l'app) → jamais cliquées. */
+  var n = 0;
+  var fcs = dlg.querySelectorAll('.MuiFormControl-root');
+  Array.prototype.forEach.call(fcs, function(fc){
+    var lab = fc.querySelector('.MuiFormLabel-root, label');
+    var L = lab ? lab.textContent.trim().toLowerCase() : '';
+    if (!L || /numéro|numero|n ?°/.test(L)) return;         /* n° : jamais touché */
+    if (fc.querySelector('.MuiSelect-select')) return;      /* listes : laissées à l'utilisateur */
+    try {
+      var input = fc.querySelector('input:not([type=hidden]), textarea');
+      var v = matchVal(L, rd.data);
+      if (input && v !== undefined && v !== null && v !== ''){ setNativeValue(input, v); n++; }
+    } catch(e){}
+  });
+  toast((mode === 'modif' ? '✏️ Modification de ' : '📋 Duplication de ') + rd.num +
+        ' — ' + n + ' champ(s) pré-rempli(s). Complétez les listes puis « Enregistrer ».');
+}
+function openPrefill(tr, mode){
+  var rd = rowData(tr);
+  if (!rd) return;
+  var nd = Array.from(D.querySelectorAll('button')).find(function(b){
+    return b.textContent.trim().toLowerCase().indexOf('nouvelle demande') === 0;
+  });
+  if (!nd){ toast('Formulaire « Nouvelle Demande » introuvable'); return; }
+  nd.click();
+  var tries = 0;
+  var t = setInterval(function(){
+    tries++;
+    var dlg = Array.from(D.querySelectorAll('.MuiDialog-root')).find(function(d){
+      if (d.querySelector('input, select, textarea') == null) return false;
+      if (d.getAttribute('aria-hidden') === 'true') return false;
+      var paper = d.querySelector('.MuiDialog-paper, .MuiPaper-root') || d;
+      return paper && getComputedStyle(paper).display !== 'none';
+    });
+    if (!dlg && tries < 40) return;
+    clearInterval(t);
+    if (dlg) prefillDialog(dlg, rd, mode);
+    else toast('Le formulaire ne s\u2019est pas ouvert');
+  }, 80);
+}
+
+/* ================= ENHANCER (idempotent) ================= */
+function isDemandes(){ return /demandes/i.test(location.pathname) || D.getElementById('adem2-bar') !== null; }
+function enhanceAll(){
+  if (!isDemandes()) return;
+  /* — titre + sous-titre — */
+  var heads = D.querySelectorAll('h1,h2,h3,h4,h5,h6');
+  for (var i=0;i<heads.length;i++){
+    var h = heads[i];
+    if (h.childElementCount === 0 && h.textContent.trim() === 'Demandes de Recrutement'){
+      if (!h.classList.contains('adem7-title')){
+        h.classList.add('adem7-title');
+        var sibs = h.parentElement ? h.parentElement.children : [];
+        for (var j=0;j<sibs.length;j++){
+          var s = sibs[j];
+          if (s !== h && /demande\(s\) de recrutement/i.test(s.textContent) && s.childElementCount === 0){
+            s.classList.add('adem7-sub'); break;
+          }
+        }
+      }
+      break;
+    }
+  }
+  /* — adaptation structurelle mobile (détection par contenu, classes hash instables) — */
+  if (!D.querySelector('.adem7-toolbar')){
+    var ndb = Array.from(D.querySelectorAll('button')).find(function(b){ return b.textContent.trim().toLowerCase().indexOf('nouvelle demande') === 0; });
+    var tg = D.querySelector('.MuiToggleButtonGroup-root');
+    if (ndb && tg){
+      var anc = ndb.parentElement;
+      while (anc && anc !== D.body && !anc.contains(tg)) anc = anc.parentElement;
+      if (anc && anc !== D.body) anc.classList.add('adem7-toolbar');
+    }
+  }
+  if (!D.querySelector('.adem7-chipstrip')){
+    var cap = Array.from(D.querySelectorAll('.MuiChip-root')).find(function(c){ return /En attente décision/i.test(c.textContent||''); });
+    var strip = cap ? cap.parentElement : null;
+    if (strip && strip.querySelectorAll('.MuiChip-root').length >= 3) strip.classList.add('adem7-chipstrip');
+  }
+  /* contenu décalé par la sidebar dockée (classe générée, marge calculée) */
+  Array.prototype.forEach.call(D.querySelectorAll('.MuiBox-root'), function(bx){
+    if (!bx.classList.contains('adem7-main') && getComputedStyle(bx).marginLeft === '260px') bx.classList.add('adem7-main');
+  });
+  /* — table : classe + zèbre + labels + icônes + chips — */
+  var tc = D.querySelector('.MuiTableContainer-root');
+  var table = tc ? tc.querySelector('table') : null;
+  if (!table || !table.tBodies.length) return;
+  table.classList.add('adem7-t');
+  var theadTexts = Array.prototype.map.call(table.querySelectorAll('thead th'), function(th){
+    return th.textContent.trim();
+  });
+  var rows = Array.prototype.slice.call(table.tBodies[0].querySelectorAll('tr')).filter(function(tr){
+    return !tr.classList.contains('adem2-hide') && tr.style.display !== 'none';
+  });
+  rows.forEach(function(tr, idx){
+    /* zèbre sur lignes VISIBLES uniquement */
+    tr.classList.toggle('adem7-z1', idx % 2 === 1);
+    tr.classList.remove('adem7-even');
+    /* data-labels pour la vue carte mobile */
+    Array.prototype.forEach.call(tr.querySelectorAll('td'), function(td, ci){
+      if (theadTexts[ci]) td.setAttribute('data-l', theadTexts[ci]);
+    });
+    /* icônes d'action */
+    if (!tr.querySelector('.adem7-acts')){
+      var rd = rowData(tr);
+      var last = tr.querySelector('td:last-child');
+      var native = last ? last.querySelector('button[aria-label="Ouvrir le détail"]') : null;
+      if (last && rd){
+        var wrap = D.createElement('div');
+        wrap.className = 'adem7-acts';
+        var mk = function(emoji, label, title, fn){
+          var b = D.createElement('button');
+          b.type = 'button';
+          b.className = 'adem7-ico';
+          b.textContent = emoji;
+          b.setAttribute('aria-label', label);
+          b.title = title;
+          b.addEventListener('click', function(ev){ ev.stopPropagation(); fn(tr); });
+          return b;
+        };
+        wrap.appendChild(mk('\uD83D\uDC41\uFE0F', 'Voir le détail de ' + rd.num, 'Voir le détail', seeDetail));
+        wrap.appendChild(mk('\u270F\uFE0F', 'Modifier la demande ' + rd.num, 'Modifier', function(tr){
+          /* V8 : formulaire optimisé avec pré-remplissage COMPLET (listes incluses) ; fallback V7 texte seul */
+          if (window.__ADEM_V8__ && window.__ADEM_V8__.open){
+            var r2 = rowData(tr);
+            if (r2){ window.__ADEM_V8__.open({ mode: 'modif', num: r2.num }); return; }
+          }
+          openPrefill(tr, 'modif');
+        }));
+        wrap.appendChild(mk('\uD83D\uDCCB', 'Dupliquer la demande ' + rd.num, 'Dupliquer', function(tr){
+          if (window.__ADEM_V8__ && window.__ADEM_V8__.open){
+            var r3 = rowData(tr);
+            if (r3){ window.__ADEM_V8__.open({ mode: 'dup', num: r3.num }); return; }
+          }
+          openPrefill(tr, 'dup');
+        }));
+        last.insertBefore(wrap, last.firstChild);
+        if (native) native.style.display = 'none';   /* masqué seulement si icônes rendues */
+      }
+    }
+    /* contraste chips de la ligne */
+    Array.prototype.forEach.call(tr.querySelectorAll('.MuiChip-root'), fixChip);
+  });
+}
+
+/* ================= BOOT ================= */
+function boot(){
+  ensureCSS();
+  initTheme();
+  enhanceAll();
+  ensureToggle();
+  setInterval(function(){ enhanceAll(); ensureToggle(); }, 900);
+  var moT = null;
+  try {
+    var mo = new MutationObserver(function(){
+      clearTimeout(moT);
+      moT = setTimeout(function(){ enhanceAll(); ensureToggle(); }, 180);
+    });
+    mo.observe(D.body, {childList:true, subtree:true});
+  } catch(e){}
+}
+if (D.readyState === 'loading') D.addEventListener('DOMContentLoaded', boot);
+else boot();
+
+window.__ADEM_V7__ = {
+  version: '7.0',
+  _dark: function(){ return D.documentElement.classList.contains('adem7-dark'); },
+  _refresh: function(){ enhanceAll(); ensureToggle(); applyDarkClass(); },
+  _toast: toast,
+  _fixChips: function(){
+    Array.prototype.forEach.call(D.querySelectorAll('.MuiChip-root'), fixChip);
+  }
+};
+})();
+</script>
+<!-- ADEM_V7_UX END -->
+<!-- ADEM_V8_FORM BEGIN -->
+<script>
+/* ADEM_V8 — Prompt n°1 : Formulaire de Création de Demande Optimisé (/demandes)
+ * Remplace le dialog natif « Nouvelle Demande de Recrutement » (composant AddDialog générique)
+ * par un formulaire structuré en 4 sections, avec indicateurs, validations métier,
+ * brouillons, pré-remplissage intelligent, suggestions de cabinets, notifications et thème sombre.
+ *
+ * Chemin d'écriture (VALIDÉ par recon_form_v8.py) : à la soumission, le dialog natif est ouvert
+ * programmatiquement puis chaque champ est synchronisé — textes via setter natif React,
+ * listes MUI Select via invocation directe du onChange trouvé dans la fiber React (2 hops).
+ * Enregistrer s'active dès que les obligatoires sont remplis → la demande réelle est créée
+ * dans l'état React de l'app (numero DR-2025-0XX, statut « En attente », historique, CSV, détail).
+ *
+ * Cohabitation : V1 widgets (données + _data patché), V2 filtres (DOM), V5 graphiques (V1._data),
+ * V7 UX (thème html.adem7-dark, icônes ✏️/📋 reroutées vers V8, toast conservé en fallback).
+ * Le clic UTILISATEUR sur « Nouvelle Demande » est intercepté (e.isTrusted uniquement) ;
+ * les clics programmatiques (tests, fallback V7) laissent le dialog natif intact.
+ */
+(function(){
+'use strict';
+if (window.__ADEM_V8__) return;
+var D = document;
+
+/* ================= LISTES NATIVES (nomenclatures du build, récolte dynamique + fallback) ================= */
+var NEED = {departement:1, type_poste:1, type_contrat:1, motif:1, priorite:1, site:1, role_responsable:1, cabinet_recrutement:1};
+var LISTS_FALLBACK = {
+  departement: ['Direction Generale','Ressources Humaines','Finance & Comptabilite','Marketing & Communication','Informatique','Commercial','Logistique & Approvisionnement','Production','Service Client','Juridique','Administration','Securite','Restauration','Herbergement','Maintenance','Lingerie','Audiovisuel'],
+  type_poste: ['Cadre','Agent de maitrise','Operationnel','Stagiaire','Temporaire'],
+  type_contrat: ['CDI','CDD','Stage','Interim','Alternance','Freelance'],
+  motif: ['Remplacement','Creation de poste','Saisonnalite','Surcharge','Reorganisation'],
+  priorite: ['Urgente','Haute','Moyenne','Basse'],
+  site: ['Siege (Douala)','Annexe (Yaounde)','Hotel Sawa','Campus Formation'],
+  role_responsable: ['Directeur General','Directeur Adjoint','DRH','DRH Adjoint','Chef de Departement','Chef de Service','Responsable de Pole','Superviseur','Manager Operationnel'],
+  cabinet_recrutement: ['HRC Cameroon','Activa RH','Skillmatch Africa','Michael Page Cameroon','Pedarec','AfricSearch','Manpower Cameroon','Interne (sans cabinet)','Autre']
+};
+var LISTS = null, LISTS_TRY = false;
+function findNomURL(){
+  try {
+    var names = performance.getEntriesByType('resource').map(function(r){ return r.name; })
+      .filter(function(u){ return /nomenclatures-[A-Za-z0-9_-]+\.js(\?|$)/.test(u); });
+    if (names.length) return names[names.length - 1];
+  } catch(e){}
+  var els = D.querySelectorAll('script[src],link[href]');
+  for (var i=0;i<els.length;i++){
+    var u = els[i].src || els[i].href || '';
+    if (/nomenclatures-[A-Za-z0-9_-]+\.js/.test(u)) return u;
+  }
+  return null;
+}
+function loadLists(cb){
+  if (LISTS) return cb(LISTS);
+  var done = function(L){ LISTS = L; cb(L); };
+  var url = findNomURL();
+  if (!url || LISTS_TRY) return done(LISTS_FALLBACK);
+  LISTS_TRY = true;
+  fetch(url, {cache:'force-cache'}).then(function(r){ return r.text(); }).then(function(t){
+    var out = {}, re = /([A-Za-z_]\w*):\[([^\]]*)\]/g, m;
+    while ((m = re.exec(t))){
+      var key = m[1];
+      if (!NEED[key]) continue;
+      var vals = [], vs = m[2], vr = /[`"']([^`"']+)[`"']/g, vm;
+      while ((vm = vr.exec(vs))){ if (vm[1].length > 1) vals.push(vm[1]); }
+      if (vals.length) out[key] = vals;
+    }
+    done(Object.assign({}, LISTS_FALLBACK, out));
+  }).catch(function(){ done(LISTS_FALLBACK); });
+}
+
+/* ================= HELPERS ================= */
+function $(s, r){ return (r || D).querySelector(s); }
+function $$(s, r){ return Array.prototype.slice.call((r || D).querySelectorAll(s)); }
+function isDemandes(){ return /demandes/i.test(location.pathname); }
+function v1(){ return window.__ADEM_V1__ || null; }
+function v7(){ return window.__ADEM_V7__ || null; }
+function lsGet(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }
+function lsSet(k, v){ try { localStorage.setItem(k, v); } catch(e){} }
+function esc(s){ return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function norm(s){ return String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,' ').trim(); }
+function fmtF(n){ return Math.round(Number(n) || 0).toLocaleString('fr-FR').replace(/\u202f/g, ' '); }
+function pad3(n){ return String(n).padStart(3, '0'); }
+function todayFR(){ var d = new Date(); return ('0'+d.getDate()).slice(-2)+'/'+('0'+(d.getMonth()+1)).slice(-2)+'/'+d.getFullYear(); }
+function parseFR(s){ var m = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(String(s||'').trim()); return m ? new Date(+m[3], +m[2]-1, +m[1]) : null; }
+function iso2fr(s){ var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(s||'')); return m ? m[3]+'/'+m[2]+'/'+m[1] : ''; }
+function fr2iso(s){ var m = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(String(s||'').trim()); return m ? m[3]+'-'+m[2]+'-'+m[1] : ''; }
+function diffDays(a, b){ return Math.round((a - b) / 86400000); }
+
+/* ================= ÉTAT ================= */
+var S = {
+  open: false, dirty: false, attempted: false, values: {}, errs: {},
+  mode: 'new', num: null, resuming: null, panel: null,
+  baseLen: 0, adds: [], lastPath: location.pathname, listsReady: null
+};
+
+/* Patch V1._data() : les graphiques V5 + modal coûts V1 intègrent les demandes créées */
+function patchData(){
+  var w = v1();
+  if (!w || w.__adem8_patched) return;
+  var orig = w._data.bind(w);
+  try { S.baseLen = orig().length; } catch(e){ S.baseLen = 0; }
+  w._data = function(){
+    var base = [];
+    try { base = orig(); } catch(e){}
+    return base.concat(S.adds.map(function(a){ return a.row; }));
+  };
+  w.__adem8_patched = true;
+}
+function baseCount(){ return S.baseLen || (v1() && v1()._origLen) || 10; }
+function nextNumero(){ return 'DR-2025-' + pad3(baseCount() + S.adds.length + 1); }
+
+/* ================= DONNÉES DÉRIVÉES ================= */
+function managers(){
+  var d = (v1() && v1()._data()) || [], m = {};
+  d.forEach(function(x){ if (x.resp) m[norm(x.resp)] = x.resp; });
+  return Object.keys(m).map(function(k){ return m[k]; });
+}
+function roleFor(resp){
+  var d = (v1() && v1()._data()) || [];
+  var hit = d.find(function(x){ return norm(x.resp) === norm(resp) && x.role; });
+  return hit ? hit.role : null;
+}
+function cabinetSuggestion(v){
+  if (!v.dept || !v.typePoste) return null;
+  var d = (v1() && v1()._data()) || [], best = null;
+  var cnt = {};
+  d.forEach(function(x){
+    if (!x.cabinet || norm(x.cabinet) === 'interne (sans cabinet)') return;
+    if (norm(x.dept) === norm(v.dept) && norm(x.typePoste) === norm(v.typePoste)){
+      cnt[x.cabinet] = (cnt[x.cabinet] || 0) + 2;
+    } else if (norm(x.dept) === norm(v.dept)){
+      cnt[x.cabinet] = (cnt[x.cabinet] || 0) + 1;
+    }
+  });
+  Object.keys(cnt).forEach(function(k){ if (!best || cnt[k] > cnt[best]) best = k; });
+  if (!best) return null;
+  var n = Math.floor(cnt[best] / 2) + (cnt[best] % 2);
+  var same = d.filter(function(x){ return norm(x.dept)===norm(v.dept) && norm(x.typePoste)===norm(v.typePoste) && x.cabinet===best; }).length;
+  return { cabinet: best, n: same >= 1 ? same : n, exact: same >= 1 };
+}
+
+/* ================= INDICATEURS ================= */
+function indicators(){
+  var d = (v1() && v1()._data()) || [];
+  var act = d.filter(function(x){ return x.statut !== 'Annulee'; });
+  var bm = 0;
+  if (act.length){
+    var sum = act.reduce(function(s, x){ return s + (Number(x.budget) || 0); }, 0);
+    bm = sum / act.length;
+  }
+  var dels = d.map(function(x){ return Number(x.delai) || 0; }).filter(function(x){ return x > 0; });
+  var dm = dels.length ? dels.reduce(function(s, x){ return s + x; }, 0) / dels.length : 0;
+  return { total: d.length, budgetMoyen: bm, delaiMoyen: dm };
+}
+
+/* ================= DÉFINITION DES CHAMPS ================= */
+var SECTIONS = [
+  { n: 1, t: 'Informations Générales', d: 'Origine de la demande : département, responsable et site' },
+  { n: 2, t: 'Détails du Poste', d: 'Caractéristiques du poste à pourvoir' },
+  { n: 3, t: 'Planning & Budget', d: 'Échéances, priorité et enveloppe budgétaire' },
+  { n: 4, t: 'Sourcing & Notes', d: 'Cabinet de recrutement et informations complémentaires' }
+];
+var FIELDS = [
+  { k: 'dept',        sec: 1, label: 'Département / Service',    type: 'select',   opts: 'departement',      req: true },
+  { k: 'resp',        sec: 1, label: 'Responsable Demande',      type: 'text',     list: 'managers',         req: true, ph: 'ex : M. Nganou André' },
+  { k: 'role',        sec: 1, label: 'Rôle du Responsable',      type: 'select',   opts: 'role_responsable', hint: 'Se remplit automatiquement selon le responsable sélectionné — modifiable' },
+  { k: 'site',        sec: 1, label: 'Site / Localisation',      type: 'select',   opts: 'site',             hint: 'Lieu de travail du poste (ex : Siège, Hôtel…)' },
+  { k: 'poste',       sec: 2, label: 'Poste Recherché',          type: 'text',     req: true, full: true,    ph: 'Intitulé exact du poste à pourvoir' },
+  { k: 'typePoste',   sec: 2, label: 'Type de Poste',            type: 'select',   opts: 'type_poste',       req: true },
+  { k: 'typeContrat', sec: 2, label: 'Type de Contrat',          type: 'select',   opts: 'type_contrat',     req: true },
+  { k: 'effectif',    sec: 2, label: 'Effectif Requis',          type: 'number',   req: true, min: 1, int: true, ph: '1' },
+  { k: 'motif',       sec: 2, label: 'Motif du Recrutement',     type: 'select',   opts: 'motif',            req: true },
+  { k: 'dateBesoin',  sec: 3, label: 'Date de Besoin',           type: 'date',     req: true },
+  { k: 'delai',       sec: 3, label: 'Délai (jours)',            type: 'number',   hint: 'Calculé automatiquement à partir de la date de besoin — modifiable' },
+  { k: 'priorite',    sec: 3, label: 'Priorité',                 type: 'prio',     req: true, full: true },
+  { k: 'budget',      sec: 3, label: 'Budget Salaire (FCFA)',    type: 'number',   req: true, min: 1, ph: 'ex : 850 000' },
+  { k: 'cout',        sec: 3, label: 'Coût Recrutement (FCFA)',  type: 'number' },
+  { k: 'cabinet',     sec: 4, label: 'Cabinet / Agence Externe', type: 'select',   opts: 'cabinet_recrutement', hint: 'Optionnel — « Interne (sans cabinet) » si sourcing interne' },
+  { k: 'notes',       sec: 4, label: 'Notes',                    type: 'textarea', full: true, ph: 'Informations complémentaires, remarques, contexte…' }
+];
+var REQUIRED = FIELDS.filter(function(f){ return f.req; }).map(function(f){ return f.k; });
+var PRIO = [
+  { v: 'Urgente', c: '#d32f2f', e: '\uD83D\uDD34' },
+  { v: 'Haute',   c: '#ed6c02', e: '\uD83D\uDFE0' },
+  { v: 'Moyenne', c: '#f9a825', e: '\uD83D\uDFE1' },
+  { v: 'Basse',   c: '#8d9aa5', e: '\u26AA' }
+];
+/* labels natifs (dialog AddDialog) → clés de notre formulaire */
+var NATIVE_LABEL = {
+  dept: 'Département', resp: 'Responsable Demande', role: 'Rôle du Responsable', site: 'Site',
+  poste: 'Poste Recherché', typePoste: 'Type Poste', typeContrat: 'Type Contrat',
+  effectif: 'Effectif Requis', motif: 'Motif', dateBesoin: 'Date de Besoin',
+  priorite: 'Priorité', budget: 'Budget Salaire (FCFA)', cout: 'Coût Recrutement (FCFA)',
+  delai: 'Délai (jours)', cabinet: 'Cabinet / Agence', notes: 'Notes'
+};
+
+/* ================= CSS ================= */
+function ensureCSS(){
+  if (D.getElementById('adem8-style')) return;
+  var st = D.createElement('style');
+  st.id = 'adem8-style';
+  st.textContent =
+  '#adem8-overlay{position:fixed;inset:0;background:rgba(13,27,23,.55);backdrop-filter:blur(2px);z-index:5000;display:flex;align-items:flex-start;justify-content:center;padding:26px 14px;overflow:auto;}' +
+  '.adem8-panel{background:#fff;border-radius:16px;width:min(880px,96vw);max-height:calc(100vh - 52px);display:flex;flex-direction:column;box-shadow:0 28px 70px rgba(0,0,0,.35);font-family:Inter,sans-serif;color:#1a2b26;animation:adem8in .22s ease;}' +
+  '@keyframes adem8in{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}' +
+  '.adem8-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:18px 24px 12px;border-bottom:1px solid #e3ece8;}' +
+  '.adem8-head h2{margin:0;font:800 19px/24px Inter,sans-serif;color:#0b3d33;letter-spacing:-.3px;}' +
+  '.adem8-head .adem8-sub2{margin:3px 0 0;font:400 12px/17px Inter,sans-serif;color:#607d8b;}' +
+  '.adem8-x{border:none;background:#f0f5f3;color:#546e7a;width:32px;height:32px;border-radius:50%;font-size:15px;cursor:pointer;flex:0 0 auto;}' +
+  '.adem8-x:hover{background:#e0f2f1;color:#0D7C66;}' +
+  '.adem8-body{overflow:auto;padding:16px 24px 8px;flex:1;}' +
+  /* indicateurs */
+  '.adem8-inds{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;}' +
+  '.adem8-ind{background:#f4faf8;border:1px solid #dcece6;border-radius:12px;padding:10px 14px;}' +
+  '.adem8-ind .l{font:600 10px/14px Inter,sans-serif;color:#5c7c72;text-transform:uppercase;letter-spacing:.5px;}' +
+  '.adem8-ind .v{font:800 17px/22px Inter,sans-serif;color:#0D7C66;margin-top:2px;}' +
+  '.adem8-ind .s{font:400 10.5px/14px Inter,sans-serif;color:#90a4ae;}' +
+  /* sections */
+  '.adem8-sec{margin-bottom:18px;}' +
+  '.adem8-sechead{display:flex;align-items:center;gap:10px;padding:9px 12px;background:#f4faf8;border:1px solid #dcece6;border-radius:10px 10px 0 0;}' +
+  '.adem8-sechead .no{width:22px;height:22px;border-radius:50%;background:#0D7C66;color:#fff;font:700 11.5px/22px Inter,sans-serif;text-align:center;flex:0 0 auto;}' +
+  '.adem8-sechead .tt{font:700 13.5px/18px Inter,sans-serif;color:#0b3d33;}' +
+  '.adem8-sechead .dd{font:400 11px/15px Inter,sans-serif;color:#78909c;margin-left:auto;text-align:right;}' +
+  '.adem8-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 14px;padding:14px 12px;border:1px solid #dcece6;border-top:none;border-radius:0 0 10px 10px;background:#fff;}' +
+  /* champs */
+  '.adem8-field{display:flex;flex-direction:column;gap:4px;min-width:0;}' +
+  '.adem8-field.adem8-full{grid-column:1 / -1;}' +
+  '.adem8-field label{font:600 12px/16px Inter,sans-serif;color:#37474f;}' +
+  '.adem8-field label .rq{color:#d32f2f;margin-left:2px;}' +
+  '.adem8-field input,.adem8-field select,.adem8-field textarea{font:400 13.5px/19px Inter,sans-serif;color:#1a2b26;background:#fff;border:1.5px solid #c8d8d2;border-radius:9px;padding:9px 11px;outline:none;width:100%;box-sizing:border-box;}' +
+  '.adem8-field textarea{min-height:74px;resize:vertical;}' +
+  '.adem8-field input:focus,.adem8-field select:focus,.adem8-field textarea:focus{border-color:#0D7C66;box-shadow:0 0 0 3px rgba(13,124,102,.14);}' +
+  '.adem8-field input[readonly]{background:#f6f8f7;color:#5c7c72;cursor:default;}' +
+  '.adem8-field.adem8-bad input,.adem8-field.adem8-bad select,.adem8-field.adem8-bad textarea,.adem8-field.adem8-bad .adem8-pills{border-color:#d32f2f!important;}' +
+  '.adem8-err{display:none;font:500 11.5px/15px Inter,sans-serif;color:#c62828;}' +
+  '.adem8-field.adem8-bad .adem8-err{display:block;}' +
+  '.adem8-hint{font:400 11px/15px Inter,sans-serif;color:#78909c;}' +
+  '.adem8-ro{display:grid;grid-template-columns:1fr 1fr;gap:12px 14px;margin-bottom:14px;}' +
+  '.adem8-ro .adem8-field input{font-weight:600;}' +
+  /* pastilles priorité */
+  '.adem8-pills{display:flex;gap:8px;flex-wrap:wrap;border:1.5px solid transparent;border-radius:9px;padding:2px;}' +
+  '.adem8-pill{position:relative;}' +
+  '.adem8-pill input{position:absolute;opacity:0;pointer-events:none;}' +
+  '.adem8-pill span{display:inline-flex;align-items:center;gap:6px;font:600 12.5px/1 Inter,sans-serif;padding:8px 13px;border-radius:999px;border:1.5px solid #c8d8d2;color:#546e7a;cursor:pointer;transition:all .15s;background:#fff;}' +
+  '.adem8-pill input:checked + span{color:#fff;border-color:transparent;box-shadow:0 2px 8px rgba(0,0,0,.18);}' +
+  '.adem8-pill input:focus-visible + span{outline:2px solid #0D7C66;outline-offset:2px;}' +
+  /* suggestion cabinet */
+  '.adem8-cabhint{display:none;align-items:center;gap:8px;background:#fff8e1;border:1px solid #ffe082;border-radius:9px;padding:7px 10px;font:500 12px/16px Inter,sans-serif;color:#795548;}' +
+  '.adem8-cabhint.on{display:flex;}' +
+  '.adem8-cabhint button{border:none;background:#0D7C66;color:#fff;font:600 11.5px/1 Inter,sans-serif;padding:6px 10px;border-radius:7px;cursor:pointer;flex:0 0 auto;}' +
+  /* bannières (brouillons / dernière demande) */
+  '.adem8-banners{margin-bottom:14px;display:flex;flex-direction:column;gap:8px;}' +
+  '.adem8-bn{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;font:500 12.5px/17px Inter,sans-serif;}' +
+  '.adem8-bn.dr{background:#f0f7ff;border:1px solid #c5dcf5;color:#1c4a72;}' +
+  '.adem8-bn.lt{background:#f4faf8;border:1px solid #bfe3d7;color:#0b4a3d;}' +
+  '.adem8-bn b{font-weight:700;}' +
+  '.adem8-bn .grow{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}' +
+  '.adem8-bn button{border:none;border-radius:7px;padding:6px 11px;font:600 11.5px/1 Inter,sans-serif;cursor:pointer;flex:0 0 auto;}' +
+  '.adem8-bn .use{background:#0D7C66;color:#fff;}' +
+  '.adem8-bn .del{background:#fff;color:#c62828;border:1px solid #efb7b7!important;}' +
+  '.adem8-bn .skip{background:transparent;color:#5c7c72;border:1px solid #c8d8d2!important;}' +
+  /* footer */
+  '.adem8-foot{display:flex;align-items:center;gap:10px;padding:14px 24px;border-top:1px solid #e3ece8;background:#fbfdfc;border-radius:0 0 16px 16px;flex-wrap:wrap;}' +
+  '.adem8-foot .note{font:400 11px/15px Inter,sans-serif;color:#90a4ae;margin-right:auto;max-width:300px;}' +
+  '.adem8-btn{border-radius:10px;padding:10px 16px;font:700 13px/1 Inter,sans-serif;cursor:pointer;border:1.5px solid transparent;transition:all .15s;}' +
+  '.adem8-btn:focus-visible{outline:2px solid #0D7C66;outline-offset:2px;}' +
+  '#adem8-cancel{background:#fff;color:#546e7a;border-color:#c8d8d2;}' +
+  '#adem8-cancel:hover{border-color:#90a4ae;}' +
+  '#adem8-draft{background:#fff;color:#0D7C66;border-color:#9fd4c6;}' +
+  '#adem8-draft:hover{background:#f0faf7;}' +
+  '#adem8-submit{background:#0D7C66;color:#fff;box-shadow:0 3px 10px rgba(13,124,102,.3);}' +
+  '#adem8-submit:hover{background:#0a6b58;}' +
+  /* confirm quitter */
+  '#adem8-confirm{display:none;align-items:center;gap:10px;width:100%;background:#fff4e5;border:1px solid #ffcc80;border-radius:10px;padding:8px 12px;font:600 12.5px/17px Inter,sans-serif;color:#a04c00;}' +
+  '#adem8-confirm.on{display:flex;}' +
+  '#adem8-confirm button{border:none;border-radius:7px;padding:7px 11px;font:700 11.5px/1 Inter,sans-serif;cursor:pointer;}' +
+  '#adem8-quit{background:#d32f2f;color:#fff;}' +
+  '#adem8-continue{background:#fff;color:#546e7a;border:1px solid #c8d8d2;}' +
+  /* notification succès HAUT de page */
+  '#adem8-banner{position:fixed;top:14px;left:50%;transform:translateX(-50%) translateY(-80px);z-index:5300;background:#0D7C66;color:#fff;font:600 13.5px/19px Inter,sans-serif;padding:12px 18px;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.3);display:flex;align-items:center;gap:12px;max-width:min(640px,92vw);transition:transform .3s ease;}' +
+  '#adem8-banner.on{transform:translateX(-50%) translateY(0);}' +
+  '#adem8-banner button{border:none;background:rgba(255,255,255,.18);color:#fff;width:24px;height:24px;border-radius:50%;cursor:pointer;font-size:12px;flex:0 0 auto;}' +
+  /* ligne nouvellement créée */
+  '.adem8-hl td{animation:adem8hl 4s ease;}' +
+  '@keyframes adem8hl{0%,60%{background:#dcf3ec!important;}100%{background:transparent;}}' +
+  /* ---- THÈME SOMBRE (html.adem7-dark piloté par V7) ---- */
+  'html.adem7-dark #adem8-overlay{background:rgba(4,8,20,.66);}' +
+  'html.adem7-dark .adem8-panel{background:#1e1e3a;color:#e8e8f0;box-shadow:0 28px 70px rgba(0,0,0,.6);}' +
+  'html.adem7-dark .adem8-head{border-bottom-color:#2c2c4a;}html.adem7-dark .adem8-head h2{color:#dfe8ff;}' +
+  'html.adem7-dark .adem8-head .adem8-sub2{color:#8f9bb3;}' +
+  'html.adem7-dark .adem8-x{background:#26264a;color:#aeb6dd;}' +
+  'html.adem7-dark .adem8-ind{background:#181834;border-color:#2c2c4a;}html.adem7-dark .adem8-ind .l{color:#8f9bb3;}html.adem7-dark .adem8-ind .v{color:#4fd1b5;}html.adem7-dark .adem8-ind .s{color:#7c86ad;}' +
+  'html.adem7-dark .adem8-sechead{background:#181834;border-color:#2c2c4a;}html.adem7-dark .adem8-sechead .tt{color:#dfe8ff;}html.adem7-dark .adem8-sechead .dd{color:#8f9bb3;}' +
+  'html.adem7-dark .adem8-grid{border-color:#2c2c4a;background:#1e1e3a;}' +
+  'html.adem7-dark .adem8-field label{color:#c3c9e8;}' +
+  'html.adem7-dark .adem8-field input,html.adem7-dark .adem8-field select,html.adem7-dark .adem8-field textarea{background:#14142a;color:#e8e8f0;border-color:#3a3a5c;}' +
+  'html.adem7-dark .adem8-field input:focus,html.adem7-dark .adem8-field select:focus,html.adem7-dark .adem8-field textarea:focus{border-color:#4fd1b5;box-shadow:0 0 0 3px rgba(79,209,181,.15);}' +
+  'html.adem7-dark .adem8-field input[readonly]{background:#181834;color:#8f9bb3;}' +
+  'html.adem7-dark .adem8-field input::placeholder,html.adem7-dark .adem8-field textarea::placeholder{color:#6f7a9e;}' +
+  'html.adem7-dark .adem8-pill span{background:#14142a;border-color:#3a3a5c;color:#aeb6dd;}' +
+  'html.adem7-dark .adem8-hint,html.adem7-dark .adem8-ro .adem8-field label{color:#8f9bb3;}' +
+  'html.adem7-dark .adem8-cabhint{background:#2a2413;border-color:#5c4d1a;color:#e4c97f;}' +
+  'html.adem7-dark .adem8-bn.dr{background:#16203a;border-color:#2c3f6b;color:#a9c3f0;}' +
+  'html.adem7-dark .adem8-bn.lt{background:#12241f;border-color:#1f4a3d;color:#9fe8d2;}' +
+  'html.adem7-dark .adem8-bn .skip{background:transparent;color:#aeb6dd;border-color:#3a3a5c!important;}' +
+  'html.adem7-dark .adem8-bn .del{background:#26264a;color:#ff9d9d;border-color:#5c2c2c!important;}' +
+  'html.adem7-dark .adem8-foot{background:#181834;border-top-color:#2c2c4a;}' +
+  'html.adem7-dark #adem8-cancel{background:#26264a;color:#dfe3f0;border-color:#3a3a5c;}' +
+  'html.adem7-dark #adem8-draft{background:#26264a;color:#4fd1b5;border-color:#2c5c4a;}' +
+  'html.adem7-dark #adem8-submit{background:#0D7C66;color:#fff;}' +
+  'html.adem7-dark #adem8-confirm{background:#2a1d0f;border-color:#5c3d1a;color:#f0c89d;}' +
+  'html.adem7-dark #adem8-continue{background:#26264a;color:#dfe3f0;border-color:#3a3a5c;}' +
+  /* ---- RESPONSIVE ---- */
+  '@media (max-width:680px){' +
+    '#adem8-overlay{padding:8px 6px;}' +
+    '.adem8-panel{max-height:calc(100vh - 16px);border-radius:14px;}' +
+    '.adem8-body{padding:12px 12px 6px;}' +
+    '.adem8-inds{grid-template-columns:1fr 1fr 1fr;gap:6px;}' +
+    '.adem8-ind{padding:8px 9px;}.adem8-ind .v{font-size:14px;}.adem8-ind .s{display:none;}' +
+    '.adem8-grid,.adem8-ro{grid-template-columns:1fr;}' +
+    '.adem8-head{padding:14px 14px 10px;}.adem8-head h2{font-size:16.5px;}' +
+    '.adem8-foot{padding:12px 14px;gap:8px;}#adem8-submit{flex:1 1 100%;order:-1;}' +
+    '.adem8-foot .note{display:none;}' +
+  '}' +
+  '@media (prefers-reduced-motion:reduce){.adem8-panel{animation:none;}#adem8-banner{transition:none;}.adem8-hl td{animation:none;}}';
+  D.head.appendChild(st);
+}
+
+/* ================= NOTIFICATION HAUT DE PAGE ================= */
+var BANNER_T = null;
+function topBanner(msg){
+  ensureCSS();
+  var b = D.getElementById('adem8-banner');
+  if (!b){
+    b = D.createElement('div');
+    b.id = 'adem8-banner';
+    b.setAttribute('role', 'status');
+    b.setAttribute('aria-live', 'polite');
+    b.innerHTML = '<span class="adem8-msg"></span><button type="button" aria-label="Fermer la notification">\u2715</button>';
+    D.body.appendChild(b);
+    b.querySelector('button').addEventListener('click', function(){ hideBanner(); });
+  }
+  b.querySelector('.adem8-msg').textContent = msg;
+  b.classList.add('on');
+  /* noop */
+  clearTimeout(BANNER_T);
+  BANNER_T = setTimeout(hideBanner, 6500);
+}
+function hideBanner(){
+  var b = D.getElementById('adem8-banner');
+  if (b) b.classList.remove('on');
+}
+
+/* ================= BROUILLONS / DERNIÈRE DEMANDE ================= */
+function drafts(){ try { return JSON.parse(lsGet('adem8_drafts') || '[]'); } catch(e){ return []; } }
+function saveDrafts(a){ lsSet('adem8_drafts', JSON.stringify(a.slice(0, 5))); }
+function addDraft(vals){
+  var a = drafts();
+  a.unshift({ id: Date.now(), savedAt: new Date().toISOString(), mode: S.mode, source: S.num, values: vals });
+  saveDrafts(a);
+}
+function delDraft(id){
+  saveDrafts(drafts().filter(function(d){ return String(d.id) !== String(id); }));
+}
+function saveLast(vals, numero){
+  lsSet('adem8_last', JSON.stringify({
+    numero: numero, at: new Date().toISOString(),
+    dept: vals.dept, typeContrat: vals.typeContrat, site: vals.site,
+    cabinet: vals.cabinet, resp: vals.resp, role: vals.role, motif: vals.motif
+  }));
+}
+
+/* ================= VALIDATION ================= */
+function validate(v){
+  var errs = {};
+  REQUIRED.forEach(function(k){ if (v[k] === '' || v[k] == null) errs[k] = 'Champ obligatoire'; });
+  if (v.dateBesoin){
+    var db = parseFR(v.dateBesoin);
+    if (!db) errs.dateBesoin = 'Format de date invalide (jj/mm/aaaa)';
+    else {
+      var t = new Date(); t.setHours(0, 0, 0, 0);
+      if (db < t) errs.dateBesoin = 'La date de besoin ne peut pas être antérieure à la date du jour';
+    }
+  }
+  if (v.budget !== '' && v.budget != null && !(Number(v.budget) > 0)) errs.budget = 'Le budget salaire doit être un nombre positif';
+  if (v.cout !== '' && v.cout != null && !(Number(v.cout) >= 0)) errs.cout = 'Le coût doit être un nombre positif';
+  if (v.effectif !== '' && v.effectif != null){
+    var e = Number(v.effectif);
+    if (!isFinite(e) || !Number.isInteger(e) || e < 1) errs.effectif = "L'effectif doit être un entier positif (minimum 1)";
+  }
+  if (v.delai !== '' && v.delai != null && !(Number(v.delai) >= 0)) errs.delai = 'Le délai doit être positif';
+  return errs;
+}
+
+/* ================= RENDU ================= */
+function fieldHTML(f){
+  var id = 'adem8-f-' + f.k;
+  var lab = '<label for="' + id + '">' + esc(f.label) + (f.req ? '<span class="rq" aria-hidden="true">*</span>' : '') + '</label>';
+  var ctl;
+  if (f.type === 'select'){
+    ctl = '<select id="' + id + '" name="' + f.k + '"' + (f.req ? ' aria-required="true"' : '') + '><option value="">— Sélectionner —</option></select>';
+  } else if (f.type === 'textarea'){
+    ctl = '<textarea id="' + id + '" name="' + f.k + '" rows="3" placeholder="' + esc(f.ph || '') + '"' + (f.req ? ' aria-required="true"' : '') + '></textarea>';
+  } else if (f.type === 'prio'){
+    ctl = '<div class="adem8-pills" role="radiogroup" aria-label="Priorité" id="' + id + '">' + PRIO.map(function(p){
+      return '<label class="adem8-pill"><input type="radio" name="adem8-prio" value="' + p.v + '"' + (f.req ? ' aria-required="true"' : '') + '>' +
+        '<span style="background:' + (p.v === 'Basse' ? '' : p.c) + '" data-pc="' + p.c + '">' + p.e + ' ' + p.v + '</span></label>';
+    }).join('') + '</div>';
+  } else {
+    var extra = f.type === 'number' ? ' min="' + (f.min || 0) + '" step="1" inputmode="numeric"' : '';
+    var dl = f.list ? ' list="adem8-dl-' + f.list + '"' : '';
+    ctl = '<input id="' + id + '" name="' + f.k + '" type="' + (f.type === 'date' ? 'date' : f.type) + '"' + extra + dl +
+          ' placeholder="' + esc(f.ph || '') + '"' + (f.req ? ' aria-required="true"' : '') + '>';
+  }
+  var hint = f.hint ? '<div class="adem8-hint" id="adem8-hint-' + f.k + '">' + esc(f.hint) + '</div>' : '';
+  var cab = f.k === 'cabinet' ? '<div class="adem8-cabhint" id="adem8-cabhint"><span class="adem8-cabtxt"></span><button type="button" id="adem8-cabuse">Utiliser</button></div>' : '';
+  return '<div class="adem8-field' + (f.full ? ' adem8-full' : '') + '" data-k="' + f.k + '">' + lab + ctl + hint + cab +
+         '<div class="adem8-err" role="alert" data-for="' + f.k + '"></div></div>';
+}
+function buildPanel(L){
+  var ind = indicators();
+  var ov = D.createElement('div');
+  ov.id = 'adem8-overlay';
+  var head =
+    '<div class="adem8-head"><div><h2 id="adem8-title">Nouvelle Demande de Recrutement</h2>' +
+    '<p class="adem8-sub2">Formulaire structuré — les champs marqués <span style="color:#d32f2f;font-weight:700">*</span> sont obligatoires. N° généré automatiquement à l\u2019enregistrement.</p></div>' +
+    '<button type="button" class="adem8-x" id="adem8-close" aria-label="Fermer le formulaire">\u2715</button></div>';
+  var inds =
+    '<div class="adem8-inds" role="group" aria-label="Indicateurs du module demandes">' +
+    '<div class="adem8-ind"><div class="l">Total demandes</div><div class="v" id="adem8-ind-total">' + ind.total + '</div><div class="s">toutes demandes confondues</div></div>' +
+    '<div class="adem8-ind"><div class="l">Budget moyen</div><div class="v" id="adem8-ind-budget">' + (ind.budgetMoyen ? fmtF(ind.budgetMoyen) + ' F' : '\u2014') + '</div><div class="s">salaire proposé (hors annulées)</div></div>' +
+    '<div class="adem8-ind"><div class="l">Délai moyen</div><div class="v" id="adem8-ind-delai">' + (ind.delaiMoyen ? Math.round(ind.delaiMoyen) + ' j' : '\u2014') + '</div><div class="s">traitement des demandes</div></div>' +
+    '</div>';
+  var banners = '<div class="adem8-banners" id="adem8-banners"></div>';
+  var ro =
+    '<div class="adem8-ro">' +
+    '<div class="adem8-field"><label for="adem8-numero">N° Demande <span class="adem8-hint">(auto-généré, non modifiable)</span></label>' +
+    '<input id="adem8-numero" type="text" value="' + esc(nextNumero()) + '" readonly aria-readonly="true"></div>' +
+    '<div class="adem8-field"><label for="adem8-datetoday">Date Demande <span class="adem8-hint">(date du jour, automatique)</span></label>' +
+    '<input id="adem8-datetoday" type="text" value="' + todayFR() + '" readonly aria-readonly="true"></div>' +
+    '</div>';
+  var secs = SECTIONS.map(function(sc){
+    var flds = FIELDS.filter(function(f){ return f.sec === sc.n; }).map(fieldHTML).join('');
+    return '<div class="adem8-sec"><div class="adem8-sechead"><span class="no">' + sc.n + '</span><span class="tt">' + esc(sc.t) + '</span><span class="dd">' + esc(sc.d) + '</span></div>' +
+           '<div class="adem8-grid">' + flds + '</div></div>';
+  }).join('');
+  var foot =
+    '<div class="adem8-foot">' +
+    '<div id="adem8-confirm" role="alertdialog" aria-label="Modifications non enregistrées"><span>Modifications non enregistrées — quitter sans sauvegarder ?</span>' +
+    '<button type="button" id="adem8-quit">Quitter sans enregistrer</button><button type="button" id="adem8-continue">Continuer l\u2019édition</button></div>' +
+    '<span class="note">« Brouillon » sauvegarde localement sans créer la demande. « Soumettre » envoie au DRH (statut : En attente).</span>' +
+    '<button type="button" class="adem8-btn" id="adem8-cancel">Annuler</button>' +
+    '<button type="button" class="adem8-btn" id="adem8-draft">Enregistrer comme brouillon</button>' +
+    '<button type="button" class="adem8-btn" id="adem8-submit">Soumettre \u00E0 validation</button>' +
+    '</div>';
+  var dls = '<datalist id="adem8-dl-managers">' + managers().map(function(m){ return '<option value="' + esc(m) + '"></option>'; }).join('') + '</datalist>';
+  ov.innerHTML = '<div class="adem8-panel" role="dialog" aria-modal="true" aria-labelledby="adem8-title">' + head +
+    '<div class="adem8-body">' + inds + banners + ro + secs + dls + '</div>' + foot + '</div>';
+  /* peupler les selects */
+  FIELDS.forEach(function(f){
+    if (f.type !== 'select') return;
+    var sel = $('#' + 'adem8-f-' + f.k, ov);
+    var vals = L[f.opts] || [];
+    vals.forEach(function(o){
+      var op = D.createElement('option');
+      op.value = o; op.textContent = o;
+      sel.appendChild(op);
+    });
+  });
+  /* options couleur des pastilles au checked (inline, pas de CSS dynamique) */
+  $$('.adem8-pill input', ov).forEach(function(r){
+    r.addEventListener('change', function(){
+      $$('.adem8-pill span', ov).forEach(function(sp){
+        var c = sp.getAttribute('data-pc');
+        if (sp.parentElement.querySelector('input').checked){
+          sp.style.background = c; sp.style.color = '#fff'; sp.style.borderColor = 'transparent';
+        } else {
+          sp.style.background = ''; sp.style.color = ''; sp.style.borderColor = '';
+        }
+      });
+    });
+  });
+  return ov;
+}
+
+/* ================= BANNIÈRES (brouillons + dernière demande) ================= */
+function renderBanners(){
+  var z = $('#adem8-banners', S.panel);
+  if (!z) return;
+  z.innerHTML = '';
+  var drs = drafts();
+  drs.forEach(function(d){
+    var when = new Date(d.savedAt);
+    var lab = ('0' + when.getDate()).slice(-2) + '/' + ('0' + (when.getMonth() + 1)).slice(-2) + '/' + when.getFullYear() + ' ' +
+              ('0' + when.getHours()).slice(-2) + ':' + ('0' + when.getMinutes()).slice(-2);
+    var what = d.values && (d.values.poste || d.values.dept) ? esc(d.values.poste || '') + (d.values.dept ? ' — ' + esc(d.values.dept) : '') : 'formulaire partiel';
+    var row = D.createElement('div');
+    row.className = 'adem8-bn dr adem8-draft-row';
+    row.innerHTML = '<span>\uD83D\uDCC4</span><span class="grow"><b>Brouillon du ' + lab + '</b> — ' + what + '</span>' +
+      '<button type="button" class="use adem8-draft-use" data-id="' + esc(d.id) + '">Reprendre</button>' +
+      '<button type="button" class="del adem8-draft-del" data-id="' + esc(d.id) + '" aria-label="Supprimer ce brouillon">Supprimer</button>';
+    z.appendChild(row);
+  });
+  var lastRaw = lsGet('adem8_last');
+  if (lastRaw && S.mode === 'new' && !S.resuming){
+    try {
+      var last = JSON.parse(lastRaw);
+      if (last && last.numero && last.numero !== skipNum()){
+        var bn = D.createElement('div');
+        bn.className = 'adem8-bn lt';
+        bn.id = 'adem8-lastbanner';
+        bn.innerHTML = '<span>\u267B\uFE0F</span><span class="grow">Pré-remplir depuis votre dernière demande (<b>' + esc(last.numero) + '</b>) : département, contrat, site, cabinet…</span>' +
+          '<button type="button" class="use" id="adem8-lastuse">Pré-remplir</button>' +
+          '<button type="button" class="skip" id="adem8-lastskip">Ignorer</button>';
+        z.appendChild(bn);
+      }
+    } catch(e){}
+  }
+  $$('.adem8-draft-use', z).forEach(function(b){
+    b.addEventListener('click', function(){
+      var d = drafts().find(function(x){ return String(x.id) === b.getAttribute('data-id'); });
+      if (!d) return;
+      S.resuming = d.id;
+      Object.keys(S.values).forEach(function(k){ S.values[k] = ''; });
+      Object.keys(d.values || {}).forEach(function(k){ if (k in S.values) S.values[k] = d.values[k]; });
+      fillFormValues();
+      renderBanners();
+      if (v7()) v7()._toast('Brouillon repris — complétez puis « Soumettre \u00E0 validation »');
+    });
+  });
+  $$('.adem8-draft-del', z).forEach(function(b){
+    b.addEventListener('click', function(){ delDraft(b.getAttribute('data-id')); renderBanners(); });
+  });
+  var lu = $('#adem8-lastuse', z);
+  if (lu) lu.addEventListener('click', function(){
+    try {
+      var last = JSON.parse(lsGet('adem8_last') || '{}');
+      ['dept', 'typeContrat', 'site', 'cabinet', 'resp', 'role', 'motif'].forEach(function(k){
+        if (last[k] && !S.values[k]) S.values[k] = last[k];
+      });
+      fillFormValues();
+      if (last.numero){ try { sessionStorage.setItem('adem8_lastskip', last.numero); } catch(e){} }
+      bnHide(z);
+      if (v7()) v7()._toast('Champs pré-remplis depuis ' + (last.numero || 'votre dernière demande'));
+    } catch(e){}
+  });
+  var ls = $('#adem8-lastskip', z);
+  if (ls) ls.addEventListener('click', function(){
+    try {
+      var last2 = JSON.parse(lsGet('adem8_last') || '{}');
+      if (last2.numero) sessionStorage.setItem('adem8_lastskip', last2.numero);
+    } catch(e){}
+    bnHide(z);
+  });
+  function bnHide(z){ var b = $('#adem8-lastbanner', z); if (b) b.remove(); }
+}
+function skipNum(){
+  try { return sessionStorage.getItem('adem8_lastskip'); } catch(e){ return null; }
+}
+
+/* ================= FORM ↔ STATE ================= */
+function readFormValues(){
+  var v = {};
+  FIELDS.forEach(function(f){
+    var el = $('#adem8-f-' + f.k, S.panel);
+    if (!el) return;
+    if (f.type === 'prio'){
+      var r = $('.adem8-pill input:checked', S.panel);
+      v[f.k] = r ? r.value : '';
+    } else if (f.type === 'date'){
+      v[f.k] = iso2fr(el.value); /* stocké en jj/mm/aaaa (format natif de l'app) */
+    } else {
+      v[f.k] = el.value;
+    }
+  });
+  return v;
+}
+function fillFormValues(){
+  FIELDS.forEach(function(f){
+    var el = $('#adem8-f-' + f.k, S.panel);
+    if (!el) return;
+    var val = S.values[f.k] || '';
+    if (f.type === 'prio'){
+      var r = $('.adem8-pill input[value="' + val.replace(/"/g, '\\"') + '"]', S.panel);
+      if (r){ r.checked = true; r.dispatchEvent(new Event('change', { bubbles: true })); }
+    } else if (f.type === 'date'){
+      el.value = fr2iso(val);
+    } else if (el.tagName === 'SELECT'){
+      ensureOption(el, val);
+      el.value = val;
+    } else {
+      el.value = val;
+    }
+  });
+  refreshCabinetHint(); refreshDelaiHint();
+}
+function ensureOption(sel, val){
+  if (!val) return;
+  var has = Array.prototype.some.call(sel.options, function(o){ return o.value === val; });
+  if (!has){
+    var op = D.createElement('option');
+    op.value = val; op.textContent = val;
+    sel.appendChild(op);
+  }
+}
+function markDirty(){ S.dirty = true; }
+
+/* ================= HINTS DYNAMIQUES ================= */
+function refreshDelaiHint(){
+  var h = $('#adem8-hint-delai', S.panel);
+  if (!h) return;
+  var el = $('#adem8-f-dateBesoin', S.panel);
+  var raw = el ? (iso2fr(el.value) || S.values.dateBesoin) : S.values.dateBesoin;
+  var db = parseFR(raw);
+  if (db){
+    var t = new Date(); t.setHours(0, 0, 0, 0);
+    var d = diffDays(db, t);
+    h.textContent = d >= 0
+      ? 'Soit ' + d + ' jour(s) à partir d\u2019aujourd\u2019hui — calculé automatiquement, modifiable'
+      : 'Date passée — vérifiez la date de besoin';
+  }
+}
+function refreshCabinetHint(){
+  var box = $('#adem8-cabhint', S.panel);
+  if (!box) return;
+  var sg = cabinetSuggestion(S.values);
+  if (sg && !S.values.cabinet){
+    box.classList.add('on');
+    $('.adem8-cabtxt', box).textContent = '\uD83D\uDCA1 Suggestion : ' + sg.cabinet +
+      (sg.exact ? ' — déjà utilisé sur ' + sg.n + ' demande(s) identique(s) (même département + type de poste)' : ' — déjà utilisé pour ce département');
+  } else {
+    box.classList.remove('on');
+  }
+}
+
+/* ================= SYNC NATIF (technique validée recon_form_v8.py) ================= */
+function findND(){
+  return $$('button').find(function(b){
+    return (b.textContent || '').trim().toLowerCase().indexOf('nouvelle demande') === 0;
+  }) || null;
+}
+function findNativeDialog(){
+  return $$('.MuiDialog-root').find(function(d){
+    if (d.getAttribute('aria-hidden') === 'true') return false;
+    return d.querySelector('input, select, textarea') != null;
+  }) || null;
+}
+function fiberOnChange(el){
+  var k = Object.keys(el).find(function(x){ return x.indexOf('__reactFiber$') === 0; });
+  if (!k) return null;
+  var f = el[k], hops = 0;
+  while (f && hops < 12){
+    var p = f.memoizedProps;
+    if (p && typeof p.onChange === 'function' && ('value' in p)) return p.onChange;
+    f = f.return; hops++;
+  }
+  return null;
+}
+function setNativeValue(el, val){
+  var proto = el.tagName === 'TEXTAREA' ? window.HTMLTextAreaElement.prototype : window.HTMLInputElement.prototype;
+  var d = Object.getOwnPropertyDescriptor(proto, 'value');
+  if (d && d.set) d.set.call(el, String(val)); else el.value = String(val);
+  el.dispatchEvent(new Event('input', { bubbles: true }));
+  el.dispatchEvent(new Event('change', { bubbles: true }));
+}
+function findFC(dlg, label){
+  var fcs = $$('.MuiFormControl-root', dlg);
+  return fcs.find(function(fc){
+    var lab = fc.querySelector('.MuiFormLabel-root, label');
+    return lab && lab.textContent.trim().replace(/\s*\*\s*$/, '').indexOf(label) === 0;
+  }) || null;
+}
+/* Ouvre le dialog natif, synchronise les champs, clique Enregistrer, attend la fermeture. */
+function nativeSync(vals, cb){
+  var nd = findND();
+  if (!nd){ cb(new Error('bouton Nouvelle Demande introuvable')); return; }
+  nd.click(); /* programmatique : isTrusted=false → PAS intercepté par V8 */
+  var tries = 0, t = setInterval(function(){
+    tries++;
+    var dlg = findNativeDialog();
+    if (!dlg && tries < 60) return;
+    clearInterval(t);
+    if (!dlg){ cb(new Error('dialog natif non ouvert')); return; }
+    var keys = Object.keys(vals).filter(function(k){ return vals[k] !== '' && vals[k] != null; });
+    var i = 0;
+    function step(){
+      if (i >= keys.length) return finish();
+      var label = keys[i++];
+      var fc = findFC(dlg, label);
+      if (!fc) return setTimeout(step, 10);
+      var sel = fc.querySelector('.MuiSelect-select');
+      if (sel){
+        var oc = fiberOnChange(sel);
+        if (oc){ try { oc({ target: { value: String(vals[label]) } }); } catch(e){} }
+        setTimeout(step, 35); /* laisse React re-rendre */
+      } else {
+        var inp = fc.querySelector('input:not([aria-hidden])') || fc.querySelector('textarea');
+        if (inp) setNativeValue(inp, vals[label]);
+        step();
+      }
+    }
+    function finish(){
+      var n = 0, t2 = setInterval(function(){
+        n++;
+        var b = $$('button', dlg).find(function(x){ return x.textContent.trim() === 'Enregistrer'; });
+        if (b && !b.disabled){ clearInterval(t2); b.click(); afterClick(); return; }
+        if (n > 25){ clearInterval(t2); cb(new Error('Enregistrer toujours désactivé')); }
+      }, 120);
+    }
+    function afterClick(){
+      var m = 0, t3 = setInterval(function(){
+        m++;
+        if (!findNativeDialog()){ clearInterval(t3); cb(null); return; }
+        if (m > 26){ clearInterval(t3); cb(new Error('dialog natif non fermé après enregistrement')); }
+      }, 160);
+    }
+    step();
+  }, 80);
+}
+
+/* ================= NAVIGATION PAGINATION + SURLIGNAGE ================= */
+function gotoLastPageThen(num, poste){
+  var tries = 0, t = setInterval(function(){
+    tries++;
+    var nxt = D.querySelector('[aria-label="Go to next page"],[aria-label="Page suivante"],[aria-label="Next page"],[aria-label="Aller à la page suivante"]');
+    if (nxt && !nxt.disabled && tries < 8){ nxt.click(); return; }
+    clearInterval(t);
+    setTimeout(function(){ highlightRow(num, poste); }, 400);
+  }, 230);
+}
+function highlightRow(num, poste){
+  var rows = $$('table tbody tr').filter(function(tr){ return !tr.classList.contains('adem2-hide') && tr.style.display !== 'none'; });
+  var tr = null;
+  if (num) tr = rows.find(function(r){ return (r.textContent || '').indexOf(num) >= 0; });
+  if (!tr && poste) tr = rows.find(function(r){ return (r.textContent || '').indexOf(poste) >= 0; });
+  if (tr){
+    try { tr.scrollIntoView({ block: 'center', behavior: 'smooth' }); } catch(e){}
+    tr.classList.add('adem8-hl');
+    setTimeout(function(){ tr.classList.remove('adem8-hl'); }, 4200);
+  }
+}
+
+/* ================= ACTIONS ================= */
+function showErrors(errs){
+  S.errs = errs;
+  $$('.adem8-field', S.panel).forEach(function(fd){
+    var k = fd.getAttribute('data-k');
+    var bad = !!(errs && errs[k]);
+    fd.classList.toggle('adem8-bad', bad);
+    var e = $('.adem8-err', fd);
+    if (e) e.textContent = bad ? errs[k] : '';
+    var ctl = $('#adem8-f-' + k, fd);
+    if (ctl && ctl.setAttribute){
+      if (bad) ctl.setAttribute('aria-invalid', 'true'); else ctl.removeAttribute('aria-invalid');
+    }
+  });
+}
+function submitFlow(){
+  S.values = readFormValues();
+  var errs = validate(S.values);
+  showErrors(errs);
+  S.attempted = true;
+  var keys = Object.keys(errs);
+  if (keys.length){
+    var first = $('#adem8-f-' + keys[0], S.panel);
+    if (first) first.focus();
+    if (v7()) v7()._toast('\u274C ' + keys.length + ' champ(s) à corriger avant de soumettre');
+    return;
+  }
+  var numero = nextNumero();
+  var btn = $('#adem8-submit', S.panel);
+  if (btn){ btn.disabled = true; btn.textContent = 'Enregistrement\u2026'; }
+  var vals = {};
+  Object.keys(NATIVE_LABEL).forEach(function(k){
+    vals[NATIVE_LABEL[k]] = S.values[k] || '';
+  });
+  nativeSync(vals, function(err){
+    if (btn){ btn.disabled = false; btn.textContent = 'Soumettre \u00E0 validation'; }
+    if (err){
+      if (v7()) v7()._toast('\u274C Enregistrement impossible : ' + err.message);
+      return;
+    }
+    S.adds.push({
+      row: {
+        num: numero, date: todayFR(), dept: S.values.dept, poste: S.values.poste,
+        typePoste: S.values.typePoste, typeContrat: S.values.typeContrat,
+        prio: S.values.priorite, statut: 'En attente', datePourvue: '',
+        resp: S.values.resp, cabinet: S.values.cabinet,
+        budget: Number(S.values.budget) || 0, cout: Number(S.values.cout) || 0,
+        delai: Number(S.values.delai) || 0, notes: S.values.notes,
+        site: S.values.site, effectif: Number(S.values.effectif) || 1,
+        motif: S.values.motif, dateBesoin: S.values.dateBesoin, role: S.values.role
+      },
+      draftId: S.resuming
+    });
+    if (S.resuming){ delDraft(S.resuming); S.resuming = null; }
+    saveLast(S.values, numero);
+    try { sessionStorage.setItem('adem8_lastskip', numero); } catch(e){}
+    var poste = S.values.poste;
+    hardClose();
+    /* note : la demande réelle vit désormais dans l'état React natif (row ajoutée par l'app) */
+    topBanner('\u2705 Demande ' + numero + ' soumise \u00E0 validation — statut « En attente ». Elle apparaît en fin de tableau.');
+    gotoLastPageThen(numero, poste);
+    try { document.dispatchEvent(new CustomEvent('adem8:submitted', { detail: { numero: numero } })); } catch(e){}
+  });
+}
+function draftFlow(){
+  S.values = readFormValues();
+  addDraft(S.values);
+  hardClose();
+  topBanner('\uD83D\uDCC4 Brouillon enregistré localement — reprenez-le en rouvrant « Nouvelle Demande ».');
+}
+function cancelFlow(){
+  if (S.dirty){
+    var c = $('#adem8-confirm', S.panel);
+    if (c){
+      c.classList.add('on');
+      var q = $('#adem8-quit', c);
+      if (q) q.focus();
+    }
+    return;
+  }
+  hardClose();
+}
+
+/* ================= OUVERTURE / FERMETURE ================= */
+function open(opts){
+  opts = opts || {};
+  if (S.open) return;
+  if (!isDemandes()) return;
+  ensureCSS();
+  S.open = true; S.dirty = false; S.attempted = false; S.delaiTouched = false;
+  S.mode = opts.mode || 'new';
+  S.num = opts.num || null;
+  S.resuming = null; S.errs = {};
+  loadLists(function(L){
+    if (!S.open) return;
+    S.panel = buildPanel(L);
+    /* valeurs initiales */
+    S.values = {};
+    FIELDS.forEach(function(f){ S.values[f.k] = ''; });
+    if (S.mode !== 'new' && S.num){
+      var d = ((v1() && v1()._data()) || []).find(function(x){ return x.num === S.num; });
+      if (d){
+        S.values = {
+          dept: d.dept || '', resp: d.resp || '', role: d.role || '', site: d.site || '',
+          poste: d.poste || '', typePoste: d.typePoste || '', typeContrat: d.typeContrat || '',
+          effectif: d.effectif ? String(d.effectif) : '', motif: d.motif || '',
+          dateBesoin: d.dateBesoin || '', delai: d.delai ? String(d.delai) : '', priorite: d.prio || '',
+          budget: d.budget ? String(d.budget) : '', cout: d.cout ? String(d.cout) : '',
+          cabinet: d.cabinet || '', notes: d.notes || ''
+        };
+        var head = $('.adem8-head .adem8-sub2', S.panel);
+        if (head) head.innerHTML = (S.mode === 'modif' ? '\u270F\uFE0F Reprise des informations de <b>' + esc(S.num) + '</b>' : '\uD83D\uDCCB Duplication de <b>' + esc(S.num) + '</b>') +
+          ' — vérifiez chaque champ, puis soumettez. Une <b>nouvelle</b> demande (N° automatique) sera créée.';
+      }
+    }
+    D.body.appendChild(S.panel); /* S.panel EST #adem8-overlay */
+    fillFormValues();
+    renderBanners();
+    wire();
+    var prev = D.body.style.overflow;
+    D.body.setAttribute('data-adem8-ov', prev || '');
+    D.body.style.overflow = 'hidden';
+    var first = $('#adem8-f-dept', S.panel);
+    if (first) setTimeout(function(){ try { first.focus(); } catch(e){} }, 60);
+  });
+}
+function wire(){
+  if (!S.panel) return;
+  FIELDS.forEach(function(f){
+    var el = $('#adem8-f-' + f.k, S.panel);
+    if (!el) return;
+    var h = function(){
+      S.values = readFormValues();
+      markDirty();
+      if (S.attempted) showErrors(validate(S.values));
+      if (f.k === 'dateBesoin'){
+        if (!S.delaiTouched){
+          var db = parseFR(iso2fr(el.value));
+          if (db){
+            var t = new Date(); t.setHours(0, 0, 0, 0);
+            var d = Math.max(0, diffDays(db, t));
+            var de = $('#adem8-f-delai', S.panel);
+            if (de){ de.value = d ? String(d) : ''; }
+            S.values.delai = de ? de.value : '';
+          }
+        }
+        refreshDelaiHint();
+      }
+      if (f.k === 'dept' || f.k === 'typePoste') refreshCabinetHint();
+      if (f.k === 'cabinet') refreshCabinetHint();
+      if (f.k === 'resp'){
+        var r = roleFor(S.values.resp);
+        if (r && !S.values.role){
+          S.values.role = r;
+          var rs = $('#adem8-f-role', S.panel);
+          ensureOption(rs, r); rs.value = r;
+          var hint = $('#adem8-hint-role', S.panel);
+          if (hint) hint.textContent = 'Rôle auto-rempli depuis l\u2019historique de ce responsable — modifiable';
+        }
+      }
+      if (f.k === 'delai') S.delaiTouched = true;
+    };
+    el.addEventListener('input', h);
+    el.addEventListener('change', h);
+  });
+  var close = $('#adem8-close', S.panel);
+  if (close) close.addEventListener('click', cancelFlow);
+  var cancel = $('#adem8-cancel', S.panel);
+  if (cancel) cancel.addEventListener('click', cancelFlow);
+  var draft = $('#adem8-draft', S.panel);
+  if (draft) draft.addEventListener('click', draftFlow);
+  var sub = $('#adem8-submit', S.panel);
+  if (sub) sub.addEventListener('click', submitFlow);
+  var quit = $('#adem8-quit', S.panel);
+  if (quit) quit.addEventListener('click', function(){ S.dirty = false; hardClose(); });
+  var cont = $('#adem8-continue', S.panel);
+  if (cont) cont.addEventListener('click', function(){ var c = $('#adem8-confirm', S.panel); if (c) c.classList.remove('on'); });
+  var cab = $('#adem8-cabuse', S.panel);
+  if (cab) cab.addEventListener('click', function(){
+    var sg = cabinetSuggestion(S.values);
+    if (!sg) return;
+    var sel = $('#adem8-f-cabinet', S.panel);
+    ensureOption(sel, sg.cabinet);
+    sel.value = sg.cabinet;
+    S.values.cabinet = sg.cabinet;
+    markDirty();
+    refreshCabinetHint();
+  });
+  S.panel.addEventListener('keydown', function(e){
+    if (e.key === 'Escape'){ e.stopPropagation(); cancelFlow(); return; }
+    if (e.key === 'Tab'){
+      var foc = $$('button, input, select, textarea, [tabindex]:not([tabindex="-1"])', S.panel)
+        .filter(function(x){ return !x.disabled && x.offsetParent !== null; });
+      if (!foc.length) return;
+      var first = foc[0], last = foc[foc.length - 1];
+      if (e.shiftKey && D.activeElement === first){ e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && D.activeElement === last){ e.preventDefault(); first.focus(); }
+    }
+  });
+  var ov = $('#adem8-overlay');
+  if (ov) ov.addEventListener('mousedown', function(e){ if (e.target === ov) cancelFlow(); });
+}
+function hardClose(){
+  if (S.panel){ S.panel.remove(); S.panel = null; }
+  var ov = $('#adem8-overlay');
+  if (ov) ov.remove();
+  var prev = D.body.getAttribute('data-adem8-ov');
+  D.body.style.overflow = prev || '';
+  D.body.removeAttribute('data-adem8-ov');
+  S.open = false; S.dirty = false; S.attempted = false; S.resuming = null;
+  var nd = findND();
+  if (nd){ try { nd.focus(); } catch(e){} }
+}
+
+/* ================= INTERCEPTION DU CLIC UTILISATEUR ================= */
+D.addEventListener('click', function(e){
+  if (!e.isTrusted) return;
+  if (!isDemandes()) return;
+  var b = e.target && e.target.closest ? e.target.closest('button, [role="button"]') : null;
+  if (!b) return;
+  var t = (b.textContent || '').trim().toLowerCase();
+  if (t.indexOf('nouvelle demande') !== 0) return;
+  e.preventDefault();
+  e.stopPropagation();
+  open({ mode: 'new' });
+}, true);
+D.addEventListener('keydown', function(e){
+  if (!e.isTrusted) return;
+  if (e.key !== 'Enter' && e.key !== ' ') return;
+  if (!isDemandes()) return;
+  var b = e.target && e.target.closest ? e.target.closest('button') : null;
+  if (!b) return;
+  var t = (b.textContent || '').trim().toLowerCase();
+  if (t.indexOf('nouvelle demande') !== 0) return;
+  e.preventDefault();
+  e.stopPropagation();
+  open({ mode: 'new' });
+}, true);
+
+/* ================= HOUSEKEEPING (SPA) ================= */
+setInterval(function(){
+  if (location.pathname !== S.lastPath){
+    S.lastPath = location.pathname;
+    S.adds = []; /* retour SPA : l'état React se réinitialise → repart de la base */
+    if (S.open) hardClose();
+  }
+  if (S.open && !isDemandes()) hardClose();
+  patchData();
+}, 900);
+patchData();
+
+/* ================= API PUBLIQUE ================= */
+window.__ADEM_V8__ = {
+  version: '8.0',
+  open: function(opts){ open(opts); },
+  close: function(){ hardClose(); },
+  _isOpen: function(){ return S.open; },
+  _values: function(){ return S.values; },
+  _errors: function(){ return S.errs; },
+  _lists: function(){ return LISTS || LISTS_FALLBACK; },
+  _indicators: indicators,
+  _nextNumero: nextNumero,
+  _adds: function(){ return S.adds.length; },
+  _drafts: function(){ return drafts(); },
+  _banner: topBanner,
+  _origDataLen: function(){ return S.baseLen; }
+};
+})();
+</script>
+<!-- ADEM_V8_FORM END -->
+<!-- ADEM_V9_ETAPE4 BEGIN -->
+<script>
+/* ============================================================
+   ADEM_V9 — Étape 4 : Délais de traitement 30/45 j + Non-Conformités
+   - Colonne « Délai » avec pastilles (Conforme ≤30 j / Vigilance 31-45 j / Critique >45 j)
+   - Filtre « Délai » dans la barre V2 (cumulatif, intersection)
+   - Bannière d'alerte ISO : demandes actives > 45 j + délai moyen vs cible
+   - « Déclarer une non-conformité » : modal complète (constat + 5 Pourquoi + action)
+   - Registre des NC persistant (localStorage) alimentant les revues de direction
+   Référentiel : Manuel D1 §7.3 + KPI « Délai < 45 jours » — ISO 9001 §10.2
+   ============================================================ */
+(function(){
+'use strict';
+if (window.__ADEM_V9__) { return; }
+
+var D = document;
+function $(s, r){ return (r || D).querySelector(s); }
+function $$(s, r){ return Array.prototype.slice.call((r || D).querySelectorAll(s)); }
+function isDemandes(){ return /\/demandes/.test(location.pathname); }
+function v1(){ return window.__ADEM_V1__ || null; }
+function v2(){ return window.__ADEM_V2__ || null; }
+function data(){ var v = v1(); return v ? v._data() : []; }
+function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+function todayISO(){ var d = new Date(); return d.getFullYear() + '-' + ('0'+(d.getMonth()+1)).slice(-2) + '-' + ('0'+d.getDate()).slice(-2); }
+function fmtDate(iso){ if (!iso) return '—'; var p = iso.split('-'); return p.length === 3 ? p[2] + '/' + p[1] + '/' + p[0] : iso; }
+
+/* ---------- sémantique délai ---------- */
+var ACTIFS = ['En attente', 'En cours', 'Validée'];
+function delai(d){
+  if (d && typeof d.delai === 'number' && !isNaN(d.delai)) return d.delai;
+  return null;
+}
+function cls(d){
+  if (!d || d.statut === 'Annulee') return 'na';
+  var n = delai(d);
+  if (n == null) return 'na';
+  if (n <= 30) return 'ok';
+  if (n <= 45) return 'vig';
+  return 'crit';
+}
+var LAB_CLS = { ok: 'Conforme', vig: 'Vigilance', crit: 'Critique', na: '—' };
+function counts(){
+  var c = { ok: 0, vig: 0, crit: 0, na: 0, moy: null, crits: [] };
+  var sum = 0, n = 0;
+  data().forEach(function(x){
+    c[cls(x)]++;
+    if (cls(x) === 'crit') c.crits.push(x);
+    if (ACTIFS.indexOf(x.statut) !== -1 && delai(x) != null){ sum += delai(x); n++; }
+  });
+  c.moy = n ? Math.round(sum / n) : null;
+  return c;
+}
+
+/* ---------- registre NC (localStorage) ---------- */
+function lsGet(){
+  try { var a = JSON.parse(localStorage.getItem('adem9_nc_register') || '[]'); return Array.isArray(a) ? a : []; }
+  catch(e){ return []; }
+}
+function lsSet(a){ try { localStorage.setItem('adem9_nc_register', JSON.stringify(a)); } catch(e){} }
+function ncFor(num){ return lsGet().filter(function(x){ return x.num === num; }); }
+function nextNC(){
+  var y = String(new Date().getFullYear());
+  var pref = 'NC-' + y + '-';
+  var mx = 0;
+  lsGet().forEach(function(x){ var m = /^NC-\d{4}-(\d+)$/.exec(x.id || ''); if (m && m[1].length === 3) mx = Math.max(mx, +m[1]); });
+  return pref + ('00' + (mx + 1)).slice(-3);
+}
+var LAB_TYPE_NC = [
+  'Délai de traitement dépassé',
+  'Dossier incomplet',
+  'Candidat non évalué sur un critère obligatoire',
+  'Référence non vérifiée',
+  'Autre'
+];
+var CLASSES_NC = ['Observation', 'NC mineure', 'NC majeure'];
+var CL_ICON = { 'Observation': '👁️', 'NC mineure': '🟠', 'NC majeure': '🔴' };
+
+/* ---------- CSS ---------- */
+var CSS_DONE = false;
+function ensureCSS(){
+  if (CSS_DONE) return;
+  CSS_DONE = true;
+  var st = D.createElement('style');
+  st.id = 'adem9-css';
+  st.textContent =
+    /* ---- pastilles délai ---- */
+    '.adem9-del{display:inline-flex;align-items:center;gap:5px;font:700 11.5px/1 Inter,sans-serif;padding:4px 9px;border-radius:999px;white-space:nowrap;}' +
+    '.adem9-del.ok{background:#e6f4ea;color:#2e7d32;}' +
+    '.adem9-del.vig{background:#fff3e0;color:#b35309;}' +
+    '.adem9-del.crit{background:#fdecea;color:#c62828;}' +
+    '.adem9-del.na{background:#f4f5f6;color:#909399;}' +
+    '.adem9-del .adem9-flagc{font-size:10.5px;filter:saturate(1.2);}' +
+    /* ---- bannière d'alerte ---- */
+    '#adem9-banner-alert{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:10px 0 4px;padding:11px 16px;border-radius:12px;font:500 13px/18px Inter,sans-serif;box-shadow:0 1px 4px rgba(0,0,0,.06);}' +
+    '#adem9-banner-alert.warn{background:#fff4ec;border:1px solid #f0c9a8;color:#7c3a06;}' +
+    '#adem9-banner-alert.crit{background:#fdecea;border:1px solid #f2b8b5;color:#8f1d1d;}' +
+    '#adem9-banner-alert.okay{background:#e6f4ea;border:1px solid #b7dfc3;color:#1d5e2a;}' +
+    '#adem9-banner-alert b{font-weight:800;}' +
+    '#adem9-banner-alert .adem9-btitle{font-weight:800;font-size:13.5px;}' +
+    '#adem9-banner-alert .adem9-bsub{opacity:.92;}' +
+    '#adem9-banner-alert .adem9-bbtn{border:none;cursor:pointer;font:700 12px/1 Inter,sans-serif;padding:8px 13px;border-radius:9px;transition:filter .15s;}' +
+    '#adem9-banner-alert .adem9-bbtn:hover{filter:brightness(.95);}' +
+    '#adem9-banner-alert .adem9-bbtn.filtre{background:#c62828;color:#fff;}' +
+    '#adem9-banner-alert .adem9-bbtn.reg{background:#0D7C66;color:#fff;}' +
+    '#adem9-banner-alert .adem9-bbtn.plain{background:rgba(0,0,0,.08);color:inherit;}' +
+    'html.adem7-dark #adem9-banner-alert.warn{background:#2b2410;border-color:#5c4a1e;color:#f3c983;}' +
+    'html.adem7-dark #adem9-banner-alert.crit{background:#3a1a1a;border-color:#6e2a2a;color:#f3a6a0;}' +
+    'html.adem7-dark #adem9-banner-alert.okay{background:#12301f;border-color:#2a5c3c;color:#a9e8c0;}' +
+    'html.adem7-dark #adem9-banner-alert .adem9-bbtn.plain{background:rgba(255,255,255,.12);color:#eee;}' +
+    /* ---- filtre délai dans barre V2 ---- */
+    '#adem9-fdelai{min-width:150px;}' +
+    '.adem9-hide{display:none !important;}' +
+    /* ---- overlay / modal NC ---- */
+    '#adem9-overlay{position:fixed;inset:0;background:rgba(13,27,23,.55);backdrop-filter:blur(2px);z-index:5100;display:flex;align-items:flex-start;justify-content:center;padding:26px 14px;overflow:auto;}' +
+    '#adem9-overlay .adem9-panel{background:#fff;border-radius:16px;width:min(760px,96vw);box-shadow:0 24px 70px rgba(0,0,0,.30);animation:adem9in .25s ease;overflow:hidden;}' +
+    '@keyframes adem9in{from{opacity:0;transform:translateY(14px) scale(.985);}to{opacity:1;transform:none;}}' +
+    '.adem9-head{display:flex;align-items:center;gap:12px;padding:16px 22px;background:linear-gradient(135deg,#0D7C66,#0a5c4c);color:#fff;}' +
+    '.adem9-head .adem9-ic{font-size:22px;}' +
+    '.adem9-head h2{margin:0;font:800 17px/22px Inter,sans-serif;}' +
+    '.adem9-head .adem9-sub{font:500 12px/16px Inter,sans-serif;opacity:.85;}' +
+    '.adem9-head .adem9-x{margin-left:auto;border:none;background:rgba(255,255,255,.16);color:#fff;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:14px;flex:0 0 auto;}' +
+    '.adem9-body{padding:18px 22px 6px;max-height:66vh;overflow:auto;}' +
+    '.adem9-sec{margin:0 0 18px;}' +
+    '.adem9-sect{display:flex;align-items:center;gap:8px;font:800 12.5px/17px Inter,sans-serif;letter-spacing:.4px;text-transform:uppercase;color:#0D7C66;border-bottom:2px solid #d7ece7;padding-bottom:7px;margin-bottom:13px;}' +
+    '.adem9-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px 15px;}' +
+    '.adem9-field{display:flex;flex-direction:column;gap:5px;min-width:0;}' +
+    '.adem9-field.full{grid-column:1 / -1;}' +
+    '.adem9-field label{font:600 12.5px/16px Inter,sans-serif;color:#33413d;}' +
+    '.adem9-field label .req{color:#c62828;}' +
+    '.adem9-field .hint{font:400 11px/14px Inter,sans-serif;color:#7b8a85;}' +
+    '.adem9-field input,.adem9-field select,.adem9-field textarea{font:500 13px/18px Inter,sans-serif;color:#1d2a26;padding:9px 11px;border:1.5px solid #c9d6d2;border-radius:9px;background:#fff;outline:none;width:100%;box-sizing:border-box;}' +
+    '.adem9-field textarea{resize:vertical;min-height:64px;}' +
+    '.adem9-field input:focus,.adem9-field select:focus,.adem9-field textarea:focus{border-color:#0D7C66;box-shadow:0 0 0 3px rgba(13,124,102,.14);}' +
+    '.adem9-field input[readonly]{background:#f2f6f5;color:#54655f;}' +
+    '.adem9-field.adem9-bad input,.adem9-field.adem9-bad select,.adem9-field.adem9-bad textarea{border-color:#c62828;background:#fff7f6;}' +
+    '.adem9-err{display:none;font:600 11.5px/15px Inter,sans-serif;color:#c62828;}' +
+    '.adem9-field.adem9-bad .adem9-err{display:block;}' +
+    '.adem9-pills{display:flex;gap:8px;flex-wrap:wrap;}' +
+    '.adem9-pill{border:1.5px solid #c9d6d2;background:#fff;color:#33413d;font:600 12px/1 Inter,sans-serif;padding:8px 12px;border-radius:999px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:all .15s;}' +
+    '.adem9-pill:hover{border-color:#0D7C66;}' +
+    '.adem9-pill[aria-checked="true"]{background:#0D7C66;border-color:#0D7C66;color:#fff;}' +
+    '.adem9-pill.cl-obs[aria-checked="true"]{background:#607d8b;border-color:#607d8b;}' +
+    '.adem9-pill.cl-min[aria-checked="true"]{background:#ed6c02;border-color:#ed6c02;}' +
+    '.adem9-pill.cl-maj[aria-checked="true"]{background:#c62828;border-color:#c62828;}' +
+    '.adem9-foot{display:flex;gap:10px;justify-content:flex-end;padding:14px 22px 18px;border-top:1px solid #e7eeec;background:#fafcfb;}' +
+    '.adem9-foot button{font:700 13px/1 Inter,sans-serif;padding:11px 18px;border-radius:10px;cursor:pointer;border:none;transition:filter .15s;}' +
+    '.adem9-foot .adem9-cancel{background:#eceff0;color:#33413d;}' +
+    '.adem9-foot .adem9-ok{background:#0D7C66;color:#fff;}' +
+    '.adem9-foot button:disabled{opacity:.55;cursor:not-allowed;}' +
+    '.adem9-foot button:hover:not(:disabled){filter:brightness(.95);}' +
+    /* ---- registre ---- */
+    '#adem9-registre{position:fixed;top:0;right:-560px;width:min(540px,94vw);height:100vh;background:#fff;z-index:5200;box-shadow:-18px 0 50px rgba(0,0,0,.22);transition:right .28s ease;display:flex;flex-direction:column;}' +
+    '#adem9-registre.on{right:0;}' +
+    '#adem9-registre .adem9-rhead{padding:16px 20px;background:linear-gradient(135deg,#0D7C66,#0a5c4c);color:#fff;display:flex;align-items:center;gap:10px;}' +
+    '#adem9-registre .adem9-rhead h2{margin:0;font:800 16px/21px Inter,sans-serif;}' +
+    '#adem9-registre .adem9-rhead .adem9-sub{font:500 11.5px/15px Inter,sans-serif;opacity:.85;}' +
+    '#adem9-registre .adem9-rhead .adem9-x{margin-left:auto;border:none;background:rgba(255,255,255,.16);color:#fff;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:13px;}' +
+    '#adem9-registre .adem9-rbody{flex:1;overflow:auto;padding:14px 16px;background:#f6f9f8;}' +
+    '.adem9-ncard{background:#fff;border:1px solid #e2eae8;border-radius:12px;padding:13px 15px;margin-bottom:11px;box-shadow:0 1px 3px rgba(0,0,0,.05);}' +
+    '.adem9-ncard .adem9-n1{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}' +
+    '.adem9-ncard .adem9-nid{font:800 13px/17px Inter,sans-serif;color:#0D7C66;}' +
+    '.adem9-ncard .adem9-chip{font:700 10.5px/1 Inter,sans-serif;padding:4px 9px;border-radius:999px;}' +
+    '.adem9-chip.cl-obs{background:#eceff1;color:#455a64;}' +
+    '.adem9-chip.cl-min{background:#fff3e0;color:#b35309;}' +
+    '.adem9-chip.cl-maj{background:#fdecea;color:#c62828;}' +
+    '.adem9-chip.st-ou{background:#e3f2fd;color:#1565c0;}' +
+    '.adem9-chip.st-cl{background:#e8f5e9;color:#2e7d32;}' +
+    '.adem9-chip.late{background:#fdecea;color:#c62828;}' +
+    '.adem9-ncard .adem9-nd{font:500 12.5px/17px Inter,sans-serif;color:#33413d;margin:7px 0 3px;}' +
+    '.adem9-ncard .adem9-nm{font:400 11.5px/16px Inter,sans-serif;color:#6b7c76;}' +
+    '.adem9-ncard details{margin-top:8px;}' +
+    '.adem9-ncard summary{cursor:pointer;font:600 11.5px/16px Inter,sans-serif;color:#0D7C66;}' +
+    '.adem9-ncard .adem9-dl{margin:7px 0 0;padding:9px 11px;background:#f6f9f8;border-radius:8px;font:400 12px/17px Inter,sans-serif;color:#33413d;}' +
+    '.adem9-ncard .adem9-dl b{color:#0D7C66;}' +
+    '.adem9-ncard .adem9-na{display:flex;gap:8px;margin-top:10px;}' +
+    '.adem9-ncard .adem9-na button{font:700 11.5px/1 Inter,sans-serif;padding:7px 11px;border-radius:8px;border:none;cursor:pointer;}' +
+    '.adem9-ncard .adem9-na .clo{background:#e0f2f1;color:#00695c;}' +
+    '.adem9-ncard .adem9-na .del{background:#fdecea;color:#c62828;}' +
+    '.adem9-rempty{text-align:center;color:#7b8a85;font:500 13px/20px Inter,sans-serif;padding:38px 12px;}' +
+    /* ---- notification ---- */
+    '#adem9-banner{position:fixed;top:14px;left:50%;transform:translateX(-50%) translateY(-90px);z-index:5400;background:#0D7C66;color:#fff;font:600 13.5px/19px Inter,sans-serif;padding:12px 18px;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.3);display:flex;align-items:center;gap:12px;max-width:min(660px,92vw);transition:transform .3s ease;}' +
+    '#adem9-banner.on{transform:translateX(-50%) translateY(0);}' +
+    '#adem9-banner button{border:none;background:rgba(255,255,255,.18);color:#fff;width:24px;height:24px;border-radius:50%;cursor:pointer;font-size:12px;flex:0 0 auto;}' +
+    /* ---- sombre ---- */
+    'html.adem7-dark #adem9-overlay{background:rgba(4,8,20,.68);}' +
+    'html.adem7-dark #adem9-overlay .adem9-panel{background:#1e1e3a;}' +
+    'html.adem7-dark .adem9-head{background:linear-gradient(135deg,#134e42,#0d2f28);}' +
+    'html.adem7-dark .adem9-field label{color:#c3d4ce;}' +
+    'html.adem7-dark .adem9-field input,html.adem7-dark .adem9-field select,html.adem7-dark .adem9-field textarea{background:#14142a;border-color:#3a3a5c;color:#e4eee9;}' +
+    'html.adem7-dark .adem9-field input:focus,html.adem7-dark .adem9-field select:focus,html.adem7-dark .adem9-field textarea:focus{border-color:#4fd1b5;box-shadow:0 0 0 3px rgba(79,209,181,.16);}' +
+    'html.adem7-dark .adem9-field input[readonly]{background:#191932;color:#9fb3ab;}' +
+    'html.adem7-dark .adem9-field.adem9-bad input,html.adem7-dark .adem9-field.adem9-bad select,html.adem7-dark .adem9-field.adem9-bad textarea{border-color:#e57373;background:#2a1a26;}' +
+    'html.adem7-dark .adem9-field .hint{color:#8fa39b;}' +
+    'html.adem7-dark .adem9-sect{color:#4fd1b5;border-bottom-color:#2c4a44;}' +
+    'html.adem7-dark .adem9-pill{background:#191932;border-color:#3a3a5c;color:#c3d4ce;}' +
+    'html.adem7-dark .adem9-pill[aria-checked="true"]{background:#4fd1b5;border-color:#4fd1b5;color:#10231e;}' +
+    'html.adem7-dark .adem9-pill.cl-obs[aria-checked="true"]{background:#78909c;border-color:#78909c;color:#10231e;}' +
+    'html.adem7-dark .adem9-pill.cl-min[aria-checked="true"]{background:#f0a35e;border-color:#f0a35e;color:#2a1503;}' +
+    'html.adem7-dark .adem9-pill.cl-maj[aria-checked="true"]{background:#e57373;border-color:#e57373;color:#2a0808;}' +
+    'html.adem7-dark .adem9-foot{background:#191932;border-top-color:#2c2c4a;}' +
+    'html.adem7-dark .adem9-foot .adem9-cancel{background:#2c2c4a;color:#c3d4ce;}' +
+    'html.adem7-dark .adem9-foot .adem9-ok{background:#4fd1b5;color:#10231e;}' +
+    'html.adem7-dark .adem9-del.ok{background:#12301f;color:#7fd8a2;}' +
+    'html.adem7-dark .adem9-del.vig{background:#33240e;color:#f0b478;}' +
+    'html.adem7-dark .adem9-del.crit{background:#3a1518;color:#f3a29c;}' +
+    'html.adem7-dark .adem9-del.na{background:#1d1d38;color:#7d8ba3;}' +
+    'html.adem7-dark #adem9-registre{background:#1e1e3a;}' +
+    'html.adem7-dark #adem9-registre .adem9-rbody{background:#14142a;}' +
+    'html.adem7-dark .adem9-ncard{background:#191932;border-color:#2c2c4a;}' +
+    'html.adem7-dark .adem9-ncard .adem9-dl{background:#14142a;}' +
+    'html.adem7-dark .adem9-ncard .adem9-nd{color:#c3d4ce;}' +
+    'html.adem7-dark .adem9-ncard .adem9-nm{color:#8fa39b;}' +
+    /* ---- responsive ---- */
+    '@media (max-width:680px){' +
+    '.adem9-grid{grid-template-columns:1fr;}' +
+    '#adem9-overlay{padding:8px 6px;}' +
+    '.adem9-body{max-height:60vh;padding:14px 14px 4px;}' +
+    '.adem9-head{padding:13px 15px;}' +
+    '.adem9-foot{flex-direction:column-reverse;}' +
+    '.adem9-foot button{width:100%;}' +
+    '#adem9-banner{font:600 12.5px/17px Inter,sans-serif;padding:10px 14px;}' +
+    '#adem9-banner-alert{padding:10px 12px;gap:8px;}' +
+    '}' +
+    '@media (prefers-reduced-motion:reduce){.adem9-panel{animation:none;}#adem9-banner{transition:none;}#adem9-registre{transition:none;}}';
+  D.head.appendChild(st);
+}
+/* ---------- colonne « Délai » + drapeaux 🚩 ---------- */
+function pillHTML(rec){
+  var k = cls(rec);
+  var n = delai(rec);
+  var lab = k === 'na' ? '—' : n + ' j';
+  var tips = {
+    ok: 'Délai de traitement : ' + n + ' jours — conforme (cible ≤ 30 j)',
+    vig: 'Délai de traitement : ' + n + ' jours — vigilance (31-45 j, cible ISO < 45 j)',
+    crit: 'Délai de traitement : ' + n + ' jours — CRITIQUE, dépasse la cible ISO de 45 j',
+    na: 'Délai non applicable'
+  };
+  var ncs = ncFor(rec.num).filter(function(x){ return x.statut !== 'Clôturée'; }).length;
+  var flag = ncs ? ' <span class="adem9-flagc" title="' + ncs + ' non-conformité(s) ouverte(s)">🚩×' + ncs + '</span>' : '';
+  return '<span class="adem9-del ' + k + '" title="' + esc(tips[k]) + '">' + lab + flag + '</span>';
+}
+function rowData(tr){
+  var m = (tr.textContent || '').match(/DR-\d{4}-\d{3}/);
+  if (!m) return null;
+  var rec = data().filter(function(x){ return x.num === m[0]; })[0];
+  return rec ? { num: m[0], data: rec } : { num: m[0], data: null };
+}
+function syncTable(){
+  if (!isDemandes()) return;
+  var tbl = $('.MuiTableContainer-root table');
+  if (!tbl) return;
+  /* en-tête : insérer « Délai » juste après « Statut » (garde Actions visible) */
+  var ths = $$('thead th', tbl);
+  if (ths.length && !$('#adem9-th-delai', tbl)){
+    var th = D.createElement('th');
+    th.id = 'adem9-th-delai';
+    th.textContent = 'Délai';
+    th.setAttribute('style', 'font-weight:800 !important;font-size:13px !important;text-transform:uppercase;letter-spacing:.3px;');
+    var statutTh = ths.filter(function(x){ return (x.textContent || '').trim() === 'Statut'; })[0] || ths[ths.length - 2] || ths[0];
+    statutTh.parentNode.insertBefore(th, statutTh.nextSibling);
+  }
+  /* index de la colonne Statut (pour insérer le td au même rang) */
+  var ths2 = $$('thead th', tbl);
+  var statutIdx = -1;
+  ths2.forEach(function(x, i){ if ((x.textContent || '').trim() === 'Statut') statutIdx = i; });
+  /* lignes : td délai + drapeau 🚩 */
+  $$('tbody tr', tbl).forEach(function(tr){
+    var rd = rowData(tr);
+    if (!rd) return;
+    var lastTd = tr.querySelector('td:last-child');
+    if (!lastTd) return;
+    if (!$('.adem9-td', tr)){
+      var td = D.createElement('td');
+      td.className = 'adem9-td';
+      td.setAttribute('data-l', 'Délai');
+      td.innerHTML = pillHTML(rd.data);
+      var tds = tr.querySelectorAll('td');
+      var ref = (statutIdx > -1 && tds[statutIdx]) ? tds[statutIdx].nextSibling : lastTd;
+      ref.parentNode.insertBefore(td, ref);
+    } else {
+      /* refresh systématique léger (évite divergences après ajout NC) */
+      var td2 = $('.adem9-td', tr);
+      var fresh = pillHTML(rd.data);
+      if (td2.innerHTML !== fresh) td2.innerHTML = fresh;
+    }
+    /* 🚩 dans les actions V7 (ou colonne actions seule) */
+    var acts = tr.querySelector('.adem7-acts') || tr.querySelector('.adem9-acts');
+    if (lastTd && !$('.adem9-flag', tr)){
+      var b = D.createElement('button');
+      b.type = 'button';
+      b.className = 'adem7-ico adem9-flag';
+      b.textContent = '🚩';
+      b.setAttribute('aria-label', 'Déclarer une non-conformité pour ' + rd.num);
+      b.title = 'Déclarer une non-conformité';
+      b.addEventListener('click', function(ev){ ev.stopPropagation(); openNC(rd.num); });
+      if (acts) acts.appendChild(b);
+      else if (lastTd){
+        var wrap = D.createElement('div');
+        wrap.className = 'adem9-acts';
+        wrap.style.cssText = 'display:inline-flex;gap:2px;';
+        wrap.appendChild(b);
+        lastTd.appendChild(wrap);
+      }
+    }
+  });
+}
+
+/* ---------- filtre « Délai » (greffé sur la barre V2) ---------- */
+var ST9 = '';
+function interCount(){
+  var d = data();
+  var vis = v2() ? v2().visibleNums() : null;
+  var n = 0;
+  d.forEach(function(x){
+    if (ST9 && cls(x) !== ST9) return;
+    if (vis && vis.size < d.length && !vis.has(x.num)) return;
+    n++;
+  });
+  return n;
+}
+function restoreCounters(){
+  var d = data();
+  var vis = v2() ? v2().visibleNums() : null;
+  var n = vis ? vis.size : d.length;
+  var xy = $('#adem2-bar .adem2-x-y');
+  if (xy) xy.textContent = n + '/' + d.length;
+  var nb = $('#adem-charts-panel .adem5-nb');
+  if (nb) nb.textContent = String(n);
+}
+function applyHide(){
+  var d = data();
+  var vis = v2() ? v2().visibleNums() : null;
+  var tbl = $('.MuiTableContainer-root table');
+  if (!tbl) return;
+  var total = d.length;
+  $$('tbody tr', tbl).forEach(function(tr){
+    var rd = rowData(tr);
+    var hide = false;
+    if (rd){
+      var rec = rd.data;
+      if (ST9 && (!rec || cls(rec) !== ST9)) hide = true;
+      if (vis && vis.size < total && rec && !vis.has(rec.num)) hide = true;
+      if (vis && vis.size < total && !rec) hide = true;
+    }
+    tr.classList.toggle('adem9-hide', hide);
+  });
+  /* compteur x/y de la barre V2 reflet de l'intersection quand le filtre délai est actif */
+  if (ST9){
+    var xy = $('#adem2-bar .adem2-x-y');
+    if (xy) xy.textContent = interCount() + '/' + total;
+    var nb = $('#adem-charts-panel .adem5-nb');
+    if (nb) nb.textContent = String(interCount());
+  }
+}
+function wireFilterEvents(){
+  D.addEventListener('adem2:change', function(){
+    setTimeout(function(){
+      /* V2.syncControls remet tous les .adem2-sel à ST[k] — restaurer notre valeur */
+      var sel = $('#adem9-fdelai');
+      if (sel && sel.value !== ST9) sel.value = ST9;
+      applyHide();
+    }, 40);
+  });
+}
+function buildSelect(){
+  var bar = $('#adem2-bar');
+  if (!bar || $('#adem9-fdelai')) return;
+  var opts = ['<option value="">Tous les délais</option>',
+    '<option value="ok">Conforme ≤ 30 j</option>',
+    '<option value="vig">Vigilance 31-45 j</option>',
+    '<option value="crit">Critique &gt; 45 j</option>'].join('');
+  var sel = D.createElement('select');
+  sel.id = 'adem9-fdelai';
+  sel.className = 'adem2-sel';
+  sel.setAttribute('data-k', 'delai9');
+  sel.setAttribute('aria-label', 'Filtrer par délai de traitement');
+  sel.innerHTML = opts;
+  var row = bar.querySelector('.adem2-row');
+  var lastSel = $$('.adem2-sel', bar).pop() || row.lastChild;
+  if (row && lastSel) row.insertBefore(sel, lastSel.nextSibling);
+  else if (row) row.appendChild(sel);
+  else bar.appendChild(sel);
+  sel.addEventListener('change', function(){
+    ST9 = sel.value;
+    sel.classList.toggle('adem2-on', !!ST9);
+    applyHide();
+    if (!ST9) restoreCounters();
+  });
+  /* réinitialisation : le bouton V2 remonte aussi notre filtre */
+  var reset = bar.querySelector('.adem2-reset');
+  if (reset) reset.addEventListener('click', function(){
+    ST9 = '';
+    sel.value = '';
+    sel.classList.remove('adem2-on');
+  }, true);
+}
+
+/* ---------- bannière d'alerte ---------- */
+function buildBanner(){
+  if (!isDemandes()) { var old = $('#adem9-banner-alert'); if (old) old.remove(); return; }
+  var bar = $('#adem2-bar');
+  var bn = $('#adem9-banner-alert');
+  if (!bar) { if (bn) bn.remove(); return; }
+  if (!bn){
+    bn = D.createElement('div');
+    bn.id = 'adem9-banner-alert';
+    bar.parentNode.insertBefore(bn, bar);
+  }
+  var c = counts();
+  var ncN = lsGet().filter(function(x){ return x.statut !== 'Clôturée'; }).length;
+  var moy = c.moy == null ? '—' : c.moy + ' j';
+  var html;
+  if (c.crit > 0){
+    bn.className = 'crit';
+    html = '<span class="adem9-btitle">⚠️ <b>' + c.crit + '</b> demande' + (c.crit > 1 ? 's' : '') +
+      ' active' + (c.crit > 1 ? 's' : '') + ' dépasse' + (c.crit > 1 ? 'nt' : '') +
+      ' le délai cible de <b>45 jours</b></span>' +
+      '<span class="adem9-bsub">Délai moyen des demandes actives : <b>' + moy + '</b> · cible ISO &lt; 45 j · conforme ≤ 30 j : <b>' + c.ok + '</b> · vigilance : <b>' + c.vig + '</b></span>' +
+      '<button class="adem9-bbtn filtre" id="adem9-bfiltre">Filtrer les critiques</button>' +
+      '<button class="adem9-bbtn reg" id="adem9-bregistre">🚩 Registre NC' + (ncN ? ' (' + ncN + ')' : '') + '</button>';
+  } else {
+    bn.className = 'okay';
+    html = '<span class="adem9-btitle">✅ Aucun dépassement du délai cible de 45 jours</span>' +
+      '<span class="adem9-bsub">Délai moyen des demandes actives : <b>' + moy + '</b> · cible ISO &lt; 45 j · conforme ≤ 30 j : <b>' + c.ok + '</b> · vigilance : <b>' + c.vig + '</b></span>' +
+      '<button class="adem9-bbtn reg" id="adem9-bregistre">🚩 Registre NC' + (ncN ? ' (' + ncN + ')' : '') + '</button>';
+  }
+  if (bn.__html !== html){
+    bn.__html = html;
+    bn.innerHTML = html;
+    var bf = $('#adem9-bfiltre', bn);
+    if (bf) bf.addEventListener('click', function(){
+      ST9 = 'crit';
+      var sel = $('#adem9-fdelai');
+      if (sel){ sel.value = 'crit'; sel.classList.add('adem2-on'); }
+      applyHide();
+      var tbl = $('.MuiTableContainer-root');
+      if (tbl) tbl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+    var br = $('#adem9-bregistre', bn);
+    if (br) br.addEventListener('click', function(){ openRegistre(); });
+  }
+}
+/* ---------- notification ---------- */
+function notify(msg){
+  var b = $('#adem9-banner');
+  if (!b){
+    b = D.createElement('div');
+    b.id = 'adem9-banner';
+    b.setAttribute('role', 'status');
+    b.setAttribute('aria-live', 'polite');
+    b.innerHTML = '<span id="adem9-bmsg"></span><button aria-label="Fermer la notification">✕</button>';
+    D.body.appendChild(b);
+    b.querySelector('button').addEventListener('click', function(){ b.classList.remove('on'); });
+  }
+  $('#adem9-bmsg', b).textContent = msg;
+  requestAnimationFrame(function(){ b.classList.add('on'); });
+  clearTimeout(b.__t);
+  b.__t = setTimeout(function(){ b.classList.remove('on'); }, 6500);
+}
+
+/* ---------- registre des NC ---------- */
+function openRegistre(){
+  ensureCSS();
+  var r = $('#adem9-registre');
+  if (!r){
+    r = D.createElement('aside');
+    r.id = 'adem9-registre';
+    r.setAttribute('role', 'complementary');
+    r.setAttribute('aria-label', 'Registre des non-conformités');
+    r.innerHTML = '<div class="adem9-rhead"><span style="font-size:19px;">🚩</span><div><h2>Registre des non-conformités</h2>' +
+      '<div class="adem9-sub">ISO 9001 §10.2 · Manuel D1 §7.3 — alimente les revues de direction</div></div>' +
+      '<button class="adem9-x" aria-label="Fermer le registre">✕</button></div>' +
+      '<div class="adem9-rbody" id="adem9-rbody"></div>';
+    D.body.appendChild(r);
+    $('.adem9-x', r).addEventListener('click', closeRegistre);
+  }
+  fillRegistre();
+  r.classList.add('on');
+}
+function closeRegistre(){
+  var r = $('#adem9-registre');
+  if (r) r.classList.remove('on');
+}
+function fillRegistre(){
+  var body = $('#adem9-rbody');
+  if (!body) return;
+  var list = lsGet().slice().reverse();
+  if (!list.length){
+    body.innerHTML = '<div class="adem9-rempty">🗂️ Aucune non-conformité enregistrée.<br>Utilisez le drapeau 🚩 d\u2019une ligne ou la bannière d\u2019alerte pour en déclarer.</div>';
+    return;
+  }
+  var today = todayISO();
+  body.innerHTML = list.map(function(x){
+    var late = x.statut === 'Ouverte' && x.echeance && x.echeance < today;
+    return '<div class="adem9-ncard" data-nc="' + esc(x.id) + '">' +
+      '<div class="adem9-n1"><span class="adem9-nid">' + esc(x.id) + '</span>' +
+      '<span class="adem9-chip cl-' + (x.classe === 'NC mineure' ? 'min' : x.classe === 'NC majeure' ? 'maj' : 'obs') + '">' + CL_ICON[x.classe] + ' ' + esc(x.classe) + '</span>' +
+      '<span class="adem9-chip ' + (x.statut === 'Ouverte' ? 'st-ou' : 'st-cl') + '">' + esc(x.statut) + '</span>' +
+      (late ? '<span class="adem9-chip late">⏰ échéance dépassée</span>' : '') +
+      '</div>' +
+      '<div class="adem9-nd"><b>' + esc(x.num) + '</b> — ' + esc(x.poste || '') + '</div>' +
+      '<div class="adem9-nm">' + esc(x.type) + ' · détectée le ' + fmtDate(x.det) +
+      (x.echeance ? ' · échéance ' + fmtDate(x.echeance) : '') + ' · responsable : ' + esc(x.resp) + '</div>' +
+      '<details><summary>Voir description / cause / action</summary><div class="adem9-dl">' +
+      '<b>Description :</b> ' + esc(x.desc) + '<br><b>Cause racine (5 Pourquoi) :</b> ' + esc(x.cause) +
+      '<br><b>Action corrective :</b> ' + esc(x.action) + '</div></details>' +
+      '<div class="adem9-na">' +
+      '<button class="clo" data-act="clo">' + (x.statut === 'Ouverte' ? '✓ Clôturer' : '↺ Rouvrir') + '</button>' +
+      '<button class="del" data-act="del">🗑 Supprimer</button></div></div>';
+  }).join('');
+  $$('.adem9-ncard', body).forEach(function(card){
+    var id = card.getAttribute('data-nc');
+    card.querySelector('[data-act="clo"]').addEventListener('click', function(){
+      var a = lsGet();
+      a.forEach(function(x){ if (x.id === id) x.statut = x.statut === 'Ouverte' ? 'Clôturée' : 'Ouverte'; });
+      lsSet(a);
+      fillRegistre();
+      refreshAll();
+      notify('Registre mis à jour — ' + id);
+    });
+    card.querySelector('[data-act="del"]').addEventListener('click', function(){
+      if (!window.confirm('Supprimer définitivement ' + id + ' du registre ?')) return;
+      lsSet(lsGet().filter(function(x){ return x.id !== id; }));
+      fillRegistre();
+      refreshAll();
+      notify(id + ' supprimée du registre');
+    });
+  });
+}
+
+/* ---------- modal « Déclarer une non-conformité » ---------- */
+var OV = null, DIRTY = false, VALIDATED = false;
+function fieldHTML(k, label, req, inner, hint, full){
+  return '<div class="adem9-field' + (full ? ' full' : '') + '" data-k="' + k + '">' +
+    '<label for="adem9-f-' + k + '">' + label + (req ? ' <span class="req">*</span>' : '') + '</label>' +
+    inner +
+    (hint ? '<span class="hint">' + hint + '</span>' : '') +
+    '<span class="adem9-err" role="alert" id="adem9-e-' + k + '"></span></div>';
+}
+function openNC(num){
+  ensureCSS();
+  closeNC(true);
+  DIRTY = false;
+  VALIDATED = false;
+  var ov = D.createElement('div');
+  ov.id = 'adem9-overlay';
+  var rec = num ? data().filter(function(x){ return x.num === num; })[0] : null;
+  var optDem = data().map(function(x){
+    var sel = num && x.num === num ? ' selected' : '';
+    return '<option value="' + x.num + '"' + sel + '>' + x.num + ' — ' + esc(x.poste || '') + '</option>';
+  }).join('');
+  var optType = LAB_TYPE_NC.map(function(t){ return '<option value="' + t + '">' + t + '</option>'; }).join('');
+  var today = todayISO();
+  var clsPills = CLASSES_NC.map(function(c, i){
+    var k = c === 'Observation' ? 'cl-obs' : c === 'NC mineure' ? 'cl-min' : 'cl-maj';
+    return '<button type="button" class="adem9-pill ' + k + '" role="radio" aria-checked="' + (i === 0 ? 'true' : 'false') + '" data-cl="' + c + '">' + CL_ICON[c] + ' ' + c + '</button>';
+  }).join('');
+  ov.innerHTML = '<div class="adem9-panel" role="dialog" aria-modal="true" aria-labelledby="adem9-title">' +
+    '<div class="adem9-head"><span class="adem9-ic">🚩</span><div><h2 id="adem9-title">Déclarer une non-conformité</h2>' +
+    '<div class="adem9-sub">Registre NC · ISO 9001 §10.2 — cause racine par la méthode des 5 Pourquoi</div></div>' +
+    '<button class="adem9-x" aria-label="Fermer le formulaire" id="adem9-close">✕</button></div>' +
+    '<div class="adem9-body">' +
+    '<div class="adem9-sec"><div class="adem9-sect">1 · Constat</div><div class="adem9-grid">' +
+    fieldHTML('num', 'Demande concernée', 1, '<select id="adem9-f-num">' + optDem + '</select>', null) +
+    fieldHTML('type', 'Type de non-conformité', 1, '<select id="adem9-f-type">' + optType + '</select>', null) +
+    fieldHTML('classe', 'Classe', 1, '<div class="adem9-pills" role="radiogroup" aria-label="Classe de non-conformité" id="adem9-f-classe">' + clsPills + '</div>', null, 1) +
+    fieldHTML('desc', 'Description du constat', 1, '<textarea id="adem9-f-desc" rows="3" placeholder="Décrire objectivement le constat…"></textarea>', null, 1) +
+    '</div></div>' +
+    '<div class="adem9-sec"><div class="adem9-sect">2 · Analyse &amp; action corrective</div><div class="adem9-grid">' +
+    fieldHTML('cause', 'Cause racine — 5 Pourquoi', 1, '<textarea id="adem9-f-cause" rows="3" placeholder="Pourquoi 1… Pourquoi 2… jusqu\u2019à la cause racine"></textarea>', 'Méthode des 5 Pourquoi — remonter jusqu\u2019à la cause racine, pas le symptôme', 1) +
+    fieldHTML('action', 'Action corrective', 1, '<textarea id="adem9-f-action" rows="2" placeholder="Action mise en place pour éliminer la cause racine…"></textarea>', null, 1) +
+    fieldHTML('resp', 'Responsable de l\u2019action', 1, '<input id="adem9-f-resp" type="text" placeholder="Nom du responsable" value="' + esc(rec && rec.resp || '') + '">', null) +
+    fieldHTML('det', 'Date de détection', 1, '<input id="adem9-f-det" type="date" value="' + today + '">', null) +
+    fieldHTML('ech', 'Échéance de l\u2019action', 0, '<input id="adem9-f-ech" type="date">', 'Optionnelle — si renseignée, ≥ date de détection', 1) +
+    '</div></div></div>' +
+    '<div class="adem9-foot"><button class="adem9-cancel" id="adem9-cancel">Annuler</button>' +
+    '<button class="adem9-ok" id="adem9-save">Enregistrer dans le registre</button></div>';
+  D.body.appendChild(ov);
+  OV = ov;
+  /* interactions */
+  ov.addEventListener('mousedown', function(e){ if (e.target === ov) tryClose(); });
+  $('#adem9-close', ov).addEventListener('click', function(){ tryClose(); });
+  $('#adem9-cancel', ov).addEventListener('click', function(){ tryClose(); });
+  $$('.adem9-pill', ov).forEach(function(p){
+    p.addEventListener('click', function(){
+      $$('.adem9-pill', ov).forEach(function(q){ q.setAttribute('aria-checked', 'false'); });
+      p.setAttribute('aria-checked', 'true');
+      DIRTY = true;
+      if (VALIDATED) validate(true);
+    });
+  });
+  $$('#adem9-overlay input, #adem9-overlay select, #adem9-overlay textarea').forEach(function(el){
+    el.addEventListener('input', function(){ DIRTY = true; if (VALIDATED) validate(true); });
+    el.addEventListener('change', function(){ DIRTY = true; if (VALIDATED) validate(true); });
+  });
+  $('#adem9-save', ov).addEventListener('click', function(){ saveNC(); });
+  ov.addEventListener('keydown', function(e){
+    if (e.key === 'Escape'){ e.stopPropagation(); tryClose(); return; }
+    if (e.key === 'Tab'){
+      var f = $$('button, input, select, textarea, [tabindex]:not([tabindex="-1"])', ov)
+        .filter(function(x){ return !x.disabled && x.offsetParent !== null; });
+      if (!f.length) return;
+      var first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && D.activeElement === first){ e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && D.activeElement === last){ e.preventDefault(); first.focus(); }
+    }
+  });
+  setTimeout(function(){ var s = $('#adem9-f-num', ov); if (s) s.focus(); }, 60);
+}
+function tryClose(){
+  if (DIRTY){
+    if (!window.confirm('Abandonner la déclaration ? Les saisies non enregistrées seront perdues.')) return;
+  }
+  closeNC();
+}
+function closeNC(silent){
+  var ov = $('#adem9-overlay');
+  if (ov) ov.remove();
+  OV = null;
+  if (!silent) VALIDATED = false;
+}
+function val(k){ var el = $('#adem9-f-' + k); return el ? el.value.trim() : ''; }
+function bad(k, msg){
+  var f = $('.adem9-field[data-k="' + k + '"]');
+  if (!f) return;
+  f.classList.add('adem9-bad');
+  $('#adem9-e-' + k).textContent = msg;
+  var inp = $('#adem9-f-' + k);
+  if (inp){ inp.setAttribute('aria-invalid', 'true'); }
+}
+function clearBad(){
+  $$('#adem9-overlay .adem9-field').forEach(function(f){
+    f.classList.remove('adem9-bad');
+    var e = f.querySelector('.adem9-err');
+    if (e) e.textContent = '';
+    var i = f.querySelector('input,select,textarea');
+    if (i) i.removeAttribute('aria-invalid');
+  });
+}
+function validate(live){
+  clearBad();
+  var errs = [];
+  function need(k, cond, msg){ if (!cond){ bad(k, msg); errs.push(k); } }
+  var classe = $('.adem9-pill[aria-checked="true"]');
+  need('num', !!val('num'), 'Sélectionnez la demande concernée');
+  need('type', !!val('type'), 'Sélectionnez le type de non-conformité');
+  need('classe', !!classe, 'Choisissez la classe');
+  need('desc', val('desc').length >= 5, 'Décrivez le constat (5 caractères minimum)');
+  need('cause', val('cause').length >= 5, 'Analysez la cause racine (5 caractères minimum)');
+  need('action', val('action').length >= 5, 'Décrivez l\u2019action corrective (5 caractères minimum)');
+  need('resp', !!val('resp'), 'Indiquez le responsable de l\u2019action');
+  need('det', !!val('det'), 'Indiquez la date de détection');
+  if (val('ech') && val('det') && val('ech') < val('det')){
+    bad('ech', 'L\u2019échéance ne peut pas précéder la date de détection');
+    errs.push('ech');
+  }
+  if (errs.length){
+    VALIDATED = true;
+    var first = $('.adem9-field.adem9-bad input, .adem9-field.adem9-bad select, .adem9-field.adem9-bad textarea');
+    if (first && !live) first.focus();
+    return false;
+  }
+  return true;
+}
+function saveNC(){
+  if (!validate(false)) return;
+  var rec = data().filter(function(x){ return x.num === val('num'); })[0];
+  var entry = {
+    id: nextNC(),
+    num: val('num'),
+    poste: rec ? rec.poste : '',
+    type: val('type'),
+    classe: $('.adem9-pill[aria-checked="true"]').getAttribute('data-cl'),
+    desc: val('desc'),
+    cause: val('cause'),
+    action: val('action'),
+    resp: val('resp'),
+    det: val('det'),
+    echeance: val('ech'),
+    statut: 'Ouverte',
+    createdAt: new Date().toISOString()
+  };
+  var a = lsGet();
+  a.push(entry);
+  if (a.length > 50) a = a.slice(-50);
+  lsSet(a);
+  closeNC();
+  refreshAll();
+  notify('✅ ' + entry.id + ' enregistrée — ' + entry.num + ' (' + entry.classe + ')');
+}
+/* ---------- orchestration ---------- */
+var MO = null, TICK = null, ROUTE = '';
+function refreshAll(){
+  try { buildSelect(); } catch(e){}
+  try { buildBanner(); } catch(e){}
+  try { syncTable(); } catch(e){}
+  try { if (ST9) applyHide(); } catch(e){}
+  try {
+    var r = $('#adem9-registre');
+    if (r && r.classList.contains('on')) fillRegistre();
+  } catch(e){}
+}
+function startObservers(){
+  if (MO) return;
+  MO = new MutationObserver(function(){
+    clearTimeout(MO.__t);
+    MO.__t = setTimeout(function(){
+      if (isDemandes()){
+        try { syncTable(); } catch(e){}
+        try { buildSelect(); } catch(e){}
+        try { buildBanner(); } catch(e){}
+      }
+    }, 120);
+  });
+  MO.observe(D.body, { childList: true, subtree: true });
+  TICK = setInterval(function(){
+    var onRoute = isDemandes();
+    if (onRoute !== (ROUTE === 'd')){
+      ROUTE = onRoute ? 'd' : '';
+      if (!onRoute){
+        var bn = $('#adem9-banner-alert'); if (bn) bn.remove();
+        closeRegistre();
+        closeNC(true);
+      }
+    }
+    if (onRoute) refreshAll();
+  }, 1600);
+}
+
+/* ---------- API publique ---------- */
+window.__ADEM_V9__ = {
+  version: '9.0',
+  open: function(num){ openNC(num); },
+  close: function(){ closeNC(); },
+  openRegistre: openRegistre,
+  closeRegistre: closeRegistre,
+  _isOpen: function(){ return !!$('#adem9-overlay'); },
+  _register: function(){ return lsGet(); },
+  _counts: counts,
+  _delai: delai,
+  _cls: cls,
+  _setFilter: function(v){
+    ST9 = v || '';
+    var sel = $('#adem9-fdelai');
+    if (sel){ sel.value = ST9; sel.classList.toggle('adem2-on', !!ST9); }
+    applyHide();
+    if (!ST9) restoreCounters();
+  },
+  _refresh: refreshAll,
+  _resetTest: function(){ lsSet([]); ST9 = ''; }
+};
+
+/* ---------- boot ---------- */
+function boot(){
+  if (!isDemandes()) return;
+  ensureCSS();
+  buildSelect();
+  buildBanner();
+  syncTable();
+  applyHide();
+  startObservers();
+  /* Réinitialiser (V2) — programmatique ET clic — remonte aussi le filtre délai */
+  var vv = v2();
+  if (vv && typeof vv.resetAll === 'function' && !vv.__adem9Wrapped){
+    vv.__adem9Wrapped = true;
+    var origReset = vv.resetAll.bind(vv);
+    vv.resetAll = function(){
+      ST9 = '';
+      var sel = $('#adem9-fdelai');
+      if (sel){ sel.value = ''; sel.classList.remove('adem2-on'); }
+      origReset();
+      applyHide();
+    };
+  }
+}
+wireFilterEvents();
+if (D.readyState === 'loading') D.addEventListener('DOMContentLoaded', boot);
+else boot();
+setTimeout(function(){ if (isDemandes()) refreshAll(); }, 2500);
+console.log('[ADEM_V9] Étape 4 prête — délais 30/45 j, bannière ISO, registre des non-conformités');
+})();
+</script>
+<!-- ADEM_V9_ETAPE4 END -->
+<!-- ADEM_V10_SIDEBAR BEGIN -->
+<script>
+/* ADEM_V10 — Correctif sidebar : chevauchement du sélecteur « Autres Domaines » (#admina-cdn)
+ * CAUSE (script inline tiers de index.html) : #admina-cdn est appendu dans .MuiDrawer-paper
+ * avec position:sticky;bottom:0 et fond TRANSLUCIDE rgba(0,0,0,0.25). Or le paper est
+ * LUI-MÊME le conteneur scrollable (contenu ~1800px > viewport) : l'élément sticky se
+ * plaque en bas de l'écran PAR-DESSUS les derniers items du menu (Types de Contrats,
+ * Départements, Planning Entretiens, Grille Évaluation…) → texte en double illisible et
+ * liens inaccessibles. Constaté sur toutes les routes (D1, D2, D3), même sans modules ADEM.
+ *
+ * CORRECTIF 100% RUNTIME — aucun octet des scripts tiers modifié, aucun nœud React déplacé :
+ *  1. #admina-cdn (élément vanilla du tiers, NON géré par React) passe en position:fixed
+ *     bottom:0,left:0, largeur calée sur le paper → toujours visible, ne quitte jamais l'écran
+ *  2. padding-bottom sur le paper = hauteur du sélecteur → la navigation peut défiler
+ *     AU-DESSUS de l'overlay : AUCUN item jamais recouvert, tout est cliquable
+ *  3. Fond rendu OPAQUE en compositant leur voile noir 25% sur le fond réel du paper
+ *     (rendu visuel identique à leur intention, sans transparence du texte sous-jacent)
+ *  4. Suivi ResizeObserver (largeur/hauteur paper + cdn) + MutationObserver/ré-application
+ *     au re-mont React du drawer (SPA, changement de route, drawer temporaire mobile)
+ *  5. Cible UNIQUEMENT le paper contenant directement #admina-cdn — jamais les autres
+ *     drawers (registre NC V9, drawer détail natif). Masqué automatiquement avec le drawer
+ *     (enfant du paper) → compatible V7 ≤820px (sidebar dockée masquée).
+ * S'applique à toutes les routes (Domaines 1/2/3) — zéro impact métier.
+ */
+(function(){
+'use strict';
+if (window.__ADEM_V10__) return;
+var D = document;
+
+var done = new WeakSet();     /* papers déjà instrumentés */
+var ro = null;
+var mo = null;
+var timer = null;
+
+function ensureCSS(){
+  if (D.getElementById('adem10-style')) return;
+  var st = D.createElement('style');
+  st.id = 'adem10-style';
+  st.textContent =
+    /* Overlay épinglé : remplace leur sticky (qui chevauchait la nav). !important car le
+     * tiers définit position:sticky et une @media ≤600 position:static sur #admina-cdn. */
+    '#admina-cdn{position:fixed!important;top:auto!important;bottom:0!important;left:0!important;right:auto!important;' +
+    'z-index:1150!important;margin:0!important;border-radius:0!important;box-shadow:0 -6px 18px rgba(0,0,0,.22)!important;}';
+  D.head.appendChild(st);
+}
+
+/* Fond réel du paper (alpha composé si nécessaire) puis voile noir 25% = leur design, en opaque */
+function opaqueBg(paper){
+  function rgbOf(s){
+    var m = /rgba?\(\s*([\d.]+)[,\s]+([\d.]+)[,\s]+([\d.]+)(?:[,\s/]+([\d.]+))?/.exec(s || '');
+    return m ? {r:+m[1], g:+m[2], b:+m[3], a:m[4]===undefined?1:+m[4]} : null;
+  }
+  var c = rgbOf(getComputedStyle(paper).backgroundColor);
+  if (!c) return null;
+  if (c.a < 1){
+    var b = rgbOf(getComputedStyle(D.body).backgroundColor) || {r:255,g:255,b:255};
+    c = {r:Math.round(c.r*c.a + b.r*(1-c.a)),
+         g:Math.round(c.g*c.a + b.g*(1-c.a)),
+         b:Math.round(c.b*c.a + b.b*(1-c.a)), a:1};
+  }
+  var k = 0.25; /* leur rgba(0,0,0,0.25) */
+  return 'rgb(' + Math.round(c.r*(1-k)) + ',' + Math.round(c.g*(1-k)) + ',' + Math.round(c.b*(1-k)) + ')';
+}
+
+function apply(paper, cdn){
+  try{
+    var rect = paper.getBoundingClientRect();
+    if (rect.width > 0) cdn.style.width = rect.width + 'px';
+    var bg = opaqueBg(paper);
+    if (bg) cdn.style.backgroundColor = bg;
+    var h = cdn.offsetHeight;
+    if (h > 0){
+      /* Deux géométries selon le type de drawer :
+       * - DOCKÉ (transform:none) : on RÉDUIT la hauteur du paper de h px → sa zone
+       *   scrollable s'arrête exactement au-dessus de l'overlay (fixe, ancré viewport
+       *   car paper non transformé) → AUCUN item jamais recouvert, à aucun scroll.
+       *   (l'overlay fixed échappe au clipping overflow:auto du paper : son containing
+       *   block est le viewport, pas le paper)
+       * - TEMPORAIRE (paper transformé = containing block de l'overlay) : l'overlay ne
+       *   peut pas sortir du paper (il serait clippé) → mode barre bas standard :
+       *   padding-bottom = h sur le paper, contenu défilant au-dessus de l'overlay. */
+      var transformed = false;
+      try{ transformed = getComputedStyle(paper).transform !== 'none'; }catch(e){}
+      if (!transformed){
+        var target = Math.max(120, window.innerHeight - h) + 'px';
+        if (paper.style.height !== target){
+          paper.style.height = target;
+        }
+        if (paper.style.paddingBottom) paper.style.paddingBottom = '';
+      } else {
+        if (paper.style.height) paper.style.height = '';
+        var pad = h + 'px';
+        if (paper.style.paddingBottom !== pad) paper.style.paddingBottom = pad;
+      }
+    }
+    /* leur bord haut doit rester visible sur l'overlay */
+    cdn.style.borderTop = '1px solid rgba(255,255,255,0.12)';
+  }catch(e){}
+}
+
+function fix(){
+  var cdn = D.getElementById('admina-cdn');
+  if (!cdn || !cdn.isConnected) return;
+  var paper = cdn.parentElement;
+  if (!paper || !paper.classList || !paper.classList.contains('MuiDrawer-paper')) return;
+  ensureCSS();
+  if (!done.has(paper)){
+    done.add(paper);
+    try{
+      if (!ro){
+        ro = new ResizeObserver(function(){ schedule(); });
+      }
+      ro.observe(paper);
+      ro.observe(cdn);
+    }catch(e){}
+  }
+  apply(paper, cdn);
+}
+
+var pend = null;
+function schedule(){
+  if (pend) return;
+  pend = setTimeout(function(){ pend = null; fix(); }, 120);
+}
+
+function start(){
+  fix();
+  /* Ré-application au re-mont React du drawer (routes SPA, drawer temporaire mobile) */
+  try{
+    mo = new MutationObserver(schedule);
+    mo.observe(D.documentElement, {childList:true, subtree:true});
+  }catch(e){}
+  /* Filet de sécurité léger */
+  timer = setInterval(fix, 1500);
+  window.addEventListener('resize', schedule, {passive:true});
+}
+
+if (D.readyState === 'loading') D.addEventListener('DOMContentLoaded', start);
+else start();
+
+window.__ADEM_V10__ = {
+  version: '1.0.0',
+  fix: fix,
+  _applied: function(){
+    var cdn = D.getElementById('admina-cdn');
+    if (!cdn) return null;
+    var paper = cdn.parentElement;
+    return {paperPad: paper ? paper.style.paddingBottom : null,
+            width: cdn.style.width, bg: cdn.style.backgroundColor,
+            pos: getComputedStyle(cdn).position};
+  }
+};
+})();
+</script>
+<!-- ADEM_V10_SIDEBAR END -->
+<script>
+/* ADEM_V11 — URLs dédiées par domaine + entrée « Tous les domaines »
+ * Contexte : la racine admina-rh-bd0.pages.dev devient la page d'accueil (hub)
+ * présentant les 31 domaines. Chaque domaine dispose désormais d'une URL dédiée :
+ *   - Domaine 1 : /Domaine1_Recrutement_Candidats
+ *   - Domaine 2 : /Domaine2_Gestion_Administrative_Personnel
+ *   - Domaine 3 : /Domaine3_Paie_Remuneration_Avantages/ (inchangé, déjà dédiée)
+ * Ce bloc réécrit les liens du sélecteur multi-domaines tiers (#admina-cdn)
+ * AU NIVEAU DOM uniquement (0 octet du script tiers n'est modifié) et ajoute
+ * une entrée « Tous les domaines » renvoyant vers la page d'accueil.
+ * Réapplication : MutationObserver + interval — le script tiers peut
+ * reconstruire #admina-cdn après un changement de route SPA.
+ * Cohabitation : V10 (géométrie) mesure #admina-cdn dynamiquement et intègre
+ * automatiquement la hauteur de l'entrée ajoutée.
+ * API : window.__ADEM_V11__ = {version, fix, _applied}
+ */
+(function () {
+  'use strict';
+  if (window.__ADEM_V11__) return;
+  var D = document;
+  var API = window.__ADEM_V11__ = { version: 'V11', fix: 'dedicated-domain-urls', _applied: 0 };
+
+  var MAP = [
+    { label: 'Domaine 1', href: '/Domaine1_Recrutement_Candidats' },
+    { label: 'Domaine 2', href: '/Domaine2_Gestion_Administrative_Personnel' },
+    { label: 'Domaine 3', href: '/Domaine3_Paie_Remuneration_Avantages/' }
+  ];
+
+  var HOME_ICON =
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" ' +
+    'stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>' +
+    '<polyline points="9 22 9 12 15 12 15 22"/></svg>';
+
+  function labelOf(a) {
+    var l = a.querySelector('.cdn-label');
+    return l ? l.textContent : '';
+  }
+
+  function ensureHome(cdn) {
+    if (D.getElementById('adem11-home')) return false;
+    var home = D.createElement('a');
+    home.id = 'adem11-home';
+    home.className = 'cdn-item';
+    home.href = '/';
+    home.title = 'Accueil — tous les domaines Admina-RH';
+    var icon = D.createElement('span');
+    icon.className = 'cdn-icon';
+    icon.innerHTML = HOME_ICON;
+    var text = D.createElement('span');
+    text.className = 'cdn-text';
+    var lab = D.createElement('span');
+    lab.className = 'cdn-label';
+    lab.textContent = 'Tous les domaines';
+    var desc = D.createElement('span');
+    desc.className = 'cdn-desc';
+    desc.textContent = 'Accueil Admina-RH';
+    text.appendChild(lab);
+    text.appendChild(desc);
+    home.appendChild(icon);
+    home.appendChild(text);
+    cdn.insertBefore(home, cdn.firstChild);
+    return true;
+  }
+
+  function fix() {
+    var cdn = D.getElementById('admina-cdn');
+    if (!cdn) return;
+    var changed = false;
+    var links = cdn.querySelectorAll('a.cdn-item');
+    for (var i = 0; i < links.length; i++) {
+      var a = links[i];
+      var t = labelOf(a);
+      for (var j = 0; j < MAP.length; j++) {
+        if (t.indexOf(MAP[j].label) === 0 && a.getAttribute('href') !== MAP[j].href) {
+          a.setAttribute('href', MAP[j].href);
+          a.removeAttribute('target');
+          a.removeAttribute('rel');
+          changed = true;
+        }
+      }
+    }
+    if (ensureHome(cdn)) changed = true;
+    if (changed) API._applied++;
+  }
+
+  var mo = new MutationObserver(fix);
+  mo.observe(D.documentElement, { childList: true, subtree: true });
+  setInterval(fix, 1500);
+  fix();
+})();
+
+</script>
+<script>
+/* ADEM V11c — deep-links : restaure l'URL d'origine transmise via #adem_r=,
+ * avant le montage du routeur React (URL finale propre, sans fragment). */
+(function () {
+  try {
+    var m = location.hash.match(/#adem_r=(.+)$/);
+    if (m) {
+      var target = decodeURIComponent(m[1]);
+      if (target && target.charAt(0) === '/' && target !== location.pathname) {
+        history.replaceState(null, '', target);
+      }
+    }
+  } catch (e) {}
+})();
+</script>
+</body></html>
