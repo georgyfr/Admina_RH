@@ -1,0 +1,790 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "date": "2026-09-02",
+    "auteur": "Task 3-b - Architecte technique senior (SaaS/ERP RH multi-tenant)",
+    "domaine": "Admina_RH Domaine 2 - Gestion Administrative du Personnel",
+    "source": [
+      "Interconnexion_Bilaterale_D1_D2_Recrutement_Administration_Personnel.pdf (6 pages)",
+      "PROMPT_DEV_Domaine2_Complet_V2.md (1669 lignes) - §9 (matrice VLOOKUP->JOIN), §13 (formules), §15 (IC D1-D2), §17.6 (triggers)",
+      "migration_6_tables_manquantes_D02.sql (7 enums + 6 tables)",
+      "data.js (mock Domaine 2 - 20 employes, 50 nomenclatures)",
+      "Manuel_Procedures_Domaine2_Gestion_Administrative.pdf (ISO 30401:2018 + ISO 9001:2015)"
+    ],
+    "normes": ["ISO 10667:2011", "ISO 30401:2018", "ISO 22400-3:2022", "ISO 9001:2015"],
+    "convention_nom_id": "IC-<CATEGORIE>-<NN> | IC-D1-D2-NN | IC-MS-NN (Master-Satellite) | IC-D2-NN (D2 interne)",
+    "cible_technique": "Supabase (PostgreSQL 15 + RLS + multi-tenant via tenant_id) + Next.js 15 App Router + Server Actions",
+    "table_master": "admina_rh.employees (feuille 2-Fiche Employe = source unique de verite)"
+  },
+  "categories": [
+    "D1-D2",
+    "Master-Satellite D2",
+    "D2 interne"
+  ],
+  "interconnexions": [
+    {
+      "id": "IC-D1-D2-01",
+      "name": "Integration Employe -> Fiche Employe",
+      "category": "D1-D2",
+      "source": {
+        "domain": "D1",
+        "feuille": "11-Integration Employe",
+        "table": "d01_integrations",
+        "trigger": "decision_embauche confirmee"
+      },
+      "target": {
+        "domain": "D2",
+        "feuille": "2-Fiche Employe",
+        "table": "admina_rh.employees",
+        "action": "INSERT"
+      },
+      "donnees_echangees": ["nom", "prenom", "date_naissance", "lieu_naissance", "genre", "nationalite", "situation_familiale", "telephone", "email", "adresse", "departement", "poste", "type_contrat", "categorie", "regime_travail", "date_embauche", "lieu_travail", "statut"],
+      "type": "D1 -> D2 (+ remontees qualite D2 -> D1)",
+      "implementation_sql": "INSERT INTO admina_rh.employees (tenant_id, matricule, civilite, nom, prenom, date_naissance, lieu_naissance, genre, nationalite, situation_familiale, telephone, email, adresse, departement, poste, type_contrat, categorie, regime_travail, date_embauche, salaire_brut, lieu_travail, statut) SELECT $tenant_id, next_matricule(), i.civilite, i.nom, i.prenom, i.date_naissance, i.lieu_naissance, i.genre, i.nationalite, i.situation_familiale, i.telephone, i.email, i.adresse, i.departement, i.poste, i.type_contrat, i.categorie, i.regime_travail, i.date_embauche, i.salaire_negocie, i.lieu_travail, 'Essai' FROM admina_rh.d01_integrations i WHERE i.id = $integration_id AND i.decision_embauche = 'confirmee' RETURNING id, matricule;",
+      "implementation_frontend": "Au clic 'Confirmer embauche' dans D1 (Feuille Integration Employe), appel Server Action confirmIntegrationEmployee(integrationId) qui cree la fiche employees + redirige vers /domaine2_Gestion_Administrative_Personnel/employes/[id] avec pre-remplissage des onglets Contrat, Documents, Bancaires. Un toast de confirmation affiche le nouveau matricule genere.",
+      "diagram": "flowchart LR\n  D1[\"D1 11-Integration Employe\\nd01_integrations\"] -->|decision_embauche=confirmee| SA[Server Action\\nconfirmIntegrationEmployee]\n  SA -->|INSERT| D2[\"D2 2-Fiche Employe\\nemployees\"]\n  D2 -->|webhook qualite| D1\n  D2 -->|return id+matricule| UI[\"Frontend redirect\\n/domaine2/.../employes/[id]\"]",
+      "source_doc": "Interconnexion_Bilaterale_D1_D2.pdf p.2 + V2 prompt §15.2 + §15.5 (9 documents justificatifs)"
+    },
+    {
+      "id": "IC-D1-D2-02",
+      "name": "Suivi Contrats (D1) -> Contrats Travail (D2)",
+      "category": "D1-D2",
+      "source": {
+        "domain": "D1",
+        "feuille": "6-Suivi Contrats",
+        "table": "d01_contracts_negotiation",
+        "trigger": "signature_offre par candidat"
+      },
+      "target": {
+        "domain": "D2",
+        "feuille": "3-Contrats Travail",
+        "table": "admina_rh.d02_contracts",
+        "action": "INSERT"
+      },
+      "donnees_echangees": ["employee_id", "type_contrat (CDI/CDD/Stage/Apprentissage)", "date_debut", "date_fin (si CDD)", "duree_mois", "periode_essai_jours", "salaire_base", "classification", "avantages_specifiques", "clauses_particulieres", "lieu_travail", "regime_travail"],
+      "type": "D1 -> D2 (+ remontees D2 -> D1 en cas d'avenant / renegociation)",
+      "implementation_sql": "INSERT INTO admina_rh.d02_contracts (tenant_id, employee_id, contract_number, type_contrat, date_debut, date_fin, salaire_brut, regime_travail, lieu_travail, statut) SELECT $tenant_id, e.id, gen_contract_number(), n.type_contrat, n.date_debut, n.date_fin, n.salaire_negocie, n.regime_travail, n.lieu_travail, 'En vigueur' FROM admina_rh.d01_contracts_negotiation n JOIN admina_rh.employees e ON e.matricule = n.matricule_candidat WHERE n.id = $negotiation_id AND n.statut_signature = 'signe' RETURNING id, contract_number;",
+      "implementation_frontend": "Sur D1 - 6-Suivi Contrats, bouton 'Formaliser contrat D2' declenche la Server Action createContractFromNegotiation(negId). Le contrat est cree dans d02_contracts et un lien direct ouvre le detail dans D2 - 3-Contrats Travail. En cas de renegociation ulterieure (avenant), D2 notifie D1 via webhook pour maj sync.",
+      "diagram": "flowchart LR\n  D1C[\"D1 6-Suivi Contrats\\nd01_contracts_negotiation\"] -->|signature_offre| SA[Server Action\\ncreateContractFromNegotiation]\n  SA -->|INSERT| D2C[\"D2 3-Contrats Travail\\nd02_contracts\"]\n  D2C -->|avenant/renego\\nwebhook| D1C",
+      "source_doc": "Interconnexion_Bilaterale_D1_D2.pdf p.3 + V2 prompt §15.2"
+    },
+    {
+      "id": "IC-D1-D2-03",
+      "name": "Periode Essai (D1) -> Avenants Contrat (D2)",
+      "category": "D1-D2",
+      "source": {
+        "domain": "D1",
+        "feuille": "13-Periode Essai",
+        "table": "d01_trial_periods",
+        "trigger": "fin periode essai avec scenario 'modification' (confirmation sans modif, rupture, ou modification des conditions initiales)"
+      },
+      "target": {
+        "domain": "D2",
+        "feuille": "4-Avenants Contrat",
+        "table": "admina_rh.d02_contract_amendments",
+        "action": "INSERT (si scenario=modification)"
+      },
+      "donnees_echangees": ["employee_id", "contract_id", "decision (confirmee/rupture/modification)", "nouveau_poste", "nouvelle_classification", "nouveau_salaire", "date_effet_avenant", "motif_modification"],
+      "type": "D1 -> D2 (+ remontees D2 -> D1 sur tracabilite juridique)",
+      "implementation_sql": "INSERT INTO admina_rh.d02_contract_amendments (tenant_id, contract_id, employee_id, amendment_number, type_avenant, date_effet, ancienne_valeur, nouvelle_valeur, motif, statut) SELECT $tenant_id, c.id, e.id, gen_amendment_number(c.id), t.type_modification, t.date_effet, t.ancienne_valeur, t.nouvelle_valeur, t.motif, 'valide' FROM admina_rh.d01_trial_periods t JOIN admina_rh.employees e ON e.id = t.employee_id JOIN admina_rh.d02_contracts c ON c.employee_id = e.id AND c.statut = 'En vigueur' WHERE t.id = $trial_id AND t.decision_fin_essai = 'modification' RETURNING id, amendment_number;",
+      "implementation_frontend": "Sur D1 - 13-Periode Essai, au moment de clore la periode avec decision 'modification des conditions initiales', la Server Action generateAmendmentFromTrial(trialId) cree automatiquement un avenant dans D2 - 4-Avenants Contrat et redirige le gestionnaire RH vers la fiche d'avenant pre-remplie pour validation finale.",
+      "diagram": "flowchart LR\n  D1T[\"D1 13-Periode Essai\\nd01_trial_periods\"] -->|decision=modification| SA[Server Action\\ngenerateAmendmentFromTrial]\n  SA -->|INSERT| D2A[\"D2 4-Avenants Contrat\\nd02_contract_amendments\"]\n  D2A -->|webhook tracabilite| D1T",
+      "source_doc": "Interconnexion_Bilaterale_D1_D2.pdf p.3 + V2 prompt §15.2"
+    },
+    {
+      "id": "IC-D1-D2-04",
+      "name": "Checklist Integration (D1) <-> Suivi Documents (D2) - bidirectionnel",
+      "category": "D1-D2",
+      "source": {
+        "domain": "D1",
+        "feuille": "12-Checklist Integration",
+        "table": "d01_integration_checklists",
+        "trigger": "creation fiche employees + reception pieces justificatives"
+      },
+      "target": {
+        "domain": "D2",
+        "feuille": "5-Suivi Documents",
+        "table": "admina_rh.d02_employee_documents",
+        "action": "INSERT + UPDATE reciproque"
+      },
+      "donnees_echangees": ["employee_id", "type_document (CNI, passeport, attestation CNPS, casier judiciaire, certificat medical, diplomes, RIB bancaire, photos, certificat domicile, contrat precedent)", "numero_document", "date_emission", "date_expiration", "statut (Valide/A_renouveler/Expire)", "lieu_depot", "notes"],
+      "type": "D1 <-> D2 (bidirectionnel, synchrone)",
+      "implementation_sql": "-- D1 -> D2 : a la creation d'un checklist item valide\nINSERT INTO admina_rh.d02_employee_documents (tenant_id, employee_id, document_number, type_document, numero_document, date_emission, date_expiration, statut, lieu_depot, notes)\nSELECT $tenant_id, i.employee_id, gen_doc_number(), i.type_document, i.numero_piece, i.date_emission, i.date_expiration, 'Valide', i.lieu_depot, i.notes\nFROM admina_rh.d01_integration_checklists i\nWHERE i.id = $checklist_id AND i.statut_piece = 'recue'\nON CONFLICT (employee_id, type_document) DO UPDATE SET date_expiration = EXCLUDED.date_expiration, updated_at = NOW();\n\n-- D2 -> D1 : remontee des anomalies documents manquants\nINSERT INTO admina_rh.d01_checklist_alerts (tenant_id, integration_id, employee_id, type_alerte, severite)\nSELECT $tenant_id, i.integration_id, e.id, 'piece_manquante', 'haute'\nFROM admina_rh.employees e\nJOIN admina_rh.d01_integrations i ON i.employee_id = e.id\nWHERE NOT EXISTS (SELECT 1 FROM admina_rh.d02_employee_documents d WHERE d.employee_id = e.id AND d.statut = 'Valide' AND d.type_document = 'CNI');",
+      "implementation_frontend": "Sur D1 - 12-Checklist Integration, le cochage d'une ligne 'piece recue' declenche syncTime auto vers D2 - 5-Suivi Documents. Reciproquement, dans D2 - 5-Suivi Documents, une alerte 'document expire' remonte en temps reel sur D1 - 12-Checklist Integration pour les employees recemment integres (< 3 mois) afin d'alerter le service recrutement d'un probleme de qualite en amont.",
+      "diagram": "flowchart LR\n  D1CK[\"D1 12-Checklist Integration\\nd01_integration_checklists\"] <-->|pieces justificatives| D2D[\"D2 5-Suivi Documents\\nd02_employee_documents\"]\n  D2D -->|anomalie piece manquante| D1CK",
+      "source_doc": "Interconnexion_Bilaterale_D1_D2.pdf p.3-4 + V2 prompt §15.2 + §15.5 (9 documents justificatifs)"
+    },
+    {
+      "id": "IC-D1-D2-05",
+      "name": "Suivi Post-Embauche (D1) -> Tableau de Bord (D2)",
+      "category": "D1-D2",
+      "source": {
+        "domain": "D1",
+        "feuille": "17-Suivi Post-Embauche",
+        "table": "d01_post_hiring_followup",
+        "trigger": "aggregation mensuelle des indicateurs qualite onboarding"
+      },
+      "target": {
+        "domain": "D2",
+        "feuille": "1-Tableau de Bord",
+        "table": "admina_rh.d02_kpi_snapshot",
+        "action": "UPSERT"
+      },
+      "donnees_echangees": ["taux_retention_3_mois", "taux_retention_6_mois", "turnover_precoce_essai", "delai_moyen_completude_dossier_jours", "taux_satisfaction_nouveaux_embauches_pct", "ecarts_engagements_realite_count", "alertes_operationnelles"],
+      "type": "D1 -> D2 (+ boucle de retroaction D2 -> D1 pour amelioration continue)",
+      "implementation_sql": "INSERT INTO admina_rh.d02_kpi_snapshot (tenant_id, periode, kpi_code, valeur, categorie, source_domain)\nSELECT $tenant_id, $periode_mois, kpi_code, valeur, 'qualite_onboarding', 'D1'\nFROM (VALUES\n  ('taux_retention_3_mois', (SELECT COUNT(*) FILTER (WHERE date_embauche >= NOW() - INTERVAL '3 months' AND statut='Actif') * 100.0 / NULLIF(COUNT(*) FILTER (WHERE date_embauche >= NOW() - INTERVAL '3 months'),0) FROM admina_rh.employees)),\n  ('taux_retention_6_mois', (SELECT COUNT(*) FILTER (WHERE date_embauche >= NOW() - INTERVAL '6 months' AND statut='Actif') * 100.0 / NULLIF(COUNT(*) FILTER (WHERE date_embauche >= NOW() - INTERVAL '6 months'),0) FROM admina_rh.employees)),\n  ('turnover_precoce_essai', (SELECT COUNT(*) FROM admina_rh.employees WHERE statut='Inactif' AND date_embauche >= NOW() - INTERVAL '6 months'))\n) AS t(kpi_code, valeur)\nON CONFLICT (tenant_id, periode, kpi_code) DO UPDATE SET valeur = EXCLUDED.valeur, updated_at = NOW();",
+      "implementation_frontend": "Sur D2 - 1-Tableau de Bord, nouvelle carte 'Qualite Onboarding D1' qui affiche les 5 KPIs de suivi post-embauche. Sur D1 - 17-Suivi Post-Embauche, un panneau 'Remontees qualite D2' affiche les anomalies detectees par le service administratif (documents manquants, erreurs saisie, incoherences contractuelles) pour ajuster le processus de recrutement en amont.",
+      "diagram": "flowchart LR\n  D1P[\"D1 17-Suivi Post-Embauche\\nd01_post_hiring_followup\"] -->|KPIs qualite mensuels| D2TB[\"D2 1-Tableau de Bord\\nd02_kpi_snapshot\"]\n  D2TB -->|anomalies / Retex\\nboucle retroaction| D1P",
+      "source_doc": "Interconnexion_Bilaterale_D1_D2.pdf p.4 + V2 prompt §15.2 + §15.6"
+    },
+    {
+      "id": "IC-MS-01",
+      "name": "Fiche Employe -> Contrats Travail (VLOOKUP Matricule -> Nom)",
+      "category": "Master-Satellite D2",
+      "source": {
+        "domain": "D2",
+        "feuille": "2-Fiche Employe",
+        "table": "admina_rh.employees",
+        "col_source": "B (matricule)"
+      },
+      "target": {
+        "domain": "D2",
+        "feuille": "3-Contrats Travail",
+        "table": "admina_rh.d02_contracts",
+        "col_cible": "D (nom employe)",
+        "cardinalite": "1:N"
+      },
+      "donnees_echangees": ["nom", "prenom", "departement", "poste", "date_embauche"],
+      "type": "Master-Satellite (LEFT JOIN + COALESCE remplace IFERROR(VLOOKUP))",
+      "implementation_sql": "SELECT c.*, e.nom, e.prenom, e.departement, e.poste, e.date_embauche\nFROM admina_rh.d02_contracts c\nLEFT JOIN admina_rh.employees e ON c.employee_id = e.id AND c.tenant_id = e.tenant_id\nWHERE c.tenant_id = $tenant_id\nORDER BY c.date_debut DESC;",
+      "implementation_frontend": "Dans D2 - 3-Contrats Travail, la colonne 'Employe' est alimentee automatiquement par le composant EmployeePicker (recherche par matricule/nom) qui declenche un JOIN server-side. Le nom n'est jamais saisi manuellement (integrite referentielle employee_id FK).",
+      "diagram": "flowchart LR\n  M[\"Master 2-Fiche Employe\\nemployees (matricule PK)\"] -.FK employee_id.-> S1[\"Satellite 3-Contrats Travail\\nd02_contracts\\ncardinalite 1:N\"]",
+      "source_doc": "V2 prompt §9.2 (formule type Excel) + §9.3 matrice ligne 1"
+    },
+    {
+      "id": "IC-MS-02",
+      "name": "Fiche Employe -> Avenants Contrat",
+      "category": "Master-Satellite D2",
+      "source": {
+        "domain": "D2",
+        "feuille": "2-Fiche Employe",
+        "table": "admina_rh.employees",
+        "col_source": "B (matricule)"
+      },
+      "target": {
+        "domain": "D2",
+        "feuille": "4-Avenants Contrat",
+        "table": "admina_rh.d02_contract_amendments",
+        "col_cible": "E (nom employe)",
+        "cardinalite": "1:N"
+      },
+      "donnees_echangees": ["nom", "prenom", "poste actuel"],
+      "type": "Master-Satellite (LEFT JOIN)",
+      "implementation_sql": "SELECT a.*, e.nom, e.prenom, e.poste\nFROM admina_rh.d02_contract_amendments a\nLEFT JOIN admina_rh.employees e ON a.employee_id = e.id AND a.tenant_id = e.tenant_id\nWHERE a.tenant_id = $tenant_id\nORDER BY a.date_effet DESC;",
+      "implementation_frontend": "Dans D2 - 4-Avenants Contrat, la colonne Employe est remplie via JOIN (jamais de saisie manuelle). A la selection d'un employee, le contrat actif en vigueur est auto-rempli.",
+      "diagram": "flowchart LR\n  M[\"Master employees\"] -.FK employee_id.-> S2[\"Satellite 4-Avenants Contrat\\nd02_contract_amendments\\n1:N\"]",
+      "source_doc": "V2 prompt §9.3 matrice ligne 2"
+    },
+    {
+      "id": "IC-MS-03",
+      "name": "Fiche Employe -> Suivi Documents",
+      "category": "Master-Satellite D2",
+      "source": {
+        "domain": "D2",
+        "feuille": "2-Fiche Employe",
+        "table": "admina_rh.employees",
+        "col_source": "B (matricule)"
+      },
+      "target": {
+        "domain": "D2",
+        "feuille": "5-Suivi Documents",
+        "table": "admina_rh.d02_employee_documents",
+        "col_cible": "D (nom employe)",
+        "cardinalite": "1:N"
+      },
+      "donnees_echangees": ["nom", "prenom", "departement"],
+      "type": "Master-Satellite (LEFT JOIN)",
+      "implementation_sql": "SELECT d.*, e.nom, e.prenom, e.departement,\n       CASE WHEN d.date_expiration IS NULL THEN NULL\n            WHEN d.date_expiration < NOW() THEN 'Expire'\n            WHEN d.date_expiration <= NOW() + INTERVAL '30 days' THEN 'A renouveler'\n            ELSE 'Valide' END AS statut_calcule\nFROM admina_rh.d02_employee_documents d\nLEFT JOIN admina_rh.employees e ON d.employee_id = e.id AND d.tenant_id = e.tenant_id\nWHERE d.tenant_id = $tenant_id\nORDER BY d.date_expiration NULLS LAST;",
+      "implementation_frontend": "Dans D2 - 5-Suivi Documents, la colonne Employe provient du JOIN. Le statut (Valide/A renouveler/Expire) est calcule dynamiquement par trigger SQL avant INSERT/UPDATE (cf. IC-D2-02).",
+      "diagram": "flowchart LR\n  M[\"Master employees\"] -.FK employee_id.-> S3[\"Satellite 5-Suivi Documents\\nd02_employee_documents\\n1:N\"]",
+      "source_doc": "V2 prompt §9.3 matrice ligne 3 + §13.9 (bascule statut auto)"
+    },
+    {
+      "id": "IC-MS-04",
+      "name": "Fiche Employe -> Donnees Bancaires",
+      "category": "Master-Satellite D2",
+      "source": {
+        "domain": "D2",
+        "feuille": "2-Fiche Employe",
+        "table": "admina_rh.employees",
+        "col_source": "B (matricule)"
+      },
+      "target": {
+        "domain": "D2",
+        "feuille": "6-Donnees Bancaires",
+        "table": "admina_rh.d02_bank_details",
+        "col_cible": "D (nom employe)",
+        "cardinalite": "1:1 ou 1:N"
+      },
+      "donnees_echangees": ["nom", "prenom"],
+      "type": "Master-Satellite (LEFT JOIN + contrainte UNIQUE sur employee_id pour RIB principal)",
+      "implementation_sql": "SELECT b.*, e.nom, e.prenom\nFROM admina_rh.d02_bank_details b\nLEFT JOIN admina_rh.employees e ON b.employee_id = e.id AND b.tenant_id = e.tenant_id\nWHERE b.tenant_id = $tenant_id\nORDER BY b.statut = 'Actif' DESC, b.created_at DESC;",
+      "implementation_frontend": "Dans D2 - 6-Donnees Bancaires, la liste RIB par employe est alimentee par JOIN. Au maximum 1 RIB actif par employe (contrainte applicative).",
+      "diagram": "flowchart LR\n  M[\"Master employees\"] -.FK employee_id.-> S4[\"Satellite 6-Donnees Bancaires\\nd02_bank_details\\n1:1 ou 1:N\"]",
+      "source_doc": "V2 prompt §9.3 matrice ligne 4"
+    },
+    {
+      "id": "IC-MS-05",
+      "name": "Fiche Employe -> Mutuelle Prevoyance",
+      "category": "Master-Satellite D2",
+      "source": {
+        "domain": "D2",
+        "feuille": "2-Fiche Employe",
+        "table": "admina_rh.employees",
+        "col_source": "B (matricule)"
+      },
+      "target": {
+        "domain": "D2",
+        "feuille": "7-Mutuelle Prevoyance",
+        "table": "admina_rh.d02_mutual_insurance",
+        "col_cible": "D (nom employe)",
+        "cardinalite": "1:1"
+      },
+      "donnees_echangees": ["nom", "prenom", "situation_familiale (pour couverture Familiale)"],
+      "type": "Master-Satellite (LEFT JOIN, 1:1 strict)",
+      "implementation_sql": "SELECT m.*, e.nom, e.prenom, e.situation_familiale\nFROM admina_rh.d02_mutual_insurance m\nLEFT JOIN admina_rh.employees e ON m.employee_id = e.id AND m.tenant_id = e.tenant_id\nWHERE m.tenant_id = $tenant_id AND m.statut_adhesion = 'Active';",
+      "implementation_frontend": "Dans D2 - 7-Mutuelle Prevoyance, le nom employe est auto-rempli via JOIN. Si situation_familiale='Marie(e)' ou couverture='Familiale', le formulaire propose l'ajout des ayants droit.",
+      "diagram": "flowchart LR\n  M[\"Master employees\"] -.FK employee_id.-> S5[\"Satellite 7-Mutuelle Prevoyance\\nd02_mutual_insurance\\n1:1\"]",
+      "source_doc": "V2 prompt §9.3 matrice ligne 5"
+    },
+    {
+      "id": "IC-MS-06",
+      "name": "Fiche Employe -> Conges Annuels",
+      "category": "Master-Satellite D2",
+      "source": {
+        "domain": "D2",
+        "feuille": "2-Fiche Employe",
+        "table": "admina_rh.employees",
+        "col_source": "B (matricule)"
+      },
+      "target": {
+        "domain": "D2",
+        "feuille": "8-Conges Annuels",
+        "table": "admina_rh.d02_leave_requests",
+        "col_cible": "D (nom employe)",
+        "cardinalite": "1:N"
+      },
+      "donnees_echangees": ["nom", "prenom", "departement", "categorie (impact droit annuel)"],
+      "type": "Master-Satellite (LEFT JOIN)",
+      "implementation_sql": "SELECT lr.*, e.nom, e.prenom, e.departement, e.categorie\nFROM admina_rh.d02_leave_requests lr\nLEFT JOIN admina_rh.employees e ON lr.employee_id = e.id AND lr.tenant_id = e.tenant_id\nWHERE lr.tenant_id = $tenant_id\nORDER BY lr.date_debut DESC;",
+      "implementation_frontend": "Dans D2 - 8-Conges Annuels, le nom employe provient du JOIN. Le dropdown d'EmployeePicker est filtre par tenant et n'affiche que les employes actifs.",
+      "diagram": "flowchart LR\n  M[\"Master employees\"] -.FK employee_id.-> S6[\"Satellite 8-Conges Annuels\\nd02_leave_requests\\n1:N\"]",
+      "source_doc": "V2 prompt §9.3 matrice ligne 6"
+    },
+    {
+      "id": "IC-MS-07",
+      "name": "Fiche Employe -> Absences Maladie",
+      "category": "Master-Satellite D2",
+      "source": {
+        "domain": "D2",
+        "feuille": "2-Fiche Employe",
+        "table": "admina_rh.employees",
+        "col_source": "B (matricule)"
+      },
+      "target": {
+        "domain": "D2",
+        "feuille": "10-Absences Maladie",
+        "table": "admina_rh.d02_absences",
+        "col_cible": "D (nom employe)",
+        "cardinalite": "1:N"
+      },
+      "donnees_echangees": ["nom", "prenom", "departement"],
+      "type": "Master-Satellite (LEFT JOIN)",
+      "implementation_sql": "SELECT ab.*, e.nom, e.prenom, e.departement\nFROM admina_rh.d02_absences ab\nLEFT JOIN admina_rh.employees e ON ab.employee_id = e.id AND ab.tenant_id = e.tenant_id\nWHERE ab.tenant_id = $tenant_id\nORDER BY ab.date_debut DESC;",
+      "implementation_frontend": "Dans D2 - 10-Absences Maladie, le nom employe provient du JOIN. A la validation d'une absence > 3 jours, declenchement auto d'une visite medicale de reprise (cf. IC-D2-08).",
+      "diagram": "flowchart LR\n  M[\"Master employees\"] -.FK employee_id.-> S7[\"Satellite 10-Absences Maladie\\nd02_absences\\n1:N\"]",
+      "source_doc": "V2 prompt §9.3 matrice ligne 7 + §13.10 (declenchement auto visite reprise)"
+    },
+    {
+      "id": "IC-MS-08",
+      "name": "Fiche Employe -> Heures Supplementaires",
+      "category": "Master-Satellite D2",
+      "source": {
+        "domain": "D2",
+        "feuille": "2-Fiche Employe",
+        "table": "admina_rh.employees",
+        "col_source": "B (matricule)"
+      },
+      "target": {
+        "domain": "D2",
+        "feuille": "11-Heures Supplementaires",
+        "table": "admina_rh.d02_overtime_hours",
+        "col_cible": "D (nom employe)",
+        "cardinalite": "1:N"
+      },
+      "donnees_echangees": ["nom", "prenom", "salaire_brut (pour calcul salaire_horaire_base)"],
+      "type": "Master-Satellite (LEFT JOIN)",
+      "implementation_sql": "SELECT ot.*, e.nom, e.prenom, e.salaire_brut,\n       ROUND((e.salaire_brut / 173.33) * ot.heures_supp * (1 + ot.taux_majoration/100.0), 2) AS montant_calcule_auto\nFROM admina_rh.d02_overtime_hours ot\nLEFT JOIN admina_rh.employees e ON ot.employee_id = e.id AND ot.tenant_id = e.tenant_id\nWHERE ot.tenant_id = $tenant_id\nORDER BY ot.semaine DESC, e.nom;",
+      "implementation_frontend": "Dans D2 - 11-Heures Supplementaires, le nom + salaire brut est auto-rempli depuis employees. Le salaire_horaire_base et le montant_calcule sont calcules automatiquement (cf. RC-007 et RC-008).",
+      "diagram": "flowchart LR\n  M[\"Master employees\"] -.FK employee_id.-> S8[\"Satellite 11-Heures Supp\\nd02_overtime_hours\\n1:N\"]",
+      "source_doc": "V2 prompt §9.3 matrice ligne 8 + §13.3 (formules HS)"
+    },
+    {
+      "id": "IC-MS-09",
+      "name": "Fiche Employe -> Pointage Presence",
+      "category": "Master-Satellite D2",
+      "source": {
+        "domain": "D2",
+        "feuille": "2-Fiche Employe",
+        "table": "admina_rh.employees",
+        "col_source": "B (matricule)"
+      },
+      "target": {
+        "domain": "D2",
+        "feuille": "12-Pointage Presence",
+        "table": "admina_rh.d02_attendance_records",
+        "col_cible": "D (nom employe)",
+        "cardinalite": "1:N (quotidien ou hebdo)"
+      },
+      "donnees_echangees": ["nom", "prenom", "departement", "poste"],
+      "type": "Master-Satellite (LEFT JOIN)",
+      "implementation_sql": "SELECT ar.*, e.nom, e.prenom, e.departement, e.poste\nFROM admina_rh.d02_attendance_records ar\nLEFT JOIN admina_rh.employees e ON ar.employee_id = e.id AND ar.tenant_id = e.tenant_id\nWHERE ar.tenant_id = $tenant_id AND ar.semaine = $semaine\nORDER BY e.nom, e.prenom;",
+      "implementation_frontend": "Dans D2 - 12-Pointage Presence, le nom + departement est auto-rempli. La saisie quotidienne (badgeage) alimente l'agregation hebdomadaire, qui alimente ensuite le planning mensuel (cf. IC-D2-04).",
+      "diagram": "flowchart LR\n  M[\"Master employees\"] -.FK employee_id.-> S9[\"Satellite 12-Pointage Presence\\nd02_attendance_records\\n1:N quotidien/hebdo\"]",
+      "source_doc": "V2 prompt §9.3 matrice ligne 9 + §13.2 (formules presence)"
+    },
+    {
+      "id": "IC-MS-10",
+      "name": "Fiche Employe -> Fiches de Paie",
+      "category": "Master-Satellite D2",
+      "source": {
+        "domain": "D2",
+        "feuille": "2-Fiche Employe",
+        "table": "admina_rh.employees",
+        "col_source": "B (matricule)"
+      },
+      "target": {
+        "domain": "D2",
+        "feuille": "14-Fiches de Paie",
+        "table": "admina_rh.d02_pay_slips",
+        "col_cible": "D (nom employe)",
+        "cardinalite": "1:N (mensuel)"
+      },
+      "donnees_echangees": ["nom", "prenom", "salaire_brut", "departement", "mode_paiement", "banque"],
+      "type": "Master-Satellite (LEFT JOIN + JOIN secondaire vers d02_bank_details)",
+      "implementation_sql": "SELECT ps.*, e.nom, e.prenom, e.salaire_brut, e.departement, b.banque, b.numero_compte\nFROM admina_rh.d02_pay_slips ps\nLEFT JOIN admina_rh.employees e ON ps.employee_id = e.id AND ps.tenant_id = e.tenant_id\nLEFT JOIN admina_rh.d02_bank_details b ON b.employee_id = e.id AND b.statut = 'Actif'\nWHERE ps.tenant_id = $tenant_id AND ps.mois = $mois\nORDER BY e.nom;",
+      "implementation_frontend": "Dans D2 - 14-Fiches de Paie, le salaire brut + RIB actif est auto-rempli. La generation de fiche declenche un calcul automatique (salaire_brut + HS validees + primes - retenues - cotisations - deductions_prets) cf. RC-012.",
+      "diagram": "flowchart LR\n  M[\"Master employees\"] -.FK employee_id.-> S10[\"Satellite 14-Fiches de Paie\\nd02_pay_slips\\n1:N mensuel\"]\n  S10 -.JOIN secondaire.-> B[\"d02_bank_details\\n(RIB actif)\"]",
+      "source_doc": "V2 prompt §9.3 matrice ligne 10 + §13.4 (formules paie)"
+    },
+    {
+      "id": "IC-MS-11",
+      "name": "Fiche Employe -> Autorisations Permis",
+      "category": "Master-Satellite D2",
+      "source": {
+        "domain": "D2",
+        "feuille": "2-Fiche Employe",
+        "table": "admina_rh.employees",
+        "col_source": "B (matricule)"
+      },
+      "target": {
+        "domain": "D2",
+        "feuille": "15-Autorisations Permis",
+        "table": "admina_rh.d02_work_permits",
+        "col_cible": "D (nom employe)",
+        "cardinalite": "1:N"
+      },
+      "donnees_echangees": ["nom", "prenom", "nationalite (permis obligatoire si etranger)"],
+      "type": "Master-Satellite (LEFT JOIN)",
+      "implementation_sql": "SELECT wp.*, e.nom, e.prenom, e.nationalite,\n       CASE WHEN wp.date_expiration IS NULL THEN NULL\n            WHEN wp.date_expiration < NOW() THEN 'Expire'\n            WHEN wp.date_expiration <= NOW() + INTERVAL '30 days' THEN 'A renouveler'\n            ELSE 'Valide' END AS statut_calcule\nFROM admina_rh.d02_work_permits wp\nLEFT JOIN admina_rh.employees e ON wp.employee_id = e.id AND wp.tenant_id = e.tenant_id\nWHERE wp.tenant_id = $tenant_id\nORDER BY wp.date_expiration NULLS LAST;",
+      "implementation_frontend": "Dans D2 - 15-Autorisations Permis, le nom + nationalite est auto-rempli. Pour les employes etrangers (nationalite != pays du tenant), un rappel auto est genere si permis expire < 30j (cf. IC-D2-03).",
+      "diagram": "flowchart LR\n  M[\"Master employees\"] -.FK employee_id.-> S11[\"Satellite 15-Autorisations Permis\\nd02_work_permits\\n1:N\"]",
+      "source_doc": "V2 prompt §9.3 matrice ligne 11 + §13.8 (jours restants)"
+    },
+    {
+      "id": "IC-MS-12",
+      "name": "Fiche Employe -> Dossiers Departs",
+      "category": "Master-Satellite D2",
+      "source": {
+        "domain": "D2",
+        "feuille": "2-Fiche Employe",
+        "table": "admina_rh.employees",
+        "col_source": "B (matricule)"
+      },
+      "target": {
+        "domain": "D2",
+        "feuille": "16-Dossiers Departs",
+        "table": "admina_rh.d02_departures",
+        "col_cible": "D (nom employe)",
+        "cardinalite": "1:1 (final)"
+      },
+      "donnees_echangees": ["nom", "prenom", "date_embauche (pour anciennete)", "salaire_brut", "type_contrat", "statut (bascule 'Inactif' a la cloture)"],
+      "type": "Master-Satellite (LEFT JOIN, 1:1 strict, impact sur employees.statut)",
+      "implementation_sql": "SELECT dp.*, e.nom, e.prenom, e.date_embauche, e.salaire_brut, e.type_contrat\nFROM admina_rh.d02_departures dp\nLEFT JOIN admina_rh.employees e ON dp.employee_id = e.id AND dp.tenant_id = e.tenant_id\nWHERE dp.tenant_id = $tenant_id\nORDER BY dp.date_depart DESC;\n\n-- Bascule automatique du statut employee a 'Inactif' a la cloture du dossier\nUPDATE admina_rh.employees SET statut='Inactif', updated_at=NOW()\nWHERE id IN (SELECT employee_id FROM admina_rh.d02_departures WHERE statut_dossier='clos' AND tenant_id=$tenant_id);",
+      "implementation_frontend": "Dans D2 - 16-Dossiers Departs, le nom + date embauche + salaire est auto-rempli. La cloture du dossier (statut_dossier='clos') declenche IC-D2-09 (auto-create Archive) + bascule employees.statut='Inactif'.",
+      "diagram": "flowchart LR\n  M[\"Master employees\"] -.FK employee_id.-> S12[\"Satellite 16-Dossiers Departs\\nd02_departures\\n1:1 final\"]\n  S12 -->|cloture dossier| UPDATE[\"employees.statut = Inactif\"]",
+      "source_doc": "V2 prompt §9.3 matrice ligne 12 + §13.6 (indemnites depart)"
+    },
+    {
+      "id": "IC-MS-13",
+      "name": "Fiche Employe -> Archivage Documents",
+      "category": "Master-Satellite D2",
+      "source": {
+        "domain": "D2",
+        "feuille": "2-Fiche Employe",
+        "table": "admina_rh.employees",
+        "col_source": "B (matricule)"
+      },
+      "target": {
+        "domain": "D2",
+        "feuille": "17-Archivage Documents",
+        "table": "admina_rh.d02_document_archives",
+        "col_cible": "D (nom employe)",
+        "cardinalite": "1:N"
+      },
+      "donnees_echangees": ["nom", "prenom", "matricule (historise meme apres archivage employee)"],
+      "type": "Master-Satellite (LEFT JOIN + conservation donnees historiques post-depart)",
+      "implementation_sql": "SELECT arc.*, e.nom, e.prenom, e.matricule\nFROM admina_rh.d02_document_archives arc\nLEFT JOIN admina_rh.employees e ON arc.employee_id = e.id AND arc.tenant_id = e.tenant_id\nWHERE arc.tenant_id = $tenant_id\nORDER BY arc.date_archivage DESC;\n\n-- NB : ne pas supprimer employees a l'archivage, marquer statut='Archive'\n-- pour preserver l'integrite referentielle des archives",
+      "implementation_frontend": "Dans D2 - 17-Archivage, le nom + matricule est conserve. Une regle d'acces strict (RBAC) limite la lecture aux roles 'Archiviste' et 'DRH'. La duree de conservation est affichee (5 ans / 50 ans selon nature document).",
+      "diagram": "flowchart LR\n  M[\"Master employees\\n(statut='Archive' conserve)\"] -.FK employee_id.-> S13[\"Satellite 17-Archivage\\nd02_document_archives\\n1:N\"]",
+      "source_doc": "V2 prompt §9.3 matrice ligne 13 + §15.9 (conservation historique)"
+    },
+    {
+      "id": "IC-MS-14",
+      "name": "Fiche Employe -> Rappels Admin",
+      "category": "Master-Satellite D2",
+      "source": {
+        "domain": "D2",
+        "feuille": "2-Fiche Employe",
+        "table": "admina_rh.employees",
+        "col_source": "B (matricule)"
+      },
+      "target": {
+        "domain": "D2",
+        "feuille": "18-Rappels Admin",
+        "table": "admina_rh.d02_reminders",
+        "col_cible": "D (nom employe)",
+        "cardinalite": "1:N"
+      },
+      "donnees_echangees": ["nom", "prenom", "departement"],
+      "type": "Master-Satellite (LEFT JOIN) + generation automatique (cf. IC-D2-02/03/06)",
+      "implementation_sql": "SELECT r.*, e.nom, e.prenom, e.departement,\n       CASE WHEN r.date_echeance < NOW() AND r.statut='en_attente' THEN 'en_retard'\n            ELSE r.statut END AS statut_calcule\nFROM admina_rh.d02_reminders r\nLEFT JOIN admina_rh.employees e ON r.employee_id = e.id AND r.tenant_id = e.tenant_id\nWHERE r.tenant_id = $tenant_id\nORDER BY r.date_echeance ASC;",
+      "implementation_frontend": "Dans D2 - 18-Rappels Admin, le nom employe est auto-rempli. Un cron quotidien (00:30) detecte les rappels en retard (date_echeance < NOW()) et bascule statut='en_retard'. Cf. trigger 17.6 #6 du V2 prompt.",
+      "diagram": "flowchart LR\n  M[\"Master employees\"] -.FK employee_id.-> S14[\"Satellite 18-Rappels Admin\\nd02_reminders\\n1:N\"]\n  CRON[\"Cron quotidien\\n00:30\"] -->|UPDATE statut=en_retard| S14",
+      "source_doc": "V2 prompt §9.3 matrice ligne 14 + §13.10 (generation auto rappels) + §17.6 trigger #6"
+    },
+    {
+      "id": "IC-MS-15",
+      "name": "Fiche Employe -> Prets Avances",
+      "category": "Master-Satellite D2",
+      "source": {
+        "domain": "D2",
+        "feuille": "2-Fiche Employe",
+        "table": "admina_rh.employees",
+        "col_source": "B (matricule)"
+      },
+      "target": {
+        "domain": "D2",
+        "feuille": "19-Prets Avances",
+        "table": "admina_rh.d02_loans",
+        "col_cible": "D (nom employe)",
+        "cardinalite": "1:N"
+      },
+      "donnees_echangees": ["nom", "prenom", "salaire_brut (pour eligibilite et taux d'endettement)"],
+      "type": "Master-Satellite (LEFT JOIN)",
+      "implementation_sql": "SELECT l.*, e.nom, e.prenom, e.salaire_brut,\n       ROUND((l.montant_accorde * (l.taux_interet/100.0/12)) / POWER(1-(1+(l.taux_interet/100.0/12)), -l.duree_mois), 2) AS mensualite_calculee,\n       l.montant_accorde - (l.mensualite * NULLIF(l.mois_payes,0)) AS solde_restant_calcule\nFROM admina_rh.d02_loans l\nLEFT JOIN admina_rh.employees e ON l.employee_id = e.id AND l.tenant_id = e.tenant_id\nWHERE l.tenant_id = $tenant_id AND l.statut IN ('accorde','en_remboursement');",
+      "implementation_frontend": "Dans D2 - 19-Prets Avances, le nom + salaire est auto-rempli. La mensualite et le solde restant sont calcules via les fonctions RC-009 et RC-010. Une deduction automatique est planifiee dans la paie mensuelle (cf. IC-D2-07).",
+      "diagram": "flowchart LR\n  M[\"Master employees\"] -.FK employee_id.-> S15[\"Satellite 19-Prets Avances\\nd02_loans\\n1:N\"]\n  S15 -->|statut=accorde| DEDUCT[\"Deduction auto\\nPaie mensuelle\"]",
+      "source_doc": "V2 prompt §9.3 matrice ligne 15 + §13.5 (formules prets)"
+    },
+    {
+      "id": "IC-MS-16",
+      "name": "Fiche Employe -> Sanctions Disciplinaires",
+      "category": "Master-Satellite D2",
+      "source": {
+        "domain": "D2",
+        "feuille": "2-Fiche Employe",
+        "table": "admina_rh.employees",
+        "col_source": "B (matricule)"
+      },
+      "target": {
+        "domain": "D2",
+        "feuille": "20-Sanctions Disciplinaires",
+        "table": "admina_rh.d02_sanctions",
+        "col_cible": "D (nom employe)",
+        "cardinalite": "1:N"
+      },
+      "donnees_echangees": ["nom", "prenom", "departement", "poste", "categorie"],
+      "type": "Master-Satellite (LEFT JOIN)",
+      "implementation_sql": "SELECT s.*, e.nom, e.prenom, e.departement, e.poste, e.categorie\nFROM admina_rh.d02_sanctions s\nLEFT JOIN admina_rh.employees e ON s.employee_id = e.id AND s.tenant_id = e.tenant_id\nWHERE s.tenant_id = $tenant_id\nORDER BY s.date_faute DESC;",
+      "implementation_frontend": "Dans D2 - 20-Sanctions Disciplinaires, le nom + poste est auto-rempli. Le workflow disciplinaire complet (entretien prealable, notification, execution) est trace (cf. V2 prompt §12.3).",
+      "diagram": "flowchart LR\n  M[\"Master employees\"] -.FK employee_id.-> S16[\"Satellite 20-Sanctions\\nd02_sanctions\\n1:N\"]",
+      "source_doc": "V2 prompt §9.3 matrice ligne 16 + §12.3 (workflow sanctions)"
+    },
+    {
+      "id": "IC-MS-17",
+      "name": "Fiche Employe -> Visites Medicales",
+      "category": "Master-Satellite D2",
+      "source": {
+        "domain": "D2",
+        "feuille": "2-Fiche Employe",
+        "table": "admina_rh.employees",
+        "col_source": "B (matricule)"
+      },
+      "target": {
+        "domain": "D2",
+        "feuille": "21-Visites Medicales",
+        "table": "admina_rh.d02_medical_visits",
+        "col_cible": "D (nom employe)",
+        "cardinalite": "1:N"
+      },
+      "donnees_echangees": ["nom", "prenom", "poste (pour aptitude avec restrictions)"],
+      "type": "Master-Satellite (LEFT JOIN)",
+      "implementation_sql": "SELECT mv.*, e.nom, e.prenom, e.poste,\n       CASE WHEN mv.date_prochaine_visite IS NULL THEN 'a_planifier'\n            WHEN mv.date_prochaine_visite < NOW() THEN 'en_retard'\n            WHEN mv.date_prochaine_visite <= NOW() + INTERVAL '15 days' THEN 'a_renouveler'\n            ELSE 'a_jour' END AS statut_visite\nFROM admina_rh.d02_medical_visits mv\nLEFT JOIN admina_rh.employees e ON mv.employee_id = e.id AND mv.tenant_id = e.tenant_id\nWHERE mv.tenant_id = $tenant_id\nORDER BY mv.date_prochaine_visite NULLS FIRST;",
+      "implementation_frontend": "Dans D2 - 21-Visites Medicales, le nom + poste est auto-rempli. La date prochaine visite declenche auto-creation d'un rappel si echeance <= 15 jours (cf. IC-D2-06).",
+      "diagram": "flowchart LR\n  M[\"Master employees\"] -.FK employee_id.-> S17[\"Satellite 21-Visites Medicales\\nd02_medical_visits\\n1:N\"]\n  S17 -->|\"date_visite - NOW <= 15j\"| RAPPEL[\"Auto-create Rappel\\ntype=visite_medicale\"]",
+      "source_doc": "V2 prompt §9.3 matrice ligne 17 + §13.10 (generation auto rappel visite)"
+    },
+    {
+      "id": "IC-MS-18",
+      "name": "Fiche Employe -> Planning Mensuel Presence",
+      "category": "Master-Satellite D2",
+      "source": {
+        "domain": "D2",
+        "feuille": "2-Fiche Employe",
+        "table": "admina_rh.employees",
+        "col_source": "B (matricule)"
+      },
+      "target": {
+        "domain": "D2",
+        "feuille": "22-Planning Mensuel Presence",
+        "table": "admina_rh.d02_monthly_planning",
+        "col_cible": "D (nom employe)",
+        "cardinalite": "1:N (mensuel)"
+      },
+      "donnees_echangees": ["nom", "prenom", "departement_id", "position_id"],
+      "type": "Master-Satellite (LEFT JOIN + JOIN ref_departments + ref_positions)",
+      "implementation_sql": "SELECT mp.*, e.nom, e.prenom, d.nom AS departement, p.titre AS poste,\n       ROUND((mp.jours_presents::numeric / NULLIF(mp.jours_ouvrables,0)) * 100, 2) AS taux_presence_calcule\nFROM admina_rh.d02_monthly_planning mp\nLEFT JOIN admina_rh.employees e ON mp.employee_id = e.id AND mp.tenant_id = e.tenant_id\nLEFT JOIN admina_rh.ref_departments d ON mp.department_id = d.id\nLEFT JOIN admina_rh.ref_positions p ON mp.position_id = p.id\nWHERE mp.tenant_id = $tenant_id AND mp.mois = $mois\nORDER BY d.nom, e.nom;",
+      "implementation_frontend": "Dans D2 - 22-Planning Mensuel, le nom + departement + poste est auto-rempli. La cloture mensuelle (statut='cloture') declenche IC-D2-05 (alimentation paie).",
+      "diagram": "flowchart LR\n  M[\"Master employees\"] -.FK employee_id.-> S18[\"Satellite 22-Planning Mensuel\\nd02_monthly_planning\\n1:N mensuel\"]\n  S18 -->|statut=cloture| PAIE[\"Alimente Fiches de Paie\"]",
+      "source_doc": "V2 prompt §9.3 matrice ligne 18 + §13.2 (formules presence)"
+    },
+    {
+      "id": "IC-D2-01",
+      "name": "Demande de conge approuvee -> MAJ Solde Conges",
+      "category": "D2 interne",
+      "source": {
+        "domain": "D2",
+        "feuille": "8-Conges Annuels",
+        "table": "admina_rh.d02_leave_requests",
+        "trigger": "statut passe a 'approuvee' (UPDATE AFTER trigger)"
+      },
+      "target": {
+        "domain": "D2",
+        "feuille": "9-Solde Conges",
+        "table": "admina_rh.d02_leave_balances",
+        "action": "UPDATE conges_pris_jours + solde_disponible + taux_utilisation"
+      },
+      "donnees_echangees": ["employee_id", "annee", "nombre_jours", "type_conge"],
+      "type": "D2 interne (trigger AFTER UPDATE OF statut)",
+      "implementation_sql": "-- Trigger V2 prompt §17.6 #5\nCREATE OR REPLACE FUNCTION admina_rh.update_leave_balance() RETURNS TRIGGER AS $$\nBEGIN\n  UPDATE admina_rh.d02_leave_balances\n  SET conges_pris_jours = (\n        SELECT COALESCE(SUM(nombre_jours),0)\n        FROM admina_rh.d02_leave_requests\n        WHERE employee_id = NEW.employee_id\n          AND type_conge = 'conge_annuel'\n          AND statut = 'approuvee'\n          AND EXTRACT(YEAR FROM date_debut) = EXTRACT(YEAR FROM NEW.date_debut)\n      ),\n      solde_disponible = droit_annuel_jours + report_n1_jours\n        - (SELECT COALESCE(SUM(nombre_jours),0) FROM admina_rh.d02_leave_requests WHERE employee_id=NEW.employee_id AND type_conge='conge_annuel' AND statut='approuvee' AND EXTRACT(YEAR FROM date_debut)=EXTRACT(YEAR FROM NEW.date_debut))\n        - conges_en_cours,\n      taux_utilisation = ROUND((SELECT COALESCE(SUM(nombre_jours),0) FROM admina_rh.d02_leave_requests WHERE employee_id=NEW.employee_id AND type_conge='conge_annuel' AND statut='approuvee' AND EXTRACT(YEAR FROM date_debut)=EXTRACT(YEAR FROM NEW.date_debut)) * 100.0 / NULLIF(droit_annuel_jours,0), 2),\n      updated_at = NOW()\n  WHERE employee_id = NEW.employee_id AND annee = EXTRACT(YEAR FROM NEW.date_debut);\n  RETURN NEW;\nEND;\n$$ LANGUAGE plpgsql;\n\nCREATE TRIGGER trg_leave_request_approved\n  AFTER UPDATE OF statut ON admina_rh.d02_leave_requests\n  FOR EACH ROW WHEN (NEW.statut = 'approuvee')\n  EXECUTE FUNCTION admina_rh.update_leave_balance();",
+      "implementation_frontend": "Dans D2 - 8-Conges Annuels, au clic 'Approuver' (workflow 2 niveaux manager + DRH), la demande passe statut='approuvee' et le trigger SQL met a jour en cascade d02_leave_balances. Le tableau 9-Solde Conges se rafrachit en temps reel via Supabase Realtime (channel d02_leave_balances).",
+      "diagram": "flowchart LR\n  LR[\"8-Conges Annuels\\nd02_leave_requests\\nstatut=approuvee\"] -->|trigger AFTER UPDATE| TR[update_leave_balance]\n  TR -->|UPDATE| LB[\"9-Solde Conges\\nd02_leave_balances\\n+conges_pris_jours\\n-solde_disponible\\n=taux_utilisation\"]",
+      "source_doc": "V2 prompt §13.1 (formules conges) + §17.6 trigger #5"
+    },
+    {
+      "id": "IC-D2-02",
+      "name": "Document expire < 15 jours -> Auto-create Rappel",
+      "category": "D2 interne",
+      "source": {
+        "domain": "D2",
+        "feuille": "5-Suivi Documents",
+        "table": "admina_rh.d02_employee_documents",
+        "trigger": "date_expiration - NOW() <= 15 jours OU statut devient 'A_renouveler'/'Expire'"
+      },
+      "target": {
+        "domain": "D2",
+        "feuille": "18-Rappels Admin",
+        "table": "admina_rh.d02_reminders",
+        "action": "INSERT type_rappel='expiration_document'"
+      },
+      "donnees_echangees": ["employee_id", "type_document", "date_expiration", "lieu_depot"],
+      "type": "D2 interne (trigger AFTER INSERT OR UPDATE)",
+      "implementation_sql": "-- Trigger V2 prompt §17.6 #3\nCREATE OR REPLACE FUNCTION admina_rh.generate_document_reminder() RETURNS TRIGGER AS $$\nBEGIN\n  IF NEW.date_expiration IS NOT NULL AND NEW.date_expiration <= NOW() + INTERVAL '15 days' THEN\n    INSERT INTO admina_rh.d02_reminders (tenant_id, employee_id, type_rappel, description, date_echeance, statut, action_requise)\n    VALUES (NEW.tenant_id, NEW.employee_id, 'expiration_document',\n            'Renouvellement document ' || NEW.type_document || ' (numero ' || NEW.numero_document || ')',\n            NEW.date_expiration, 'en_attente',\n            CASE WHEN NEW.date_expiration < NOW() THEN 'URGENT: document expire'\n                 ELSE 'Lancer procedure renouvellement' END)\n    ON CONFLICT ON CONSTRAINT uq_reminder_doc DO NOTHING;\n  END IF;\n  RETURN NEW;\nEND;\n$$ LANGUAGE plpgsql;\n\nCREATE TRIGGER trg_documents_reminder\n  AFTER INSERT OR UPDATE ON admina_rh.d02_employee_documents\n  FOR EACH ROW EXECUTE FUNCTION admina_rh.generate_document_reminder();\n\n-- Trigger #4 : bascule statut auto\nCREATE OR REPLACE FUNCTION admina_rh.update_document_status() RETURNS TRIGGER AS $$\nBEGIN\n  IF NEW.date_expiration IS NOT NULL THEN\n    IF NEW.date_expiration < NOW() THEN NEW.statut := 'Expire';\n    ELSIF NEW.date_expiration <= NOW() + INTERVAL '30 days' THEN NEW.statut := 'A_renouveler';\n    ELSE NEW.statut := 'Valide'; END IF;\n  END IF;\n  RETURN NEW;\nEND;\n$$ LANGUAGE plpgsql;\n\nCREATE TRIGGER trg_document_status\n  BEFORE INSERT OR UPDATE ON admina_rh.d02_employee_documents\n  FOR EACH ROW EXECUTE FUNCTION admina_rh.update_document_status();",
+      "implementation_frontend": "Dans D2 - 5-Suivi Documents, l'affichage du badge couleur (vert/orange/rouge) est calcule par le trigger SQL BEFORE. Un panneau 'Rappels auto-generes' en bas de page liste les rappels crees automatiquement. Le compteur 'Documents a renouveler' du Tableau de Bord est alimente en temps reel via Supabase Realtime.",
+      "diagram": "flowchart LR\n  DOC[\"5-Suivi Documents\\nd02_employee_documents\"] -->|\"date_expiration <= NOW+15j\"| T1[trigger\\ngenerate_document_reminder]\n  T1 -->|INSERT| RAP[\"18-Rappels Admin\\nd02_reminders\\ntype=expiration_document\"]\n  DOC -->|statut auto| T2[trigger\\nupdate_document_status]\n  T2 -->|Valide/A renouveler/Expire| DOC",
+      "source_doc": "V2 prompt §13.8 (jours restants) + §13.9 (bascule statut) + §13.10 (generation rappels) + §17.6 triggers #3 #4"
+    },
+    {
+      "id": "IC-D2-03",
+      "name": "Contrat expire < 30 jours -> Auto-create Rappel renouvellement",
+      "category": "D2 interne",
+      "source": {
+        "domain": "D2",
+        "feuille": "3-Contrats Travail",
+        "table": "admina_rh.d02_contracts",
+        "trigger": "date_fin - NOW() <= 30 jours (CDD/Stage uniquement)"
+      },
+      "target": {
+        "domain": "D2",
+        "feuille": "18-Rappels Admin",
+        "table": "admina_rh.d02_reminders",
+        "action": "INSERT type_rappel='renouvellement_contrat' + bascule statut contrat='Echu' si date_fin < NOW()"
+      },
+      "donnees_echangees": ["employee_id", "contract_id", "date_fin", "type_contrat"],
+      "type": "D2 interne (trigger BEFORE INSERT OR UPDATE + cron quotidien)",
+      "implementation_sql": "-- Trigger V2 prompt §17.6 #1\nCREATE OR REPLACE FUNCTION admina_rh.update_contract_status() RETURNS TRIGGER AS $$\nBEGIN\n  IF NEW.date_fin IS NOT NULL THEN\n    IF NEW.date_fin < NOW() THEN NEW.statut := 'Echu';\n    ELSIF NEW.date_fin <= NOW() + INTERVAL '30 days' THEN\n      -- declencher rappel de renouvellement (seulement pour CDD/Stage)\n      IF NEW.type_contrat IN ('CDD','Stage','Interim','Apprentissage') THEN\n        INSERT INTO admina_rh.d02_reminders (tenant_id, employee_id, type_rappel, description, date_echeance, statut, action_requise)\n        VALUES (NEW.tenant_id, NEW.employee_id, 'renouvellement_contrat',\n                'Renouvellement contrat ' || NEW.contract_number,\n                NEW.date_fin, 'en_attente',\n                'Decider renouvellement ou fin contrat')\n        ON CONFLICT ON CONSTRAINT uq_reminder_contract DO NOTHING;\n      END IF;\n    END IF;\n  END IF;\n  RETURN NEW;\nEND;\n$$ LANGUAGE plpgsql;\n\nCREATE TRIGGER trg_contracts_status\n  BEFORE INSERT OR UPDATE ON admina_rh.d02_contracts\n  FOR EACH ROW EXECUTE FUNCTION admina_rh.update_contract_status();",
+      "implementation_frontend": "Dans D2 - 3-Contrats Travail, les contrats CDD/Stage arrivant a echeance sous 30 jours sont mis en evidence avec un badge orange (< 30j) ou rouge (< 7j). Un rappel 'Renouvellement contrat' est cree automatiquement et visible dans 18-Rappels Admin. Le bouton 'Renouveler' ouvre le formulaire pre-rempli du nouveau contrat.",
+      "diagram": "flowchart LR\n  CTR[\"3-Contrats Travail\\nd02_contracts\\ntype=CDD/Stage\"] -->|date_fin - NOW <= 30j| TRG[trigger\\nupdate_contract_status]\n  TRG -->|statut=Echu| CTR\n  TRG -->|INSERT| RAP[\"18-Rappels Admin\\ntype=renouvellement_contrat\"]",
+      "source_doc": "V2 prompt §13.8 + §13.9 (bascule contrat echu) + §13.10 + §17.6 trigger #1"
+    },
+    {
+      "id": "IC-D2-04",
+      "name": "Pointage valide (hebdo) -> Alimente Planning Mensuel",
+      "category": "D2 interne",
+      "source": {
+        "domain": "D2",
+        "feuille": "12-Pointage Presence",
+        "table": "admina_rh.d02_attendance_records",
+        "trigger": "statut passe a 'valide' (validation manager hebdo)"
+      },
+      "target": {
+        "domain": "D2",
+        "feuille": "22-Planning Mensuel Presence",
+        "table": "admina_rh.d02_monthly_planning",
+        "action": "UPSERT (agregation mensuelle des 4-5 semaines)"
+      },
+      "donnees_echangees": ["employee_id", "jours_presents", "jours_absents", "retards_minutes", "heures_supp"],
+      "type": "D2 interne (trigger AFTER UPDATE OF statut + cron mensuel d'agregation)",
+      "implementation_sql": "-- Trigger d'agregation hebdo -> mensuel\nCREATE OR REPLACE FUNCTION admina_rh.aggregate_attendance_to_planning() RETURNS TRIGGER AS $$\nDECLARE\n  v_mois VARCHAR(20);\n  v_annee INT;\n  v_emp UUID;\nBEGIN\n  v_emp := NEW.employee_id;\n  v_annee := EXTRACT(YEAR FROM to_date(split_part(NEW.semaine,'-',2)||'-W'||trim(leading 'S' from split_part(NEW.semaine,'-',1)), 'IYYY-IW'));\n  v_mois := to_char(to_date(split_part(NEW.semaine,'-',2)||'-W'||trim(leading 'S' from split_part(NEW.semaine,'-',1)), 'IYYY-IW'), 'YYYY-MM');\n\n  INSERT INTO admina_rh.d02_monthly_planning (tenant_id, employee_id, plan_number, mois, jours_ouvrables, jours_presents, jours_absents, retards_minutes, heures_supp, taux_presence, statut)\n  SELECT $1, v_emp, 'PL-'||v_mois||'-'||substring(v_emp::text,1,8),\n         v_mois,\n         SUM(jours_ouvrables_hebdo),\n         SUM(jours_presents),\n         SUM(jours_absents),\n         SUM(retards_minutes),\n         SUM(heures_supp),\n         ROUND(SUM(jours_presents)::numeric / NULLIF(SUM(jours_ouvrables_hebdo),0) * 100, 2),\n         'brouillon'\n  FROM (... weekly aggregates ...)\n  ON CONFLICT (employee_id, mois) DO UPDATE SET\n    jours_presents = EXCLUDED.jours_presents,\n    jours_absents = EXCLUDED.jours_absents,\n    retards_minutes = EXCLUDED.retards_minutes,\n    heures_supp = EXCLUDED.heures_supp,\n    taux_presence = EXCLUDED.taux_presence,\n    updated_at = NOW();\n  RETURN NEW;\nEND;\n$$ LANGUAGE plpgsql;\n\nCREATE TRIGGER trg_attendance_to_planning\n  AFTER UPDATE OF statut ON admina_rh.d02_attendance_records\n  FOR EACH ROW WHEN (NEW.statut = 'valide')\n  EXECUTE FUNCTION admina_rh.aggregate_attendance_to_planning();",
+      "implementation_frontend": "Dans D2 - 12-Pointage Presence, au clic 'Valider semaine' par le manager, le trigger agrege automatiquement les donnees vers le planning mensuel (D2 - 22-Planning Mensuel). Le planning mensuel reste en statut 'brouillon' jusqu'a validation/cloture mensuelle.",
+      "diagram": "flowchart LR\n  ATT[\"12-Pointage Presence\\nd02_attendance_records\\nstatut=valide\"] -->|trigger AFTER UPDATE| AGG[aggregate_attendance_to_planning]\n  AGG -->|UPSERT mensuel| PL[\"22-Planning Mensuel\\nd02_monthly_planning\\nstatut=brouillon\"]",
+      "source_doc": "V2 prompt §11.4 (procedure pointage) + ECRAN 14 + ECRAN 15"
+    },
+    {
+      "id": "IC-D2-05",
+      "name": "Planning mensuel cloture -> Alimente Fiches de Paie",
+      "category": "D2 interne",
+      "source": {
+        "domain": "D2",
+        "feuille": "22-Planning Mensuel Presence",
+        "table": "admina_rh.d02_monthly_planning",
+        "trigger": "statut passe a 'cloture' (cloture mensuelle manager + DRH)"
+      },
+      "target": {
+        "domain": "D2",
+        "feuille": "14-Fiches de Paie",
+        "table": "admina_rh.d02_pay_slips",
+        "action": "INSERT (generation auto fiches brouillon)"
+      },
+      "donnees_echangees": ["employee_id", "mois", "jours_presents", "jours_absents (-> retenues)", "heures_supp (-> montant calcule)", "taux_presence"],
+      "type": "D2 interne (trigger AFTER UPDATE OF statut)",
+      "implementation_sql": "CREATE OR REPLACE FUNCTION admina_rh.generate_pay_slips_on_planning_close() RETURNS TRIGGER AS $$\nBEGIN\n  IF NEW.statut = 'cloture' THEN\n    INSERT INTO admina_rh.d02_pay_slips (tenant_id, employee_id, mois, salaire_base, salaire_brut, cotisations, net_a_payer, mode_paiement, statut)\n    SELECT\n      NEW.tenant_id, NEW.employee_id, NEW.mois,\n      e.salaire_brut AS salaire_base,\n      e.salaire_brut\n        + COALESCE((SELECT SUM(montant_calcule) FROM admina_rh.d02_overtime_hours ot WHERE ot.employee_id=e.id AND ot.statut='validee' AND ot.semaine LIKE NEW.mois||'%'),0)\n        - ROUND((e.salaire_brut / NULLIF(NEW.jours_ouvrables,0)) * NEW.jours_absents, 2) AS salaire_brut,\n      ROUND((e.salaire_brut\n        + COALESCE((SELECT SUM(montant_calcule) FROM admina_rh.d02_overtime_hours ot WHERE ot.employee_id=e.id AND ot.statut='validee' AND ot.semaine LIKE NEW.mois||'%'),0)\n        - ROUND((e.salaire_brut / NULLIF(NEW.jours_ouvrables,0)) * NEW.jours_absents, 2)) * 0.1625, 2) AS cotisations,\n      (e.salaire_brut\n        + COALESCE((SELECT SUM(montant_calcule) FROM admina_rh.d02_overtime_hours ot WHERE ot.employee_id=e.id AND ot.statut='validee' AND ot.semaine LIKE NEW.mois||'%'),0)\n        - ROUND((e.salaire_brut / NULLIF(NEW.jours_ouvrables,0)) * NEW.jours_absents, 2))\n      - ROUND((e.salaire_brut\n        + COALESCE((SELECT SUM(montant_calcule) FROM admina_rh.d02_overtime_hours ot WHERE ot.employee_id=e.id AND ot.statut='validee' AND ot.semaine LIKE NEW.mois||'%'),0)\n        - ROUND((e.salaire_brut / NULLIF(NEW.jours_ouvrables,0)) * NEW.jours_absents, 2)) * 0.1625, 2)\n      - COALESCE((SELECT SUM(p.mensualite) FROM admina_rh.d02_loans p WHERE p.employee_id=e.id AND p.statut='en_remboursement'),0) AS net_a_payer,\n      COALESCE((SELECT mode_paiement FROM admina_rh.d02_bank_details b WHERE b.employee_id=e.id AND b.statut='Actif' LIMIT 1), 'Virement') AS mode_paiement,\n      'generee' AS statut\n    FROM admina_rh.employees e\n    WHERE e.id = NEW.employee_id AND e.tenant_id = NEW.tenant_id;\n  END IF;\n  RETURN NEW;\nEND;\n$$ LANGUAGE plpgsql;\n\nCREATE TRIGGER trg_planning_close_generate_payslips\n  AFTER UPDATE OF statut ON admina_rh.d02_monthly_planning\n  FOR EACH ROW WHEN (NEW.statut = 'cloture')\n  EXECUTE FUNCTION admina_rh.generate_pay_slips_on_planning_close();",
+      "implementation_frontend": "Dans D2 - 22-Planning Mensuel, au clic 'Cloturer mois' (apres validation manager), le trigger genere automatiquement une fiche de paie 'brouillon' par employe dans D2 - 14-Fiches de Paie. Le comptable peut ensuite ajuster et valider chaque fiche. KPI Obj.3 : 100% des fiches generees avant le 5 du mois suivant.",
+      "diagram": "flowchart LR\n  PL[\"22-Planning Mensuel\\nstatut=cloture\"] -->|trigger| GEN[generate_pay_slips_on_planning_close]\n  GEN -->|INSERT par employe| PS[\"14-Fiches de Paie\\nstatut=generee\"]\n  PS -->|validation DRH| VAL[\"statut=validee\"]\n  VAL -->|virement banque| PAY[\"statut=payee\\n+date_paiement\"]",
+      "source_doc": "V2 prompt §11.5 (procedure paie) + ECRAN 15 (workflow cloture) + ECRAN 16 (processus generation) + §13.4 (formules paie)"
+    },
+    {
+      "id": "IC-D2-06",
+      "name": "Heures supplementaires validees -> Integrees en Paie",
+      "category": "D2 interne",
+      "source": {
+        "domain": "D2",
+        "feuille": "11-Heures Supplementaires",
+        "table": "admina_rh.d02_overtime_hours",
+        "trigger": "statut passe a 'validee' (validation hierarchique)"
+      },
+      "target": {
+        "domain": "D2",
+        "feuille": "14-Fiches de Paie",
+        "table": "admina_rh.d02_pay_slips",
+        "action": "UPDATE salaire_brut += montant_calcule (a la generation mensuelle)"
+      },
+      "donnees_echangees": ["employee_id", "semaine", "heures_supp", "montant_calcule", "valide_par"],
+      "type": "D2 interne (lecture a la generation de paie + trigger pour passage statut 'payee' apres paiement)",
+      "implementation_sql": "-- Les HS validees sont incluses automatiquement dans la generation de paie (cf. IC-D2-05)\n-- Regle imperative : seules les HS 'validees' peuvent etre integrees en paie (cf. V2 prompt ECRAN 13 §4)\n\n-- Trigger : apres paiement de la fiche de paie, marquer les HS correspondantes comme 'payee'\nCREATE OR REPLACE FUNCTION admina_rh.mark_overtime_paid() RETURNS TRIGGER AS $$\nBEGIN\n  IF NEW.statut = 'payee' AND (OLD.statut IS NULL OR OLD.statut != 'payee') THEN\n    UPDATE admina_rh.d02_overtime_hours\n    SET statut = 'payee', updated_at = NOW()\n    WHERE employee_id = NEW.employee_id\n      AND tenant_id = NEW.tenant_id\n      AND statut = 'validee'\n      AND LEFT(semaine, 7) = LEFT(NEW.mois, 7);\n  END IF;\n  RETURN NEW;\nEND;\n$$ LANGUAGE plpgsql;\n\nCREATE TRIGGER trg_payslip_paid_mark_overtime\n  AFTER UPDATE OF statut ON admina_rh.d02_pay_slips\n  FOR EACH ROW WHEN (NEW.statut = 'payee')\n  EXECUTE FUNCTION admina_rh.mark_overtime_paid();",
+      "implementation_frontend": "Dans D2 - 11-Heures Supplementaires, le workflow est strict : declaration -> validation manager -> 'validee' -> integree en paie au moment de la generation mensuelle -> 'payee' apres virement. Les HS en attente ou rejetees ne sont JAMAIS integrees en paie (garde-fou applicatif).",
+      "diagram": "flowchart LR\n  HS[\"11-Heures Supp\\nstatut=validee\"] -->|generation paie| PS[\"14-Fiches de Paie\\n+salaire_brut montant_calcule\"]\n  PS -->|statut=payee| TRG[trigger mark_overtime_paid]\n  TRG -->|UPDATE statut=payee| HS",
+      "source_doc": "V2 prompt ECRAN 13 §workflow + §13.3 (formules HS) + §13.4 (formules paie)"
+    },
+    {
+      "id": "IC-D2-07",
+      "name": "Pret accorde -> Deduction automatique en Paie",
+      "category": "D2 interne",
+      "source": {
+        "domain": "D2",
+        "feuille": "19-Prets Avances",
+        "table": "admina_rh.d02_loans",
+        "trigger": "statut passe a 'accorde' puis 'en_remboursement' (debut_remboursement atteint)"
+      },
+      "target": {
+        "domain": "D2",
+        "feuille": "14-Fiches de Paie",
+        "table": "admina_rh.d02_pay_slips",
+        "action": "UPDATE net_a_payer -= mensualite (deduction auto)"
+      },
+      "donnees_echangees": ["employee_id", "mensualite", "duree_mois", "mois_payes", "solde_restant"],
+      "type": "D2 interne (lecture a la generation de paie + incrementation mois_payes apres paiement)",
+      "implementation_sql": "-- La mensualite de pret est deduite automatiquement du net_a_payer (cf. IC-D2-05 formule net_a_payer)\n\n-- Trigger : apres paiement de la fiche de paie, incrementer mois_payes et maj solde_restant\nCREATE OR REPLACE FUNCTION admina_rh.update_loan_after_payment() RETURNS TRIGGER AS $$\nBEGIN\n  IF NEW.statut = 'payee' AND (OLD.statut IS NULL OR OLD.statut != 'payee') THEN\n    UPDATE admina_rh.d02_loans\n    SET mois_payes = COALESCE(mois_payes, 0) + 1,\n        solde_restant = GREATEST(0, montant_accorde - (mensualite * (COALESCE(mois_payes, 0) + 1))),\n        statut = CASE WHEN COALESCE(mois_payes, 0) + 1 >= duree_mois THEN 'solde' ELSE 'en_remboursement' END,\n        updated_at = NOW()\n    WHERE employee_id = NEW.employee_id\n      AND tenant_id = NEW.tenant_id\n      AND statut IN ('accorde', 'en_remboursement')\n      AND date_debut_remboursement <= NOW();\n  END IF;\n  RETURN NEW;\nEND;\n$$ LANGUAGE plpgsql;\n\nCREATE TRIGGER trg_payslip_paid_update_loans\n  AFTER UPDATE OF statut ON admina_rh.d02_pay_slips\n  FOR EACH ROW WHEN (NEW.statut = 'payee')\n  EXECUTE FUNCTION admina_rh.update_loan_after_payment();",
+      "implementation_frontend": "Dans D2 - 19-Prets Avances, au passage en statut 'accorde', la mensualite est figee et un message confirme 'Ce pret sera deduit automatiquement de la paie mensuelle pendant X mois'. Apres chaque paiement de paie, le solde restant est decremente et affiche dans le tableau. Le pret passe en statut 'solde' quand mois_payes >= duree_mois.",
+      "diagram": "flowchart LR\n  PR[\"19-Prets Avances\\nstatut=accorde/en_remboursement\"] -->|mensualite| PS[\"14-Fiches de Paie\\n-net_a_payer\"]\n  PS -->|statut=payee| TRG[trigger update_loan_after_payment]\n  TRG -->|mois_payes+1, solde_restant-mensualite| PR\n  PR -->|mois_payes>=duree| SOLDE[\"statut=solde\"]",
+      "source_doc": "V2 prompt §13.5 (formules prets) + §13.4 (formules paie) + §12.5 (workflow prets)"
+    },
+    {
+      "id": "IC-D2-08",
+      "name": "Absence > 3 jours -> Auto-create Visite Medicale de Reprise",
+      "category": "D2 interne",
+      "source": {
+        "domain": "D2",
+        "feuille": "10-Absences Maladie",
+        "table": "admina_rh.d02_absences",
+        "trigger": "duree_jours > 3 (maladie, accident travail, hospitalisation) ET statut = 'justifiee'"
+      },
+      "target": {
+        "domain": "D2",
+        "feuille": "21-Visites Medicales",
+        "table": "admina_rh.d02_medical_visits",
+        "action": "INSERT type_visite='reprise'"
+      },
+      "donnees_echangees": ["employee_id", "date_fin_absence (-> date_visite = J+1 reprise)", "type_absence"],
+      "type": "D2 interne (trigger AFTER UPDATE OF statut WHEN duree_jours > 3)",
+      "implementation_sql": "CREATE OR REPLACE FUNCTION admina_rh.auto_create_medical_visit_on_absence() RETURNS TRIGGER AS $$\nBEGIN\n  IF NEW.statut = 'justifiee' AND COALESCE(NEW.duree_jours, 0) > 3 THEN\n    INSERT INTO admina_rh.d02_medical_visits (tenant_id, employee_id, type_visite, medecin_structure, date_visite, date_prochaine_visite, resultat, aptitude, restrictions, cout, prise_en_charge, observations)\n    VALUES (\n      NEW.tenant_id, NEW.employee_id, 'reprise',\n      'A planifier',\n      COALESCE(NEW.date_fin, NOW()::date) + INTERVAL '1 day',\n      NULL, -- date prochaine visite a definir par le medecin\n      'En attente',\n      'apte', -- valeur par defaut, sera mise a jour par le medecin\n      '', 0, 'Employeur',\n      'Visite de reprise auto-generee suite absence ' || NEW.type_absence || ' de ' || NEW.duree_jours || ' jours'\n    )\n    ON CONFLICT ON CONSTRAINT uq_medical_visit_reprise DO NOTHING;\n  END IF;\n  RETURN NEW;\nEND;\n$$ LANGUAGE plpgsql;\n\nCREATE TRIGGER trg_absence_create_medical_visit\n  AFTER UPDATE OF statut ON admina_rh.d02_absences\n  FOR EACH ROW WHEN (NEW.statut = 'justifiee' AND COALESCE(NEW.duree_jours,0) > 3)\n  EXECUTE FUNCTION admina_rh.auto_create_medical_visit_on_absence();",
+      "implementation_frontend": "Dans D2 - 10-Absences Maladie, lorsqu'une absence de plus de 3 jours est validee (statut='justifiee'), une visite medicale de reprise est automatiquement creee dans D2 - 21-Visites Medicales avec statut 'A planifier'. Une notification est envoyee au responsable RH pour planifier le rendez-vous avec le medecin du travail avant la reprise effective.",
+      "diagram": "flowchart LR\n  AB[\"10-Absences Maladie\\nstatut=justifiee\\nduree>3j\"] -->|trigger| TRG[auto_create_medical_visit_on_absence]\n  TRG -->|INSERT type=reprise| VM[\"21-Visites Medicales\\ndate_visite=date_fin_abs+1j\\nstatut=A planifier\"]",
+      "source_doc": "V2 prompt ECRAN 12 workflow §4 + §13.10 + §11.6 (procedure visites medicales)"
+    },
+    {
+      "id": "IC-D2-09",
+      "name": "Depart clos -> Auto-create Archive + bascule employees.statut",
+      "category": "D2 interne",
+      "source": {
+        "domain": "D2",
+        "feuille": "16-Dossiers Departs",
+        "table": "admina_rh.d02_departures",
+        "trigger": "statut_dossier passe a 'clos' (checklist multi-etapes completee)"
+      },
+      "target": {
+        "domain": "D2",
+        "feuille": "17-Archivage Documents",
+        "table": "admina_rh.d02_document_archives",
+        "action": "INSERT (transfert du dossier complet vers archivage) + UPDATE employees.statut='Inactif'"
+      },
+      "donnees_echangees": ["employee_id", "documents_remis (liste)", "solde_tout_compte", "indemnite", "date_depart"],
+      "type": "D2 interne (trigger AFTER UPDATE OF statut_dossier)",
+      "implementation_sql": "CREATE OR REPLACE FUNCTION admina_rh.archive_employee_on_departure_close() RETURNS TRIGGER AS $$\nBEGIN\n  IF NEW.statut_dossier = 'clos' AND (OLD.statut_dossier IS NULL OR OLD.statut_dossier != 'clos') THEN\n    -- 1. Transfert de tous les documents actifs vers l'archivage\n    INSERT INTO admina_rh.d02_document_archives (tenant_id, employee_id, archive_number, type_document, numero_document, date_archivage, duree_conservation_ans, lieu_depot, source_table)\n    SELECT NEW.tenant_id, d.employee_id, 'ARC-' || NEW.id || '-' || d.id, d.type_document, d.numero_document, NOW(),\n      CASE d.type_document\n        WHEN 'CNI' THEN 10 WHEN 'Passeport' THEN 10 WHEN 'RIB bancaire' THEN 10\n        WHEN 'Contrat precedent' THEN 50 WHEN 'Attestation CNPS' THEN 50\n        ELSE 5 END,\n      'Archive numerique', 'd02_employee_documents'\n    FROM admina_rh.d02_employee_documents d WHERE d.employee_id = NEW.employee_id AND d.tenant_id = NEW.tenant_id;\n\n    -- 2. Transfert des contrats vers archivage\n    INSERT INTO admina_rh.d02_document_archives (tenant_id, employee_id, archive_number, type_document, numero_document, date_archivage, duree_conservation_ans, lieu_depot, source_table)\n    SELECT NEW.tenant_id, c.employee_id, 'ARC-' || NEW.id || '-CTR-' || c.id, 'Contrat', c.contract_number, NOW(), 50, 'Coffre fort', 'd02_contracts'\n    FROM admina_rh.d02_contracts c WHERE c.employee_id = NEW.employee_id AND c.tenant_id = NEW.tenant_id;\n\n    -- 3. Bascule du statut employee -> 'Inactif' (conservation de la fiche pour integrite referentielle)\n    UPDATE admina_rh.employees\n    SET statut = 'Inactif', updated_at = NOW()\n    WHERE id = NEW.employee_id AND tenant_id = NEW.tenant_id;\n\n    -- 4. Generation d'un rappel de destruction a la fin de la duree de conservation\n    INSERT INTO admina_rh.d02_reminders (tenant_id, employee_id, type_rappel, description, date_echeance, statut, action_requise)\n    SELECT NEW.tenant_id, NEW.employee_id, 'destruction_archive',\n           'Destruction archives employee ' || NEW.employee_id,\n           NOW() + INTERVAL '50 years',\n           'en_attente',\n           'Verifier duree conservation puis detruire archives'\n    WHERE NOT EXISTS (SELECT 1 FROM admina_rh.d02_reminders r WHERE r.employee_id = NEW.employee_id AND r.type_rappel = 'destruction_archive');\n  END IF;\n  RETURN NEW;\nEND;\n$$ LANGUAGE plpgsql;\n\nCREATE TRIGGER trg_departure_close_archive\n  AFTER UPDATE OF statut_dossier ON admina_rh.d02_departures\n  FOR EACH ROW WHEN (NEW.statut_dossier = 'clos')\n  EXECUTE FUNCTION admina_rh.archive_employee_on_departure_close();",
+      "implementation_frontend": "Dans D2 - 16-Dossiers Departs, au clic 'Cloturer dossier' (apres checklist complete : solde tout compte, attestation, certificat, restitution materiel), le trigger SQL declenche 4 actions atomiques : (1) transfert de tous les documents vers 17-Archivage, (2) bascule employees.statut='Inactif', (3) generation d'un rappel 'destruction_archive' a +50 ans, (4) notification au service RH. La fiche employee reste consultable (en lecture seule) pour preserver l'integrite referentielle.",
+      "diagram": "flowchart LR\n  DP[\"16-Dossiers Departs\\nstatut_dossier=clos\"] -->|trigger| TRG[archive_employee_on_departure_close]\n  TRG -->|INSERT documents + contrats| ARC[\"17-Archivage\\nd02_document_archives\"]\n  TRG -->|UPDATE| EMP[\"employees.statut=Inactif\\n(fiche conservee)\"]\n  TRG -->|INSERT +50 ans| RAP[\"18-Rappels\\ntype=destruction_archive\"]",
+      "source_doc": "V2 prompt §11.8 (procedure departs archivage) + ECRAN 21 + ECRAN 22 + §12.4 (workflow depart)"
+    }
+  ],
+  "stats": {
+    "total_interconnexions": 32,
+    "par_categorie": {
+      "D1-D2": 5,
+      "Master-Satellite D2": 18,
+      "D2 interne": 9
+    },
+    "triggers_sql_documentes": 11,
+    "mermaid_diagrams": 32
+  }
+}
