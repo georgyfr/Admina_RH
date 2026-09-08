@@ -3937,4 +3937,104 @@ window.__ADEM_V10__ = {
 })();
 
 </script>
+<script>
+/* ADEM_V13 — Nettoyage sidebar : retrait des chemins inter-domaines (D1/D2)
+ * DEMANDE UTILISATEUR (08/09/2026) : les blocs de navigation de domaines en tête
+ * de la barre latérale ne servent plus depuis le bouton flottant « Domaines »
+ * (ADEM V12, présent sur toutes les pages) → les retirer proprement :
+ *   - shell partagé D1 (et route D1) : bloc violet « → Domaine 2 — Admin.
+ *     Personnel / Gestion administrative » (MuiList mono-item sous la marque)
+ *   - D2 (D2Layout) : bloc « Retour Domaine 1 » (MuiList mono-item sous la marque)
+ * Les en-têtes de marque (« Admina-RH / Domaine … ») sont CONSERVÉS : ils
+ * identifient l'application en cours, ils ne sont pas des chemins de navigation.
+ *
+ * MÉTHODE 100% RUNTIME — 0 octet des bundles React modifié, aucun nœud déplacé :
+ *  1. Scan des .MuiList-root dans .MuiDrawer-paper, masquage du <ul> ENTIER
+ *     (item + ses marges) par signature textuelle EXACTE :
+ *       · D1 : contient « Domaine 2 — Admin. Personnel » ET « Gestion
+ *         administrative » (les deux chaînes → aucun faux positif sur la
+ *         marque D2 qui ne porte que la première)
+ *       · D2 : texte exact « Retour Domaine 1 »
+ *  2. Dédoublonnage des filets : ces listes sont coincées entre DEUX Divider ;
+ *     une fois la liste masquée, si le Divider précédent (visible) et le
+ *     Divider suivant deviennent adjacents, le suivant est masqué aussi
+ *     (pas de double hairline entre la marque et la navigation).
+ *  3. Persistance SPA : MutationObserver (re-monts React au changement de
+ *     route) + filet de sécurité interval 1500 ms — mêmes patterns que V10/V12.
+ *
+ * NON-INTERFÉRENCE : #adem12-btn/#adem12-panel (V12) vivent hors du paper ;
+ * #admina-cdn (bloc tiers, déjà display:none par V12) n'est pas un MuiList ;
+ * les listes de navigation métier (sections Su / Z) ne matchent aucune
+ * signature. Idempotent, sans restauration (retrait définitif demandé).
+ * API : window.__ADEM_V13__ = {version, fix, _applied}
+ */
+(function () {
+  'use strict';
+  if (window.__ADEM_V13__) return;
+  var D = document;
+  var API = window.__ADEM_V13__ = { version: 'V13', fix: fix, _applied: 0 };
+
+  /* signatures — em dash U+2014 exact, espaces normalisés à la comparaison */
+  var SIG_D1_A = 'Domaine 2 — Admin. Personnel';
+  var SIG_D1_B = 'Gestion administrative';
+  var SIG_D2 = 'Retour Domaine 1';
+
+  function norm(s) { return (s || '').replace(/\s+/g, ' ').trim(); }
+
+  function isDivider(el) {
+    return !!el && (el.tagName === 'HR' ||
+      (el.classList && el.classList.contains('MuiDivider-root')));
+  }
+
+  function prevVisible(el) {
+    var p = el.previousElementSibling;
+    while (p) {
+      if (getComputedStyle(p).display !== 'none') return p;
+      p = p.previousElementSibling;
+    }
+    return null;
+  }
+
+  function matchSignature(txt) {
+    var t = norm(txt);
+    if (t.indexOf(SIG_D1_A) !== -1 && t.indexOf(SIG_D1_B) !== -1) return true; /* bloc D1 (et seul porteur des 2 chaînes) */
+    return t === SIG_D2; /* bloc D2 : texte strictement égal */
+  }
+
+  function fix() {
+    var papers = D.querySelectorAll('.MuiDrawer-paper');
+    for (var i = 0; i < papers.length; i++) {
+      var lists = papers[i].querySelectorAll('.MuiList-root');
+      for (var j = 0; j < lists.length; j++) {
+        var ul = lists[j];
+        if (ul.style.display === 'none') continue;           /* déjà traité */
+        if (!matchSignature(ul.textContent)) continue;
+        ul.style.display = 'none';
+        ul.setAttribute('data-adem13', 'hidden');
+        API._applied++;
+        /* dédoublonnage : Divider précédent visible + Divider suivant → masquer le suivant */
+        var prev = prevVisible(ul), next = ul.nextElementSibling;
+        if (isDivider(prev) && isDivider(next) &&
+            getComputedStyle(next).display !== 'none') {
+          next.style.display = 'none';
+          next.setAttribute('data-adem13', 'hidden-divider');
+        }
+      }
+    }
+  }
+
+  function start() {
+    fix();
+    try {
+      var mo = new MutationObserver(function () { fix(); });
+      mo.observe(D.documentElement, { childList: true, subtree: true });
+    } catch (e) {}
+    setInterval(fix, 1500); /* filet de sécurité (patterns V10/V12) */
+  }
+
+  if (D.readyState === 'loading') D.addEventListener('DOMContentLoaded', start);
+  else start();
+})();
+
+</script>
 </body></html>
