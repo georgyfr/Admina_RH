@@ -7,92 +7,105 @@
 <meta name="description" content="Tableau de Bord — module Temps de Travail &amp; Planification de la plateforme Admina-RH (Hôtel 4★). Données issues du classeur Excel du domaine 4."/>
 <link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
 <style>
-:root{--bg:#0d0d1a;--card:#15152a;--card2:#191932;--border:rgba(255,255,255,.09);--txt:#eef0ff;
---mut:#9aa0c3;--acc:#9375cd;--acc2:#5e35a1;--ok:#3ad29f;--warn:#f5b74e;--bad:#ff7b72;--info:#6cb6ff}
+:root{--bg:#f2f6f4;--card:#ffffff;--card2:#f7faf8;--border:#e1e8e4;--txt:#1c2b26;--mut:#5d6f67;
+--acc:#0e7a5f;--acc2:#0a5c48;--ok:#15803d;--warn:#b45309;--bad:#dc2626;--info:#2563eb}
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{font-family:system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;background:
-radial-gradient(1200px 500px at 70% -10%,rgba(94,53,161,.28),transparent),var(--bg);color:var(--txt);min-height:100vh}
+body{font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;background:
+radial-gradient(1100px 420px at 75% -12%,rgba(14,122,95,.08),transparent),var(--bg);color:var(--txt);min-height:100vh}
 a{color:var(--info);text-decoration:none}
 a:hover{text-decoration:underline}
 .shell{display:grid;grid-template-columns:252px 1fr;min-height:100vh}
-aside{background:rgba(10,10,22,.72);border-right:1px solid var(--border);padding:18px 14px;position:sticky;top:0;
+aside{background:linear-gradient(175deg,#0e3d34 0%,#0b2f28 55%,#082521 100%);border-right:1px solid rgba(0,0,0,.25);padding:18px 14px;position:sticky;top:0;
 height:100vh;overflow-y:auto}
-aside .bmark{display:flex;align-items:center;gap:10px;padding:2px 6px 14px;border-bottom:1px solid var(--border);margin-bottom:12px}
-.logo{width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,var(--acc),var(--acc2));display:flex;
-align-items:center;justify-content:center;font-weight:800;font-size:13px;box-shadow:0 6px 18px rgba(94,53,161,.45);flex:none}
-.bmark b{font-size:1rem;display:block}
-.bmark small{color:var(--mut);font-size:.68rem;letter-spacing:.05em;text-transform:uppercase;display:block;margin-top:1px}
-aside .grp{color:var(--mut);font-size:.64rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;margin:14px 8px 6px}
-aside a.nav{display:flex;align-items:center;gap:8px;color:#c9cdf0;font-size:.86rem;padding:7px 10px;border-radius:9px;
+aside .bmark{display:flex;align-items:center;gap:10px;padding:2px 6px 14px;border-bottom:1px solid rgba(255,255,255,.12);margin-bottom:12px}
+.logo{width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,#1fae83,#0c6b52);display:flex;
+align-items:center;justify-content:center;font-weight:800;font-size:13px;color:#fff;box-shadow:0 6px 18px rgba(13,110,82,.5);flex:none}
+.bmark b{font-size:1rem;display:block;color:#fff}
+.bmark small{color:#83b3a4;font-size:.68rem;letter-spacing:.05em;text-transform:uppercase;display:block;margin-top:1px}
+aside .grp{color:#7fc3ac;font-size:.64rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;margin:14px 8px 6px}
+aside a.nav{display:flex;align-items:center;gap:8px;color:#d3e6de;font-size:.86rem;padding:7px 10px;border-radius:9px;
 transition:.15s;border:1px solid transparent}
-aside a.nav:hover{background:rgba(147,117,205,.1);text-decoration:none}
-aside a.nav.on{background:linear-gradient(135deg,rgba(147,117,205,.22),rgba(94,53,161,.12));color:#fff;
-border-color:rgba(147,117,205,.35)}
-aside a.nav .dot{width:6px;height:6px;border-radius:50%;background:var(--acc);opacity:.5;flex:none}
-aside a.nav.on .dot{opacity:1;box-shadow:0 0 8px var(--acc)}
-aside .home{margin-top:14px;border-top:1px solid var(--border);padding-top:12px}
+aside a.nav:hover{background:rgba(255,255,255,.07);text-decoration:none;color:#fff}
+aside a.nav.on{background:rgba(31,174,131,.18);color:#fff;
+border-color:rgba(31,174,131,.45)}
+aside a.nav .dot{width:6px;height:6px;border-radius:50%;background:#2fd4a7;opacity:.45;flex:none}
+aside a.nav.on .dot{opacity:1;box-shadow:0 0 8px #2fd4a7}
+aside .home{margin-top:14px;border-top:1px solid rgba(255,255,255,.12);padding-top:12px}
 main{padding:26px 30px 60px;min-width:0}
 .topbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:20px}
 .topbar .crumb{color:var(--mut);font-size:.8rem}
 .topbar .crumb a{color:var(--acc)}
-.topbar .tohub{margin-left:auto;font-size:.8rem;color:var(--mut);border:1px solid var(--border);padding:7px 13px;
+.topbar .tohub{margin-left:auto;font-size:.8rem;color:var(--mut);background:var(--card);border:1px solid var(--border);padding:7px 13px;
 border-radius:10px;transition:.2s}
-.topbar .tohub:hover{color:var(--txt);border-color:var(--acc);text-decoration:none}
+.topbar .tohub:hover{color:var(--acc);border-color:var(--acc);text-decoration:none;box-shadow:0 4px 14px rgba(14,122,95,.12)}
 h1{font-size:clamp(1.45rem,2.6vw,2rem);font-weight:800}
-h1 span{background:linear-gradient(90deg,var(--acc),#c9b3ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+h1 span{background:linear-gradient(90deg,#0a5c48,#17a97f);-webkit-background-clip:text;background-clip:text;color:transparent}
 .sub{color:var(--mut);font-size:.92rem;margin-top:6px;max-width:72ch}
-.chips{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0 6px}
-.chip{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px 14px;min-width:128px}
-.chip b{font-size:1.18rem;display:block;font-variant-numeric:tabular-nums}
+.hero{margin:4px 0 20px;background:linear-gradient(120deg,#0c382f 0%,#0e4a3b 55%,#10604a 100%);border:1px solid rgba(255,255,255,.09);
+border-radius:18px;padding:26px 28px;display:flex;gap:18px;align-items:center;justify-content:space-between;flex-wrap:wrap;color:#fff;
+box-shadow:0 16px 36px -20px rgba(8,55,42,.6)}
+.hero .hl{display:flex;gap:16px;align-items:center;min-width:260px}
+.hero .hic{width:54px;height:54px;border-radius:14px;background:rgba(255,255,255,.13);display:flex;align-items:center;justify-content:center;flex:none}
+.hero h2{font-size:clamp(1.2rem,2.2vw,1.68rem);font-weight:800;letter-spacing:-.2px;line-height:1.25}
+.hero .hsub{color:#bfe3d5;font-size:.85rem;margin-top:5px;max-width:62ch}
+.hero .hr{display:flex;gap:8px;flex-wrap:wrap}
+.hero .hchip{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);color:#e9fbf4;font-size:.74rem;font-weight:600;
+padding:7px 12px;border-radius:999px;white-space:nowrap}
+.chips{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0 2px}
+.chip{background:var(--card);border:1px solid var(--border);border-left:4px solid #c9d7d0;border-radius:12px;padding:10px 14px;min-width:128px;
+box-shadow:0 1px 2px rgba(16,40,32,.04)}
+.chip b{font-size:1.18rem;display:block;font-variant-numeric:tabular-nums;color:var(--txt)}
 .chip small{color:var(--mut);font-size:.7rem;letter-spacing:.04em;text-transform:uppercase}
+.chip.ok{border-left-color:var(--ok)}.chip.warn{border-left-color:var(--warn)}.chip.bad{border-left-color:var(--bad)}.chip.info{border-left-color:var(--info)}
 .chip.ok b{color:var(--ok)}.chip.warn b{color:var(--warn)}.chip.bad b{color:var(--bad)}.chip.info b{color:var(--info)}
-.panel{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin-top:18px}
-.panel h2{font-size:1.02rem;margin-bottom:12px;display:flex;align-items:center;gap:8px}
-.panel h2::before{content:"";width:8px;height:8px;border-radius:2px;background:linear-gradient(135deg,var(--acc),var(--acc2))}
+.panel{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin-top:18px;box-shadow:0 1px 3px rgba(16,40,32,.05)}
+.panel h2{font-size:1.02rem;margin-bottom:12px;display:flex;align-items:center;gap:8px;color:var(--txt)}
+.panel h2::before{content:"";width:8px;height:8px;border-radius:2px;background:linear-gradient(135deg,#1fae83,#0c6b52)}
 .tools{display:flex;gap:10px;align-items:center;margin-bottom:12px;flex-wrap:wrap}
-.tools input[type=search]{background:var(--card2);border:1px solid var(--border);color:var(--txt);border-radius:10px;
+.tools input[type=search]{background:var(--card);border:1px solid var(--border);color:var(--txt);border-radius:10px;
 padding:9px 13px;font-size:.86rem;min-width:240px;outline:none}
-.tools input[type=search]:focus{border-color:var(--acc)}
+.tools input[type=search]:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(14,122,95,.12)}
+.tools input[type=search]::placeholder{color:#93a49c}
 .tools .count{color:var(--mut);font-size:.78rem}
 .legend{display:flex;gap:12px;flex-wrap:wrap;color:var(--mut);font-size:.74rem;margin:4px 0 10px}
 .legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;vertical-align:-1px}
 .tblwrap{overflow-x:auto;border:1px solid var(--border);border-radius:12px}
 table{border-collapse:collapse;width:100%;font-size:.83rem;min-width:640px}
-thead th{position:sticky;top:0;background:#1d1d38;color:#c9cdf0;text-align:left;font-weight:600;font-size:.72rem;
+thead th{position:sticky;top:0;background:#eef4f1;color:#54655e;text-align:left;font-weight:700;font-size:.72rem;
 letter-spacing:.04em;text-transform:uppercase;padding:10px 12px;border-bottom:1px solid var(--border);white-space:nowrap;z-index:2}
-tbody td{padding:9px 12px;border-bottom:1px solid rgba(255,255,255,.05);white-space:nowrap;vertical-align:middle}
-tbody tr:hover{background:rgba(147,117,205,.06)}
+tbody td{padding:9px 12px;border-bottom:1px solid #edf2ef;white-space:nowrap;vertical-align:middle;color:var(--txt)}
+tbody tr:hover{background:rgba(14,122,95,.045)}
 tbody tr:last-child td{border-bottom:0}
 td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
 td.ctr,th.ctr{text-align:center}
 .badge{display:inline-block;font-size:.66rem;font-weight:700;letter-spacing:.05em;padding:3px 9px;border-radius:999px}
-.b-ok{color:#0e8a66;background:rgba(58,210,159,.13);border:1px solid rgba(58,210,159,.4)}
-.b-warn{color:#96690f;background:rgba(245,183,78,.14);border:1px solid rgba(245,183,78,.4)}
-.b-bad{color:#ff8f88;background:rgba(255,123,114,.12);border:1px solid rgba(255,123,114,.4)}
-.b-info{color:#8fc4ff;background:rgba(108,182,255,.12);border:1px solid rgba(108,182,255,.4)}
-.b-mut{color:var(--mut);background:rgba(154,160,195,.1);border:1px solid rgba(154,160,195,.3)}
-.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.78rem;color:#c9cdf0}
+.b-ok{color:#166534;background:#e5f7ec;border:1px solid #9adbb6}
+.b-warn{color:#92400e;background:#fdf1d8;border:1px solid #ecd192}
+.b-bad{color:#991b1b;background:#fdeaea;border:1px solid #f3b4b4}
+.b-info{color:#1e40af;background:#e7effd;border:1px solid #b0c8f7}
+.b-mut{color:#4c5f57;background:#eef3f0;border:1px solid #d3ded8}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.78rem;color:#31473f}
 .tw{white-space:normal;min-width:180px;max-width:360px;overflow:hidden;text-overflow:ellipsis}
 .grid-days{display:grid;grid-template-columns:repeat(31,24px);gap:2px}
 .dc{width:24px;height:22px;border-radius:5px;display:flex;align-items:center;justify-content:center;
 font-size:.62rem;font-weight:800}
-.dc-t{background:rgba(108,182,255,.18);color:#8fc4ff;border:1px solid rgba(108,182,255,.35)}
-.dc-n{background:rgba(147,117,205,.22);color:#c9b3ff;border:1px solid rgba(147,117,205,.4)}
-.dc-r{background:rgba(154,160,195,.1);color:var(--mut);border:1px solid rgba(154,160,195,.25)}
-.dc-a{background:rgba(255,123,114,.16);color:#ff9d97;border:1px solid rgba(255,123,114,.4)}
-.dc-e{background:rgba(255,255,255,.03);border:1px dashed rgba(255,255,255,.08)}
+.dc-t{background:#dcebfd;color:#1d4ed8;border:1px solid #bed7f7}
+.dc-n{background:#ece7fc;color:#6d28d9;border:1px solid #d9cff5}
+.dc-r{background:#eef2f0;color:#64748b;border:1px solid #d8e2dd}
+.dc-a{background:#fde8e8;color:#dc2626;border:1px solid #f5c2c2}
+.dc-e{background:#fbfdfc;border:1px dashed #ccd9d2}
 .bars .row{display:grid;grid-template-columns:220px 1fr 150px;gap:12px;align-items:center;padding:7px 0;
-border-bottom:1px solid rgba(255,255,255,.05)}
+border-bottom:1px solid #edf2ef}
 .bars .row:last-child{border-bottom:0}
-.bars .lb{font-size:.82rem;color:#c9cdf0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.bars .track{height:12px;background:rgba(255,255,255,.05);border-radius:6px;overflow:hidden}
-.bars .fill{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--acc2),var(--acc))}
+.bars .lb{font-size:.82rem;color:#31473f;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bars .track{height:12px;background:#e7eeea;border-radius:6px;overflow:hidden}
+.bars .fill{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--acc2),#17a97f)}
 .bars .vv{font-size:.8rem;color:var(--mut);text-align:right;font-variant-numeric:tabular-nums}
 .quick{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:12px}
 .quick a.q{display:block;background:var(--card2);border:1px solid var(--border);border-radius:13px;padding:14px 15px;
 transition:.18s;color:var(--txt)}
-.quick a.q:hover{border-color:var(--acc);transform:translateY(-2px);text-decoration:none;box-shadow:0 10px 26px rgba(94,53,161,.25)}
+.quick a.q:hover{border-color:var(--acc);transform:translateY(-2px);text-decoration:none;box-shadow:0 10px 26px rgba(14,122,95,.16)}
 .quick .qn{font-size:.66rem;color:var(--acc);font-weight:800;letter-spacing:.1em}
 .quick b{display:block;font-size:.9rem;margin:3px 0 4px}
 .quick p{color:var(--mut);font-size:.74rem;line-height:1.45}
@@ -215,8 +228,7 @@ border-bottom:1px solid var(--border)}main{padding:20px 16px 50px}.bars .row{gri
     <span class="crumb"><a href="/">Tous les domaines</a> / <a href="/Domaine4_Temps_Travail_Planification/">Domaine 4</a> / Tableau de Bord</span>
     <a class="tohub" href="/">← Présentation des 31 domaines</a>
   </div>
-  <h1><span>Tableau de Bord</span></h1>
-  <p class="sub">Vue synthétique de tous les indicateurs du domaine — réplique fidèle de la feuille « 1-Tableau de Bord » du classeur Excel (période : Juin 2025).</p>
+  <div class="hero"><div class="hl"><span class="hic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#e9fbf4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span><div><h2>Tableau de Bord &mdash; Temps de Travail &amp; Planification</h2><p class="hsub">Plannings, pointages, heures spéciales et compteurs de l'hôtel &mdash; réplique fidèle du classeur Excel du domaine, période Juin 2025.</p></div></div><div class="hr"><span class="hchip">20 feuilles Excel</span><span class="hchip">14 employés planifiés</span><span class="hchip">19 écrans</span></div></div>
 
 <div class="chips"><div class="chip info"><b>14</b><small>Employés planifiés</small></div><div class="chip "><b>280 h</b><small>Heures prévues</small></div><div class="chip ok"><b>258 h</b><small>Heures effectives</small></div><div class="chip bad"><b>-22 h</b><small>Écart total</small></div></div><div class="chips"><div class="chip "><b>5</b><small>Pointages saisis</small></div><div class="chip warn"><b>1</b><small>Retards détectés</small></div><div class="chip bad"><b>1</b><small>Anomalies pointage</small></div><div class="chip ok"><b>4</b><small>Pointages validés</small></div></div><div class="chips"><div class="chip "><b>21,5 h</b><small>Total heures supp</small></div><div class="chip "><b>0,0 h</b><small>Heures bonifiées</small></div><div class="chip info"><b>85 500 FCFA</b><small>Coût HS total</small></div><div class="chip warn"><b>1</b><small>HS en attente</small></div></div><div class="chips"><div class="chip "><b>36 h</b><small>Total heures nuit</small></div><div class="chip "><b>36 h</b><small>Heures WE & fériés</small></div><div class="chip info"><b>183 000 FCFA</b><small>Coût WE & fériés</small></div><div class="chip ok"><b>2</b><small>Gardes effectuées</small></div></div><div class="chips"><div class="chip "><b>5</b><small>Total écarts</small></div><div class="chip warn"><b>2</b><small>Écarts non traités</small></div><div class="chip "><b>5</b><small>Rapports d'audit</small></div><div class="chip ok"><b>10,7 %</b><small>Taux réalisation moy.</small></div></div><div class="panel"><h2>Répartition par département — heures effectives &amp; supplémentaires (Juin 2025)</h2><div class="bars"><div class="row"><span class="lb">Étage &amp; Housekeeping</span><span class="track"><span class="fill" style="width:100,0%"></span></span><span class="vv">64 h eff. · 8,0 h supp</span></div><div class="row"><span class="lb">Maintenance</span><span class="track"><span class="fill" style="width:83,3%"></span></span><span class="vv">56 h eff. · 4,0 h supp</span></div><div class="row"><span class="lb">Réception &amp; Front Office</span><span class="track"><span class="fill" style="width:77,8%"></span></span><span class="vv">52 h eff. · 4,0 h supp</span></div><div class="row"><span class="lb">Cuisine &amp; Restauration</span><span class="track"><span class="fill" style="width:77,1%"></span></span><span class="vv">50 h eff. · 5,5 h supp</span></div><div class="row"><span class="lb">Finance &amp; Comptabilité</span><span class="track"><span class="fill" style="width:50,0%"></span></span><span class="vv">36 h eff. · 0,0 h supp</span></div><div class="row"><span class="lb">Service Client</span><span class="track"><span class="fill" style="width:0,0%"></span></span><span class="vv">0 h eff. · 0,0 h supp</span></div><div class="row"><span class="lb">Commercial</span><span class="track"><span class="fill" style="width:0,0%"></span></span><span class="vv">0 h eff. · 0,0 h supp</span></div><div class="row"><span class="lb">Sécurité</span><span class="track"><span class="fill" style="width:0,0%"></span></span><span class="vv">0 h eff. · 0,0 h supp</span></div></div><p class="note">Agrégats calculés depuis les données du classeur (correspondance des départements harmonisée, accents inclus).</p></div><div class="panel"><h2>Les 18 rubriques du domaine</h2><div class="quick"><a class="q" href="/Domaine4_Temps_Travail_Planification/planning-mensuel/"><span class="qn">DOMAINE 4</span><b>Planning Mensuel</b><p>Grille journalière T/N/R/A de juin 2025 pour 14 employés.</p></a><a class="q" href="/Domaine4_Temps_Travail_Planification/planning-hebdomadaire/"><span class="qn">DOMAINE 4</span><b>Planning Hebdomadaire</b><p>Semaines types par équipe (40 à 45 h).</p></a><a class="q" href="/Domaine4_Temps_Travail_Planification/garde-astreintes/"><span class="qn">DOMAINE 4</span><b>Gardes &amp; Astreintes</b><p>Gardes de nuit, astreintes et permanences compensées.</p></a><a class="q" href="/Domaine4_Temps_Travail_Planification/pointage-journalier/"><span class="qn">DOMAINE 4</span><b>Pointage Journalier</b><p>Badgeuse, pointeur, fiches manuelles et retards.</p></a><a class="q" href="/Domaine4_Temps_Travail_Planification/releve-heures/"><span class="qn">DOMAINE 4</span><b>Relevé des Heures</b><p>Synthèse hebdomadaire normales / supp / nuit / WE.</p></a><a class="q" href="/Domaine4_Temps_Travail_Planification/heures-supplementaires/"><span class="qn">DOMAINE 4</span><b>Heures Supplémentaires</b><p>Majorations 25 % à 100 % et montants FCFA.</p></a><a class="q" href="/Domaine4_Temps_Travail_Planification/heures-nuit/"><span class="qn">DOMAINE 4</span><b>Heures de Nuit</b><p>Périodes 22h-06h et suivi des effectifs de nuit.</p></a><a class="q" href="/Domaine4_Temps_Travail_Planification/heures-week-end-feries/"><span class="qn">DOMAINE 4</span><b>Heures WE &amp; Fériés</b><p>Travail de week-end et jours fériés bonifiés.</p></a><a class="q" href="/Domaine4_Temps_Travail_Planification/compteurs-temps/"><span class="qn">DOMAINE 4</span><b>Compteurs de Temps</b><p>Banques d'heures : théorique 173 h, effectif, solde.</p></a><a class="q" href="/Domaine4_Temps_Travail_Planification/calendrier-feries/"><span class="qn">DOMAINE 4</span><b>Calendrier Jours Fériés</b><p>12 jours fériés 2025 et fermeture de l'hôtel.</p></a><a class="q" href="/Domaine4_Temps_Travail_Planification/roulement-equipes/"><span class="qn">DOMAINE 4</span><b>Roulement des Équipes</b><p>Rotations 3x8 et bascules entre équipes.</p></a><a class="q" href="/Domaine4_Temps_Travail_Planification/conges-collectifs/"><span class="qn">DOMAINE 4</span><b>Congés Collectifs</b><p>Fermetures annuelles, ponts et congés de Noël.</p></a><a class="q" href="/Domaine4_Temps_Travail_Planification/tableau-service/"><span class="qn">DOMAINE 4</span><b>Tableau des Services</b><p>Affectations par service, horaire et équipe.</p></a><a class="q" href="/Domaine4_Temps_Travail_Planification/regimes-horaires/"><span class="qn">DOMAINE 4</span><b>Régimes Horaires</b><p>Temps plein, mi-temps et rotation 3x8.</p></a><a class="q" href="/Domaine4_Temps_Travail_Planification/ecarts-pointage/"><span class="qn">DOMAINE 4</span><b>Écarts de Pointage</b><p>Retards, oublis de badgeage et justifications.</p></a><a class="q" href="/Domaine4_Temps_Travail_Planification/bilan-mensuel-temps/"><span class="qn">DOMAINE 4</span><b>Bilan Mensuel du Temps</b><p>Consolidation par département (présence, coûts).</p></a><a class="q" href="/Domaine4_Temps_Travail_Planification/rapports-audit-temps/"><span class="qn">DOMAINE 4</span><b>Rapports &amp; Audit</b><p>Bilans, audits HS et conformité horaires.</p></a><a class="q" href="/Domaine4_Temps_Travail_Planification/employes/"><span class="qn">DOMAINE 4</span><b>Employés</b><p>Référentiel des 14 employés planifiés (matricules EMP-).</p></a></div></div>
 
