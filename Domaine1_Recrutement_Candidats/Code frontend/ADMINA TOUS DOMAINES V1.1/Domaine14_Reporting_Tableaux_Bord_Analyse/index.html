@@ -71,6 +71,117 @@ padding:10px 16px;border-radius:11px;transition:.2s}
 </style>
 </head>
 <body>
+<div id="adem14-splash" role="status" aria-live="polite" aria-label="Chargement du domaine">
+<style id="adem14-style">
+#adem14-splash{position:fixed;inset:0;z-index:1400;min-height:100vh;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,#f5f6fa 0%,#e8edf5 100%);overflow:hidden;transition:opacity .38s ease}
+#adem14-splash::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 40%,rgba(126,63,242,0.08) 0%,transparent 60%);pointer-events:none}
+#adem14-splash.a14-out{opacity:0;pointer-events:none}
+#adem14-splash .a14-card{position:relative;z-index:1;padding:40px 32px;border-radius:16px;display:flex;flex-direction:column;align-items:center;gap:12px;min-width:280px;max-width:420px;margin:0 16px;background:rgba(255,255,255,0.82);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.6);box-shadow:0 24px 60px -12px rgba(11,42,74,0.18),0 0 0 1px rgba(255,255,255,0.7);animation:adem14-fade-in .5s ease-out}
+@media (min-width:600px){#adem14-splash .a14-card{padding:48px;min-width:340px}}
+#adem14-splash .a14-logo{width:80px;height:80px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#7e3ff2 0%,#2a6a9a 100%);color:#fff;font-weight:800;font-size:1.9rem;letter-spacing:.5px;font-family:"Inter",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;animation:adem14-pulse 2s ease-in-out infinite;margin-bottom:8px;user-select:none}
+#adem14-splash .a14-title{font-family:"Inter",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:1.5rem;font-weight:800;color:#0b2a4a;letter-spacing:-.3px;text-align:center}
+#adem14-splash .a14-sub{color:#6b7a8a;font-size:.78rem;text-align:center;letter-spacing:.2px;font-family:"Inter",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+#adem14-splash .a14-dots{display:flex;gap:8px;margin:12px 0 4px}
+#adem14-splash .a14-dots i{width:10px;height:10px;border-radius:50%;background:#7e3ff2;display:inline-block;animation:adem14-dot-bounce 1.4s ease-in-out infinite}
+#adem14-splash .a14-dots i:nth-child(2){animation-delay:.2s}
+#adem14-splash .a14-dots i:nth-child(3){animation-delay:.4s}
+#adem14-splash .a14-loading{color:#9aa8b8;font-family:"Roboto Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.72rem;letter-spacing:.3px;text-align:center;min-height:1.2em}
+#adem14-splash .a14-bar{margin-top:16px;width:240px;height:4px;border-radius:2px;background:rgba(126,63,242,0.1);position:relative;overflow:hidden}
+#adem14-splash .a14-bar span{position:absolute;left:-35%;right:100%;top:0;bottom:0;background:linear-gradient(90deg,#7e3ff2 0%,#2a6a9a 100%);border-radius:2px;animation:adem14-bar 2.1s cubic-bezier(.65,.815,.735,.395) infinite}
+#adem14-splash .a14-phases{display:flex;gap:8px;margin-top:20px;align-items:center}
+#adem14-splash .a14-phases i{width:8px;height:8px;border-radius:50%;display:inline-block;animation:adem14-phase-pulse 1.6s ease-in-out infinite}
+#adem14-splash .a14-phases i:nth-child(1){background:#1B4F72;animation-delay:0s}
+#adem14-splash .a14-phases i:nth-child(2){background:#2E86C1;animation-delay:.15s}
+#adem14-splash .a14-phases i:nth-child(3){background:#27AE60;animation-delay:.3s}
+#adem14-splash .a14-phases i:nth-child(4){background:#F39C12;animation-delay:.45s}
+#adem14-splash .a14-phases i:nth-child(5){background:#8E44AD;animation-delay:.6s}
+#adem14-splash .a14-meta{margin-top:8px;color:#9aa8b8;font-family:"Roboto Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.6rem;letter-spacing:.4px;text-transform:uppercase;text-align:center}
+#adem14-splash.a14-dark{background:linear-gradient(135deg,#0a0a1a 0%,#141428 50%,#1a1a2e 100%)}
+#adem14-splash.a14-dark::before{background:radial-gradient(circle at 50% 40%,rgba(126,63,242,0.18) 0%,transparent 60%)}
+#adem14-splash.a14-dark .a14-card{background:rgba(20,20,40,0.72);border-color:rgba(126,63,242,0.25);box-shadow:0 24px 60px -12px rgba(0,0,0,0.6),0 0 0 1px rgba(126,63,242,0.15)}
+#adem14-splash.a14-dark .a14-title{color:#fff}
+#adem14-splash.a14-dark .a14-sub{color:#aaa}
+#adem14-splash.a14-dark .a14-bar{background:rgba(126,63,242,0.15)}
+@keyframes adem14-pulse{0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(126,63,242,0.4)}50%{transform:scale(1.05);box-shadow:0 0 0 20px rgba(126,63,242,0)}}
+@keyframes adem14-dot-bounce{0%,80%,100%{transform:translateY(0);opacity:.5}40%{transform:translateY(-8px);opacity:1}}
+@keyframes adem14-phase-pulse{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.4);opacity:1}}
+@keyframes adem14-fade-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes adem14-bar{0%{left:-35%;right:100%}60%{left:100%;right:-90%}100%{left:100%;right:-90%}}
+@media (prefers-reduced-motion:reduce){#adem14-splash,#adem14-splash *{animation:none!important;transition:none!important}}
+</style>
+  <div class="a14-card">
+    <div class="a14-logo">AR</div>
+    <div class="a14-title">Admina-RH</div>
+    <div class="a14-sub">Domaine 14 — Reporting & Tableaux de Bord Analyse</div>
+    <div class="a14-dots"><i></i><i></i><i></i></div>
+    <div class="a14-loading">Chargement en cours<span class="a14-ell">.</span></div>
+    <div class="a14-bar"><span></span></div>
+    <div class="a14-phases"><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="a14-meta">EN PRÉPARATION</div>
+  </div>
+</div>
+<script>
+/* __ADEM_V14__ — écran de chargement de domaine (réplique du splash natif D2)
+   Appliqué aux copies D1 et D3 ; no-op sur D2 et le hub.
+   Apparition immédiate (injection en tête de body), disparition quand l'app
+   est montée (>= 700 ms, filet 4 s), fondu 380 ms puis retrait du nœud.
+   Sur D3 (Next.js), l'hydratation retire les nœuds body additionnels ~300 ms :
+   ré-attachement synchrone (MutationObserver + interval filet) tant que le
+   splash n'est pas terminé — même pattern de survie que V12. */
+(function(){
+  'use strict';
+  if (window.__ADEM_V14__) return;
+  if (/domaine2_Gestion/i.test(location.pathname)) return;
+  var el = document.getElementById('adem14-splash');
+  if (!el) return;
+  var dark = false;
+  try { dark = localStorage.getItem('admina-dark') === 'true'; } catch (e) {}
+  if (dark) el.classList.add('a14-dark');
+  window.__ADEM_V14__ = { v: '14', fix: 'splash-domaine', _applied: Date.now() };
+  var t0 = Date.now(), done = false, mo = null;
+  function host(){ return document.body || document.documentElement; }
+  /* survie : ré-attache le nœud s'il est retiré par un tiers (hydratation Next) */
+  function reattach(){
+    if (done || el.parentNode) return;
+    host().appendChild(el);
+  }
+  try {
+    mo = new MutationObserver(reattach);
+    mo.observe(document.body || document.documentElement, { childList: true });
+  } catch (e) {}
+  var ivKeep = setInterval(function(){
+    reattach();
+    if (done || Date.now() - t0 > 4500) clearInterval(ivKeep);
+  }, 150);
+  /* points de suspension animés (., .., ...) comme le composant natif */
+  var ell = el.querySelector('.a14-ell'), n = 1;
+  var ellIv = setInterval(function(){
+    n = n === 1 ? 2 : (n === 2 ? 3 : 1);
+    if (ell) ell.textContent = new Array(n + 1).join('.');
+    else clearInterval(ellIv);
+  }, 500);
+  function hide(){
+    if (done) return;
+    done = true;
+    el.dataset.a14done = '1';
+    clearInterval(ellIv); clearInterval(ivKeep);
+    try { mo.disconnect(); } catch (e) {}
+    el.classList.add('a14-out');
+    setTimeout(function(){ if (el && el.parentNode) el.parentNode.removeChild(el); }, 420);
+  }
+  /* page statique : prête dès que le DOM est parsé */
+  var iv = setInterval(function(){
+    var ready = false;
+    ready = document.readyState !== 'loading';
+    if (Date.now() - t0 >= 700 && document.readyState !== 'loading' && ready){
+      clearInterval(iv); hide();
+    }
+  }, 80);
+  setTimeout(function(){ clearInterval(iv); hide(); }, 4000);
+})();
+</script>
+
+
 <header>
   <div class="wrap">
     <div class="logo">AR</div>
