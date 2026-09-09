@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Journal de Pointage | Domaine 5 | Admina-RH</title>
+<meta name="description" content="Journal de pointage du Domaine 5.">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="alternate icon" href="/favicon.ico">
+<style>@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+:root{--d5-bg:#F4FAFC;--d5-card:#FFFFFF;--d5-ink:#0F2430;--d5-muted:#5E7A8A;--d5-line:#D8E9F0;
+--d5-cyan:#0E7490;--d5-cyan2:#0891B2;--d5-sky:#06B6D4;--d5-soft:#CFF4FB;--d5-softer:#F0FBFE;
+--d5-ok:#15803D;--d5-okbg:#DCFCE7;--d5-info:#1D4ED8;--d5-infobg:#DBEAFE;--d5-warn:#B45309;
+--d5-warnbg:#FEF3C7;--d5-bad:#B91C1C;--d5-badbg:#FEE2E2;--d5-neu:#475569;--d5-neubg:#F1F5F9;
+--d5-grad:linear-gradient(135deg,#06B6D4,#0E7490);--d5-r:18px;}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--d5-bg);color:var(--d5-ink);
+font-family:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased;}
+a{color:var(--d5-cyan);text-decoration:none;}
+a:hover{text-decoration:underline;}
+
+/* ==================== SHELL : sidebar + colonne principale ==================== */
+.d5-shell{display:grid;grid-template-columns:266px minmax(0,1fr);min-height:100vh;}
+aside.d5-side{position:sticky;top:0;height:100vh;overflow-y:auto;scrollbar-width:thin;
+scrollbar-color:rgba(34,211,238,.4) transparent;background:linear-gradient(175deg,#0B3A4A 0%,#07293A 55%,#051D2B 100%);
+border-right:1px solid rgba(0,0,0,.45);padding:18px 14px 22px;}
+.d5-side .bmark{display:flex;align-items:center;gap:10px;padding:2px 6px 14px;
+border-bottom:1px solid rgba(255,255,255,.12);margin-bottom:12px;}
+.d5-side .logo{width:38px;height:38px;border-radius:11px;background:var(--d5-grad);display:flex;align-items:center;
+justify-content:center;font-weight:800;font-size:13px;color:#fff;box-shadow:0 6px 18px rgba(6,182,212,.5);flex:none;
+text-decoration:none;}
+.d5-side .bmark b{font-size:1rem;display:block;color:#fff;}
+.d5-side .bmark small{color:#8FC8DC;font-size:.66rem;letter-spacing:.05em;text-transform:uppercase;display:block;margin-top:1px;}
+.d5-ssearch{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.06);
+border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:8px 11px;margin:0 2px 4px;color:#8FC8DC;}
+.d5-ssearch svg{width:14px;height:14px;flex:none;}
+.d5-ssearch input{border:0;background:transparent;outline:none;width:100%;min-width:0;
+font:600 12.6px 'Plus Jakarta Sans',sans-serif;color:#fff;}
+.d5-ssearch input::placeholder{color:#5E8DA0;}
+a.d5-snav{display:flex;align-items:center;gap:8px;color:#D6EBF4;font-size:.845rem;padding:6.5px 9px;
+border-radius:9px;border:1px solid transparent;transition:.14s;}
+a.d5-snav:hover{background:rgba(255,255,255,.07);color:#fff;text-decoration:none;}
+a.d5-snav.on{background:rgba(34,211,238,.16);color:#fff;border-color:rgba(34,211,238,.45);}
+a.d5-snav .sheet{flex:none;min-width:26px;height:18px;padding:0 5px;border-radius:5px;
+background:rgba(34,211,238,.14);color:#67E8F9;font-size:9.4px;font-weight:800;
+display:flex;align-items:center;justify-content:center;letter-spacing:.02em;}
+a.d5-snav.on .sheet{background:var(--d5-grad);color:#fff;}
+a.d5-snav .lab{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.d5-shome{margin-top:16px;border-top:1px solid rgba(255,255,255,.12);padding-top:12px;}
+.d5-sroles{margin-top:14px;padding:11px 10px 4px;background:rgba(34,211,238,.07);
+border:1px solid rgba(34,211,238,.2);border-radius:12px;}
+.d5-sroles .t{font-size:.6rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase;
+color:#7DD3E8;margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.d5-sroles .t svg{width:12px;height:12px;}
+.d5-sroles .r{display:flex;flex-wrap:wrap;gap:5px;padding-bottom:7px;}
+.d5-sroles .r a{display:inline-flex;align-items:center;gap:5px;font-size:10.3px;font-weight:700;
+color:#DFF3FA;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
+border-radius:99px;padding:4px 9px;transition:.14s;}
+.d5-sroles .r a:hover{background:rgba(34,211,238,.2);border-color:rgba(34,211,238,.4);color:#fff;text-decoration:none;}
+.d5-sroles .r a svg{width:11px;height:11px;color:#67E8F9;}
+
+.d5-maincol{min-width:0;display:flex;flex-direction:column;}
+main{width:100%;max-width:1240px;margin:0 auto;padding:24px 26px 30px;flex:1;}
+.d5-topbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px;}
+.d5-topbar .crumb{color:var(--d5-muted);font-size:12.4px;display:flex;align-items:center;gap:7px;flex-wrap:wrap;}
+.d5-topbar .crumb a{color:var(--d5-cyan);font-weight:600;}
+.d5-topbar .crumb .sep{opacity:.45;}
+.d5-topbar .crumb b{color:var(--d5-ink);}
+.d5-topbar .tohub{margin-left:auto;display:inline-flex;align-items:center;gap:7px;font-size:12.6px;font-weight:700;
+color:var(--d5-cyan);background:#fff;border:1px solid #A5E8F5;padding:7px 13px;border-radius:10px;transition:.16s;}
+.d5-topbar .tohub svg{width:14px;height:14px;}
+.d5-topbar .tohub:hover{background:var(--d5-soft);text-decoration:none;box-shadow:0 4px 14px rgba(8,145,178,.14);}
+
+/* ==================== entête de page ==================== */
+.d5-heroline{display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:22px;}
+.d5-heroico{flex:none;width:54px;height:54px;border-radius:16px;background:var(--d5-grad);color:#fff;
+display:flex;align-items:center;justify-content:center;box-shadow:0 8px 22px rgba(8,145,178,.3);}
+.d5-heroico svg{width:26px;height:26px;}
+.d5-heroline h1{font-size:25px;font-weight:800;letter-spacing:-.02em;line-height:1.2;}
+.d5-heroline .d5-sub{color:var(--d5-muted);font-size:13.8px;margin-top:4px;max-width:780px;}
+.d5-modbadge{display:inline-flex;align-items:center;gap:6px;background:var(--d5-soft);color:var(--d5-cyan);
+font-size:11px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;border-radius:99px;
+padding:5px 12px;margin-bottom:8px;}
+.d5-modbadge svg{width:13px;height:13px;}
+
+/* KPI */
+.d5-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));gap:14px;margin-bottom:24px;}
+.d5-kpi{background:var(--d5-card);border:1px solid var(--d5-line);border-radius:var(--d5-r);
+padding:16px 17px;display:flex;flex-direction:column;gap:8px;box-shadow:0 3px 12px rgba(8,145,178,.05);
+transition:.16s;position:relative;overflow:hidden;}
+.d5-kpi:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(8,145,178,.12);}
+.d5-kpi::before{content:'';position:absolute;inset:0 0 auto 0;height:3px;background:var(--d5-grad);opacity:.85;}
+.d5-kpi .k-lab{font-size:11.2px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--d5-muted);}
+.d5-kpi .k-val{font-size:23px;font-weight:800;letter-spacing:-.02em;color:var(--d5-ink);line-height:1.1;}
+.d5-kpi .k-val small{font-size:13px;font-weight:700;color:var(--d5-cyan);}
+.d5-kpi .k-note{font-size:11.3px;color:var(--d5-muted);}
+
+/* cartes génériques */
+.d5-card{background:var(--d5-card);border:1px solid var(--d5-line);border-radius:var(--d5-r);
+box-shadow:0 3px 12px rgba(8,145,178,.05);margin-bottom:22px;overflow:hidden;}
+.d5-card-h{display:flex;align-items:center;gap:10px;padding:15px 20px;border-bottom:1px solid var(--d5-line);
+background:linear-gradient(180deg,#F7FCFE,#fff);flex-wrap:wrap;}
+.d5-card-h svg{width:17px;height:17px;color:var(--d5-cyan);flex:none;}
+.d5-card-h h2{font-size:15.5px;font-weight:800;letter-spacing:-.01em;}
+.d5-card-h .hint{font-size:12px;color:var(--d5-muted);margin-left:auto;}
+.d5-card-b{padding:18px 20px;}
+
+/* tables */
+.d5-tblwrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+table.d5-tbl{width:100%;border-collapse:collapse;font-size:12.9px;min-width:640px;}
+.d5-tbl th{background:var(--d5-soft);color:#155E75;font-size:10.8px;font-weight:800;letter-spacing:.06em;
+text-transform:uppercase;text-align:left;padding:10px 12px;border-bottom:2px solid #A5E8F5;white-space:nowrap;}
+.d5-tbl td{padding:10px 12px;border-bottom:1px solid #EAF6FA;vertical-align:top;}
+.d5-tbl tbody tr:hover{background:var(--d5-softer);}
+.d5-tbl td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;}
+.d5-tbl td.ctr{text-align:center;white-space:nowrap;}
+.d5-tbl .id{font-weight:700;color:var(--d5-cyan);white-space:nowrap;}
+.d5-tbl .strong{font-weight:700;}
+.d5-tbl .muted{color:var(--d5-muted);}
+.d5-totrow td{background:#F0FBFE;font-weight:800;border-top:2px solid #A5E8F5;}
+
+/* badges */
+.d5-badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:99px;
+font-size:11px;font-weight:700;white-space:nowrap;}
+.d5-badge::before{content:'';width:6px;height:6px;border-radius:99px;background:currentColor;}
+.d5-b-ok{color:var(--d5-ok);background:var(--d5-okbg);}
+.d5-b-info{color:var(--d5-info);background:var(--d5-infobg);}
+.d5-b-warn{color:var(--d5-warn);background:var(--d5-warnbg);}
+.d5-b-bad{color:var(--d5-bad);background:var(--d5-badbg);}
+.d5-b-neu{color:var(--d5-neu);background:var(--d5-neubg);}
+.d5-b-gold{color:#155E75;background:var(--d5-soft);}
+.d5-b-urg{color:#9F1239;background:#FFE4E6;}
+
+/* graphes barres */
+.d5-bars{display:flex;flex-direction:column;gap:11px;}
+.d5-bar-row{display:grid;grid-template-columns:220px 1fr 78px;gap:12px;align-items:center;}
+.d5-bar-lab{font-size:12.6px;font-weight:600;color:var(--d5-ink);text-align:right;overflow:hidden;
+text-overflow:ellipsis;white-space:nowrap;}
+.d5-bar-track{height:22px;background:var(--d5-softer);border-radius:99px;overflow:hidden;
+border:1px solid var(--d5-line);}
+.d5-bar-fill{height:100%;background:var(--d5-grad);border-radius:99px;min-width:4px;
+box-shadow:inset 0 1px 0 rgba(255,255,255,.35);}
+.d5-bar-val{font-size:12.4px;font-weight:800;color:var(--d5-cyan);font-variant-numeric:tabular-nums;}
+
+/* grille modules (dashboard) */
+.d5-mods{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:13px;}
+.d5-mod{display:flex;flex-direction:column;gap:8px;background:#fff;border:1px solid var(--d5-line);
+border-radius:15px;padding:15px 16px;transition:.16s;}
+.d5-mod:hover{transform:translateY(-2px);border-color:#67E8F9;box-shadow:0 8px 20px rgba(8,145,178,.12);text-decoration:none;}
+.d5-mod .m-top{display:flex;align-items:center;gap:9px;}
+.d5-mod .m-num{flex:none;width:30px;height:30px;border-radius:9px;background:var(--d5-soft);color:var(--d5-cyan);
+display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:800;}
+.d5-mod b{font-size:13.2px;font-weight:800;line-height:1.3;color:var(--d5-ink);}
+.d5-mod span{font-size:11.6px;color:var(--d5-muted);line-height:1.45;}
+.d5-mod .m-go{margin-top:auto;font-size:11.6px;font-weight:700;color:var(--d5-cyan);display:inline-flex;
+align-items:center;gap:5px;}
+.d5-mod .m-go svg{width:13px;height:13px;}
+
+/* ==================== RÔLES UTILISATEURS (section TDB) ==================== */
+.d5-roles{background:linear-gradient(180deg,#ECFAFE,#F4FAFC);border:1px solid #A5E8F5;border-radius:var(--d5-r);
+padding:20px;margin-bottom:22px;box-shadow:0 3px 12px rgba(8,145,178,.06);}
+.d5-roles-head{display:flex;align-items:baseline;gap:10px;margin-bottom:13px;flex-wrap:wrap;}
+.d5-roles-head h2{font-size:13px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
+color:var(--d5-cyan);display:flex;align-items:center;gap:8px;}
+.d5-roles-head h2 svg{width:16px;height:16px;}
+.d5-roles-head span{font-size:12px;color:var(--d5-muted);font-weight:500;}
+.d5-roles-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;}
+.d5-role{background:#fff;border:1px solid #A5E8F5;border-radius:15px;padding:13px 15px;
+display:flex;flex-direction:column;gap:7px;box-shadow:0 3px 10px rgba(8,145,178,.06);transition:.16s;}
+.d5-role:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(8,145,178,.13);border-color:#67E8F9;}
+.d5-role .d5-role-top{display:flex;align-items:center;gap:9px;}
+.d5-role-ico{flex:none;width:32px;height:32px;border-radius:10px;background:var(--d5-soft);color:var(--d5-cyan);
+display:flex;align-items:center;justify-content:center;}
+.d5-role-ico svg{width:17px;height:17px;}
+.d5-role b{font-size:13px;font-weight:800;line-height:1.25;}
+.d5-role-scope{display:inline-flex;align-self:flex-start;font-size:10px;font-weight:800;letter-spacing:.06em;
+text-transform:uppercase;color:var(--d5-cyan);background:var(--d5-soft);border-radius:99px;padding:3px 9px;}
+.d5-role p{font-size:11.6px;color:var(--d5-muted);line-height:1.5;}
+
+/* ==================== COMPOSANTS PAR ONGLET ==================== */
+/* Compteurs — barres empilées droits/pris/planifié */
+.d5-stack{display:flex;flex-direction:column;gap:13px;}
+.d5-stack-row{display:grid;grid-template-columns:210px 1fr 150px;gap:12px;align-items:center;}
+.d5-stack-lab{font-size:12.5px;font-weight:700;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.d5-stack-lab small{display:block;font-weight:600;color:var(--d5-muted);font-size:10.6px;}
+.d5-stack-track{display:flex;height:24px;border-radius:99px;overflow:hidden;border:1px solid var(--d5-line);background:var(--d5-softer);}
+.d5-stack-track i{height:100%;display:block;}
+.d5-stack-track i.s1{background:linear-gradient(180deg,#22D3EE,#0891B2);}
+.d5-stack-track i.s2{background:linear-gradient(180deg,#F59E0B,#D97706);}
+.d5-stack-track i.s3{background:linear-gradient(180deg,#A78BFA,#7C3AED);}
+.d5-stack-track i.s4{background:linear-gradient(180deg,#34D399,#059669);}
+.d5-stack-leg{display:flex;gap:14px;flex-wrap:wrap;font-size:11.4px;color:var(--d5-muted);margin-top:11px;}
+.d5-stack-leg i{width:11px;height:11px;border-radius:3px;display:inline-block;margin-right:5px;vertical-align:-1px;}
+
+/* Frise chronologique des départs */
+.d5-tl{position:relative;padding-left:30px;}
+.d5-tl::before{content:'';position:absolute;left:10px;top:8px;bottom:8px;width:2px;
+background:linear-gradient(180deg,#A5E8F5,#0891B2 55%,#0E7490);border-radius:2px;}
+.d5-tl-item{position:relative;padding:0 0 16px 14px;}
+.d5-tl-item::before{content:'';position:absolute;left:-25px;top:5px;width:11px;height:11px;border-radius:99px;
+background:var(--d5-grad);border:2px solid #fff;box-shadow:0 0 0 2px #A5E8F5;}
+.d5-tl-item .t-date{font-size:11px;font-weight:800;color:var(--d5-cyan);letter-spacing:.04em;text-transform:uppercase;}
+.d5-tl-item b{display:block;font-size:13.4px;margin:2px 0;}
+.d5-tl-item .t-meta{font-size:11.8px;color:var(--d5-muted);}
+.d5-tl-item .t-meta b{display:inline;font-size:11.8px;}
+
+/* jauges semaines maternité */
+.d5-gauge{display:flex;flex-direction:column;gap:6px;}
+.d5-gauge-track{height:14px;background:var(--d5-softer);border:1px solid var(--d5-line);border-radius:99px;overflow:hidden;}
+.d5-gauge-fill{height:100%;background:linear-gradient(90deg,#F472B6,#DB2777);border-radius:99px;}
+.d5-gauge-fill.m{background:linear-gradient(90deg,#38BDF8,#2563EB);}
+.d5-gauge-note{font-size:11.2px;color:var(--d5-muted);}
+
+/* calendrier dept × mois */
+.d5-calwrap{overflow-x:auto;}
+table.d5-cal{border-collapse:collapse;font-size:12px;min-width:560px;width:100%;}
+.d5-cal th{background:var(--d5-soft);color:#155E75;font-size:10.6px;font-weight:800;text-transform:uppercase;
+letter-spacing:.05em;padding:8px 9px;border:1px solid #A5E8F5;}
+.d5-cal td{border:1px solid #E4F2F7;padding:7px 9px;text-align:center;font-variant-numeric:tabular-nums;}
+.d5-cal td.rowh{font-weight:700;text-align:left;background:#F7FCFE;white-space:nowrap;}
+.d5-cal td .c{display:inline-flex;gap:3px;}
+.d5-cal td .c i{width:8px;height:8px;border-radius:2px;display:inline-block;}
+.d5-cal .c1{background:#0891B2;}.d5-cal .c2{background:#F59E0B;}.d5-cal .c3{background:#EF4444;}.d5-cal .c4{background:#7C3AED;}
+.d5-cal-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:11.3px;color:var(--d5-muted);margin-top:10px;}
+.d5-cal-legend i{width:10px;height:10px;border-radius:2px;display:inline-block;margin-right:5px;vertical-align:-1px;}
+
+/* chips horaires pointage */
+.d5-chipset{display:flex;flex-wrap:wrap;gap:8px;}
+.d5-chip2{display:inline-flex;align-items:center;gap:6px;background:var(--d5-softer);border:1px solid var(--d5-line);
+border-radius:99px;padding:5px 12px;font-size:11.8px;font-weight:700;color:var(--d5-ink);}
+.d5-chip2 svg{width:13px;height:13px;color:var(--d5-cyan);}
+.d5-chip2 small{color:var(--d5-muted);font-weight:600;}
+
+/* cartes périodes (congé forcé) */
+.d5-percards{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:13px;margin-bottom:20px;}
+.d5-percard{background:linear-gradient(180deg,#F7FCFE,#fff);border:1px solid var(--d5-line);border-radius:15px;
+padding:15px 16px;display:flex;flex-direction:column;gap:7px;position:relative;overflow:hidden;}
+.d5-percard::before{content:'';position:absolute;inset:0 0 auto 0;height:3px;background:var(--d5-grad);}
+.d5-percard .p-dates{font-size:11px;font-weight:800;color:var(--d5-cyan);letter-spacing:.05em;text-transform:uppercase;}
+.d5-percard b{font-size:13.4px;line-height:1.3;}
+.d5-percard span{font-size:11.8px;color:var(--d5-muted);}
+.d5-percard .p-n{margin-top:auto;display:flex;gap:8px;flex-wrap:wrap;}
+
+/* anneaux taux présence */
+.d5-rings{display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:13px;}
+.d5-ring{text-align:center;background:#fff;border:1px solid var(--d5-line);border-radius:15px;padding:14px 10px;transition:.16s;}
+.d5-ring:hover{box-shadow:0 8px 20px rgba(8,145,178,.12);transform:translateY(-2px);}
+.d5-ring .ring{position:relative;width:78px;height:78px;margin:0 auto 8px;border-radius:99px;
+background:conic-gradient(var(--rc,#0891B2) calc(var(--pct,0)*1%),#E4F2F7 0);}
+.d5-ring .ring::before{content:'';position:absolute;inset:8px;border-radius:99px;background:#fff;}
+.d5-ring .ring b{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+font-size:14px;font-weight:800;letter-spacing:-.02em;}
+.d5-ring small{display:block;font-size:11.3px;font-weight:700;color:var(--d5-ink);line-height:1.35;}
+.d5-ring tiny{display:block;font-size:10.2px;color:var(--d5-muted);}
+
+/* note source + footer */
+.d5-src{font-size:12.3px;color:var(--d5-muted);margin:4px 0 8px;display:flex;align-items:center;gap:7px;flex-wrap:wrap;}
+.d5-src svg{width:13.5px;height:13.5px;flex:none;}
+footer.d5f{background:#07293A;color:#B8D8E4;margin-top:30px;}
+footer.d5f .in{max-width:1240px;margin:0 auto;padding:22px;font-size:12.8px;line-height:1.7;}
+footer.d5f b{color:#A5E8F5;}
+footer.d5f a{color:#67E8F9;}
+footer.d5f .row{display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;align-items:center;}
+
+/* interconnexions */
+.d5-docs{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:13px;}
+.d5-doc{display:flex;flex-direction:column;gap:9px;background:#fff;border:1px solid var(--d5-line);
+border-radius:15px;padding:16px;transition:.16s;}
+.d5-doc:hover{border-color:#67E8F9;box-shadow:0 8px 20px rgba(8,145,178,.12);text-decoration:none;}
+.d5-doc .d-ico{width:38px;height:38px;border-radius:11px;background:var(--d5-soft);color:var(--d5-cyan);
+display:flex;align-items:center;justify-content:center;}
+.d5-doc .d-ico svg{width:19px;height:19px;}
+.d5-doc b{font-size:13.3px;font-weight:800;color:var(--d5-ink);line-height:1.3;}
+.d5-doc span{font-size:11.8px;color:var(--d5-muted);line-height:1.45;flex:1;}
+.d5-doc .d-dl{font-size:12px;font-weight:700;color:var(--d5-cyan);display:inline-flex;align-items:center;gap:6px;}
+.d5-doc .d-dl svg{width:14px;height:14px;}
+.d5-fig{margin:0 0 18px;}
+.d5-fig img{width:100%;height:auto;border:1px solid var(--d5-line);border-radius:14px;background:#fff;}
+.d5-fig figcaption{font-size:12px;color:var(--d5-muted);margin-top:7px;text-align:center;}
+
+/* ==================== splash D5 (variante cyan) ==================== */
+#adem14d5-splash{position:fixed;inset:0;z-index:1400;display:flex;align-items:center;justify-content:center;
+background:radial-gradient(1100px 500px at 50% -10%,#A5E8F5 0%,#F4FAFC 55%) #F4FAFC;
+font-family:'Plus Jakarta Sans',system-ui,sans-serif;transition:opacity .38s ease;}
+#adem14d5-splash.a14d5-out{opacity:0;pointer-events:none;}
+#adem14d5-splash .a14d5-card{background:rgba(255,255,255,.86);backdrop-filter:blur(12px);
+border:1px solid rgba(8,145,178,.18);border-radius:22px;padding:34px 44px;text-align:center;
+box-shadow:0 24px 70px rgba(8,145,178,.2);max-width:92vw;animation:a14d5-in .5s ease;}
+@keyframes a14d5-in{from{opacity:0;transform:translateY(14px) scale(.97);}to{opacity:1;transform:none;}}
+#adem14d5-splash .a14d5-logo{width:58px;height:58px;border-radius:17px;background:var(--d5-grad);color:#fff;
+display:flex;align-items:center;justify-content:center;font-weight:800;font-size:21px;margin:0 auto 15px;
+box-shadow:0 10px 26px rgba(8,145,178,.4);animation:a14d5-pulse 1.6s ease-in-out infinite;}
+@keyframes a14d5-pulse{0%,100%{box-shadow:0 10px 26px rgba(8,145,178,.4);}50%{box-shadow:0 10px 40px rgba(6,182,212,.6);}}
+#adem14d5-splash .a14d5-title{font-size:20px;font-weight:800;color:#0F2430;}
+#adem14d5-splash .a14d5-sub{font-size:13.5px;font-weight:600;color:#0E7490;margin-top:4px;}
+#adem14d5-splash .a14d5-dots{display:flex;gap:7px;justify-content:center;margin:17px 0 5px;}
+#adem14d5-splash .a14d5-dots i{width:8px;height:8px;border-radius:99px;background:#06B6D4;
+animation:a14d5-bounce 1.2s ease-in-out infinite;}
+#adem14d5-splash .a14d5-dots i:nth-child(2){animation-delay:.15s;background:#0891B2;}
+#adem14d5-splash .a14d5-dots i:nth-child(3){animation-delay:.3s;background:#0E7490;}
+@keyframes a14d5-bounce{0%,100%{transform:translateY(0);opacity:.5;}50%{transform:translateY(-7px);opacity:1;}}
+#adem14d5-splash .a14d5-loading{font-size:13px;color:#5E7A8A;font-weight:600;}
+#adem14d5-splash .a14d5-bar{width:230px;height:5px;background:#D8E9F0;border-radius:99px;margin:14px auto 10px;overflow:hidden;}
+#adem14d5-splash .a14d5-bar span{display:block;height:100%;width:40%;background:var(--d5-grad);border-radius:99px;
+animation:a14d5-bar 1.3s ease-in-out infinite;}
+@keyframes a14d5-bar{0%{transform:translateX(-120%);}100%{transform:translateX(340%);}}
+#adem14d5-splash .a14d5-meta{font-size:11.4px;color:#94A3B8;font-weight:600;}
+#adem14d5-splash .a14d5-phases{display:flex;gap:6px;justify-content:center;margin-top:11px;}
+#adem14d5-splash .a14d5-phases i{width:22px;height:4px;border-radius:99px;background:#CFF4FB;}
+#adem14d5-splash .a14d5-phases i:nth-child(2){background:#A5E8F5;}
+#adem14d5-splash .a14d5-phases i:nth-child(3){background:#67E8F9;}
+#adem14d5-splash .a14d5-phases i:nth-child(4){background:#22D3EE;}
+#adem14d5-splash .a14d5-phases i:nth-child(5){background:#0891B2;}
+#adem14d5-splash.a14d5-dark{background:radial-gradient(1100px 500px at 50% -10%,#083344 0%,#0F172A 55%) #0F172A;}
+#adem14d5-splash.a14d5-dark .a14d5-card{background:rgba(15,23,42,.86);border-color:rgba(34,211,238,.3);}
+#adem14d5-splash.a14d5-dark .a14d5-title{color:#CFF4FB;}
+#adem14d5-splash.a14d5-dark .a14d5-loading{color:#B8D8E4;}
+@media (prefers-reduced-motion:reduce){
+#adem14d5-splash *,#adem14d5-splash{animation:none !important;transition:none !important;}}
+
+/* ==================== responsive ==================== */
+@media (max-width:980px){
+.d5-shell{grid-template-columns:1fr;}
+aside.d5-side{position:static;height:auto;min-height:0;border-right:0;border-bottom:1px solid rgba(0,0,0,.4);}
+.d5-snavwrap{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:2px;}
+.d5-shome{margin-top:10px;}
+}
+@media (max-width:860px){
+main{padding:20px 16px 8px;}
+.d5-heroline h1{font-size:21px;}
+.d5-bar-row{grid-template-columns:120px 1fr 52px;}
+.d5-stack-row{grid-template-columns:100px 1fr;}
+.d5-stack-leg{grid-column:1/-1;}
+.d5-stack-val{display:none;}
+.d5-role{padding:12px;}
+}
+@media print{aside.d5-side,.d5-topbar,#adem12-btn{display:none !important;}}
+</style>
+</head>
+<body>
+
+<div id="adem14d5-splash" role="status" aria-live="polite" aria-label="Chargement du domaine">
+  <div class="a14d5-card">
+    <div class="a14d5-logo">AR</div>
+    <div class="a14d5-title">Admina-RH</div>
+    <div class="a14d5-sub">Domaine 5 — Congés, Absences & Présence</div>
+    <div class="a14d5-dots"><i></i><i></i><i></i></div>
+    <div class="a14d5-loading">Chargement en cours<span class="a14d5-ell">.</span></div>
+    <div class="a14d5-bar"><span></span></div>
+    <div class="a14d5-phases"><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="a14d5-meta">20 écrans · 20 feuilles Excel · 2025</div>
+  </div>
+</div>
+<script>
+/* __ADEM_V14_D5__ — écran de chargement du domaine (variante cyan D5).
+   Disparition quand <main id="d5-main"> est peint (>= 700 ms, filet 4 s, fondu 380 ms,
+   retrait du nœud). Idempotent, survie MutationObserver (pattern V12/V14). */
+(function(){
+  'use strict';
+  if (window.__ADEM_V14_D5__) return;
+  var el = document.getElementById('adem14d5-splash');
+  if (!el) return;
+  var dark = false;
+  try { dark = localStorage.getItem('admina-dark') === 'true'; } catch (e) {}
+  if (dark) el.classList.add('a14d5-dark');
+  window.__ADEM_V14_D5__ = { v: '14-d5', _applied: Date.now() };
+  var t0 = Date.now(), done = false, mo = null;
+  function host(){ return document.body || document.documentElement; }
+  function reattach(){ if (done || el.parentNode) return; host().appendChild(el); }
+  try { mo = new MutationObserver(reattach); mo.observe(host(), { childList: true }); } catch (e) {}
+  var ivKeep = setInterval(function(){
+    reattach();
+    if (done || Date.now() - t0 > 4500) clearInterval(ivKeep);
+  }, 150);
+  var ell = el.querySelector('.a14d5-ell'), n = 1;
+  var ellIv = setInterval(function(){
+    n = n === 1 ? 2 : (n === 2 ? 3 : 1);
+    if (ell) ell.textContent = new Array(n + 1).join('.');
+    else clearInterval(ellIv);
+  }, 500);
+  function hide(){
+    if (done) return; done = true;
+    el.dataset.a14d5done = '1';
+    clearInterval(ellIv); clearInterval(ivKeep);
+    try { mo.disconnect(); } catch (e) {}
+    el.classList.add('a14d5-out');
+    setTimeout(function(){ if (el && el.parentNode) el.parentNode.removeChild(el); }, 420);
+  }
+  var iv = setInterval(function(){
+    var ready = false;
+    try { ready = !!document.getElementById('d5-main'); } catch (e) {}
+    if (Date.now() - t0 >= 700 && document.readyState !== 'loading' && ready){
+      clearInterval(iv); hide();
+    }
+  }, 80);
+  setTimeout(function(){ clearInterval(iv); hide(); }, 4000);
+})();
+</script>
+<div class="d5-shell">
+
+<aside class="d5-side">
+<div class="bmark"><a class="logo" href="/" title="Tous les domaines Admina-RH">AR</a>
+<div><b>Admina-RH</b><small>Domaine 5 · Congés & Présence</small></div></div>
+<div class="d5-ssearch"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="d5navq" type="search" placeholder="Filtrer un onglet…" aria-label="Filtrer les onglets"></div>
+<nav class="d5-snavwrap" aria-label="Onglets du domaine (feuilles du classeur)">
+<a class="d5-snav" href="/Domaine5_Conges_Absences_Presence/"><span class="sheet">TDB</span><span class="lab">Tableau de Bord</span></a><a class="d5-snav" href="/Domaine5_Conges_Absences_Presence/compteur-conges-payes/"><span class="sheet">#52</span><span class="lab">Compteur Congés Payés</span></a><a class="d5-snav" href="/Domaine5_Conges_Absences_Presence/planning-departs-conge/"><span class="sheet">#53</span><span class="lab">Planning des Départs</span></a><a class="d5-snav" href="/Domaine5_Conges_Absences_Presence/permissions-speciales/"><span class="sheet">#54</span><span class="lab">Permissions Spéciales</span></a><a class="d5-snav" href="/Domaine5_Conges_Absences_Presence/conges-sans-solde/"><span class="sheet">#55</span><span class="lab">Congés Sans Solde</span></a><a class="d5-snav" href="/Domaine5_Conges_Absences_Presence/absences-non-justifiees/"><span class="sheet">#56</span><span class="lab">Absences Non Justifiées</span></a><a class="d5-snav" href="/Domaine5_Conges_Absences_Presence/retards-departs-anticipe/"><span class="sheet">#57</span><span class="lab">Retards &amp; Départs Anticipés</span></a><a class="d5-snav" href="/Domaine5_Conges_Absences_Presence/arrets-maladie/"><span class="sheet">#58</span><span class="lab">Arrêts Maladie</span></a><a class="d5-snav" href="/Domaine5_Conges_Absences_Presence/arrets-accident-travail/"><span class="sheet">#59</span><span class="lab">Accidents du Travail</span></a><a class="d5-snav" href="/Domaine5_Conges_Absences_Presence/conges-maternite-paternite/"><span class="sheet">#60</span><span class="lab">Maternité &amp; Paternité</span></a><a class="d5-snav" href="/Domaine5_Conges_Absences_Presence/taux-absenteisme/"><span class="sheet">#61</span><span class="lab">Taux d&#x27;Absentéisme</span></a><a class="d5-snav on" href="/Domaine5_Conges_Absences_Presence/journal-pointage/"><span class="sheet">#62</span><span class="lab">Journal de Pointage</span></a><a class="d5-snav" href="/Domaine5_Conges_Absences_Presence/conge-force-repos-impose/"><span class="sheet">#63</span><span class="lab">Congé Forcé / Repos Imposé</span></a><a class="d5-snav" href="/Domaine5_Conges_Absences_Presence/solde-conges-par-dept/"><span class="sheet">SD</span><span class="lab">Soldes par Département</span></a><a class="d5-snav" href="/Domaine5_Conges_Absences_Presence/historique-presence-annuelle/"><span class="sheet">HP</span><span class="lab">Historique Annuel</span></a><a class="d5-snav" href="/Domaine5_Conges_Absences_Presence/calendrier-conges/"><span class="sheet">CAL</span><span class="lab">Calendrier des Congés</span></a><a class="d5-snav" href="/Domaine5_Conges_Absences_Presence/compteurs-absences-employe/"><span class="sheet">CE</span><span class="lab">Compteurs par Employé</span></a><a class="d5-snav" href="/Domaine5_Conges_Absences_Presence/rapports-stat-absences/"><span class="sheet">RS</span><span class="lab">Rapports &amp; Statistiques</span></a><a class="d5-snav" href="/Domaine5_Conges_Absences_Presence/employes/"><span class="sheet">—</span><span class="lab">Employés</span></a><a class="d5-snav" href="/Domaine5_Conges_Absences_Presence/interconnexions/"><span class="sheet">—</span><span class="lab">Interconnexions &amp; Documents</span></a>
+</nav>
+<div class="d5-shome">
+<a class="d5-snav" href="/"><span class="sheet">⌂</span><span class="lab">Tous les domaines</span></a>
+</div>
+<div class="d5-sroles"><div class="t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M2.5 20c0-3.3 2.9-5.2 6.5-5.2s6.5 1.9 6.5 5.2"/><circle cx="17.5" cy="9.5" r="2.4"/><path d="M16 14.9c2.9.2 5.5 1.8 5.5 4.6"/></svg> Rôles utilisateurs</div><div class="r"><a href="/Domaine5_Conges_Absences_Presence/#roles" title="Décide des congés forcés et repos imposés (fermetures, basse saison) et approuve les rapports d&#x27;absences."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-4h6v4"/><path d="M9 10h.01M15 10h.01M12 13h.01"/></svg>Direction Générale</a><a href="/Domaine5_Conges_Absences_Presence/#roles" title="Gère compteurs, soldes et planning ; valide les congés sans solde, les sanctions et l&#x27;absentéisme par service."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6 8-6s8 2 8 6"/><path d="M9 12l3 3 3-3"/></svg>DRH</a><a href="/Domaine5_Conges_Absences_Presence/#roles" title="Saisit pointages, plannings et permissions ; organise les remplacements et rédige les bilans mensuels."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4M16 2v4M3 9h18M8 14h4"/></svg>Assistante RH</a><a href="/Domaine5_Conges_Absences_Presence/#roles" title="Valide les dates de départ de ses collaborateurs, justifie retards et absences, vérifie les chevauchements."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="3"/><circle cx="17" cy="10" r="2.5"/><path d="M2 20c0-3 2.7-5 6-5s6 2 6 5"/><path d="M14 20c0-2.2 1.3-3.5 3-3.5s3 1.3 3 3.5"/></svg>Manager / N+1</a><a href="/Domaine5_Conges_Absences_Presence/#roles" title="Certifie les arrêts maladie, suit les visites de reprise et les déclarations d&#x27;accidents du travail (CNPS)."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/><path d="M12 11v5M9.5 13.5h5"/></svg>Médecin / SST</a><a href="/Domaine5_Conges_Absences_Presence/#roles" title="Demande ses congés et permissions, consulte son solde, son score de présence et son historique annuel."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="3.5"/><path d="M5 21c0-3.5 3-5.5 7-5.5s7 2 7 5.5"/><path d="M12 12.5v3M10.5 14h3"/></svg>Employé</a></div></div>
+</aside>
+<div class="d5-maincol">
+<main id="d5-main">
+<div class="d5-topbar"><div class="crumb"><a href="/">Tous les domaines</a><span class="sep">›</span><a href="/Domaine5_Conges_Absences_Presence/">Domaine 5</a><span class="sep">›</span><span>Présence</span><span class="sep">›</span><b>Admina-RH</b></div>
+<a class="tohub" href="/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7.5" height="7.5" rx="1.8"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.8"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.8"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.8"/></svg> Hub Admina-RH</a></div>
+
+<div class="d5-heroline"><div class="d5-heroico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg></div><div><span class="d5-modbadge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg> Module #62 · Présence</span><h1>Tableau de Présence / Journal de Pointage</h1><p class="d5-sub">Pointage journalier des équipes : heures d'arrivée et de départ, présence effective en heures, absences du jour avec typologie, retards en minutes et validation des relevés.</p></div></div>
+<div class="d5-kpis">
+<div class="d5-kpi"><span class="k-lab">Pointages saisis</span><span class="k-val">7</span></div>
+<div class="d5-kpi"><span class="k-lab">Total heures</span><span class="k-val">47.8 <small> h</small></span></div>
+<div class="d5-kpi"><span class="k-lab">Total retards</span><span class="k-val">25 <small> min</small></span></div>
+<div class="d5-kpi"><span class="k-lab">Absences</span><span class="k-val">1</span><span class="k-note">journales</span></div>
+</div>
+<section class="d5-card"><div class="d5-card-h"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg><h2>Horaires du jour</h2><span class="hint">10 premiers pointages</span></div><div class="d5-card-b"><div class="d5-chipset"><span class="d5-chip2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>Nganou Clarisse<small>07h55 → 17h10</small>
+<span class="d5-badge d5-b-ok">Present</span></span><span class="d5-chip2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>Tchinda Armand<small>08h15 → 17h30</small>
+<span class="d5-badge d5-b-ok">Present</span></span><span class="d5-chip2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>Fotso Marguerite<small>— → —</small>
+<span class="d5-badge d5-b-neu">Arret maladie</span></span><span class="d5-chip2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>Nkoulou Mbarga<small>06h00 → 14h10</small>
+<span class="d5-badge d5-b-ok">Present</span></span><span class="d5-chip2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>Kamga Paul<small>06h10 → 14h00</small>
+<span class="d5-badge d5-b-ok">Present</span></span><span class="d5-chip2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>Nkoulou Joel<small>07h00 → 15h00</small>
+<span class="d5-badge d5-b-ok">Present</span></span><span class="d5-chip2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>Kamga Patrice<small>07h00 → 15h00</small>
+<span class="d5-badge d5-b-ok">Present</span></span></div></div></section>
+<section class="d5-card"><div class="d5-card-h"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg><h2>Journal complet</h2></div><div class="d5-card-b"><div class="d5-tblwrap"><table class="d5-tbl "><thead><tr><th>N°</th><th>Nom Employé</th><th>Département</th><th>Date</th><th>Heure Arrivée</th><th>Heure Départ</th><th>Présence (h)</th><th>Absence</th><th>Retard (min)</th><th>Type Absence</th><th>Statut</th></tr></thead><tbody><tr><tr><td class='id'>JP-001</td><td>Nganou Clarisse</td><td class='muted'>Cuisine &amp; Restauration</td><td>02/06/2025</td><td class='ctr'>07h55</td><td class='ctr'>17h10</td><td class='num strong'>8.2</td><td>—</td><td class='num'>0</td><td>—</td><td class='ctr'><span class="d5-badge d5-b-ok">Valide</span></td></tr></tr><tr><tr><td class='id'>JP-002</td><td>Tchinda Armand</td><td class='muted'>Réception &amp; Front Office</td><td>02/06/2025</td><td class='ctr'>08h15</td><td class='ctr'>17h30</td><td class='num strong'>8.2</td><td>—</td><td class='num'>15</td><td>—</td><td class='ctr'><span class="d5-badge d5-b-ok">Valide</span></td></tr></tr><tr><tr><td class='id'>JP-003</td><td>Fotso Marguerite</td><td class='muted'>Finance &amp; Comptabilité</td><td>03/06/2025</td><td class='ctr'>—</td><td class='ctr'>—</td><td class='num strong'>0</td><td>Arret maladie</td><td class='num'>0</td><td>Arret maladie</td><td class='ctr'><span class="d5-badge d5-b-ok">Valide</span></td></tr></tr><tr><tr><td class='id'>JP-004</td><td>Nkoulou Mbarga</td><td class='muted'>Étage &amp; Housekeeping</td><td>02/06/2025</td><td class='ctr'>06h00</td><td class='ctr'>14h10</td><td class='num strong'>7.7</td><td>—</td><td class='num'>0</td><td>—</td><td class='ctr'><span class="d5-badge d5-b-ok">Valide</span></td></tr></tr><tr><tr><td class='id'>JP-005</td><td>Kamga Paul</td><td class='muted'>Maintenance</td><td>02/06/2025</td><td class='ctr'>06h10</td><td class='ctr'>14h00</td><td class='num strong'>7.7</td><td>—</td><td class='num'>10</td><td>—</td><td class='ctr'><span class="d5-badge d5-b-ok">Valide</span></td></tr></tr><tr><tr><td class='id'>JP-028</td><td>Nkoulou Joel</td><td class='muted'>Sécurité</td><td>02/06/2025</td><td class='ctr'>07h00</td><td class='ctr'>15h00</td><td class='num strong'>8</td><td>—</td><td class='num'>0</td><td>—</td><td class='ctr'><span class="d5-badge d5-b-ok">Valide</span></td></tr></tr><tr><tr><td class='id'>JP-029</td><td>Kamga Patrice</td><td class='muted'>Sécurité</td><td>02/06/2025</td><td class='ctr'>07h00</td><td class='ctr'>15h00</td><td class='num strong'>8</td><td>—</td><td class='num'>0</td><td>—</td><td class='ctr'><span class="d5-badge d5-b-ok">Valide</span></td></tr></tr><tr class="d5totrow"><td></td><td>TOTAL</td><td></td><td></td><td></td><td></td><td class='num'>47.8 h</td><td class='ctr'>1 abs.</td><td class='num'>25 min</td><td></td><td></td></tr></tbody></table></div></div></section>
+<p class="d5-src"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg> Feuille « 12-Journal de Pointage » (#62) — recalculs fidèles des formules du classeur (VLOOKUP employés, SUMIF / COUNTIF inter-feuilles, taux et scores).</p>
+
+</main>
+<footer class="d5f"><div class="in"><div class="row">
+<div><b>Admina-RH</b> — Domaine 5 — Congés, Absences & Présence<br>
+Source : classeur « Domaine5_Conges_Absences_Presence (2).xlsx » · conforme ISO 30414 / ISO 9001.</div>
+<div><a href="/">Accueil multi-domaines</a> · <a href="https://github.com/georgyfr/Admina_RH" target="_blank" rel="noopener noreferrer">Dépôt GitHub ↗</a></div>
+</div></div></footer>
+</div>
+</div>
+<script id="adem12-d5">
+
+/* ADEM_V12 — Menu déroulant global des domaines (remplace les listes sidebar)
+ * DEMANDE UTILISATEUR : la liste des domaines dans la barre latérale s'affiche mal
+ * (libellés tronqués, chevauchements) → afficher tous les domaines AILLEURS, sous
+ * forme de liste déroulante, présente sur TOUS les domaines actifs.
+ *
+ * SOLUTION : bouton flottant fixe EN BAS À DROITE (unique position fiable sur les
+ * 3 applications distinctes : React D1/D2, Next.js D3, pages « en préparation »)
+ * ouvrant un panneau déroulant : recherche + 31 domaines (badges ACTIF / EN
+ * PRÉPARATION), domaine courant surligné, lien Accueil (hub). Absent du hub « / »
+ * qui est déjà la page de présentation complète.
+ *
+ * Les listes sidebar deviennent inutiles et sont MASQUÉES (CSS + DOM runtime,
+ * 0 octet des scripts tiers modifié, aucun nœud React/Next déplacé) :
+ *   - app React (D1/D2)  : #admina-cdn (bloc tiers) → display:none
+ *   - build D3 (Next.js) : conteneur « Autres Domaines » → display:none
+ * La sidebar retrouve ainsi sa hauteur complète (V10 ne réduit plus rien :
+ * offsetHeight du bloc masqué = 0).
+ *
+ * Non-régression : z-index 1600 (au-dessus de l'app MUI 1100-1300, SOUS les
+ * modaux ADEM V8/V9 à 5000+) ; auto-réparation si le nœud disparaît ;
+ * surlignage du domaine courant suivi (popstate + intervalle, routes SPA).
+ * API : window.__ADEM_V12__ = {version, open, close, fix, _applied}
+ */
+(function () {
+  'use strict';
+  if (window.__ADEM_V12__) return;
+  var D = document;
+  var API = window.__ADEM_V12__ = { version: 'V12', open: open, close: close, fix: fix, _applied: 0 };
+
+  /* ------- données : les 31 domaines (mêmes URLs dédiées que le hub) ------- */
+  var DOMAINS = [
+    { n: 1,  u: '/Domaine1_Recrutement_Candidats', l: 'Recrutement & Candidats', a: 1 },
+    { n: 2,  u: '/Domaine2_Gestion_Administrative_Personnel', l: 'Gestion Administrative du Personnel', a: 1 },
+    { n: 3,  u: '/Domaine3_Paie_Remuneration_Avantages/', l: 'Paie, Rémunération & Avantages', a: 1 },
+    { n: 4,  u: '/Domaine4_Temps_Travail_Planification/', l: 'Temps de Travail & Planification', a: 1 },
+    { n: 5,  u: '/Domaine5_Conges_Absences_Presence/', l: 'Congés, Absences & Présence', a: 1 },
+    { n: 6,  u: '/Domaine6_Formation_Developpement_Competences/', l: 'Formation & Développement des Compétences', a: 1 },
+    { n: 7,  u: '/Domaine7_Evaluation_Gestion_Performance/', l: 'Évaluation & Gestion de la Performance' },
+    { n: 8,  u: '/Domaine8_Relations_Sociales_Syndicats/', l: 'Relations Sociales & Syndicats' },
+    { n: 9,  u: '/Domaine9_Sante_Securite_Conditions_Travail/', l: 'Santé, Sécurité & Conditions de Travail' },
+    { n: 10, u: '/Domaine10_Talents_Mobilite_Interne/', l: 'Talents & Mobilité Interne' },
+    { n: 11, u: '/Domaine11_Droit_Travail_Conformite/', l: 'Droit du Travail & Conformité' },
+    { n: 12, u: '/Domaine12_Documentation_Archivage_RH/', l: 'Documentation & Archivage RH' },
+    { n: 13, u: '/Domaine13_Communication_RH_Marque_Employeur/', l: 'Communication RH & Marque Employeur' },
+    { n: 14, u: '/Domaine14_Reporting_Tableaux_Bord_Analyse/', l: 'Reporting & Tableaux de Bord Analyse' },
+    { n: 15, u: '/Domaine15_Budget_Pilotage_Financier_RH/', l: 'Budget & Pilotage Financier RH' },
+    { n: 16, u: '/Domaine16_Diversite_Equite_Inclusion/', l: 'Diversité, Équité & Inclusion' },
+    { n: 17, u: '/Domaine17_Audit_Conformite_Contentieux/', l: 'Audit, Conformité & Contentieux' },
+    { n: 18, u: '/Domaine18_RSE_Developpement_Durable_RH/', l: 'RSE & Développement Durable' },
+    { n: 19, u: '/Domaine19_Innovation_RH_Transformation_Digitale/', l: 'Innovation RH & Transformation Digitale' },
+    { n: 20, u: '/Domaine20_Pilotage_Reporting_RH/', l: 'Pilotage & Reporting RH' },
+    { n: 21, u: '/Domaine21_Fiches_Postes_Profils_Cartographie_Metiers/', l: 'Fiches de Postes & Cartographie des Métiers' },
+    { n: 22, u: '/Domaine22_Avantages_Sociaux_Previsionnelle/', l: 'Avantages Sociaux & Prévoyance' },
+    { n: 23, u: '/Domaine23_Travail_Temporaire/', l: 'Travail Temporaire' },
+    { n: 24, u: '/Domaine24_Stagiaires_Alternants/', l: 'Stagiaires & Alternants' },
+    { n: 25, u: '/Domaine25_Expatries_Personnel_Detache/', l: 'Expatriés & Personnel Détaché' },
+    { n: 26, u: '/Domaine26_Gestion_Budgetaire_Fiscale_RH/', l: 'Gestion Budgétaire & Fiscale RH' },
+    { n: 27, u: '/Domaine27_Reclamations_Contentieux_RH/', l: 'Réclamations & Contentieux RH' },
+    { n: 28, u: '/Domaine28_Mobilite_Carriere_Succession_RH/', l: 'Mobilité, Carrière & Succession' },
+    { n: 29, u: '/Domaine29_Communication_Interne_Engagement/', l: 'Communication Interne & Engagement' },
+    { n: 30, u: '/Domaine30_Expatrites_Mobilite_Internationale/', l: 'Expatriés & Mobilité Internationale' },
+    { n: 31, u: '/Domaine31_Retraites_Prevoyance_Transitions_Carriere/', l: 'Retraites, Prévoyance & Transitions de Carrière' }
+  ];
+  var N_ACTIF = 6;
+
+  /* hub racine = déjà la présentation complète → aucun bouton */
+  var p0 = location.pathname;
+  if (p0 === '/' || p0 === '/index.html') { API.fix = function () {}; return; }
+
+  var ICON_GRID = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>';
+  var ICON_CHEV = '<svg class="adem12-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
+  var ICON_X = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+  var ICON_SEARCH = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>';
+  var ICON_CHECK = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+  var ICON_ARROW = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="8 7 17 7 17 16"/></svg>';
+
+  var CSS = [
+    '#adem12-btn{position:fixed;right:18px;bottom:18px;z-index:1600;display:flex;align-items:center;gap:8px;',
+    'padding:12px 18px;border:0;border-radius:999px;cursor:pointer;color:#fff;',
+    "background:linear-gradient(135deg,#9375cd,#5e35a1);font-family:'Roboto',system-ui,-apple-system,'Segoe UI',sans-serif;",
+    'font-size:13.5px;font-weight:600;letter-spacing:.02em;box-shadow:0 10px 28px rgba(94,53,161,.45);',
+    'transition:transform .18s ease,box-shadow .18s ease;}',
+    '#adem12-btn:hover{transform:translateY(-2px);box-shadow:0 14px 34px rgba(94,53,161,.55);}',
+    '#adem12-btn:active{transform:translateY(0);}',
+    '#adem12-btn .adem12-chev{transition:transform .2s ease;opacity:.9;}',
+    '#adem12-btn.adem12-open .adem12-chev{transform:rotate(180deg);}',
+    '#adem12-panel{position:fixed;right:18px;bottom:72px;z-index:1600;width:min(404px,calc(100vw - 24px));',
+    'max-height:min(68vh,600px);display:flex;flex-direction:column;background:#fff;color:#221a3f;',
+    "font-family:'Roboto',system-ui,-apple-system,'Segoe UI',sans-serif;text-align:left;",
+    'border:1px solid rgba(94,53,161,.18);border-radius:18px;box-shadow:0 24px 70px rgba(20,10,50,.35);',
+    'overflow:hidden;opacity:0;transform:translateY(14px) scale(.98);transform-origin:100% 100%;',
+    'pointer-events:none;transition:opacity .2s ease,transform .22s ease;}',
+    '#adem12-panel.adem12-open{opacity:1;transform:none;pointer-events:auto;}',
+    '#adem12-panel .adem12-head{display:flex;align-items:center;gap:10px;padding:14px 16px;',
+    'background:linear-gradient(135deg,rgba(147,117,205,.14),rgba(94,53,161,.07));border-bottom:1px solid rgba(94,53,161,.12);}',
+    '#adem12-panel .adem12-head b{font-size:14px;color:#3b2a6b;}',
+    '#adem12-panel .adem12-head small{display:block;font-size:11px;color:#8b84a8;margin-top:1px;}',
+    '#adem12-panel .adem12-x{margin-left:auto;border:0;background:transparent;color:#6b6390;cursor:pointer;',
+    'padding:6px;border-radius:8px;display:flex;transition:.15s;}',
+    '#adem12-panel .adem12-x:hover{background:rgba(94,53,161,.1);color:#3b2a6b;}',
+    '#adem12-panel .adem12-search{padding:10px 12px;border-bottom:1px solid #efeaf8;}',
+    '#adem12-panel .adem12-search div{display:flex;align-items:center;gap:8px;background:#f7f4fd;',
+    'border:1px solid #e6def5;border-radius:10px;padding:8px 12px;color:#8b84a8;}',
+    '#adem12-panel .adem12-search input{flex:1;border:0;background:transparent;outline:none;',
+    "font:400 13px/1.3 'Roboto',system-ui,sans-serif;color:#221a3f;min-width:0;}",
+    '#adem12-panel .adem12-list{overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;}',
+    '#adem12-panel .adem12-item{display:flex;align-items:center;gap:10px;padding:10px 14px;',
+    'text-decoration:none;color:#2c2450;border-bottom:1px solid #f3eff9;transition:background .12s;}',
+    '#adem12-panel .adem12-item:hover{background:#f7f4fd;}',
+    '#adem12-panel .adem12-item.adem12-on{background:rgba(147,117,205,.12);box-shadow:inset 3px 0 0 #7c5fc0;}',
+    '#adem12-panel .adem12-num{flex:none;width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;',
+    'background:rgba(147,117,205,.15);border:1px solid rgba(147,117,205,.35);color:#64489e;',
+    'font-size:10.5px;font-weight:700;}',
+    '#adem12-panel .adem12-lab{flex:1;font-size:12.8px;font-weight:500;line-height:1.3;min-width:0;',
+    'overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}',
+    '#adem12-panel .adem12-chip{flex:none;font-size:9.5px;font-weight:700;letter-spacing:.05em;',
+    'padding:3px 8px;border-radius:999px;}',
+    '#adem12-panel .adem12-ok{color:#0e8a66;background:rgba(58,210,159,.13);border:1px solid rgba(58,210,159,.45);}',
+    '#adem12-panel .adem12-warn{color:#96690f;background:rgba(245,183,78,.14);border:1px solid rgba(245,183,78,.4);}',
+    '#adem12-panel .adem12-cur{flex:none;display:none;color:#7c5fc0;}',
+    '#adem12-panel .adem12-item.adem12-on .adem12-cur{display:flex;}',
+    '#adem12-panel .adem12-none{display:none;padding:22px 16px;color:#8b84a8;font-size:12.5px;text-align:center;}',
+    '#adem12-panel .adem12-foot{display:flex;align-items:center;gap:8px;padding:12px 16px;text-decoration:none;',
+    'color:#5e35a1;font-size:12.5px;font-weight:600;border-top:1px solid #efeaf8;background:#fbf9ff;transition:.15s;}',
+    '#adem12-panel .adem12-foot:hover{background:#f3edfc;}',
+    '@media(max-width:640px){#adem12-btn{right:12px;bottom:12px;padding:11px 15px;font-size:12.5px;}',
+    '#adem12-panel{right:12px;bottom:66px;width:calc(100vw - 24px);}}',
+    /* masquage des listes sidebar remplacées (0 octet tiers modifié) */
+    '#admina-cdn{display:none !important;}',
+    '.border-t.border-white\\/10.bg-black\\/20{display:none !important;}'
+  ].join('');
+
+  var btn, panel, listEl, inputEl, noneEl;
+
+  function el(tag, cls, html) {
+    var e = D.createElement(tag);
+    if (cls) e.className = cls;
+    if (html != null) e.innerHTML = html;
+    return e;
+  }
+
+  function currentKey() {
+    var p = location.pathname;
+    if (p.indexOf('/Domaine1_Recrutement_Candidats') === 0) return '/Domaine1_Recrutement_Candidats';
+    if (p.indexOf('/Domaine2_Gestion_Administrative_Personnel') === 0 ||
+        p.indexOf('/domaine2_Gestion_Administrative_Personnel') === 0) return '/Domaine2_Gestion_Administrative_Personnel';
+    if (p.indexOf('/Domaine3_Paie_Remuneration_Avantages') === 0) return '/Domaine3_Paie_Remuneration_Avantages/';
+    for (var i = 3; i < DOMAINS.length; i++) {
+      var f = DOMAINS[i].u.slice(0, -1);
+      if (p === f || p.indexOf(f + '/') === 0) return DOMAINS[i].u;
+    }
+    return null;
+  }
+
+  function refreshCurrent() {
+    if (!listEl) return;
+    var cur = currentKey();
+    var rows = listEl.querySelectorAll('.adem12-item');
+    for (var i = 0; i < rows.length; i++) {
+      var on = cur !== null && rows[i].getAttribute('data-u') === cur;
+      rows[i].className = 'adem12-item' + (on ? ' adem12-on' : '') + (DOMAINS[i].a ? '' : '');
+    }
+  }
+
+  function buildPanel() {
+    panel = el('div');
+    panel.id = 'adem12-panel';
+    panel.setAttribute('role', 'dialog');
+    panel.setAttribute('aria-label', 'Tous les domaines Admina-RH');
+
+    var head = el('div', 'adem12-head');
+    head.appendChild(el('div', null, '<b>Admina-RH</b><small>' + N_ACTIF + ' domaines actifs · ' +
+      DOMAINS.length + ' domaines au total</small>'));
+    var x = el('button', 'adem12-x', ICON_X);
+    x.setAttribute('aria-label', 'Fermer');
+    x.addEventListener('click', function () { close(); });
+    head.appendChild(x);
+    panel.appendChild(head);
+
+    var sw = el('div', 'adem12-search');
+    var si = el('div', null, ICON_SEARCH);
+    inputEl = D.createElement('input');
+    inputEl.type = 'search';
+    inputEl.placeholder = 'Rechercher un domaine…';
+    inputEl.setAttribute('aria-label', 'Rechercher un domaine');
+    inputEl.addEventListener('input', filter);
+    si.appendChild(inputEl);
+    sw.appendChild(si);
+    panel.appendChild(sw);
+
+    listEl = el('div', 'adem12-list');
+    for (var i = 0; i < DOMAINS.length; i++) {
+      var d = DOMAINS[i];
+      var a = el('a', 'adem12-item');
+      a.href = d.u;
+      a.setAttribute('data-u', d.u);
+      a.title = 'Domaine ' + d.n + ' — ' + d.l;
+      a.appendChild(el('span', 'adem12-num', 'D' + d.n));
+      a.appendChild(el('span', 'adem12-lab', d.l));
+      a.appendChild(el('span', 'adem12-chip ' + (d.a ? 'adem12-ok' : 'adem12-warn'), d.a ? 'ACTIF' : 'EN PRÉPARATION'));
+      a.appendChild(el('span', 'adem12-cur', ICON_CHECK));
+      listEl.appendChild(a);
+    }
+    noneEl = el('div', 'adem12-none', 'Aucun domaine ne correspond à votre recherche.');
+    listEl.appendChild(noneEl);
+    panel.appendChild(listEl);
+
+    var foot = el('a', 'adem12-foot', 'Tous les domaines — Accueil ' + ICON_ARROW);
+    foot.href = '/';
+    panel.appendChild(foot);
+  }
+
+  function filter() {
+    var v = inputEl.value.trim().toLowerCase();
+    var n = 0;
+    var rows = listEl.querySelectorAll('.adem12-item');
+    for (var i = 0; i < rows.length; i++) {
+      var hit = rows[i].getAttribute('data-u').toLowerCase().indexOf(v) !== -1 ||
+                rows[i].textContent.toLowerCase().indexOf(v) !== -1;
+      rows[i].style.display = hit ? '' : 'none';
+      if (hit) n++;
+    }
+    noneEl.style.display = n ? 'none' : 'block';
+  }
+
+  function open() {
+    if (!panel) return;
+    refreshCurrent();
+    panel.classList.add('adem12-open');
+    btn.classList.add('adem12-open');
+    btn.setAttribute('aria-expanded', 'true');
+    try { inputEl.focus(); } catch (e) {}
+  }
+
+  function close() {
+    if (!panel) return;
+    panel.classList.remove('adem12-open');
+    btn.classList.remove('adem12-open');
+    btn.setAttribute('aria-expanded', 'false');
+  }
+
+  function toggle() {
+    if (panel.classList.contains('adem12-open')) close();
+    else open();
+  }
+
+  /* Masquage runtime de secours (si la classe Tailwind du bloc D3 change) */
+  function hideD3Block() {
+    if (location.pathname.indexOf('/Domaine3_Paie') !== 0) return;
+    var ps = D.querySelectorAll('p');
+    for (var i = 0; i < ps.length; i++) {
+      if ((ps[i].textContent || '').trim().toLowerCase() === 'autres domaines') {
+        var c = ps[i].parentElement;
+        if (c && c.style.display !== 'none') { c.style.display = 'none'; API._applied++; }
+      }
+    }
+  }
+
+  function fix() {
+    if (!btn || !btn.isConnected) mount();
+    refreshCurrent();
+    hideD3Block();
+  }
+
+  function mount() {
+    if (btn && btn.isConnected) return;
+    if (!btn) {
+      buildPanel();
+      btn = el('button', null, ICON_GRID + '<span>Domaines</span>' + ICON_CHEV);
+      btn.id = 'adem12-btn';
+      btn.setAttribute('aria-expanded', 'false');
+      btn.setAttribute('aria-haspopup', 'true');
+      btn.setAttribute('aria-controls', 'adem12-panel');
+      btn.title = 'Tous les domaines Admina-RH';
+      btn.addEventListener('click', function (e) { e.stopPropagation(); toggle(); });
+      D.addEventListener('click', function (e) {
+        if (!panel.classList.contains('adem12-open')) return;
+        if (panel.contains(e.target) || btn.contains(e.target)) return;
+        close();
+      });
+      D.addEventListener('keydown', function (e) {
+        if ((e.key || e.keyCode) === 'Escape') close();
+      });
+      window.addEventListener('popstate', refreshCurrent);
+    }
+    D.body.appendChild(btn);
+    D.body.appendChild(panel);
+    API._applied++;
+  }
+
+  function start() {
+    if (!D.getElementById('adem12-style')) {
+      var st = D.createElement('style');
+      st.id = 'adem12-style';
+      st.textContent = CSS;
+      D.head.appendChild(st);
+    }
+    mount();
+    /* suivi léger : routes SPA + auto-réparation (pattern V11) */
+    setInterval(fix, 1500);
+  }
+
+  if (D.readyState === 'loading') D.addEventListener('DOMContentLoaded', start);
+  else start();
+})();
+
+
+</script>
+<script>
+/* filtre onglets (sidebar) */
+(function(){
+  var q = document.getElementById('d5navq'), wrap = document.querySelector('.d5-snavwrap');
+  if (!q || !wrap) return;
+  q.addEventListener('input', function(){
+    var v = q.value.trim().toLowerCase();
+    var links = wrap.querySelectorAll('a.d5-snav');
+    for (var i = 0; i < links.length; i++) {
+      var hit = !v || links[i].textContent.toLowerCase().indexOf(v) !== -1;
+      links[i].style.display = hit ? '' : 'none';
+    }
+  });
+})();
+</script>
+</body>
+</html>
