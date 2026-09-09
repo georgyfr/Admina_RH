@@ -1,111 +1,73 @@
 <!doctype html>
 <html lang="fr">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Admina-RH | Domaine 5 — Tableau de Bord</title>
-<meta name="description" content="Tableau de Bord — module Congés, Absences & Présence de la plateforme Admina-RH (Hôtel 4★). Données issues du classeur Excel du domaine 5."/>
-<link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Domaine 5 — Congés, Absences & Présence | Admina-RH</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <style>
-:root{--bg:#f9f6ef;--card:#ffffff;--card2:#fdfaf3;--border:#eae1cd;--txt:#2b2213;--mut:#71654d;
---acc:#b45309;--acc2:#92400e;--ok:#15803d;--warn:#ca8a04;--bad:#dc2626;--info:#2563eb}
+
+:root{--bg:#0d0d1a;--card:#15152a;--card2:#191932;--border:rgba(255,255,255,.09);--txt:#eef0ff;
+--mut:#9aa0c3;--acc:#9375cd;--acc2:#5e35a1;--ok:#3ad29f;--warn:#f5b74e}
 *{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;background:
-radial-gradient(1100px 420px at 75% -12%,rgba(180,83,9,.07),transparent),var(--bg);color:var(--txt);min-height:100vh}
-a{color:var(--info);text-decoration:none}
-a:hover{text-decoration:underline}
-.shell{display:grid;grid-template-columns:252px 1fr;min-height:100vh}
-aside{background:linear-gradient(175deg,#43300c 0%,#352409 55%,#261806 100%);border-right:1px solid rgba(0,0,0,.25);padding:18px 14px;position:sticky;top:0;
-height:100vh;overflow-y:auto}
-aside .bmark{display:flex;align-items:center;gap:10px;padding:2px 6px 14px;border-bottom:1px solid rgba(255,255,255,.12);margin-bottom:12px}
-.logo{width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,#f59e0b,#b45309);display:flex;
-align-items:center;justify-content:center;font-weight:800;font-size:13px;color:#fff;box-shadow:0 6px 18px rgba(180,83,9,.5);flex:none}
-.bmark b{font-size:1rem;display:block;color:#fff}
-.bmark small{color:#d3b586;font-size:.68rem;letter-spacing:.05em;text-transform:uppercase;display:block;margin-top:1px}
-aside .grp{color:#ddb678;font-size:.64rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;margin:14px 8px 6px}
-aside a.nav{display:flex;align-items:center;gap:8px;color:#f0e3c8;font-size:.86rem;padding:7px 10px;border-radius:9px;
-transition:.15s;border:1px solid transparent}
-aside a.nav:hover{background:rgba(255,255,255,.07);text-decoration:none;color:#fff}
-aside a.nav.on{background:rgba(245,158,11,.18);color:#fff;
-border-color:rgba(245,158,11,.45)}
-aside a.nav .dot{width:6px;height:6px;border-radius:50%;background:#fbbf24;opacity:.45;flex:none}
-aside a.nav.on .dot{opacity:1;box-shadow:0 0 8px #fbbf24}
-aside .home{margin-top:14px;border-top:1px solid rgba(255,255,255,.12);padding-top:12px}
-main{padding:26px 30px 60px;min-width:0}
-.topbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:20px}
-.topbar .crumb{color:var(--mut);font-size:.8rem}
-.topbar .crumb a{color:var(--acc)}
-.topbar .tohub{margin-left:auto;font-size:.8rem;color:var(--mut);background:var(--card);border:1px solid var(--border);padding:7px 13px;
-border-radius:10px;transition:.2s}
-.topbar .tohub:hover{color:var(--acc);border-color:var(--acc);text-decoration:none;box-shadow:0 4px 14px rgba(180,83,9,.12)}
-h1{font-size:clamp(1.45rem,2.6vw,2rem);font-weight:800}
-h1 span{background:linear-gradient(90deg,#92400e,#f59e0b);-webkit-background-clip:text;background-clip:text;color:transparent}
-.sub{color:var(--mut);font-size:.92rem;margin-top:6px;max-width:72ch}
-.hero{margin:4px 0 20px;background:linear-gradient(120deg,#41300a 0%,#6a4410 55%,#936010 100%);border:1px solid rgba(255,255,255,.09);
-border-radius:18px;padding:26px 28px;display:flex;gap:18px;align-items:center;justify-content:space-between;flex-wrap:wrap;color:#fff;
-box-shadow:0 16px 36px -20px rgba(66,44,8,.6)}
-.hero .hl{display:flex;gap:16px;align-items:center;min-width:260px}
-.hero .hic{width:54px;height:54px;border-radius:14px;background:rgba(255,255,255,.13);display:flex;align-items:center;justify-content:center;flex:none}
-.hero h2{font-size:clamp(1.2rem,2.2vw,1.68rem);font-weight:800;letter-spacing:-.2px;line-height:1.25}
-.hero .hsub{color:#f1dcba;font-size:.85rem;margin-top:5px;max-width:62ch}
-.hero .hr{display:flex;gap:8px;flex-wrap:wrap}
-.hero .hchip{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);color:#fdf6e9;font-size:.74rem;font-weight:600;
-padding:7px 12px;border-radius:999px;white-space:nowrap}
-.chips{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0 2px}
-.chip{background:var(--card);border:1px solid var(--border);border-left:4px solid #d9c9a4;border-radius:12px;padding:10px 14px;min-width:128px;
-box-shadow:0 1px 2px rgba(66,44,8,.04)}
-.chip b{font-size:1.18rem;display:block;font-variant-numeric:tabular-nums;color:var(--txt)}
-.chip small{color:var(--mut);font-size:.7rem;letter-spacing:.04em;text-transform:uppercase}
-.chip.ok{border-left-color:var(--ok)}.chip.warn{border-left-color:var(--warn)}.chip.bad{border-left-color:var(--bad)}.chip.info{border-left-color:var(--info)}
-.chip.ok b{color:var(--ok)}.chip.warn b{color:var(--warn)}.chip.bad b{color:var(--bad)}.chip.info b{color:var(--info)}
-.panel{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin-top:18px;box-shadow:0 1px 3px rgba(66,44,8,.05)}
-.panel h2{font-size:1.02rem;margin-bottom:12px;display:flex;align-items:center;gap:8px;color:var(--txt)}
-.panel h2::before{content:"";width:8px;height:8px;border-radius:2px;background:linear-gradient(135deg,#f59e0b,#b45309)}
-.tools{display:flex;gap:10px;align-items:center;margin-bottom:12px;flex-wrap:wrap}
-.tools input[type=search]{background:var(--card);border:1px solid var(--border);color:var(--txt);border-radius:10px;
-padding:9px 13px;font-size:.86rem;min-width:240px;outline:none}
-.tools input[type=search]:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(180,83,9,.12)}
-.tools input[type=search]::placeholder{color:#a4937a}
-.tools .count{color:var(--mut);font-size:.78rem}
-.legend{display:flex;gap:12px;flex-wrap:wrap;color:var(--mut);font-size:.74rem;margin:4px 0 10px}
-.legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;vertical-align:-1px}
-.tblwrap{overflow-x:auto;border:1px solid var(--border);border-radius:12px}
-table{border-collapse:collapse;width:100%;font-size:.83rem;min-width:640px}
-thead th{position:sticky;top:0;background:#f4eddc;color:#6d5f45;text-align:left;font-weight:700;font-size:.72rem;
-letter-spacing:.04em;text-transform:uppercase;padding:10px 12px;border-bottom:1px solid var(--border);white-space:nowrap;z-index:2}
-tbody td{padding:9px 12px;border-bottom:1px solid #f0eadb;white-space:nowrap;vertical-align:middle;color:var(--txt)}
-tbody tr:hover{background:rgba(180,83,9,.045)}
-tbody tr:last-child td{border-bottom:0}
-td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
-td.ctr,th.ctr{text-align:center}
-.badge{display:inline-block;font-size:.66rem;font-weight:700;letter-spacing:.05em;padding:3px 9px;border-radius:999px}
-.b-ok{color:#166534;background:#e5f7ec;border:1px solid #9adbb6}
-.b-warn{color:#92400e;background:#fdf1d8;border:1px solid #ecd192}
-.b-bad{color:#991b1b;background:#fdeaea;border:1px solid #f3b4b4}
-.b-info{color:#1e40af;background:#e7effd;border:1px solid #b0c8f7}
-.b-mut{color:#5c5342;background:#f3efe6;border:1px solid #ddd3bf}
-.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.78rem;color:#4d3d24}
-.tw{white-space:normal;min-width:180px;max-width:360px;overflow:hidden;text-overflow:ellipsis}
-.bars .row{display:grid;grid-template-columns:220px 1fr 150px;gap:12px;align-items:center;padding:7px 0;
-border-bottom:1px solid #f0eadb}
-.bars .row:last-child{border-bottom:0}
-.bars .lb{font-size:.82rem;color:#4d3d24;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.bars .track{height:12px;background:#eee5d0;border-radius:6px;overflow:hidden}
-.bars .fill{display:block;height:100%;border-radius:6px;background:linear-gradient(90deg,var(--acc2),#f59e0b)}
-.bars .vv{font-size:.8rem;color:var(--mut);text-align:right;font-variant-numeric:tabular-nums}
-.quick{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:12px}
-.quick a.q{display:block;background:var(--card2);border:1px solid var(--border);border-radius:13px;padding:14px 15px;
-transition:.18s;color:var(--txt)}
-.quick a.q:hover{border-color:var(--acc);transform:translateY(-2px);text-decoration:none;box-shadow:0 10px 26px rgba(180,83,9,.16)}
-.quick .qn{font-size:.66rem;color:var(--acc);font-weight:800;letter-spacing:.1em}
-.quick b{display:block;font-size:.9rem;margin:3px 0 4px}
-.quick p{color:var(--mut);font-size:.74rem;line-height:1.45}
-.note{color:var(--mut);font-size:.74rem;margin-top:12px;line-height:1.6}
-footer{border-top:1px solid var(--border);margin-top:34px;padding-top:16px;color:var(--mut);font-size:.76rem;
-display:flex;gap:14px;flex-wrap:wrap;justify-content:space-between}
-@media(max-width:940px){.shell{grid-template-columns:1fr}aside{position:static;height:auto;border-right:0;
-border-bottom:1px solid var(--border)}main{padding:20px 16px 50px}.bars .row{grid-template-columns:130px 1fr 110px}}
+body{font-family:system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;background:
+radial-gradient(1200px 500px at 70% -10%,rgba(94,53,161,.28),transparent),var(--bg);color:var(--txt);
+min-height:100vh;display:flex;flex-direction:column}
+.wrap{width:min(1180px,92%);margin:0 auto}
+header{padding:22px 0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:14px}
+header .wrap{display:flex;align-items:center;gap:14px;width:min(1180px,92%)}
+.logo{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--acc),var(--acc2));
+display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;letter-spacing:.5px;
+box-shadow:0 6px 18px rgba(94,53,161,.45)}
+.brand b{font-size:1.12rem}
+.brand small{display:block;color:var(--mut);font-size:.76rem;letter-spacing:.06em;text-transform:uppercase}
+.gh{margin-left:auto;color:var(--mut);text-decoration:none;font-size:.86rem;border:1px solid var(--border);
+padding:8px 14px;border-radius:10px;transition:.2s}
+.gh:hover{color:var(--txt);border-color:var(--acc)}
+.hero{padding:52px 0 26px}
+.hero h1{font-size:clamp(1.6rem,3.4vw,2.3rem);font-weight:800}
+.hero h1 span{background:linear-gradient(90deg,var(--acc),#c9b3ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{color:var(--mut);margin-top:10px;max-width:760px;line-height:1.65;font-size:.97rem}
+.meta{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap;align-items:center}
+.chip{font-size:.78rem;font-weight:600;padding:6px 12px;border-radius:999px;border:1px solid var(--border);color:var(--mut)}
+.chip.ok{color:var(--ok);border-color:rgba(58,210,159,.4);background:rgba(58,210,159,.08)}
+.search{margin:8px 0 6px;width:min(460px,100%)}
+.search input{width:100%;padding:12px 16px;border-radius:12px;border:1px solid var(--border);
+background:var(--card);color:var(--txt);font-size:.95rem;outline:none;transition:.2s}
+.search input:focus{border-color:var(--acc)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;padding:18px 0 40px}
+.card{display:block;text-decoration:none;color:inherit;background:var(--card);border:1px solid var(--border);
+border-radius:16px;padding:18px;transition:transform .18s,border-color .18s,background .18s;position:relative}
+.card:hover{transform:translateY(-3px);border-color:var(--acc);background:var(--card2)}
+.card .top{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.num{width:42px;height:42px;border-radius:11px;background:rgba(147,117,205,.14);border:1px solid rgba(147,117,205,.35);
+color:#c9b3ff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.82rem;flex:none}
+.card h3{font-size:1rem;font-weight:700;line-height:1.3}
+.card p{color:var(--mut);font-size:.85rem;line-height:1.55;min-height:52px}
+.card .foot{display:flex;align-items:center;justify-content:space-between;margin-top:12px}
+.st{font-size:.72rem;font-weight:700;letter-spacing:.05em;padding:5px 10px;border-radius:999px}
+.st.ok{color:var(--ok);background:rgba(58,210,159,.1);border:1px solid rgba(58,210,159,.4)}
+.st.warn{color:var(--warn);background:rgba(245,183,78,.08);border:1px solid rgba(245,183,78,.35)}
+.go{color:var(--acc);font-size:.85rem;font-weight:600}
+.card.actif{border-color:rgba(147,117,205,.4);background:linear-gradient(180deg,rgba(147,117,205,.07),transparent),var(--card)}
+.empty{color:var(--mut);padding:30px 0;display:none}
+footer{border-top:1px solid var(--border);padding:22px 0;color:var(--mut);font-size:.82rem;line-height:1.7}
+footer b{color:var(--txt)}
+footer a{color:var(--acc);text-decoration:none}
+@media(max-width:640px){header{padding:16px 0}.hero{padding:34px 0 18px}.card p{min-height:0}}
+
+body{display:flex;flex-direction:column}
+main{flex:1;display:flex;align-items:center;justify-content:center;padding:40px 0}
+.box{width:min(640px,92%);background:var(--card);border:1px solid var(--border);border-radius:20px;
+padding:38px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.35)}
+.box .num{margin:0 auto 16px}
+.box h1{font-size:1.5rem;margin-bottom:10px}
+.box p{color:var(--mut);line-height:1.7;font-size:.95rem;margin-bottom:22px}
+.links{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.links a{color:var(--txt);text-decoration:none;font-size:.88rem;font-weight:600;border:1px solid var(--border);
+padding:10px 16px;border-radius:11px;transition:.2s}
+.links a:hover{border-color:var(--acc);color:var(--acc)}
+.links a.prim{background:linear-gradient(135deg,var(--acc),var(--acc2));border-color:transparent;color:#fff}
 </style>
 </head>
 <body>
@@ -150,19 +112,22 @@ border-bottom:1px solid var(--border)}main{padding:20px 16px 50px}.bars .row{gri
   <div class="a14-card">
     <div class="a14-logo">AR</div>
     <div class="a14-title">Admina-RH</div>
-    <div class="a14-sub">Domaine 5 — Congés, Absences &amp; Présence</div>
+    <div class="a14-sub">Domaine 5 — Congés, Absences & Présence</div>
     <div class="a14-dots"><i></i><i></i><i></i></div>
     <div class="a14-loading">Chargement en cours<span class="a14-ell">.</span></div>
     <div class="a14-bar"><span></span></div>
     <div class="a14-phases"><i></i><i></i><i></i><i></i><i></i></div>
-    <div class="a14-meta">19 écrans · 20 feuilles Excel · Juin 2025</div>
+    <div class="a14-meta">EN PRÉPARATION</div>
   </div>
 </div>
 <script>
-/* __ADEM_V14__ — écran de chargement de domaine (réplique du splash natif D2),
-   variante Domaine 5 : disparition quand l'écran #d5-main est peint (>= 700 ms,
-   filet 4 s, fondu 380 ms puis retrait du nœud). Page statique : pas d'hydratation,
-   le MutationObserver de survie est conservé par sécurité (pattern V12/V14). */
+/* __ADEM_V14__ — écran de chargement de domaine (réplique du splash natif D2)
+   Appliqué aux copies D1 et D3 ; no-op sur D2 et le hub.
+   Apparition immédiate (injection en tête de body), disparition quand l'app
+   est montée (>= 700 ms, filet 4 s), fondu 380 ms puis retrait du nœud.
+   Sur D3 (Next.js), l'hydratation retire les nœuds body additionnels ~300 ms :
+   ré-attachement synchrone (MutationObserver + interval filet) tant que le
+   splash n'est pas terminé — même pattern de survie que V12. */
 (function(){
   'use strict';
   if (window.__ADEM_V14__) return;
@@ -172,9 +137,10 @@ border-bottom:1px solid var(--border)}main{padding:20px 16px 50px}.bars .row{gri
   var dark = false;
   try { dark = localStorage.getItem('admina-dark') === 'true'; } catch (e) {}
   if (dark) el.classList.add('a14-dark');
-  window.__ADEM_V14__ = { v: '14', fix: 'splash-domaine-5', _applied: Date.now() };
+  window.__ADEM_V14__ = { v: '14', fix: 'splash-domaine', _applied: Date.now() };
   var t0 = Date.now(), done = false, mo = null;
   function host(){ return document.body || document.documentElement; }
+  /* survie : ré-attache le nœud s'il est retiré par un tiers (hydratation Next) */
   function reattach(){
     if (done || el.parentNode) return;
     host().appendChild(el);
@@ -187,6 +153,7 @@ border-bottom:1px solid var(--border)}main{padding:20px 16px 50px}.bars .row{gri
     reattach();
     if (done || Date.now() - t0 > 4500) clearInterval(ivKeep);
   }, 150);
+  /* points de suspension animés (., .., ...) comme le composant natif */
   var ell = el.querySelector('.a14-ell'), n = 1;
   var ellIv = setInterval(function(){
     n = n === 1 ? 2 : (n === 2 ? 3 : 1);
@@ -202,10 +169,10 @@ border-bottom:1px solid var(--border)}main{padding:20px 16px 50px}.bars .row{gri
     el.classList.add('a14-out');
     setTimeout(function(){ if (el && el.parentNode) el.parentNode.removeChild(el); }, 420);
   }
-  /* app D5 prête : <main id="d5-main"> peint */
+  /* page statique : prête dès que le DOM est parsé */
   var iv = setInterval(function(){
     var ready = false;
-    try { ready = !!document.getElementById('d5-main'); } catch (e) {}
+    ready = document.readyState !== 'loading';
     if (Date.now() - t0 >= 700 && document.readyState !== 'loading' && ready){
       clearInterval(iv); hide();
     }
@@ -213,17 +180,30 @@ border-bottom:1px solid var(--border)}main{padding:20px 16px 50px}.bars .row{gri
   setTimeout(function(){ clearInterval(iv); hide(); }, 4000);
 })();
 </script>
-<div class="shell">
-<aside><div class="bmark"><div class="logo">AR</div><div><b>Admina-RH</b><small>Domaine 5</small></div></div><div class="grp">Pilotage</div><a class="nav on" href="/Domaine5_Conges_Absences_Presence/"><span class="dot"></span>Tableau de Bord</a><a class="nav" href="/Domaine5_Conges_Absences_Presence/taux-absenteisme/"><span class="dot"></span>Taux d'Absentéisme</a><a class="nav" href="/Domaine5_Conges_Absences_Presence/rapports-stat-absences/"><span class="dot"></span>Rapports &amp; Statistiques</a><div class="grp">Congés</div><a class="nav" href="/Domaine5_Conges_Absences_Presence/compteur-conges-payes/"><span class="dot"></span>Compteur Congés Payés</a><a class="nav" href="/Domaine5_Conges_Absences_Presence/planning-departs-conges/"><span class="dot"></span>Planning Départs Congé</a><a class="nav" href="/Domaine5_Conges_Absences_Presence/permissions-speciales/"><span class="dot"></span>Permissions Spéciales</a><a class="nav" href="/Domaine5_Conges_Absences_Presence/conges-sans-solde/"><span class="dot"></span>Congés Sans Solde</a><a class="nav" href="/Domaine5_Conges_Absences_Presence/conge-force-repos/"><span class="dot"></span>Congé Forcé &amp; Repos</a><a class="nav" href="/Domaine5_Conges_Absences_Presence/conges-maternite-paternite/"><span class="dot"></span>Maternité &amp; Paternité</a><a class="nav" href="/Domaine5_Conges_Absences_Presence/calendrier-conges/"><span class="dot"></span>Calendrier des Congés</a><a class="nav" href="/Domaine5_Conges_Absences_Presence/solde-conges-departement/"><span class="dot"></span>Soldes par Département</a><div class="grp">Absences</div><a class="nav" href="/Domaine5_Conges_Absences_Presence/absences-non-justifiees/"><span class="dot"></span>Absences Non Justifiées</a><a class="nav" href="/Domaine5_Conges_Absences_Presence/arrets-maladie/"><span class="dot"></span>Arrêts Maladie</a><a class="nav" href="/Domaine5_Conges_Absences_Presence/arrets-accident-travail/"><span class="dot"></span>Arrêts Accident du Travail</a><a class="nav" href="/Domaine5_Conges_Absences_Presence/retards-departs-anticipe/"><span class="dot"></span>Retards &amp; Départs Anticipés</a><a class="nav" href="/Domaine5_Conges_Absences_Presence/compteurs-absences-employe/"><span class="dot"></span>Compteurs par Employé</a><div class="grp">Présence</div><a class="nav" href="/Domaine5_Conges_Absences_Presence/journal-pointage/"><span class="dot"></span>Journal de Pointage</a><a class="nav" href="/Domaine5_Conges_Absences_Presence/historique-presence/"><span class="dot"></span>Historique de Présence</a><div class="grp">Référentiel</div><a class="nav" href="/Domaine5_Conges_Absences_Presence/employes/"><span class="dot"></span>Employés</a><div class="home"><a class="nav" href="/"><span class="dot"></span>Tous les domaines</a></div></aside>
-<main id="d5-main">
-<div class="topbar"><span class="crumb"><a href="/">Tous les domaines</a> / <a href="/Domaine5_Conges_Absences_Presence/">Domaine 5</a> / Tableau de Bord</span><a class="tohub" href="/">← Présentation des 31 domaines</a></div><div class="hero"><div class="hl"><span class="hic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fdf6e9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M9 16l2 2 4-4"/></svg></span><div><h2>Tableau de Bord &mdash; Congés, Absences &amp; Présence</h2><p class="hsub">Compteurs de congés, permissions, absences, arrêts et présence de l'hôtel &mdash; réplique fidèle du classeur Excel du domaine, période Juin 2025.</p></div></div><div class="hr"><span class="hchip">20 feuilles Excel</span><span class="hchip">14 employés suivis</span><span class="hchip">19 écrans</span></div></div><div class="chips"><div class="chip"><b>210 j</b><small>Droits acquis</small></div><div class="chip"><b>38 j</b><small>Congés pris</small></div><div class="chip ok"><b>145 j</b><small>Solde disponible</small></div><div class="chip info"><b>1</b><small>Départs en cours</small></div></div><div class="chips"><div class="chip"><b>5</b><small>Permissions accordées</small></div><div class="chip bad"><b>7 j</b><small>Absences NJ (jours)</small></div><div class="chip warn"><b>140 min</b><small>Retards cumulés</small></div><div class="chip bad"><b>33 j</b><small>Arrêts maladie (jours)</small></div></div><div class="chips"><div class="chip warn"><b>3</b><small>Accidents du travail</small></div><div class="chip info"><b>1</b><small>Maternité en cours</small></div><div class="chip info"><b>2,2 %</b><small>Taux absentéisme moy.</small></div><div class="chip ok"><b>95,2 / 100</b><small>Score présence moyen</small></div></div><div class="chips"><div class="chip"><b>3</b><small>Congés sans solde</small></div><div class="chip warn"><b>18 j</b><small>Congés forcés (jours)</small></div><div class="chip"><b>7</b><small>Pointages saisis</small></div><div class="chip"><b>3</b><small>Rapports d'absences</small></div></div><div class="panel"><div class="bars"><div class="row"><span class="lb">Service Client</span><span class="track"><span class="fill" style="width:0%"></span></span><span class="vv">0 % · 5 pers.</span></div><div class="row"><span class="lb">Maintenance</span><span class="track"><span class="fill" style="width:100%"></span></span><span class="vv">6,1 % · 3 pers.</span></div><div class="row"><span class="lb">Finance &amp; Comptabilité</span><span class="track"><span class="fill" style="width:55.7%"></span></span><span class="vv">3,4 % · 4 pers.</span></div><div class="row"><span class="lb">Réception &amp; Front Office</span><span class="track"><span class="fill" style="width:24.6%"></span></span><span class="vv">1,5 % · 6 pers.</span></div><div class="row"><span class="lb">Cuisine &amp; Restauration</span><span class="track"><span class="fill" style="width:18%"></span></span><span class="vv">1,1 % · 8 pers.</span></div><div class="row"><span class="lb">Maintenance</span><span class="track"><span class="fill" style="width:49.2%"></span></span><span class="vv">3 % · 6 pers.</span></div><div class="row"><span class="lb">Sécurité</span><span class="track"><span class="fill" style="width:0%"></span></span><span class="vv">0 % · 4 pers.</span></div></div><p class="note">Effectifs dérivés des heures théoriques du classeur (heures ÷ jours ouvrables) ; jours d'absence issus des compteurs par employé (feuille 17), départements harmonisés.</p></div><div class="panel"><div class="bars"><div class="row"><span class="lb">Congé annuel</span><span class="track"><span class="fill" style="width:100%"></span></span><span class="vv">38 j</span></div><div class="row"><span class="lb">Arrêt maladie</span><span class="track"><span class="fill" style="width:86.8%"></span></span><span class="vv">33 j</span></div><div class="row"><span class="lb">Absence injustifiée</span><span class="track"><span class="fill" style="width:18.4%"></span></span><span class="vv">7 j</span></div><div class="row"><span class="lb">Retard</span><span class="track"><span class="fill" style="width:13.2%"></span></span><span class="vv">5</span></div><div class="row"><span class="lb">Permission spéciale</span><span class="track"><span class="fill" style="width:13.2%"></span></span><span class="vv">5</span></div><div class="row"><span class="lb">Accident du travail</span><span class="track"><span class="fill" style="width:7.9%"></span></span><span class="vv">3</span></div><div class="row"><span class="lb">Congé sans solde</span><span class="track"><span class="fill" style="width:7.9%"></span></span><span class="vv">3</span></div></div><p class="note">Congé annuel et arrêts maladie comptés en jours ; retards, permissions, accidents et congés sans solde comptés en occurrences (formules de la feuille « 1-Tableau de Bord »).</p></div><div class="panel"><h2>Les 18 rubriques du domaine</h2><div class="quick"><a class="q" href="/Domaine5_Conges_Absences_Presence/compteur-conges-payes/"><span class="qn">DOMAINE 5</span><b>Compteur Congés Payés</b><p>Droits, pris, planifiés et soldes 2025 par employé.</p></a><a class="q" href="/Domaine5_Conges_Absences_Presence/planning-departs-conges/"><span class="qn">DOMAINE 5</span><b>Planning Départs Congé</b><p>Départs planifiés, remplacements et chevauchements.</p></a><a class="q" href="/Domaine5_Conges_Absences_Presence/permissions-speciales/"><span class="qn">DOMAINE 5</span><b>Permissions Spéciales</b><p>Mariage, deuil, naissance — durées légales.</p></a><a class="q" href="/Domaine5_Conges_Absences_Presence/conges-sans-solde/"><span class="qn">DOMAINE 5</span><b>Congés Sans Solde</b><p>Congés CSS et impact sur l'ancienneté.</p></a><a class="q" href="/Domaine5_Conges_Absences_Presence/absences-non-justifiees/"><span class="qn">DOMAINE 5</span><b>Absences Non Justifiées</b><p>Registre, sanctions et clôtures.</p></a><a class="q" href="/Domaine5_Conges_Absences_Presence/retards-departs-anticipe/"><span class="qn">DOMAINE 5</span><b>Retards &amp; Départs Anticipés</b><p>Minutes cumulées et justifications.</p></a><a class="q" href="/Domaine5_Conges_Absences_Presence/arrets-maladie/"><span class="qn">DOMAINE 5</span><b>Arrêts Maladie</b><p>Certificats, IJSS et maintien de salaire.</p></a><a class="q" href="/Domaine5_Conges_Absences_Presence/arrets-accident-travail/"><span class="qn">DOMAINE 5</span><b>Arrêts Accident du Travail</b><p>Accidents, blessures et déclarations CNPS.</p></a><a class="q" href="/Domaine5_Conges_Absences_Presence/conges-maternite-paternite/"><span class="qn">DOMAINE 5</span><b>Maternité &amp; Paternité</b><p>16 semaines maternité, paternité 2 j.</p></a><a class="q" href="/Domaine5_Conges_Absences_Presence/taux-absenteisme/"><span class="qn">DOMAINE 5</span><b>Taux d'Absentéisme</b><p>Par département — effectifs et jours d'absence.</p></a><a class="q" href="/Domaine5_Conges_Absences_Presence/journal-pointage/"><span class="qn">DOMAINE 5</span><b>Journal de Pointage</b><p>Présence quotidienne : arrivée, départ, retard.</p></a><a class="q" href="/Domaine5_Conges_Absences_Presence/conge-force-repos/"><span class="qn">DOMAINE 5</span><b>Congé Forcé &amp; Repos</b><p>Fermetures, inventaires et repos compensé.</p></a><a class="q" href="/Domaine5_Conges_Absences_Presence/solde-conges-departement/"><span class="qn">DOMAINE 5</span><b>Soldes par Département</b><p>Droits, pris et solde agrégés par service.</p></a><a class="q" href="/Domaine5_Conges_Absences_Presence/historique-presence/"><span class="qn">DOMAINE 5</span><b>Historique de Présence</b><p>Bilan annuel par employé et taux de présence.</p></a><a class="q" href="/Domaine5_Conges_Absences_Presence/calendrier-conges/"><span class="qn">DOMAINE 5</span><b>Calendrier des Congés</b><p>Vue mensuelle : planifiés, effectués, permissions.</p></a><a class="q" href="/Domaine5_Conges_Absences_Presence/compteurs-absences-employe/"><span class="qn">DOMAINE 5</span><b>Compteurs par Employé</b><p>Occurrence des absences et score de présence.</p></a><a class="q" href="/Domaine5_Conges_Absences_Presence/rapports-stat-absences/"><span class="qn">DOMAINE 5</span><b>Rapports &amp; Statistiques</b><p>Bilans, analyses et anomalies d'absences.</p></a><a class="q" href="/Domaine5_Conges_Absences_Presence/employes/"><span class="qn">DOMAINE 5</span><b>Employés</b><p>Référentiel des 14 employés suivis (matricules EMP-).</p></a></div></div>
-  <footer>
-    <span>Source : classeur <b>Domaine5_Conges_Absences_Presence (2).xlsx</b> — feuille « 1-Tableau de Bord » · valeurs calculées selon les formules du classeur</span>
-    <span>Admina-RH · Hôtel 4★ — plateforme RH</span>
-  </footer>
-</main>
-</div>
 
+
+<header>
+  <div class="wrap">
+    <div class="logo">AR</div>
+    <div class="brand"><b>Admina-RH</b><small>Plateforme de Gestion RH</small></div>
+    <a class="gh" href="/">← Tous les domaines</a>
+  </div>
+</header>
+<main><div class="box">
+  <div class="num" style="width:56px;height:56px;font-size:1rem">D5</div>
+  <span class="st warn">EN PRÉPARATION</span>
+  <h1 style="margin-top:14px">Domaine 5 — Congés, Absences & Présence</h1>
+  <p>Ce domaine fonctionnel de la plateforme Admina-RH est en cours de préparation.
+  Son adresse définitive est réservée : <b>admina-rh-bd0.pages.dev/Domaine5_Conges_Absences_Presence/</b>.
+  Il sera ouvert prochainement, comme les domaines déjà actifs ci-dessous.</p>
+  <div class="links">
+    <a class="prim" href="/">Tous les domaines</a>
+    <a href="/Domaine1_Recrutement_Candidats">Domaine 1 — Recrutement</a>
+    <a href="/Domaine2_Gestion_Administrative_Personnel">Domaine 2 — Admin. Personnel</a>
+    <a href="/Domaine3_Paie_Remuneration_Avantages/">Domaine 3 — Paie</a>
+  </div>
+</div></main>
+<footer><div class="wrap"><b>Admina-RH</b> — 31 domaines · une seule base : admina-rh-bd0.pages.dev</div></footer>
 <script>
 /* ADEM_V12 — Menu déroulant global des domaines (remplace les listes sidebar)
  * DEMANDE UTILISATEUR : la liste des domaines dans la barre latérale s'affiche mal
@@ -259,9 +239,9 @@ border-bottom:1px solid var(--border)}main{padding:20px 16px 50px}.bars .row{gri
     { n: 1,  u: '/Domaine1_Recrutement_Candidats', l: 'Recrutement & Candidats', a: 1 },
     { n: 2,  u: '/Domaine2_Gestion_Administrative_Personnel', l: 'Gestion Administrative du Personnel', a: 1 },
     { n: 3,  u: '/Domaine3_Paie_Remuneration_Avantages/', l: 'Paie, Rémunération & Avantages', a: 1 },
-    { n: 4,  u: '/Domaine4_Temps_Travail_Planification/', l: 'Temps de Travail & Planification', a: 1 },
-    { n: 5,  u: '/Domaine5_Conges_Absences_Presence/', l: 'Congés, Absences & Présence', a: 1 },
-    { n: 6,  u: '/Domaine6_Formation_Developpement_Competences/', l: 'Formation & Développement des Compétences', a: 1 },
+    { n: 4,  u: '/Domaine4_Temps_Travail_Planification/', l: 'Temps de Travail & Planification' },
+    { n: 5,  u: '/Domaine5_Conges_Absences_Presence/', l: 'Congés, Absences & Présence' },
+    { n: 6,  u: '/Domaine6_Formation_Developpement_Competences/', l: 'Formation & Développement des Compétences' },
     { n: 7,  u: '/Domaine7_Evaluation_Gestion_Performance/', l: 'Évaluation & Gestion de la Performance' },
     { n: 8,  u: '/Domaine8_Relations_Sociales_Syndicats/', l: 'Relations Sociales & Syndicats' },
     { n: 9,  u: '/Domaine9_Sante_Securite_Conditions_Travail/', l: 'Santé, Sécurité & Conditions de Travail' },
@@ -288,7 +268,7 @@ border-bottom:1px solid var(--border)}main{padding:20px 16px 50px}.bars .row{gri
     { n: 30, u: '/Domaine30_Expatrites_Mobilite_Internationale/', l: 'Expatriés & Mobilité Internationale' },
     { n: 31, u: '/Domaine31_Retraites_Prevoyance_Transitions_Carriere/', l: 'Retraites, Prévoyance & Transitions de Carrière' }
   ];
-  var N_ACTIF = 6;
+  var N_ACTIF = 3;
 
   /* hub racine = déjà la présentation complète → aucun bouton */
   var p0 = location.pathname;

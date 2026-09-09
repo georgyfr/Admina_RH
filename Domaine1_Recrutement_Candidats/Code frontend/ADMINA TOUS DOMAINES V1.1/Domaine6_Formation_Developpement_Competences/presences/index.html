@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admina-RH | Domaine 6 — Présences en Formation</title>
+<meta name="description" content="Feuilles de présence et émargement des sessions du Domaine 6.">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/svg+xml" href="/Domaine6_Formation_Developpement_Competences/favicon-d6.svg">
+<style>@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+:root{--d6-bg:#FFFBF3;--d6-card:#FFFFFF;--d6-ink:#292524;--d6-muted:#79716B;--d6-line:#F0E4CE;
+--d6-amber:#B45309;--d6-amber2:#D97706;--d6-gold:#F59E0B;--d6-soft:#FEF3C7;--d6-softer:#FFFBEB;
+--d6-ok:#15803D;--d6-okbg:#DCFCE7;--d6-info:#1D4ED8;--d6-infobg:#DBEAFE;--d6-warn:#B45309;
+--d6-warnbg:#FEF3C7;--d6-bad:#B91C1C;--d6-badbg:#FEE2E2;--d6-neu:#57534E;--d6-neubg:#F5F5F4;
+--d6-grad:linear-gradient(135deg,#F59E0B,#B45309);--d6-r:18px;}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--d6-bg);color:var(--d6-ink);
+font-family:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased;}
+a{color:var(--d6-amber);text-decoration:none;}
+a:hover{text-decoration:underline;}
+
+/* ==================== BANDE 1 : marque ==================== */
+.d6h{background:#fff;border-bottom:1px solid var(--d6-line);position:relative;z-index:20;}
+.d6h-brand{max-width:1240px;margin:0 auto;padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.d6h-logo{flex:none;width:46px;height:46px;border-radius:14px;background:var(--d6-grad);color:#fff;
+display:flex;align-items:center;justify-content:center;font-weight:800;font-size:17px;letter-spacing:.02em;
+box-shadow:0 6px 18px rgba(180,83,9,.32);text-decoration:none;}
+.d6h-logo:hover{text-decoration:none;transform:translateY(-1px);}
+.d6h-brandtxt{min-width:0;}
+.d6h-brandtxt b{display:block;font-size:16.5px;font-weight:800;letter-spacing:-.01em;}
+.d6h-brandtxt small{display:block;font-size:12.5px;color:var(--d6-muted);font-weight:600;
+white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.d6h-actions{margin-left:auto;display:flex;gap:9px;flex:none;}
+.d6h-btn{display:inline-flex;align-items:center;gap:7px;padding:9px 16px;border-radius:12px;
+font-size:13px;font-weight:700;transition:.16s;}
+.d6h-btn.ghost{color:var(--d6-amber);background:var(--d6-soft);border:1px solid #FDE68A;}
+.d6h-btn.ghost:hover{background:#FDE68A;text-decoration:none;}
+.d6h-btn.solid{color:#fff;background:var(--d6-grad);box-shadow:0 4px 14px rgba(180,83,9,.28);}
+.d6h-btn.solid:hover{filter:brightness(1.06);text-decoration:none;}
+.d6h-btn svg{width:15px;height:15px;}
+
+/* ==================== BANDE 2 : rôles utilisateurs ==================== */
+.d6h-roles{background:linear-gradient(180deg,#FFF7E6,#FFFBF3);border-bottom:1px solid var(--d6-line);}
+.d6h-roles-in{max-width:1240px;margin:0 auto;padding:13px 22px 15px;}
+.d6h-roles-head{display:flex;align-items:baseline;gap:10px;margin-bottom:10px;flex-wrap:wrap;}
+.d6h-roles-head h2{font-size:12px;font-weight:800;letter-spacing:.11em;text-transform:uppercase;
+color:var(--d6-amber);display:flex;align-items:center;gap:7px;}
+.d6h-roles-head h2 svg{width:15px;height:15px;}
+.d6h-roles-head span{font-size:12px;color:var(--d6-muted);font-weight:500;}
+.d6h-roles-strip{display:flex;gap:11px;overflow-x:auto;padding-bottom:5px;scroll-snap-type:x proximity;
+-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:#FDE68A transparent;}
+.d6h-roles-strip::-webkit-scrollbar{height:5px;}
+.d6h-roles-strip::-webkit-scrollbar-thumb{background:#FDE68A;border-radius:99px;}
+.d6-role{flex:0 0 218px;scroll-snap-align:start;background:#fff;border:1px solid #FDE68A;
+border-radius:15px;padding:12px 14px;display:flex;flex-direction:column;gap:7px;
+box-shadow:0 3px 10px rgba(180,83,9,.06);transition:.16s;}
+.d6-role:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(180,83,9,.13);border-color:#FCD34D;}
+.d6-role .d6-role-top{display:flex;align-items:center;gap:9px;}
+.d6-role-ico{flex:none;width:32px;height:32px;border-radius:10px;background:var(--d6-soft);color:var(--d6-amber);
+display:flex;align-items:center;justify-content:center;}
+.d6-role-ico svg{width:17px;height:17px;}
+.d6-role b{font-size:12.8px;font-weight:800;line-height:1.25;}
+.d6-role-scope{display:inline-flex;align-self:flex-start;font-size:10px;font-weight:800;letter-spacing:.06em;
+text-transform:uppercase;color:var(--d6-amber);background:var(--d6-soft);border-radius:99px;padding:3px 9px;}
+.d6-role p{font-size:11.4px;color:var(--d6-muted);line-height:1.45;}
+
+/* ==================== BANDE 3 : navigation modules ==================== */
+.d6h-navwrap{background:#fff;border-bottom:1px solid var(--d6-line);position:sticky;top:0;z-index:30;
+box-shadow:0 8px 24px rgba(180,83,9,.07);}
+.d6h-nav{max-width:1240px;margin:0 auto;padding:9px 22px;display:flex;align-items:center;gap:16px;overflow-x:auto;
+scrollbar-width:thin;scrollbar-color:#FDE68A transparent;}
+.d6h-nav::-webkit-scrollbar{height:5px;}
+.d6h-nav::-webkit-scrollbar-thumb{background:#FDE68A;border-radius:99px;}
+.d6-navgrp{display:flex;align-items:center;gap:7px;flex:none;}
+.d6-navgrp + .d6-navgrp{border-left:1px solid var(--d6-line);padding-left:16px;}
+.d6-navlbl{font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#C29B57;}
+.d6h-nav a{flex:none;display:inline-flex;align-items:center;gap:6px;padding:7px 13px;border-radius:99px;
+font-size:12.6px;font-weight:600;color:#6B5638;background:var(--d6-softer);border:1px solid transparent;transition:.15s;}
+.d6h-nav a:hover{background:var(--d6-soft);text-decoration:none;}
+.d6h-nav a.on{background:var(--d6-grad);color:#fff;box-shadow:0 4px 12px rgba(180,83,9,.3);}
+.d6h-nav a .n{font-size:9.6px;font-weight:800;opacity:.62;}
+.d6-navsearch{flex:none;display:flex;align-items:center;gap:7px;background:var(--d6-softer);
+border:1px solid var(--d6-line);border-radius:99px;padding:7px 13px;margin-left:auto;color:var(--d6-muted);}
+.d6-navsearch svg{width:14px;height:14px;flex:none;}
+.d6-navsearch input{border:0;background:transparent;outline:none;font:600 12.6px 'Plus Jakarta Sans',sans-serif;
+color:var(--d6-ink);width:150px;min-width:0;}
+.d6-navsearch input::placeholder{color:#BFA377;}
+
+/* ==================== contenu ==================== */
+main{max-width:1240px;margin:0 auto;padding:26px 22px 10px;}
+.d6-crumb{font-size:12.3px;color:var(--d6-muted);margin-bottom:14px;display:flex;align-items:center;
+gap:7px;flex-wrap:wrap;}
+.d6-crumb a{color:var(--d6-amber);font-weight:600;}
+.d6-crumb .sep{opacity:.45;}
+.d6-crumb b{color:var(--d6-ink);}
+.d6-heroline{display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:22px;}
+.d6-heroico{flex:none;width:54px;height:54px;border-radius:16px;background:var(--d6-grad);color:#fff;
+display:flex;align-items:center;justify-content:center;box-shadow:0 8px 22px rgba(180,83,9,.3);}
+.d6-heroico svg{width:26px;height:26px;}
+.d6-heroline h1{font-size:25px;font-weight:800;letter-spacing:-.02em;line-height:1.2;}
+.d6-heroline .d6-sub{color:var(--d6-muted);font-size:13.8px;margin-top:4px;max-width:760px;}
+.d6-modbadge{display:inline-flex;align-items:center;gap:6px;background:var(--d6-soft);color:var(--d6-amber);
+font-size:11px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;border-radius:99px;
+padding:5px 12px;margin-bottom:8px;}
+.d6-modbadge svg{width:13px;height:13px;}
+
+/* KPI cards avec anneau */
+.d6-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));gap:14px;margin-bottom:24px;}
+.d6-kpi{background:var(--d6-card);border:1px solid var(--d6-line);border-radius:var(--d6-r);
+padding:16px 17px;display:flex;flex-direction:column;gap:8px;box-shadow:0 3px 12px rgba(180,83,9,.05);
+transition:.16s;position:relative;overflow:hidden;}
+.d6-kpi:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(180,83,9,.12);}
+.d6-kpi::before{content:'';position:absolute;inset:0 0 auto 0;height:3px;background:var(--d6-grad);opacity:.85;}
+.d6-kpi .k-lab{font-size:11.2px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--d6-muted);}
+.d6-kpi .k-val{font-size:23px;font-weight:800;letter-spacing:-.02em;color:var(--d6-ink);line-height:1.1;}
+.d6-kpi .k-val small{font-size:13px;font-weight:700;color:var(--d6-amber);}
+.d6-kpi .k-note{font-size:11.3px;color:var(--d6-muted);}
+
+/* cartes génériques */
+.d6-card{background:var(--d6-card);border:1px solid var(--d6-line);border-radius:var(--d6-r);
+box-shadow:0 3px 12px rgba(180,83,9,.05);margin-bottom:22px;overflow:hidden;}
+.d6-card-h{display:flex;align-items:center;gap:10px;padding:15px 20px;border-bottom:1px solid var(--d6-line);
+background:linear-gradient(180deg,#FFFDF8,#fff);flex-wrap:wrap;}
+.d6-card-h svg{width:17px;height:17px;color:var(--d6-amber);flex:none;}
+.d6-card-h h2{font-size:15.5px;font-weight:800;letter-spacing:-.01em;}
+.d6-card-h .hint{font-size:12px;color:var(--d6-muted);margin-left:auto;}
+.d6-card-b{padding:18px 20px;}
+
+/* tables */
+.d6-tblwrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+table.d6-tbl{width:100%;border-collapse:collapse;font-size:12.9px;min-width:640px;}
+.d6-tbl th{background:var(--d6-soft);color:#92400E;font-size:10.8px;font-weight:800;letter-spacing:.06em;
+text-transform:uppercase;text-align:left;padding:10px 12px;border-bottom:2px solid #FDE68A;white-space:nowrap;}
+.d6-tbl td{padding:10px 12px;border-bottom:1px solid #FAF3E3;vertical-align:top;}
+.d6-tbl tbody tr:hover{background:var(--d6-softer);}
+.d6-tbl td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;}
+.d6-tbl td.ctr{text-align:center;white-space:nowrap;}
+.d6-tbl .id{font-weight:700;color:var(--d6-amber);white-space:nowrap;}
+.d6-tbl .strong{font-weight:700;}
+.d6-tbl .muted{color:var(--d6-muted);}
+.d6-totrow td{background:#FFFBEB;font-weight:800;border-top:2px solid #FDE68A;}
+
+/* badges statut */
+.d6-badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:99px;
+font-size:11px;font-weight:700;white-space:nowrap;}
+.d6-badge::before{content:'';width:6px;height:6px;border-radius:99px;background:currentColor;}
+.d6-b-ok{color:var(--d6-ok);background:var(--d6-okbg);}
+.d6-b-info{color:var(--d6-info);background:var(--d6-infobg);}
+.d6-b-warn{color:var(--d6-warn);background:var(--d6-warnbg);}
+.d6-b-bad{color:var(--d6-bad);background:var(--d6-badbg);}
+.d6-b-neu{color:var(--d6-neu);background:var(--d6-neubg);}
+.d6-b-gold{color:#92400E;background:var(--d6-soft);}
+
+/* graphes barres dashboard */
+.d6-bars{display:flex;flex-direction:column;gap:11px;}
+.d6-bar-row{display:grid;grid-template-columns:220px 1fr 64px;gap:12px;align-items:center;}
+.d6-bar-lab{font-size:12.6px;font-weight:600;color:var(--d6-ink);text-align:right;overflow:hidden;
+text-overflow:ellipsis;white-space:nowrap;}
+.d6-bar-track{height:22px;background:var(--d6-softer);border-radius:99px;overflow:hidden;
+border:1px solid var(--d6-line);}
+.d6-bar-fill{height:100%;background:var(--d6-grad);border-radius:99px;min-width:4px;
+box-shadow:inset 0 1px 0 rgba(255,255,255,.35);}
+.d6-bar-val{font-size:12.6px;font-weight:800;color:var(--d6-amber);font-variant-numeric:tabular-nums;}
+
+/* grille modules (dashboard) */
+.d6-mods{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:13px;}
+.d6-mod{display:flex;flex-direction:column;gap:8px;background:#fff;border:1px solid var(--d6-line);
+border-radius:15px;padding:15px 16px;transition:.16s;}
+.d6-mod:hover{transform:translateY(-2px);border-color:#FCD34D;box-shadow:0 8px 20px rgba(180,83,9,.12);text-decoration:none;}
+.d6-mod .m-top{display:flex;align-items:center;gap:9px;}
+.d6-mod .m-num{flex:none;width:30px;height:30px;border-radius:9px;background:var(--d6-soft);color:var(--d6-amber);
+display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:800;}
+.d6-mod b{font-size:13.2px;font-weight:800;line-height:1.3;color:var(--d6-ink);}
+.d6-mod span{font-size:11.6px;color:var(--d6-muted);line-height:1.45;}
+.d6-mod .m-go{margin-top:auto;font-size:11.6px;font-weight:700;color:var(--d6-amber);display:inline-flex;
+align-items:center;gap:5px;}
+.d6-mod .m-go svg{width:13px;height:13px;}
+
+/* interconnexions */
+.d6-docs{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:13px;}
+.d6-doc{display:flex;flex-direction:column;gap:9px;background:#fff;border:1px solid var(--d6-line);
+border-radius:15px;padding:16px;transition:.16s;}
+.d6-doc:hover{border-color:#FCD34D;box-shadow:0 8px 20px rgba(180,83,9,.12);text-decoration:none;}
+.d6-doc .d-ico{width:38px;height:38px;border-radius:11px;background:var(--d6-soft);color:var(--d6-amber);
+display:flex;align-items:center;justify-content:center;}
+.d6-doc .d-ico svg{width:19px;height:19px;}
+.d6-doc b{font-size:13.3px;font-weight:800;color:var(--d6-ink);line-height:1.3;}
+.d6-doc span{font-size:11.8px;color:var(--d6-muted);line-height:1.45;flex:1;}
+.d6-doc .d-dl{font-size:12px;font-weight:700;color:var(--d6-amber);display:inline-flex;align-items:center;gap:6px;}
+.d6-doc .d-dl svg{width:14px;height:14px;}
+.d6-fig{margin:0 0 18px;}
+.d6-fig img{width:100%;height:auto;border:1px solid var(--d6-line);border-radius:14px;background:#fff;}
+.d6-fig figcaption{font-size:12px;color:var(--d6-muted);margin-top:7px;text-align:center;}
+
+/* note source + footer */
+.d6-src{font-size:12.3px;color:var(--d6-muted);margin:4px 0 8px;display:flex;align-items:center;gap:7px;flex-wrap:wrap;}
+.d6-src svg{width:13.5px;height:13.5px;flex:none;}
+footer.d6f{background:#292524;color:#D6CBC0;margin-top:30px;}
+footer.d6f .in{max-width:1240px;margin:0 auto;padding:22px;font-size:12.8px;line-height:1.7;}
+footer.d6f b{color:#FDE68A;}
+footer.d6f a{color:#FBBF24;}
+footer.d6f .row{display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;align-items:center;}
+
+/* splash D6 (variante ambre) */
+#adem14d6-splash{position:fixed;inset:0;z-index:1400;display:flex;align-items:center;justify-content:center;
+background:radial-gradient(1100px 500px at 50% -10%,#FDE68A 0%,#FFFBF3 55%) #FFFBF3;
+font-family:'Plus Jakarta Sans',system-ui,sans-serif;transition:opacity .38s ease;}
+#adem14d6-splash.a14d6-out{opacity:0;pointer-events:none;}
+#adem14d6-splash .a14d6-card{background:rgba(255,255,255,.86);backdrop-filter:blur(12px);
+border:1px solid rgba(180,83,9,.16);border-radius:22px;padding:34px 44px;text-align:center;
+box-shadow:0 24px 70px rgba(180,83,9,.2);max-width:92vw;animation:a14d6-in .5s ease;}
+@keyframes a14d6-in{from{opacity:0;transform:translateY(14px) scale(.97);}to{opacity:1;transform:none;}}
+#adem14d6-splash .a14d6-logo{width:58px;height:58px;border-radius:17px;background:var(--d6-grad);color:#fff;
+display:flex;align-items:center;justify-content:center;font-weight:800;font-size:21px;margin:0 auto 15px;
+box-shadow:0 10px 26px rgba(180,83,9,.4);animation:a14d6-pulse 1.6s ease-in-out infinite;}
+@keyframes a14d6-pulse{0%,100%{box-shadow:0 10px 26px rgba(180,83,9,.4);}50%{box-shadow:0 10px 40px rgba(217,119,6,.6);}}
+#adem14d6-splash .a14d6-title{font-size:20px;font-weight:800;color:#292524;}
+#adem14d6-splash .a14d6-sub{font-size:13.5px;font-weight:600;color:#B45309;margin-top:4px;}
+#adem14d6-splash .a14d6-dots{display:flex;gap:7px;justify-content:center;margin:17px 0 5px;}
+#adem14d6-splash .a14d6-dots i{width:8px;height:8px;border-radius:99px;background:#F59E0B;
+animation:a14d6-bounce 1.2s ease-in-out infinite;}
+#adem14d6-splash .a14d6-dots i:nth-child(2){animation-delay:.15s;background:#D97706;}
+#adem14d6-splash .a14d6-dots i:nth-child(3){animation-delay:.3s;background:#B45309;}
+@keyframes a14d6-bounce{0%,100%{transform:translateY(0);opacity:.5;}50%{transform:translateY(-7px);opacity:1;}}
+#adem14d6-splash .a14d6-loading{font-size:13px;color:#79716B;font-weight:600;}
+#adem14d6-splash .a14d6-bar{width:230px;height:5px;background:#F3E8D2;border-radius:99px;margin:14px auto 10px;overflow:hidden;}
+#adem14d6-splash .a14d6-bar span{display:block;height:100%;width:40%;background:var(--d6-grad);border-radius:99px;
+animation:a14d6-bar 1.3s ease-in-out infinite;}
+@keyframes a14d6-bar{0%{transform:translateX(-120%);}100%{transform:translateX(340%);}}
+#adem14d6-splash .a14d6-meta{font-size:11.4px;color:#A8A29E;font-weight:600;}
+#adem14d6-splash .a14d6-phases{display:flex;gap:6px;justify-content:center;margin-top:11px;}
+#adem14d6-splash .a14d6-phases i{width:22px;height:4px;border-radius:99px;background:#FDE68A;}
+#adem14d6-splash .a14d6-phases i:nth-child(2){background:#FCD34D;}
+#adem14d6-splash .a14d6-phases i:nth-child(3){background:#F59E0B;}
+#adem14d6-splash .a14d6-phases i:nth-child(4){background:#D97706;}
+#adem14d6-splash .a14d6-phases i:nth-child(5){background:#B45309;}
+#adem14d6-splash.a14d6-dark{background:radial-gradient(1100px 500px at 50% -10%,#451A03 0%,#1C1917 55%) #1C1917;}
+#adem14d6-splash.a14d6-dark .a14d6-card{background:rgba(28,25,23,.86);border-color:rgba(245,158,11,.3);}
+#adem14d6-splash.a14d6-dark .a14d6-title{color:#FEF3C7;}
+#adem14d6-splash.a14d6-dark .a14d6-loading{color:#D6CBC0;}
+@media (prefers-reduced-motion:reduce){
+#adem14d6-splash *,#adem14d6-splash{animation:none !important;transition:none !important;}}
+
+@media (max-width:860px){
+.d6h-brand{padding:12px 16px;}
+.d6h-actions .ghost{display:none;}
+.d6h-roles-in{padding:11px 16px 13px;}
+.d6h-nav{padding:9px 16px;}
+main{padding:20px 16px 8px;}
+.d6-heroline h1{font-size:21px;}
+.d6-bar-row{grid-template-columns:120px 1fr 52px;}
+.d6-role{flex-basis:196px;}
+}
+@media print{.d6h-navwrap,.d6h-actions,#adem12-btn{display:none !important;}}
+</style>
+</head>
+<body>
+
+<div id="adem14d6-splash" role="status" aria-live="polite" aria-label="Chargement du domaine">
+  <div class="a14d6-card">
+    <div class="a14d6-logo">AR</div>
+    <div class="a14d6-title">Admina-RH</div>
+    <div class="a14d6-sub">Domaine 6 — Formation & Développement des Compétences</div>
+    <div class="a14d6-dots"><i></i><i></i><i></i></div>
+    <div class="a14d6-loading">Chargement en cours<span class="a14d6-ell">.</span></div>
+    <div class="a14d6-bar"><span></span></div>
+    <div class="a14d6-phases"><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="a14d6-meta">21 écrans · 20 feuilles Excel · 2025</div>
+  </div>
+</div>
+<script>
+/* __ADEM_V14_D6__ — écran de chargement du domaine (variante ambre D6).
+   Disparition quand <main id="d6-main"> est peint (>= 700 ms, filet 4 s, fondu 380 ms,
+   retrait du nœud). Idempotent, survie MutationObserver (pattern V12/V14). */
+(function(){
+  'use strict';
+  if (window.__ADEM_V14_D6__) return;
+  var el = document.getElementById('adem14d6-splash');
+  if (!el) return;
+  var dark = false;
+  try { dark = localStorage.getItem('admina-dark') === 'true'; } catch (e) {}
+  if (dark) el.classList.add('a14d6-dark');
+  window.__ADEM_V14_D6__ = { v: '14-d6', _applied: Date.now() };
+  var t0 = Date.now(), done = false, mo = null;
+  function host(){ return document.body || document.documentElement; }
+  function reattach(){ if (done || el.parentNode) return; host().appendChild(el); }
+  try { mo = new MutationObserver(reattach); mo.observe(host(), { childList: true }); } catch (e) {}
+  var ivKeep = setInterval(function(){
+    reattach();
+    if (done || Date.now() - t0 > 4500) clearInterval(ivKeep);
+  }, 150);
+  var ell = el.querySelector('.a14d6-ell'), n = 1;
+  var ellIv = setInterval(function(){
+    n = n === 1 ? 2 : (n === 2 ? 3 : 1);
+    if (ell) ell.textContent = new Array(n + 1).join('.');
+    else clearInterval(ellIv);
+  }, 500);
+  function hide(){
+    if (done) return; done = true;
+    el.dataset.a14d6done = '1';
+    clearInterval(ellIv); clearInterval(ivKeep);
+    try { mo.disconnect(); } catch (e) {}
+    el.classList.add('a14d6-out');
+    setTimeout(function(){ if (el && el.parentNode) el.parentNode.removeChild(el); }, 420);
+  }
+  var iv = setInterval(function(){
+    var ready = false;
+    try { ready = !!document.getElementById('d6-main'); } catch (e) {}
+    if (Date.now() - t0 >= 700 && document.readyState !== 'loading' && ready){
+      clearInterval(iv); hide();
+    }
+  }, 80);
+  setTimeout(function(){ clearInterval(iv); hide(); }, 4000);
+})();
+</script>
+
+<header class="d6h"><div class="d6h-brand">
+<a class="d6h-logo" href="/" title="Tous les domaines Admina-RH">AR</a>
+<div class="d6h-brandtxt"><b>Admina-RH</b><small>Domaine 6 — Formation & Développement des Compétences</small></div>
+<nav class="d6h-actions">
+<a class="d6h-btn ghost" href="/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Tous les domaines</a>
+<a class="d6h-btn solid" href="/Domaine6_Formation_Developpement_Competences/">Tableau de Bord</a>
+</nav></div></header>
+<section class="d6h-roles"><div class="d6h-roles-in">
+<div class="d6h-roles-head"><h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M2.5 20c0-3.3 2.9-5.2 6.5-5.2s6.5 1.9 6.5 5.2"/><circle cx="17.5" cy="9.5" r="2.4"/><path d="M16 14.9c2.9.2 5.5 1.8 5.5 4.6"/></svg> Rôles utilisateurs du domaine</h2>
+<span>6 profils · périmètres dérivés du classeur D6 (PID « Validé par N+1 », rapports « Approuvé », formateurs internes/externes)</span></div>
+<div class="d6h-roles-strip"><div class="d6-role">
+<div class="d6-role-top"><span class="d6-role-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-4h6v4"/><path d="M9 10h.01M15 10h.01M12 13h.01"/></svg></span><b>Direction Générale</b></div>
+<span class="d6-role-scope">Validation stratégique</span>
+<p>Approuve le budget annuel de formation et les rapports annuels (statuts « Approuvé »).</p></div><div class="d6-role">
+<div class="d6-role-top"><span class="d6-role-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6 8-6s8 2 8 6"/><path d="M9 12l3 3 3-3"/></svg></span><b>DRH / Responsable Formation</b></div>
+<span class="d6-role-scope">Pilotage complet</span>
+<p>Élabore et pilote le PAF, le budget, le catalogue, les conventions et les interconnexions.</p></div><div class="d6-role">
+<div class="d6-role-top"><span class="d6-role-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4M16 2v4M3 9h18M8 14h4"/></svg></span><b>Assistante RH</b></div>
+<span class="d6-role-scope">Coordination opérationnelle</span>
+<p>Saisie et suivi : inscriptions, feuilles de présence, évaluations, suivi mensuel, dossiers.</p></div><div class="d6-role">
+<div class="d6-role-top"><span class="d6-role-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="3"/><circle cx="17" cy="10" r="2.5"/><path d="M2 20c0-3 2.7-5 6-5s6 2 6 5"/><path d="M14 20c0-2.2 1.3-3.5 3-3.5s3 1.3 3 3.5"/></svg></span><b>Manager / N+1</b></div>
+<span class="d6-role-scope">Besoins & validation</span>
+<p>Identifie les besoins de son équipe (entretien annuel) et valide les PID de ses collaborateurs.</p></div><div class="d6-role">
+<div class="d6-role-top"><span class="d6-role-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7l10-4 10 4-10 4z"/><path d="M6 9v6c0 1.5 2.7 3 6 3s6-1.5 6-3V9"/><path d="M22 7v6"/></svg></span><b>Formateur interne / externe</b></div>
+<span class="d6-role-scope">Animation</span>
+<p>Anime les sessions (coach, consultant, organisme), émargement et scores d'évaluation à chaud.</p></div><div class="d6-role">
+<div class="d6-role-top"><span class="d6-role-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="3.5"/><path d="M5 21c0-3.5 3-5.5 7-5.5s7 2 7 5.5"/><path d="M12 12.5v3M10.5 14h3"/></svg></span><b>Employé</b></div>
+<span class="d6-role-scope">Parcours de formation</span>
+<p>Formule sa demande, participe aux sessions, répond aux évaluations, suit son PID et ses certifications.</p></div></div>
+</div></section>
+<div class="d6h-navwrap"><nav class="d6h-nav" aria-label="Modules du domaine">
+<div class="d6-navgrp"><span class="d6-navlbl">Pilotage</span><a href="/Domaine6_Formation_Developpement_Competences/"><span class="n">#00</span>Tableau de Bord</a><a href="/Domaine6_Formation_Developpement_Competences/plan-annuel-formation/"><span class="n">#64</span>Plan Annuel (PAF)</a><a href="/Domaine6_Formation_Developpement_Competences/budget-formation/"><span class="n">#70</span>Budget Formation</a><a href="/Domaine6_Formation_Developpement_Competences/suivi-mensuel/"><span class="n">#79</span>Suivi Mensuel</a><a href="/Domaine6_Formation_Developpement_Competences/rapports-statistiques/"><span class="n">#80</span>Rapports & Statistiques</a></div><div class="d6-navgrp"><span class="d6-navlbl">Besoins & Accès</span><a href="/Domaine6_Formation_Developpement_Competences/besoins-formation/"><span class="n">#65</span>Besoins en Formation</a><a href="/Domaine6_Formation_Developpement_Competences/inscriptions/"><span class="n">#66</span>Inscriptions</a><a href="/Domaine6_Formation_Developpement_Competences/catalogue-formations/"><span class="n">#71</span>Catalogue</a><a href="/Domaine6_Formation_Developpement_Competences/conventions-formation/"><span class="n">#73</span>Conventions</a></div><div class="d6-navgrp"><span class="d6-navlbl">Animation & Suivi</span><a class="on" href="/Domaine6_Formation_Developpement_Competences/presences/"><span class="n">#67</span>Présences</a><a href="/Domaine6_Formation_Developpement_Competences/evaluations-chaud/"><span class="n">#68</span>Évaluations à Chaud</a><a href="/Domaine6_Formation_Developpement_Competences/evaluations-froid/"><span class="n">#69</span>Évaluations à Froid</a><a href="/Domaine6_Formation_Developpement_Competences/formateurs/"><span class="n">#72</span>Formateurs</a></div><div class="d6-navgrp"><span class="d6-navlbl">Compétences</span><a href="/Domaine6_Formation_Developpement_Competences/plans-individuels/"><span class="n">#74</span>Plans Individuels (PID)</a><a href="/Domaine6_Formation_Developpement_Competences/matrice-competences/"><span class="n">#75</span>Matrice Compétences</a><a href="/Domaine6_Formation_Developpement_Competences/bilan-departements/"><span class="n">#76</span>Bilan par Département</a><a href="/Domaine6_Formation_Developpement_Competences/certifications/"><span class="n">#77</span>Certifications</a><a href="/Domaine6_Formation_Developpement_Competences/historique-employe/"><span class="n">#78</span>Historique Employé</a></div><div class="d6-navgrp"><span class="d6-navlbl">Référentiels</span><a href="/Domaine6_Formation_Developpement_Competences/employes/"><span class="n">#—</span>Employés</a><a href="/Domaine6_Formation_Developpement_Competences/interconnexions/"><span class="n">#—</span>Interconnexions & Documents</a></div>
+<div class="d6-navsearch"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></svg><input id="d6navq" type="search" placeholder="Filtrer un module…" aria-label="Filtrer les modules"></div>
+</nav></div>
+<main id="d6-main">
+<div class="d6-crumb"><a href="/">Tous les domaines</a><span class="sep">›</span><a href="/Domaine6_Formation_Developpement_Competences/">Domaine 6</a><span class="sep">›</span><span>Animation & Suivi</span><span class="sep">›</span><b>Domaine 6 — Présences en Formation</b></div>
+
+<div class="d6-heroline">
+<div class="d6-heroico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M2.5 20c0-3.3 2.9-5.2 6.5-5.2s6.5 1.9 6.5 5.2"/><circle cx="17.5" cy="9.5" r="2.4"/><path d="M16 14.9c2.9.2 5.5 1.8 5.5 4.6"/></svg></div>
+<div><span class="d6-modbadge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M2.5 20c0-3.3 2.9-5.2 6.5-5.2s6.5 1.9 6.5 5.2"/><circle cx="17.5" cy="9.5" r="2.4"/><path d="M16 14.9c2.9.2 5.5 1.8 5.5 4.6"/></svg> Module #67</span>
+<h1>Feuille de Présence en Formation</h1>
+<p class="d6-sub">Émargement des sessions de formation : heures d'arrivée, présents, absents et retards par action.</p></div>
+</div>
+<div class="d6-kpis">
+<div class="d6-kpi"><span class="k-lab">Entrées saisies</span><span class="k-val">5</span></div>
+<div class="d6-kpi"><span class="k-lab">Présents</span><span class="k-val">3</span><span class="k-note">taux de présence 60.0 %</span></div>
+<div class="d6-kpi"><span class="k-lab">Absents</span><span class="k-val">1</span></div>
+<div class="d6-kpi"><span class="k-lab">Retards</span><span class="k-val">1</span><span class="k-note">arrivées après le début de session</span></div>
+</div>
+<section class="d6-card"><div class="d6-card-h"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M2.5 20c0-3.3 2.9-5.2 6.5-5.2s6.5 1.9 6.5 5.2"/><circle cx="17.5" cy="9.5" r="2.4"/><path d="M16 14.9c2.9.2 5.5 1.8 5.5 4.6"/></svg><h2>Émargement par session</h2><span class="hint">feuille « 5-Presence Formation » (#67)</span></div><div class="d6-card-b"><div class="d6-tblwrap"><table class="d6-tbl "><thead><tr><th>N°</th><th>Action formation</th><th>Matricule</th><th>Nom employé</th><th>Département</th><th>Date session</th><th>Heure arrivée</th><th>Présence</th></tr></thead><tbody><tr><td class="id">PRES-001</td><td class="id">PAF-001</td><td>EMP-010</td><td class="strong">Tagne René</td><td>Cuisine &amp; Restauration</td><td>10/03/2025</td><td class="ctr">08h00</td><td><span class="d6-badge d6-b-ok">Present</span></td></tr><tr><td class="id">PRES-002</td><td class="id">PAF-001</td><td>EMP-001</td><td class="strong">Nganou Clarisse</td><td>Cuisine &amp; Restauration</td><td>10/03/2025</td><td class="ctr">08h05</td><td><span class="d6-badge d6-b-ok">Present</span></td></tr><tr><td class="id">PRES-003</td><td class="id">PAF-001</td><td>EMP-011</td><td class="strong">Bouba Ahmed</td><td>Sécurité</td><td>10/03/2025</td><td class="ctr">—</td><td><span class="d6-badge d6-b-bad">Absent</span></td></tr><tr><td class="id">PRES-004</td><td class="id">PAF-002</td><td>EMP-004</td><td class="strong">Nkoulou Mbarga</td><td>Étage &amp; Housekeeping</td><td>07/04/2025</td><td class="ctr">09h00</td><td><span class="d6-badge d6-b-ok">Present</span></td></tr><tr><td class="id">PRES-005</td><td class="id">PAF-003</td><td>EMP-006</td><td class="strong">Ngo Delphine</td><td>Service Client</td><td>02/06/2025</td><td class="ctr">08h10</td><td><span class="d6-badge d6-b-warn">Retard</span></td></tr></tbody></table></div></div></section>
+<p class="d6-src"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg> Source : classeur D6 — feuille « 5-Presence Formation », lignes PRES-001 à PRES-005.</p>
+
+</main>
+<footer class="d6f"><div class="in"><div class="row">
+<div><b>Admina-RH</b> — Domaine 6 — Formation & Développement des Compétences<br>
+Source : classeur « Domaine6_Formation_Developpement_Competences (4).xlsx » · conforme ISO 30414 / ISO 9001.</div>
+<div><a href="/">Accueil multi-domaines</a> · <a href="https://github.com/georgyfr/Admina_RH" target="_blank" rel="noopener noreferrer">Dépôt GitHub ↗</a></div>
+</div></div></footer>
+<script id="adem12-d6">
+
+/* ADEM_V12 — Menu déroulant global des domaines (remplace les listes sidebar)
+ * DEMANDE UTILISATEUR : la liste des domaines dans la barre latérale s'affiche mal
+ * (libellés tronqués, chevauchements) → afficher tous les domaines AILLEURS, sous
+ * forme de liste déroulante, présente sur TOUS les domaines actifs.
+ *
+ * SOLUTION : bouton flottant fixe EN BAS À DROITE (unique position fiable sur les
+ * 3 applications distinctes : React D1/D2, Next.js D3, pages « en préparation »)
+ * ouvrant un panneau déroulant : recherche + 31 domaines (badges ACTIF / EN
+ * PRÉPARATION), domaine courant surligné, lien Accueil (hub). Absent du hub « / »
+ * qui est déjà la page de présentation complète.
+ *
+ * Les listes sidebar deviennent inutiles et sont MASQUÉES (CSS + DOM runtime,
+ * 0 octet des scripts tiers modifié, aucun nœud React/Next déplacé) :
+ *   - app React (D1/D2)  : #admina-cdn (bloc tiers) → display:none
+ *   - build D3 (Next.js) : conteneur « Autres Domaines » → display:none
+ * La sidebar retrouve ainsi sa hauteur complète (V10 ne réduit plus rien :
+ * offsetHeight du bloc masqué = 0).
+ *
+ * Non-régression : z-index 1600 (au-dessus de l'app MUI 1100-1300, SOUS les
+ * modaux ADEM V8/V9 à 5000+) ; auto-réparation si le nœud disparaît ;
+ * surlignage du domaine courant suivi (popstate + intervalle, routes SPA).
+ * API : window.__ADEM_V12__ = {version, open, close, fix, _applied}
+ */
+(function () {
+  'use strict';
+  if (window.__ADEM_V12__) return;
+  var D = document;
+  var API = window.__ADEM_V12__ = { version: 'V12', open: open, close: close, fix: fix, _applied: 0 };
+
+  /* ------- données : les 31 domaines (mêmes URLs dédiées que le hub) ------- */
+  var DOMAINS = [
+    { n: 1,  u: '/Domaine1_Recrutement_Candidats', l: 'Recrutement & Candidats', a: 1 },
+    { n: 2,  u: '/Domaine2_Gestion_Administrative_Personnel', l: 'Gestion Administrative du Personnel', a: 1 },
+    { n: 3,  u: '/Domaine3_Paie_Remuneration_Avantages/', l: 'Paie, Rémunération & Avantages', a: 1 },
+    { n: 4,  u: '/Domaine4_Temps_Travail_Planification/', l: 'Temps de Travail & Planification', a: 1 },
+    { n: 5,  u: '/Domaine5_Conges_Absences_Presence/', l: 'Congés, Absences & Présence' },
+    { n: 6,  u: '/Domaine6_Formation_Developpement_Competences/', l: 'Formation & Développement des Compétences', a: 1 },
+    { n: 7,  u: '/Domaine7_Evaluation_Gestion_Performance/', l: 'Évaluation & Gestion de la Performance' },
+    { n: 8,  u: '/Domaine8_Relations_Sociales_Syndicats/', l: 'Relations Sociales & Syndicats' },
+    { n: 9,  u: '/Domaine9_Sante_Securite_Conditions_Travail/', l: 'Santé, Sécurité & Conditions de Travail' },
+    { n: 10, u: '/Domaine10_Talents_Mobilite_Interne/', l: 'Talents & Mobilité Interne' },
+    { n: 11, u: '/Domaine11_Droit_Travail_Conformite/', l: 'Droit du Travail & Conformité' },
+    { n: 12, u: '/Domaine12_Documentation_Archivage_RH/', l: 'Documentation & Archivage RH' },
+    { n: 13, u: '/Domaine13_Communication_RH_Marque_Employeur/', l: 'Communication RH & Marque Employeur' },
+    { n: 14, u: '/Domaine14_Reporting_Tableaux_Bord_Analyse/', l: 'Reporting & Tableaux de Bord Analyse' },
+    { n: 15, u: '/Domaine15_Budget_Pilotage_Financier_RH/', l: 'Budget & Pilotage Financier RH' },
+    { n: 16, u: '/Domaine16_Diversite_Equite_Inclusion/', l: 'Diversité, Équité & Inclusion' },
+    { n: 17, u: '/Domaine17_Audit_Conformite_Contentieux/', l: 'Audit, Conformité & Contentieux' },
+    { n: 18, u: '/Domaine18_RSE_Developpement_Durable_RH/', l: 'RSE & Développement Durable' },
+    { n: 19, u: '/Domaine19_Innovation_RH_Transformation_Digitale/', l: 'Innovation RH & Transformation Digitale' },
+    { n: 20, u: '/Domaine20_Pilotage_Reporting_RH/', l: 'Pilotage & Reporting RH' },
+    { n: 21, u: '/Domaine21_Fiches_Postes_Profils_Cartographie_Metiers/', l: 'Fiches de Postes & Cartographie des Métiers' },
+    { n: 22, u: '/Domaine22_Avantages_Sociaux_Previsionnelle/', l: 'Avantages Sociaux & Prévoyance' },
+    { n: 23, u: '/Domaine23_Travail_Temporaire/', l: 'Travail Temporaire' },
+    { n: 24, u: '/Domaine24_Stagiaires_Alternants/', l: 'Stagiaires & Alternants' },
+    { n: 25, u: '/Domaine25_Expatries_Personnel_Detache/', l: 'Expatriés & Personnel Détaché' },
+    { n: 26, u: '/Domaine26_Gestion_Budgetaire_Fiscale_RH/', l: 'Gestion Budgétaire & Fiscale RH' },
+    { n: 27, u: '/Domaine27_Reclamations_Contentieux_RH/', l: 'Réclamations & Contentieux RH' },
+    { n: 28, u: '/Domaine28_Mobilite_Carriere_Succession_RH/', l: 'Mobilité, Carrière & Succession' },
+    { n: 29, u: '/Domaine29_Communication_Interne_Engagement/', l: 'Communication Interne & Engagement' },
+    { n: 30, u: '/Domaine30_Expatrites_Mobilite_Internationale/', l: 'Expatriés & Mobilité Internationale' },
+    { n: 31, u: '/Domaine31_Retraites_Prevoyance_Transitions_Carriere/', l: 'Retraites, Prévoyance & Transitions de Carrière' }
+  ];
+  var N_ACTIF = 5;
+
+  /* hub racine = déjà la présentation complète → aucun bouton */
+  var p0 = location.pathname;
+  if (p0 === '/' || p0 === '/index.html') { API.fix = function () {}; return; }
+
+  var ICON_GRID = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>';
+  var ICON_CHEV = '<svg class="adem12-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
+  var ICON_X = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+  var ICON_SEARCH = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>';
+  var ICON_CHECK = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+  var ICON_ARROW = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="8 7 17 7 17 16"/></svg>';
+
+  var CSS = [
+    '#adem12-btn{position:fixed;right:18px;bottom:18px;z-index:1600;display:flex;align-items:center;gap:8px;',
+    'padding:12px 18px;border:0;border-radius:999px;cursor:pointer;color:#fff;',
+    "background:linear-gradient(135deg,#9375cd,#5e35a1);font-family:'Roboto',system-ui,-apple-system,'Segoe UI',sans-serif;",
+    'font-size:13.5px;font-weight:600;letter-spacing:.02em;box-shadow:0 10px 28px rgba(94,53,161,.45);',
+    'transition:transform .18s ease,box-shadow .18s ease;}',
+    '#adem12-btn:hover{transform:translateY(-2px);box-shadow:0 14px 34px rgba(94,53,161,.55);}',
+    '#adem12-btn:active{transform:translateY(0);}',
+    '#adem12-btn .adem12-chev{transition:transform .2s ease;opacity:.9;}',
+    '#adem12-btn.adem12-open .adem12-chev{transform:rotate(180deg);}',
+    '#adem12-panel{position:fixed;right:18px;bottom:72px;z-index:1600;width:min(404px,calc(100vw - 24px));',
+    'max-height:min(68vh,600px);display:flex;flex-direction:column;background:#fff;color:#221a3f;',
+    "font-family:'Roboto',system-ui,-apple-system,'Segoe UI',sans-serif;text-align:left;",
+    'border:1px solid rgba(94,53,161,.18);border-radius:18px;box-shadow:0 24px 70px rgba(20,10,50,.35);',
+    'overflow:hidden;opacity:0;transform:translateY(14px) scale(.98);transform-origin:100% 100%;',
+    'pointer-events:none;transition:opacity .2s ease,transform .22s ease;}',
+    '#adem12-panel.adem12-open{opacity:1;transform:none;pointer-events:auto;}',
+    '#adem12-panel .adem12-head{display:flex;align-items:center;gap:10px;padding:14px 16px;',
+    'background:linear-gradient(135deg,rgba(147,117,205,.14),rgba(94,53,161,.07));border-bottom:1px solid rgba(94,53,161,.12);}',
+    '#adem12-panel .adem12-head b{font-size:14px;color:#3b2a6b;}',
+    '#adem12-panel .adem12-head small{display:block;font-size:11px;color:#8b84a8;margin-top:1px;}',
+    '#adem12-panel .adem12-x{margin-left:auto;border:0;background:transparent;color:#6b6390;cursor:pointer;',
+    'padding:6px;border-radius:8px;display:flex;transition:.15s;}',
+    '#adem12-panel .adem12-x:hover{background:rgba(94,53,161,.1);color:#3b2a6b;}',
+    '#adem12-panel .adem12-search{padding:10px 12px;border-bottom:1px solid #efeaf8;}',
+    '#adem12-panel .adem12-search div{display:flex;align-items:center;gap:8px;background:#f7f4fd;',
+    'border:1px solid #e6def5;border-radius:10px;padding:8px 12px;color:#8b84a8;}',
+    '#adem12-panel .adem12-search input{flex:1;border:0;background:transparent;outline:none;',
+    "font:400 13px/1.3 'Roboto',system-ui,sans-serif;color:#221a3f;min-width:0;}",
+    '#adem12-panel .adem12-list{overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;}',
+    '#adem12-panel .adem12-item{display:flex;align-items:center;gap:10px;padding:10px 14px;',
+    'text-decoration:none;color:#2c2450;border-bottom:1px solid #f3eff9;transition:background .12s;}',
+    '#adem12-panel .adem12-item:hover{background:#f7f4fd;}',
+    '#adem12-panel .adem12-item.adem12-on{background:rgba(147,117,205,.12);box-shadow:inset 3px 0 0 #7c5fc0;}',
+    '#adem12-panel .adem12-num{flex:none;width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;',
+    'background:rgba(147,117,205,.15);border:1px solid rgba(147,117,205,.35);color:#64489e;',
+    'font-size:10.5px;font-weight:700;}',
+    '#adem12-panel .adem12-lab{flex:1;font-size:12.8px;font-weight:500;line-height:1.3;min-width:0;',
+    'overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}',
+    '#adem12-panel .adem12-chip{flex:none;font-size:9.5px;font-weight:700;letter-spacing:.05em;',
+    'padding:3px 8px;border-radius:999px;}',
+    '#adem12-panel .adem12-ok{color:#0e8a66;background:rgba(58,210,159,.13);border:1px solid rgba(58,210,159,.45);}',
+    '#adem12-panel .adem12-warn{color:#96690f;background:rgba(245,183,78,.14);border:1px solid rgba(245,183,78,.4);}',
+    '#adem12-panel .adem12-cur{flex:none;display:none;color:#7c5fc0;}',
+    '#adem12-panel .adem12-item.adem12-on .adem12-cur{display:flex;}',
+    '#adem12-panel .adem12-none{display:none;padding:22px 16px;color:#8b84a8;font-size:12.5px;text-align:center;}',
+    '#adem12-panel .adem12-foot{display:flex;align-items:center;gap:8px;padding:12px 16px;text-decoration:none;',
+    'color:#5e35a1;font-size:12.5px;font-weight:600;border-top:1px solid #efeaf8;background:#fbf9ff;transition:.15s;}',
+    '#adem12-panel .adem12-foot:hover{background:#f3edfc;}',
+    '@media(max-width:640px){#adem12-btn{right:12px;bottom:12px;padding:11px 15px;font-size:12.5px;}',
+    '#adem12-panel{right:12px;bottom:66px;width:calc(100vw - 24px);}}',
+    /* masquage des listes sidebar remplacées (0 octet tiers modifié) */
+    '#admina-cdn{display:none !important;}',
+    '.border-t.border-white\\/10.bg-black\\/20{display:none !important;}'
+  ].join('');
+
+  var btn, panel, listEl, inputEl, noneEl;
+
+  function el(tag, cls, html) {
+    var e = D.createElement(tag);
+    if (cls) e.className = cls;
+    if (html != null) e.innerHTML = html;
+    return e;
+  }
+
+  function currentKey() {
+    var p = location.pathname;
+    if (p.indexOf('/Domaine1_Recrutement_Candidats') === 0) return '/Domaine1_Recrutement_Candidats';
+    if (p.indexOf('/Domaine2_Gestion_Administrative_Personnel') === 0 ||
+        p.indexOf('/domaine2_Gestion_Administrative_Personnel') === 0) return '/Domaine2_Gestion_Administrative_Personnel';
+    if (p.indexOf('/Domaine3_Paie_Remuneration_Avantages') === 0) return '/Domaine3_Paie_Remuneration_Avantages/';
+    for (var i = 3; i < DOMAINS.length; i++) {
+      var f = DOMAINS[i].u.slice(0, -1);
+      if (p === f || p.indexOf(f + '/') === 0) return DOMAINS[i].u;
+    }
+    return null;
+  }
+
+  function refreshCurrent() {
+    if (!listEl) return;
+    var cur = currentKey();
+    var rows = listEl.querySelectorAll('.adem12-item');
+    for (var i = 0; i < rows.length; i++) {
+      var on = cur !== null && rows[i].getAttribute('data-u') === cur;
+      rows[i].className = 'adem12-item' + (on ? ' adem12-on' : '') + (DOMAINS[i].a ? '' : '');
+    }
+  }
+
+  function buildPanel() {
+    panel = el('div');
+    panel.id = 'adem12-panel';
+    panel.setAttribute('role', 'dialog');
+    panel.setAttribute('aria-label', 'Tous les domaines Admina-RH');
+
+    var head = el('div', 'adem12-head');
+    head.appendChild(el('div', null, '<b>Admina-RH</b><small>' + N_ACTIF + ' domaines actifs · ' +
+      DOMAINS.length + ' domaines au total</small>'));
+    var x = el('button', 'adem12-x', ICON_X);
+    x.setAttribute('aria-label', 'Fermer');
+    x.addEventListener('click', function () { close(); });
+    head.appendChild(x);
+    panel.appendChild(head);
+
+    var sw = el('div', 'adem12-search');
+    var si = el('div', null, ICON_SEARCH);
+    inputEl = D.createElement('input');
+    inputEl.type = 'search';
+    inputEl.placeholder = 'Rechercher un domaine…';
+    inputEl.setAttribute('aria-label', 'Rechercher un domaine');
+    inputEl.addEventListener('input', filter);
+    si.appendChild(inputEl);
+    sw.appendChild(si);
+    panel.appendChild(sw);
+
+    listEl = el('div', 'adem12-list');
+    for (var i = 0; i < DOMAINS.length; i++) {
+      var d = DOMAINS[i];
+      var a = el('a', 'adem12-item');
+      a.href = d.u;
+      a.setAttribute('data-u', d.u);
+      a.title = 'Domaine ' + d.n + ' — ' + d.l;
+      a.appendChild(el('span', 'adem12-num', 'D' + d.n));
+      a.appendChild(el('span', 'adem12-lab', d.l));
+      a.appendChild(el('span', 'adem12-chip ' + (d.a ? 'adem12-ok' : 'adem12-warn'), d.a ? 'ACTIF' : 'EN PRÉPARATION'));
+      a.appendChild(el('span', 'adem12-cur', ICON_CHECK));
+      listEl.appendChild(a);
+    }
+    noneEl = el('div', 'adem12-none', 'Aucun domaine ne correspond à votre recherche.');
+    listEl.appendChild(noneEl);
+    panel.appendChild(listEl);
+
+    var foot = el('a', 'adem12-foot', 'Tous les domaines — Accueil ' + ICON_ARROW);
+    foot.href = '/';
+    panel.appendChild(foot);
+  }
+
+  function filter() {
+    var v = inputEl.value.trim().toLowerCase();
+    var n = 0;
+    var rows = listEl.querySelectorAll('.adem12-item');
+    for (var i = 0; i < rows.length; i++) {
+      var hit = rows[i].getAttribute('data-u').toLowerCase().indexOf(v) !== -1 ||
+                rows[i].textContent.toLowerCase().indexOf(v) !== -1;
+      rows[i].style.display = hit ? '' : 'none';
+      if (hit) n++;
+    }
+    noneEl.style.display = n ? 'none' : 'block';
+  }
+
+  function open() {
+    if (!panel) return;
+    refreshCurrent();
+    panel.classList.add('adem12-open');
+    btn.classList.add('adem12-open');
+    btn.setAttribute('aria-expanded', 'true');
+    try { inputEl.focus(); } catch (e) {}
+  }
+
+  function close() {
+    if (!panel) return;
+    panel.classList.remove('adem12-open');
+    btn.classList.remove('adem12-open');
+    btn.setAttribute('aria-expanded', 'false');
+  }
+
+  function toggle() {
+    if (panel.classList.contains('adem12-open')) close();
+    else open();
+  }
+
+  /* Masquage runtime de secours (si la classe Tailwind du bloc D3 change) */
+  function hideD3Block() {
+    if (location.pathname.indexOf('/Domaine3_Paie') !== 0) return;
+    var ps = D.querySelectorAll('p');
+    for (var i = 0; i < ps.length; i++) {
+      if ((ps[i].textContent || '').trim().toLowerCase() === 'autres domaines') {
+        var c = ps[i].parentElement;
+        if (c && c.style.display !== 'none') { c.style.display = 'none'; API._applied++; }
+      }
+    }
+  }
+
+  function fix() {
+    if (!btn || !btn.isConnected) mount();
+    refreshCurrent();
+    hideD3Block();
+  }
+
+  function mount() {
+    if (btn && btn.isConnected) return;
+    if (!btn) {
+      buildPanel();
+      btn = el('button', null, ICON_GRID + '<span>Domaines</span>' + ICON_CHEV);
+      btn.id = 'adem12-btn';
+      btn.setAttribute('aria-expanded', 'false');
+      btn.setAttribute('aria-haspopup', 'true');
+      btn.setAttribute('aria-controls', 'adem12-panel');
+      btn.title = 'Tous les domaines Admina-RH';
+      btn.addEventListener('click', function (e) { e.stopPropagation(); toggle(); });
+      D.addEventListener('click', function (e) {
+        if (!panel.classList.contains('adem12-open')) return;
+        if (panel.contains(e.target) || btn.contains(e.target)) return;
+        close();
+      });
+      D.addEventListener('keydown', function (e) {
+        if ((e.key || e.keyCode) === 'Escape') close();
+      });
+      window.addEventListener('popstate', refreshCurrent);
+    }
+    D.body.appendChild(btn);
+    D.body.appendChild(panel);
+    API._applied++;
+  }
+
+  function start() {
+    if (!D.getElementById('adem12-style')) {
+      var st = D.createElement('style');
+      st.id = 'adem12-style';
+      st.textContent = CSS;
+      D.head.appendChild(st);
+    }
+    mount();
+    /* suivi léger : routes SPA + auto-réparation (pattern V11) */
+    setInterval(fix, 1500);
+  }
+
+  if (D.readyState === 'loading') D.addEventListener('DOMContentLoaded', start);
+  else start();
+})();
+
+
+</script>
+<script>
+/* filtre modules (navigation) */
+(function(){
+  var q = document.getElementById('d6navq'), nav = document.querySelector('.d6h-nav');
+  if (!q || !nav) return;
+  q.addEventListener('input', function(){
+    var v = q.value.trim().toLowerCase();
+    var groups = nav.querySelectorAll('.d6-navgrp');
+    for (var g = 0; g < groups.length; g++) {
+      var links = groups[g].querySelectorAll('a'), any = false;
+      for (var i = 0; i < links.length; i++) {
+        var hit = !v || links[i].textContent.toLowerCase().indexOf(v) !== -1;
+        links[i].style.display = hit ? '' : 'none';
+        if (hit) any = true;
+      }
+      groups[g].style.display = any ? '' : 'none';
+    }
+  });
+})();
+</script>
+</body>
+</html>
