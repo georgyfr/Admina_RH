@@ -1,1 +1,128 @@
-import{r as e}from"./rolldown-runtime-hePW80VL.js";import{$ as t,B as n,F as r,K as i,M as a,N as o,Ot as s,P as c,R as l,V as u,Y as d,at as f,bt as p,f as m,h,it as g,ot as _,p as v,u as y}from"./Box-CHFloNRC.js";import{S as b}from"./Menu-C-TQKk_A.js";import{l as x,r as S,t as C}from"./Grow-BGmbCfxC.js";var w=e(s(),1);function T(e){return e.substring(2).toLowerCase()}function E(e,t){return t.documentElement.clientWidth<e.clientX||t.documentElement.clientHeight<e.clientY}function D(e){let{children:t,disableReactTree:r=!1,mouseEvent:i=`onClick`,onClickAway:a,touchEvent:o=`onTouchEnd`}=e,s=w.useRef(!1),c=w.useRef(null),l=w.useRef(!1),d=w.useRef(!1);w.useEffect(()=>(setTimeout(()=>{l.current=!0},0),()=>{l.current=!1}),[]);let f=u(S(t),c),p=n(e=>{let t=d.current;d.current=!1;let n=x(c.current);if(!l.current||!c.current||`clientX`in e&&E(e,n))return;if(s.current){s.current=!1;return}let i;i=e.composedPath?e.composedPath().includes(c.current):!b(n.documentElement,e.target)||b(c.current,e.target),!i&&(r||!t)&&a(e)}),m=e=>n=>{d.current=!0;let r=t.props[e];r&&r(n)},h={ref:f};return o!==!1&&(h[o]=m(o)),w.useEffect(()=>{if(o!==!1){let e=T(o),t=x(c.current),n=()=>{s.current=!0};return t.addEventListener(e,p),t.addEventListener(`touchmove`,n),()=>{t.removeEventListener(e,p),t.removeEventListener(`touchmove`,n)}}},[p,o]),i!==!1&&(h[i]=m(i)),w.useEffect(()=>{if(i!==!1){let e=T(i),t=x(c.current);return t.addEventListener(e,p),()=>{t.removeEventListener(e,p)}}},[p,i]),w.cloneElement(t,h)}var O=p();function k(e={}){let{autoHideDuration:t=null,disableWindowBlurListener:r=!1,onClose:i,open:a,resumeHideDuration:o}=e,s=y();w.useEffect(()=>{if(!a)return;function e(e){e.defaultPrevented||e.key===`Escape`&&i?.(e,`escapeKeyDown`)}return document.addEventListener(`keydown`,e),()=>{document.removeEventListener(`keydown`,e)}},[a,i]);let c=n((e,t)=>{i?.(e,t)}),l=n(e=>{!i||e==null||s.start(e,()=>{c(null,`timeout`)})});w.useEffect(()=>(a&&l(t),s.clear),[a,t,l,s]);let u=e=>{i?.(e,`clickaway`)},d=s.clear,f=w.useCallback(()=>{t!=null&&l(o??t*.5)},[t,o,l]),p=e=>t=>{let n=e.onBlur;n?.(t),f()},m=e=>t=>{let n=e.onFocus;n?.(t),d()},g=e=>t=>{let n=e.onMouseEnter;n?.(t),d()},_=e=>t=>{let n=e.onMouseLeave;n?.(t),f()};return w.useEffect(()=>{if(!r&&a)return window.addEventListener(`focus`,f),window.addEventListener(`blur`,d),()=>{window.removeEventListener(`focus`,f),window.removeEventListener(`blur`,d)}},[r,a,f,d]),{getRootProps:(t={})=>{let n={...h(e),...h(t)};return{role:`presentation`,...t,...n,onBlur:p(n),onFocus:m(n),onMouseEnter:g(n),onMouseLeave:_(n)}},onClickAway:u}}function A(e){return f(`MuiSnackbarContent`,e)}g(`MuiSnackbarContent`,[`root`,`message`,`action`]);var j=e=>{let{classes:t}=e;return d({root:[`root`],action:[`action`],message:[`message`]},A,t)},M=r(m,{name:`MuiSnackbarContent`,slot:`Root`})(c(({theme:e})=>{let n=e.palette.mode===`light`?.8:.98;return{...e.focusVisible&&i(`0 0 0 4px ${(e.vars||e).palette.background.default}`),...e.typography.body2,color:e.vars?e.vars.palette.SnackbarContent.color:e.palette.getContrastText(t(e.palette.background.default,n)),backgroundColor:e.vars?e.vars.palette.SnackbarContent.bg:t(e.palette.background.default,n),display:`flex`,alignItems:`center`,flexWrap:`wrap`,padding:`6px 16px`,flexGrow:1,[e.breakpoints.up(`sm`)]:{flexGrow:`initial`,minWidth:288}}})),N=r(`div`,{name:`MuiSnackbarContent`,slot:`Message`})({padding:`8px 0`}),P=r(`div`,{name:`MuiSnackbarContent`,slot:`Action`})({display:`flex`,alignItems:`center`,marginLeft:`auto`,paddingLeft:16,marginRight:-8}),F=w.forwardRef(function(e,t){let n=o({props:e,name:`MuiSnackbarContent`}),{action:r,className:i,message:a,role:s=`alert`,...c}=n,l=n,u=j(l);return(0,O.jsxs)(M,{role:s,elevation:6,className:_(u.root,i),ownerState:l,ref:t,...c,children:[(0,O.jsx)(N,{className:u.message,ownerState:l,children:a}),r?(0,O.jsx)(P,{className:u.action,ownerState:l,children:r}):null]})});function I(e){return f(`MuiSnackbar`,e)}g(`MuiSnackbar`,[`root`,`anchorOriginTopCenter`,`anchorOriginBottomCenter`,`anchorOriginTopRight`,`anchorOriginBottomRight`,`anchorOriginTopLeft`,`anchorOriginBottomLeft`]);var L=e=>{let{classes:t,anchorOrigin:n}=e,r={root:[`root`,`anchorOrigin${a(n.vertical)}${a(n.horizontal)}`]};return d(r,I,t)},R=r(`div`,{name:`MuiSnackbar`,slot:`Root`,overridesResolver:(e,t)=>{let{ownerState:n}=e;return[t.root,t[`anchorOrigin${a(n.anchorOrigin.vertical)}${a(n.anchorOrigin.horizontal)}`]]}})(c(({theme:e})=>({zIndex:(e.vars||e).zIndex.snackbar,position:`fixed`,display:`flex`,left:8,right:8,justifyContent:`center`,alignItems:`center`,variants:[{props:({ownerState:e})=>e.anchorOrigin.vertical===`top`,style:{top:8,[e.breakpoints.up(`sm`)]:{top:24}}},{props:({ownerState:e})=>e.anchorOrigin.vertical!==`top`,style:{bottom:8,[e.breakpoints.up(`sm`)]:{bottom:24}}},{props:({ownerState:e})=>e.anchorOrigin.horizontal===`left`,style:{justifyContent:`flex-start`,[e.breakpoints.up(`sm`)]:{left:24,right:`auto`}}},{props:({ownerState:e})=>e.anchorOrigin.horizontal===`right`,style:{justifyContent:`flex-end`,[e.breakpoints.up(`sm`)]:{right:24,left:`auto`}}},{props:({ownerState:e})=>e.anchorOrigin.horizontal===`center`,style:{[e.breakpoints.up(`sm`)]:{left:`50%`,right:`auto`,transform:`translateX(-50%)`}}}]}))),z=w.forwardRef(function(e,t){let n=o({props:e,name:`MuiSnackbar`}),r=l(),i={enter:r.transitions.duration.enteringScreen,exit:r.transitions.duration.leavingScreen},{action:a,anchorOrigin:{vertical:s,horizontal:c}={vertical:`bottom`,horizontal:`left`},autoHideDuration:u=null,children:d,className:f,disableWindowBlurListener:p=!1,message:m,onBlur:h,onClose:g,onFocus:_,onMouseEnter:y,onMouseLeave:b,open:x,resumeHideDuration:S,slots:T={},slotProps:E={},transitionDuration:A=i,...j}=n,M={...n,anchorOrigin:{vertical:s,horizontal:c},autoHideDuration:u,disableWindowBlurListener:p,transitionDuration:A},N=L(M),{getRootProps:P,onClickAway:I}=k(M),[z,B]=w.useState(!0),V={slots:T,slotProps:E},[H,U]=v(`root`,{ref:t,className:[N.root,f],elementType:R,getSlotProps:P,externalForwardedProps:{...V,...j},ownerState:M}),[W,{ownerState:G,...K}]=v(`clickAwayListener`,{elementType:D,externalForwardedProps:V,getSlotProps:e=>({onClickAway:(...t)=>{let n=t[0];e.onClickAway?.(...t),!n?.defaultMuiPrevented&&I(...t)}}),ownerState:M}),[q,J]=v(`content`,{elementType:F,shouldForwardComponentProp:!0,externalForwardedProps:V,additionalProps:{message:m,action:a},ownerState:M}),[Y,X]=v(`transition`,{elementType:C,externalForwardedProps:V,getSlotProps:e=>({onEnter:(...t)=>{e.onEnter?.(...t),B(!1)},onExited:(...t)=>{e.onExited?.(...t),B(!0)}}),additionalProps:{appear:!0,in:x,timeout:A,direction:s===`top`?`down`:`up`},ownerState:M});return!x&&z?null:(0,O.jsx)(W,{...K,...T.clickAwayListener&&{ownerState:G},children:(0,O.jsx)(H,{...U,children:(0,O.jsx)(Y,{...X,children:d||(0,O.jsx)(q,{...J})})})})});export{z as t};
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Admina-RH — Tous les Domaines</title>
+<meta name="description" content="Plateforme Admina-RH : 31 domaines de gestion RH. Chaque domaine dispose d'une URL dédiée sous admina-rh-bd0.pages.dev." />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<script>
+/* Admina-RH — entrée multi-domaines.
+ * Ce document est servi à la racine (hub) ET par le fallback SPA automatique de
+ * Cloudflare Pages pour tout chemin non physique (deep-links /demandes, /candidats,
+ * /domaine2_Gestion_Administrative_Personnel/..., sans _redirects → URL préservée).
+ * À la racine : hub des 31 domaines. Ailleurs : bascule immédiate vers l'application
+ * (/Domaine1_Recrutement_Candidats/) avec le chemin d'origine dans le fragment
+ * #adem_r= — V11c le restaure avant le montage du routeur React. */
+(function () {
+  var p = location.pathname;
+  if (p === '/' || p === '/index.html') return;
+  location.replace('/Domaine1_Recrutement_Candidats/index.html#adem_r=' +
+    encodeURIComponent(p + location.search));
+})();
+</script>
+<style>
+:root{--bg:#0d0d1a;--card:#15152a;--card2:#191932;--border:rgba(255,255,255,.09);--txt:#eef0ff;
+--mut:#9aa0c3;--acc:#9375cd;--acc2:#5e35a1;--ok:#3ad29f;--warn:#f5b74e}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;background:
+radial-gradient(1200px 500px at 70% -10%,rgba(94,53,161,.28),transparent),var(--bg);color:var(--txt);
+min-height:100vh;display:flex;flex-direction:column}
+.wrap{width:min(1180px,92%);margin:0 auto}
+header{padding:22px 0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:14px}
+header .wrap{display:flex;align-items:center;gap:14px;width:min(1180px,92%)}
+.logo{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--acc),var(--acc2));
+display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;letter-spacing:.5px;
+box-shadow:0 6px 18px rgba(94,53,161,.45)}
+.brand b{font-size:1.12rem}
+.brand small{display:block;color:var(--mut);font-size:.76rem;letter-spacing:.06em;text-transform:uppercase}
+.gh{margin-left:auto;color:var(--mut);text-decoration:none;font-size:.86rem;border:1px solid var(--border);
+padding:8px 14px;border-radius:10px;transition:.2s}
+.gh:hover{color:var(--txt);border-color:var(--acc)}
+.hero{padding:52px 0 26px}
+.hero h1{font-size:clamp(1.6rem,3.4vw,2.3rem);font-weight:800}
+.hero h1 span{background:linear-gradient(90deg,var(--acc),#c9b3ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{color:var(--mut);margin-top:10px;max-width:760px;line-height:1.65;font-size:.97rem}
+.meta{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap;align-items:center}
+.chip{font-size:.78rem;font-weight:600;padding:6px 12px;border-radius:999px;border:1px solid var(--border);color:var(--mut)}
+.chip.ok{color:var(--ok);border-color:rgba(58,210,159,.4);background:rgba(58,210,159,.08)}
+.search{margin:8px 0 6px;width:min(460px,100%)}
+.search input{width:100%;padding:12px 16px;border-radius:12px;border:1px solid var(--border);
+background:var(--card);color:var(--txt);font-size:.95rem;outline:none;transition:.2s}
+.search input:focus{border-color:var(--acc)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;padding:18px 0 40px}
+.card{display:block;text-decoration:none;color:inherit;background:var(--card);border:1px solid var(--border);
+border-radius:16px;padding:18px;transition:transform .18s,border-color .18s,background .18s;position:relative}
+.card:hover{transform:translateY(-3px);border-color:var(--acc);background:var(--card2)}
+.card .top{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.num{width:42px;height:42px;border-radius:11px;background:rgba(147,117,205,.14);border:1px solid rgba(147,117,205,.35);
+color:#c9b3ff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.82rem;flex:none}
+.card h3{font-size:1rem;font-weight:700;line-height:1.3}
+.card p{color:var(--mut);font-size:.85rem;line-height:1.55;min-height:52px}
+.card .foot{display:flex;align-items:center;justify-content:space-between;margin-top:12px}
+.st{font-size:.72rem;font-weight:700;letter-spacing:.05em;padding:5px 10px;border-radius:999px}
+.st.ok{color:var(--ok);background:rgba(58,210,159,.1);border:1px solid rgba(58,210,159,.4)}
+.st.warn{color:var(--warn);background:rgba(245,183,78,.08);border:1px solid rgba(245,183,78,.35)}
+.go{color:var(--acc);font-size:.85rem;font-weight:600}
+.card.actif{border-color:rgba(147,117,205,.4);background:linear-gradient(180deg,rgba(147,117,205,.07),transparent),var(--card)}
+.empty{color:var(--mut);padding:30px 0;display:none}
+footer{border-top:1px solid var(--border);padding:22px 0;color:var(--mut);font-size:.82rem;line-height:1.7}
+footer b{color:var(--txt)}
+footer a{color:var(--acc);text-decoration:none}
+@media(max-width:640px){header{padding:16px 0}.hero{padding:34px 0 18px}.card p{min-height:0}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="logo">AR</div>
+    <div class="brand"><b>Admina-RH</b><small>Plateforme de Gestion RH</small></div>
+    <a class="gh" href="https://github.com/georgyfr/Admina_RH" target="_blank" rel="noopener noreferrer">Dépôt GitHub ↗</a>
+  </div>
+</header>
+<main class="wrap">
+  <section class="hero">
+    <h1>Tous les <span>Domaines RH</span></h1>
+    <p>Bienvenue sur la plateforme <b>Admina-RH</b>. Chaque domaine fonctionnel dispose de sa propre
+    adresse dédiée sous la base <b>admina-rh-bd0.pages.dev</b>. Les domaines actifs ouvrent l'application
+    correspondante ; les domaines en préparation disposent déjà de leur adresse réservée.</p>
+    <div class="meta">
+      <span class="chip ok">● 6 domaines actifs</span>
+      <span class="chip">31 domaines</span>
+      <span class="chip">Base commune : admina-rh-bd0.pages.dev</span>
+    </div>
+    <div class="search"><input id="q" type="search" placeholder="Rechercher un domaine…" autocomplete="off" /></div>
+  </section>
+  <section class="grid" id="grid"></section>
+  <p class="empty" id="empty">Aucun domaine ne correspond à votre recherche.</p>
+</main>
+<footer>
+  <div class="wrap">
+    <b>Admina-RH</b> — Système Intégré de Gestion des Ressources Humaines · conforme ISO 30401 / ISO 9001.<br />
+    Page d'accueil multi-domaines · source : <a href="https://github.com/georgyfr/Admina_RH" target="_blank" rel="noopener noreferrer">github.com/georgyfr/Admina_RH</a>
+  </div>
+</footer>
+<script>
+var DOMAINS = [{"num": 1, "url": "/Domaine1_Recrutement_Candidats", "label": "Recrutement & Candidats", "desc": "Offres d'emploi, demandes de recrutement, base candidats, entretiens et intégration.", "active": true}, {"num": 2, "url": "/Domaine2_Gestion_Administrative_Personnel", "label": "Gestion Administrative du Personnel", "desc": "Dossiers employés, contrats, présence, absences et documents administratifs.", "active": true}, {"num": 3, "url": "/Domaine3_Paie_Remuneration_Avantages/", "label": "Paie, Rémunération & Avantages", "desc": "Bulletins de paie, calcul des salaires, primes, avantages et cotisations.", "active": true}, {"num": 4, "url": "/Domaine4_Temps_Travail_Planification/", "label": "Temps de Travail & Planification", "desc": "Plannings, horaires, temps de travail et planification des équipes.", "active": true}, {"num": 5, "url": "/Domaine5_Conges_Absences_Presence/", "label": "Congés, Absences & Présence", "desc": "Demandes de congés, soldes, absences et suivi de présence.", "active": true}, {"num": 6, "url": "/Domaine6_Formation_Developpement_Competences/", "label": "Formation & Développement des Compétences", "desc": "Plans de formation, catalogues et montée en compétences.", "active": true}, {"num": 7, "url": "/Domaine7_Evaluation_Gestion_Performance/", "label": "Évaluation & Gestion de la Performance", "desc": "Objectifs, entretiens annuels et évaluations de performance.", "active": false}, {"num": 8, "url": "/Domaine8_Relations_Sociales_Syndicats/", "label": "Relations Sociales & Syndicats", "desc": "CSE, délégués, accords collectifs et dialogue social.", "active": false}, {"num": 9, "url": "/Domaine9_Sante_Securite_Conditions_Travail/", "label": "Santé, Sécurité & Conditions de Travail", "desc": "Prévention, visites médicales, accidents du travail et SST.", "active": false}, {"num": 10, "url": "/Domaine10_Talents_Mobilite_Interne/", "label": "Talents & Mobilité Interne", "desc": "Gestion des talents, plans de carrière et mobilité interne.", "active": false}, {"num": 11, "url": "/Domaine11_Droit_Travail_Conformite/", "label": "Droit du Travail & Conformité", "desc": "Veille juridique, conformité légale et obligations de l'employeur.", "active": false}, {"num": 12, "url": "/Domaine12_Documentation_Archivage_RH/", "label": "Documentation & Archivage RH", "desc": "Gestion documentaire, archivage et durées de conservation.", "active": false}, {"num": 13, "url": "/Domaine13_Communication_RH_Marque_Employeur/", "label": "Communication RH & Marque Employeur", "desc": "Communication RH, marque employeur et attractivité.", "active": false}, {"num": 14, "url": "/Domaine14_Reporting_Tableaux_Bord_Analyse/", "label": "Reporting & Tableaux de Bord Analyse", "desc": "KPIs RH, reporting et analyses décisionnelles.", "active": false}, {"num": 15, "url": "/Domaine15_Budget_Pilotage_Financier_RH/", "label": "Budget & Pilotage Financier RH", "desc": "Masse salariale, budgets RH et pilotage financier.", "active": false}, {"num": 16, "url": "/Domaine16_Diversite_Equite_Inclusion/", "label": "Diversité, Équité & Inclusion", "desc": "Égalité professionnelle, diversité et inclusion.", "active": false}, {"num": 17, "url": "/Domaine17_Audit_Conformite_Contentieux/", "label": "Audit, Conformité & Contentieux", "desc": "Audits RH, contentieux et gestion des risques sociaux.", "active": false}, {"num": 18, "url": "/Domaine18_RSE_Developpement_Durable_RH/", "label": "RSE & Développement Durable", "desc": "Responsabilité sociétale et durabilité des pratiques RH.", "active": false}, {"num": 19, "url": "/Domaine19_Innovation_RH_Transformation_Digitale/", "label": "Innovation RH & Transformation Digitale", "desc": "Digitalisation des RH et innovation sociale.", "active": false}, {"num": 20, "url": "/Domaine20_Pilotage_Reporting_RH/", "label": "Pilotage & Reporting RH", "desc": "Pilotage stratégique et reporting consolidé.", "active": false}, {"num": 21, "url": "/Domaine21_Fiches_Postes_Profils_Cartographie_Metiers/", "label": "Fiches de Postes & Cartographie des Métiers", "desc": "Référentiel métiers, fiches de poste et profils.", "active": false}, {"num": 22, "url": "/Domaine22_Avantages_Sociaux_Previsionnelle/", "label": "Avantages Sociaux & Prévoyance", "desc": "Mutuelle, prévoyance, retraite et avantages sociaux.", "active": false}, {"num": 23, "url": "/Domaine23_Travail_Temporaire/", "label": "Travail Temporaire", "desc": "Intérim, contrats courts et missions temporaires.", "active": false}, {"num": 24, "url": "/Domaine24_Stagiaires_Alternants/", "label": "Stagiaires & Alternants", "desc": "Stages, alternances et conventions.", "active": false}, {"num": 25, "url": "/Domaine25_Expatries_Personnel_Detache/", "label": "Expatriés & Personnel Détaché", "desc": "Mobilité internationale et personnel détaché.", "active": false}, {"num": 26, "url": "/Domaine26_Gestion_Budgetaire_Fiscale_RH/", "label": "Gestion Budgétaire & Fiscale RH", "desc": "Fiscalité RH, charges sociales et gestion budgétaire.", "active": false}, {"num": 27, "url": "/Domaine27_Reclamations_Contentieux_RH/", "label": "Réclamations & Contentieux RH", "desc": "Réclamations des salariés et gestion des litiges.", "active": false}, {"num": 28, "url": "/Domaine28_Mobilite_Carriere_Succession_RH/", "label": "Mobilité, Carrière & Succession", "desc": "Plans de carrière, promotion et gestion de succession.", "active": false}, {"num": 29, "url": "/Domaine29_Communication_Interne_Engagement/", "label": "Communication Interne & Engagement", "desc": "Engagement des collaborateurs et communication interne.", "active": false}, {"num": 30, "url": "/Domaine30_Expatrites_Mobilite_Internationale/", "label": "Expatriés & Mobilité Internationale", "desc": "Politiques d'expatriation et mobilité globale.", "active": false}, {"num": 31, "url": "/Domaine31_Retraites_Prevoyance_Transitions_Carriere/", "label": "Retraites, Prévoyance & Transitions de Carrière", "desc": "Départs en retraite, prévoyance et transitions de carrière.", "active": false}];
+var grid = document.getElementById('grid');
+grid.innerHTML = DOMAINS.map(function (d) {
+  return '<a class="card' + (d.active ? ' actif' : '') + '" href="' + d.url + '">' +
+    '<div class="top"><div class="num">D' + d.num + '</div><h3>' + d.label + '</h3></div>' +
+    '<p>' + d.desc + '</p>' +
+    '<div class="foot"><span class="st ' + (d.active ? 'ok">ACTIF' : 'warn">EN PRÉPARATION') + '</span>' +
+    '<span class="go">' + (d.active ? 'Ouvrir →' : 'Voir →') + '</span></div></a>';
+}).join('');
+var q = document.getElementById('q');
+q.addEventListener('input', function () {
+  var v = q.value.trim().toLowerCase(), n = 0;
+  var cards = grid.querySelectorAll('.card');
+  for (var i = 0; i < cards.length; i++) {
+    var hit = cards[i].textContent.toLowerCase().indexOf(v) !== -1;
+    cards[i].style.display = hit ? '' : 'none';
+    if (hit) n++;
+  }
+  document.getElementById('empty').style.display = n ? 'none' : 'block';
+});
+</script>
+</body>
+</html>

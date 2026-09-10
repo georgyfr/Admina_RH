@@ -42,6 +42,12 @@ import { t as CT } from "./CalendarToday-DmfkOBZI.js";
 import { t as AS2 } from "./Assessment-rn0S5uJR.js";
 import { t as AB } from "./AccountBalanceWallet-j86C9uBL.js";
 import { t as AT } from "./AccessTime-znnVq312.js";
+import { t as HSA } from "./HealthAndSafety-rj08z02O.js";
+import { t as PYC } from "./Payments-DG2h2GSU.js";
+import { t as HEA } from "./HourglassEmpty-HIf4jpB0.js";
+import { t as SCH } from "./Schedule-C7p8NDIg.js";
+import { t as RCPT } from "./ReceiptLong-tLozChDd.js";
+import { t as GVL } from "./Gavel-D87BpYZK.js";
 var Q = e(t(), 1),
   $ = n(),
   re = {
@@ -1545,6 +1551,7 @@ function SoldesV2() {
 
 function ie({ screen: e }) {
   if (e === `soldes`) return (0, $.jsx)(SoldesV2, {});
+  if (e === `absences`) return (0, $.jsx)(AbsencesV2, {});
   let t = O(),
     n = re[e],
     [T, A] = (0, Q.useState)(0),
@@ -1896,4 +1903,865 @@ function ie({ screen: e }) {
       })
     : (0, $.jsx)(a, { sx: { p: 3 }, children: (0, $.jsxs)(i, { children: [`Écran non configuré: `, e] }) });
 }
+/* ================================================================
+   ABSENCES V2 — Cockpit absentéisme & santé au travail (écran 'absences')
+   Pattern SoldesV2 : hydratation autonome (localStorage admina_d2_absences_v2
+   ?? seed ?? demandes santé Congés V2), moteur ouvrables + fériés Cameroun
+   commun (sldOuvrables/sldFset), conformité Code du travail Cameroun.
+   Aucun autre écran du chunk n'utilise ce code (branchement dédié dans ie).
+   ================================================================ */
+var ABS_LS = `admina_d2_absences_v2`;
+var ABS_TYPES = {
+  maladie: [`Congé maladie`, 50, `art. 86 CT — demi-salaire après 1 an d'ancienneté (plafond 6 mois/an)`],
+  accident_travail: [`Accident du travail`, 100, `loi n° 98/004 — prise en charge CNPS · déclaration sous 48 h`],
+  hospitalisation: [`Hospitalisation`, 50, `art. 86 CT — demi-salaire sur justificatif`],
+  quarantaine: [`Quarantaine`, 50, `mesure sanitaire — sur justificatif`],
+  conge_maternite: [`Congé maternité`, 100, `art. 84 CT — 14 semaines, indemnités journalières CNPS`],
+  conge_paternite: [`Congé paternité`, 100, `art. 85 CT — 10 jours à la naissance`],
+  absence_autorisee: [`Absence autorisée`, 100, `événement familial / autorisation manager`],
+  absence_non_justifiee: [`Absence non justifiée`, 0, `aucune indemnité — procédure art. 34-36 CT au-delà de 8 j`],
+};
+var ABS_ST = {
+  en_attente: [`En attente`, `warning`, `outlined`],
+  justifiee: [`Justifiée`, `success`, `outlined`],
+  non_justifiee: [`Non justifiée`, `error`, `filled`],
+  rejetee: [`Rejetée`, `default`, `outlined`],
+};
+var ABS_SRC = { base: [`Base`, `default`], conges: [`Congés V2`, `secondary`], v2: [`Déclarée`, `primary`] };
+function absStore() {
+  try {
+    var r = localStorage.getItem(ABS_LS);
+    if (r) {
+      var s = JSON.parse(r);
+      if (s && s.v === 1) return s;
+    }
+  } catch (err) {}
+  return { v: 1, patches: {}, records: [], meta: { coutJour: 15000 } };
+}
+function absSave(st) {
+  try {
+    localStorage.setItem(ABS_LS, JSON.stringify(st));
+  } catch (err) {}
+}
+function absLibelle(t) {
+  var m = ABS_TYPES[t];
+  return m ? m[0] : t || `—`;
+}
+function absChipStatut(s2) {
+  var x2 = ABS_ST[s2] || [s2 || `—`, `default`, `outlined`];
+  return (0, $.jsx)(T, { label: x2[0], size: `small`, color: x2[1], variant: x2[2], sx: { fontWeight: 700, fontSize: `0.7rem` } });
+}
+function absChipSource(src) {
+  var x2 = ABS_SRC[src] || [src || `—`, `default`];
+  return (0, $.jsx)(T, { label: x2[0], size: `small`, color: x2[1], variant: `outlined`, sx: { fontWeight: 700, fontSize: `0.62rem`, height: 20 } });
+}
+function absSeed() {
+  return re && re.absences && Array.isArray(re.absences.data) ? re.absences.data : [];
+}
+function absCongesSante() {
+  var out = [];
+  try {
+    (sldDemandes() || []).forEach((q2) => {
+      if (q2.type_conge !== `conge_maladie` && q2.type_conge !== `conge_maternite` && q2.type_conge !== `conge_paternite`) return;
+      if (q2.statut === `annulee`) return;
+      out.push({
+        id: `cg-` + q2.id,
+        employee_id: q2.employee_id,
+        type_absence: q2.type_conge === `conge_maladie` ? `maladie` : q2.type_conge,
+        date_debut: q2.date_debut,
+        date_fin: q2.date_fin,
+        duree_jours: q2.nombre_jours,
+        motif: q2.motif || `Congé santé`,
+        statut: q2.statut === `approuvee` ? `justifiee` : q2.statut === `en_attente` ? `en_attente` : `rejetee`,
+        source: `conges`,
+      });
+    });
+  } catch (err) {}
+  return out;
+}
+function absToutes() {
+  var st = absStore(),
+    out = [];
+  absSeed().forEach((r) => out.push(Object.assign({}, r, { source: `base` })));
+  absCongesSante().forEach((r) => out.push(r));
+  (st.records || []).forEach((r) => out.push(Object.assign({}, r, { source: `v2` })));
+  out.forEach((r) => {
+    var p = st.patches && st.patches[r.id];
+    if (p) Object.assign(r, p);
+  });
+  return out;
+}
+function absCalendaire(d1, d2) {
+  if (!d1 || !d2) return 0;
+  var n = Math.round((new Date(d2) - new Date(d1)) / 864e5) + 1;
+  return n > 0 ? n : 0;
+}
+function absIndemn(emp, ouvr, tauxPct) {
+  var sal = (emp && emp.salaire_brut) || 0;
+  return Math.round((sal / 26) * ouvr * (tauxPct / 100));
+}
+function absAutoExo() {
+  var cnt = {};
+  absToutes().forEach((r) => {
+    var an = String(r.date_debut || ``).slice(0, 4);
+    if (an) cnt[an] = (cnt[an] || 0) + 1;
+  });
+  var meilleur = null,
+    max = -1;
+  Object.keys(cnt).forEach((an) => {
+    if (cnt[an] > max || (cnt[an] === max && an === String(new Date().getFullYear()))) {
+      max = cnt[an];
+      meilleur = an;
+    }
+  });
+  return meilleur || String(new Date().getFullYear());
+}
+function absFlags(r, cumulNJ) {
+  var auj = new Date().toISOString().slice(0, 10),
+    tms = new Date(r.date_debut).getTime(),
+    nj = r.statut === `non_justifiee`;
+  return {
+    cnps: r.type_absence === `accident_travail` && !r.cnps_declare,
+    cnpsLate: r.type_absence === `accident_travail` && !r.cnps_declare && new Date().getTime() - tms > 48 * 36e5,
+    visite: (r.ouvr || 0) > 3 && !r.visite_prog && r.date_fin && r.date_fin < auj,
+    relance: nj && !(r.relances > 0),
+    abandon: nj && cumulNJ >= 8,
+  };
+}
+function absBradford(rows) {
+  var m = {};
+  rows.forEach((r) => {
+    if (r.statut === `rejetee` || r.type_absence === `conge_maternite` || r.type_absence === `conge_paternite`) return;
+    var e2 = m[r.employee_id] || { S: 0, D: 0 };
+    e2.S += 1;
+    e2.D += r.ouvr || 0;
+    m[r.employee_id] = e2;
+  });
+  Object.keys(m).forEach((k2) => {
+    m[k2].B = m[k2].S * m[k2].S * m[k2].D;
+  });
+  return m;
+}
+function AbsKpi(pg) {
+  var IC = pg.ic;
+  return (0, $.jsxs)(
+    a,
+    {
+      onClick: pg.onClic,
+      sx: {
+        p: 2,
+        borderRadius: 3,
+        cursor: `pointer`,
+        minWidth: 0,
+        bgcolor: `background.paper`,
+        background: pg.grad ? `linear-gradient(135deg,#7e3ff2 0%,#9d6bff 100%)` : undefined,
+        color: pg.grad ? `#fff` : `text.primary`,
+        border: `1px solid`,
+        borderColor: pg.actif ? `#7e3ff2` : `divider`,
+        boxShadow: pg.actif ? 4 : 1,
+        transition: `box-shadow .2s`,
+        "&:hover": { boxShadow: 6 },
+      },
+      children: [
+        (0, $.jsx)(IC, { sx: { fontSize: 30, mb: 0.5, color: pg.grad ? `rgba(255,255,255,.92)` : pg.couleur || `primary.main` } }),
+        (0, $.jsx)(i, { variant: `h5`, fontWeight: 800, sx: { overflowWrap: `anywhere` }, children: pg.valeur }),
+        (0, $.jsx)(i, { variant: `body2`, fontWeight: 700, sx: { color: pg.grad ? `rgba(255,255,255,.9)` : `text.primary` }, children: pg.label }),
+        pg.sub
+          ? (0, $.jsx)(i, {
+              variant: `caption`,
+              sx: { display: `block`, mt: 0.5, color: pg.grad ? `rgba(255,255,255,.75)` : `text.secondary` },
+              children: pg.sub,
+            })
+          : null,
+      ],
+    },
+  );
+}
+function AbsTuile(pg) {
+  return (0, $.jsxs)(
+    a,
+    {
+      sx: { border: `1px solid`, borderColor: `divider`, borderRadius: 2, p: 1.5, textAlign: `center`, bgcolor: `background.default` },
+      children: [
+        (0, $.jsx)(i, { variant: `caption`, sx: { color: `text.secondary`, fontWeight: 600 }, children: pg.label }),
+        (0, $.jsx)(i, { variant: `h6`, fontWeight: 800, sx: { color: pg.couleur || `text.primary`, fontSize: `1rem` }, children: pg.valeur }),
+      ],
+    },
+  );
+}
+function absChipConf(fl) {
+  var out = [];
+  if (fl.cnpsLate) out.push((0, $.jsx)(T, { key: `c`, label: `CNPS 48 h dépassé`, size: `small`, color: `error`, variant: `filled`, sx: { fontWeight: 700, fontSize: `0.62rem` } }));
+  else if (fl.cnps) out.push((0, $.jsx)(T, { key: `c`, label: `CNPS à déclarer`, size: `small`, color: `warning`, variant: `outlined`, sx: { fontWeight: 700, fontSize: `0.62rem` } }));
+  if (fl.visite) out.push((0, $.jsx)(T, { key: `v`, label: `Visite reprise due`, size: `small`, color: `warning`, variant: `outlined`, sx: { fontWeight: 700, fontSize: `0.62rem` } }));
+  if (fl.relance) out.push((0, $.jsx)(T, { key: `r`, label: `Relance due`, size: `small`, color: `warning`, variant: `outlined`, sx: { fontWeight: 700, fontSize: `0.62rem` } }));
+  if (fl.abandon) out.push((0, $.jsx)(T, { key: `a`, label: `Abandon de poste ?`, size: `small`, color: `error`, variant: `filled`, sx: { fontWeight: 700, fontSize: `0.62rem` } }));
+  if (out.length === 0)
+    out.push((0, $.jsx)(T, { key: `ok`, label: `À jour`, size: `small`, color: `success`, variant: `outlined`, sx: { fontWeight: 700, fontSize: `0.62rem` } }));
+  return (0, $.jsx)(a, { sx: { display: `flex`, gap: 0.5, flexWrap: `wrap` }, children: out });
+}
+
+function AbsencesV2() {
+  var nav = O(),
+    AN = new Date().getFullYear(),
+    stTick = (0, Q.useState)(0),
+    tick = stTick[0],
+    setTick = stTick[1],
+    stRech = (0, Q.useState)(``),
+    rech = stRech[0],
+    setRech = stRech[1],
+    stDept = (0, Q.useState)(`tous`),
+    dept = stDept[0],
+    setDept = stDept[1],
+    stStatut = (0, Q.useState)(`tous`),
+    statutF = stStatut[0],
+    setStatutF = stStatut[1],
+    stType = (0, Q.useState)(`tous`),
+    typeF = stType[0],
+    setTypeF = stType[1],
+    stExo = (0, Q.useState)(absAutoExo),
+    exo = stExo[0],
+    setExo = stExo[1],
+    stTri = (0, Q.useState)({ key: `debut`, dir: `desc` }),
+    tri = stTri[0],
+    setTri = stTri[1],
+    stPage = (0, Q.useState)(0),
+    page = stPage[0],
+    setPage = stPage[1],
+    stPp = (0, Q.useState)(10),
+    pp = stPp[0],
+    setPp = stPp[1],
+    stDet = (0, Q.useState)(null),
+    detail = stDet[0],
+    setDetail = stDet[1],
+    stSnk = (0, Q.useState)(null),
+    snack = stSnk[0],
+    setSnack = stSnk[1],
+    stSyn = (0, Q.useState)(new Date()),
+    sync = stSyn[0],
+    setSync = stSyn[1],
+    stNew = (0, Q.useState)(!1),
+    dlgNew = stNew[0],
+    setDlgNew = stNew[1],
+    stPar = (0, Q.useState)(!1),
+    dlgPar = stPar[0],
+    setDlgPar = stPar[1],
+    stVDate = (0, Q.useState)(``),
+    vDate = stVDate[0],
+    setVDate = stVDate[1],
+    stEmpNew = (0, Q.useState)(``),
+    empNew = stEmpNew[0],
+    setEmpNew = stEmpNew[1],
+    stTypeNew = (0, Q.useState)(`maladie`),
+    typeNew = stTypeNew[0],
+    setTypeNew = stTypeNew[1],
+    stD1New = (0, Q.useState)(``),
+    d1New = stD1New[0],
+    setD1New = stD1New[1],
+    stD2New = (0, Q.useState)(``),
+    d2New = stD2New[0],
+    setD2New = stD2New[1],
+    stMotifNew = (0, Q.useState)(``),
+    motifNew = stMotifNew[0],
+    setMotifNew = stMotifNew[1],
+    stCout = (0, Q.useState)(15000),
+    cout = stCout[0],
+    setCout = stCout[1];
+  var roleAct = window.__congesD2Role || `drh`,
+    estEmploye = roleAct === `employe`,
+    metaCg = sldStoreMeta(),
+    empSim = (metaCg && metaCg.emploiSimule) || `emp-002`,
+    FER = sldFset();
+  /* — Fusion temps réel : seed + Congés V2 santé + déclarations locales — */
+  var ALL = (0, Q.useMemo)(() => {
+    var st = absStore(),
+      cumulNJ = {};
+    var cj = (st.meta && st.meta.coutJour) || 15000;
+    var base = absToutes().map((r) => {
+      var ouvr = sldOuvrables(r.date_debut, r.date_fin, FER);
+      var emp = R(r.employee_id);
+      return Object.assign({}, r, {
+        ouvr: ouvr,
+        cal: absCalendaire(r.date_debut, r.date_fin),
+        annee: String(r.date_debut || ``).slice(0, 4),
+        tm: ABS_TYPES[r.type_absence] || [absLibelle(r.type_absence), 0, ``],
+        emp: emp,
+        indem: absIndemn(emp, ouvr, (ABS_TYPES[r.type_absence] || [0, 0])[1]),
+        coutR: r.statut === `non_justifiee` ? ouvr * cj : 0,
+      });
+    });
+    base.forEach((r) => {
+      if (r.statut === `non_justifiee`) cumulNJ[r.employee_id] = (cumulNJ[r.employee_id] || 0) + r.ouvr;
+    });
+    base.forEach((r) => {
+      r.fl = absFlags(r, cumulNJ[r.employee_id] || 0);
+    });
+    return base;
+  }, [tick]);
+  var brad = (0, Q.useMemo)(() => {
+    var scope = ALL.filter((r) => exo === `tous` || r.annee === exo);
+    return absBradford(scope);
+  }, [ALL, exo]);
+  var rows = (0, Q.useMemo)(() => {
+    return ALL.filter((r) => {
+      if (estEmploye && r.employee_id !== empSim) return !1;
+      if (exo !== `tous` && !estEmploye && r.annee !== exo) return !1;
+      if (dept !== `tous` && (!r.emp || r.emp.departement !== dept)) return !1;
+      if (typeF !== `tous` && r.type_absence !== typeF) return !1;
+      if (statutF === `a_reguler`) {
+        if (!(r.fl.cnpsLate || r.fl.cnps || r.fl.visite || r.fl.relance || r.fl.abandon || r.statut === `en_attente`)) return !1;
+      } else if (statutF === `recommande`) {
+        var bb = brad[r.employee_id];
+        if (!bb || bb.B < 450) return !1;
+      } else if (statutF !== `tous` && r.statut !== statutF) return !1;
+      if (rech) {
+        var q2 = rech.toLowerCase(),
+          nm = r.emp ? B(r.emp).toLowerCase() : ``;
+        if (!nm.includes(q2) && !String(r.motif || ``).toLowerCase().includes(q2) && !String(absLibelle(r.type_absence)).toLowerCase().includes(q2) && !String((r.emp && r.emp.matricule) || ``).toLowerCase().includes(q2) && !String((r.emp && r.emp.departement) || ``).toLowerCase().includes(q2) && !String(r.employee_id || ``).toLowerCase().includes(q2)) return !1;
+      }
+      return !0;
+    });
+  }, [ALL, exo, dept, typeF, statutF, rech, brad, estEmploye, empSim]);
+  var srt = rows.slice().sort((r1, r2) => {
+    var k1, k2;
+    switch (tri.key) {
+      case `employe`:
+        k1 = r1.emp ? B(r1.emp) : ``;
+        k2 = r2.emp ? B(r2.emp) : ``;
+        break;
+      case `dept`:
+        k1 = (r1.emp && r1.emp.departement) || ``;
+        k2 = (r2.emp && r2.emp.departement) || ``;
+        break;
+      case `type`:
+        k1 = absLibelle(r1.type_absence);
+        k2 = absLibelle(r2.type_absence);
+        break;
+      case `duree`:
+        k1 = r1.ouvr;
+        k2 = r2.ouvr;
+        break;
+      case `cout`:
+        k1 = r1.indem + r1.coutR;
+        k2 = r2.indem + r2.coutR;
+        break;
+      case `statut`:
+        k1 = r1.statut || ``;
+        k2 = r2.statut || ``;
+        break;
+      default:
+        k1 = r1.date_debut || ``;
+        k2 = r2.date_debut || ``;
+    }
+    var cmp = typeof k1 === `string` ? k1.localeCompare(k2) : k1 - k2;
+    return tri.dir === `asc` ? cmp : -cmp;
+  });
+  var kpi = (0, Q.useMemo)(() => {
+    var jours = 0,
+      coutTot = 0,
+      aReg = 0,
+      bradf = 0;
+    var scope = ALL.filter((r) => estEmploye ? r.employee_id === empSim : !0).filter((r) => exo === `tous` || r.annee === exo);
+    scope.forEach((r) => {
+      if (r.statut !== `rejetee`) jours += r.ouvr;
+      coutTot += r.indem + r.coutR;
+      if (r.fl.cnpsLate || r.fl.cnps || r.fl.visite || r.fl.relance || r.fl.abandon || r.statut === `en_attente`) aReg++;
+    });
+    Object.keys(brad).forEach((k2) => {
+      if (brad[k2].B >= 450) bradf++;
+    });
+    var jOuvrPeriode = sldOuvrables(AN + `-01-01`, new Date().toISOString().slice(0, 10), FER),
+      eff = estEmploye ? 1 : H.length,
+      tauxAbs = exo === String(AN) && jOuvrPeriode > 0 ? Math.round(((jours / (eff * jOuvrPeriode)) * 100) * 10) / 10 : null;
+    return { jours: jours, coutTot: coutTot, aReg: aReg, bradf: bradf, tauxAbs: tauxAbs };
+  }, [ALL, exo, brad, estEmploye, empSim, tick]);
+  var alCNPS = rows.filter((r) => r.fl.cnpsLate || r.fl.cnps),
+    alAbandon = rows.filter((r) => r.fl.abandon),
+    alVisite = rows.filter((r) => r.fl.visite),
+    alRelance = rows.filter((r) => r.fl.relance),
+    alBrad = rows.filter((r) => {
+      var bb = brad[r.employee_id];
+      return bb && bb.B >= 450 && r === rows.find((x2) => x2.employee_id === r.employee_id);
+    }),
+    alMat = rows.filter((r) => r.type_absence === `conge_maternite` && r.statut === `justifiee`);
+  var depts = (0, Q.useMemo)(() => {
+    var s2 = new Set();
+    H.forEach((e2) => e2.departement && s2.add(e2.departement));
+    return Array.from(s2).sort();
+  }, []);
+  var fRefresh = () => {
+    ((SLD_FSET = null), setSync(new Date()), setTick(tick + 1), setSnack({ msg: `Dossiers recalculés — sources : base + Congés Annuels V2 + déclarations locales`, sev: `success` }));
+  };
+  var fTri = (key) => setTri((tr) => ({ key: key, dir: tr.key === key && tr.dir === `asc` ? `desc` : `asc` }));
+  var fTh = (label, key, align) =>
+    (0, $.jsx)(
+      v,
+      {
+        align: align || `left`,
+        sx: { fontWeight: 700, whiteSpace: `nowrap`, bgcolor: `background.default` },
+        children: (0, $.jsxs)(a, {
+          sx: { display: `inline-flex`, alignItems: `center`, gap: 0.5, cursor: `pointer`, userSelect: `none`, "&:hover": { color: `primary.main` } },
+          onClick: () => fTri(key),
+          children: [
+            label,
+            tri.key === key
+              ? (0, $.jsx)(tri.dir === `asc` ? AU : AD, { sx: { fontSize: 15, color: `primary.main` } })
+              : (0, $.jsx)(a, { sx: { width: 15 } }),
+          ],
+        }),
+      },
+      key,
+    );
+  var fPatch = (id, patch, msg) => {
+    var st = absStore();
+    st.patches = st.patches || {};
+    st.patches[id] = Object.assign({}, st.patches[id], patch);
+    absSave(st);
+    setTick(tick + 1);
+    setSnack({ msg: msg, sev: `success` });
+  };
+  var fCnps = (r) => fPatch(r.id, { cnps_declare: 1, cnps_date: new Date().toISOString().slice(0, 10) }, `Accident du travail déclaré à la CNPS — délai légal de 48 h couvert (loi n° 98/004).`);
+  var fVisite = (r) => {
+    if (!vDate) return setSnack({ msg: `Choisissez d'abord la date de la visite de reprise.`, sev: `warning` });
+    var id = r.id;
+    fPatch(id, { visite_prog: 1, visite_date: vDate }, `Visite de reprise programmée le ` + A(vDate) + ` (médecine du travail).`);
+    setVDate(``);
+    setDetail(null);
+  };
+  var fJustifie = (r) => fPatch(r.id, { statut: `justifiee`, justifie_le: new Date().toISOString().slice(0, 10) }, `Justificatif enregistré — dossier marqué justifié.`);
+  var fRelance = (r) => fPatch(r.id, { relances: (r.relances || 0) + 1, relance_date: new Date().toISOString().slice(0, 10) }, `Relance justificatif enregistrée (rappel au salarié).`);
+  var fRejete = (r) => fPatch(r.id, { statut: `rejetee` }, `Dossier rejeté — l'absence reste non justifiée.`);
+  var fNew = () => {
+    if (!empNew || !d1New || !d2New) return setSnack({ msg: `Employé, dates de début et de fin obligatoires.`, sev: `warning` });
+    if (d2New < d1New) return setSnack({ msg: `La date de fin précède la date de début.`, sev: `error` });
+    var st = absStore();
+    st.records = st.records || [];
+    st.records.push({
+      id: `abv2-` + Date.now(),
+      employee_id: empNew,
+      type_absence: typeNew,
+      date_debut: d1New,
+      date_fin: d2New,
+      duree_jours: absCalendaire(d1New, d2New),
+      motif: motifNew || absLibelle(typeNew),
+      statut: `en_attente`,
+      source: `v2`,
+      date_declaration: new Date().toISOString().slice(0, 10),
+    });
+    absSave(st);
+    ((setDlgNew(!1), setD1New(``), setD2New(``), setMotifNew(``), setTick(tick + 1)),
+      setSnack({ msg: `Absence déclarée — dossier en attente de justificatif (` + sldOuvrables(d1New, d2New, FER) + ` j ouvrables).`, sev: `success` }));
+  };
+  var fSaveParams = () => {
+    var st = absStore();
+    st.meta = st.meta || {};
+    st.meta.coutJour = Math.max(0, parseInt(cout, 10) || 0);
+    absSave(st);
+    ((setDlgPar(!1), setTick(tick + 1)), setSnack({ msg: `Paramètres enregistrés — coûts recalculés.`, sev: `success` }));
+  };
+  var fExport = () => {
+    var entetes = [`Matricule`, `Employé`, `Département`, `Type`, `Du`, `Au`, `Durée ouvrable (j)`, `Durée calendaire (j)`, `Statut`, `Justificatif reçu le`, `CNPS déclarée`, `Visite de reprise`, `Relances`, `Indemnité estimée (FCFA)`, `Coût remplacement (FCFA)`, `Conformité`, `Exercice`, `Source`],
+      lignes = srt.map((r) => {
+        var conf = r.fl.cnpsLate ? `CNPS 48 h dépassé` : r.fl.cnps ? `CNPS à déclarer` : r.fl.abandon ? `Abandon de poste (art. 34-36)` : r.fl.visite ? `Visite de reprise due` : r.fl.relance ? `Relance justificatif due` : `À jour`;
+        return [
+          (r.emp && r.emp.matricule) || ``,
+          r.emp ? B(r.emp) : ``,
+          (r.emp && r.emp.departement) || ``,
+          absLibelle(r.type_absence),
+          A(r.date_debut),
+          A(r.date_fin),
+          r.ouvr,
+          r.cal,
+          ABS_ST[r.statut] ? ABS_ST[r.statut][0] : r.statut,
+          r.justifie_le ? A(r.justifie_le) : ``,
+          r.cnps_declare ? (r.cnps_date ? A(r.cnps_date) : `oui`) : `non`,
+          r.visite_prog ? (r.visite_date ? A(r.visite_date) : `programmée`) : `non`,
+          r.relances || 0,
+          r.indem,
+          r.coutR,
+          conf,
+          r.annee,
+          ABS_SRC[r.source] ? ABS_SRC[r.source][0] : r.source,
+        ]
+          .map((x2) => `"${String(x2 == null ? `` : x2).replace(/"/g, `""`)}"`)
+          .join(`;`);
+      }),
+      csv = `﻿` + entetes.join(`;`) + `
+` + lignes.join(`
+`),
+      bl = new Blob([csv], { type: `text/csv;charset=utf-8;` }),
+      ur = URL.createObjectURL(bl),
+      an2 = document.createElement(`a`);
+    ((an2.href = ur), (an2.download = `absences_${exo}_${new Date().toISOString().slice(0, 10)}.csv`), an2.click(), URL.revokeObjectURL(ur));
+    setSnack({ msg: srt.length + ` dossier(s) exporté(s) — valeurs réelles (durées ouvrables, indemnités, conformité)`, sev: `success` });
+  };
+  var openDet = (r2) => { if (r2 && r2.fl === undefined) { try { console.error('AB2DBG detail sans fl:', JSON.stringify(r2).slice(0, 400)); } catch (err) {} } (setVDate(``), setDetail(r2)); };
+  var absDlgDetail = () =>
+    (0, $.jsxs)(f, { open: !!detail, onClose: () => setDetail(null), maxWidth: `md`, fullWidth: !0, children: [
+      detail
+        ? (0, $.jsxs)(h, { sx: { fontWeight: 800, display: `flex`, alignItems: `center`, gap: 1.5 }, children: [
+            sldAvatar(detail.emp || {}, 44, 18),
+            (0, $.jsxs)(a, { children: [
+              (0, $.jsx)(i, { variant: `h6`, fontWeight: 800, children: detail.emp ? B(detail.emp) : detail.employee_id }),
+              (0, $.jsx)(i, { variant: `caption`, color: `text.secondary`, children: ((detail.emp && detail.emp.poste) || ``) + ` · ` + ((detail.emp && detail.emp.departement) || ``) + ` · ` + ((detail.emp && detail.emp.matricule) || ``) }),
+            ] }),
+            (0, $.jsx)(a, { sx: { ml: `auto`, display: `flex`, gap: 1, alignItems: `center` }, children: [absChipSource(detail.source), absChipStatut(detail.statut)] }),
+          ] })
+        : null,
+      detail
+        ? (0, $.jsxs)(p, { children: [
+            detail.fl.cnpsLate
+              ? (0, $.jsx)(c, { severity: `error`, sx: { mb: 2, fontWeight: 600 }, children: `Délai CNPS de 48 h dépassé sans déclaration (loi n° 98/004) — déclarez immédiatement pour sécuriser la prise en charge.` })
+              : null,
+            detail.fl.abandon
+              ? (0, $.jsx)(c, { severity: `error`, sx: { mb: 2, fontWeight: 600 }, children: `Cumul ≥ 8 jours ouvrables non justifiés — procédure disciplinaire / abandon de poste (art. 34-36 CT) à engager.` })
+              : null,
+            detail.fl.visite
+              ? (0, $.jsx)(c, { severity: `warning`, sx: { mb: 2, fontWeight: 600 }, children: `Arrêt de plus de 3 jours : visite de reprise à programmer avec la médecine du travail.` })
+              : null,
+            detail.fl.relance
+              ? (0, $.jsx)(c, { severity: `warning`, sx: { mb: 2, fontWeight: 600 }, children: `Aucun justificatif reçu — relancez le salarié (J+2) et tracez la démarche.` })
+              : null,
+            (0, $.jsxs)(a, { sx: { display: `grid`, gridTemplateColumns: { xs: `repeat(3,1fr)`, sm: `repeat(6,1fr)` }, gap: 1.5 }, children: [
+              (0, $.jsx)(AbsTuile, { label: `Type`, valeur: absLibelle(detail.type_absence) }),
+              (0, $.jsx)(AbsTuile, { label: `Durée ouvrable`, valeur: detail.ouvr + ` j` }),
+              (0, $.jsx)(AbsTuile, { label: `Durée calendaire`, valeur: detail.cal + ` j` }),
+              (0, $.jsx)(AbsTuile, { label: `Taux légal`, valeur: detail.tm[1] + ` %` }),
+              (0, $.jsx)(AbsTuile, { label: `Indemnité estimée`, valeur: sldFCFA(detail.indem), couleur: detail.indem > 0 ? `success.main` : `text.primary` }),
+              (0, $.jsx)(AbsTuile, { label: `Coût remplacement`, valeur: detail.coutR > 0 ? sldFCFA(detail.coutR) : `—`, couleur: detail.coutR > 0 ? `error.main` : `text.primary` }),
+            ] }),
+            (0, $.jsx)(i, { variant: `caption`, sx: { display: `block`, mt: 1, color: `text.secondary` }, children: (detail.tm[2] || ``) + (detail.emp && detail.emp.salaire_brut ? ` · base : salaire brut / 26 × jours ouvrables × taux` : ``) }),
+            (0, $.jsx)(i, { variant: `subtitle2`, sx: { mt: 2, mb: 1, fontWeight: 800 }, children: `Conformité & actions` }),
+            (0, $.jsxs)(o, { direction: `row`, spacing: 1, sx: { flexWrap: `wrap`, rowGap: 1.5, alignItems: `center` }, children: [
+              detail.type_absence === `accident_travail`
+                ? detail.cnps_declare
+                  ? (0, $.jsx)(T, { label: `CNPS déclarée` + (detail.cnps_date ? ` le ` + A(detail.cnps_date) : ``), color: `success`, variant: `outlined`, sx: { fontWeight: 700 } })
+                  : (0, $.jsx)(l, { variant: `contained`, color: `error`, size: `small`, startIcon: (0, $.jsx)(GVL, {}), onClick: () => fCnps(detail), sx: { textTransform: `none`, fontSize: `0.75rem` }, children: `Déclarer à la CNPS` })
+                : null,
+              detail.ouvr > 3
+                ? detail.visite_prog
+                  ? (0, $.jsx)(T, { label: `Visite de reprise` + (detail.visite_date ? ` — ` + A(detail.visite_date) : ` programmée`), color: `success`, variant: `outlined`, sx: { fontWeight: 700 } })
+                  : (0, $.jsxs)(a, { sx: { display: `flex`, gap: 1, alignItems: `center`, flexWrap: `wrap` }, children: [
+                      (0, $.jsx)(D, { type: `date`, size: `small`, label: `Date visite`, value: vDate, onChange: (e2) => setVDate(e2.target.value), InputLabelProps: { shrink: !0 }, sx: { width: 175, "& .MuiInput-root": { fontSize: `0.8rem` } } }),
+                      (0, $.jsx)(l, { variant: `contained`, size: `small`, startIcon: (0, $.jsx)(SCH, {}), onClick: () => fVisite(detail), sx: { textTransform: `none`, fontSize: `0.75rem`, bgcolor: `#7e3ff2` }, children: `Programmer` }),
+                    ] })
+                : null,
+              detail.statut === `en_attente` || detail.statut === `non_justifiee`
+                ? (0, $.jsxs)(o, { direction: `row`, spacing: 1, children: [
+                    (0, $.jsx)(l, { variant: `contained`, size: `small`, startIcon: (0, $.jsx)(RCPT, {}), onClick: () => { (fJustifie(detail), setDetail(null)); }, sx: { textTransform: `none`, fontSize: `0.75rem` }, children: `Certificat reçu — justifier` }),
+                    (0, $.jsx)(l, { variant: `outlined`, size: `small`, startIcon: (0, $.jsx)(RF, {}), onClick: () => fRelance(detail), sx: { textTransform: `none`, fontSize: `0.75rem` }, children: `Relancer (` + (detail.relances || 0) + `)` }),
+                    detail.statut === `en_attente`
+                      ? (0, $.jsx)(l, { variant: `outlined`, color: `error`, size: `small`, onClick: () => { (fRejete(detail), setDetail(null)); }, sx: { textTransform: `none`, fontSize: `0.75rem` }, children: `Rejeter` })
+                      : null,
+                  ] })
+                : null,
+            ] }),
+            (0, $.jsx)(i, { variant: `subtitle2`, sx: { mt: 2.5, mb: 1, fontWeight: 800 }, children: `Historique du dossier` }),
+            (0, $.jsx)(a, { sx: { display: `flex`, flexDirection: `column`, gap: 0.75 }, children: [
+              [`Déclarée — ` + A(detail.date_debut) + ` · motif : ` + (detail.motif || `—`), CT, `primary.main`],
+              detail.justifie_le ? [`Justificatif reçu — ` + A(detail.justifie_le), RCPT, `success.main`] : null,
+              detail.cnps_declare ? [`Déclarée à la CNPS` + (detail.cnps_date ? ` — ` + A(detail.cnps_date) : ``), GVL, `success.main`] : null,
+              detail.relances > 0 ? [detail.relances + ` relance(s) — dernière le ` + A(detail.relance_date), RF, `warning.main`] : null,
+              [`Fin d'arrêt — ` + A(detail.date_fin), AT, `text.secondary`],
+              detail.visite_prog ? [`Visite de reprise` + (detail.visite_date ? ` — ` + A(detail.visite_date) : ` programmée`), SCH, `success.main`] : null,
+            ]
+              .filter(Boolean)
+              .map((li, ix) =>
+                (0, $.jsxs)(a, { sx: { display: `flex`, alignItems: `center`, gap: 1.2 }, children: [
+                  (0, $.jsx)(li[1], { sx: { fontSize: 16, color: li[2] } }),
+                  (0, $.jsx)(i, { variant: `body2`, children: li[0] }),
+                ] }, ix),
+              ) }),
+          ] })
+        : null,
+      (0, $.jsxs)(m, { sx: { px: 3, pb: 2 }, children: [
+        (0, $.jsx)(l, { onClick: () => setDetail(null), children: `Fermer` }),
+        detail && detail.source === `conges`
+          ? (0, $.jsx)(l, { variant: `contained`, startIcon: (0, $.jsx)(CT, {}), onClick: () => nav(`/domaine2_Gestion_Administrative_Personnel/conges`), sx: { bgcolor: `#7e3ff2`, textTransform: `none` }, children: `Ouvrir Congés Annuels` })
+          : null,
+        detail
+          ? (0, $.jsx)(l, { variant: `outlined`, onClick: () => { (setRech(detail.emp ? B(detail.emp) : detail.employee_id), setDetail(null), setPage(0)); }, sx: { textTransform: `none` }, children: `Voir tous ses dossiers` })
+          : null,
+      ] }),
+    ] });
+  var absDlgNew = () =>
+    (0, $.jsxs)(f, { open: dlgNew, onClose: () => setDlgNew(!1), maxWidth: `sm`, fullWidth: !0, children: [
+      (0, $.jsx)(h, { sx: { fontWeight: 800 }, children: `Déclarer une absence` }),
+      (0, $.jsxs)(p, { sx: { display: `flex`, flexDirection: `column`, gap: 2 }, children: [
+        (0, $.jsx)(c, { severity: `info`, children: `Le dossier démarre « En attente » — justificatif à fournir sous 48 h. Durées recalculées automatiquement en jours ouvrables (week-ends et fériés Cameroun déduits).` }),
+        (0, $.jsxs)(D, { select: !0, size: `small`, label: `Employé`, value: empNew, onChange: (e2) => setEmpNew(e2.target.value), disabled: estEmploye, sx: { "& .MuiInput-root": { fontSize: `0.85rem` } }, children: [
+          (0, $.jsx)(s, { value: ``, children: `— Choisir un employé —` }),
+          H.map((e3) => (0, $.jsx)(s, { value: e3.id, children: B(e3) + ` · ` + (e3.departement || ``) }, e3.id)),
+        ] }),
+        (0, $.jsxs)(D, { select: !0, size: `small`, label: `Type d'absence`, value: typeNew, onChange: (e2) => setTypeNew(e2.target.value), sx: { "& .MuiInput-root": { fontSize: `0.85rem` } }, children:
+          Object.keys(ABS_TYPES).map((tk) => (0, $.jsx)(s, { value: tk, children: ABS_TYPES[tk][0] }, tk)),
+        }),
+        (0, $.jsxs)(a, { sx: { display: `grid`, gridTemplateColumns: `1fr 1fr`, gap: 2 }, children: [
+          (0, $.jsx)(D, { type: `date`, size: `small`, label: `Du`, value: d1New, onChange: (e2) => setD1New(e2.target.value), InputLabelProps: { shrink: !0 }, sx: { "& .MuiInput-root": { fontSize: `0.85rem` } } }),
+          (0, $.jsx)(D, { type: `date`, size: `small`, label: `Au`, value: d2New, onChange: (e2) => setD2New(e2.target.value), InputLabelProps: { shrink: !0 }, sx: { "& .MuiInput-root": { fontSize: `0.85rem` } } }),
+        ] }),
+        d1New && d2New && d2New >= d1New
+          ? (0, $.jsx)(i, { variant: `caption`, color: `text.secondary`, children: `Durée : ` + sldOuvrables(d1New, d2New, FER) + ` j ouvrables / ` + absCalendaire(d1New, d2New) + ` j calendaires · indemnité estimée ` + sldFCFA(absIndemn(R(empNew), sldOuvrables(d1New, d2New, FER), ABS_TYPES[typeNew][1])) })
+          : null,
+        (0, $.jsx)(D, { size: `small`, label: `Motif (facultatif)`, value: motifNew, onChange: (e2) => setMotifNew(e2.target.value), sx: { "& .MuiInput-root": { fontSize: `0.85rem` } } }),
+      ] }),
+      (0, $.jsxs)(m, { sx: { px: 3, pb: 2 }, children: [
+        (0, $.jsx)(l, { onClick: () => setDlgNew(!1), children: `Annuler` }),
+        (0, $.jsx)(l, { variant: `contained`, onClick: fNew, sx: { bgcolor: `#7e3ff2`, textTransform: `none` }, children: `Enregistrer le dossier` }),
+      ] }),
+    ] });
+  var absDlgParams = () =>
+    (0, $.jsxs)(f, { open: dlgPar, onClose: () => setDlgPar(!1), maxWidth: `xs`, fullWidth: !0, children: [
+      (0, $.jsx)(h, { sx: { fontWeight: 800 }, children: `Paramètres de coûts` }),
+      (0, $.jsxs)(p, { sx: { display: `flex`, flexDirection: `column`, gap: 2 }, children: [
+        (0, $.jsx)(D, { type: `number`, size: `small`, label: `Coût journalier de remplacement (FCFA)`, value: cout, onChange: (e2) => setCout(e2.target.value), sx: { "& .MuiInput-root": { fontSize: `0.85rem` } } }),
+        (0, $.jsx)(i, { variant: `caption`, color: `text.secondary`, children: `Appliqué aux seules absences non justifiées (coût de remplacement). Les indemnités légales utilisent salaire brut / 26 × jours ouvrables × taux réglementaire : ` + Object.keys(ABS_TYPES).map((tk) => absLibelle(tk) + ` ` + ABS_TYPES[tk][1] + ` %`).join(` · `) + `.` }),
+      ] }),
+      (0, $.jsxs)(m, { sx: { px: 3, pb: 2 }, children: [
+        (0, $.jsx)(l, { onClick: () => setDlgPar(!1), children: `Annuler` }),
+        (0, $.jsx)(l, { variant: `contained`, onClick: fSaveParams, sx: { bgcolor: `#7e3ff2`, textTransform: `none` }, children: `Enregistrer` }),
+      ] }),
+    ] });
+  /* — Vue salarié (RGPD, rôle Employé) : uniquement ses propres dossiers — */
+  var jRestants = Math.max(0, Math.ceil((new Date(AN, 11, 31) - new Date()) / 864e5));
+  if (estEmploye) {
+    var mes = srt,
+      mesJours = mes.filter((r) => r.statut !== `rejetee`).reduce((s2, r) => s2 + r.ouvr, 0),
+      mesAtt = mes.filter((r) => r.statut === `en_attente`).length,
+      mesIndem = mes.filter((r) => r.statut !== `rejetee`).reduce((s2, r) => s2 + r.indem, 0),
+      moEmp = R(empSim) || {},
+      prochain = mes
+        .filter((r) => r.date_fin >= new Date().toISOString().slice(0, 10))
+        .sort((r1, r2) => (r1.date_fin > r2.date_fin ? 1 : -1))[0];
+    return (0, $.jsxs)(a, {
+      children: [
+        (0, $.jsx)(c, { severity: `info`, sx: { mb: 2.5, fontWeight: 600 }, children: `Vue salarié — vous consultez uniquement vos propres dossiers d'absence (confidentialité RGPD).` }),
+        (0, $.jsx)(J, {
+          title: `Mes absences & arrêts`,
+          subtitle: `Historique complet (tous exercices) · décompte en jours ouvrables (fériés Cameroun déduits)`,
+          action: (0, $.jsx)(l, { variant: `outlined`, size: `small`, startIcon: (0, $.jsx)(RF, {}), onClick: fRefresh, sx: { textTransform: `none`, fontSize: `0.75rem` }, children: `Actualiser` }),
+        }),
+        (0, $.jsx)(ee, {
+          sx: { mt: 2, borderRadius: 3 },
+          children: (0, $.jsxs)(u, {
+            children: [
+              (0, $.jsxs)(o, { direction: `row`, spacing: 2, alignItems: `center`, sx: { mb: 2 }, children: [
+                sldAvatar(moEmp, 56, 22),
+                (0, $.jsxs)(a, { children: [
+                  (0, $.jsx)(i, { variant: `h6`, fontWeight: 800, children: B(moEmp) }),
+                  (0, $.jsx)(i, { variant: `body2`, color: `text.secondary`, children: (moEmp.poste || ``) + ` · ` + (moEmp.departement || ``) + ` · ` + (moEmp.matricule || ``) }),
+                ] }),
+                (0, $.jsx)(a, { sx: { ml: `auto` }, children: (0, $.jsx)(l, { variant: `contained`, size: `small`, startIcon: (0, $.jsx)(x, {}), onClick: () => { (setEmpNew(empSim), setDlgNew(!0)); }, sx: { textTransform: `none`, fontSize: `0.75rem`, bgcolor: `#7e3ff2` }, children: `Déclarer une absence` }) }),
+              ] }),
+              (0, $.jsxs)(a, { sx: { display: `grid`, gridTemplateColumns: `repeat(auto-fit,minmax(130px,1fr))`, gap: 1.5 }, children: [
+                (0, $.jsx)(AbsTuile, { label: `Jours d'absence`, valeur: mesJours + ` j` }),
+                (0, $.jsx)(AbsTuile, { label: `Dossiers en cours`, valeur: String(mesAtt), couleur: mesAtt > 0 ? `warning.main` : null }),
+                (0, $.jsx)(AbsTuile, { label: `Indemnités estimées`, valeur: sldFCFA(mesIndem) }),
+                (0, $.jsx)(AbsTuile, { label: `Prochain retour`, valeur: prochain ? A(prochain.date_fin) : `—` }),
+              ] }),
+              (0, $.jsx)(i, { variant: `subtitle2`, sx: { mt: 2.5, mb: 1, fontWeight: 800 }, children: `Mes dossiers — ` + mes.length }),
+              mes.length === 0
+                ? (0, $.jsx)(i, { variant: `body2`, color: `text.secondary`, children: `Aucun dossier d'absence sur cet exercice. Déclarez toute absence dès le premier jour (justificatif sous 48 h).` })
+                : (0, $.jsx)(a, { sx: { display: `flex`, flexDirection: `column`, gap: 1 }, children: mes.map((r) =>
+                    (0, $.jsxs)(
+                      a,
+                      { sx: { display: `flex`, alignItems: `center`, gap: 1.5, p: 1, borderRadius: 2, border: `1px solid`, borderColor: `divider`, flexWrap: `wrap` }, children: [
+                        (0, $.jsx)(CT, { sx: { fontSize: 18, color: `primary.main` } }),
+                        (0, $.jsxs)(a, { sx: { minWidth: 0 }, children: [
+                          (0, $.jsx)(i, { variant: `body2`, fontWeight: 700, children: absLibelle(r.type_absence) + ` · ` + A(r.date_debut) + ` → ` + A(r.date_fin) }),
+                          (0, $.jsx)(i, { variant: `caption`, color: `text.secondary`, children: r.ouvr + ` j ouvrables · ` + (r.motif || ``) }),
+                        ] }),
+                        (0, $.jsx)(a, { sx: { ml: `auto` }, children: absChipStatut(r.statut) }),
+                      ] },
+                      r.id,
+                    ),
+                  ) }),
+              (0, $.jsxs)(o, { direction: `row`, spacing: 1.5, sx: { mt: 2.5 }, children: [
+                (0, $.jsx)(l, { variant: `outlined`, size: `small`, startIcon: (0, $.jsx)(CT, {}), onClick: () => nav(`/domaine2_Gestion_Administrative_Personnel/conges`), sx: { textTransform: `none`, fontSize: `0.75rem` }, children: `Mes congés annuels` }),
+              ] }),
+            ],
+          }),
+        }),
+        absDlgNew(),
+        (0, $.jsx)(d, { open: !!snack, autoHideDuration: 4e3, onClose: () => setSnack(null), anchorOrigin: { vertical: `bottom`, horizontal: `center` }, message: snack ? snack.msg : `` }),
+      ],
+    });
+  }
+  /* — Vue RH / Manager : cockpit absentéisme complet — */
+  return (0, $.jsxs)(o, {
+    spacing: 2.5,
+    sx: { width: `100%`, maxWidth: `100%`, minWidth: 0 },
+    children: [
+      (0, $.jsx)(J, {
+        title: `Absences maladie — Cockpit absentéisme & conformité`,
+        subtitle: `Exercice ` + (exo === `tous` ? `tous exercices confondus` : exo) + ` · décompte en jours ouvrables (fériés Cameroun déduits) · fusion temps réel : base + Congés Annuels V2 + déclarations locales · conformité CT Cameroun (art. 34-36, 83-93) & CNPS`,
+        action: (0, $.jsxs)(o, {
+          direction: `row`,
+          spacing: 1,
+          alignItems: `center`,
+          children: [
+            (0, $.jsx)(i, { variant: `caption`, sx: { color: `text.secondary`, display: { xs: `none`, md: `block` } }, children: `Synchro ` + sync.toLocaleTimeString() }),
+            (0, $.jsxs)(l, { variant: `outlined`, size: `small`, onClick: fRefresh, sx: { textTransform: `none`, fontSize: `0.75rem`, minWidth: 0, px: { xs: 1, sm: 1.5 } }, children: [(0, $.jsx)(RF, { sx: { fontSize: 18 } }), (0, $.jsx)(i, { component: `span`, sx: { display: { xs: `none`, sm: `inline` }, fontSize: `inherit` }, children: `Actualiser` })] }),
+            (0, $.jsxs)(l, { variant: `outlined`, size: `small`, onClick: fExport, sx: { textTransform: `none`, fontSize: `0.75rem`, minWidth: 0, px: { xs: 1, sm: 1.5 } }, children: [(0, $.jsx)(S, { sx: { fontSize: 18 } }), (0, $.jsx)(i, { component: `span`, sx: { display: { xs: `none`, sm: `inline` }, fontSize: `inherit` }, children: `Export CSV` })] }),
+            (0, $.jsxs)(l, { variant: `contained`, size: `small`, onClick: () => { (setEmpNew(``), setDlgNew(!0)); }, sx: { textTransform: `none`, fontSize: `0.75rem`, minWidth: 0, px: { xs: 1, sm: 1.5 }, bgcolor: `#7e3ff2` }, children: [(0, $.jsx)(x, { sx: { fontSize: 18 } }), (0, $.jsx)(i, { component: `span`, sx: { display: { xs: `none`, sm: `inline` }, fontSize: `inherit` }, children: `Déclarer` })] }),
+            (0, $.jsx)(l, { variant: `outlined`, size: `small`, onClick: () => { var st = absStore(); setCout((st.meta && st.meta.coutJour) || 15000); setDlgPar(!0); }, sx: { textTransform: `none`, fontSize: `0.75rem`, minWidth: 0, px: { xs: 1, sm: 1.5 } }, children: [(0, $.jsx)(PYC, { sx: { fontSize: 18 } }), (0, $.jsx)(i, { component: `span`, sx: { display: { xs: `none`, sm: `inline` }, fontSize: `inherit` }, children: `Paramètres` })] }),
+          ],
+        }),
+      }),
+      exo !== `tous` && exo !== String(AN)
+        ? (0, $.jsx)(c, {
+            severity: `info`,
+            sx: { fontWeight: 600 },
+            children: `Exercice ` + AN + ` en cours (` + jRestants + ` jour(s) avant le 31/12) — l'exercice affiché ` + exo + ` est le plus documenté. Basculez via le filtre Exercice ou déclarez un dossier ` + AN + `.`,
+          })
+        : null,
+      alCNPS.length > 0
+        ? (0, $.jsx)(c, {
+            severity: `error`,
+            icon: (0, $.jsx)(w, {}),
+            sx: { fontWeight: 600, overflowWrap: `anywhere`, "& .MuiAlert-action": { display: { xs: `none`, sm: `flex` } } },
+            action: (0, $.jsx)(l, { color: `error`, size: `small`, onClick: () => (setTypeF(`accident_travail`), setPage(0)), sx: { textTransform: `none` }, children: `Examiner` }),
+            children: alCNPS.length + ` accident(s) du travail à déclarer à la CNPS — délai légal 48 h (loi n° 98/004, art. 78) : risque de pénalité et de prise en charge refusée.`,
+          })
+        : null,
+      alAbandon.length > 0
+        ? (0, $.jsx)(c, {
+            severity: `error`,
+            icon: (0, $.jsx)(GV, {}),
+            sx: { fontWeight: 600, overflowWrap: `anywhere`, "& .MuiAlert-action": { display: { xs: `none`, sm: `flex` } } },
+            action: (0, $.jsx)(l, { color: `error`, size: `small`, onClick: () => (setStatutF(`a_reguler`), setPage(0)), sx: { textTransform: `none` }, children: `Examiner` }),
+            children: alAbandon.length + ` absence(s) non justifiée(s) atteignent 8 jours ouvrables cumulés — engager la procédure disciplinaire / abandon de poste (art. 34-36 Code du travail).`,
+          })
+        : null,
+      alVisite.length + alRelance.length > 0
+        ? (0, $.jsx)(c, {
+            severity: `warning`,
+            sx: { fontWeight: 600, overflowWrap: `anywhere`, "& .MuiAlert-action": { display: { xs: `none`, sm: `flex` } } },
+            action: (0, $.jsx)(l, { color: `warning`, size: `small`, onClick: () => (setStatutF(`a_reguler`), setPage(0)), sx: { textTransform: `none` }, children: `Traiter` }),
+            children: alVisite.length + ` visite(s) de reprise à programmer (arrêt > 3 j — médecine du travail) · ` + alRelance.length + ` justificatif(s) à relancer (J+2).`,
+          })
+        : null,
+      alBrad.length > 0
+        ? (0, $.jsx)(c, {
+            severity: `warning`,
+            sx: { fontWeight: 600, overflowWrap: `anywhere`, "& .MuiAlert-action": { display: { xs: `none`, sm: `flex` } } },
+            action: (0, $.jsx)(l, { color: `warning`, size: `small`, onClick: () => (setStatutF(`recommande`), setPage(0)), sx: { textTransform: `none` }, children: `Voir` }),
+            children: alBrad.length + ` salarié(s) avec facteur de Bradford ≥ 450 (arrêts courts répétés) — entretien de prévention recommandé (lien burn-out : voir Soldes de congés).`,
+          })
+        : null,
+      (0, $.jsxs)(a, { sx: { display: `grid`, gridTemplateColumns: { xs: `1fr 1fr`, md: `repeat(4,1fr)` }, gap: 2 }, children: [
+        (0, $.jsx)(AbsKpi, { ic: HSA, grad: !0, valeur: kpi.jours + ` j`, label: `Jours d'absence perdus`, sub: kpi.tauxAbs != null ? `taux d'absentéisme ` + kpi.tauxAbs + ` % (cible < 4 %)` : `tous exercices confondus`, actif: statutF === `tous` && dept === `tous` && typeF === `tous` && !rech, onClic: () => { (setStatutF(`tous`), setDept(`tous`), setTypeF(`tous`), setRech(``), setPage(0)); } }),
+        (0, $.jsx)(AbsKpi, { ic: HEA, couleur: `warning.main`, valeur: String(kpi.aReg), label: `Dossiers à régulariser`, sub: `CNPS · visites reprise · relances · attentes`, actif: statutF === `a_reguler`, onClic: () => (setStatutF(statutF === `a_reguler` ? `tous` : `a_reguler`), setPage(0)) }),
+        (0, $.jsx)(AbsKpi, { ic: PYC, couleur: `error.main`, valeur: sldFCFA(kpi.coutTot), label: `Coût estimé`, sub: `indemnités légales + remplacements (paramétrable)`, actif: !1, onClic: () => fTri(`cout`) }),
+        (0, $.jsx)(AbsKpi, { ic: SCH, couleur: `secondary.main`, valeur: String(kpi.bradf), label: `Récidives (Bradford ≥ 450)`, sub: `arrêts courts répétés — prévention burn-out`, actif: statutF === `recommande`, onClic: () => (setStatutF(statutF === `recommande` ? `tous` : `recommande`), setPage(0)) }),
+      ] }),
+      (0, $.jsxs)(a, { sx: { display: `flex`, gap: 1.5, flexWrap: `wrap`, alignItems: `center` }, children: [
+        (0, $.jsx)(D, {
+          size: `small`,
+          placeholder: `Rechercher (nom, matricule, motif, type…)`,
+          value: rech,
+          onChange: (e2) => { (setRech(e2.target.value), setPage(0)); },
+          InputProps: { startAdornment: (0, $.jsx)(k, { sx: { fontSize: 18, mr: 1, color: `text.secondary` } }) },
+          sx: { flex: 1, minWidth: 160, "& .MuiInput-root": { fontSize: `0.8rem` } },
+        }),
+        (0, $.jsxs)(D, { select: !0, size: `small`, label: `Statut`, value: statutF, onChange: (e2) => { (setStatutF(e2.target.value), setPage(0)); }, sx: { minWidth: 160, width: { xs: `100%`, sm: `auto` } }, children: [
+          (0, $.jsx)(s, { value: `tous`, children: `Tous les statuts` }),
+          (0, $.jsx)(s, { value: `a_reguler`, children: `🔴 À régulariser (actions dues)` }),
+          (0, $.jsx)(s, { value: `non_justifiee`, children: `Non justifiée` }),
+          (0, $.jsx)(s, { value: `en_attente`, children: `En attente` }),
+          (0, $.jsx)(s, { value: `justifiee`, children: `Justifiée` }),
+          (0, $.jsx)(s, { value: `rejetee`, children: `Rejetée` }),
+          (0, $.jsx)(s, { value: `recommande`, children: `🟠 Récidive Bradford ≥ 450` }),
+        ] }),
+        (0, $.jsxs)(D, { select: !0, size: `small`, label: `Type`, value: typeF, onChange: (e2) => { (setTypeF(e2.target.value), setPage(0)); }, sx: { minWidth: 170, width: { xs: `100%`, sm: `auto` } }, children: [
+          (0, $.jsx)(s, { value: `tous`, children: `Tous les types` }),
+          Object.keys(ABS_TYPES).map((tk) => (0, $.jsx)(s, { value: tk, children: ABS_TYPES[tk][0] }, tk)),
+        ] }),
+        (0, $.jsxs)(D, { select: !0, size: `small`, label: `Exercice`, value: exo, onChange: (e2) => { (setExo(e2.target.value), setPage(0)); }, sx: { minWidth: 150, width: { xs: `100%`, sm: `auto` } }, children: [
+          (0, $.jsx)(s, { value: String(AN), children: `Exercice ` + AN }),
+          (0, $.jsx)(s, { value: String(AN - 1), children: `Exercice ` + (AN - 1) }),
+          (0, $.jsx)(s, { value: String(AN - 2), children: `Exercice ` + (AN - 2) }),
+          (0, $.jsx)(s, { value: `tous`, children: `Tous exercices` }),
+        ] }),
+        dept !== `tous` || statutF !== `tous` || typeF !== `tous` || rech
+          ? (0, $.jsx)(l, { size: `small`, onClick: () => { (setDept(`tous`), setStatutF(`tous`), setTypeF(`tous`), setRech(``), setPage(0)); }, sx: { textTransform: `none`, fontSize: `0.75rem` }, children: `Effacer les filtres` })
+          : null,
+      ] }),
+      (0, $.jsx)(a, { sx: { display: `flex`, gap: 0.75, flexWrap: `wrap`, mb: -0.5 }, children: [
+        (0, $.jsx)(T, { label: `Tous départements`, size: `small`, onClick: () => (setDept(`tous`), setPage(0)), color: dept === `tous` ? `primary` : `default`, variant: dept === `tous` ? `filled` : `outlined`, sx: { fontWeight: 700, fontSize: `0.72rem`, cursor: `pointer` } }),
+        depts.map((dp) =>
+          (0, $.jsx)(T, { label: dp, size: `small`, onClick: () => (setDept(dept === dp ? `tous` : dp), setPage(0)), color: dept === dp ? `primary` : `default`, variant: dept === dp ? `filled` : `outlined`, sx: { fontWeight: 700, fontSize: `0.72rem`, cursor: `pointer` } }, dp),
+        ),
+      ] }),
+      (0, $.jsx)(ee, { children: (0, $.jsxs)(u, { children: [
+        (0, $.jsx)(y, { sx: { overflowX: `auto`, maxWidth: `100%` }, children: (0, $.jsxs)(ne, { size: `small`, stickyHeader: !0, children: [
+          (0, $.jsx)(te, { children: (0, $.jsxs)(b, { children: [
+            fTh(`Employé`, `employe`),
+            fTh(`Département`, `dept`),
+            fTh(`Type`, `type`),
+            fTh(`Période`, `debut`),
+            fTh(`Durée (ouvr.)`, `duree`, `right`),
+            (0, $.jsx)(v, { sx: { fontWeight: 700 }, children: `Conformité` }),
+            fTh(`Indemnité estimée`, `cout`, `right`),
+            (0, $.jsx)(v, { sx: { fontWeight: 700 }, children: `Statut` }),
+            (0, $.jsx)(v, { align: `center`, sx: { fontWeight: 700 }, children: `Actions` }),
+          ] }) }),
+          (0, $.jsx)(_, { children: srt.slice(page * pp, page * pp + pp).map((rw, idx) =>
+            (0, $.jsxs)(b, { hover: !0, onClick: () => openDet(rw), sx: { cursor: `pointer` }, children: [
+              (0, $.jsxs)(v, { children: [
+                (0, $.jsxs)(a, { sx: { display: `flex`, alignItems: `center`, gap: 1.2 }, children: [
+                  sldAvatar(rw.emp || {}, 34, 12),
+                  (0, $.jsxs)(a, { sx: { minWidth: 0 }, children: [
+                    (0, $.jsx)(i, { variant: `body2`, fontWeight: 700, noWrap: !0, children: rw.emp ? B(rw.emp) : rw.employee_id }),
+                    (0, $.jsx)(i, { variant: `caption`, sx: { color: `text.secondary`, fontFamily: `monospace` }, children: (rw.emp && rw.emp.matricule) || `` }),
+                  ] }),
+                ] }),
+              ] }),
+              (0, $.jsx)(v, { children: (0, $.jsx)(T, { label: (rw.emp && rw.emp.departement) || `—`, size: `small`, variant: `outlined`, sx: { fontSize: `0.68rem`, fontWeight: 700 } }) }),
+              (0, $.jsxs)(v, { children: [
+                (0, $.jsx)(T, { label: absLibelle(rw.type_absence), size: `small`, color: rw.fl.abandon || rw.fl.cnpsLate ? `error` : rw.type_absence === `absence_non_justifiee` ? `warning` : `primary`, variant: `outlined`, sx: { fontWeight: 700, fontSize: `0.66rem` } }),
+                (0, $.jsx)(i, { variant: `caption`, sx: { display: `block`, color: `text.secondary` }, children: rw.motif || `` }),
+              ] }),
+              (0, $.jsxs)(v, { children: [
+                (0, $.jsx)(i, { variant: `body2`, fontWeight: 700, noWrap: !0, children: A(rw.date_debut) + ` → ` + A(rw.date_fin) }),
+                (0, $.jsx)(a, { sx: { display: `flex`, alignItems: `center`, gap: 0.5, mt: 0.25 }, children: absChipSource(rw.source) }),
+              ] }),
+              (0, $.jsxs)(v, { align: `right`, children: [
+                (0, $.jsx)(i, { variant: `body2`, fontWeight: 800, children: rw.ouvr + ` j` }),
+                (0, $.jsx)(i, { variant: `caption`, sx: { display: `block`, color: `text.secondary` }, children: rw.cal + ` j cal.` }),
+              ] }),
+              (0, $.jsx)(v, { children: absChipConf(rw.fl) }),
+              (0, $.jsxs)(v, { align: `right`, children: [
+                (0, $.jsx)(i, { variant: `body2`, fontWeight: 700, children: rw.indem > 0 ? sldFCFA(rw.indem) : `—` }),
+                rw.coutR > 0 ? (0, $.jsx)(i, { variant: `caption`, sx: { display: `block`, color: `error.main`, fontWeight: 700 }, children: `+ ` + sldFCFA(rw.coutR) + ` remp.` }) : null,
+              ] }),
+              (0, $.jsx)(v, { children: absChipStatut(rw.statut) }),
+              (0, $.jsx)(v, { align: `center`, children: (0, $.jsx)(o, { direction: `row`, spacing: 0.5, justifyContent: `center`, children: (0, $.jsx)(E, { title: `Détail du dossier`, children: (0, $.jsx)(r, { size: `small`, color: `primary`, onClick: (e2) => (e2.stopPropagation(), openDet(rw)), children: (0, $.jsx)(C, { fontSize: `small` }) }) }) }) }),
+            ] }, rw.id || idx),
+          ) }),
+          srt.length === 0
+            ? (0, $.jsx)(b, { children: (0, $.jsx)(v, { colSpan: 9, align: `center`, sx: { py: 4, color: `text.secondary` }, children: `Aucun dossier d'absence ne correspond aux filtres actifs — déclarez une absence ou changez d'exercice.` }) })
+            : null,
+        ] }) }),
+        (0, $.jsx)(g, {
+          component: `div`,
+          count: srt.length,
+          page: page,
+          onPageChange: (e2, p2) => setPage(p2),
+          rowsPerPage: pp,
+          onRowsPerPageChange: (e2) => { (setPp(parseInt(e2.target.value)), setPage(0)); },
+          rowsPerPageOptions: [10, 20, 50],
+          labelRowsPerPage: `Lignes:`,
+          labelDisplayedRows: (pg2) => pg2.from + `-` + pg2.to + ` sur ` + pg2.count,
+          sx: { mt: 1 },
+        }),
+      ] }) }),
+      absDlgDetail(),
+      absDlgNew(),
+      absDlgParams(),
+      (0, $.jsx)(d, { open: !!snack, autoHideDuration: 4e3, onClose: () => setSnack(null), anchorOrigin: { vertical: `bottom`, horizontal: `center` }, message: snack ? snack.msg : `` }),
+    ],
+  });
+}
+
 export { ie as default };
