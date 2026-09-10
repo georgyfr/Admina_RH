@@ -1,0 +1,243 @@
+/* ============================================================
+   ADMINA-RH — PILIER 3 « Interagir » (Tableau de Bord Domaine 1)
+   Palette ⌘K, export multi-format, filtres URL, multi-sélection, a11y
+   SCOPÉ : toutes les règles sous html.admina-tdb (posé/retiré par
+   admina-pilier2.js à chaque navigation SPA). Zéro effet ailleurs.
+   ============================================================ */
+
+/* ------------------------------------------------ focus visible global */
+html.admina-tdb :focus-visible {
+  outline: 2px solid #7c4dff;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+html.admina-tdb.adem7-dark :focus-visible { outline-color: #b39ddb; }
+
+/* ------------------------------------------------ skip-link */
+html.admina-tdb .admina-p3-skip {
+  position: fixed; top: -48px; left: 12px; z-index: 3200;
+  background: #7c4dff; color: #fff; padding: 10px 16px;
+  border-radius: 0 0 8px 8px; font-size: 14px; font-weight: 600;
+  text-decoration: none; transition: top .18s ease;
+  box-shadow: 0 4px 14px rgba(0,0,0,.25);
+}
+html.admina-tdb .admina-p3-skip:focus { top: 0; }
+html.admina-tdb .admina-sr-only {
+  position: absolute !important; width: 1px !important; height: 1px !important;
+  padding: 0 !important; margin: -1px !important; overflow: hidden !important;
+  clip: rect(0 0 0 0) !important; white-space: nowrap !important; border: 0 !important;
+}
+
+/* ------------------------------------------------ bouton palette dans l'en-tête */
+html.admina-tdb .admina-p3-open {
+  display: inline-flex; align-items: center; gap: 8px;
+  border: 1px solid rgba(0,0,0,.15); background: #fff; color: #444;
+  border-radius: 8px; padding: 8px 12px; font-size: 13px; cursor: pointer;
+  min-height: 36px; font-family: inherit;
+  transition: border-color .15s, box-shadow .15s;
+}
+html.admina-tdb .admina-p3-open:hover {
+  border-color: #7c4dff; box-shadow: 0 0 0 3px rgba(124,77,255,.12);
+}
+html.admina-tdb .admina-p3-open kbd {
+  background: #f1ecff; color: #5b32c7; border: 1px solid #d8ccff;
+  border-radius: 5px; padding: 1px 6px; font-size: 11px; font-weight: 700;
+  font-family: inherit;
+}
+html.admina-tdb.adem7-dark .admina-p3-open {
+  background: #2a2a3d; border-color: rgba(255,255,255,.18); color: #d5d0ea;
+}
+html.admina-tdb.adem7-dark .admina-p3-open kbd {
+  background: #3a2f5c; color: #cbb8ff; border-color: #574a86;
+}
+
+/* ------------------------------------------------ palette (dialog ⌘K) */
+html.admina-tdb .admina-p3-backdrop {
+  position: fixed; inset: 0; z-index: 3000;
+  background: rgba(15, 12, 35, .45);
+  display: none; align-items: flex-start; justify-content: center;
+  padding: 9vh 16px 16px;
+}
+html.admina-tdb.adem7-dark .admina-p3-backdrop { background: rgba(0,0,0,.62); }
+html.admina-tdb.admina-p3-open-pal .admina-p3-backdrop { display: flex; }
+
+html.admina-tdb .admina-p3-panel {
+  width: 100%; max-width: 620px; max-height: 70vh;
+  display: flex; flex-direction: column;
+  background: #fff; border-radius: 14px; overflow: hidden;
+  box-shadow: 0 24px 70px rgba(10,5,40,.35), 0 0 0 1px rgba(0,0,0,.06);
+  animation: adminaP3In .16s ease-out;
+}
+html.admina-tdb.adem7-dark .admina-p3-panel {
+  background: #201d33; box-shadow: 0 24px 70px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.09);
+}
+@keyframes adminaP3In { from { opacity: 0; transform: translateY(-10px) scale(.985); } }
+
+html.admina-tdb .admina-p3-inputrow {
+  display: flex; align-items: center; gap: 10px;
+  padding: 14px 16px; border-bottom: 1px solid rgba(0,0,0,.08);
+}
+html.admina-tdb.adem7-dark .admina-p3-inputrow { border-bottom-color: rgba(255,255,255,.09); }
+html.admina-tdb .admina-p3-inputrow svg { flex: 0 0 auto; color: #7c4dff; }
+html.admina-tdb.adem7-dark .admina-p3-inputrow svg { color: #b39ddb; }
+html.admina-tdb .admina-p3-input {
+  flex: 1 1 auto; border: 0; outline: 0; background: transparent;
+  font-size: 16px; color: #241f3d; font-family: inherit; min-height: 26px;
+}
+html.admina-tdb.adem7-dark .admina-p3-input { color: #ece8fb; }
+html.admina-tdb .admina-p3-input::placeholder { color: #9a94b8; }
+html.admina-tdb .admina-p3-esc {
+  flex: 0 0 auto; font-size: 11px; color: #7a7494;
+  border: 1px solid rgba(0,0,0,.14); border-radius: 5px; padding: 2px 7px;
+}
+html.admina-tdb.adem7-dark .admina-p3-esc { color: #a49ec2; border-color: rgba(255,255,255,.16); }
+
+html.admina-tdb .admina-p3-list {
+  list-style: none; margin: 0; padding: 6px; overflow-y: auto;
+  overscroll-behavior: contain; flex: 1 1 auto;
+}
+html.admina-tdb .admina-p3-cat {
+  font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+  color: #8a83a8; padding: 10px 12px 4px; user-select: none;
+}
+html.admina-tdb.adem7-dark .admina-p3-cat { color: #8f88b5; }
+html.admina-tdb .admina-p3-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 12px; border-radius: 9px; cursor: pointer;
+  color: #2c2745; font-size: 14px; line-height: 1.35;
+}
+html.admina-tdb.adem7-dark .admina-p3-item { color: #d9d4ef; }
+html.admina-tdb .admina-p3-item .admina-p3-ico {
+  flex: 0 0 auto; width: 28px; height: 28px; border-radius: 7px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: #f2eefe; color: #6a3fd8; font-size: 14px;
+}
+html.admina-tdb.adem7-dark .admina-p3-item .admina-p3-ico { background: #332b52; color: #c4b1f5; }
+html.admina-tdb .admina-p3-item .admina-p3-lbl { flex: 1 1 auto; min-width: 0; }
+html.admina-tdb .admina-p3-item .admina-p3-hint {
+  flex: 0 0 auto; font-size: 11px; color: #948db2;
+}
+html.admina-tdb .admina-p3-item[aria-selected="true"],
+html.admina-tdb .admina-p3-item.admina-p3-active {
+  background: #f0e9ff;
+}
+html.admina-tdb.adem7-dark .admina-p3-item[aria-selected="true"],
+html.admina-tdb.adem7-dark .admina-p3-item.admina-p3-active { background: #372e5c; }
+html.admina-tdb .admina-p3-empty { padding: 26px 16px; text-align: center; color: #8a83a8; font-size: 14px; }
+html.admina-tdb .admina-p3-foot {
+  border-top: 1px solid rgba(0,0,0,.08); padding: 8px 14px;
+  display: flex; gap: 14px; font-size: 11px; color: #8a83a8; flex-wrap: wrap;
+}
+html.admina-tdb.adem7-dark .admina-p3-foot { border-top-color: rgba(255,255,255,.09); color: #8f88b5; }
+html.admina-tdb .admina-p3-foot kbd {
+  background: rgba(0,0,0,.06); border: 1px solid rgba(0,0,0,.12);
+  border-radius: 4px; padding: 0 5px; font-family: inherit;
+}
+html.admina-tdb.adem7-dark .admina-p3-foot kbd { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.16); }
+
+/* ------------------------------------------------ menu d'export multi-format */
+html.admina-tdb .admina-p3-menu {
+  position: fixed; z-index: 3100; min-width: 230px;
+  background: #fff; border-radius: 12px; overflow: hidden;
+  box-shadow: 0 14px 44px rgba(10,5,40,.28), 0 0 0 1px rgba(0,0,0,.07);
+  padding: 6px; display: none;
+  animation: adminaP3In .14s ease-out;
+}
+html.admina-tdb.adem7-dark .admina-p3-menu { background: #262239; box-shadow: 0 14px 44px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.09); }
+html.admina-tdb.admina-p3-menu-open .admina-p3-menu { display: block; }
+html.admina-tdb .admina-p3-menu [role="menuitem"] {
+  display: flex; align-items: center; gap: 10px;
+  width: 100%; border: 0; background: transparent; text-align: left;
+  padding: 10px 12px; border-radius: 8px; cursor: pointer;
+  font-size: 14px; color: #2c2745; font-family: inherit;
+}
+html.admina-tdb.adem7-dark .admina-p3-menu [role="menuitem"] { color: #d9d4ef; }
+html.admina-tdb .admina-p3-menu [role="menuitem"]:hover,
+html.admina-tdb .admina-p3-menu [role="menuitem"]:focus {
+  background: #f0e9ff; outline: none;
+}
+html.admina-tdb.adem7-dark .admina-p3-menu [role="menuitem"]:hover,
+html.admina-tdb.adem7-dark .admina-p3-menu [role="menuitem"]:focus { background: #372e5c; }
+html.admina-tdb .admina-p3-menu .admina-p3-mico {
+  width: 26px; height: 26px; border-radius: 6px; flex: 0 0 auto;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: #f2eefe; color: #6a3fd8; font-size: 12px; font-weight: 700;
+}
+html.admina-tdb.adem7-dark .admina-p3-menu .admina-p3-mico { background: #332b52; color: #c4b1f5; }
+html.admina-tdb .admina-p3-mtitle {
+  font-size: 11px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase;
+  color: #8a83a8; padding: 8px 12px 4px;
+}
+html.admina-tdb.adem7-dark .admina-p3-mtitle { color: #8f88b5; }
+
+/* ------------------------------------------------ multi-sélection */
+html.admina-tdb .admina-sel-col { width: 42px; padding-right: 4px !important; }
+html.admina-tdb .admina-sel-box {
+  width: 17px; height: 17px; accent-color: #7c4dff; cursor: pointer;
+  display: block; margin: auto;
+}
+html.admina-tdb .admina-sel-head-btn {
+  border: 0; background: transparent; cursor: pointer; padding: 2px;
+  display: block; margin: auto; color: #6a3fd8; border-radius: 4px;
+}
+html.admina-tdb .admina-sel-head-btn:hover { background: rgba(124,77,255,.1); }
+
+html.admina-tdb .admina-p3-bar {
+  position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%);
+  z-index: 2900; display: none; align-items: center; gap: 8px; flex-wrap: wrap;
+  background: #241f3d; color: #fff; border-radius: 14px;
+  padding: 10px 12px 10px 16px; box-shadow: 0 14px 40px rgba(10,5,40,.4);
+  max-width: calc(100vw - 24px);
+  animation: adminaP3Bar .18s ease-out;
+}
+@keyframes adminaP3Bar { from { opacity: 0; transform: translate(-50%, 12px); } }
+html.admina-tdb.admina-p3-sel .admina-p3-bar { display: flex; }
+html.admina-tdb .admina-p3-bar .admina-p3-count { font-size: 13px; font-weight: 600; white-space: nowrap; }
+html.admina-tdb .admina-p3-bar button {
+  border: 1px solid rgba(255,255,255,.22); background: rgba(255,255,255,.08);
+  color: #fff; border-radius: 9px; padding: 8px 12px; font-size: 13px;
+  cursor: pointer; font-family: inherit; min-height: 36px;
+  transition: background .15s;
+}
+html.admina-tdb .admina-p3-bar button:hover { background: rgba(255,255,255,.18); }
+html.admina-tdb .admina-p3-bar button.admina-p3-ok { background: #2e7d32; border-color: #2e7d32; }
+html.admina-tdb .admina-p3-bar button.admina-p3-ok:hover { background: #35923a; }
+html.admina-tdb .admina-p3-bar button.admina-p3-warn { background: rgba(230,81,0,.85); border-color: transparent; }
+html.admina-tdb .admina-p3-bar button.admina-p3-x { border-color: transparent; background: transparent; font-size: 15px; }
+
+/* ------------------------------------------------ annonces (aria-live) */
+html.admina-tdb .admina-p3-live {
+  position: fixed; left: 50%; bottom: 84px; transform: translateX(-50%);
+  z-index: 2950; background: #1b1b2b; color: #fff; font-size: 13px;
+  padding: 9px 16px; border-radius: 10px; box-shadow: 0 8px 26px rgba(0,0,0,.3);
+  opacity: 0; pointer-events: none; transition: opacity .2s; max-width: 90vw;
+}
+html.admina-tdb .admina-p3-live.admina-p3-show { opacity: 1; }
+html.admina-tdb.admina-p3-sel .admina-p3-live { bottom: 124px; }
+
+/* ------------------------------------------------ responsive mobile */
+@media (max-width: 819px) {
+  html.admina-tdb .admina-p3-backdrop { padding: 6vh 10px 10px; }
+  html.admina-tdb .admina-p3-panel { max-height: 78vh; }
+  html.admina-tdb .admina-p3-open .admina-p3-openword { display: none; }
+  html.admina-tdb .admina-p3-hint { display: none; }
+  html.admina-tdb .admina-p3-bar { bottom: 10px; width: calc(100vw - 20px); justify-content: center; }
+  html.admina-tdb .admina-p3-bar .admina-p3-count { width: 100%; text-align: center; }
+}
+
+/* ------------------------------------------------ mouvement réduit */
+@media (prefers-reduced-motion: reduce) {
+  html.admina-tdb .admina-p3-panel,
+  html.admina-tdb .admina-p3-menu,
+  html.admina-tdb .admina-p3-bar { animation: none; }
+  html.admina-tdb .admina-p3-skip { transition: none; }
+}
+
+/* ------------------------------------------------ impression : cacher les artefacts P3 */
+@media print {
+  html.admina-tdb .admina-p3-bar,
+  html.admina-tdb .admina-p3-backdrop,
+  html.admina-tdb .admina-p3-menu,
+  html.admina-tdb .admina-p3-live,
+  html.admina-tdb .admina-sel-col { display: none !important; }
+}
