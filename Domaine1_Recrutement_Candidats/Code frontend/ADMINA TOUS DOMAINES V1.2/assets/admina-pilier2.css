@@ -1,0 +1,217 @@
+/* =====================================================================
+   ADMINA-RH — PILIER 2 « Réorganiser » — Tableau de Bord Domaine 1
+   Portée : UNIQUEMENT /Domaine1_Recrutement_Candidats/tableau-de-bord
+   Mécanisme : html.admina-tdb posé/retiré par admina-pilier2.js
+   (aucune règle ne s'applique aux autres pages du site)
+   ===================================================================== */
+
+/* ---------- 1. PLEINE LARGEUR ---------- */
+/* Ligne KPI : 6 cartes plafonnées à 220px -> répartition pleine largeur */
+html.admina-tdb .css-6khbhj{flex-wrap:wrap}
+html.admina-tdb .css-6khbhj > .MuiPaper-root{flex:1 1 140px;min-width:0;max-width:none}
+
+/* Items de grille sans classe de span (graphiques, coûts, table) :
+   flex:0 0 auto -> pleine largeur avec retour à la ligne mobile */
+html.admina-tdb .MuiGrid-container > .MuiGrid-root:not([class*='MuiGrid-grid-']){
+  flex:1 1 280px;min-width:0;max-width:none
+}
+html.admina-tdb .MuiGrid-container > .MuiGrid-root:not([class*='MuiGrid-grid-']) > .MuiPaper-root{
+  width:100%;box-sizing:border-box
+}
+
+/* ---------- 2. MODE SOMBRE LISIBLE (WCAG) ---------- */
+/* Panneau Recommandations : fond crème codé en dur + texte clair */
+html.adem7-dark.admina-tdb .css-15nt1v1{
+  background:#26210f!important;
+  color:#e8e8e8!important;
+  border:1px solid rgba(255,193,7,.30)
+}
+/* En-têtes de table sticky : fond gris clair + texte clair */
+html.adem7-dark.admina-tdb .MuiTableCell-stickyHeader{
+  background:#1e1e1e!important;
+  color:#e8e8e8!important
+}
+/* Selects natifs blancs (couche masquée des filtres) */
+html.adem7-dark.admina-tdb .MuiSelect-nativeInput{background:transparent!important}
+
+/* ---------- 3. MOBILE (<= 819px : la sidebar est masquée par l'app) ---------- */
+@media (max-width:819px){
+  /* Suppression du décalage 260px hérité du layout desktop (marge + largeur) */
+  html.admina-tdb .css-1310g41{margin-left:0!important;width:100%!important}
+  html.admina-tdb .MuiToolbar-root{padding-left:10px!important;padding-right:10px!important}
+
+  /* KPI : 2 par rangée */
+  html.admina-tdb .css-6khbhj > .MuiPaper-root{flex:1 1 140px}
+
+  /* Grilles : un bloc par rangée */
+  html.admina-tdb .MuiGrid-container > .MuiGrid-root:not([class*='MuiGrid-grid-']){flex:1 1 240px}
+
+  /* Table : réduction des marges internes */
+  html.admina-tdb .MuiTableCell-root{padding:8px 6px!important}
+
+  /* Sidebar dockée (display:none par l'app) -> panneau coulissant */
+  html.admina-tdb .MuiDrawer-docked{
+    display:block!important;
+    position:fixed;top:0;left:0;bottom:0;
+    width:280px;max-width:86vw;
+    z-index:1450;
+    transform:translateX(-106%);
+    transition:transform .25s ease
+  }
+  html.admina-tdb.admina-nav-open .MuiDrawer-docked{transform:translateX(0)}
+  html.admina-tdb .MuiDrawer-docked .MuiDrawer-paper{
+    width:280px;max-width:86vw;box-sizing:border-box;
+    position:absolute;height:100%
+  }
+  /* Bouton hamburger injecté par admina-pilier2.js */
+  html.admina-tdb .admina-burger{display:inline-flex!important}
+  /* Fond assombri du panneau de navigation */
+  html.admina-tdb .admina-nav-backdrop{
+    position:fixed;inset:0;background:rgba(0,0,0,.5);
+    z-index:1440;opacity:0;pointer-events:none;transition:opacity .22s ease
+  }
+  html.admina-tdb.admina-nav-open .admina-nav-backdrop{opacity:1;pointer-events:auto}
+}
+html.admina-tdb .admina-burger{display:none}
+html.admina-tdb .admina-nav-backdrop{background:transparent;pointer-events:none}
+
+/* ---------- 4. DRAWER DE DÉTAIL (sans perte de contexte) ---------- */
+html.admina-tdb .admina-drawer-backdrop{
+  position:fixed;inset:0;background:rgba(0,0,0,.55);
+  z-index:1460;opacity:0;pointer-events:none;transition:opacity .22s ease
+}
+html.admina-tdb.admina-drawer-open .admina-drawer-backdrop{opacity:1;pointer-events:auto}
+
+html.admina-tdb .admina-drawer{
+  position:fixed;top:0;right:0;bottom:0;
+  width:min(470px,94vw);
+  z-index:1461;
+  background:#ffffff;color:#1c1c1e;
+  border-left:1px solid rgba(0,0,0,.08);
+  box-shadow:-10px 0 34px rgba(0,0,0,.22);
+  transform:translateX(106%);
+  transition:transform .26s cubic-bezier(.2,.7,.3,1);
+  display:flex;flex-direction:column;
+  font-family:Inter,-apple-system,'Segoe UI',Roboto,sans-serif;
+}
+html.admina-tdb.admina-drawer-open .admina-drawer{transform:translateX(0)}
+html.adem7-dark.admina-tdb .admina-drawer{
+  background:#1b1b1f;color:#e8e8e8;
+  border-left:1px solid rgba(255,255,255,.10);
+  box-shadow:-10px 0 34px rgba(0,0,0,.55)
+}
+html.admina-tdb .admina-drawer *,
+html.admina-tdb .admina-drawer *::before,
+html.admina-tdb .admina-drawer *::after{box-sizing:border-box}
+
+/* En-tête */
+html.admina-tdb .admina-dw-head{
+  padding:18px 20px 14px;
+  border-bottom:1px solid rgba(0,0,0,.08);
+  display:flex;align-items:flex-start;gap:10px
+}
+html.adem7-dark.admina-tdb .admina-dw-head{border-bottom-color:rgba(255,255,255,.10)}
+html.admina-tdb .admina-dw-headtxt{flex:1 1 auto;min-width:0}
+html.admina-tdb .admina-dw-num{
+  font-size:15px;font-weight:700;letter-spacing:.4px;margin:0 0 2px;
+  font-variant-numeric:tabular-nums
+}
+html.admina-tdb .admina-dw-poste{font-size:13.5px;opacity:.85;margin:0}
+html.admina-tdb .admina-dw-chip{
+  display:inline-block;font-size:11.5px;font-weight:600;
+  padding:3px 10px;border-radius:999px;margin-top:6px;letter-spacing:.3px
+}
+html.admina-tdb .admina-dw-close{
+  flex:0 0 auto;width:34px;height:34px;border-radius:50%;
+  border:1px solid rgba(0,0,0,.14);background:transparent;color:inherit;
+  font-size:17px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center
+}
+html.admina-tdb .admina-dw-close:hover{background:rgba(0,0,0,.06)}
+html.adem7-dark.admina-tdb .admina-dw-close{border-color:rgba(255,255,255,.22)}
+html.adem7-dark.admina-tdb .admina-dw-close:hover{background:rgba(255,255,255,.08)}
+
+/* Corps défilant */
+html.admina-tdb .admina-dw-body{flex:1 1 auto;overflow-y:auto;padding:16px 20px 22px}
+html.admina-tdb .admina-dw-sec{margin:0 0 18px}
+html.admina-tdb .admina-dw-secT{
+  font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;
+  opacity:.62;margin:0 0 9px
+}
+
+/* Grille de champs */
+html.admina-tdb .admina-dw-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px 12px}
+@media (max-width:420px){html.admina-tdb .admina-dw-grid{grid-template-columns:1fr}}
+html.admina-tdb .admina-dw-f{
+  border:1px solid rgba(0,0,0,.09);border-radius:9px;padding:7px 10px;
+  background:rgba(0,0,0,.018)
+}
+html.adem7-dark.admina-tdb .admina-dw-f{
+  border-color:rgba(255,255,255,.10);background:rgba(255,255,255,.045)
+}
+html.admina-tdb .admina-dw-fk{font-size:10.5px;text-transform:uppercase;letter-spacing:.7px;opacity:.6;margin:0 0 2px}
+html.admina-tdb .admina-dw-fv{font-size:13.5px;font-weight:600;margin:0;overflow-wrap:anywhere}
+
+/* Progression par étapes */
+html.admina-tdb .admina-dw-steps{list-style:none;margin:0;padding:0}
+html.admina-tdb .admina-dw-step{display:flex;align-items:center;gap:9px;padding:4px 0;font-size:13px}
+html.admina-tdb .admina-dw-dot{
+  width:18px;height:18px;border-radius:50%;flex:0 0 auto;
+  border:2px solid rgba(0,0,0,.22);display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:700;color:transparent
+}
+html.admina-tdb .admina-dw-step.on .admina-dw-dot{border-color:#2e7d32;background:#2e7d32;color:#fff}
+html.admina-tdb .admina-dw-step.cur .admina-dw-dot{border-color:#ed6c02;background:#ed6c02;color:#fff}
+html.admina-tdb .admina-dw-step.cur{font-weight:600}
+html.admina-tdb .admina-dw-stepline{flex:1 1 auto;height:2px;background:rgba(0,0,0,.12);border-radius:2px}
+html.adem7-dark.admina-tdb .admina-dw-dot{border-color:rgba(255,255,255,.28)}
+html.adem7-dark.admina-tdb .admina-dw-stepline{background:rgba(255,255,255,.16)}
+
+/* Historique (journal ISO) */
+html.admina-tdb .admina-dw-log{border-left:2px solid rgba(0,0,0,.12);margin-left:5px;padding-left:12px}
+html.adem7-dark.admina-tdb .admina-dw-log{border-left-color:rgba(255,255,255,.16)}
+html.admina-tdb .admina-dw-logi{position:relative;padding:3px 0 7px;font-size:12.5px}
+html.admina-tdb .admina-dw-logi::before{
+  content:'';position:absolute;left:-17px;top:9px;width:8px;height:8px;border-radius:50%;
+  background:#2e7d32;box-shadow:0 0 0 3px rgba(46,125,50,.18)
+}
+html.admina-tdb .admina-dw-loga{font-weight:600}
+html.admina-tdb .admina-dw-logt{display:block;font-size:11px;opacity:.6;margin-top:1px}
+html.admina-tdb .admina-dw-empty{
+  font-size:12.5px;opacity:.7;font-style:italic;padding:6px 0
+}
+
+/* Pied */
+html.admina-tdb .admina-dw-foot{
+  padding:10px 20px;border-top:1px solid rgba(0,0,0,.08);
+  display:flex;align-items:center;gap:8px
+}
+html.adem7-dark.admina-tdb .admina-dw-foot{border-top-color:rgba(255,255,255,.10)}
+html.admina-tdb .admina-dw-navb{
+  flex:1 1 auto;padding:7px 6px;border-radius:8px;font-size:12.5px;font-weight:600;
+  border:1px solid rgba(0,0,0,.14);background:transparent;color:inherit;cursor:pointer
+}
+html.admina-tdb .admina-dw-navb:hover{background:rgba(0,0,0,.05)}
+html.adem7-dark.admina-tdb .admina-dw-navb{border-color:rgba(255,255,255,.20)}
+html.adem7-dark.admina-tdb .admina-dw-navb:hover{background:rgba(255,255,255,.07)}
+html.admina-tdb .admina-dw-src{font-size:10px;opacity:.55;text-align:right;line-height:1.35;flex:1 1 auto}
+
+/* Hamburger (injecté) */
+html.admina-tdb .admina-burger{
+  width:38px;height:38px;border-radius:8px;border:none;background:transparent;color:inherit;
+  align-items:center;justify-content:center;cursor:pointer;margin-right:2px
+}
+html.admina-tdb .admina-burger:hover{background:rgba(0,0,0,.06)}
+html.adem7-dark.admina-tdb .admina-burger:hover{background:rgba(255,255,255,.08)}
+
+/* Accessibilité : focus visible sur tous les éléments injectés */
+html.admina-tdb .admina-drawer:focus-visible,
+html.admina-tdb .admina-dw-close:focus-visible,
+html.admina-tdb .admina-dw-navb:focus-visible,
+html.admina-tdb .admina-burger:focus-visible{outline:2px solid #00897b;outline-offset:2px}
+
+/* Réduction des animations (préférence utilisateur) */
+@media (prefers-reduced-motion:reduce){
+  html.admina-tdb .admina-drawer,
+  html.admina-tdb .MuiDrawer-docked,
+  html.admina-tdb .admina-drawer-backdrop{transition:none}
+}
