@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Admina-RH | Domaine 7 — Décisions RH</title>
-<meta name="description" content="Décisions issues de l&#x27;évaluation : promotions, primes de mérite, ruptures, montants associés et dates de mise en œuvre."/>
+<title>Admina-RH | Domaine 7 — Évaluation &amp; Gestion de la Performance</title>
+<meta name="description" content="Les décisions RH post-évaluation : promotions, augmentations, PAP obligatoires, ruptures — montants associés (89 500 FCFA)."/>
 <link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
 <style>
 :root{--bg:#f5f3fb;--card:#ffffff;--card2:#faf9fe;--border:#e2dcf0;--txt:#1d1630;--mut:#635b7e;
@@ -32,87 +32,199 @@ border-color:rgba(139,92,246,.5)}
 aside a.nav .dot{width:6px;height:6px;border-radius:50%;background:#a78bfa;opacity:.45;flex:none}
 aside a.nav.on .dot{opacity:1;box-shadow:0 0 8px #a78bfa}
 aside .home{margin-top:14px;border-top:1px solid rgba(255,255,255,.12);padding-top:12px}
-main{padding:26px 30px 60px;min-width:0}
-.topbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+.topbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
 .topbar .crumb{color:var(--mut);font-size:.8rem}
 .topbar .crumb a{color:var(--acc)}
 .topbar .tohub{margin-left:auto;font-size:.8rem;color:var(--mut);background:var(--card);border:1px solid var(--border);padding:7px 13px;
 border-radius:10px;transition:.2s}
 .topbar .tohub:hover{color:var(--acc);border-color:var(--acc);text-decoration:none;box-shadow:0 4px 14px rgba(109,40,217,.12)}
-h1{font-size:clamp(1.45rem,2.6vw,2rem);font-weight:800}
-h1 span{background:linear-gradient(90deg,#4c1d95,#8b5cf6);-webkit-background-clip:text;background-clip:text;color:transparent}
-.sub{color:var(--mut);font-size:.92rem;margin-top:6px;max-width:72ch}
-.hero{margin:4px 0 20px;background:linear-gradient(120deg,#2a1650 0%,#37206e 55%,#4a2d94 100%);border:1px solid rgba(255,255,255,.09);
-border-radius:18px;padding:26px 28px;display:flex;gap:18px;align-items:center;justify-content:space-between;flex-wrap:wrap;color:#fff;
-box-shadow:0 16px 36px -20px rgba(30,15,60,.6)}
-.hero .hl{display:flex;gap:16px;align-items:center;min-width:260px}
-.hero .hic{width:54px;height:54px;border-radius:14px;background:rgba(255,255,255,.13);display:flex;align-items:center;justify-content:center;flex:none}
-.hero h2{font-size:clamp(1.2rem,2.2vw,1.68rem);font-weight:800;letter-spacing:-.2px;line-height:1.25}
-.hero .hsub{color:#ded1f7;font-size:.85rem;margin-top:5px;max-width:62ch}
-.hero .hr{display:flex;gap:8px;flex-wrap:wrap}
-.hero .hchip{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);color:#f3eefd;font-size:.74rem;font-weight:600;
-padding:7px 12px;border-radius:999px;white-space:nowrap}
-.chips{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0 2px}
-.chip{background:var(--card);border:1px solid var(--border);border-left:4px solid #cfc4e8;border-radius:12px;padding:10px 14px;min-width:128px;
-box-shadow:0 1px 2px rgba(30,20,55,.04)}
-.chip b{font-size:1.18rem;display:block;font-variant-numeric:tabular-nums;color:var(--txt)}
-.chip small{color:var(--mut);font-size:.7rem;letter-spacing:.04em;text-transform:uppercase}
-.chip.ok{border-left-color:var(--ok)}.chip.warn{border-left-color:var(--warn)}.chip.bad{border-left-color:var(--bad)}.chip.info{border-left-color:var(--info)}
-.chip.ok b{color:var(--ok)}.chip.warn b{color:var(--warn)}.chip.bad b{color:var(--bad)}.chip.info b{color:var(--info)}
-.panel{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin-top:18px;box-shadow:0 1px 3px rgba(30,20,55,.05)}
-.panel h2{font-size:1.02rem;margin-bottom:12px;display:flex;align-items:center;gap:8px;color:var(--txt)}
-.panel h2::before{content:"";width:8px;height:8px;border-radius:2px;background:linear-gradient(135deg,#8b5cf6,#5b21b6)}
-.tools{display:flex;gap:10px;align-items:center;margin-bottom:12px;flex-wrap:wrap}
-.tools input[type=search]{background:var(--card);border:1px solid var(--border);color:var(--txt);border-radius:10px;
-padding:9px 13px;font-size:.86rem;min-width:240px;outline:none}
-.tools input[type=search]:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(109,40,217,.12)}
-.tools input[type=search]::placeholder{color:#9d92b8}
-.tools .count{color:var(--mut);font-size:.78rem}
-.tblwrap{overflow-x:auto;border:1px solid var(--border);border-radius:12px}
-table{border-collapse:collapse;width:100%;font-size:.83rem;min-width:640px}
-thead th{position:sticky;top:0;background:#f1edf9;color:#5a4d7a;text-align:left;font-weight:700;font-size:.72rem;
-letter-spacing:.04em;text-transform:uppercase;padding:10px 12px;border-bottom:1px solid var(--border);white-space:nowrap;z-index:2}
-tbody td{padding:9px 12px;border-bottom:1px solid #efeaf7;white-space:nowrap;vertical-align:middle;color:var(--txt)}
-tbody tr:hover{background:rgba(109,40,217,.05)}
-tbody tr:last-child td{border-bottom:0}
-td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
-td.ctr,th.ctr{text-align:center}
-.badge{display:inline-block;font-size:.66rem;font-weight:700;letter-spacing:.05em;padding:3px 9px;border-radius:999px}
-.b-ok{color:#166534;background:#e5f7ec;border:1px solid #9adbb6}
-.b-warn{color:#92400e;background:#fdf1d8;border:1px solid #ecd192}
-.b-bad{color:#991b1b;background:#fdeaea;border:1px solid #f3b4b4}
-.b-info{color:#4c1d95;background:#ede9fe;border:1px solid #c4b5fd}
-.b-mut{color:#4a4260;background:#f0edf6;border:1px solid #d8d0e8}
-.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.78rem;color:#3b2f5c}
-.tw{white-space:normal;min-width:180px;max-width:360px;overflow:hidden;text-overflow:ellipsis}
-.bars .row{display:grid;grid-template-columns:220px 1fr 150px;gap:12px;align-items:center;padding:7px 0;
-border-bottom:1px solid #efeaf7}
-.bars .row:last-child{border-bottom:0}
-.bars .lb{font-size:.82rem;color:#3b2f5c;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.bars .track{display:block;height:12px;background:#e9e3f5;border-radius:6px;overflow:hidden}
-.bars .fill{display:block;height:100%;border-radius:6px;background:linear-gradient(90deg,var(--acc2),#a78bfa)}
-.bars .vv{font-size:.8rem;color:var(--mut);text-align:right;font-variant-numeric:tabular-nums}
-.quick{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:12px}
-.quick a.q{display:block;background:var(--card2);border:1px solid var(--border);border-radius:13px;padding:14px 15px;
-transition:.18s;color:var(--txt)}
-.quick a.q:hover{border-color:var(--acc);transform:translateY(-2px);text-decoration:none;box-shadow:0 10px 26px rgba(109,40,217,.16)}
-.quick .qn{font-size:.66rem;color:var(--acc);font-weight:800;letter-spacing:.1em}
-.quick b{display:block;font-size:.9rem;margin:3px 0 4px}
-.quick p{color:var(--mut);font-size:.74rem;line-height:1.45}
-.docs{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
-.docs a.doc{display:flex;gap:12px;align-items:center;background:var(--card2);border:1px solid var(--border);border-radius:13px;
-padding:14px 15px;transition:.18s;color:var(--txt)}
-.docs a.doc:hover{border-color:var(--acc);transform:translateY(-2px);text-decoration:none;box-shadow:0 10px 26px rgba(109,40,217,.16)}
-.docs .dico{width:40px;height:40px;border-radius:11px;background:rgba(109,40,217,.09);display:flex;align-items:center;
-justify-content:center;flex:none;color:var(--acc)}
-.docs b{display:block;font-size:.86rem;line-height:1.3}
-.docs small{color:var(--mut);font-size:.72rem}
-.docimg{max-width:100%;border:1px solid var(--border);border-radius:12px;margin-top:10px;display:block}
-.note{color:var(--mut);font-size:.74rem;margin-top:12px;line-height:1.6}
-footer{border-top:1px solid var(--border);margin-top:34px;padding-top:16px;color:var(--mut);font-size:.76rem;
-display:flex;gap:14px;flex-wrap:wrap;justify-content:space-between}
+main{padding:26px 30px 60px;min-width:0}
+/* ============ EN-TÊTE DE PAGE D7 ============ */
+.p7-head{display:flex;align-items:flex-start;gap:22px;flex-wrap:wrap;margin-bottom:14px}
+.p7-head h1{font-size:1.75rem;letter-spacing:-.02em}
+.p7-head h1 span{background:linear-gradient(90deg,var(--acc2),#8b5cf6);-webkit-background-clip:text;background-clip:text;color:transparent}
+.p7-head .sub{color:var(--mut);font-size:.9rem;max-width:70ch;margin-top:6px}
+.p7-headnote{margin-left:auto;text-align:right;border:1px solid var(--border);border-top:3px solid var(--nc,#6d28d9);
+background:var(--card);border-radius:14px;padding:12px 18px;box-shadow:0 10px 26px -18px rgba(30,15,60,.35);min-width:150px}
+.p7-headnote b{display:block;font-size:1.45rem;font-variant-numeric:tabular-nums;color:var(--nc,#6d28d9)}
+.p7-headnote small{color:var(--mut);font-size:.72rem;text-transform:uppercase;letter-spacing:.07em}
+.p7-headnote em{display:block;font-style:normal;color:#8b7fae;font-size:.74rem;margin-top:4px}
+/* ============ STEPPER DE CAMPAGNE ============ */
+.p7-stepper{display:flex;gap:0;list-style:none;align-items:center;background:var(--card);border:1px solid var(--border);
+border-radius:14px;padding:11px 16px;margin-bottom:20px;overflow-x:auto;box-shadow:0 8px 22px -18px rgba(30,15,60,.4)}
+.p7-stepper li{display:flex;align-items:center;gap:8px;flex:none;padding-right:22px;position:relative;color:#9b90b7;font-size:.78rem;font-weight:600}
+.p7-stepper li:not(:last-child):after{content:"";position:absolute;right:8px;top:50%;width:9px;height:1px;background:#d9d0ec}
+.p7-stepper li .p7-stn{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+background:#efeaf8;color:#8b7fae;font-size:.72rem;font-weight:800;flex:none;transition:.2s}
+.p7-stepper li.on{color:var(--txt)}
+.p7-stepper li.on .p7-stn{background:linear-gradient(135deg,var(--acc),#8b5cf6);color:#fff;box-shadow:0 4px 12px rgba(109,40,217,.4)}
+.p7-stepper li.on .p7-stl{color:var(--acc2)}
+/* ============ BENTO GRID ============ */
+.p7-bento{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}
+.p7-card{grid-column:span var(--sp,6);background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px 19px;
+position:relative;box-shadow:0 10px 26px -22px rgba(30,15,60,.45);min-width:0}
+.p7-card:before{content:"";position:absolute;inset:0 0 auto;height:3px;border-radius:16px 16px 0 0;background:var(--nc,#ede8f7);opacity:.85}
+.p7-card h3{font-size:.78rem;text-transform:uppercase;letter-spacing:.1em;color:var(--mut);margin-bottom:14px;font-weight:700}
+.p7-chr{position:absolute;top:14px;right:16px;font-size:.75rem;color:var(--mut)}
+.p7-sp4{--sp:4}.p7-sp5{--sp:5}.p7-sp6{--sp:6}.p7-sp7{--sp:7}.p7-sp8{--sp:8}.p7-sp12{--sp:12}
+/* ============ JAUGE ANNULAIRE ============ */
+.p7-ring{position:relative;width:var(--sz,118px);margin:0 auto;padding-bottom:2px}
+.p7-ring svg{width:var(--sz,118px);height:var(--sz,118px);display:block}
+.p7-ringv{position:absolute;top:0;left:0;width:var(--sz,118px);height:var(--sz,118px);display:flex;flex-direction:column;
+align-items:center;justify-content:center}
+.p7-ringv b{font-size:1.3rem;font-variant-numeric:tabular-nums}
+.p7-ringv small{color:var(--mut);font-size:.66rem}
+.p7-ringl{text-align:center;font-size:.74rem;color:var(--txt);font-weight:600;margin-top:4px;line-height:1.25;max-width:var(--sz,118px);margin-left:auto;margin-right:auto}
+.p7-ringl small{display:block;color:var(--mut);font-weight:400;font-size:.7rem;margin-top:2px}
+.p7-rings{display:flex;gap:8px;justify-content:space-around;flex-wrap:wrap}
+/* ============ MINI INDICATEURS ============ */
+.p7-minis{display:grid;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:10px}
+.p7-mini{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:11px 13px}
+.p7-mini b{display:block;font-size:1.18rem;font-variant-numeric:tabular-nums}
+.p7-mini small{color:var(--mut);font-size:.7rem;line-height:1.35;display:block;margin-top:2px}
+/* ============ ÉCHELLE A→E ============ */
+.p7-scale{display:flex;gap:8px}
+.p7-scseg{position:relative;background:#f1ecf9;border-radius:10px;min-height:86px;padding:8px 9px;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end}
+.p7-scfill{position:absolute;left:0;bottom:0;top:auto;height:5px;border-radius:0 0 10px 10px;transition:width .4s}
+.p7-sclab{position:relative}
+.p7-sclab b{font-size:1.05rem;display:block}
+.p7-sclab span{display:block;color:var(--mut);font-size:.64rem;line-height:1.3}
+.p7-sclab em{font-style:normal;font-weight:800;font-size:1rem;color:var(--acc2)}
+/* ============ PODIUM ============ */
+.p7-podium{display:flex;align-items:flex-end;justify-content:center;gap:14px;padding:6px 0 2px}
+.p7-pod{display:flex;flex-direction:column;align-items:center;gap:5px;text-align:center;width:31%}
+.p7-pod b{font-size:.82rem;line-height:1.2}
+.p7-pod small{color:var(--mut);font-size:.68rem}
+.p7-pav{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:.82rem;box-shadow:0 6px 16px -6px rgba(30,15,60,.5)}
+.p7-pbar{width:100%;max-width:110px;border-radius:9px 9px 0 0;background:linear-gradient(180deg,#efe9fa,#e2d8f3);margin-top:6px}
+/* ============ PROGRESSION / CIBLE ============ */
+.p7-goal{margin:11px 0}
+.p7-gtop{display:flex;justify-content:space-between;gap:10px;font-size:.8rem;margin-bottom:5px}
+.p7-glb{color:var(--txt);font-weight:600}
+.p7-gv{color:var(--mut);font-variant-numeric:tabular-nums;white-space:nowrap}
+.p7-gtrack{position:relative;height:10px;background:#efeaf8;border-radius:99px}
+.p7-gfill{position:absolute;left:0;top:0;bottom:0;border-radius:99px;transition:width .4s}
+.p7-gt{position:absolute;top:-3px;bottom:-3px;width:2px;background:#3f3763;border-radius:2px}
+/* ============ BADGES ============ */
+.p7-nb{display:inline-flex;align-items:center;gap:4px;font-weight:800;font-variant-numeric:tabular-nums;
+border-radius:99px;padding:3px 9px;font-size:.8rem;border:1px solid transparent;white-space:nowrap}
+.p7-nb i{font-style:normal;font-size:.62rem;opacity:.75;font-weight:700}
+.p7-nb-a{background:#f3eefe;color:#7c3aed;border-color:#ddd0f9}
+.p7-nb-b{background:#ecfdf3;color:#15803d;border-color:#d3f5df}
+.p7-nb-c{background:#fdf6ec;color:#b45309;border-color:#f5e6c8}
+.p7-nb-d{background:#fff1e8;color:#c2410c;border-color:#fcdcc5}
+.p7-nb-e{background:#fdecec;color:#dc2626;border-color:#f8d3d3}
+.p7-nb-x{background:#f1ecf9;color:#635b7e}
+.p7-tag{display:inline-block;border-radius:99px;padding:3px 10px;font-size:.72rem;font-weight:700;border:1px solid}
+.p7-t-ok{background:#ecfdf3;color:#15803d;border-color:#cdebda}
+.p7-t-warn{background:#fdf6ec;color:#b45309;border-color:#f5e6c8}
+.p7-t-bad{background:#fdecec;color:#dc2626;border-color:#f8d3d3}
+.p7-t-info{background:#eef2ff;color:#4f46e5;border-color:#dbe1fd}
+.p7-t-mut{background:#f1ecf9;color:#635b7e;border-color:#e2dcf0}
+.p7-delta{font-weight:800;font-size:.78rem;font-variant-numeric:tabular-nums;white-space:nowrap}
+.p7-dup{color:#15803d}.p7-ddn{color:#dc2626}.p7-dz{color:#635b7e}
+.p7-av{display:inline-flex;width:26px;height:26px;border-radius:50%;background:#ede5fb;color:#5b21b6;align-items:center;
+justify-content:center;font-size:.62rem;font-weight:800;margin-right:8px;flex:none;vertical-align:middle}
+/* ============ TABLEAU ============ */
+.p7-tools{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.p7-tools input{flex:1;max-width:340px;background:var(--card2);border:1px solid var(--border);border-radius:10px;
+padding:9px 13px;font-size:.86rem;outline:none;transition:.2s;color:var(--txt)}
+.p7-tools input:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(109,40,217,.12)}
+.p7-count{color:var(--mut);font-size:.75rem}
+.p7-tblwrap{overflow-x:auto;border:1px solid var(--border);border-radius:12px}
+.p7-card table{width:100%;border-collapse:collapse;font-size:.83rem;min-width:520px}
+.p7-card thead th{background:#faf8fd;color:#7d74a0;font-size:.66rem;text-transform:uppercase;letter-spacing:.07em;
+text-align:left;padding:10px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
+.p7-card tbody td{padding:9px 12px;border-bottom:1px solid #f0ebf8;vertical-align:middle}
+.p7-card tbody tr:last-child td{border-bottom:0}
+.p7-card tbody tr:hover{background:#faf8fe}
+.p7-card td.num,.p7-card th.num{text-align:right}
+.p7-card td.ctr,.p7-card th.ctr{text-align:center}
+.p7-tw{vertical-align:middle}
+/* ============ 360° ============ */
+.p7-s360{margin:10px 0}
+.p7-s360t{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px;font-size:.85rem}
+.p7-s360bar{display:flex;height:14px;border-radius:99px;overflow:hidden;gap:2px}
+.p7-s360bar span{border-radius:3px;min-width:8px;transition:width .4s}
+.p7-s360l{display:flex;justify-content:space-between;color:var(--mut);font-size:.7rem;margin-top:5px}
+.p7-s360l b{color:var(--txt);font-variant-numeric:tabular-nums}
+/* ============ TIMELINE ============ */
+.p7-timeline{list-style:none;position:relative;padding-left:24px}
+.p7-timeline:before{content:"";position:absolute;left:7px;top:8px;bottom:8px;width:2px;background:#e6ddf5}
+.p7-timeline li{position:relative;padding:9px 0}
+.p7-tldot{position:absolute;left:-24px;top:14px;width:16px;height:16px;border-radius:50%;background:#fff;border:4px solid #8b5cf6;box-shadow:0 0 0 3px #f1eafb}
+.p7-tlbody{display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap}
+.p7-tldate{font-size:.72rem;color:var(--mut);font-variant-numeric:tabular-nums;min-width:86px;padding-top:3px}
+.p7-tlmain{flex:1;min-width:180px}
+.p7-tlmain b{font-size:.88rem;display:block}
+.p7-tlmain small{color:var(--mut);font-size:.74rem}
+.p7-tlside{display:flex;align-items:center;gap:8px}
+/* ============ BARRES MENSUELLES ============ */
+.p7-months{display:flex;align-items:flex-end;gap:12px;height:150px;padding:6px 4px 0}
+.p7-mcol{flex:1;display:flex;align-items:flex-end;justify-content:center;gap:3px;height:100%;position:relative}
+.p7-mcol small{position:absolute;bottom:-20px;left:0;right:0;text-align:center;color:var(--mut);font-size:.66rem}
+.p7-mb{width:14%;min-width:7px;border-radius:4px 4px 0 0;transition:height .4s}
+.p7-mleg{display:flex;gap:14px;flex-wrap:wrap;margin-top:28px;color:var(--mut);font-size:.72rem}
+.p7-mleg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+/* ============ BARRES HORIZONTALES ============ */
+.p7-brow{display:grid;grid-template-columns:150px 1fr 84px;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid #f0ebf8;font-size:.82rem}
+.p7-brow:last-child{border-bottom:0}
+.p7-blb{color:var(--txt);font-weight:600}
+.p7-btrack{height:11px;background:#efeaf8;border-radius:99px;display:block;overflow:hidden}
+.p7-bfill{display:block;height:100%;border-radius:99px;transition:width .4s}
+.p7-bvv{text-align:right;color:var(--mut);font-variant-numeric:tabular-nums;white-space:nowrap}
+/* ============ DOCUMENTS ============ */
+.p7-docs{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:11px}
+.p7-doc{display:flex;gap:12px;align-items:center;background:var(--card2);border:1px solid var(--border);border-radius:12px;
+padding:13px 14px;transition:.18s;color:var(--txt)}
+.p7-doc:hover{text-decoration:none;border-color:var(--acc);box-shadow:0 8px 20px -12px rgba(109,40,217,.35);transform:translateY(-1px)}
+.p7-dico{width:38px;height:38px;border-radius:10px;background:#f3eefe;display:flex;align-items:center;justify-content:center;font-size:1.05rem;flex:none}
+.p7-dtx b{display:block;font-size:.8rem;line-height:1.3}
+.p7-dtx small{color:var(--mut);font-size:.68rem}
+.p7-img{display:block;max-width:100%;border:1px solid var(--border);border-radius:12px;margin:10px 0}
+/* ============ NOMENCLATURES ============ */
+.p7-noms{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:12px}
+.p7-nom{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:12px 14px}
+.p7-nom b{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--acc2);display:block;margin-bottom:8px}
+.p7-nom ul{list-style:none}
+.p7-nom li{font-size:.76rem;color:var(--txt);padding:3px 0;border-bottom:1px dashed #ece6f7}
+.p7-nom li:last-child{border-bottom:0}
+.p7-nom li:before{content:"—";color:#b9a8e0;margin-right:6px}
+/* ============ FICHES (bulletins employé) ============ */
+.p7-fiches{display:grid;grid-template-columns:repeat(auto-fill,minmax(305px,1fr));gap:12px}
+.p7-fiche{background:var(--card2);border:1px solid var(--border);border-radius:14px;padding:13px 14px}
+.p7-fichetop{display:flex;align-items:center;gap:10px}
+.p7-fichetop>div{flex:1;min-width:0}
+.p7-fichetop b{font-size:.86rem;display:block}
+.p7-fichetop small{color:var(--mut);font-size:.7rem;display:block;line-height:1.35}
+.p7-fichebody{display:flex;gap:12px;align-items:center;padding:10px 4px 0}
+.p7-fichebody .p7-ring{padding-bottom:2px}
+.p7-fichekpi{flex:1;min-width:0}
+.p7-fichebadges{display:flex;gap:6px;flex-wrap:wrap;align-items:center;font-size:.78rem}
+/* ============ CARTES SERVICE ============ */
+.p7-svcs{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:12px}
+.p7-svc{background:var(--card2);border:1px solid var(--border);border-radius:14px;padding:13px 14px;text-align:center}
+.p7-svctop b{font-size:.82rem;display:block}
+.p7-svctop small{color:var(--mut);font-size:.68rem}
+.p7-svc .p7-ring{padding-bottom:2px}
+.p7-svcg{text-align:left;margin-top:8px}
+.p7-svcp{margin-top:8px;font-size:.74rem;color:var(--mut)}
+/* ============ LIGNES ÉVOLUTION ============ */
+.p7-evl{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px dashed #ece6f7}
+.p7-evl:last-child{border-bottom:0}
+.p7-evmain{flex:1;min-width:0}
+.p7-evmain b{font-size:.82rem;display:block}
+.p7-evmain small{color:var(--mut);font-size:.7rem}
+/* ============ NOTE / FOOTER ============ */
+.p7-note{color:#8b7fae;font-size:.74rem;margin-top:12px;line-height:1.5}
+footer{display:flex;gap:14px;flex-wrap:wrap;justify-content:space-between;color:var(--mut);font-size:.74rem;
+border-top:1px solid var(--border);margin-top:34px;padding-top:16px}
 @media(max-width:940px){.shell{grid-template-columns:1fr}aside{position:static;height:auto;border-right:0;
-border-bottom:1px solid var(--border)}main{padding:20px 16px 50px}.bars .row{grid-template-columns:130px 1fr 110px}}
+border-bottom:1px solid var(--border)}main{padding:20px 14px 50px}
+.p7-card{grid-column:span 12 !important}
+.p7-brow{grid-template-columns:105px 1fr 76px}
+.p7-headnote{margin-left:0;text-align:left;width:100%}
+.p7-headnote b{font-size:1.2rem}}
 </style>
 </head>
 <body>
@@ -221,35 +333,23 @@ border-bottom:1px solid var(--border)}main{padding:20px 16px 50px}.bars .row{gri
 })();
 </script>
 <div class="shell">
-<aside><div class="bmark"><div class="logo">AR</div><div><b>Admina-RH</b><small>Domaine 7</small></div></div><div class="grp">Pilotage</div><a class="nav" href="/Domaine7_Evaluation_Gestion_Performance/"><span class="dot"></span>Tableau de Bord</a><a class="nav" href="/Domaine7_Evaluation_Gestion_Performance/tdb-individuel/"><span class="dot"></span>TdB Individuel</a><a class="nav" href="/Domaine7_Evaluation_Gestion_Performance/bilan-service/"><span class="dot"></span>Bilan par Service</a><a class="nav" href="/Domaine7_Evaluation_Gestion_Performance/historique-eval/"><span class="dot"></span>Historique Évaluations</a><div class="grp">Évaluations</div><a class="nav" href="/Domaine7_Evaluation_Gestion_Performance/grille-annuelle/"><span class="dot"></span>Grille Annuelle</a><a class="nav" href="/Domaine7_Evaluation_Gestion_Performance/entretiens-annuels/"><span class="dot"></span>Entretiens Annuels</a><a class="nav" href="/Domaine7_Evaluation_Gestion_Performance/evaluation-essai/"><span class="dot"></span>Évaluation à l&#x27;Essai</a><a class="nav" href="/Domaine7_Evaluation_Gestion_Performance/evaluation-360/"><span class="dot"></span>Évaluation 360°</a><div class="grp">Objectifs &amp; KPI</div><a class="nav" href="/Domaine7_Evaluation_Gestion_Performance/objectifs-smart/"><span class="dot"></span>Objectifs SMART</a><a class="nav" href="/Domaine7_Evaluation_Gestion_Performance/kpi-individuels/"><span class="dot"></span>KPI Individuels</a><a class="nav" href="/Domaine7_Evaluation_Gestion_Performance/objectifs-trimestre/"><span class="dot"></span>Objectifs par Trimestre</a><div class="grp">Amélioration &amp; Mérite</div><a class="nav" href="/Domaine7_Evaluation_Gestion_Performance/plan-amelioration/"><span class="dot"></span>Plans Amélioration (PAP)</a><a class="nav" href="/Domaine7_Evaluation_Gestion_Performance/classement-employes/"><span class="dot"></span>Classement Employés</a><a class="nav" href="/Domaine7_Evaluation_Gestion_Performance/primes-performance/"><span class="dot"></span>Primes &amp; Mérite</a><a class="nav" href="/Domaine7_Evaluation_Gestion_Performance/formation-performance/"><span class="dot"></span>Formation &amp; Performance</a><div class="grp">Suivi &amp; Référentiels</div><a class="nav" href="/Domaine7_Evaluation_Gestion_Performance/suivi-essai-mensuel/"><span class="dot"></span>Suivi Essai Mensuel</a><a class="nav" href="/Domaine7_Evaluation_Gestion_Performance/rapports-evaluation/"><span class="dot"></span>Rapports Évaluation</a><a class="nav on" href="/Domaine7_Evaluation_Gestion_Performance/decisions-rh/"><span class="dot"></span>Décisions RH</a><a class="nav" href="/Domaine7_Evaluation_Gestion_Performance/referentiel/"><span class="dot"></span>Référentiel &amp; Nomenclatures</a><a class="nav" href="/Domaine7_Evaluation_Gestion_Performance/interconnexions/"><span class="dot"></span>Interconnexions &amp; Documents</a><div class="home"><a class="nav" href="/"><span class="dot"></span>Tous les domaines</a></div></aside>
+<aside><div class="bmark"><div class="logo">AR</div><div><b>Admina-RH</b><small>Domaine 7</small></div></div><div class="grp">Pilotage</div><a class="nav" href="/Domaine7_Evaluation_Gestion_Performance/"><span class="dot"></span>Tableau de Bord</a><a class="nav" href="/Domaine7_Evaluation_Gestion_Performance/tdb-individuel/"><span class="dot"></span>TdB Individuel</a><a class="nav" href="/Domaine7_Evaluation_Gestion_Performance/bilan-service/"><span class="dot"></span>Bilan par Service</a><a class="nav" href="/Domaine7_Evaluation_Gestion_Performance/historique-eval/"><span class="dot"></span>Historique Évaluations</a><div class="grp">Évaluations</div><a class="nav" href="/Domaine7_Evaluation_Gestion_Performance/grille-annuelle/"><span class="dot"></span>Grille Annuelle</a><a class="nav" href="/Domaine7_Evaluation_Gestion_Performance/entretiens-annuels/"><span class="dot"></span>Entretiens Annuels</a><a class="nav" href="/Domaine7_Evaluation_Gestion_Performance/evaluation-essai/"><span class="dot"></span>Évaluation à l'Essai</a><a class="nav" href="/Domaine7_Evaluation_Gestion_Performance/evaluation-360/"><span class="dot"></span>Évaluation 360°</a><div class="grp">Objectifs &amp; KPI</div><a class="nav" href="/Domaine7_Evaluation_Gestion_Performance/objectifs-smart/"><span class="dot"></span>Objectifs SMART</a><a class="nav" href="/Domaine7_Evaluation_Gestion_Performance/kpi-individuels/"><span class="dot"></span>KPI Individuels</a><a class="nav" href="/Domaine7_Evaluation_Gestion_Performance/objectifs-trimestre/"><span class="dot"></span>Objectifs par Trimestre</a><div class="grp">Amélioration &amp; Mérite</div><a class="nav" href="/Domaine7_Evaluation_Gestion_Performance/plan-amelioration/"><span class="dot"></span>Plans Amélioration (PAP)</a><a class="nav" href="/Domaine7_Evaluation_Gestion_Performance/classement-employes/"><span class="dot"></span>Classement Employés</a><a class="nav" href="/Domaine7_Evaluation_Gestion_Performance/primes-performance/"><span class="dot"></span>Primes &amp; Mérite</a><a class="nav" href="/Domaine7_Evaluation_Gestion_Performance/formation-performance/"><span class="dot"></span>Formation &amp; Performance</a><div class="grp">Suivi &amp; Référentiels</div><a class="nav" href="/Domaine7_Evaluation_Gestion_Performance/suivi-essai-mensuel/"><span class="dot"></span>Suivi Essai Mensuel</a><a class="nav" href="/Domaine7_Evaluation_Gestion_Performance/rapports-evaluation/"><span class="dot"></span>Rapports Évaluation</a><a class="nav on" href="/Domaine7_Evaluation_Gestion_Performance/decisions-rh/"><span class="dot"></span>Décisions RH</a><a class="nav" href="/Domaine7_Evaluation_Gestion_Performance/referentiel/"><span class="dot"></span>Référentiel &amp; Nomenclatures</a><a class="nav" href="/Domaine7_Evaluation_Gestion_Performance/interconnexions/"><span class="dot"></span>Interconnexions &amp; Documents</a><div class="home"><a class="nav" href="/"><span class="dot"></span>Tous les domaines</a></div></aside>
 <main id="d7-main">
   <div class="topbar"><span class="crumb"><a href="/">Tous les domaines</a> / <a href="/Domaine7_Evaluation_Gestion_Performance/">Domaine 7</a> / Décisions RH</span>
-    <a class="tohub" href="/">← Présentation des 31 domaines</a>
+<a class="tohub" href="/">← Présentation des 31 domaines</a>
   </div>
-  <h1><span>Décisions RH</span></h1>
-  <p class="sub">Décisions issues de l&#x27;évaluation : promotions, primes de mérite, ruptures, montants associés et dates de mise en œuvre.</p>
-<div class="hero"><div class="hl"><span class="hic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#f3eefd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><div><h2>Décisions RH Post-Évaluation</h2><p class="hsub">Décisions issues de l&#x27;évaluation : promotions, primes de mérite, ruptures, montants associés et dates de mise en œuvre.</p></div></div><div class="hr"><span class="hchip">5 décisions</span></div></div>
-<div class="chips"><div class="chip"><b>5</b><small>Décisions</small></div><div class="chip ok"><b>1</b><small>Promotions</small></div><div class="chip info"><b>89 500 FCFA</b><small>Montants associés</small></div></div><div class="panel"><h2>Décisions RH post-évaluation</h2><div class="tools"><input type="search" placeholder="Rechercher (nom, département, statut…)" aria-label="Filtrer le tableau"><span class="count"></span></div><div class="tblwrap"><table><thead><tr><th>N°</th><th>Matricule</th><th>Nom Employé</th><th>Département</th><th>Année</th><th class="num">Note Globale (/20)</th><th>Décision RH</th><th class="num">Montant Associé (FCFA)</th><th>Date Mise en Œuvre</th></tr></thead><tbody><tr><td><span class="mono">DEC-001</span></td><td><span class="mono">EMP-2025-002</span></td><td>Tchinda Armand</td><td>Informatique</td><td>2025</td><td class="num">17.7</td><td class="tw"><span class="tw">Promotion + prime merite</span></td><td class="num">37 500 FCFA</td><td>01/07/2025</td></tr><tr><td><span class="mono">DEC-002</span></td><td><span class="mono">EMP-2025-001</span></td><td>Nganou Clarisse</td><td>Ressources Humaines</td><td>2025</td><td class="num">17</td><td class="tw"><span class="tw">Maintien + prime rendement</span></td><td class="num">42 000 FCFA</td><td>01/07/2025</td></tr><tr><td><span class="mono">DEC-003</span></td><td><span class="mono">EMP-2025-003</span></td><td>Fotso Marguerite</td><td>Finance &amp; Comptabilite</td><td>2025</td><td class="num">17.3</td><td class="tw"><span class="tw">Augmentation salariale 5%</span></td><td class="num">10 000 FCFA</td><td>01/07/2025</td></tr><tr><td><span class="mono">DEC-004</span></td><td><span class="mono">EMP-2025-020</span></td><td>Tagne Rene</td><td>Cuisine &amp; Restauration</td><td>2025</td><td class="num">13</td><td class="tw"><span class="tw">PAP obligatoire + pas de prime</span></td><td class="num">0 FCFA</td><td>20/06/2025</td></tr><tr><td><span class="mono">DEC-005</span></td><td><span class="mono">EMP-2025-033</span></td><td>Tamo Elvis</td><td>Cuisine &amp; Restauration</td><td>2025</td><td class="num">8</td><td class="tw"><span class="tw">Rupture periode essai</span></td><td class="num">0 FCFA</td><td>15/07/2025</td></tr></tbody></table></div></div><script>
+  <ol class="p7-stepper" aria-label="Phases de la campagne d'évaluation"><li class=""><span class="p7-stn">1</span><span class="p7-stl">Planification</span></li><li class=""><span class="p7-stn">2</span><span class="p7-stl">Collecte des notes</span></li><li class=""><span class="p7-stn">3</span><span class="p7-stl">Entretiens</span></li><li class="on"><span class="p7-stn">4</span><span class="p7-stl">Analyse &amp; classement</span></li><li class=""><span class="p7-stn">5</span><span class="p7-stl">Amélioration</span></li></ol><div class="p7-head"><h1><span>Décisions RH</span></h1><p class="sub">Les décisions prises à l'issue de la campagne : promotions, augmentations, maintiens, PAP obligatoires et ruptures — avec leurs montants associés.</p><div class="p7-headnote" style="--nc:#7c3aed">
+<div><b>89 500 FCFA</b><small>Montants associés</small></div><em>5 décisions</em></div></div><div class="p7-bento"><section class="p7-card "><h3>Registre des décisions</h3><div class="p7-tools"><input id="f-dec" type="search" placeholder="Rechercher…" aria-label="Filtrer le tableau"/>
+<span class="p7-count" id="f-dec-c"></span></div><div class="p7-tblwrap"><table id="t-dec"><thead><tr><th class="">N°</th><th class="">Nom Employe</th><th class="">Departement</th><th class="">Annee</th><th class="num">Note Globale (/20)</th><th class="ctr">Decision RH</th><th class="">Montant Associate (FCFA)</th><th class="">Date Mise en Oeuvre</th></tr></thead><tbody><tr><td class="">DEC-001</td><td class="">Tchinda Armand</td><td class="">Informatique</td><td class="">2025</td><td class="num"><span class="p7-nb p7-nb-a" title="Échelle A">17.7<i>A</i></span></td><td class="ctr"><span class="p7-tag p7-t-mut">Promotion + prime merite</span></td><td class="">37500</td><td class="">2025-07-01</td></tr><tr><td class="">DEC-002</td><td class="">Nganou Clarisse</td><td class="">Ressources Humaines</td><td class="">2025</td><td class="num"><span class="p7-nb p7-nb-a" title="Échelle A">17<i>A</i></span></td><td class="ctr"><span class="p7-tag p7-t-mut">Maintien + prime rendement</span></td><td class="">42000</td><td class="">2025-07-01</td></tr><tr><td class="">DEC-003</td><td class="">Fotso Marguerite</td><td class="">Finance & Comptabilite</td><td class="">2025</td><td class="num"><span class="p7-nb p7-nb-a" title="Échelle A">17.3<i>A</i></span></td><td class="ctr"><span class="p7-tag p7-t-mut">Augmentation salariale 5%</span></td><td class="">10000</td><td class="">2025-07-01</td></tr><tr><td class="">DEC-004</td><td class="">Tagne Rene</td><td class="">Cuisine & Restauration</td><td class="">2025</td><td class="num"><span class="p7-nb p7-nb-c" title="Échelle C">13<i>C</i></span></td><td class="ctr"><span class="p7-tag p7-t-mut">PAP obligatoire + pas de prime</span></td><td class="">0</td><td class="">2025-06-20</td></tr><tr><td class="">DEC-005</td><td class="">Tamo Elvis</td><td class="">Cuisine & Restauration</td><td class="">2025</td><td class="num"><span class="p7-nb p7-nb-e" title="Échelle E">8<i>E</i></span></td><td class="ctr"><span class="p7-tag p7-t-bad">Rupture periode essai</span></td><td class="">0</td><td class="">2025-07-15</td></tr></tbody></table></div><script>
 (function(){
-  var inp=document.querySelector('.tools input[type=search]');
-  if(!inp)return;
-  var tb=document.querySelector('.tblwrap tbody');
-  var cnt=document.querySelector('.tools .count');
-  var total=tb?tb.querySelectorAll('tr').length:0;
-  function upd(){
-    var q=inp.value.trim().toLowerCase(),n=0;
-    if(tb){tb.querySelectorAll('tr').forEach(function(tr){
-      var ok=!q||tr.textContent.toLowerCase().indexOf(q)>=0;
-      tr.style.display=ok?'':'none';if(ok)n++;});}
-    if(cnt)cnt.textContent=n+' / '+total+' lignes';
-  }
-  inp.addEventListener('input',upd);upd();
+var i=document.getElementById('f-dec');if(!i)return;
+var w=i.closest('.p7-card'),rows=[].slice.call(w.querySelectorAll('tbody tr')),c=document.getElementById('f-dec-c');
+function up(){var q=i.value.trim().toLowerCase(),n=0;rows.forEach(function(r){var hit=!q||(r.textContent||'').toLowerCase().indexOf(q)>-1;r.style.display=hit?'':'none';if(hit)n++;});
+if(c)c.textContent=q?(n+' / '+rows.length+' lignes'):'';}
+i.addEventListener('input',up);up();
 })();
-</script><p class="note">Le classeur compte les décisions par type (COUNTIF « *Promotion* », « *Rupture* ») — reproduits dans les compteurs ci-dessus.</p>
-<footer>
-    <span>Source : classeur <b>Domaine7_Evaluation_Gestion_Performance.xlsx</b> — feuille « 18-Decisions RH Post-Eval. » · valeurs calculées selon les formules du classeur</span>
-    <span>Admina-RH · Hôtel 4★ — plateforme RH</span>
-  </footer>
+</script></section><section class="p7-card " style="--nc:#b45309"><h3>Nature des décisions</h3><div class="p7-minis"><div class="p7-mini "><b>1</b><small>Promotion</small></div><div class="p7-mini "><b>2</b><small>Augmentation / Maintien</small></div><div class="p7-mini "><b>1</b><small>PAP</small></div><div class="p7-mini "><b>1</b><small>Rupture</small></div></div><p class="p7-note">Une rupture de période d'essai (Tamo Elvis, note 8/20) et un PAP obligatoire (Tagne René, note 13/20) complètent les récompenses.</p></section></div>
+  <footer><span>Admina-RH · Domaine 7 — Évaluation &amp; Gestion de la Performance</span><span>Réplique fidèle du classeur Excel · campagne 2025</span></footer>
 </main>
 </div>
 <script>
