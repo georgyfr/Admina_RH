@@ -48,6 +48,8 @@ import { t as HEA } from "./HourglassEmpty-HIf4jpB0.js";
 import { t as SCH } from "./Schedule-C7p8NDIg.js";
 import { t as RCPT } from "./ReceiptLong-tLozChDd.js";
 import { t as GVL } from "./Gavel-D87BpYZK.js";
+import { t as TUNE } from "./Tune-D67V1qnY.js";
+import { t as HIS } from "./History-BcPnGU_q.js";
 var Q = e(t(), 1),
   $ = n(),
   re = {
@@ -968,8 +970,9 @@ function sldStoreMeta() {
 function sldReport(empId, meta) {
   return (meta && meta.reports && meta.reports[empId]) || 0;
 }
-function sldDroit(emp, annee) {
-  var base = emp && emp.categorie === `Cadre` ? 30 : 26,
+function sldDroit(emp, annee, P) {
+  if (!P) P = SLD3_DEF;
+  var base = emp && emp.categorie === `Cadre` ? (P.baseCadre || 30) : (P.baseAutre || 26),
     em = new Date(emp.date_embauche),
     moisT = 12;
   if (em.getFullYear() === annee) moisT = 12 - em.getMonth();
@@ -977,12 +980,83 @@ function sldDroit(emp, annee) {
   var droit = Math.round((base * moisT) / 12);
   return { droit: droit, base: base, prorata: droit < base ? 1 : 0 };
 }
-function sldStatut(m) {
+function sldStatut(m, P) {
+  if (!P) P = SLD3_DEF;
+  var sS = P.seuilSous == null ? 40 : P.seuilSous,
+    sT = P.seuilTendu == null ? 75 : P.seuilTendu;
   if (m.prev < 0 || m.dispo < 0) return { key: `critique`, label: `Critique`, color: `error`, filled: !0 };
-  if (m.taux > 75) return { key: `tendu`, label: `Tendu`, color: `warning`, filled: !0 };
-  if (m.taux < 40) return { key: `sousUtilise`, label: `Sous-utilisé`, color: `info`, filled: !1 };
+  if (m.taux > sT) return { key: `tendu`, label: `Tendu`, color: `warning`, filled: !0 };
+  if (m.taux < sS) return { key: `sousUtilise`, label: `Sous-utilisé`, color: `info`, filled: !1 };
   return { key: `sain`, label: `Sain`, color: `success`, filled: !1 };
 }
+/* ================================================================
+   PACK COCKPIT V3 — paramètres persistants, ajustements + journal
+   d'audit, échéance légale art. 89 CT, indemnité compensatrice
+   art. 90 CT. Stockage dédié : admina_d2_soldes_v3 (indépendant du
+   store Congés V2 et du store Absences V2).
+   ================================================================ */
+var SLD3_LS = `admina_d2_soldes_v3`;
+var SLD3_DEF = { seuilSous: 40, seuilTendu: 75, baseCadre: 30, baseAutre: 26, coutFixe: 20000, coutFixeOn: 0 };
+function sld3Store() {
+  var d = { v: 1, ajust: [], meta: { parametres: Object.assign({}, SLD3_DEF) } };
+  try {
+    var raw = localStorage.getItem(SLD3_LS);
+    if (raw) {
+      var st = JSON.parse(raw);
+      if (st && Array.isArray(st.ajust)) {
+        d.ajust = st.ajust;
+        d.meta.parametres = Object.assign({}, SLD3_DEF, (st.meta && st.meta.parametres) || {});
+      }
+    }
+  } catch (err) {}
+  return d;
+}
+function sld3Write(st) {
+  try { localStorage.setItem(SLD3_LS, JSON.stringify(st)); } catch (err) {}
+}
+function sld3Params() {
+  return sld3Store().meta.parametres;
+}
+function sld3AjustEmp(st, empId, annee) {
+  var n = 0;
+  (st.ajust || []).forEach((x) => {
+    if (x.emp_id === empId && (annee == null || String(x.annee) === String(annee))) n += x.jours;
+  });
+  return n;
+}
+function sldCoutJour(emp, P) {
+  if (!P) P = SLD3_DEF;
+  return P.coutFixeOn ? Number(P.coutFixe) || 0 : (emp && emp.salaire_brut ? emp.salaire_brut / 26 : 0);
+}
+function sldIndemnite(m, P) {
+  return Math.max(m.dispo, 0) * sldCoutJour(m.emp, P);
+}
+/* Échéance légale art. 89 CT : les droits ouverts au titre d'un exercice
+   doivent être consommés dans les 12 mois. Le report N-1 affiché sur
+   l'exercice N provient des droits de N-1 → échéance = 31/12 de N.
+   Les jours pris consomment en priorité le report (FIFO légal des droits
+   les plus anciens). */
+function sldEcheance(m, anneeRef) {
+  if (!m || m.report <= 0) return null;
+  var restant = Math.max(0, m.report - Math.max(m.pris, 0));
+  if (restant <= 0) return null;
+  var ech = new Date(anneeRef, 11, 31),
+    auj = new Date(),
+    jr = Math.ceil((ech - auj) / 864e5);
+  return {
+    restant: restant,
+    echeance: `31/12/` + anneeRef,
+    jrest: jr,
+    expire: jr < 0,
+    urgence: jr < 0 ? `expiree` : jr <= 90 ? `echoire` : `info`,
+  };
+}
+var SLD3_AJUST_TYPES = {
+  recuperation: [`Récupération (jour férié travaillé, repos compensateur)`, 1],
+  regularisation: [`Régularisation comptable`, 0],
+  sans_solde: [`Congé sans solde (déduit du solde)`, -1],
+  correction: [`Correction d'erreur de saisie`, 0],
+};
 function sldHash(s) {
   var h = 0;
   for (var i2 = 0; i2 < s.length; i2++) h = ((h * 31 + s.charCodeAt(i2)) & 0x7fffffff) >>> 0;
@@ -1016,6 +1090,28 @@ function sldAvatar(emp, size, fs) {
 }
 function sldFCFA(n) {
   return String(Math.round(n || 0)).replace(/\B(?=(\d{3})+(?!\d))/g, ` `) + ` FCFA`;
+}
+function sldSigne(n) {
+  return n > 0 ? `+` + n : String(n);
+}
+function sldSpark(pts) {
+  var w = 260,
+    h = 54,
+    mx = Math.max.apply(null, pts.concat([1])),
+    n = pts.length;
+  var path = pts
+    .map((p2, idx) => (idx === 0 ? `M` : `L`) + ((idx / (n - 1)) * (w - 8) + 4).toFixed(1) + `,` + (h - 6 - (p2 / mx) * (h - 12)).toFixed(1))
+    .join(` `);
+  return (0, $.jsxs)(`svg`, {
+    viewBox: `0 0 ` + w + ` ` + h,
+    width: `100%`,
+    height: h,
+    preserveAspectRatio: `none`,
+    children: [
+      (0, $.jsx)(`path`, { d: path + ` L` + (w - 4) + `,` + (h - 2) + ` L4,` + (h - 2) + ` Z`, fill: `rgba(126,63,242,.12)`, stroke: `none` }),
+      (0, $.jsx)(`path`, { d: path, fill: `none`, stroke: `#7e3ff2`, strokeWidth: 2 }),
+    ],
+  });
 }
 
 function SldKpi(pg) {
@@ -1078,8 +1174,8 @@ function sldBarre(pct, couleur) {
     ],
   });
 }
-function sldChipStatut(m) {
-  var st = sldStatut(m);
+function sldChipStatut(m, P) {
+  var st = sldStatut(m, P);
   return (0, $.jsx)(T, {
     label: st.label,
     size: `small`,
@@ -1093,8 +1189,8 @@ function sldChipDemande(st) {
     x2 = mp[st] || [st, `default`];
   return (0, $.jsx)(T, { label: x2[0], size: `small`, color: x2[1], variant: `outlined`, sx: { fontWeight: 700, fontSize: `0.7rem` } });
 }
-function sldAlertePerso(m) {
-  var st = sldStatut(m);
+function sldAlertePerso(m, P) {
+  var st = sldStatut(m, P);
   if (st.key === `critique`)
     return (0, $.jsx)(c, {
       severity: `error`,
@@ -1140,8 +1236,35 @@ function SoldesV2() {
     pp = stPp[0],
     setPp = stPp[1],
     stDet = (0, Q.useState)(null),
-    detail = stDet[0],
+    detId = stDet[0],
     setDetail = stDet[1],
+    stAdj = (0, Q.useState)(null),
+    adj = stAdj[0],
+    setAdj = stAdj[1],
+    stAdjF = (0, Q.useState)({ type: `recuperation`, sens: 1, jours: 1, motif: `` }),
+    adjF = stAdjF[0],
+    setAdjF = stAdjF[1],
+    stSimu = (0, Q.useState)(0),
+    simu = stSimu[0],
+    setSimu = stSimu[1],
+    stPol = (0, Q.useState)({ politique: `integrale`, plafond: 10 }),
+    pol = stPol[0],
+    setPol = stPol[1],
+    stJrn = (0, Q.useState)(0),
+    jrn = stJrn[0],
+    setJrn = stJrn[1],
+    stPar = (0, Q.useState)(0),
+    par = stPar[0],
+    setPar = stPar[1],
+    stEche = (0, Q.useState)(`tous`),
+    echeF = stEche[0],
+    setEche = stEche[1],
+    stCh = (0, Q.useState)(1),
+    chOpen = stCh[0],
+    setCh = stCh[1],
+    stP = (0, Q.useState)(sld3Params()),
+    P = stP[0],
+    setP = stP[1],
     stSnk = (0, Q.useState)(null),
     snack = stSnk[0],
     setSnack = stSnk[1],
@@ -1156,9 +1279,10 @@ function SoldesV2() {
     var DEM = sldDemandes(),
       FER = sldFset(),
       meta = sldStoreMeta(),
+      ST = sld3Store(),
       anneeSel = exo === `tous` ? AN : parseInt(exo, 10);
     return H.map((emp) => {
-      var dr = sldDroit(emp, anneeSel),
+      var dr = sldDroit(emp, anneeSel, P),
         rep = anneeSel === AN ? sldReport(emp.id, meta) : 0,
         pris = 0,
         att = 0,
@@ -1172,12 +1296,28 @@ function SoldesV2() {
         else if (q2.statut === `en_attente`) att += oj;
         dems.push(q2);
       });
-      var dispo = dr.droit + rep - pris,
+      var aj = sld3AjustEmp(ST, emp.id, exo === `tous` ? null : anneeSel),
+        dispo = dr.droit + rep - pris + aj,
         prev = dispo - att,
         taux = dr.droit > 0 ? Math.round((pris / dr.droit) * 100) : 0;
-      return { emp: emp, droit: dr.droit, base: dr.base, prorata: dr.prorata, report: rep, pris: pris, att: att, dispo: dispo, prev: prev, taux: taux, dems: dems };
+      var delta = null;
+      if (exo !== `tous`) {
+        var drP = sldDroit(emp, anneeSel - 1, P),
+          prisP = 0;
+        DEM.forEach((q2) => {
+          if (q2.employee_id !== emp.id || q2.type_conge !== `conge_annuel` || q2.statut !== `approuvee`) return;
+          if (String(q2.date_debut || ``).slice(0, 4) !== String(anneeSel - 1)) return;
+          prisP += sldOuvrables(q2.date_debut, q2.date_fin, FER);
+        });
+        delta = dr.droit + rep - pris + aj - (drP.droit - prisP);
+      }
+      var mm = { emp: emp, droit: dr.droit, base: dr.base, prorata: dr.prorata, report: rep, pris: pris, att: att, dispo: dispo, prev: prev, taux: taux, dems: dems, aj: aj, delta: delta };
+      mm.ech = sldEcheance(mm, anneeSel);
+      return mm;
     });
-  }, [tick, exo]);
+  }, [tick, exo, P]);
+  var detail = (0, Q.useMemo)(() => (detId == null ? null : calc.find((x2) => x2.emp.id === detId) || null), [calc, detId]);
+  var journal = (0, Q.useMemo)(() => sld3Store().ajust.slice().sort((x1, x2) => (x1.ts < x2.ts ? 1 : -1)), [jrn, tick]);
   var depts = (0, Q.useMemo)(() => {
     var s2 = new Set();
     H.forEach((e2) => e2.departement && s2.add(e2.departement));
@@ -1187,8 +1327,13 @@ function SoldesV2() {
     () =>
       calc.filter((m2) => {
         if (dept !== `tous` && m2.emp.departement !== dept) return !1;
-        var st = sldStatut(m2);
+        var st = sldStatut(m2, P);
         if (statutF !== `tous` && st.key !== statutF) return !1;
+        if (echeF !== `tous`) {
+          var ec = m2.ech;
+          if (echeF === `echoire` && (!ec || ec.urgence !== `echoire`)) return !1;
+          if (echeF === `expiree` && (!ec || !ec.expire)) return !1;
+        }
         if (rech) {
           var q2 = rech.toLowerCase(),
             nm = B(m2.emp).toLowerCase();
@@ -1196,7 +1341,7 @@ function SoldesV2() {
         }
         return !0;
       }),
-    [calc, dept, statutF, rech],
+    [calc, dept, statutF, rech, echeF],
   );
   var srt = flt.slice().sort((m1, m2) => {
     var k1, k2;
@@ -1225,6 +1370,10 @@ function SoldesV2() {
         k1 = m1.taux;
         k2 = m2.taux;
         break;
+      case `eche`:
+        k1 = m1.ech ? m1.ech.jrest : 99999;
+        k2 = m2.ech ? m2.ech.jrest : 99999;
+        break;
       default:
         k1 = m1.dispo;
         k2 = m2.dispo;
@@ -1237,23 +1386,71 @@ function SoldesV2() {
       crit = 0,
       sousU = 0,
       sTaux = 0,
-      prov = 0;
+      prov = 0,
+      expN = 0,
+      expJ = 0;
     flt.forEach((m2) => {
       tot += Math.max(m2.dispo, 0);
       sTaux += m2.taux;
-      var st = sldStatut(m2);
+      var st = sldStatut(m2, P);
       if (st.key === `critique`) crit++;
       if (st.key === `sousUtilise`) sousU++;
-      var sal = m2.emp.salaire_brut || 0;
-      prov += Math.max(m2.dispo, 0) * (sal / 26);
+      prov += Math.max(m2.dispo, 0) * sldCoutJour(m2.emp, P);
+      if (m2.ech && !m2.ech.expire) {
+        expN++;
+        expJ += m2.ech.restant;
+      }
     });
-    return { tot: tot, crit: crit, sousU: sousU, tauxMoy: flt.length ? Math.round(sTaux / flt.length) : 0, prov: prov };
+    return { tot: tot, crit: crit, sousU: sousU, tauxMoy: flt.length ? Math.round(sTaux / flt.length) : 0, prov: prov, expN: expN, expJ: expJ };
+  }, [flt, P]);
+  var chStats = (0, Q.useMemo)(() => {
+    var n = { critique: 0, tendu: 0, sain: 0, sousUtilise: 0 };
+    flt.forEach((m2) => n[sldStatut(m2, P).key]++);
+    return n;
+  }, [flt, P]);
+  var chDepts = (0, Q.useMemo)(() => {
+    var s2 = {};
+    flt.forEach((m2) => {
+      var dp = m2.emp.departement || `—`;
+      if (!s2[dp]) s2[dp] = { dept: dp, n: 0, dispo: 0, taux: 0 };
+      s2[dp].n++;
+      s2[dp].dispo += Math.max(m2.dispo, 0);
+      s2[dp].taux += m2.taux;
+    });
+    return Object.values(s2)
+      .map((x2) => ({ dept: x2.dept, n: x2.n, dispo: x2.dispo, tauxM: Math.round(x2.taux / x2.n) }))
+      .sort((x1, x2) => x2.dispo - x1.dispo);
   }, [flt]);
+  var simRows = (0, Q.useMemo)(() => {
+    if (!simu) return null;
+    return calc.map((m2) => {
+      var fin = m2.dispo,
+        rep2 = fin > 0 ? (pol.politique === `integrale` ? fin : pol.politique === `plafond` ? Math.min(fin, Number(pol.plafond) || 0) : 0) : 0,
+        dr2 = sldDroit(m2.emp, AN + 1, P);
+      return { emp: m2.emp, fin: fin, rep: rep2, droit: dr2.droit, prorata: dr2.prorata, ouvert: dr2.droit + rep2 };
+    });
+  }, [simu, pol, calc, P]);
+  var sparkData = (0, Q.useMemo)(() => {
+    if (!detail) return null;
+    var FER = sldFset(),
+      cum = 0,
+      pts = [],
+      an = exo === `tous` ? AN : parseInt(exo, 10);
+    for (var mo = 1; mo <= 12; mo++) {
+      detail.dems.forEach((q2) => {
+        if (q2.statut !== `approuvee`) return;
+        var d = new Date(q2.date_debut);
+        if (d.getFullYear() === an && d.getMonth() === mo - 1) cum += sldOuvrables(q2.date_debut, q2.date_fin, FER);
+      });
+      pts.push(cum);
+    }
+    return pts;
+  }, [detail, exo]);
   var jRestants = Math.max(0, Math.ceil((new Date(AN, 11, 31) - new Date()) / 864e5));
   var fExport = () => {
-    var entetes = [`Matricule`, `Employé`, `Département`, `Poste`, `Catégorie`, `Exercice`, `Droit (j)`, `Dont report N-1`, `Pris (j ouvr.)`, `En attente (j ouvr.)`, `Solde disponible (j)`, `Solde projeté (j)`, `Taux (%)`, `Statut`, `Alerte`],
+    var entetes = [`Matricule`, `Employé`, `Département`, `Poste`, `Catégorie`, `Exercice`, `Droit (j)`, `Dont report N-1`, `Pris (j ouvr.)`, `En attente (j ouvr.)`, `Ajustements (j)`, `Solde disponible (j)`, `Solde projeté (j)`, `Taux (%)`, `Statut`, `Alerte`, `Report restant (j)`, `Échéance art. 89`, `Indemnité compensatrice (FCFA)`],
       lignes = srt.map((m2) => {
-        var st = sldStatut(m2),
+        var st = sldStatut(m2, P),
           al = st.key === `critique` ? `Dépassement projeté — arbitrage requis` : st.key === `sousUtilise` ? `Non-consommation — risque légal/burn-out` : st.key === `tendu` ? `Taux élevé — couverture à surveiller` : ``;
         return [
           m2.emp.matricule || ``,
@@ -1266,11 +1463,15 @@ function SoldesV2() {
           m2.report,
           m2.pris,
           m2.att,
+          m2.aj || 0,
           m2.dispo,
           m2.prev,
           m2.taux,
           st.label,
           al,
+          m2.ech ? m2.ech.restant : 0,
+          m2.ech ? m2.ech.echeance : ``,
+          Math.round(sldIndemnite(m2, P)),
         ]
           .map((x2) => `"${String(x2 == null ? `` : x2).replace(/"/g, `""`)}"`)
           .join(`;`);
@@ -1286,6 +1487,58 @@ function SoldesV2() {
   };
   var fRefresh = () => {
     ((SLD_FSET = null), setSync(new Date()), setTick(tick + 1), setSnack({ msg: `Soldes recalculés depuis les demandes de congés (source : Congés Annuels V2)`, sev: `success` }));
+  };
+  var fAdjOpen = (m) => {
+    ((setAdjF({ type: `recuperation`, sens: 1, jours: 1, motif: `` }), setAdj(m)));
+  };
+  var fAjustSubmit = () => {
+    if (!adj) return;
+    var jours = Math.abs(Number(adjF.jours) || 0);
+    if (!jours || jours > 60) {
+      setSnack({ msg: `Nombre de jours invalide (0,5 à 60)`, sev: `error` });
+      return;
+    }
+    if (!adjF.motif || adjF.motif.trim().length < 3) {
+      setSnack({ msg: `Motif obligatoire (3 caractères minimum) — traçabilité d'audit`, sev: `error` });
+      return;
+    }
+    var signe = adjF.type === `recuperation` ? 1 : adjF.type === `sans_solde` ? -1 : Number(adjF.sens) || 1,
+      st = sld3Store();
+    st.ajust.push({ id: `adj-` + Date.now(), ts: new Date().toISOString(), auteur: roleAct, emp_id: adj.emp.id, emp_nom: B(adj.emp), annee: exo === `tous` ? AN : parseInt(exo, 10), type: adjF.type, jours: signe * jours, motif: adjF.motif.trim() });
+    sld3Write(st);
+    var nv = adj.dispo + signe * jours;
+    ((setAdj(null), setDetail(adj.emp.id), setTick(tick + 1), setSnack({ msg: `Ajustement enregistré (` + (signe > 0 ? `+` : `-`) + jours + ` j) — nouveau solde ` + nv + ` j`, sev: `success` })));
+  };
+  var fParSave = () => {
+    var st = sld3Store();
+    ((st.meta.parametres = P), sld3Write(st), setPar(0), setTick(tick + 1), setSnack({ msg: `Paramètres enregistrés — cockpit recalculé`, sev: `success` }));
+  };
+  var fSimExport = () => {
+    if (!simRows) return;
+    var ent = [`Matricule`, `Employé`, `Département`, `Solde fin ` + AN + ` (j)`, `Report simulé vers ` + (AN + 1) + ` (j)`, `Droit ` + (AN + 1) + ` (j)`, `Solde d'ouverture ` + (AN + 1) + ` (j)`],
+      lig = simRows.map((r2) =>
+        [r2.emp.matricule || ``, B(r2.emp), r2.emp.departement || ``, r2.fin, r2.rep, r2.droit, r2.ouvert]
+          .map((x2) => `"${String(x2 == null ? `` : x2).replace(/"/g, `""`)}"`)
+          .join(`;`),
+      ),
+      bl = new Blob(["\uFEFF" + ent.join(`;`) + "\n" + lig.join("\n")], { type: `text/csv;charset=utf-8;` }),
+      ur = URL.createObjectURL(bl),
+      an2 = document.createElement(`a`);
+    ((an2.href = ur), (an2.download = `simulation_cloture_${AN}_${AN + 1}.csv`), an2.click(), URL.revokeObjectURL(ur));
+    setSnack({ msg: `Simulation de clôture exportée`, sev: `success` });
+  };
+  var fJrnExport = () => {
+    var ent = [`Horodatage`, `Auteur (rôle)`, `Employé`, `Exercice`, `Type d'ajustement`, `Jours (signés)`, `Motif`],
+      lig = journal.map((x2) =>
+        [x2.ts, x2.auteur, x2.emp_nom, x2.annee, (SLD3_AJUST_TYPES[x2.type] || [x2.type])[0], x2.jours, x2.motif]
+          .map((x3) => `"${String(x3 == null ? `` : x3).replace(/"/g, `""`)}"`)
+          .join(`;`),
+      ),
+      bl = new Blob(["\uFEFF" + ent.join(`;`) + "\n" + lig.join("\n")], { type: `text/csv;charset=utf-8;` }),
+      ur = URL.createObjectURL(bl),
+      an2 = document.createElement(`a`);
+    ((an2.href = ur), (an2.download = `journal_ajustements_soldes_${new Date().toISOString().slice(0, 10)}.csv`), an2.click(), URL.revokeObjectURL(ur));
+    setSnack({ msg: `Journal d'audit exporté (${journal.length} mouvement(s))`, sev: `success` });
   };
   var fTri = (key) => setTri((tr) => ({ key: key, dir: tr.key === key && tr.dir === `asc` ? `desc` : `asc` }));
   var fTh = (label, key, align) =>
@@ -1324,9 +1577,17 @@ function SoldesV2() {
           children: [
             (0, $.jsxs)(u, {
               children: [
-                (0, $.jsxs)(o, { direction: `row`, spacing: 2, alignItems: `center`, sx: { mb: 2 }, children: [sldAvatar(mo.emp, 56, 22), (0, $.jsxs)(a, { children: [(0, $.jsx)(i, { variant: `h6`, fontWeight: 800, children: B(mo.emp) }), (0, $.jsx)(i, { variant: `body2`, color: `text.secondary`, children: (mo.emp.poste || ``) + ` · ` + (mo.emp.departement || ``) + ` · ` + (mo.emp.matricule || ``) })] }), (0, $.jsx)(a, { sx: { ml: `auto` }, children: sldChipStatut(mo) })] }),
-                sldAlertePerso(mo),
-                (0, $.jsxs)(a, { sx: { display: `grid`, gridTemplateColumns: `repeat(auto-fit,minmax(130px,1fr))`, gap: 1.5 }, children: [(0, $.jsx)(SldTuile, { label: `Droit annuel`, valeur: mo.droit + ` j` }), (0, $.jsx)(SldTuile, { label: `Report N-1`, valeur: `+` + mo.report + ` j` }), (0, $.jsx)(SldTuile, { label: `Pris (ouvrables)`, valeur: mo.pris + ` j` }), (0, $.jsx)(SldTuile, { label: `En attente`, valeur: mo.att + ` j`, couleur: mo.att > 0 ? `warning.main` : null }), (0, $.jsx)(SldTuile, { label: `Disponible`, valeur: mo.dispo + ` j`, couleur: mo.dispo < 0 ? `error.main` : `success.main` }), (0, $.jsx)(SldTuile, { label: `Projection si accord`, valeur: mo.prev + ` j`, couleur: mo.prev < 0 ? `error.main` : `text.primary` })] }),
+                (0, $.jsxs)(o, { direction: `row`, spacing: 2, alignItems: `center`, sx: { mb: 2 }, children: [sldAvatar(mo.emp, 56, 22), (0, $.jsxs)(a, { children: [(0, $.jsx)(i, { variant: `h6`, fontWeight: 800, children: B(mo.emp) }), (0, $.jsx)(i, { variant: `body2`, color: `text.secondary`, children: (mo.emp.poste || ``) + ` · ` + (mo.emp.departement || ``) + ` · ` + (mo.emp.matricule || ``) })] }), (0, $.jsx)(a, { sx: { ml: `auto` }, children: sldChipStatut(mo, P) })] }),
+                sldAlertePerso(mo, P),
+                mo.ech && !mo.ech.expire
+                  ? (0, $.jsx)(c, {
+                      severity: `warning`,
+                      icon: (0, $.jsx)(GVL, {}),
+                      sx: { mb: 2, fontWeight: 600 },
+                      children: mo.ech.restant + ` j de report expirent le ` + mo.ech.echeance + ` (` + mo.ech.jrest + ` jour(s) restants) — les congés doivent être pris dans les 12 mois (art. 89 CT). Pensez à les consommer.`,
+                    })
+                  : null,
+                (0, $.jsxs)(a, { sx: { display: `grid`, gridTemplateColumns: `repeat(auto-fit,minmax(130px,1fr))`, gap: 1.5 }, children: [(0, $.jsx)(SldTuile, { label: `Droit annuel`, valeur: mo.droit + ` j` }), (0, $.jsx)(SldTuile, { label: `Report N-1`, valeur: `+` + mo.report + ` j` }), (0, $.jsx)(SldTuile, { label: `Pris (ouvrables)`, valeur: mo.pris + ` j` }), (0, $.jsx)(SldTuile, { label: `En attente`, valeur: mo.att + ` j`, couleur: mo.att > 0 ? `warning.main` : null }), (0, $.jsx)(SldTuile, { label: `Disponible`, valeur: mo.dispo + ` j`, couleur: mo.dispo < 0 ? `error.main` : `success.main` }), (0, $.jsx)(SldTuile, { label: `Projection si accord`, valeur: mo.prev + ` j`, couleur: mo.prev < 0 ? `error.main` : `text.primary` }), (0, $.jsx)(SldTuile, { label: `Ajustements RH`, valeur: sldSigne(mo.aj || 0) + ` j`, couleur: mo.aj ? `secondary.main` : null })] }),
                 (0, $.jsx)(a, { sx: { mt: 2 }, children: sldBarre(mo.taux, mo.taux > 75 ? `error.main` : mo.taux < 40 ? `warning.main` : `success.main`) }),
                 (0, $.jsx)(i, { variant: `subtitle2`, sx: { mt: 2.5, mb: 1, fontWeight: 800 }, children: `Mes congés annuels ` + (exo === `tous` ? `(tous exercices)` : exo) + ` — ` + mo.dems.length + ` demande(s)` }),
                 mo.dems.length === 0
@@ -1366,11 +1627,16 @@ function SoldesV2() {
       (0, $.jsx)(J, {
         title: `Soldes de congés — Cockpit de pilotage`,
         subtitle: `Exercice ` + (exo === `tous` ? `tous exercices confondus` : exo) + ` · décompte en jours ouvrables (week-ends et fériés Cameroun déduits) · synchronisé en temps réel avec les demandes de Congés Annuels`,
+        sx: { "& .MuiCardHeader-action": { flexWrap: `wrap`, maxWidth: { xs: `56%`, sm: `none` }, rowGap: 1 } },
         action: (0, $.jsxs)(o, {
           direction: `row`,
           spacing: 1,
           alignItems: `center`,
+          sx: { flexWrap: `wrap`, justifyContent: { xs: `flex-start`, sm: `flex-end` }, rowGap: 1 },
           children: [
+            (0, $.jsxs)(l, { variant: `outlined`, size: `small`, onClick: () => setSimu(1), sx: { textTransform: `none`, fontSize: `0.75rem`, minWidth: 0, px: { xs: 1, sm: 1.5 } }, children: [(0, $.jsx)(AT, { sx: { fontSize: 18 } }), (0, $.jsx)(i, { component: `span`, sx: { display: { xs: `none`, lg: `inline` }, fontSize: `inherit` }, children: `Simulateur` })] }),
+            (0, $.jsxs)(l, { variant: `outlined`, size: `small`, onClick: () => setJrn(1), sx: { textTransform: `none`, fontSize: `0.75rem`, minWidth: 0, px: { xs: 1, sm: 1.5 } }, children: [(0, $.jsx)(HIS, { sx: { fontSize: 18 } }), (0, $.jsx)(i, { component: `span`, sx: { display: { xs: `none`, lg: `inline` }, fontSize: `inherit` }, children: `Journal` + (journal.length ? ` (` + journal.length + `)` : ``) })] }),
+            (0, $.jsx)(E, { title: `Paramètres du cockpit (seuils, bases, coûts)`, children: (0, $.jsx)(r, { size: `small`, onClick: () => setPar(1), children: (0, $.jsx)(TUNE, { sx: { fontSize: 20 } }) }) }),
             (0, $.jsx)(i, { variant: `caption`, sx: { color: `text.secondary`, display: { xs: `none`, md: `block` } }, children: `Synchro ` + sync.toLocaleTimeString() }),
             (0, $.jsxs)(l, { variant: `outlined`, size: `small`, onClick: fRefresh, sx: { textTransform: `none`, fontSize: `0.75rem`, minWidth: 0, px: { xs: 1, sm: 1.5 } }, children: [(0, $.jsx)(RF, { sx: { fontSize: 18 } }), (0, $.jsx)(i, { component: `span`, sx: { display: { xs: `none`, sm: `inline` }, fontSize: `inherit` }, children: `Actualiser` })] }),
             (0, $.jsxs)(l, { variant: `outlined`, size: `small`, onClick: fExport, sx: { textTransform: `none`, fontSize: `0.75rem`, minWidth: 0, px: { xs: 1, sm: 1.5 } }, children: [(0, $.jsx)(S, { sx: { fontSize: 18 } }), (0, $.jsx)(i, { component: `span`, sx: { display: { xs: `none`, sm: `inline` }, fontSize: `inherit` }, children: `Export CSV` })] }),
@@ -1392,6 +1658,15 @@ function SoldesV2() {
             sx: { fontWeight: 600, overflowWrap: `anywhere`, "& .MuiAlert-action": { display: { xs: `none`, sm: `flex` } } },
             action: (0, $.jsx)(l, { color: `warning`, size: `small`, onClick: () => setStatutF(`sousUtilise`), sx: { textTransform: `none` }, children: `Voir` }),
             children: kpi.sousU + ` employé(s) sous 40 % de consommation ` + (exo === `tous` ? `` : exo) + ` — obligation légale de repos (art. 89 et s. Code du travail) · ` + jRestants + ` jour(s) avant le 31/12 : anticipez la planification.`,
+          })
+        : null,
+      kpi.expN > 0
+        ? (0, $.jsx)(c, {
+            severity: `warning`,
+            icon: (0, $.jsx)(GVL, {}),
+            sx: { fontWeight: 600, overflowWrap: `anywhere`, "& .MuiAlert-action": { display: { xs: `none`, sm: `flex` } } },
+            action: (0, $.jsx)(l, { color: `warning`, size: `small`, onClick: () => setEche(echeF === `echoire` ? `tous` : `echoire`), sx: { textTransform: `none` }, children: `Examiner` }),
+            children: `Échéance art. 89 : ` + kpi.expN + ` employé(s) portent ` + kpi.expJ + ` j de droits à échoir au 31/12/` + AN + ` (congés à prendre dans les 12 mois) — ` + jRestants + ` j restants avant la fin d'exercice.`,
           })
         : null,
       (0, $.jsxs)(a, { sx: { display: `grid`, gridTemplateColumns: { xs: `1fr 1fr`, md: `repeat(4,1fr)` }, gap: 2 }, children: [
@@ -1422,8 +1697,13 @@ function SoldesV2() {
           (0, $.jsx)(s, { value: String(AN - 2), children: `Exercice ` + (AN - 2) }),
           (0, $.jsx)(s, { value: `tous`, children: `Tous exercices` }),
         ] }),
-        dept !== `tous` || statutF !== `tous` || rech
-          ? (0, $.jsx)(l, { size: `small`, onClick: () => { (setDept(`tous`), setStatutF(`tous`), setRech(``), setPage(0)); }, sx: { textTransform: `none`, fontSize: `0.75rem` }, children: `Effacer les filtres` })
+        (0, $.jsxs)(D, { select: !0, size: `small`, label: `Échéance art. 89`, value: echeF, onChange: (e2) => { (setEche(e2.target.value), setPage(0)); }, sx: { minWidth: 160, width: { xs: `100%`, sm: `auto` } }, children: [
+          (0, $.jsx)(s, { value: `tous`, children: `Toutes échéances` }),
+          (0, $.jsx)(s, { value: `echoire`, children: `⏳ À échoir (< 90 j)` }),
+          (0, $.jsx)(s, { value: `expiree`, children: `🔴 Expirées` }),
+        ] }),
+        dept !== `tous` || statutF !== `tous` || rech || echeF !== `tous`
+          ? (0, $.jsx)(l, { size: `small`, onClick: () => { (setDept(`tous`), setStatutF(`tous`), setRech(``), setEche(`tous`), setPage(0)); }, sx: { textTransform: `none`, fontSize: `0.75rem` }, children: `Effacer les filtres` })
           : null,
       ] }),
       (0, $.jsx)(a, { sx: { display: `flex`, gap: 0.75, flexWrap: `wrap`, mb: -0.5 }, children: [
@@ -1432,6 +1712,58 @@ function SoldesV2() {
           (0, $.jsx)(T, { label: dp, size: `small`, onClick: () => (setDept(dept === dp ? `tous` : dp), setPage(0)), color: dept === dp ? `primary` : `default`, variant: dept === dp ? `filled` : `outlined`, sx: { fontWeight: 700, fontSize: `0.72rem`, cursor: `pointer` } }, dp),
         ),
       ] }),
+      (0, $.jsx)(ee, { sx: { borderRadius: 3 }, children: (0, $.jsxs)(u, { children: [
+        (0, $.jsxs)(a, { sx: { display: `flex`, alignItems: `center`, gap: 1, mb: chOpen ? 1.5 : 0 }, children: [
+          (0, $.jsx)(AS2, { sx: { fontSize: 20, color: `#7e3ff2` } }),
+          (0, $.jsx)(i, { variant: `subtitle2`, fontWeight: 800, children: `Pilotage visuel` }),
+          (0, $.jsx)(a, { sx: { ml: `auto` }, children: (0, $.jsx)(l, { size: `small`, onClick: () => setCh(chOpen ? 0 : 1), sx: { textTransform: `none`, fontSize: `0.72rem`, minWidth: 0 }, children: chOpen ? `Masquer` : `Afficher` }) }),
+        ] }),
+        chOpen
+          ? (0, $.jsxs)(a, { sx: { display: `grid`, gridTemplateColumns: { xs: `1fr`, md: `1fr 1fr` }, gap: 2.5, overflowX: `auto` }, children: [
+              (0, $.jsxs)(a, { children: [
+                (0, $.jsx)(i, { variant: `caption`, fontWeight: 800, sx: { color: `text.secondary`, display: `block`, mb: 1 }, children: `Répartition des statuts — ` + flt.length + ` employé(s) affiché(s)` }),
+                (0, $.jsx)(a, { sx: { display: `flex`, flexDirection: `column`, gap: 1 }, children: [
+                  { k: `critique`, l: `Critique`, c: `error.main`, n: chStats.critique },
+                  { k: `tendu`, l: `Tendu`, c: `warning.main`, n: chStats.tendu },
+                  { k: `sain`, l: `Sain`, c: `success.main`, n: chStats.sain },
+                  { k: `sousUtilise`, l: `Sous-utilisé`, c: `info.main`, n: chStats.sousUtilise },
+                ].map((x2) =>
+                  (0, $.jsxs)(
+                    a,
+                    {
+                      sx: { display: `flex`, alignItems: `center`, gap: 1 },
+                      children: [
+                        (0, $.jsx)(a, { sx: { width: 86, flexShrink: 0 }, children: (0, $.jsx)(i, { variant: `caption`, fontWeight: 700, children: x2.l }) }),
+                        (0, $.jsx)(a, { sx: { flex: 1, height: 10, borderRadius: 5, bgcolor: `action.hover`, overflow: `hidden` }, children: (0, $.jsx)(a, { sx: { width: (flt.length ? Math.round((x2.n / flt.length) * 100) : 0) + `%`, height: `100%`, bgcolor: x2.c } }) }),
+                        (0, $.jsx)(i, { variant: `caption`, fontWeight: 800, sx: { width: 22, textAlign: `right` }, children: String(x2.n) }),
+                      ],
+                    },
+                    x2.k,
+                  ),
+                ) }),
+              ] }),
+              (0, $.jsxs)(a, { children: [
+                (0, $.jsx)(i, { variant: `caption`, fontWeight: 800, sx: { color: `text.secondary`, display: `block`, mb: 1 }, children: `Santé par département — taux moyen d'utilisation, cliquez pour filtrer` }),
+                (0, $.jsx)(a, { sx: { display: `flex`, flexDirection: `column`, gap: 0.75, maxHeight: 180, overflowY: `auto` }, children: chDepts.map((x2) =>
+                  (0, $.jsxs)(
+                    a,
+                    {
+                      onClick: () => (setDept(dept === x2.dept ? `tous` : x2.dept), setPage(0)),
+                      sx: { display: `flex`, alignItems: `center`, gap: 1, cursor: `pointer`, p: 0.5, borderRadius: 1, "&:hover": { bgcolor: `action.hover` } },
+                      children: [
+                        (0, $.jsx)(T, { label: x2.dept, size: `small`, variant: dept === x2.dept ? `filled` : `outlined`, color: dept === x2.dept ? `primary` : `default`, sx: { fontWeight: 700, fontSize: `0.65rem`, minWidth: 90 } }),
+                        (0, $.jsx)(i, { variant: `caption`, sx: { width: 84, flexShrink: 0, color: `text.secondary` }, children: x2.n + ` emp · ` + x2.dispo + ` j` }),
+                        (0, $.jsx)(a, { sx: { flex: 1, height: 8, borderRadius: 4, bgcolor: `action.hover`, overflow: `hidden` }, children: (0, $.jsx)(a, { sx: { width: Math.min(x2.tauxM, 100) + `%`, height: `100%`, bgcolor: x2.tauxM > 75 ? `error.main` : x2.tauxM < 40 ? `warning.main` : `success.main` } }) }),
+                        (0, $.jsx)(i, { variant: `caption`, fontWeight: 800, children: x2.tauxM + `%` }),
+                      ],
+                    },
+                    x2.dept,
+                  ),
+                ) }),
+              ] }),
+            ] })
+          : null,
+      ] }) }),
       (0, $.jsx)(ee, { children: (0, $.jsxs)(u, { children: [
         (0, $.jsx)(y, { sx: { overflowX: `auto`, maxWidth: `100%` }, children: (0, $.jsxs)(ne, { size: `small`, stickyHeader: !0, children: [
           (0, $.jsx)(te, { children: (0, $.jsxs)(b, { children: [
@@ -1443,10 +1775,11 @@ function SoldesV2() {
             fTh(`Solde disponible`, `dispo`, `right`),
             fTh(`Taux`, `taux`),
             (0, $.jsx)(v, { sx: { fontWeight: 700 }, children: `Statut` }),
+            fTh(`Échéance 89`, `eche`),
             (0, $.jsx)(v, { align: `center`, sx: { fontWeight: 700 }, children: `Actions` }),
           ] }) }),
           (0, $.jsx)(_, { children: srt.slice(page * pp, page * pp + pp).map((m2, idx) =>
-            (0, $.jsxs)(b, { hover: !0, onClick: () => setDetail(m2), sx: { cursor: `pointer` }, children: [
+            (0, $.jsxs)(b, { hover: !0, onClick: () => setDetail(m2.emp.id), sx: { cursor: `pointer` }, children: [
               (0, $.jsxs)(v, { children: [
                 (0, $.jsxs)(a, { sx: { display: `flex`, alignItems: `center`, gap: 1.2 }, children: [
                   sldAvatar(m2.emp, 34, 12),
@@ -1467,17 +1800,19 @@ function SoldesV2() {
               (0, $.jsxs)(v, { align: `right`, children: [
                 (0, $.jsx)(i, { variant: `body2`, fontWeight: 800, sx: { color: m2.dispo < 0 ? `error.main` : m2.dispo < 5 ? `warning.main` : `success.main` }, children: m2.dispo + ` j` }),
                 m2.att > 0 ? (0, $.jsx)(i, { variant: `caption`, sx: { display: `block`, color: `text.secondary` }, children: `projeté : ` + m2.prev + ` j` }) : null,
+                m2.delta != null && m2.delta !== 0 ? (0, $.jsx)(i, { variant: `caption`, sx: { display: `block`, fontWeight: 700, color: m2.delta > 0 ? `success.main` : `error.main` }, children: (m2.delta > 0 ? `▲` : `▼`) + ` N-1 : ` + sldSigne(m2.delta) + ` j` }) : null,
               ] }),
               (0, $.jsx)(v, { children: sldBarre(m2.taux, m2.taux > 75 ? `error.main` : m2.taux < 40 ? `warning.main` : `success.main`) }),
-              (0, $.jsx)(v, { children: sldChipStatut(m2) }),
+              (0, $.jsx)(v, { children: sldChipStatut(m2, P) }),
+              (0, $.jsx)(v, { children: m2.ech ? (0, $.jsx)(E, { title: m2.ech.restant + ` j de report expirent le ` + m2.ech.echeance + ` (art. 89 CT — congés à prendre dans les 12 mois)`, children: (0, $.jsx)(T, { label: m2.ech.expire ? `Expiré` : `J-` + m2.ech.jrest, size: `small`, color: m2.ech.expire ? `error` : `warning`, variant: `outlined`, sx: { fontWeight: 800, fontSize: `0.68rem` } }) }) : (0, $.jsx)(i, { variant: `body2`, sx: { color: `text.disabled` }, children: `—` }) }),
               (0, $.jsx)(v, { align: `center`, children: (0, $.jsxs)(o, { direction: `row`, spacing: 0.5, justifyContent: `center`, children: [
-                (0, $.jsx)(E, { title: `Détail du solde`, children: (0, $.jsx)(r, { size: `small`, color: `primary`, onClick: (e2) => (e2.stopPropagation(), setDetail(m2)), children: (0, $.jsx)(C, { fontSize: `small` }) }) }),
+                (0, $.jsx)(E, { title: `Détail du solde`, children: (0, $.jsx)(r, { size: `small`, color: `primary`, onClick: (e2) => (e2.stopPropagation(), setDetail(m2.emp.id)), children: (0, $.jsx)(C, { fontSize: `small` }) }) }),
                 (0, $.jsx)(E, { title: `Voir ses demandes dans Congés Annuels`, children: (0, $.jsx)(r, { size: `small`, color: `secondary`, onClick: (e2) => (e2.stopPropagation(), nav(`/domaine2_Gestion_Administrative_Personnel/conges`)), children: (0, $.jsx)(CT, { fontSize: `small` }) }) }),
               ] }) }),
             ] }, m2.emp.id || idx),
           ) }),
           srt.length === 0
-            ? (0, $.jsx)(b, { children: (0, $.jsx)(v, { colSpan: 9, align: `center`, sx: { py: 4, color: `text.secondary` }, children: `Aucun employé ne correspond aux filtres actifs` }) })
+            ? (0, $.jsx)(b, { children: (0, $.jsx)(v, { colSpan: 10, align: `center`, sx: { py: 4, color: `text.secondary` }, children: `Aucun employé ne correspond aux filtres actifs` }) })
             : null,
         ] }) }),
         (0, $.jsx)(g, {
@@ -1503,13 +1838,13 @@ function SoldesV2() {
                   (0, $.jsx)(i, { variant: `h6`, fontWeight: 800, children: B(detail.emp) }),
                   (0, $.jsx)(i, { variant: `caption`, color: `text.secondary`, children: (detail.emp.poste || ``) + ` · ` + (detail.emp.departement || ``) + ` · ` + (detail.emp.matricule || ``) + ` · ` + (detail.emp.categorie || ``) }),
                 ] }),
-                (0, $.jsx)(a, { sx: { ml: `auto` }, children: sldChipStatut(detail) }),
+                (0, $.jsx)(a, { sx: { ml: `auto` }, children: sldChipStatut(detail, P) }),
               ],
             })
           : null,
         detail
           ? (0, $.jsxs)(p, { children: [
-              sldAlertePerso(detail),
+              sldAlertePerso(detail, P),
               (0, $.jsxs)(a, { sx: { display: `grid`, gridTemplateColumns: { xs: `repeat(3,1fr)`, sm: `repeat(6,1fr)` }, gap: 1.5 }, children: [
                 (0, $.jsx)(SldTuile, { label: `Droit annuel`, valeur: detail.droit + ` j` }),
                 (0, $.jsx)(SldTuile, { label: `Base`, valeur: detail.base + ` j` }),
@@ -1517,9 +1852,15 @@ function SoldesV2() {
                 (0, $.jsx)(SldTuile, { label: `Pris (ouvrables)`, valeur: detail.pris + ` j` }),
                 (0, $.jsx)(SldTuile, { label: `Disponible`, valeur: detail.dispo + ` j`, couleur: detail.dispo < 0 ? `error.main` : `success.main` }),
                 (0, $.jsx)(SldTuile, { label: `Projection si accord`, valeur: detail.prev + ` j`, couleur: detail.prev < 0 ? `error.main` : `text.primary` }),
+                (0, $.jsx)(SldTuile, { label: `Ajustements RH`, valeur: sldSigne(detail.aj || 0) + ` j`, couleur: detail.aj ? `secondary.main` : null }),
               ] }),
               (0, $.jsxs)(a, { sx: { mt: 2 }, children: [
                 (0, $.jsx)(i, { variant: `caption`, fontWeight: 700, sx: { color: `text.secondary` }, children: `Décompte : jours ouvrables lun-ven, fériés Cameroun déduits · provision indicative ` + sldFCFA(Math.max(detail.dispo, 0) * ((detail.emp.salaire_brut || 0) / 26)) }),
+              (0, $.jsxs)(a, { sx: { mt: 1.5, p: 1.5, borderRadius: 2, bgcolor: `action.hover` }, children: [
+                (0, $.jsx)(i, { variant: `caption`, fontWeight: 800, sx: { display: `block` }, children: `Indemnité compensatrice de congés payés (art. 90 CT)` }),
+                (0, $.jsx)(i, { variant: `h6`, fontWeight: 800, sx: { color: `#7e3ff2` }, children: sldFCFA(sldIndemnite(detail, P)) }),
+                (0, $.jsx)(i, { variant: `caption`, color: `text.secondary`, children: Math.max(detail.dispo, 0) + ` j disponibles × ` + sldFCFA(sldCoutJour(detail.emp, P)) + `/j ` + (P.coutFixeOn ? `(coût journalier paramétré)` : `(salaire de référence ÷ 26)`) + ` — due au départ si le congé n'a pas été pris.` }),
+              ] }),
               ] }),
               (0, $.jsx)(i, { variant: `subtitle2`, sx: { mt: 2, mb: 1, fontWeight: 800 }, children: `Congés annuels ` + (exo === `tous` ? `— tous exercices` : exo) + ` — ` + detail.dems.length + ` demande(s)` }),
               detail.dems.length === 0
@@ -1537,11 +1878,140 @@ function SoldesV2() {
                         sldChipDemande(q2.statut),
                       ] }, q2.id),
                     ) }),
+              (0, $.jsx)(i, { variant: `subtitle2`, sx: { mt: 2, mb: 0.5, fontWeight: 800 }, children: `Consommation mensuelle cumulée ` + (exo === `tous` ? AN : exo) + ` (j ouvrables)` }),
+              sparkData ? sldSpark(sparkData) : null,
             ] })
           : null,
         (0, $.jsxs)(m, { sx: { px: 3, pb: 2 }, children: [
+          (0, $.jsx)(l, { variant: `outlined`, color: `warning`, onClick: () => fAdjOpen(detail), children: `Ajuster le solde` }),
           (0, $.jsx)(l, { onClick: () => setDetail(null), children: `Fermer` }),
           (0, $.jsx)(l, { variant: `contained`, startIcon: (0, $.jsx)(CT, {}), onClick: () => nav(`/domaine2_Gestion_Administrative_Personnel/conges`), sx: { bgcolor: `#7e3ff2`, textTransform: `none` }, children: `Ouvrir Congés Annuels` }),
+        ] }),
+      ] }),
+      (0, $.jsxs)(f, { open: !!adj, onClose: () => setAdj(null), maxWidth: `sm`, fullWidth: !0, children: [
+        adj
+          ? (0, $.jsxs)(h, { sx: { fontWeight: 800, display: `flex`, alignItems: `center`, gap: 1.5 }, children: [
+              sldAvatar(adj.emp, 40, 17),
+              (0, $.jsxs)(a, { children: [
+                (0, $.jsx)(i, { variant: `h6`, fontWeight: 800, children: `Ajuster le solde` }),
+                (0, $.jsx)(i, { variant: `caption`, color: `text.secondary`, children: B(adj.emp) + ` · solde actuel ` + adj.dispo + ` j · exercice ` + (exo === `tous` ? AN : exo) }),
+              ] }),
+            ] })
+          : null,
+        adj
+          ? (0, $.jsxs)(p, { children: [
+              (0, $.jsx)(c, { severity: `info`, sx: { mb: 2, fontWeight: 600 }, children: `Tout ajustement est horodaté et journalisé (auteur, motif) — consultable dans le Journal d'audit et exportable pour le contrôle interne.` }),
+              (0, $.jsxs)(o, { spacing: 2, children: [
+                (0, $.jsx)(D, { select: !0, size: `small`, label: `Type d'ajustement`, value: adjF.type, onChange: (e2) => setAdjF({ ...adjF, type: e2.target.value }), fullWidth: !0, children: Object.keys(SLD3_AJUST_TYPES).map((k2) => (0, $.jsx)(s, { value: k2, children: SLD3_AJUST_TYPES[k2][0] }, k2)) }),
+                adjF.type !== `recuperation` && adjF.type !== `sans_solde`
+                  ? (0, $.jsxs)(D, { select: !0, size: `small`, label: `Sens de l'ajustement`, value: String(adjF.sens), onChange: (e2) => setAdjF({ ...adjF, sens: Number(e2.target.value) }), fullWidth: !0, children: [
+                      (0, $.jsx)(s, { value: `1`, children: `Ajouter des jours (+)` }),
+                      (0, $.jsx)(s, { value: `-1`, children: `Retirer des jours (−)` }),
+                    ] })
+                  : null,
+                (0, $.jsx)(D, { type: `number`, size: `small`, label: `Nombre de jours`, value: adjF.jours, onChange: (e2) => setAdjF({ ...adjF, jours: e2.target.value }), fullWidth: !0, inputProps: { min: 0.5, max: 60, step: 0.5 }, helperText: `Demi-journées acceptées (0,5) — entre 0,5 et 60 j` }),
+                (0, $.jsx)(D, { multiline: !0, rows: 2, size: `small`, label: `Motif (obligatoire)`, value: adjF.motif, onChange: (e2) => setAdjF({ ...adjF, motif: e2.target.value }), fullWidth: !0, helperText: `Ex. : repos compensateur 01/05, régularisation paie mars…` }),
+                (0, $.jsx)(a, { sx: { p: 1.5, borderRadius: 2, bgcolor: `action.hover`, textAlign: `center` }, children: (0, $.jsx)(i, { variant: `body2`, fontWeight: 800, children: `Nouveau solde disponible : ` + (adj.dispo + (adjF.type === `recuperation` ? 1 : adjF.type === `sans_solde` ? -1 : Number(adjF.sens) || 1) * (Math.abs(Number(adjF.jours)) || 0)) + ` j` }) }),
+              ] }),
+            ] })
+          : null,
+        (0, $.jsxs)(m, { sx: { px: 3, pb: 2 }, children: [
+          (0, $.jsx)(l, { onClick: () => setAdj(null), children: `Annuler` }),
+          (0, $.jsx)(l, { variant: `contained`, onClick: fAjustSubmit, sx: { bgcolor: `#7e3ff2`, textTransform: `none` }, children: `Enregistrer l'ajustement` }),
+        ] }),
+      ] }),
+      (0, $.jsxs)(f, { open: !!jrn, onClose: () => setJrn(0), maxWidth: `md`, fullWidth: !0, children: [
+        (0, $.jsx)(h, { sx: { fontWeight: 800 }, children: `Journal d'audit des ajustements — ` + journal.length + ` mouvement(s)` }),
+        (0, $.jsxs)(p, { children: [
+          journal.length === 0
+            ? (0, $.jsx)(c, { severity: `success`, sx: { fontWeight: 600 }, children: `Aucun ajustement manuel enregistré. Tous les soldes proviennent exclusivement du calcul automatique (droits, reports, demandes Congés V2).` })
+            : (0, $.jsx)(a, { sx: { display: `flex`, flexDirection: `column`, gap: 1, maxHeight: 420, overflowY: `auto` }, children: journal.map((x2) =>
+                (0, $.jsxs)(
+                  a,
+                  {
+                    sx: { display: `flex`, gap: 1.5, alignItems: `flex-start`, p: 1, borderRadius: 2, border: `1px solid`, borderColor: `divider` },
+                    children: [
+                      (0, $.jsx)(HIS, { sx: { fontSize: 18, color: `text.secondary`, mt: 0.25 } }),
+                      (0, $.jsxs)(a, { sx: { flex: 1, minWidth: 0 }, children: [
+                        (0, $.jsx)(i, { variant: `body2`, fontWeight: 700, children: x2.emp_nom + ` · exercice ` + x2.annee }),
+                        (0, $.jsx)(i, { variant: `caption`, color: `text.secondary`, sx: { display: `block` }, children: new Date(x2.ts).toLocaleString() + ` · auteur : ` + x2.auteur }),
+                        (0, $.jsx)(i, { variant: `caption`, sx: { display: `block`, mt: 0.5 }, children: (SLD3_AJUST_TYPES[x2.type] || [x2.type])[0] + ` — motif : ` + x2.motif }),
+                      ] }),
+                      (0, $.jsx)(T, { label: sldSigne(x2.jours) + ` j`, size: `small`, color: x2.jours > 0 ? `success` : `warning`, variant: `filled`, sx: { fontWeight: 800, fontSize: `0.72rem` } }),
+                    ],
+                  },
+                  x2.id,
+                ),
+              ) }),
+        ] }),
+        (0, $.jsxs)(m, { sx: { px: 3, pb: 2 }, children: [
+          (0, $.jsx)(l, { onClick: () => setJrn(0), children: `Fermer` }),
+          (0, $.jsx)(l, { variant: `contained`, startIcon: (0, $.jsx)(S, {}), onClick: fJrnExport, disabled: journal.length === 0, sx: { bgcolor: `#7e3ff2`, textTransform: `none` }, children: `Exporter le journal (CSV)` }),
+        ] }),
+      ] }),
+      (0, $.jsxs)(f, { open: !!par, onClose: () => { (setPar(0), setP(sld3Params())); }, maxWidth: `sm`, fullWidth: !0, children: [
+        (0, $.jsx)(h, { sx: { fontWeight: 800 }, children: `Paramètres du cockpit` }),
+        (0, $.jsxs)(p, { children: [
+          (0, $.jsx)(c, { severity: `info`, sx: { mb: 2, fontWeight: 600 }, children: `Ces réglages pilotent les seuils de statut, les droits de base et la valorisation financière (provisions, indemnité compensatrice). Ils sont persistés sur ce poste et appliqués immédiatement après enregistrement.` }),
+          (0, $.jsxs)(o, { spacing: 2, children: [
+            (0, $.jsxs)(o, { direction: `row`, spacing: 2, children: [
+              (0, $.jsx)(D, { type: `number`, size: `small`, label: `Base Cadre (j/an)`, value: P.baseCadre, onChange: (e2) => setP({ ...P, baseCadre: e2.target.value }), fullWidth: !0, inputProps: { min: 0, max: 60 } }),
+              (0, $.jsx)(D, { type: `number`, size: `small`, label: `Base non-Cadre (j/an)`, value: P.baseAutre, onChange: (e2) => setP({ ...P, baseAutre: e2.target.value }), fullWidth: !0, inputProps: { min: 0, max: 60 } }),
+            ] }),
+            (0, $.jsxs)(o, { direction: `row`, spacing: 2, children: [
+              (0, $.jsx)(D, { type: `number`, size: `small`, label: `Seuil sous-utilisé (%)`, value: P.seuilSous, onChange: (e2) => setP({ ...P, seuilSous: e2.target.value }), fullWidth: !0, inputProps: { min: 0, max: 100 } }),
+              (0, $.jsx)(D, { type: `number`, size: `small`, label: `Seuil tendu (%)`, value: P.seuilTendu, onChange: (e2) => setP({ ...P, seuilTendu: e2.target.value }), fullWidth: !0, inputProps: { min: 0, max: 100 } }),
+            ] }),
+            (0, $.jsxs)(D, { select: !0, size: `small`, label: `Valorisation financière`, value: P.coutFixeOn ? `1` : `0`, onChange: (e2) => setP({ ...P, coutFixeOn: e2.target.value === `1` ? 1 : 0 }), children: [
+              (0, $.jsx)(s, { value: `0`, children: `Salaire réel de chaque employé ÷ 26` }),
+              (0, $.jsx)(s, { value: `1`, children: `Coût journalier fixe global` }),
+            ] }),
+            P.coutFixeOn ? (0, $.jsx)(D, { type: `number`, size: `small`, label: `Coût journalier fixe (FCFA)`, value: P.coutFixe, onChange: (e2) => setP({ ...P, coutFixe: e2.target.value }), fullWidth: !0, inputProps: { min: 0, step: 500 } }) : null,
+          ] }),
+        ] }),
+        (0, $.jsxs)(m, { sx: { px: 3, pb: 2 }, children: [
+          (0, $.jsx)(l, { onClick: () => { (setPar(0), setP(sld3Params())); }, children: `Annuler` }),
+          (0, $.jsx)(l, { variant: `contained`, startIcon: (0, $.jsx)(TUNE, {}), onClick: fParSave, sx: { bgcolor: `#7e3ff2`, textTransform: `none` }, children: `Enregistrer` }),
+        ] }),
+      ] }),
+      (0, $.jsxs)(f, { open: !!simu, onClose: () => setSimu(0), maxWidth: `lg`, fullWidth: !0, children: [
+        (0, $.jsx)(h, { sx: { fontWeight: 800 }, children: `Simulateur de clôture d'exercice ` + AN + ` → ` + (AN + 1) }),
+        (0, $.jsxs)(p, { children: [
+          (0, $.jsx)(c, { severity: `info`, sx: { mb: 2, fontWeight: 600 }, children: `Art. 89 du Code du travail : les congés doivent être pris dans les 12 mois qui suivent l'ouverture du droit. Choisissez une politique de report pour préparer la bascule du 01/01/` + (AN + 1) + ` — la simulation est sans effet sur les données jusqu'à décision en comité RH.` }),
+          (0, $.jsxs)(a, { sx: { display: `flex`, gap: 2, flexWrap: `wrap`, mb: 2, alignItems: `center` }, children: [
+            (0, $.jsxs)(D, { select: !0, size: `small`, label: `Politique de report`, value: pol.politique, onChange: (e2) => setPol({ ...pol, politique: e2.target.value }), sx: { minWidth: 320, maxWidth: `100%` }, children: [
+              (0, $.jsx)(s, { value: `integrale`, children: `Reporter intégralement les soldes non consommés` }),
+              (0, $.jsx)(s, { value: `plafond`, children: `Reporter avec plafond (limite paramétrable)` }),
+              (0, $.jsx)(s, { value: `purge`, children: `Purger les droits non consommés (application stricte art. 89)` }),
+            ] }),
+            pol.politique === `plafond` ? (0, $.jsx)(D, { type: `number`, size: `small`, label: `Plafond (jours)`, value: pol.plafond, onChange: (e2) => setPol({ ...pol, plafond: e2.target.value }), sx: { width: 170 }, inputProps: { min: 0, max: 30 } }) : null,
+            simRows ? (0, $.jsx)(i, { variant: `caption`, sx: { color: `text.secondary` }, children: `Total report simulé : ` + simRows.reduce((s3, r2) => s3 + r2.rep, 0) + ` j · ouverture cumulée ` + simRows.reduce((s3, r2) => s3 + r2.ouvert, 0) + ` j` }) : null,
+          ] }),
+          simRows
+            ? (0, $.jsx)(y, { sx: { overflowX: `auto`, maxHeight: 380 }, children: (0, $.jsxs)(ne, { size: `small`, stickyHeader: !0, children: [
+                  (0, $.jsx)(te, { children: (0, $.jsxs)(b, { children: [
+                    (0, $.jsx)(v, { children: `Employé` }),
+                    (0, $.jsx)(v, { align: `right`, children: `Solde fin ` + AN }),
+                    (0, $.jsx)(v, { align: `right`, children: `Report simulé → ` + (AN + 1) }),
+                    (0, $.jsx)(v, { align: `right`, children: `Droit ` + (AN + 1) }),
+                    (0, $.jsx)(v, { align: `right`, children: `Solde d'ouverture ` + (AN + 1) }),
+                  ] }) }),
+                  (0, $.jsx)(_, { children: simRows.map((r2, i3) =>
+                    (0, $.jsxs)(b, { hover: !0, children: [
+                      (0, $.jsx)(v, { children: (0, $.jsxs)(a, { sx: { display: `flex`, alignItems: `center`, gap: 1 }, children: [sldAvatar(r2.emp, 30, 11), (0, $.jsx)(i, { variant: `body2`, fontWeight: 700, noWrap: !0, children: B(r2.emp) })] }) }),
+                      (0, $.jsx)(v, { align: `right`, children: r2.fin + ` j` }),
+                      (0, $.jsx)(v, { align: `right`, children: (0, $.jsx)(i, { variant: `body2`, fontWeight: 700, sx: { color: r2.rep > 0 ? `secondary.main` : `text.disabled` }, children: `+` + r2.rep + ` j` }) }),
+                      (0, $.jsx)(v, { align: `right`, children: r2.droit + ` j` + (r2.prorata ? ` (prorata)` : ``) }),
+                      (0, $.jsx)(v, { align: `right`, children: (0, $.jsx)(i, { variant: `body2`, fontWeight: 800, children: r2.ouvert + ` j` }) }),
+                    ] }, r2.emp.id || i3),
+                  ) }),
+                ] }) })
+            : null,
+          (0, $.jsx)(i, { variant: `caption`, sx: { color: `text.secondary`, display: `block`, mt: 1.5 }, children: `Droit ` + (AN + 1) + ` calculé avec prorata d'embauche éventuel. Les soldes négatifs ne sont pas reportés (débit à régulariser par ajustement).` }),
+        ] }),
+        (0, $.jsxs)(m, { sx: { px: 3, pb: 2 }, children: [
+          (0, $.jsx)(l, { onClick: () => setSimu(0), children: `Fermer` }),
+          (0, $.jsx)(l, { variant: `contained`, startIcon: (0, $.jsx)(S, {}), onClick: fSimExport, sx: { bgcolor: `#7e3ff2`, textTransform: `none` }, children: `Exporter la simulation (CSV)` }),
         ] }),
       ] }),
       (0, $.jsx)(d, { open: !!snack, autoHideDuration: 4e3, onClose: () => setSnack(null), anchorOrigin: { vertical: `bottom`, horizontal: `center` }, message: snack ? snack.msg : `` }),

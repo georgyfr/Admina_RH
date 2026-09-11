@@ -76,7 +76,35 @@ a{color:inherit;text-decoration:none}
 .chipx.ghub{border-style:dashed}
 
 /* ===== shell principal ===== */
-.d8shell{min-height:100vh;display:flex;flex-direction:column}
+.d8shell{min-height:100vh;display:grid;grid-template-columns:266px minmax(0,1fr)}
+/* ===== ADEM V23 — barre latérale gauche D8 (onglets du cycle social) ===== */
+aside.d8side{grid-column:1;grid-row:1/span 2;align-self:start;position:sticky;top:0;height:100vh;overflow-y:auto;
+  background:linear-gradient(175deg,#14304b 0%,#0b2a4a 55%,#0a2036 100%);border-right:1px solid rgba(0,0,0,.28);
+  padding:18px 14px 20px}
+.d8side .bmark{display:flex;align-items:center;gap:10px;padding:2px 6px 14px;border-bottom:1px solid rgba(255,255,255,.12);margin-bottom:12px}
+.d8side .logo{width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,#1e4e79 49.5%,#b23a2f 50.5%);
+  display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:#fff;
+  box-shadow:0 6px 18px rgba(11,42,74,.55);flex:none}
+.d8side .bmark b{font-size:1rem;display:block;color:#fff}
+.d8side .bmark small{color:#9db8d2;font-size:.68rem;letter-spacing:.05em;text-transform:uppercase;display:block;margin-top:1px}
+.d8side .grp{display:flex;align-items:center;gap:7px;color:#9db8d2;font-size:.64rem;font-weight:700;letter-spacing:.12em;
+  text-transform:uppercase;margin:14px 8px 6px}
+.d8side .grp i{width:8px;height:8px;border-radius:2px;flex:none;opacity:.92}
+.d8side a.nav{display:flex;align-items:center;gap:8px;color:#dbe7f3;font-size:.85rem;padding:7px 10px;border-radius:9px;
+  transition:.15s;border:1px solid transparent}
+.d8side a.nav:hover{background:rgba(255,255,255,.07);text-decoration:none;color:#fff}
+.d8side a.nav.on{background:rgba(30,78,121,.42);color:#fff;border-color:rgba(76,140,199,.55)}
+.d8side a.nav .dot{width:6px;height:6px;border-radius:50%;background:#6fa3cf;opacity:.45;flex:none}
+.d8side a.nav.on .dot{opacity:1;box-shadow:0 0 8px #6fa3cf}
+.d8side .home{margin-top:14px;border-top:1px solid rgba(255,255,255,.12);padding-top:12px}
+.d8h{grid-column:2;grid-row:1}
+#d8-main{grid-column:2;grid-row:2}
+@media(max-width:940px){
+  .d8shell{display:block}
+  aside.d8side{position:static;height:auto;overflow:visible;border-right:0;border-bottom:1px solid rgba(255,255,255,.16)}
+  main{padding:20px 16px 50px}
+}
+/* ===== fin ADEM V23 sidebar ===== */
 main{flex:1;width:100%;max-width:1180px;margin:0 auto;padding:22px 30px 60px;min-width:0}
 .topbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:2px 0 18px}
 .topbar .crumb{font-size:.8rem;color:var(--mut)}
@@ -381,7 +409,7 @@ footer .sep{opacity:.5}
   setTimeout(function(){ clearInterval(iv); hide(); }, 4000);
 })();
 </script>
-<div class="d8shell">
+<div class="d8shell"><aside class="d8side"><div class="bmark"><div class="logo">AR</div><div><b>Admina-RH</b><small>Domaine 8 · Dialogue social</small></div></div><div class="grp"><i style="background:#2c6da3"></i>Pilotage</div><a class="nav" href="/Domaine8_Relations_Sociales_Syndicats/"><span class="dot"></span>Tableau de Bord</a><div class="grp"><i style="background:#5e93c4"></i>1 · Prévention & Organisation</div><a class="nav" href="/Domaine8_Relations_Sociales_Syndicats/syndicats/"><span class="dot"></span>Paysage Syndical</a><a class="nav" href="/Domaine8_Relations_Sociales_Syndicats/droit-syndical/"><span class="dot"></span>Droit Syndical</a><a class="nav" href="/Domaine8_Relations_Sociales_Syndicats/delegues/"><span class="dot"></span>Délégués & Élus</a><a class="nav" href="/Domaine8_Relations_Sociales_Syndicats/cse/"><span class="dot"></span>CSE & Commissions</a><a class="nav" href="/Domaine8_Relations_Sociales_Syndicats/calendrier-nego/"><span class="dot"></span>Calendrier de Négociation</a><div class="grp"><i style="background:#c9972b"></i>2 · Gestion Disciplinaire</div><a class="nav" href="/Domaine8_Relations_Sociales_Syndicats/discipline/"><span class="dot"></span>Sanctions & Discipline</a><div class="grp"><i style="background:#d05a4e"></i>3 · Réclamations & Médiation</div><a class="nav" href="/Domaine8_Relations_Sociales_Syndicats/reclamations/"><span class="dot"></span>Registre des Réclamations</a><a class="nav" href="/Domaine8_Relations_Sociales_Syndicats/reclamations-mois/"><span class="dot"></span>Réclamations du Mois</a><a class="nav" href="/Domaine8_Relations_Sociales_Syndicats/mediation/"><span class="dot"></span>Médiation</a><a class="nav" href="/Domaine8_Relations_Sociales_Syndicats/mesures-correctives/"><span class="dot"></span>Mesures Correctives</a><div class="grp"><i style="background:#a86bc4"></i>4 · Négociation & Dialogue</div><a class="nav" href="/Domaine8_Relations_Sociales_Syndicats/conflits/"><span class="dot"></span>Conflits Sociaux</a><a class="nav" href="/Domaine8_Relations_Sociales_Syndicats/negociations/"><span class="dot"></span>Négociations en Cours</a><a class="nav" href="/Domaine8_Relations_Sociales_Syndicats/accords/"><span class="dot"></span>Accords d&#x27;Entreprise</a><a class="nav" href="/Domaine8_Relations_Sociales_Syndicats/historique-accords/"><span class="dot"></span>Historique des Accords</a><a class="nav" href="/Domaine8_Relations_Sociales_Syndicats/pv-reunions/"><span class="dot"></span>Procès-Verbaux</a><div class="grp"><i style="background:#418763"></i>5 · Bilan Social & Reporting</div><a class="nav" href="/Domaine8_Relations_Sociales_Syndicats/bilan-social/"><span class="dot"></span>Bilan Social</a><a class="nav" href="/Domaine8_Relations_Sociales_Syndicats/rapports-instances/"><span class="dot"></span>Rapports d&#x27;Instances</a><a class="nav on" href="/Domaine8_Relations_Sociales_Syndicats/employes/"><span class="dot"></span>Référentiel Employés</a><a class="nav" href="/Domaine8_Relations_Sociales_Syndicats/interconnexions/"><span class="dot"></span>Interconnexions & Documents</a><div class="home"><a class="nav" href="/"><span class="dot"></span>Tous les domaines</a></div></aside>
 
 <header class="d8h">
   <div class="d8h-band">
@@ -397,7 +425,7 @@ footer .sep{opacity:.5}
   </div>
   <div class="d8h-roles"><div class="lab">Rôles utilisateurs du domaine</div><div class="row"><div class="role"><i style="background:#1e4e79">DG</i><div><b>Direction Générale</b><small>Signature des accords</small></div></div><div class="role"><i style="background:#2c6da3">DRH</i><div><b>DRH Nganou</b><small>Pilotage &amp; négociation</small></div></div><div class="role"><i style="background:#6d3a8e">ARH</i><div><b>Assistante RH</b><small>Coordination &amp; PV</small></div></div><div class="role"><i style="background:#b23a2f">DP</i><div><b>Délégués du Personnel</b><small>4 mandatés en cours</small></div></div><div class="role"><i style="background:#c9574a">SYN</i><div><b>Représentants Syndicaux</b><small>5 organisations</small></div></div><div class="role"><i style="background:#b07818">CS</i><div><b>Chefs de Service</b><small>Mesures correctives</small></div></div></div></div>
 </header>
-<nav class="d8cyclewrap" aria-label="Cycle social"><div class="d8cycle"><a class="d8ph" href="/Domaine8_Relations_Sociales_Syndicats/syndicats/"><span class="num" style="background:#1e4e79">1</span><span><b>Prévention &amp; Organisation</b><small>5 écrans</small></span><span class="fleche"></span></a><a class="d8ph" href="/Domaine8_Relations_Sociales_Syndicats/discipline/"><span class="num" style="background:#b07818">2</span><span><b>Gestion Disciplinaire</b><small>1 écran</small></span><span class="fleche"></span></a><a class="d8ph" href="/Domaine8_Relations_Sociales_Syndicats/reclamations/"><span class="num" style="background:#b23a2f">3</span><span><b>Réclamation &amp; Médiation</b><small>4 écrans</small></span><span class="fleche"></span></a><a class="d8ph" href="/Domaine8_Relations_Sociales_Syndicats/conflits/"><span class="num" style="background:#6d3a8e">4</span><span><b>Négociation &amp; Dialogue Social</b><small>5 écrans</small></span><span class="fleche"></span></a><a class="d8ph on" href="/Domaine8_Relations_Sociales_Syndicats/bilan-social/" style="background:#2e6b4f;border-color:#2e6b4f"><span class="num" style="background:rgba(255,255,255,.22)">5</span><span><b>Bilan Social &amp; Reporting</b><small>4 écrans</small></span><span class="fleche"></span></a></div></nav>
+
 <div class="d8crumbs"><span class="lab">Écrans :</span><a class="chipx ghub" href="/Domaine8_Relations_Sociales_Syndicats/">Tableau de Bord</a><a class="chipx" href="/Domaine8_Relations_Sociales_Syndicats/bilan-social/">Bilan Social</a><a class="chipx" href="/Domaine8_Relations_Sociales_Syndicats/rapports-instances/">Rapports</a><a class="chipx on" href="/Domaine8_Relations_Sociales_Syndicats/employes/">Employés</a><a class="chipx" href="/Domaine8_Relations_Sociales_Syndicats/interconnexions/">Interconnexions</a><a class="chipx" href="/#grid" style="margin-left:auto">← Les 31 domaines</a></div>
 <main id="d8-main">
   <div class="topbar">
