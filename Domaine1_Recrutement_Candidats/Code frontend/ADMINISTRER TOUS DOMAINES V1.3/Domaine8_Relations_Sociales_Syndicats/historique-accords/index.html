@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>D8 · Historique des Accords | Admina-RH</title>
+<meta name="description" content="Historique complet des accords signés depuis 2020 : textes, signataires et statuts actuels."/>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
+<style>
+:root{
+  --encre:#26221c; --mut:#6e675c; --bg:#f6f4ef; --card:#ffffff; --card2:#fbf9f4;
+  --line:#e6e1d5; --line2:#d8d2c2;
+  --bleu:#1e4e79; --bleu2:#2c6da3; --bleuf:#eaf1f7;
+  --rouge:#b23a2f; --rouge2:#c9574a; --rougef:#f9edeb;
+  --or:#b07818; --orf:#f7f0e0; --vert:#2e6b4f; --vertf:#eaf3ee;
+  --violet:#6d3a8e; --violetf:#f2ecf7;
+  --ph1:#1e4e79; --ph2:#b07818; --ph3:#b23a2f; --ph4:#6d3a8e; --ph5:#2e6b4f;
+  --shadow:0 10px 30px -18px rgba(38,34,28,.35);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"Inter",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",sans-serif;
+  background:var(--bg);color:var(--encre);line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+
+/* ===== bandeau « les deux parties » ===== */
+.d8h{position:relative}
+.d8h-band{display:grid;grid-template-columns:1fr auto 1fr;align-items:stretch;min-height:64px}
+.d8h-left{background:linear-gradient(90deg,#163a5c 0%,var(--bleu) 78%,#265e8e 100%);color:#fff;
+  display:flex;align-items:center;gap:12px;padding:10px 20px 10px 22px;border-radius:0 0 0 0}
+.d8h-right{background:linear-gradient(270deg,#8f2d24 0%,var(--rouge) 78%,#a83a2f 100%);color:#fff;
+  display:flex;align-items:center;justify-content:flex-end;gap:12px;padding:10px 22px 10px 20px;text-align:right}
+.d8h-left small,.d8h-right small{display:block;font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;opacity:.78}
+.d8h-left b,.d8h-right b{font-size:1.02rem;font-weight:800;letter-spacing:-.2px}
+.d8h-seal{align-self:center;width:58px;height:58px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,var(--bleu) 0% 50%,var(--rouge) 50% 100%);color:#fff;font-weight:800;font-size:1.05rem;
+  border:3px solid #fff;box-shadow:0 6px 18px -6px rgba(38,34,28,.5);margin:0 10px;z-index:2}
+.d8h-title{padding:22px 30px 6px;max-width:1180px;margin:0 auto;width:100%}
+.d8h-title h1{font-size:clamp(1.3rem,2.4vw,1.85rem);font-weight:800;letter-spacing:-.3px}
+.d8h-title h1 em{font-style:normal;color:var(--rouge)}
+.d8h-title p{color:var(--mut);font-size:.92rem;margin-top:5px;max-width:88ch}
+.d8h-mots{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.d8h-mots span{font-size:.74rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:5px 12px;
+  border-radius:999px;background:#fff;border:1px solid var(--line2);color:var(--encre);display:inline-flex;align-items:center;gap:7px}
+.d8h-mots span i{width:8px;height:8px;border-radius:2px;display:inline-block}
+.d8h-roles{max-width:1180px;margin:16px auto 0;width:100%;padding:0 30px}
+.d8h-roles .lab{font-size:.66rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--mut);margin-bottom:8px}
+.d8h-roles .row{display:flex;gap:10px;flex-wrap:wrap}
+.role{background:#fff;border:1px solid var(--line);border-radius:12px;padding:9px 13px;display:flex;gap:10px;align-items:center;box-shadow:var(--shadow)}
+.role i{width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-style:normal;font-size:.8rem;font-weight:800;color:#fff}
+.role b{font-size:.8rem;display:block;line-height:1.2}
+.role small{font-size:.68rem;color:var(--mut)}
+
+/* ===== frise du cycle social ===== */
+.d8cyclewrap{max-width:1180px;margin:18px auto 0;width:100%;padding:0 30px}
+.d8cycle{display:flex;align-items:stretch;gap:6px;flex-wrap:wrap}
+.d8ph{flex:1 1 150px;min-width:148px;position:relative;background:#fff;border:1px solid var(--line);border-radius:12px;
+  padding:10px 12px 10px 12px;display:flex;gap:9px;align-items:center;transition:transform .15s ease,box-shadow .15s ease}
+.d8ph:hover{transform:translateY(-2px);box-shadow:0 12px 26px -16px rgba(38,34,28,.45)}
+.d8ph .num{width:30px;height:30px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;
+  color:#fff;font-weight:800;font-size:.85rem}
+.d8ph b{font-size:.78rem;line-height:1.25;display:block}
+.d8ph small{font-size:.66rem;color:var(--mut)}
+.d8ph.on{border-color:transparent;color:#fff}
+.d8ph.on small{color:rgba(255,255,255,.8)}
+.d8ph .fleche{position:absolute;right:-8px;top:50%;transform:translateY(-50%);width:12px;height:12px;background:#fff;
+  border-top:1px solid var(--line);border-right:1px solid var(--line);transform:translateY(-50%) rotate(45deg);z-index:1}
+.d8ph:last-child .fleche{display:none}
+
+/* ===== chips des écrans de la phase ===== */
+.d8crumbs{max-width:1180px;margin:12px auto 0;width:100%;padding:0 30px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.d8crumbs .lab{font-size:.66rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);margin-right:2px}
+.chipx{font-size:.75rem;font-weight:600;padding:6px 12px;border-radius:999px;background:#fff;border:1px solid var(--line);color:var(--encre)}
+.chipx:hover{border-color:var(--bleu2);color:var(--bleu)}
+.chipx.on{background:var(--bleu);border-color:var(--bleu);color:#fff;font-weight:700}
+.chipx.ghub{border-style:dashed}
+
+/* ===== shell principal ===== */
+.d8shell{min-height:100vh;display:grid;grid-template-columns:266px minmax(0,1fr)}
+/* ===== ADEM V23 — barre latérale gauche D8 (onglets du cycle social) ===== */
+aside.d8side{grid-column:1;grid-row:1/span 2;align-self:start;position:sticky;top:0;height:100vh;overflow-y:auto;
+  background:linear-gradient(175deg,#14304b 0%,#0b2a4a 55%,#0a2036 100%);border-right:1px solid rgba(0,0,0,.28);
+  padding:18px 14px 20px}
+.d8side .bmark{display:flex;align-items:center;gap:10px;padding:2px 6px 14px;border-bottom:1px solid rgba(255,255,255,.12);margin-bottom:12px}
+.d8side .logo{width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,#1e4e79 49.5%,#b23a2f 50.5%);
+  display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:#fff;
+  box-shadow:0 6px 18px rgba(11,42,74,.55);flex:none}
+.d8side .bmark b{font-size:1rem;display:block;color:#fff}
+.d8side .bmark small{color:#9db8d2;font-size:.68rem;letter-spacing:.05em;text-transform:uppercase;display:block;margin-top:1px}
+.d8side .grp{display:flex;align-items:center;gap:7px;color:#9db8d2;font-size:.64rem;font-weight:700;letter-spacing:.12em;
+  text-transform:uppercase;margin:14px 8px 6px}
+.d8side .grp i{width:8px;height:8px;border-radius:2px;flex:none;opacity:.92}
+.d8side a.nav{display:flex;align-items:center;gap:8px;color:#dbe7f3;font-size:.85rem;padding:7px 10px;border-radius:9px;
+  transition:.15s;border:1px solid transparent}
+.d8side a.nav:hover{background:rgba(255,255,255,.07);text-decoration:none;color:#fff}
+.d8side a.nav.on{background:rgba(30,78,121,.42);color:#fff;border-color:rgba(76,140,199,.55)}
+.d8side a.nav .dot{width:6px;height:6px;border-radius:50%;background:#6fa3cf;opacity:.45;flex:none}
+.d8side a.nav.on .dot{opacity:1;box-shadow:0 0 8px #6fa3cf}
+.d8side .home{margin-top:14px;border-top:1px solid rgba(255,255,255,.12);padding-top:12px}
+.d8h{grid-column:2;grid-row:1}
+#d8-main{grid-column:2;grid-row:2}
+@media(max-width:940px){
+  .d8shell{display:block}
+  aside.d8side{position:static;height:auto;overflow:visible;border-right:0;border-bottom:1px solid rgba(255,255,255,.16)}
+  main{padding:20px 16px 50px}
+}
+/* ===== fin ADEM V23 sidebar ===== */
+main{flex:1;width:100%;max-width:1180px;margin:0 auto;padding:22px 30px 60px;min-width:0}
+.topbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:2px 0 18px}
+.topbar .crumb{font-size:.8rem;color:var(--mut)}
+.topbar .crumb a{color:var(--bleu);font-weight:600}
+.topbar .crumb a:hover{text-decoration:underline}
+.topbar .phasetag{margin-left:auto;font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
+  color:#fff;padding:5px 11px;border-radius:999px}
+
+/* ===== sections ===== */
+.hero8{background:linear-gradient(120deg,#163a5c 0%,#1e4e79 46%,#8f2d24 100%);border-radius:16px;color:#fff;
+  padding:26px 28px;display:flex;gap:18px;align-items:center;justify-content:space-between;flex-wrap:wrap;
+  box-shadow:0 18px 40px -22px rgba(22,42,60,.7);margin-bottom:22px}
+.hero8 h2{font-size:clamp(1.15rem,2vw,1.5rem);font-weight:800;letter-spacing:-.2px;line-height:1.3}
+.hero8 p{color:#e8e2d8;font-size:.86rem;margin-top:6px;max-width:70ch}
+.hero8 .hbadge{background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.22);border-radius:12px;
+  padding:10px 16px;text-align:center}
+.hero8 .hbadge b{font-size:1.45rem;display:block}
+.hero8 .hbadge small{font-size:.68rem;opacity:.85;letter-spacing:.06em;text-transform:uppercase}
+
+.sect{margin:26px 0 10px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.sect h3{font-size:1.05rem;font-weight:800;letter-spacing:-.2px}
+.sect p{color:var(--mut);font-size:.82rem}
+.sect .more{margin-left:auto;font-size:.75rem;color:var(--bleu);font-weight:600}
+
+/* ===== KPI ===== */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px 12px;position:relative;overflow:hidden;box-shadow:var(--shadow)}
+.kpi::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--bleu)}
+.kpi.rouge::before{background:var(--rouge)}
+.kpi .v{font-size:1.62rem;font-weight:800;letter-spacing:-.5px;line-height:1.1}
+.kpi .v small{font-size:.8rem;font-weight:700;color:var(--mut)}
+.kpi .l{font-size:.78rem;font-weight:700;margin-top:2px}
+.kpi .s{font-size:.7rem;color:var(--mut);margin-top:3px;line-height:1.35}
+
+/* ===== stats chips ===== */
+.d8stats{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0 6px}
+.stat{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 14px;min-width:128px;box-shadow:var(--shadow)}
+.stat b{font-size:1.18rem;font-weight:800;display:block}
+.stat small{font-size:.7rem;color:var(--mut)}
+
+/* ===== cartes ===== */
+.d8grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.d8grid.g2{grid-template-columns:repeat(2,1fr)}
+.card8{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;box-shadow:var(--shadow)}
+.card8 h4{font-size:.92rem;font-weight:800;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.card8 p{font-size:.8rem;color:var(--mut)}
+.card8 .mini{font-size:.72rem;color:var(--mut);margin-top:8px;display:flex;gap:8px;flex-wrap:wrap}
+
+/* ===== tableaux ===== */
+.tblcard{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:var(--shadow)}
+.tbltop{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--line);background:var(--card2);flex-wrap:wrap}
+.tbltop b{font-size:.86rem}
+.tbltop .count{font-size:.7rem;color:var(--mut);background:#fff;border:1px solid var(--line);padding:3px 9px;border-radius:999px}
+.tbltop input{margin-left:auto;min-width:200px;flex:0 1 240px;font:inherit;font-size:.78rem;padding:7px 12px;border:1px solid var(--line2);
+  border-radius:9px;background:#fff;color:var(--encre);outline:none}
+.tbltop input:focus{border-color:var(--bleu2)}
+.tblwrap{overflow-x:auto}
+table.d8tbl{width:100%;border-collapse:collapse;font-size:.8rem;min-width:720px}
+.d8tbl th{position:sticky;top:0;background:#f2efe7;text-align:left;font-size:.64rem;letter-spacing:.09em;text-transform:uppercase;
+  color:#57503f;padding:9px 12px;border-bottom:1px solid var(--line2);white-space:nowrap}
+.d8tbl td{padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.d8tbl tr:last-child td{border-bottom:none}
+.d8tbl tbody tr:hover{background:#faf8f2}
+.d8tbl td.strong{font-weight:700}
+.d8tbl td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.d8tbl .soustot{background:#f7f4ec;font-weight:800}
+.d8tbl .note{color:var(--mut);font-size:.72rem}
+
+/* ===== badges ===== */
+.bdg{display:inline-block;font-size:.67rem;font-weight:700;padding:3px 9px;border-radius:999px;white-space:nowrap;
+  border:1px solid transparent;line-height:1.35}
+.b-vert{background:var(--vertf);color:var(--vert);border-color:#cfe3d8}
+.b-bleu{background:var(--bleuf);color:var(--bleu);border-color:#cfdfea}
+.b-rouge{background:var(--rougef);color:var(--rouge);border-color:#efd2ce}
+.b-ambre{background:var(--orf);color:var(--or);border-color:#e8dcc0}
+.b-gris{background:#f0eee8;color:#6e675c;border-color:var(--line2)}
+.b-violet{background:var(--violetf);color:var(--violet);border-color:#e0d3ec}
+
+/* ===== barres ===== */
+.dbar{display:grid;grid-template-columns:180px 1fr 110px;gap:10px;align-items:center;margin:9px 0}
+.dbar .lbl{font-size:.78rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dbar .track{height:12px;border-radius:999px;background:#ece8dd;overflow:hidden}
+.dbar .fill{display:block;height:100%;border-radius:999px}
+.dbar .val{font-size:.76rem;color:var(--mut);font-variant-numeric:tabular-nums;text-align:right}
+.dbar .fill.b1{background:linear-gradient(90deg,var(--ph1),#3a72a8)}
+.dbar .fill.b2{background:linear-gradient(90deg,var(--ph2),#c9972b)}
+.dbar .fill.b3{background:linear-gradient(90deg,var(--ph3),#d05a4e)}
+.dbar .fill.b4{background:linear-gradient(90deg,var(--ph4),#8b56ab)}
+.dbar .fill.b5{background:linear-gradient(90deg,var(--ph5),#418763)}
+
+/* ===== donut ===== */
+.donutrow{display:flex;gap:26px;align-items:center;flex-wrap:wrap}
+.donut{width:170px;height:170px;border-radius:50%;position:relative;flex:none;
+  background:conic-gradient(var(--donut))}
+.donut::after{content:"";position:absolute;inset:26%;border-radius:50%;background:var(--card);
+  box-shadow:0 0 0 1px var(--line) inset}
+.donut .dc{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:1}
+.donut .dc b{font-size:1.5rem;font-weight:800}
+.donut .dc small{font-size:.64rem;color:var(--mut);text-transform:uppercase;letter-spacing:.08em}
+.leg{display:flex;flex-direction:column;gap:7px;min-width:190px}
+.leg .li{display:flex;align-items:center;gap:8px;font-size:.78rem}
+.leg .li i{width:11px;height:11px;border-radius:3px;flex:none}
+.leg .li b{margin-left:auto;font-variant-numeric:tabular-nums}
+
+/* ===== timeline ===== */
+.d8tl{position:relative;margin:10px 0 6px;padding-left:26px}
+.d8tl::before{content:"";position:absolute;left:9px;top:6px;bottom:6px;width:2px;background:var(--line2)}
+.tlitem{position:relative;padding:0 0 16px 8px}
+.tlitem::before{content:"";position:absolute;left:-23px;top:5px;width:12px;height:12px;border-radius:50%;
+  background:#fff;border:3px solid var(--bleu)}
+.tlitem.r2::before{border-color:var(--or)}
+.tlitem.r3::before{border-color:var(--rouge)}
+.tlitem .d{font-size:.68rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--mut)}
+.tlitem b{font-size:.85rem;display:block;margin-top:1px}
+.tlitem p{font-size:.76rem;color:var(--mut);margin-top:2px}
+
+/* ===== stepper processus ===== */
+.d8steps{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:14px 0 4px}
+.step{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 12px 10px;position:relative;box-shadow:var(--shadow)}
+.step .n{width:26px;height:26px;border-radius:50%;background:var(--bleuf);color:var(--bleu);font-weight:800;font-size:.78rem;
+  display:flex;align-items:center;justify-content:center;margin-bottom:7px}
+.step b{font-size:.76rem;display:block;line-height:1.3}
+.step small{font-size:.68rem;color:var(--mut);display:block;margin-top:3px;line-height:1.4}
+
+/* ===== jauges climat ===== */
+.clim{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.climat{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;box-shadow:var(--shadow);text-align:center}
+.climat .g{width:86px;height:86px;border-radius:50%;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;
+  background:conic-gradient(var(--cc) calc(var(--pct)*1%),#ece8dd 0);position:relative}
+.climat .g::after{content:"";position:absolute;inset:11px;border-radius:50%;background:#fff}
+.climat .g b{position:relative;z-index:1;font-size:1.2rem;font-weight:800}
+.climat b{font-size:.8rem;display:block}
+.climat small{font-size:.68rem;color:var(--mut)}
+
+/* ===== mesures correctives ===== */
+.mc{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.mcard{background:#fff;border:1px solid var(--line);border-radius:14px;padding:15px 17px;box-shadow:var(--shadow)}
+.mcard .top{display:flex;align-items:center;gap:9px;margin-bottom:7px;flex-wrap:wrap}
+.mcard .top b{font-size:.85rem}
+.mcard p{font-size:.78rem;color:var(--mut)}
+.mcard .meta{display:flex;gap:14px;flex-wrap:wrap;margin-top:9px;font-size:.72rem;color:var(--mut)}
+.mcard .meta b{font-size:.72rem;color:var(--encre)}
+.pbar{height:9px;border-radius:999px;background:#ece8dd;overflow:hidden;margin-top:10px}
+.pbar span{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--vert),#418763)}
+.pbar.mid span{background:linear-gradient(90deg,var(--or),#c9972b)}
+.pbar.low span{background:linear-gradient(90deg,var(--rouge),#d05a4e)}
+
+/* ===== blocs divers ===== */
+.note8{background:var(--bleuf);border:1px solid #cfdfea;border-left:4px solid var(--bleu);border-radius:10px;
+  padding:12px 15px;font-size:.8rem;color:#23425f;margin:16px 0}
+.note8.rouge{background:var(--rougef);border-color:#efd2ce;border-left-color:var(--rouge);color:#5f2a24}
+.note8.or{background:var(--orf);border-color:#e8dcc0;border-left-color:var(--or);color:#5c4310}
+.d8doc{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.doc8{background:#fff;border:1px solid var(--line);border-radius:13px;padding:14px 15px;display:flex;gap:11px;align-items:flex-start;
+  box-shadow:var(--shadow);transition:transform .15s ease}
+.doc8:hover{transform:translateY(-2px)}
+.doc8 .ic{width:38px;height:46px;border-radius:7px;flex:none;display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:.6rem;font-weight:800;letter-spacing:.06em}
+.doc8.pdf .ic{background:linear-gradient(160deg,#c0392b,#8f2d24)}
+.doc8.png .ic{background:linear-gradient(160deg,#2c6da3,#163a5c)}
+.doc8 b{font-size:.78rem;line-height:1.3;display:block}
+.doc8 small{font-size:.68rem;color:var(--mut);display:block;margin-top:3px}
+.schema8{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px;box-shadow:var(--shadow)}
+.schema8 img{width:100%;height:auto;border-radius:8px;display:block}
+.schema8 b{font-size:.76rem;display:block;padding:8px 4px 2px}
+
+.emplo{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.ecard{background:#fff;border:1px solid var(--line);border-radius:13px;padding:13px 15px;box-shadow:var(--shadow);display:flex;gap:11px}
+.ecard .av{width:40px;height:40px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;
+  color:#fff;font-weight:800;font-size:.82rem;background:linear-gradient(135deg,var(--bleu),var(--rouge))}
+.ecard b{font-size:.82rem;display:block}
+.ecard small{font-size:.7rem;color:var(--mut);display:block;line-height:1.45}
+
+footer{border-top:1px solid var(--line);margin-top:34px;padding:18px 30px 26px;display:flex;gap:10px;flex-wrap:wrap;
+  align-items:center;color:var(--mut);font-size:.74rem;max-width:1180px;margin-left:auto;margin-right:auto;width:100%}
+footer b{color:var(--encre)}
+footer .sep{opacity:.5}
+
+@media (max-width:940px){
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .d8grid,.d8doc,.emplo{grid-template-columns:repeat(2,1fr)}
+  .clim{grid-template-columns:repeat(3,1fr)}
+  .mc{grid-template-columns:1fr}
+  .d8steps{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:640px){
+  .d8h-band{grid-template-columns:1fr;min-height:0}
+  .d8h-left{justify-content:flex-start;border-radius:0}
+  .d8h-right{justify-content:flex-start;text-align:left;padding-top:12px}
+  .d8h-seal{margin:10px auto}
+  .d8h-title,.d8h-roles,.d8cyclewrap,.d8crumbs{padding-left:18px;padding-right:18px}
+  main{padding:18px 18px 50px}
+  .kpis,.d8grid,.d8grid.g2,.d8doc,.emplo{grid-template-columns:1fr}
+  .clim{grid-template-columns:repeat(2,1fr)}
+  .dbar{grid-template-columns:110px 1fr 74px}
+  .topbar .phasetag{margin-left:0}
+}
+</style>
+</head>
+<body>
+<div id="adem14-splash" role="status" aria-live="polite" aria-label="Chargement du domaine">
+<style id="adem14-style">
+#adem14-splash{position:fixed;inset:0;z-index:1400;min-height:100vh;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,#f5f6fa 0%,#e8edf5 100%);overflow:hidden;transition:opacity .38s ease}
+#adem14-splash::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 40%,rgba(126,63,242,0.08) 0%,transparent 60%);pointer-events:none}
+#adem14-splash.a14-out{opacity:0;pointer-events:none}
+#adem14-splash .a14-card{position:relative;z-index:1;padding:40px 32px;border-radius:16px;display:flex;flex-direction:column;align-items:center;gap:12px;min-width:280px;max-width:420px;margin:0 16px;background:rgba(255,255,255,0.82);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.6);box-shadow:0 24px 60px -12px rgba(11,42,74,0.18),0 0 0 1px rgba(255,255,255,0.7);animation:adem14-fade-in .5s ease-out}
+@media (min-width:600px){#adem14-splash .a14-card{padding:48px;min-width:340px}}
+#adem14-splash .a14-logo{width:80px;height:80px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#1e4e79 0%,#b23a2f 100%);color:#fff;font-weight:800;font-size:1.9rem;letter-spacing:.5px;font-family:"Inter",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;animation:adem14-pulse 2s ease-in-out infinite;margin-bottom:8px;user-select:none}
+#adem14-splash .a14-title{font-family:"Inter",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:1.5rem;font-weight:800;color:#0b2a4a;letter-spacing:-.3px;text-align:center}
+#adem14-splash .a14-sub{color:#6b7a8a;font-size:.78rem;text-align:center;letter-spacing:.2px;font-family:"Inter",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+#adem14-splash .a14-dots{display:flex;gap:8px;margin:12px 0 4px}
+#adem14-splash .a14-dots i{width:10px;height:10px;border-radius:50%;background:#b23a2f;display:inline-block;animation:adem14-dot-bounce 1.4s ease-in-out infinite}
+#adem14-splash .a14-dots i:nth-child(2){animation-delay:.2s}
+#adem14-splash .a14-dots i:nth-child(3){animation-delay:.4s}
+#adem14-splash .a14-loading{color:#9aa8b8;font-family:"Roboto Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.72rem;letter-spacing:.3px;text-align:center;min-height:1.2em}
+#adem14-splash .a14-bar{margin-top:16px;width:240px;height:4px;border-radius:2px;background:rgba(178,58,47,0.12);position:relative;overflow:hidden}
+#adem14-splash .a14-bar span{position:absolute;left:-35%;right:100%;top:0;bottom:0;background:linear-gradient(90deg,#1e4e79 0%,#b23a2f 100%);border-radius:2px;animation:adem14-bar 2.1s cubic-bezier(.65,.815,.735,.395) infinite}
+#adem14-splash .a14-phases{display:flex;gap:8px;margin-top:20px;align-items:center}
+#adem14-splash .a14-phases i{width:8px;height:8px;border-radius:50%;display:inline-block;animation:adem14-phase-pulse 1.6s ease-in-out infinite}
+#adem14-splash .a14-phases i:nth-child(1){background:#1e4e79;animation-delay:0s}
+#adem14-splash .a14-phases i:nth-child(2){background:#b07818;animation-delay:.15s}
+#adem14-splash .a14-phases i:nth-child(3){background:#b23a2f;animation-delay:.3s}
+#adem14-splash .a14-phases i:nth-child(4){background:#6d3a8e;animation-delay:.45s}
+#adem14-splash .a14-phases i:nth-child(5){background:#2e6b4f;animation-delay:.6s}
+#adem14-splash .a14-meta{margin-top:8px;color:#9aa8b8;font-family:"Roboto Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.6rem;letter-spacing:.4px;text-transform:uppercase;text-align:center}
+#adem14-splash.a14-dark{background:linear-gradient(135deg,#0a0a1a 0%,#141428 50%,#1a1a2e 100%)}
+#adem14-splash.a14-dark::before{background:radial-gradient(circle at 50% 40%,rgba(126,63,242,0.18) 0%,transparent 60%)}
+#adem14-splash.a14-dark .a14-card{background:rgba(20,20,40,0.72);border-color:rgba(126,63,242,0.25);box-shadow:0 24px 60px -12px rgba(0,0,0,0.6),0 0 0 1px rgba(126,63,242,0.15)}
+#adem14-splash.a14-dark .a14-title{color:#fff}
+#adem14-splash.a14-dark .a14-sub{color:#aaa}
+#adem14-splash.a14-dark .a14-bar{background:rgba(126,63,242,0.15)}
+@keyframes adem14-pulse{0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(126,63,242,0.4)}50%{transform:scale(1.05);box-shadow:0 0 0 20px rgba(126,63,242,0)}}
+@keyframes adem14-dot-bounce{0%,80%,100%{transform:translateY(0);opacity:.5}40%{transform:translateY(-8px);opacity:1}}
+@keyframes adem14-phase-pulse{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.4);opacity:1}}
+@keyframes adem14-fade-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes adem14-bar{0%{left:-35%;right:100%}60%{left:100%;right:-90%}100%{left:100%;right:-90%}}
+@media (prefers-reduced-motion:reduce){#adem14-splash,#adem14-splash *{animation:none!important;transition:none!important}}
+</style>
+  <div class="a14-card">
+    <div class="a14-logo">AR</div>
+    <div class="a14-title">Admina-RH</div>
+    <div class="a14-sub">Domaine 8 — Relations Sociales &amp; Syndicats</div>
+    <div class="a14-dots"><i></i><i></i><i></i></div>
+    <div class="a14-loading">Chargement en cours<span class="a14-ell">.</span></div>
+    <div class="a14-bar"><span></span></div>
+    <div class="a14-phases"><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="a14-meta">20 écrans · 19 feuilles Excel · 2025</div>
+  </div>
+</div>
+<script>
+/* __ADEM_V14_D8__ — écran de chargement de domaine (réplique du splash natif D2),
+   variante Domaine 8 (duotone bleu patronal / rouge social) : disparition quand l'écran #d7-main est peint (>= 700 ms,
+   filet 4 s, fondu 380 ms puis retrait du nœud). Page statique : pas d'hydratation,
+   le MutationObserver de survie est conservé par sécurité (pattern V12/V14). */
+(function(){
+  'use strict';
+  if (window.__ADEM_V14__) return;
+  if (/domaine2_Gestion/i.test(location.pathname)) return;
+  var el = document.getElementById('adem14-splash');
+  if (!el) return;
+  var dark = false;
+  try { dark = localStorage.getItem('admina-dark') === 'true'; } catch (e) {}
+  if (dark) el.classList.add('a14-dark');
+  window.__ADEM_V14__ = { v: '14', fix: 'splash-domaine-8', _applied: Date.now() };
+  var t0 = Date.now(), done = false, mo = null;
+  function host(){ return document.body || document.documentElement; }
+  function reattach(){
+    if (done || el.parentNode) return;
+    host().appendChild(el);
+  }
+  try {
+    mo = new MutationObserver(reattach);
+    mo.observe(document.body || document.documentElement, { childList: true });
+  } catch (e) {}
+  var ivKeep = setInterval(function(){
+    reattach();
+    if (done || Date.now() - t0 > 4500) clearInterval(ivKeep);
+  }, 150);
+  var ell = el.querySelector('.a14-ell'), n = 1;
+  var ellIv = setInterval(function(){
+    n = n === 1 ? 2 : (n === 2 ? 3 : 1);
+    if (ell) ell.textContent = new Array(n + 1).join('.');
+    else clearInterval(ellIv);
+  }, 500);
+  function hide(){
+    if (done) return;
+    done = true;
+    el.dataset.a14done = '1';
+    clearInterval(ellIv); clearInterval(ivKeep);
+    try { mo.disconnect(); } catch (e) {}
+    el.classList.add('a14-out');
+    setTimeout(function(){ if (el && el.parentNode) el.parentNode.removeChild(el); }, 420);
+  }
+  /* app D8 prête : <main id="d8-main"> peint */
+  var iv = setInterval(function(){
+    var ready = false;
+    try { ready = !!document.getElementById('d8-main'); } catch (e) {}
+    if (Date.now() - t0 >= 700 && document.readyState !== 'loading' && ready){
+      clearInterval(iv); hide();
+    }
+  }, 80);
+  setTimeout(function(){ clearInterval(iv); hide(); }, 4000);
+})();
+</script>
+<div class="d8shell"><aside class="d8side"><div class="bmark"><div class="logo">AR</div><div><b>Admina-RH</b><small>Domaine 8 · Dialogue social</small></div></div><div class="grp"><i style="background:#2c6da3"></i>Pilotage</div><a class="nav" href="/Domaine8_Relations_Sociales_Syndicats/"><span class="dot"></span>Tableau de Bord</a><div class="grp"><i style="background:#5e93c4"></i>1 · Prévention & Organisation</div><a class="nav" href="/Domaine8_Relations_Sociales_Syndicats/syndicats/"><span class="dot"></span>Paysage Syndical</a><a class="nav" href="/Domaine8_Relations_Sociales_Syndicats/droit-syndical/"><span class="dot"></span>Droit Syndical</a><a class="nav" href="/Domaine8_Relations_Sociales_Syndicats/delegues/"><span class="dot"></span>Délégués & Élus</a><a class="nav" href="/Domaine8_Relations_Sociales_Syndicats/cse/"><span class="dot"></span>CSE & Commissions</a><a class="nav" href="/Domaine8_Relations_Sociales_Syndicats/calendrier-nego/"><span class="dot"></span>Calendrier de Négociation</a><div class="grp"><i style="background:#c9972b"></i>2 · Gestion Disciplinaire</div><a class="nav" href="/Domaine8_Relations_Sociales_Syndicats/discipline/"><span class="dot"></span>Sanctions & Discipline</a><div class="grp"><i style="background:#d05a4e"></i>3 · Réclamations & Médiation</div><a class="nav" href="/Domaine8_Relations_Sociales_Syndicats/reclamations/"><span class="dot"></span>Registre des Réclamations</a><a class="nav" href="/Domaine8_Relations_Sociales_Syndicats/reclamations-mois/"><span class="dot"></span>Réclamations du Mois</a><a class="nav" href="/Domaine8_Relations_Sociales_Syndicats/mediation/"><span class="dot"></span>Médiation</a><a class="nav" href="/Domaine8_Relations_Sociales_Syndicats/mesures-correctives/"><span class="dot"></span>Mesures Correctives</a><div class="grp"><i style="background:#a86bc4"></i>4 · Négociation & Dialogue</div><a class="nav" href="/Domaine8_Relations_Sociales_Syndicats/conflits/"><span class="dot"></span>Conflits Sociaux</a><a class="nav" href="/Domaine8_Relations_Sociales_Syndicats/negociations/"><span class="dot"></span>Négociations en Cours</a><a class="nav" href="/Domaine8_Relations_Sociales_Syndicats/accords/"><span class="dot"></span>Accords d&#x27;Entreprise</a><a class="nav on" href="/Domaine8_Relations_Sociales_Syndicats/historique-accords/"><span class="dot"></span>Historique des Accords</a><a class="nav" href="/Domaine8_Relations_Sociales_Syndicats/pv-reunions/"><span class="dot"></span>Procès-Verbaux</a><div class="grp"><i style="background:#418763"></i>5 · Bilan Social & Reporting</div><a class="nav" href="/Domaine8_Relations_Sociales_Syndicats/bilan-social/"><span class="dot"></span>Bilan Social</a><a class="nav" href="/Domaine8_Relations_Sociales_Syndicats/rapports-instances/"><span class="dot"></span>Rapports d&#x27;Instances</a><a class="nav" href="/Domaine8_Relations_Sociales_Syndicats/employes/"><span class="dot"></span>Référentiel Employés</a><a class="nav" href="/Domaine8_Relations_Sociales_Syndicats/interconnexions/"><span class="dot"></span>Interconnexions & Documents</a><div class="home"><a class="nav" href="/"><span class="dot"></span>Tous les domaines</a></div></aside>
+
+<header class="d8h">
+  <div class="d8h-band">
+    <div class="d8h-left"><div><b>Admina-RH</b><small>Partie patronale — Direction &amp; RH</small></div></div>
+    <div class="d8h-seal">D8</div>
+    <div class="d8h-right"><div><b>Relations Sociales &amp; Syndicats</b><small>Partie sociale — Syndicats &amp; Instances</small></div></div>
+  </div>
+  <div class="d8h-title">
+    <h1>Domaine 8 — Relations Sociales &amp; Syndicats <em>· Dialogue social</em></h1>
+    <p>Prévention, instances représentatives, discipline, réclamations, médiation, négociation collective et bilan social
+       — réplique fidèle du classeur Excel du domaine, campagne 2025 (19 feuilles, modules #87 à #96).</p>
+    <div class="d8h-mots"><span><i style="background:#1e4e79"></i>Prévenir</span><span><i style="background:#2c6da3"></i>Dialoguer</span><span><i style="background:#6d3a8e"></i>Négocier</span><span><i style="background:#b23a2f"></i>Résoudre</span></div>
+  </div>
+  <div class="d8h-roles"><div class="lab">Rôles utilisateurs du domaine</div><div class="row"><div class="role"><i style="background:#1e4e79">DG</i><div><b>Direction Générale</b><small>Signature des accords</small></div></div><div class="role"><i style="background:#2c6da3">DRH</i><div><b>DRH Nganou</b><small>Pilotage &amp; négociation</small></div></div><div class="role"><i style="background:#6d3a8e">ARH</i><div><b>Assistante RH</b><small>Coordination &amp; PV</small></div></div><div class="role"><i style="background:#b23a2f">DP</i><div><b>Délégués du Personnel</b><small>4 mandatés en cours</small></div></div><div class="role"><i style="background:#c9574a">SYN</i><div><b>Représentants Syndicaux</b><small>5 organisations</small></div></div><div class="role"><i style="background:#b07818">CS</i><div><b>Chefs de Service</b><small>Mesures correctives</small></div></div></div></div>
+</header>
+
+<div class="d8crumbs"><span class="lab">Écrans :</span><a class="chipx ghub" href="/Domaine8_Relations_Sociales_Syndicats/">Tableau de Bord</a><a class="chipx" href="/Domaine8_Relations_Sociales_Syndicats/conflits/">Conflits</a><a class="chipx" href="/Domaine8_Relations_Sociales_Syndicats/negociations/">Négociations</a><a class="chipx" href="/Domaine8_Relations_Sociales_Syndicats/accords/">Accords</a><a class="chipx on" href="/Domaine8_Relations_Sociales_Syndicats/historique-accords/">Historique</a><a class="chipx" href="/Domaine8_Relations_Sociales_Syndicats/pv-reunions/">PV Réunions</a><a class="chipx" href="/#grid" style="margin-left:auto">← Les 31 domaines</a></div>
+<main id="d8-main">
+  <div class="topbar">
+    <span class="crumb"><a href="/">Tous les domaines</a> / <a href="/Domaine8_Relations_Sociales_Syndicats/">Domaine 8</a> / <b>Historique</b></span>
+    <span class="phasetag" style="background:#6d3a8e">Phase 4 — Négociation</span>
+  </div>
+
+<div class="hero8"><div><h2>Six ans de dialogue contractualisé</h2>
+  <p>De l'accord salarial de 2022 (+4&nbsp;%) à l'avenant prime de panier de 2025, l'historique retrace la
+     construction progressive du pacte social de l'entreprise et le statut actuel de chaque texte (#13).</p></div>
+  <div class="hbadge"><b>2020→2025</b><small>profondeur d'archive</small></div></div>
+
+<div class="tblcard">
+  <div class="tbltop"><b>Historique des accords</b><span class="count">7 accords archivés</span><input type="search" placeholder="Filtrer…" data-filter/></div>
+  <div class="tblwrap"><table class="d8tbl"><thead><tr><th>N°</th><th>Réf. accord</th><th>Année</th><th>Type</th><th>Signataires</th><th>Objet principal</th><th>Durée</th><th>Statut actuel</th></tr></thead>
+  <tbody data-tbody><tr><td class="">HA-001</td><td class="">AC-001</td><td class=""><td class="num">2025</td></td><td class="">Accord salarial</td><td class="">CSTT, CSA, CSC</td><td class="">Revalorisation salariale 5%</td><td class=""><td class="num">12 mois</td></td><td class=""><span class="bdg b-vert">En vigueur</span></td></tr><tr><td class="">HA-002</td><td class="">AC-002</td><td class=""><td class="num">2024</td></td><td class="">Accord d&#x27;entreprise</td><td class="">CSC</td><td class="">Teletravail partiel IT</td><td class=""><td class="num">24 mois</td></td><td class=""><span class="bdg b-vert">En vigueur</span></td></tr><tr><td class="">HA-003</td><td class="">AC-003</td><td class=""><td class="num">2020</td></td><td class="">Convention collective</td><td class="">Ensemble syndicats</td><td class="">Application CCT Hotelier</td><td class=""><td class="num">60 mois</td></td><td class=""><span class="bdg b-gris">Expire</span></td></tr><tr><td class="">HA-004</td><td class="">AC-004</td><td class=""><td class="num">2025</td></td><td class="">Protocole precontentieux</td><td class="">CSTT</td><td class="">Resolution conflit horaires</td><td class=""><td class="num">6 mois</td></td><td class=""><span class="bdg b-vert">En vigueur</span></td></tr><tr><td class="">HA-005</td><td class="">AC-005</td><td class=""><td class="num">2025</td></td><td class="">Avenant</td><td class="">CSE</td><td class="">Revision prime panier</td><td class=""><td class="num">12 mois</td></td><td class=""><span class="bdg b-vert">En vigueur</span></td></tr><tr><td class="">HA-006</td><td class="">AC-OLD-001</td><td class=""><td class="num">2022</td></td><td class="">Accord salarial</td><td class="">CSTT, CSA</td><td class="">Augmentation 4% 2022</td><td class=""><td class="num">12 mois</td></td><td class=""><span class="bdg b-gris">Expire</span></td></tr><tr><td class="">HA-007</td><td class="">AC-OLD-002</td><td class=""><td class="num">2023</td></td><td class="">Accord d&#x27;entreprise</td><td class="">CSTT, CSA, CSC</td><td class="">Prime transport 2023</td><td class=""><td class="num">12 mois</td></td><td class=""><span class="bdg b-gris">Expire</span></td></tr></tbody></table></div>
+</div>
+<script>
+(function() {
+  var inp = document.querySelector('[data-filter]');
+  if (!inp) return;
+  var tb = document.querySelector('[data-tbody]');
+  var rows = Array.prototype.slice.call(tb.querySelectorAll('tr'));
+  inp.addEventListener('input', function() {
+    var q = this.value.trim().toLowerCase();
+    rows.forEach(function(tr) {
+      tr.style.display = (!q || tr.textContent.toLowerCase().indexOf(q) >= 0) ? '' : 'none';
+    });
+  });
+})();
+</script>
+<div class="sect"><h3>Accords par année de signature</h3><p>rythme de la négociation collective</p></div>
+<div class="card8"><div class="dbar"><span class="lbl" title="2025">2025</span><span class="track"><span class="fill b4" style="width:100%"></span></span><span class="val">3 accords</span></div><div class="dbar"><span class="lbl" title="2024">2024</span><span class="track"><span class="fill b4" style="width:33%"></span></span><span class="val">1 accord</span></div><div class="dbar"><span class="lbl" title="2023">2023</span><span class="track"><span class="fill b4" style="width:33%"></span></span><span class="val">1 accord</span></div><div class="dbar"><span class="lbl" title="2022">2022</span><span class="track"><span class="fill b4" style="width:33%"></span></span><span class="val">1 accord</span></div><div class="dbar"><span class="lbl" title="2020">2020</span><span class="track"><span class="fill b4" style="width:33%"></span></span><span class="val">1 accord</span></div></div>
+<div class="note8"><b>Lecture :</b> 2025 concentre quatre textes (accord salarial, protocole précontentieux,
+avenant panier + la CCT arrivée à expiration) — signe d'un dialogue intensifié après les conflits de
+fin 2024-début 2025. Trois textes restent en vigueur à date.</div>
+<footer>
+  <b>Admina-RH</b><span class="sep">·</span> Domaine 8 — Relations Sociales, Syndicats &amp; Instances Représentatives
+  <span class="sep">·</span> Cycle du dialogue social en 5 phases <span class="sep">·</span> Campagne 2025
+  <span style="margin-left:auto">★★★★☆ plateforme RH</span>
+</footer>
+</main>
+</div>
+<script>
+/* ADEM_V12 — Menu déroulant global des domaines (remplace les listes sidebar)
+ * DEMANDE UTILISATEUR : la liste des domaines dans la barre latérale s'affiche mal
+ * (libellés tronqués, chevauchements) → afficher tous les domaines AILLEURS, sous
+ * forme de liste déroulante, présente sur TOUS les domaines actifs.
+ *
+ * SOLUTION : bouton flottant fixe EN BAS À DROITE (unique position fiable sur les
+ * 3 applications distinctes : React D1/D2, Next.js D3, pages « en préparation »)
+ * ouvrant un panneau déroulant : recherche + 31 domaines (badges ACTIF / EN
+ * PRÉPARATION), domaine courant surligné, lien Accueil (hub). Absent du hub « / »
+ * qui est déjà la page de présentation complète.
+ *
+ * Les listes sidebar deviennent inutiles et sont MASQUÉES (CSS + DOM runtime,
+ * 0 octet des scripts tiers modifié, aucun nœud React/Next déplacé) :
+ *   - app React (D1/D2)  : #admina-cdn (bloc tiers) → display:none
+ *   - build D3 (Next.js) : conteneur « Autres Domaines » → display:none
+ * La sidebar retrouve ainsi sa hauteur complète (V10 ne réduit plus rien :
+ * offsetHeight du bloc masqué = 0).
+ *
+ * Non-régression : z-index 1600 (au-dessus de l'app MUI 1100-1300, SOUS les
+ * modaux ADEM V8/V9 à 5000+) ; auto-réparation si le nœud disparaît ;
+ * surlignage du domaine courant suivi (popstate + intervalle, routes SPA).
+ * API : window.__ADEM_V12__ = {version, open, close, fix, _applied}
+ */
+(function () {
+  'use strict';
+  if (window.__ADEM_V12__) return;
+  var D = document;
+  var API = window.__ADEM_V12__ = { version: 'V12', open: open, close: close, fix: fix, _applied: 0 };
+
+  /* ------- données : les 31 domaines (mêmes URLs dédiées que le hub) ------- */
+  var DOMAINS = [
+    { n: 1,  u: '/Domaine1_Recrutement_Candidats', l: 'Recrutement & Candidats', a: 1 },
+    { n: 2,  u: '/Domaine2_Gestion_Administrative_Personnel', l: 'Gestion Administrative du Personnel', a: 1 },
+    { n: 3,  u: '/Domaine3_Paie_Remuneration_Avantages/', l: 'Paie, Rémunération & Avantages', a: 1 },
+    { n: 4,  u: '/Domaine4_Temps_Travail_Planification/', l: 'Temps de Travail & Planification', a: 1 },
+    { n: 5,  u: '/Domaine5_Conges_Absences_Presence/', l: 'Congés, Absences & Présence', a: 1 },
+    { n: 6,  u: '/Domaine6_Formation_Developpement_Competences/', l: 'Formation & Développement des Compétences', a: 1 },
+    { n: 7,  u: '/Domaine7_Evaluation_Gestion_Performance/', l: 'Évaluation & Gestion de la Performance', a: 1 },
+    { n: 8,  u: '/Domaine8_Relations_Sociales_Syndicats/', l: 'Relations Sociales & Syndicats', a: 1 },
+    { n: 9,  u: '/Domaine9_Sante_Securite_Conditions_Travail/', l: 'Santé, Sécurité & Conditions de Travail' },
+    { n: 10, u: '/Domaine10_Talents_Mobilite_Interne/', l: 'Talents & Mobilité Interne' },
+    { n: 11, u: '/Domaine11_Droit_Travail_Conformite/', l: 'Droit du Travail & Conformité' },
+    { n: 12, u: '/Domaine12_Documentation_Archivage_RH/', l: 'Documentation & Archivage RH' },
+    { n: 13, u: '/Domaine13_Communication_RH_Marque_Employeur/', l: 'Communication RH & Marque Employeur' },
+    { n: 14, u: '/Domaine14_Reporting_Tableaux_Bord_Analyse/', l: 'Reporting & Tableaux de Bord Analyse' },
+    { n: 15, u: '/Domaine15_Budget_Pilotage_Financier_RH/', l: 'Budget & Pilotage Financier RH' },
+    { n: 16, u: '/Domaine16_Diversite_Equite_Inclusion/', l: 'Diversité, Équité & Inclusion' },
+    { n: 17, u: '/Domaine17_Audit_Conformite_Contentieux/', l: 'Audit, Conformité & Contentieux' },
+    { n: 18, u: '/Domaine18_RSE_Developpement_Durable_RH/', l: 'RSE & Développement Durable' },
+    { n: 19, u: '/Domaine19_Innovation_RH_Transformation_Digitale/', l: 'Innovation RH & Transformation Digitale' },
+    { n: 20, u: '/Domaine20_Pilotage_Reporting_RH/', l: 'Pilotage & Reporting RH' },
+    { n: 21, u: '/Domaine21_Fiches_Postes_Profils_Cartographie_Metiers/', l: 'Fiches de Postes & Cartographie des Métiers' },
+    { n: 22, u: '/Domaine22_Avantages_Sociaux_Previsionnelle/', l: 'Avantages Sociaux & Prévoyance' },
+    { n: 23, u: '/Domaine23_Travail_Temporaire/', l: 'Travail Temporaire' },
+    { n: 24, u: '/Domaine24_Stagiaires_Alternants/', l: 'Stagiaires & Alternants' },
+    { n: 25, u: '/Domaine25_Expatries_Personnel_Detache/', l: 'Expatriés & Personnel Détaché' },
+    { n: 26, u: '/Domaine26_Gestion_Budgetaire_Fiscale_RH/', l: 'Gestion Budgétaire & Fiscale RH' },
+    { n: 27, u: '/Domaine27_Reclamations_Contentieux_RH/', l: 'Réclamations & Contentieux RH' },
+    { n: 28, u: '/Domaine28_Mobilite_Carriere_Succession_RH/', l: 'Mobilité, Carrière & Succession' },
+    { n: 29, u: '/Domaine29_Communication_Interne_Engagement/', l: 'Communication Interne & Engagement' },
+    { n: 30, u: '/Domaine30_Expatrites_Mobilite_Internationale/', l: 'Expatriés & Mobilité Internationale' },
+    { n: 31, u: '/Domaine31_Retraites_Prevoyance_Transitions_Carriere/', l: 'Retraites, Prévoyance & Transitions de Carrière' }
+  ];
+  var N_ACTIF = 8;
+
+  /* hub racine = déjà la présentation complète → aucun bouton */
+  var p0 = location.pathname;
+  if (p0 === '/' || p0 === '/index.html') { API.fix = function () {}; return; }
+
+  var ICON_GRID = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>';
+  var ICON_CHEV = '<svg class="adem12-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
+  var ICON_X = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+  var ICON_SEARCH = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>';
+  var ICON_CHECK = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+  var ICON_ARROW = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="8 7 17 7 17 16"/></svg>';
+
+  var CSS = [
+    '#adem12-btn{position:fixed;right:18px;bottom:18px;z-index:1600;display:flex;align-items:center;gap:8px;',
+    'padding:12px 18px;border:0;border-radius:999px;cursor:pointer;color:#fff;',
+    "background:linear-gradient(135deg,#9375cd,#5e35a1);font-family:'Roboto',system-ui,-apple-system,'Segoe UI',sans-serif;",
+    'font-size:13.5px;font-weight:600;letter-spacing:.02em;box-shadow:0 10px 28px rgba(94,53,161,.45);',
+    'transition:transform .18s ease,box-shadow .18s ease;}',
+    '#adem12-btn:hover{transform:translateY(-2px);box-shadow:0 14px 34px rgba(94,53,161,.55);}',
+    '#adem12-btn:active{transform:translateY(0);}',
+    '#adem12-btn .adem12-chev{transition:transform .2s ease;opacity:.9;}',
+    '#adem12-btn.adem12-open .adem12-chev{transform:rotate(180deg);}',
+    '#adem12-panel{position:fixed;right:18px;bottom:72px;z-index:1600;width:min(404px,calc(100vw - 24px));',
+    'max-height:min(68vh,600px);display:flex;flex-direction:column;background:#fff;color:#221a3f;',
+    "font-family:'Roboto',system-ui,-apple-system,'Segoe UI',sans-serif;text-align:left;",
+    'border:1px solid rgba(94,53,161,.18);border-radius:18px;box-shadow:0 24px 70px rgba(20,10,50,.35);',
+    'overflow:hidden;opacity:0;transform:translateY(14px) scale(.98);transform-origin:100% 100%;',
+    'pointer-events:none;transition:opacity .2s ease,transform .22s ease;}',
+    '#adem12-panel.adem12-open{opacity:1;transform:none;pointer-events:auto;}',
+    '#adem12-panel .adem12-head{display:flex;align-items:center;gap:10px;padding:14px 16px;',
+    'background:linear-gradient(135deg,rgba(147,117,205,.14),rgba(94,53,161,.07));border-bottom:1px solid rgba(94,53,161,.12);}',
+    '#adem12-panel .adem12-head b{font-size:14px;color:#3b2a6b;}',
+    '#adem12-panel .adem12-head small{display:block;font-size:11px;color:#8b84a8;margin-top:1px;}',
+    '#adem12-panel .adem12-x{margin-left:auto;border:0;background:transparent;color:#6b6390;cursor:pointer;',
+    'padding:6px;border-radius:8px;display:flex;transition:.15s;}',
+    '#adem12-panel .adem12-x:hover{background:rgba(94,53,161,.1);color:#3b2a6b;}',
+    '#adem12-panel .adem12-search{padding:10px 12px;border-bottom:1px solid #efeaf8;}',
+    '#adem12-panel .adem12-search div{display:flex;align-items:center;gap:8px;background:#f7f4fd;',
+    'border:1px solid #e6def5;border-radius:10px;padding:8px 12px;color:#8b84a8;}',
+    '#adem12-panel .adem12-search input{flex:1;border:0;background:transparent;outline:none;',
+    "font:400 13px/1.3 'Roboto',system-ui,sans-serif;color:#221a3f;min-width:0;}",
+    '#adem12-panel .adem12-list{overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;}',
+    '#adem12-panel .adem12-item{display:flex;align-items:center;gap:10px;padding:10px 14px;',
+    'text-decoration:none;color:#2c2450;border-bottom:1px solid #f3eff9;transition:background .12s;}',
+    '#adem12-panel .adem12-item:hover{background:#f7f4fd;}',
+    '#adem12-panel .adem12-item.adem12-on{background:rgba(147,117,205,.12);box-shadow:inset 3px 0 0 #7c5fc0;}',
+    '#adem12-panel .adem12-num{flex:none;width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;',
+    'background:rgba(147,117,205,.15);border:1px solid rgba(147,117,205,.35);color:#64489e;',
+    'font-size:10.5px;font-weight:700;}',
+    '#adem12-panel .adem12-lab{flex:1;font-size:12.8px;font-weight:500;line-height:1.3;min-width:0;',
+    'overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}',
+    '#adem12-panel .adem12-chip{flex:none;font-size:9.5px;font-weight:700;letter-spacing:.05em;',
+    'padding:3px 8px;border-radius:999px;}',
+    '#adem12-panel .adem12-ok{color:#0e8a66;background:rgba(58,210,159,.13);border:1px solid rgba(58,210,159,.45);}',
+    '#adem12-panel .adem12-warn{color:#96690f;background:rgba(245,183,78,.14);border:1px solid rgba(245,183,78,.4);}',
+    '#adem12-panel .adem12-cur{flex:none;display:none;color:#7c5fc0;}',
+    '#adem12-panel .adem12-item.adem12-on .adem12-cur{display:flex;}',
+    '#adem12-panel .adem12-none{display:none;padding:22px 16px;color:#8b84a8;font-size:12.5px;text-align:center;}',
+    '#adem12-panel .adem12-foot{display:flex;align-items:center;gap:8px;padding:12px 16px;text-decoration:none;',
+    'color:#5e35a1;font-size:12.5px;font-weight:600;border-top:1px solid #efeaf8;background:#fbf9ff;transition:.15s;}',
+    '#adem12-panel .adem12-foot:hover{background:#f3edfc;}',
+    '@media(max-width:640px){#adem12-btn{right:12px;bottom:12px;padding:11px 15px;font-size:12.5px;}',
+    '#adem12-panel{right:12px;bottom:66px;width:calc(100vw - 24px);}}',
+    /* masquage des listes sidebar remplacées (0 octet tiers modifié) */
+    '#admina-cdn{display:none !important;}',
+    '.border-t.border-white\\/10.bg-black\\/20{display:none !important;}'
+  ].join('');
+
+  var btn, panel, listEl, inputEl, noneEl;
+
+  function el(tag, cls, html) {
+    var e = D.createElement(tag);
+    if (cls) e.className = cls;
+    if (html != null) e.innerHTML = html;
+    return e;
+  }
+
+  function currentKey() {
+    var p = location.pathname;
+    if (p.indexOf('/Domaine1_Recrutement_Candidats') === 0) return '/Domaine1_Recrutement_Candidats';
+    if (p.indexOf('/Domaine2_Gestion_Administrative_Personnel') === 0 ||
+        p.indexOf('/domaine2_Gestion_Administrative_Personnel') === 0) return '/Domaine2_Gestion_Administrative_Personnel';
+    if (p.indexOf('/Domaine3_Paie_Remuneration_Avantages') === 0) return '/Domaine3_Paie_Remuneration_Avantages/';
+    for (var i = 3; i < DOMAINS.length; i++) {
+      var f = DOMAINS[i].u.slice(0, -1);
+      if (p === f || p.indexOf(f + '/') === 0) return DOMAINS[i].u;
+    }
+    return null;
+  }
+
+  function refreshCurrent() {
+    if (!listEl) return;
+    var cur = currentKey();
+    var rows = listEl.querySelectorAll('.adem12-item');
+    for (var i = 0; i < rows.length; i++) {
+      var on = cur !== null && rows[i].getAttribute('data-u') === cur;
+      rows[i].className = 'adem12-item' + (on ? ' adem12-on' : '') + (DOMAINS[i].a ? '' : '');
+    }
+  }
+
+  function buildPanel() {
+    panel = el('div');
+    panel.id = 'adem12-panel';
+    panel.setAttribute('role', 'dialog');
+    panel.setAttribute('aria-label', 'Tous les domaines Admina-RH');
+
+    var head = el('div', 'adem12-head');
+    head.appendChild(el('div', null, '<b>Admina-RH</b><small>' + N_ACTIF + ' domaines actifs · ' +
+      DOMAINS.length + ' domaines au total</small>'));
+    var x = el('button', 'adem12-x', ICON_X);
+    x.setAttribute('aria-label', 'Fermer');
+    x.addEventListener('click', function () { close(); });
+    head.appendChild(x);
+    panel.appendChild(head);
+
+    var sw = el('div', 'adem12-search');
+    var si = el('div', null, ICON_SEARCH);
+    inputEl = D.createElement('input');
+    inputEl.type = 'search';
+    inputEl.placeholder = 'Rechercher un domaine…';
+    inputEl.setAttribute('aria-label', 'Rechercher un domaine');
+    inputEl.addEventListener('input', filter);
+    si.appendChild(inputEl);
+    sw.appendChild(si);
+    panel.appendChild(sw);
+
+    listEl = el('div', 'adem12-list');
+    for (var i = 0; i < DOMAINS.length; i++) {
+      var d = DOMAINS[i];
+      var a = el('a', 'adem12-item');
+      a.href = d.u;
+      a.setAttribute('data-u', d.u);
+      a.title = 'Domaine ' + d.n + ' — ' + d.l;
+      a.appendChild(el('span', 'adem12-num', 'D' + d.n));
+      a.appendChild(el('span', 'adem12-lab', d.l));
+      a.appendChild(el('span', 'adem12-chip ' + (d.a ? 'adem12-ok' : 'adem12-warn'), d.a ? 'ACTIF' : 'EN PRÉPARATION'));
+      a.appendChild(el('span', 'adem12-cur', ICON_CHECK));
+      listEl.appendChild(a);
+    }
+    noneEl = el('div', 'adem12-none', 'Aucun domaine ne correspond à votre recherche.');
+    listEl.appendChild(noneEl);
+    panel.appendChild(listEl);
+
+    var foot = el('a', 'adem12-foot', 'Tous les domaines — Accueil ' + ICON_ARROW);
+    foot.href = '/';
+    panel.appendChild(foot);
+  }
+
+  function filter() {
+    var v = inputEl.value.trim().toLowerCase();
+    var n = 0;
+    var rows = listEl.querySelectorAll('.adem12-item');
+    for (var i = 0; i < rows.length; i++) {
+      var hit = rows[i].getAttribute('data-u').toLowerCase().indexOf(v) !== -1 ||
+                rows[i].textContent.toLowerCase().indexOf(v) !== -1;
+      rows[i].style.display = hit ? '' : 'none';
+      if (hit) n++;
+    }
+    noneEl.style.display = n ? 'none' : 'block';
+  }
+
+  function open() {
+    if (!panel) return;
+    refreshCurrent();
+    panel.classList.add('adem12-open');
+    btn.classList.add('adem12-open');
+    btn.setAttribute('aria-expanded', 'true');
+    try { inputEl.focus(); } catch (e) {}
+  }
+
+  function close() {
+    if (!panel) return;
+    panel.classList.remove('adem12-open');
+    btn.classList.remove('adem12-open');
+    btn.setAttribute('aria-expanded', 'false');
+  }
+
+  function toggle() {
+    if (panel.classList.contains('adem12-open')) close();
+    else open();
+  }
+
+  /* Masquage runtime de secours (si la classe Tailwind du bloc D3 change) */
+  function hideD3Block() {
+    if (location.pathname.indexOf('/Domaine3_Paie') !== 0) return;
+    var ps = D.querySelectorAll('p');
+    for (var i = 0; i < ps.length; i++) {
+      if ((ps[i].textContent || '').trim().toLowerCase() === 'autres domaines') {
+        var c = ps[i].parentElement;
+        if (c && c.style.display !== 'none') { c.style.display = 'none'; API._applied++; }
+      }
+    }
+  }
+
+  function fix() {
+    if (!btn || !btn.isConnected) mount();
+    refreshCurrent();
+    hideD3Block();
+  }
+
+  function mount() {
+    if (btn && btn.isConnected) return;
+    if (!btn) {
+      buildPanel();
+      btn = el('button', null, ICON_GRID + '<span>Domaines</span>' + ICON_CHEV);
+      btn.id = 'adem12-btn';
+      btn.setAttribute('aria-expanded', 'false');
+      btn.setAttribute('aria-haspopup', 'true');
+      btn.setAttribute('aria-controls', 'adem12-panel');
+      btn.title = 'Tous les domaines Admina-RH';
+      btn.addEventListener('click', function (e) { e.stopPropagation(); toggle(); });
+      D.addEventListener('click', function (e) {
+        if (!panel.classList.contains('adem12-open')) return;
+        if (panel.contains(e.target) || btn.contains(e.target)) return;
+        close();
+      });
+      D.addEventListener('keydown', function (e) {
+        if ((e.key || e.keyCode) === 'Escape') close();
+      });
+      window.addEventListener('popstate', refreshCurrent);
+    }
+    D.body.appendChild(btn);
+    D.body.appendChild(panel);
+    API._applied++;
+  }
+
+  function start() {
+    if (!D.getElementById('adem12-style')) {
+      var st = D.createElement('style');
+      st.id = 'adem12-style';
+      st.textContent = CSS;
+      D.head.appendChild(st);
+    }
+    mount();
+    /* suivi léger : routes SPA + auto-réparation (pattern V11) */
+    setInterval(fix, 1500);
+  }
+
+  if (D.readyState === 'loading') D.addEventListener('DOMContentLoaded', start);
+  else start();
+})();
+
+</script>
+</body>
+</html>

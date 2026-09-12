@@ -1,0 +1,683 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Admina-RH | Domaine 7 — Évaluation &amp; Gestion de la Performance</title>
+<meta name="description" content="Les plans d&#x27;amélioration de la performance : points faibles identifiés, actions concrètes, échéances et avancement."/>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
+<style>
+:root{--bg:#f5f3fb;--card:#ffffff;--card2:#faf9fe;--border:#e2dcf0;--txt:#1d1630;--mut:#635b7e;
+--acc:#6d28d9;--acc2:#5b21b6;--ok:#15803d;--warn:#b45309;--bad:#dc2626;--info:#4f46e5}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;background:
+radial-gradient(1100px 420px at 75% -12%,rgba(109,40,217,.08),transparent),var(--bg);color:var(--txt);min-height:100vh}
+a{color:var(--info);text-decoration:none}
+a:hover{text-decoration:underline}
+.shell{display:grid;grid-template-columns:252px 1fr;min-height:100vh}
+aside{background:linear-gradient(175deg,#2a1a4e 0%,#221341 55%,#170d2c 100%);border-right:1px solid rgba(0,0,0,.25);padding:18px 14px;position:sticky;top:0;
+height:100vh;overflow-y:auto}
+aside .bmark{display:flex;align-items:center;gap:10px;padding:2px 6px 14px;border-bottom:1px solid rgba(255,255,255,.12);margin-bottom:12px}
+.logo{width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,#8b5cf6,#5b21b6);display:flex;
+align-items:center;justify-content:center;font-weight:800;font-size:13px;color:#fff;box-shadow:0 6px 18px rgba(91,33,182,.5);flex:none}
+.bmark b{font-size:1rem;display:block;color:#fff}
+.bmark small{color:#c3b1ea;font-size:.68rem;letter-spacing:.05em;text-transform:uppercase;display:block;margin-top:1px}
+aside .grp{color:#a68ed6;font-size:.64rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;margin:14px 8px 6px}
+aside a.nav{display:flex;align-items:center;gap:8px;color:#e0d6f3;font-size:.86rem;padding:7px 10px;border-radius:9px;
+transition:.15s;border:1px solid transparent}
+aside a.nav:hover{background:rgba(255,255,255,.07);text-decoration:none;color:#fff}
+aside a.nav.on{background:rgba(139,92,246,.2);color:#fff;
+border-color:rgba(139,92,246,.5)}
+aside a.nav .dot{width:6px;height:6px;border-radius:50%;background:#a78bfa;opacity:.45;flex:none}
+aside a.nav.on .dot{opacity:1;box-shadow:0 0 8px #a78bfa}
+aside .home{margin-top:14px;border-top:1px solid rgba(255,255,255,.12);padding-top:12px}
+.topbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.topbar .crumb{color:var(--mut);font-size:.8rem}
+.topbar .crumb a{color:var(--acc)}
+.topbar .tohub{margin-left:auto;font-size:.8rem;color:var(--mut);background:var(--card);border:1px solid var(--border);padding:7px 13px;
+border-radius:10px;transition:.2s}
+.topbar .tohub:hover{color:var(--acc);border-color:var(--acc);text-decoration:none;box-shadow:0 4px 14px rgba(109,40,217,.12)}
+main{padding:26px 30px 60px;min-width:0}
+/* ============ EN-TÊTE DE PAGE D7 ============ */
+.p7-head{display:flex;align-items:flex-start;gap:22px;flex-wrap:wrap;margin-bottom:14px}
+.p7-head h1{font-size:1.75rem;letter-spacing:-.02em}
+.p7-head h1 span{background:linear-gradient(90deg,var(--acc2),#8b5cf6);-webkit-background-clip:text;background-clip:text;color:transparent}
+.p7-head .sub{color:var(--mut);font-size:.9rem;max-width:70ch;margin-top:6px}
+.p7-headnote{margin-left:auto;text-align:right;border:1px solid var(--border);border-top:3px solid var(--nc,#6d28d9);
+background:var(--card);border-radius:14px;padding:12px 18px;box-shadow:0 10px 26px -18px rgba(30,15,60,.35);min-width:150px}
+.p7-headnote b{display:block;font-size:1.45rem;font-variant-numeric:tabular-nums;color:var(--nc,#6d28d9)}
+.p7-headnote small{color:var(--mut);font-size:.72rem;text-transform:uppercase;letter-spacing:.07em}
+.p7-headnote em{display:block;font-style:normal;color:#8b7fae;font-size:.74rem;margin-top:4px}
+/* ============ STEPPER DE CAMPAGNE ============ */
+.p7-stepper{display:flex;gap:0;list-style:none;align-items:center;background:var(--card);border:1px solid var(--border);
+border-radius:14px;padding:11px 16px;margin-bottom:20px;overflow-x:auto;box-shadow:0 8px 22px -18px rgba(30,15,60,.4)}
+.p7-stepper li{display:flex;align-items:center;gap:8px;flex:none;padding-right:22px;position:relative;color:#9b90b7;font-size:.78rem;font-weight:600}
+.p7-stepper li:not(:last-child):after{content:"";position:absolute;right:8px;top:50%;width:9px;height:1px;background:#d9d0ec}
+.p7-stepper li .p7-stn{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+background:#efeaf8;color:#8b7fae;font-size:.72rem;font-weight:800;flex:none;transition:.2s}
+.p7-stepper li.on{color:var(--txt)}
+.p7-stepper li.on .p7-stn{background:linear-gradient(135deg,var(--acc),#8b5cf6);color:#fff;box-shadow:0 4px 12px rgba(109,40,217,.4)}
+.p7-stepper li.on .p7-stl{color:var(--acc2)}
+/* ============ BENTO GRID ============ */
+.p7-bento{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}
+.p7-card{grid-column:span var(--sp,6);background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px 19px;
+position:relative;box-shadow:0 10px 26px -22px rgba(30,15,60,.45);min-width:0}
+.p7-card:before{content:"";position:absolute;inset:0 0 auto;height:3px;border-radius:16px 16px 0 0;background:var(--nc,#ede8f7);opacity:.85}
+.p7-card h3{font-size:.78rem;text-transform:uppercase;letter-spacing:.1em;color:var(--mut);margin-bottom:14px;font-weight:700}
+.p7-chr{position:absolute;top:14px;right:16px;font-size:.75rem;color:var(--mut)}
+.p7-sp4{--sp:4}.p7-sp5{--sp:5}.p7-sp6{--sp:6}.p7-sp7{--sp:7}.p7-sp8{--sp:8}.p7-sp12{--sp:12}
+/* ============ JAUGE ANNULAIRE ============ */
+.p7-ring{position:relative;width:var(--sz,118px);margin:0 auto;padding-bottom:2px}
+.p7-ring svg{width:var(--sz,118px);height:var(--sz,118px);display:block}
+.p7-ringv{position:absolute;top:0;left:0;width:var(--sz,118px);height:var(--sz,118px);display:flex;flex-direction:column;
+align-items:center;justify-content:center}
+.p7-ringv b{font-size:1.3rem;font-variant-numeric:tabular-nums}
+.p7-ringv small{color:var(--mut);font-size:.66rem}
+.p7-ringl{text-align:center;font-size:.74rem;color:var(--txt);font-weight:600;margin-top:4px;line-height:1.25;max-width:var(--sz,118px);margin-left:auto;margin-right:auto}
+.p7-ringl small{display:block;color:var(--mut);font-weight:400;font-size:.7rem;margin-top:2px}
+.p7-rings{display:flex;gap:8px;justify-content:space-around;flex-wrap:wrap}
+/* ============ MINI INDICATEURS ============ */
+.p7-minis{display:grid;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:10px}
+.p7-mini{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:11px 13px}
+.p7-mini b{display:block;font-size:1.18rem;font-variant-numeric:tabular-nums}
+.p7-mini small{color:var(--mut);font-size:.7rem;line-height:1.35;display:block;margin-top:2px}
+/* ============ ÉCHELLE A→E ============ */
+.p7-scale{display:flex;gap:8px}
+.p7-scseg{position:relative;background:#f1ecf9;border-radius:10px;min-height:86px;padding:8px 9px;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end}
+.p7-scfill{position:absolute;left:0;bottom:0;top:auto;height:5px;border-radius:0 0 10px 10px;transition:width .4s}
+.p7-sclab{position:relative}
+.p7-sclab b{font-size:1.05rem;display:block}
+.p7-sclab span{display:block;color:var(--mut);font-size:.64rem;line-height:1.3}
+.p7-sclab em{font-style:normal;font-weight:800;font-size:1rem;color:var(--acc2)}
+/* ============ PODIUM ============ */
+.p7-podium{display:flex;align-items:flex-end;justify-content:center;gap:14px;padding:6px 0 2px}
+.p7-pod{display:flex;flex-direction:column;align-items:center;gap:5px;text-align:center;width:31%}
+.p7-pod b{font-size:.82rem;line-height:1.2}
+.p7-pod small{color:var(--mut);font-size:.68rem}
+.p7-pav{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:.82rem;box-shadow:0 6px 16px -6px rgba(30,15,60,.5)}
+.p7-pbar{width:100%;max-width:110px;border-radius:9px 9px 0 0;background:linear-gradient(180deg,#efe9fa,#e2d8f3);margin-top:6px}
+/* ============ PROGRESSION / CIBLE ============ */
+.p7-goal{margin:11px 0}
+.p7-gtop{display:flex;justify-content:space-between;gap:10px;font-size:.8rem;margin-bottom:5px}
+.p7-glb{color:var(--txt);font-weight:600}
+.p7-gv{color:var(--mut);font-variant-numeric:tabular-nums;white-space:nowrap}
+.p7-gtrack{position:relative;height:10px;background:#efeaf8;border-radius:99px}
+.p7-gfill{position:absolute;left:0;top:0;bottom:0;border-radius:99px;transition:width .4s}
+.p7-gt{position:absolute;top:-3px;bottom:-3px;width:2px;background:#3f3763;border-radius:2px}
+/* ============ BADGES ============ */
+.p7-nb{display:inline-flex;align-items:center;gap:4px;font-weight:800;font-variant-numeric:tabular-nums;
+border-radius:99px;padding:3px 9px;font-size:.8rem;border:1px solid transparent;white-space:nowrap}
+.p7-nb i{font-style:normal;font-size:.62rem;opacity:.75;font-weight:700}
+.p7-nb-a{background:#f3eefe;color:#7c3aed;border-color:#ddd0f9}
+.p7-nb-b{background:#ecfdf3;color:#15803d;border-color:#d3f5df}
+.p7-nb-c{background:#fdf6ec;color:#b45309;border-color:#f5e6c8}
+.p7-nb-d{background:#fff1e8;color:#c2410c;border-color:#fcdcc5}
+.p7-nb-e{background:#fdecec;color:#dc2626;border-color:#f8d3d3}
+.p7-nb-x{background:#f1ecf9;color:#635b7e}
+.p7-tag{display:inline-block;border-radius:99px;padding:3px 10px;font-size:.72rem;font-weight:700;border:1px solid}
+.p7-t-ok{background:#ecfdf3;color:#15803d;border-color:#cdebda}
+.p7-t-warn{background:#fdf6ec;color:#b45309;border-color:#f5e6c8}
+.p7-t-bad{background:#fdecec;color:#dc2626;border-color:#f8d3d3}
+.p7-t-info{background:#eef2ff;color:#4f46e5;border-color:#dbe1fd}
+.p7-t-mut{background:#f1ecf9;color:#635b7e;border-color:#e2dcf0}
+.p7-delta{font-weight:800;font-size:.78rem;font-variant-numeric:tabular-nums;white-space:nowrap}
+.p7-dup{color:#15803d}.p7-ddn{color:#dc2626}.p7-dz{color:#635b7e}
+.p7-av{display:inline-flex;width:26px;height:26px;border-radius:50%;background:#ede5fb;color:#5b21b6;align-items:center;
+justify-content:center;font-size:.62rem;font-weight:800;margin-right:8px;flex:none;vertical-align:middle}
+/* ============ TABLEAU ============ */
+.p7-tools{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.p7-tools input{flex:1;max-width:340px;background:var(--card2);border:1px solid var(--border);border-radius:10px;
+padding:9px 13px;font-size:.86rem;outline:none;transition:.2s;color:var(--txt)}
+.p7-tools input:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(109,40,217,.12)}
+.p7-count{color:var(--mut);font-size:.75rem}
+.p7-tblwrap{overflow-x:auto;border:1px solid var(--border);border-radius:12px}
+.p7-card table{width:100%;border-collapse:collapse;font-size:.83rem;min-width:520px}
+.p7-card thead th{background:#faf8fd;color:#7d74a0;font-size:.66rem;text-transform:uppercase;letter-spacing:.07em;
+text-align:left;padding:10px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
+.p7-card tbody td{padding:9px 12px;border-bottom:1px solid #f0ebf8;vertical-align:middle}
+.p7-card tbody tr:last-child td{border-bottom:0}
+.p7-card tbody tr:hover{background:#faf8fe}
+.p7-card td.num,.p7-card th.num{text-align:right}
+.p7-card td.ctr,.p7-card th.ctr{text-align:center}
+.p7-tw{vertical-align:middle}
+/* ============ 360° ============ */
+.p7-s360{margin:10px 0}
+.p7-s360t{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px;font-size:.85rem}
+.p7-s360bar{display:flex;height:14px;border-radius:99px;overflow:hidden;gap:2px}
+.p7-s360bar span{border-radius:3px;min-width:8px;transition:width .4s}
+.p7-s360l{display:flex;justify-content:space-between;color:var(--mut);font-size:.7rem;margin-top:5px}
+.p7-s360l b{color:var(--txt);font-variant-numeric:tabular-nums}
+/* ============ TIMELINE ============ */
+.p7-timeline{list-style:none;position:relative;padding-left:24px}
+.p7-timeline:before{content:"";position:absolute;left:7px;top:8px;bottom:8px;width:2px;background:#e6ddf5}
+.p7-timeline li{position:relative;padding:9px 0}
+.p7-tldot{position:absolute;left:-24px;top:14px;width:16px;height:16px;border-radius:50%;background:#fff;border:4px solid #8b5cf6;box-shadow:0 0 0 3px #f1eafb}
+.p7-tlbody{display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap}
+.p7-tldate{font-size:.72rem;color:var(--mut);font-variant-numeric:tabular-nums;min-width:86px;padding-top:3px}
+.p7-tlmain{flex:1;min-width:180px}
+.p7-tlmain b{font-size:.88rem;display:block}
+.p7-tlmain small{color:var(--mut);font-size:.74rem}
+.p7-tlside{display:flex;align-items:center;gap:8px}
+/* ============ BARRES MENSUELLES ============ */
+.p7-months{display:flex;align-items:flex-end;gap:12px;height:150px;padding:6px 4px 0}
+.p7-mcol{flex:1;display:flex;align-items:flex-end;justify-content:center;gap:3px;height:100%;position:relative}
+.p7-mcol small{position:absolute;bottom:-20px;left:0;right:0;text-align:center;color:var(--mut);font-size:.66rem}
+.p7-mb{width:14%;min-width:7px;border-radius:4px 4px 0 0;transition:height .4s}
+.p7-mleg{display:flex;gap:14px;flex-wrap:wrap;margin-top:28px;color:var(--mut);font-size:.72rem}
+.p7-mleg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+/* ============ BARRES HORIZONTALES ============ */
+.p7-brow{display:grid;grid-template-columns:150px 1fr 84px;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid #f0ebf8;font-size:.82rem}
+.p7-brow:last-child{border-bottom:0}
+.p7-blb{color:var(--txt);font-weight:600}
+.p7-btrack{height:11px;background:#efeaf8;border-radius:99px;display:block;overflow:hidden}
+.p7-bfill{display:block;height:100%;border-radius:99px;transition:width .4s}
+.p7-bvv{text-align:right;color:var(--mut);font-variant-numeric:tabular-nums;white-space:nowrap}
+/* ============ DOCUMENTS ============ */
+.p7-docs{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:11px}
+.p7-doc{display:flex;gap:12px;align-items:center;background:var(--card2);border:1px solid var(--border);border-radius:12px;
+padding:13px 14px;transition:.18s;color:var(--txt)}
+.p7-doc:hover{text-decoration:none;border-color:var(--acc);box-shadow:0 8px 20px -12px rgba(109,40,217,.35);transform:translateY(-1px)}
+.p7-dico{width:38px;height:38px;border-radius:10px;background:#f3eefe;display:flex;align-items:center;justify-content:center;font-size:1.05rem;flex:none}
+.p7-dtx b{display:block;font-size:.8rem;line-height:1.3}
+.p7-dtx small{color:var(--mut);font-size:.68rem}
+.p7-img{display:block;max-width:100%;border:1px solid var(--border);border-radius:12px;margin:10px 0}
+/* ============ NOMENCLATURES ============ */
+.p7-noms{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:12px}
+.p7-nom{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:12px 14px}
+.p7-nom b{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--acc2);display:block;margin-bottom:8px}
+.p7-nom ul{list-style:none}
+.p7-nom li{font-size:.76rem;color:var(--txt);padding:3px 0;border-bottom:1px dashed #ece6f7}
+.p7-nom li:last-child{border-bottom:0}
+.p7-nom li:before{content:"—";color:#b9a8e0;margin-right:6px}
+/* ============ FICHES (bulletins employé) ============ */
+.p7-fiches{display:grid;grid-template-columns:repeat(auto-fill,minmax(305px,1fr));gap:12px}
+.p7-fiche{background:var(--card2);border:1px solid var(--border);border-radius:14px;padding:13px 14px}
+.p7-fichetop{display:flex;align-items:center;gap:10px}
+.p7-fichetop>div{flex:1;min-width:0}
+.p7-fichetop b{font-size:.86rem;display:block}
+.p7-fichetop small{color:var(--mut);font-size:.7rem;display:block;line-height:1.35}
+.p7-fichebody{display:flex;gap:12px;align-items:center;padding:10px 4px 0}
+.p7-fichebody .p7-ring{padding-bottom:2px}
+.p7-fichekpi{flex:1;min-width:0}
+.p7-fichebadges{display:flex;gap:6px;flex-wrap:wrap;align-items:center;font-size:.78rem}
+/* ============ CARTES SERVICE ============ */
+.p7-svcs{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:12px}
+.p7-svc{background:var(--card2);border:1px solid var(--border);border-radius:14px;padding:13px 14px;text-align:center}
+.p7-svctop b{font-size:.82rem;display:block}
+.p7-svctop small{color:var(--mut);font-size:.68rem}
+.p7-svc .p7-ring{padding-bottom:2px}
+.p7-svcg{text-align:left;margin-top:8px}
+.p7-svcp{margin-top:8px;font-size:.74rem;color:var(--mut)}
+/* ============ LIGNES ÉVOLUTION ============ */
+.p7-evl{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px dashed #ece6f7}
+.p7-evl:last-child{border-bottom:0}
+.p7-evmain{flex:1;min-width:0}
+.p7-evmain b{font-size:.82rem;display:block}
+.p7-evmain small{color:var(--mut);font-size:.7rem}
+/* ============ NOTE / FOOTER ============ */
+.p7-note{color:#8b7fae;font-size:.74rem;margin-top:12px;line-height:1.5}
+footer{display:flex;gap:14px;flex-wrap:wrap;justify-content:space-between;color:var(--mut);font-size:.74rem;
+border-top:1px solid var(--border);margin-top:34px;padding-top:16px}
+@media(max-width:940px){.shell{grid-template-columns:1fr}aside{position:static;height:auto;border-right:0;
+border-bottom:1px solid var(--border)}main{padding:20px 14px 50px}
+.p7-card{grid-column:span 12 !important}
+.p7-brow{grid-template-columns:105px 1fr 76px}
+.p7-headnote{margin-left:0;text-align:left;width:100%}
+.p7-headnote b{font-size:1.2rem}}
+</style>
+</head>
+<body>
+<div id="adem14-splash" role="status" aria-live="polite" aria-label="Chargement du domaine">
+<style id="adem14-style">
+#adem14-splash{position:fixed;inset:0;z-index:1400;min-height:100vh;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,#f5f6fa 0%,#e8edf5 100%);overflow:hidden;transition:opacity .38s ease}
+#adem14-splash::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 40%,rgba(126,63,242,0.08) 0%,transparent 60%);pointer-events:none}
+#adem14-splash.a14-out{opacity:0;pointer-events:none}
+#adem14-splash .a14-card{position:relative;z-index:1;padding:40px 32px;border-radius:16px;display:flex;flex-direction:column;align-items:center;gap:12px;min-width:280px;max-width:420px;margin:0 16px;background:rgba(255,255,255,0.82);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.6);box-shadow:0 24px 60px -12px rgba(11,42,74,0.18),0 0 0 1px rgba(255,255,255,0.7);animation:adem14-fade-in .5s ease-out}
+@media (min-width:600px){#adem14-splash .a14-card{padding:48px;min-width:340px}}
+#adem14-splash .a14-logo{width:80px;height:80px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#7e3ff2 0%,#2a6a9a 100%);color:#fff;font-weight:800;font-size:1.9rem;letter-spacing:.5px;font-family:"Inter",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;animation:adem14-pulse 2s ease-in-out infinite;margin-bottom:8px;user-select:none}
+#adem14-splash .a14-title{font-family:"Inter",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:1.5rem;font-weight:800;color:#0b2a4a;letter-spacing:-.3px;text-align:center}
+#adem14-splash .a14-sub{color:#6b7a8a;font-size:.78rem;text-align:center;letter-spacing:.2px;font-family:"Inter",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+#adem14-splash .a14-dots{display:flex;gap:8px;margin:12px 0 4px}
+#adem14-splash .a14-dots i{width:10px;height:10px;border-radius:50%;background:#7e3ff2;display:inline-block;animation:adem14-dot-bounce 1.4s ease-in-out infinite}
+#adem14-splash .a14-dots i:nth-child(2){animation-delay:.2s}
+#adem14-splash .a14-dots i:nth-child(3){animation-delay:.4s}
+#adem14-splash .a14-loading{color:#9aa8b8;font-family:"Roboto Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.72rem;letter-spacing:.3px;text-align:center;min-height:1.2em}
+#adem14-splash .a14-bar{margin-top:16px;width:240px;height:4px;border-radius:2px;background:rgba(126,63,242,0.1);position:relative;overflow:hidden}
+#adem14-splash .a14-bar span{position:absolute;left:-35%;right:100%;top:0;bottom:0;background:linear-gradient(90deg,#7e3ff2 0%,#2a6a9a 100%);border-radius:2px;animation:adem14-bar 2.1s cubic-bezier(.65,.815,.735,.395) infinite}
+#adem14-splash .a14-phases{display:flex;gap:8px;margin-top:20px;align-items:center}
+#adem14-splash .a14-phases i{width:8px;height:8px;border-radius:50%;display:inline-block;animation:adem14-phase-pulse 1.6s ease-in-out infinite}
+#adem14-splash .a14-phases i:nth-child(1){background:#1B4F72;animation-delay:0s}
+#adem14-splash .a14-phases i:nth-child(2){background:#2E86C1;animation-delay:.15s}
+#adem14-splash .a14-phases i:nth-child(3){background:#27AE60;animation-delay:.3s}
+#adem14-splash .a14-phases i:nth-child(4){background:#F39C12;animation-delay:.45s}
+#adem14-splash .a14-phases i:nth-child(5){background:#8E44AD;animation-delay:.6s}
+#adem14-splash .a14-meta{margin-top:8px;color:#9aa8b8;font-family:"Roboto Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.6rem;letter-spacing:.4px;text-transform:uppercase;text-align:center}
+#adem14-splash.a14-dark{background:linear-gradient(135deg,#0a0a1a 0%,#141428 50%,#1a1a2e 100%)}
+#adem14-splash.a14-dark::before{background:radial-gradient(circle at 50% 40%,rgba(126,63,242,0.18) 0%,transparent 60%)}
+#adem14-splash.a14-dark .a14-card{background:rgba(20,20,40,0.72);border-color:rgba(126,63,242,0.25);box-shadow:0 24px 60px -12px rgba(0,0,0,0.6),0 0 0 1px rgba(126,63,242,0.15)}
+#adem14-splash.a14-dark .a14-title{color:#fff}
+#adem14-splash.a14-dark .a14-sub{color:#aaa}
+#adem14-splash.a14-dark .a14-bar{background:rgba(126,63,242,0.15)}
+@keyframes adem14-pulse{0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(126,63,242,0.4)}50%{transform:scale(1.05);box-shadow:0 0 0 20px rgba(126,63,242,0)}}
+@keyframes adem14-dot-bounce{0%,80%,100%{transform:translateY(0);opacity:.5}40%{transform:translateY(-8px);opacity:1}}
+@keyframes adem14-phase-pulse{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.4);opacity:1}}
+@keyframes adem14-fade-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes adem14-bar{0%{left:-35%;right:100%}60%{left:100%;right:-90%}100%{left:100%;right:-90%}}
+@media (prefers-reduced-motion:reduce){#adem14-splash,#adem14-splash *{animation:none!important;transition:none!important}}
+</style>
+  <div class="a14-card">
+    <div class="a14-logo">AR</div>
+    <div class="a14-title">Admina-RH</div>
+    <div class="a14-sub">Domaine 7 — Évaluation &amp; Gestion de la Performance</div>
+    <div class="a14-dots"><i></i><i></i><i></i></div>
+    <div class="a14-loading">Chargement en cours<span class="a14-ell">.</span></div>
+    <div class="a14-bar"><span></span></div>
+    <div class="a14-phases"><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="a14-meta">20 écrans · 19 feuilles Excel · 2025</div>
+  </div>
+</div>
+<script>
+/* __ADEM_V14__ — écran de chargement de domaine (réplique du splash natif D2),
+   variante Domaine 7 : disparition quand l'écran #d7-main est peint (>= 700 ms,
+   filet 4 s, fondu 380 ms puis retrait du nœud). Page statique : pas d'hydratation,
+   le MutationObserver de survie est conservé par sécurité (pattern V12/V14). */
+(function(){
+  'use strict';
+  if (window.__ADEM_V14__) return;
+  if (/domaine2_Gestion/i.test(location.pathname)) return;
+  var el = document.getElementById('adem14-splash');
+  if (!el) return;
+  var dark = false;
+  try { dark = localStorage.getItem('admina-dark') === 'true'; } catch (e) {}
+  if (dark) el.classList.add('a14-dark');
+  window.__ADEM_V14__ = { v: '14', fix: 'splash-domaine-7', _applied: Date.now() };
+  var t0 = Date.now(), done = false, mo = null;
+  function host(){ return document.body || document.documentElement; }
+  function reattach(){
+    if (done || el.parentNode) return;
+    host().appendChild(el);
+  }
+  try {
+    mo = new MutationObserver(reattach);
+    mo.observe(document.body || document.documentElement, { childList: true });
+  } catch (e) {}
+  var ivKeep = setInterval(function(){
+    reattach();
+    if (done || Date.now() - t0 > 4500) clearInterval(ivKeep);
+  }, 150);
+  var ell = el.querySelector('.a14-ell'), n = 1;
+  var ellIv = setInterval(function(){
+    n = n === 1 ? 2 : (n === 2 ? 3 : 1);
+    if (ell) ell.textContent = new Array(n + 1).join('.');
+    else clearInterval(ellIv);
+  }, 500);
+  function hide(){
+    if (done) return;
+    done = true;
+    el.dataset.a14done = '1';
+    clearInterval(ellIv); clearInterval(ivKeep);
+    try { mo.disconnect(); } catch (e) {}
+    el.classList.add('a14-out');
+    setTimeout(function(){ if (el && el.parentNode) el.parentNode.removeChild(el); }, 420);
+  }
+  /* app D7 prête : <main id="d7-main"> peint */
+  var iv = setInterval(function(){
+    var ready = false;
+    try { ready = !!document.getElementById('d7-main'); } catch (e) {}
+    if (Date.now() - t0 >= 700 && document.readyState !== 'loading' && ready){
+      clearInterval(iv); hide();
+    }
+  }, 80);
+  setTimeout(function(){ clearInterval(iv); hide(); }, 4000);
+})();
+</script>
+<div class="shell">
+<aside><div class="bmark"><div class="logo">AR</div><div><b>Admina-RH</b><small>Domaine 7</small></div></div><div class="grp">Pilotage</div><a class="nav" href="/Domaine7_Evaluation_Gestion_Performance/"><span class="dot"></span>Tableau de Bord</a><a class="nav" href="/Domaine7_Evaluation_Gestion_Performance/tdb-individuel/"><span class="dot"></span>TdB Individuel</a><a class="nav" href="/Domaine7_Evaluation_Gestion_Performance/bilan-service/"><span class="dot"></span>Bilan par Service</a><a class="nav" href="/Domaine7_Evaluation_Gestion_Performance/historique-eval/"><span class="dot"></span>Historique Évaluations</a><div class="grp">Évaluations</div><a class="nav" href="/Domaine7_Evaluation_Gestion_Performance/grille-annuelle/"><span class="dot"></span>Grille Annuelle</a><a class="nav" href="/Domaine7_Evaluation_Gestion_Performance/entretiens-annuels/"><span class="dot"></span>Entretiens Annuels</a><a class="nav" href="/Domaine7_Evaluation_Gestion_Performance/evaluation-essai/"><span class="dot"></span>Évaluation à l'Essai</a><a class="nav" href="/Domaine7_Evaluation_Gestion_Performance/evaluation-360/"><span class="dot"></span>Évaluation 360°</a><div class="grp">Objectifs &amp; KPI</div><a class="nav" href="/Domaine7_Evaluation_Gestion_Performance/objectifs-smart/"><span class="dot"></span>Objectifs SMART</a><a class="nav" href="/Domaine7_Evaluation_Gestion_Performance/kpi-individuels/"><span class="dot"></span>KPI Individuels</a><a class="nav" href="/Domaine7_Evaluation_Gestion_Performance/objectifs-trimestre/"><span class="dot"></span>Objectifs par Trimestre</a><div class="grp">Amélioration &amp; Mérite</div><a class="nav on" href="/Domaine7_Evaluation_Gestion_Performance/plan-amelioration/"><span class="dot"></span>Plans Amélioration (PAP)</a><a class="nav" href="/Domaine7_Evaluation_Gestion_Performance/classement-employes/"><span class="dot"></span>Classement Employés</a><a class="nav" href="/Domaine7_Evaluation_Gestion_Performance/primes-performance/"><span class="dot"></span>Primes &amp; Mérite</a><a class="nav" href="/Domaine7_Evaluation_Gestion_Performance/formation-performance/"><span class="dot"></span>Formation &amp; Performance</a><div class="grp">Suivi &amp; Référentiels</div><a class="nav" href="/Domaine7_Evaluation_Gestion_Performance/suivi-essai-mensuel/"><span class="dot"></span>Suivi Essai Mensuel</a><a class="nav" href="/Domaine7_Evaluation_Gestion_Performance/rapports-evaluation/"><span class="dot"></span>Rapports Évaluation</a><a class="nav" href="/Domaine7_Evaluation_Gestion_Performance/decisions-rh/"><span class="dot"></span>Décisions RH</a><a class="nav" href="/Domaine7_Evaluation_Gestion_Performance/referentiel/"><span class="dot"></span>Référentiel &amp; Nomenclatures</a><a class="nav" href="/Domaine7_Evaluation_Gestion_Performance/interconnexions/"><span class="dot"></span>Interconnexions &amp; Documents</a><div class="home"><a class="nav" href="/"><span class="dot"></span>Tous les domaines</a></div></aside>
+<main id="d7-main">
+  <div class="topbar"><span class="crumb"><a href="/">Tous les domaines</a> / <a href="/Domaine7_Evaluation_Gestion_Performance/">Domaine 7</a> / Plans Amélioration (PAP)</span>
+<a class="tohub" href="/">← Présentation des 31 domaines</a>
+  </div>
+  <ol class="p7-stepper" aria-label="Phases de la campagne d'évaluation"><li class=""><span class="p7-stn">1</span><span class="p7-stl">Planification</span></li><li class=""><span class="p7-stn">2</span><span class="p7-stl">Collecte des notes</span></li><li class=""><span class="p7-stn">3</span><span class="p7-stl">Entretiens</span></li><li class=""><span class="p7-stn">4</span><span class="p7-stl">Analyse &amp; classement</span></li><li class="on"><span class="p7-stn">5</span><span class="p7-stl">Amélioration</span></li></ol><div class="p7-head"><h1><span>Plans Amélioration (PAP)</span></h1><p class="sub">Les plans d'amélioration de la performance : points faibles, action concrète, échéance et avancement — la phase « amélioration » du flux d'évaluation.</p><div class="p7-headnote" style="--nc:#7c3aed">
+<div><b>57.5 %</b><small>Avancement moyen</small></div><em>4 PAP en cours</em></div></div><div class="p7-bento"><section class="p7-card " style="--nc:#7c3aed"><h3>Les 4 plans en cours</h3><div class="p7-fiches"><div class="p7-fiche">
+<div class="p7-fichetop"><span class="p7-av">TR</span><div><b>Tagne Rene</b><small>Non conformites HACCP repetees</small></div><span class="p7-tag p7-t-warn">En cours</span></div>
+<div class="p7-fichebody" style="padding:10px 4px">
+<div class="p7-goal"><div class="p7-gtop"><span class="p7-glb">Formation ciblee — Formation HACCP niveau 2 + suivi hebdo</span><span class="p7-gv">40 %</span></div>
+<div class="p7-gtrack"><span class="p7-gfill" style="width:40%;background:#dc2626"></span></div></div>
+<small style="color:var(--mut);font-size:.72rem">Échéance 2025-09-30 · Évaluateur : Chef Cuisine</small>
+</div></div><div class="p7-fiche">
+<div class="p7-fichetop"><span class="p7-av">MC</span><div><b>Mba Carine</b><small>Accueil clients insuffisant a l'essai</small></div><span class="p7-tag p7-t-warn">En cours</span></div>
+<div class="p7-fichebody" style="padding:10px 4px">
+<div class="p7-goal"><div class="p7-gtop"><span class="p7-glb">Coaching individuel — Coaching 2h/semaine avec N+1 + observation</span><span class="p7-gv">60 %</span></div>
+<div class="p7-gtrack"><span class="p7-gfill" style="width:60%;background:#b45309"></span></div></div>
+<small style="color:var(--mut);font-size:.72rem">Échéance 2025-08-31 · Évaluateur : Chef Service Client</small>
+</div></div><div class="p7-fiche">
+<div class="p7-fichetop"><span class="p7-av">NC</span><div><b>Nganou Clarisse</b><small>Turnover superieur a l'objectif</small></div><span class="p7-tag p7-t-warn">En cours</span></div>
+<div class="p7-fichebody" style="padding:10px 4px">
+<div class="p7-goal"><div class="p7-gtop"><span class="p7-glb">Suivi renforce — Entretiens individuels mensuels + plan retention</span><span class="p7-gv">50 %</span></div>
+<div class="p7-gtrack"><span class="p7-gfill" style="width:50%;background:#c2410c"></span></div></div>
+<small style="color:var(--mut);font-size:.72rem">Échéance 2025-12-31 · Évaluateur : DG</small>
+</div></div><div class="p7-fiche">
+<div class="p7-fichetop"><span class="p7-av">FE</span><div><b>Fokam Eric</b><small>Retards repetes</small></div><span class="p7-tag p7-t-warn">En cours</span></div>
+<div class="p7-fichebody" style="padding:10px 4px">
+<div class="p7-goal"><div class="p7-gtop"><span class="p7-glb">Suivi renforce — Pointage quotidien + entretien RH</span><span class="p7-gv">80 %</span></div>
+<div class="p7-gtrack"><span class="p7-gfill" style="width:80%;background:#15803d"></span></div></div>
+<small style="color:var(--mut);font-size:.72rem">Échéance 2025-08-15 · Évaluateur : Chef Entretien</small>
+</div></div></div></section><section class="p7-card "><h3>Types d'action</h3><div class="p7-minis"><div class="p7-mini "><b>1</b><small>Formation ciblee</small></div><div class="p7-mini "><b>1</b><small>Coaching individuel</small></div><div class="p7-mini "><b>2</b><small>Suivi renforce</small></div></div></section><section class="p7-card " style="--nc:#15803d"><h3>Avancements</h3><div class="p7-goal"><div class="p7-gtop"><span class="p7-glb">Tagne Rene</span><span class="p7-gv">échéance 2025-09-30</span></div>
+<div class="p7-gtrack"><span class="p7-gfill" style="width:40%;background:#dc2626"></span></div></div><div class="p7-goal"><div class="p7-gtop"><span class="p7-glb">Mba Carine</span><span class="p7-gv">échéance 2025-08-31</span></div>
+<div class="p7-gtrack"><span class="p7-gfill" style="width:60%;background:#b45309"></span></div></div><div class="p7-goal"><div class="p7-gtop"><span class="p7-glb">Nganou Clarisse</span><span class="p7-gv">échéance 2025-12-31</span></div>
+<div class="p7-gtrack"><span class="p7-gfill" style="width:50%;background:#c2410c"></span></div></div><div class="p7-goal"><div class="p7-gtop"><span class="p7-glb">Fokam Eric</span><span class="p7-gv">échéance 2025-08-15</span></div>
+<div class="p7-gtrack"><span class="p7-gfill" style="width:80%;background:#15803d"></span></div></div></section></div>
+  <footer><span>Admina-RH · Domaine 7 — Évaluation &amp; Gestion de la Performance</span><span>Réplique fidèle du classeur Excel · campagne 2025</span></footer>
+</main>
+</div>
+<script>
+/* ADEM_V12 — Menu déroulant global des domaines (remplace les listes sidebar)
+ * DEMANDE UTILISATEUR : la liste des domaines dans la barre latérale s'affiche mal
+ * (libellés tronqués, chevauchements) → afficher tous les domaines AILLEURS, sous
+ * forme de liste déroulante, présente sur TOUS les domaines actifs.
+ *
+ * SOLUTION : bouton flottant fixe EN BAS À DROITE (unique position fiable sur les
+ * 3 applications distinctes : React D1/D2, Next.js D3, pages « en préparation »)
+ * ouvrant un panneau déroulant : recherche + 31 domaines (badges ACTIF / EN
+ * PRÉPARATION), domaine courant surligné, lien Accueil (hub). Absent du hub « / »
+ * qui est déjà la page de présentation complète.
+ *
+ * Les listes sidebar deviennent inutiles et sont MASQUÉES (CSS + DOM runtime,
+ * 0 octet des scripts tiers modifié, aucun nœud React/Next déplacé) :
+ *   - app React (D1/D2)  : #admina-cdn (bloc tiers) → display:none
+ *   - build D3 (Next.js) : conteneur « Autres Domaines » → display:none
+ * La sidebar retrouve ainsi sa hauteur complète (V10 ne réduit plus rien :
+ * offsetHeight du bloc masqué = 0).
+ *
+ * Non-régression : z-index 1600 (au-dessus de l'app MUI 1100-1300, SOUS les
+ * modaux ADEM V8/V9 à 5000+) ; auto-réparation si le nœud disparaît ;
+ * surlignage du domaine courant suivi (popstate + intervalle, routes SPA).
+ * API : window.__ADEM_V12__ = {version, open, close, fix, _applied}
+ */
+(function () {
+  'use strict';
+  if (window.__ADEM_V12__) return;
+  var D = document;
+  var API = window.__ADEM_V12__ = { version: 'V12', open: open, close: close, fix: fix, _applied: 0 };
+
+  /* ------- données : les 31 domaines (mêmes URLs dédiées que le hub) ------- */
+  var DOMAINS = [
+    { n: 1,  u: '/Domaine1_Recrutement_Candidats', l: 'Recrutement & Candidats', a: 1 },
+    { n: 2,  u: '/Domaine2_Gestion_Administrative_Personnel', l: 'Gestion Administrative du Personnel', a: 1 },
+    { n: 3,  u: '/Domaine3_Paie_Remuneration_Avantages/', l: 'Paie, Rémunération & Avantages', a: 1 },
+    { n: 4,  u: '/Domaine4_Temps_Travail_Planification/', l: 'Temps de Travail & Planification', a: 1 },
+    { n: 5,  u: '/Domaine5_Conges_Absences_Presence/', l: 'Congés, Absences & Présence', a: 1 },
+    { n: 6,  u: '/Domaine6_Formation_Developpement_Competences/', l: 'Formation & Développement des Compétences', a: 1 },
+    { n: 7,  u: '/Domaine7_Evaluation_Gestion_Performance/', l: 'Évaluation & Gestion de la Performance', a: 1 },
+    { n: 8,  u: '/Domaine8_Relations_Sociales_Syndicats/', l: 'Relations Sociales & Syndicats' },
+    { n: 9,  u: '/Domaine9_Sante_Securite_Conditions_Travail/', l: 'Santé, Sécurité & Conditions de Travail' },
+    { n: 10, u: '/Domaine10_Talents_Mobilite_Interne/', l: 'Talents & Mobilité Interne' },
+    { n: 11, u: '/Domaine11_Droit_Travail_Conformite/', l: 'Droit du Travail & Conformité' },
+    { n: 12, u: '/Domaine12_Documentation_Archivage_RH/', l: 'Documentation & Archivage RH' },
+    { n: 13, u: '/Domaine13_Communication_RH_Marque_Employeur/', l: 'Communication RH & Marque Employeur' },
+    { n: 14, u: '/Domaine14_Reporting_Tableaux_Bord_Analyse/', l: 'Reporting & Tableaux de Bord Analyse' },
+    { n: 15, u: '/Domaine15_Budget_Pilotage_Financier_RH/', l: 'Budget & Pilotage Financier RH' },
+    { n: 16, u: '/Domaine16_Diversite_Equite_Inclusion/', l: 'Diversité, Équité & Inclusion' },
+    { n: 17, u: '/Domaine17_Audit_Conformite_Contentieux/', l: 'Audit, Conformité & Contentieux' },
+    { n: 18, u: '/Domaine18_RSE_Developpement_Durable_RH/', l: 'RSE & Développement Durable' },
+    { n: 19, u: '/Domaine19_Innovation_RH_Transformation_Digitale/', l: 'Innovation RH & Transformation Digitale' },
+    { n: 20, u: '/Domaine20_Pilotage_Reporting_RH/', l: 'Pilotage & Reporting RH' },
+    { n: 21, u: '/Domaine21_Fiches_Postes_Profils_Cartographie_Metiers/', l: 'Fiches de Postes & Cartographie des Métiers' },
+    { n: 22, u: '/Domaine22_Avantages_Sociaux_Previsionnelle/', l: 'Avantages Sociaux & Prévoyance' },
+    { n: 23, u: '/Domaine23_Travail_Temporaire/', l: 'Travail Temporaire' },
+    { n: 24, u: '/Domaine24_Stagiaires_Alternants/', l: 'Stagiaires & Alternants' },
+    { n: 25, u: '/Domaine25_Expatries_Personnel_Detache/', l: 'Expatriés & Personnel Détaché' },
+    { n: 26, u: '/Domaine26_Gestion_Budgetaire_Fiscale_RH/', l: 'Gestion Budgétaire & Fiscale RH' },
+    { n: 27, u: '/Domaine27_Reclamations_Contentieux_RH/', l: 'Réclamations & Contentieux RH' },
+    { n: 28, u: '/Domaine28_Mobilite_Carriere_Succession_RH/', l: 'Mobilité, Carrière & Succession' },
+    { n: 29, u: '/Domaine29_Communication_Interne_Engagement/', l: 'Communication Interne & Engagement' },
+    { n: 30, u: '/Domaine30_Expatrites_Mobilite_Internationale/', l: 'Expatriés & Mobilité Internationale' },
+    { n: 31, u: '/Domaine31_Retraites_Prevoyance_Transitions_Carriere/', l: 'Retraites, Prévoyance & Transitions de Carrière' }
+  ];
+  var N_ACTIF = 7;
+
+  /* hub racine = déjà la présentation complète → aucun bouton */
+  var p0 = location.pathname;
+  if (p0 === '/' || p0 === '/index.html') { API.fix = function () {}; return; }
+
+  var ICON_GRID = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>';
+  var ICON_CHEV = '<svg class="adem12-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
+  var ICON_X = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+  var ICON_SEARCH = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>';
+  var ICON_CHECK = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+  var ICON_ARROW = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="8 7 17 7 17 16"/></svg>';
+
+  var CSS = [
+    '#adem12-btn{position:fixed;right:18px;bottom:18px;z-index:1600;display:flex;align-items:center;gap:8px;',
+    'padding:12px 18px;border:0;border-radius:999px;cursor:pointer;color:#fff;',
+    "background:linear-gradient(135deg,#9375cd,#5e35a1);font-family:'Roboto',system-ui,-apple-system,'Segoe UI',sans-serif;",
+    'font-size:13.5px;font-weight:600;letter-spacing:.02em;box-shadow:0 10px 28px rgba(94,53,161,.45);',
+    'transition:transform .18s ease,box-shadow .18s ease;}',
+    '#adem12-btn:hover{transform:translateY(-2px);box-shadow:0 14px 34px rgba(94,53,161,.55);}',
+    '#adem12-btn:active{transform:translateY(0);}',
+    '#adem12-btn .adem12-chev{transition:transform .2s ease;opacity:.9;}',
+    '#adem12-btn.adem12-open .adem12-chev{transform:rotate(180deg);}',
+    '#adem12-panel{position:fixed;right:18px;bottom:72px;z-index:1600;width:min(404px,calc(100vw - 24px));',
+    'max-height:min(68vh,600px);display:flex;flex-direction:column;background:#fff;color:#221a3f;',
+    "font-family:'Roboto',system-ui,-apple-system,'Segoe UI',sans-serif;text-align:left;",
+    'border:1px solid rgba(94,53,161,.18);border-radius:18px;box-shadow:0 24px 70px rgba(20,10,50,.35);',
+    'overflow:hidden;opacity:0;transform:translateY(14px) scale(.98);transform-origin:100% 100%;',
+    'pointer-events:none;transition:opacity .2s ease,transform .22s ease;}',
+    '#adem12-panel.adem12-open{opacity:1;transform:none;pointer-events:auto;}',
+    '#adem12-panel .adem12-head{display:flex;align-items:center;gap:10px;padding:14px 16px;',
+    'background:linear-gradient(135deg,rgba(147,117,205,.14),rgba(94,53,161,.07));border-bottom:1px solid rgba(94,53,161,.12);}',
+    '#adem12-panel .adem12-head b{font-size:14px;color:#3b2a6b;}',
+    '#adem12-panel .adem12-head small{display:block;font-size:11px;color:#8b84a8;margin-top:1px;}',
+    '#adem12-panel .adem12-x{margin-left:auto;border:0;background:transparent;color:#6b6390;cursor:pointer;',
+    'padding:6px;border-radius:8px;display:flex;transition:.15s;}',
+    '#adem12-panel .adem12-x:hover{background:rgba(94,53,161,.1);color:#3b2a6b;}',
+    '#adem12-panel .adem12-search{padding:10px 12px;border-bottom:1px solid #efeaf8;}',
+    '#adem12-panel .adem12-search div{display:flex;align-items:center;gap:8px;background:#f7f4fd;',
+    'border:1px solid #e6def5;border-radius:10px;padding:8px 12px;color:#8b84a8;}',
+    '#adem12-panel .adem12-search input{flex:1;border:0;background:transparent;outline:none;',
+    "font:400 13px/1.3 'Roboto',system-ui,sans-serif;color:#221a3f;min-width:0;}",
+    '#adem12-panel .adem12-list{overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;}',
+    '#adem12-panel .adem12-item{display:flex;align-items:center;gap:10px;padding:10px 14px;',
+    'text-decoration:none;color:#2c2450;border-bottom:1px solid #f3eff9;transition:background .12s;}',
+    '#adem12-panel .adem12-item:hover{background:#f7f4fd;}',
+    '#adem12-panel .adem12-item.adem12-on{background:rgba(147,117,205,.12);box-shadow:inset 3px 0 0 #7c5fc0;}',
+    '#adem12-panel .adem12-num{flex:none;width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;',
+    'background:rgba(147,117,205,.15);border:1px solid rgba(147,117,205,.35);color:#64489e;',
+    'font-size:10.5px;font-weight:700;}',
+    '#adem12-panel .adem12-lab{flex:1;font-size:12.8px;font-weight:500;line-height:1.3;min-width:0;',
+    'overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}',
+    '#adem12-panel .adem12-chip{flex:none;font-size:9.5px;font-weight:700;letter-spacing:.05em;',
+    'padding:3px 8px;border-radius:999px;}',
+    '#adem12-panel .adem12-ok{color:#0e8a66;background:rgba(58,210,159,.13);border:1px solid rgba(58,210,159,.45);}',
+    '#adem12-panel .adem12-warn{color:#96690f;background:rgba(245,183,78,.14);border:1px solid rgba(245,183,78,.4);}',
+    '#adem12-panel .adem12-cur{flex:none;display:none;color:#7c5fc0;}',
+    '#adem12-panel .adem12-item.adem12-on .adem12-cur{display:flex;}',
+    '#adem12-panel .adem12-none{display:none;padding:22px 16px;color:#8b84a8;font-size:12.5px;text-align:center;}',
+    '#adem12-panel .adem12-foot{display:flex;align-items:center;gap:8px;padding:12px 16px;text-decoration:none;',
+    'color:#5e35a1;font-size:12.5px;font-weight:600;border-top:1px solid #efeaf8;background:#fbf9ff;transition:.15s;}',
+    '#adem12-panel .adem12-foot:hover{background:#f3edfc;}',
+    '@media(max-width:640px){#adem12-btn{right:12px;bottom:12px;padding:11px 15px;font-size:12.5px;}',
+    '#adem12-panel{right:12px;bottom:66px;width:calc(100vw - 24px);}}',
+    /* masquage des listes sidebar remplacées (0 octet tiers modifié) */
+    '#admina-cdn{display:none !important;}',
+    '.border-t.border-white\\/10.bg-black\\/20{display:none !important;}'
+  ].join('');
+
+  var btn, panel, listEl, inputEl, noneEl;
+
+  function el(tag, cls, html) {
+    var e = D.createElement(tag);
+    if (cls) e.className = cls;
+    if (html != null) e.innerHTML = html;
+    return e;
+  }
+
+  function currentKey() {
+    var p = location.pathname;
+    if (p.indexOf('/Domaine1_Recrutement_Candidats') === 0) return '/Domaine1_Recrutement_Candidats';
+    if (p.indexOf('/Domaine2_Gestion_Administrative_Personnel') === 0 ||
+        p.indexOf('/domaine2_Gestion_Administrative_Personnel') === 0) return '/Domaine2_Gestion_Administrative_Personnel';
+    if (p.indexOf('/Domaine3_Paie_Remuneration_Avantages') === 0) return '/Domaine3_Paie_Remuneration_Avantages/';
+    for (var i = 3; i < DOMAINS.length; i++) {
+      var f = DOMAINS[i].u.slice(0, -1);
+      if (p === f || p.indexOf(f + '/') === 0) return DOMAINS[i].u;
+    }
+    return null;
+  }
+
+  function refreshCurrent() {
+    if (!listEl) return;
+    var cur = currentKey();
+    var rows = listEl.querySelectorAll('.adem12-item');
+    for (var i = 0; i < rows.length; i++) {
+      var on = cur !== null && rows[i].getAttribute('data-u') === cur;
+      rows[i].className = 'adem12-item' + (on ? ' adem12-on' : '') + (DOMAINS[i].a ? '' : '');
+    }
+  }
+
+  function buildPanel() {
+    panel = el('div');
+    panel.id = 'adem12-panel';
+    panel.setAttribute('role', 'dialog');
+    panel.setAttribute('aria-label', 'Tous les domaines Admina-RH');
+
+    var head = el('div', 'adem12-head');
+    head.appendChild(el('div', null, '<b>Admina-RH</b><small>' + N_ACTIF + ' domaines actifs · ' +
+      DOMAINS.length + ' domaines au total</small>'));
+    var x = el('button', 'adem12-x', ICON_X);
+    x.setAttribute('aria-label', 'Fermer');
+    x.addEventListener('click', function () { close(); });
+    head.appendChild(x);
+    panel.appendChild(head);
+
+    var sw = el('div', 'adem12-search');
+    var si = el('div', null, ICON_SEARCH);
+    inputEl = D.createElement('input');
+    inputEl.type = 'search';
+    inputEl.placeholder = 'Rechercher un domaine…';
+    inputEl.setAttribute('aria-label', 'Rechercher un domaine');
+    inputEl.addEventListener('input', filter);
+    si.appendChild(inputEl);
+    sw.appendChild(si);
+    panel.appendChild(sw);
+
+    listEl = el('div', 'adem12-list');
+    for (var i = 0; i < DOMAINS.length; i++) {
+      var d = DOMAINS[i];
+      var a = el('a', 'adem12-item');
+      a.href = d.u;
+      a.setAttribute('data-u', d.u);
+      a.title = 'Domaine ' + d.n + ' — ' + d.l;
+      a.appendChild(el('span', 'adem12-num', 'D' + d.n));
+      a.appendChild(el('span', 'adem12-lab', d.l));
+      a.appendChild(el('span', 'adem12-chip ' + (d.a ? 'adem12-ok' : 'adem12-warn'), d.a ? 'ACTIF' : 'EN PRÉPARATION'));
+      a.appendChild(el('span', 'adem12-cur', ICON_CHECK));
+      listEl.appendChild(a);
+    }
+    noneEl = el('div', 'adem12-none', 'Aucun domaine ne correspond à votre recherche.');
+    listEl.appendChild(noneEl);
+    panel.appendChild(listEl);
+
+    var foot = el('a', 'adem12-foot', 'Tous les domaines — Accueil ' + ICON_ARROW);
+    foot.href = '/';
+    panel.appendChild(foot);
+  }
+
+  function filter() {
+    var v = inputEl.value.trim().toLowerCase();
+    var n = 0;
+    var rows = listEl.querySelectorAll('.adem12-item');
+    for (var i = 0; i < rows.length; i++) {
+      var hit = rows[i].getAttribute('data-u').toLowerCase().indexOf(v) !== -1 ||
+                rows[i].textContent.toLowerCase().indexOf(v) !== -1;
+      rows[i].style.display = hit ? '' : 'none';
+      if (hit) n++;
+    }
+    noneEl.style.display = n ? 'none' : 'block';
+  }
+
+  function open() {
+    if (!panel) return;
+    refreshCurrent();
+    panel.classList.add('adem12-open');
+    btn.classList.add('adem12-open');
+    btn.setAttribute('aria-expanded', 'true');
+    try { inputEl.focus(); } catch (e) {}
+  }
+
+  function close() {
+    if (!panel) return;
+    panel.classList.remove('adem12-open');
+    btn.classList.remove('adem12-open');
+    btn.setAttribute('aria-expanded', 'false');
+  }
+
+  function toggle() {
+    if (panel.classList.contains('adem12-open')) close();
+    else open();
+  }
+
+  /* Masquage runtime de secours (si la classe Tailwind du bloc D3 change) */
+  function hideD3Block() {
+    if (location.pathname.indexOf('/Domaine3_Paie') !== 0) return;
+    var ps = D.querySelectorAll('p');
+    for (var i = 0; i < ps.length; i++) {
+      if ((ps[i].textContent || '').trim().toLowerCase() === 'autres domaines') {
+        var c = ps[i].parentElement;
+        if (c && c.style.display !== 'none') { c.style.display = 'none'; API._applied++; }
+      }
+    }
+  }
+
+  function fix() {
+    if (!btn || !btn.isConnected) mount();
+    refreshCurrent();
+    hideD3Block();
+  }
+
+  function mount() {
+    if (btn && btn.isConnected) return;
+    if (!btn) {
+      buildPanel();
+      btn = el('button', null, ICON_GRID + '<span>Domaines</span>' + ICON_CHEV);
+      btn.id = 'adem12-btn';
+      btn.setAttribute('aria-expanded', 'false');
+      btn.setAttribute('aria-haspopup', 'true');
+      btn.setAttribute('aria-controls', 'adem12-panel');
+      btn.title = 'Tous les domaines Admina-RH';
+      btn.addEventListener('click', function (e) { e.stopPropagation(); toggle(); });
+      D.addEventListener('click', function (e) {
+        if (!panel.classList.contains('adem12-open')) return;
+        if (panel.contains(e.target) || btn.contains(e.target)) return;
+        close();
+      });
+      D.addEventListener('keydown', function (e) {
+        if ((e.key || e.keyCode) === 'Escape') close();
+      });
+      window.addEventListener('popstate', refreshCurrent);
+    }
+    D.body.appendChild(btn);
+    D.body.appendChild(panel);
+    API._applied++;
+  }
+
+  function start() {
+    if (!D.getElementById('adem12-style')) {
+      var st = D.createElement('style');
+      st.id = 'adem12-style';
+      st.textContent = CSS;
+      D.head.appendChild(st);
+    }
+    mount();
+    /* suivi léger : routes SPA + auto-réparation (pattern V11) */
+    setInterval(fix, 1500);
+  }
+
+  if (D.readyState === 'loading') D.addEventListener('DOMContentLoaded', start);
+  else start();
+})();
+
+</script>
+</body>
+</html>
