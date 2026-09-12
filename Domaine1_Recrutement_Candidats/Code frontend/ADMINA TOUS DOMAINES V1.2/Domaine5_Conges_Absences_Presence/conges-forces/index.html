@@ -114,7 +114,109 @@ display:flex;gap:14px;flex-wrap:wrap;justify-content:space-between}
 @media(max-width:940px){.shell{grid-template-columns:1fr}aside{position:static;height:auto;border-right:0;
 border-bottom:1px solid var(--border)}main{padding:20px 16px 50px}.bars .row{grid-template-columns:130px 1fr 110px}}
 </style>
-</head>
+<style id="d5s-v24">/* ===== Sidebar intelligente V24 — Domaine 5 Congés, Absences & Présence ===== */
+.d5s{background:linear-gradient(175deg,#0d3348 0%,#0a2739 55%,#071d2b 100%);border-right:1px solid rgba(0,0,0,.25);border-bottom:0;padding:14px 12px 10px;position:sticky;top:0;height:100vh;overflow-y:auto;overflow-x:hidden;display:flex;flex-direction:column;gap:10px;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.22) transparent}
+.d5s::-webkit-scrollbar{width:8px}
+.d5s::-webkit-scrollbar-thumb{background:rgba(255,255,255,.18);border-radius:8px}
+.d5s::-webkit-scrollbar-track{background:transparent}
+.d5s-brand{display:flex;align-items:center;gap:10px;padding:2px 4px 10px;border-bottom:1px solid rgba(255,255,255,.12);flex:none}
+.d5s-logo{width:38px;height:38px;flex:none;border-radius:11px;background:linear-gradient(135deg,#0284c7,#0369a1 55%,#075985);display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:.95rem;box-shadow:0 2px 10px rgba(2,132,199,.4);letter-spacing:.02em}
+.d5s-bname{min-width:0}
+.d5s-bname b{display:block;color:#fff;font-size:.97rem;line-height:1.15}
+.d5s-bname small{display:block;color:#8fb6cf;font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.d5s-close{display:none;margin-left:auto;background:none;border:0;color:#8fb6cf;font-size:1rem;cursor:pointer;padding:4px;line-height:1}
+.d5s-close:hover{color:#fff}
+.d5s-kpirow{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;text-decoration:none;flex:none}
+.d5s-kpi{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:6px 4px;text-align:center;transition:.15s;min-width:0}
+.d5s-kpi b{display:block;color:#fff;font-size:.85rem;line-height:1.2;white-space:nowrap}
+.d5s-kpi small{display:block;color:#8fb6cf;font-size:.53rem;text-transform:uppercase;letter-spacing:.05em;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.d5s-kpirow:hover{text-decoration:none}
+.d5s-kpirow:hover .d5s-kpi{background:rgba(47,168,224,.14);border-color:rgba(47,168,224,.4);transform:translateY(-1px)}
+.d5s-alerts{display:grid;grid-template-columns:1fr 1fr;gap:6px;flex:none}
+.d5s-al{display:block;border-radius:9px;padding:5px 8px;font-size:.64rem;line-height:1.3;text-decoration:none;border:1px solid transparent;transition:.15s}
+.d5s-al b{display:block;font-size:.8rem}
+.d5s-al.bad{background:rgba(220,38,38,.12);border-color:rgba(220,38,38,.35);color:#fca5a5}
+.d5s-al.warn{background:rgba(180,83,9,.14);border-color:rgba(180,83,9,.4);color:#fcd34d}
+.d5s-al:hover{text-decoration:none;filter:brightness(1.18)}
+.d5s-search{position:relative;display:flex;align-items:center;flex:none}
+.d5s-search svg{position:absolute;left:9px;width:13px;height:13px;color:#7fb3d3;pointer-events:none}
+.d5s-search input{width:100%;background:rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.14);border-radius:10px;color:#eaf4fb;font-size:.8rem;padding:7px 26px 7px 28px;outline:none;transition:.15s}
+.d5s-search input::placeholder{color:#6f9cbc}
+.d5s-search input:focus{border-color:#2fa8e0;box-shadow:0 0 0 3px rgba(47,168,224,.18);background:rgba(0,0,0,.36)}
+.d5s-search kbd{position:absolute;right:8px;font-size:.58rem;color:#7fb3d3;border:1px solid rgba(255,255,255,.22);border-radius:4px;padding:0 4px;background:rgba(255,255,255,.06);pointer-events:none;font-family:inherit}
+.d5s-count{font-size:.66rem;color:#7fd0f5;padding:2px 6px;flex:none}
+.d5s-count[hidden]{display:none}
+.d5s-menu{display:flex;flex-direction:column;min-height:0;flex:1 1 auto;overflow-y:auto;overflow-x:hidden;padding-bottom:6px;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.22) transparent}
+.d5s-menu::-webkit-scrollbar{width:8px}
+.d5s-menu::-webkit-scrollbar-thumb{background:rgba(255,255,255,.18);border-radius:8px}
+.d5s-menu::-webkit-scrollbar-track{background:transparent}
+.d5s-sec{margin:0}
+.d5s-sec.d5s-hide{display:none}
+.d5s-sec[hidden]{display:none}
+.d5s-grp{display:flex;align-items:center;justify-content:space-between;color:#7fb3d3;font-size:.62rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;margin:12px 6px 5px}
+.d5s-badge{background:rgba(47,168,224,.18);color:#9fd8f2;border:1px solid rgba(47,168,224,.3);border-radius:99px;font-size:.56rem;padding:0 6px;letter-spacing:0;font-weight:700}
+.d5s-item{position:relative}
+.d5s-item.d5s-hide{display:none}
+.d5s-link{display:flex;align-items:center;gap:8px;color:#d4e4f0;font-size:.83rem;padding:6px 26px 6px 9px;border-radius:9px;transition:.14s;border:1px solid transparent;text-decoration:none;min-height:30px}
+.d5s-link:hover{background:rgba(255,255,255,.07);color:#fff;text-decoration:none}
+.d5s-link:focus-visible{outline:2px solid #2fa8e0;outline-offset:-2px}
+.d5s-link.on{background:rgba(33,150,217,.16);border-color:rgba(47,168,224,.4);color:#fff;box-shadow:inset 3px 0 0 #2fa8e0}
+.d5s-dot{width:6px;height:6px;border-radius:50%;background:#2fa8e0;opacity:.45;flex:none}
+.d5s-link.on .d5s-dot{opacity:1;box-shadow:0 0 8px #2fa8e0}
+.d5s-lbl{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.d5s-lbl mark{background:#fbbf24;color:#0a2739;border-radius:3px;padding:0 1px}
+.d5s-check{color:#34d399;font-size:.68rem;flex:none;position:absolute;right:26px;top:50%;transform:translateY(-50%)}
+.d5s-star{position:absolute;right:4px;top:50%;transform:translateY(-50%);background:none;border:0;color:#7fb3d3;font-size:.8rem;cursor:pointer;opacity:0;padding:4px 5px;border-radius:6px;transition:.14s;line-height:1}
+.d5s-item:hover .d5s-star,.d5s-star:focus-visible{opacity:.8}
+.d5s-star:hover{opacity:1;background:rgba(255,255,255,.1)}
+.d5s-star.d5s-on{opacity:1;color:#fbbf24}
+.d5s-secempty{color:#5b7f99;font-size:.66rem;padding:4px 10px;font-style:italic}
+.d5s-secempty[hidden]{display:none}
+.d5s-calc{flex:none;margin-top:6px}
+.d5s-calcbtn{display:flex;align-items:center;gap:7px;width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:#d4e4f0;border-radius:10px;padding:7px 10px;font-size:.76rem;cursor:pointer;transition:.15s;text-align:left}
+.d5s-calcbtn:hover{background:rgba(47,168,224,.13);border-color:rgba(47,168,224,.4);color:#fff}
+.d5s-calcbtn[aria-expanded="true"]{background:rgba(47,168,224,.16);border-color:rgba(47,168,224,.45);color:#fff}
+.d5s-calcbtn svg{width:14px;height:14px;flex:none}
+.d5s-calcpanel{background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:9px 10px;display:flex;flex-direction:column;gap:7px;margin-top:6px}
+.d5s-calcpanel[hidden]{display:none}
+.d5s-calcpanel label{display:flex;flex-direction:column;gap:2px;color:#8fb6cf;font-size:.6rem;text-transform:uppercase;letter-spacing:.06em}
+.d5s-calcpanel input{background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.16);border-radius:7px;color:#eaf4fb;font-size:.78rem;padding:5px 7px;outline:none;color-scheme:dark;width:100%}
+.d5s-calcpanel input:focus{border-color:#2fa8e0}
+.d5s-chk{flex-direction:row;align-items:center;gap:6px;text-transform:none;letter-spacing:0;font-size:.68rem;color:#d4e4f0;cursor:pointer}
+.d5s-chk input{width:auto}
+.d5s-cres{background:rgba(47,168,224,.12);border:1px solid rgba(47,168,224,.3);border-radius:8px;color:#fff;font-size:.74rem;padding:6px 8px;line-height:1.4}
+.d5s-cres.bad{background:rgba(220,38,38,.13);border-color:rgba(220,38,38,.4)}
+.d5s-cnote{color:#5b7f99;font-size:.57rem}
+.d5s-foot{margin-top:auto;padding-top:10px;border-top:1px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:space-between;color:#5b7f99;font-size:.6rem;flex:none;gap:6px}
+.d5s-home{color:#9fc6de;text-decoration:none;font-size:.66rem;white-space:nowrap}
+.d5s-home:hover{color:#fff;text-decoration:none}
+.d5s-footright{display:flex;align-items:center;gap:6px;flex:none}
+.d5s-help{background:none;border:1px solid rgba(255,255,255,.18);color:#9fc6de;border-radius:7px;font-size:.62rem;padding:2px 7px;cursor:pointer;white-space:nowrap}
+.d5s-help:hover{background:rgba(255,255,255,.08);color:#fff}
+.d5s-modal{position:fixed;inset:0;background:rgba(2,10,18,.6);display:flex;align-items:center;justify-content:center;z-index:80}
+.d5s-modal[hidden]{display:none}
+.d5s-mcard{background:#0e2a3d;border:1px solid rgba(47,168,224,.35);border-radius:14px;padding:18px 20px;max-width:350px;width:92%;color:#d4e4f0;font-size:.78rem;box-shadow:0 18px 50px rgba(0,0,0,.5)}
+.d5s-mcard h4{margin:0 0 10px;color:#fff;font-size:.92rem}
+.d5s-mcard table{width:100%;border-collapse:collapse}
+.d5s-mcard td{padding:5px 0;border-bottom:1px solid rgba(255,255,255,.08)}
+.d5s-mcard tr:last-child td{border-bottom:0}
+.d5s-mcard td:first-child{color:#7fd0f5;width:42%;white-space:nowrap}
+.d5s-mcard kbd{border:1px solid rgba(255,255,255,.25);border-radius:4px;padding:0 5px;background:rgba(255,255,255,.07);font-size:.7rem;font-family:inherit}
+.d5s-mclose{margin-top:12px;width:100%;background:#0369a1;border:0;color:#fff;border-radius:8px;padding:8px;font-size:.8rem;cursor:pointer}
+.d5s-mclose:hover{background:#0284c7}
+.d5s-burger{display:none;position:fixed;top:10px;left:10px;z-index:65;width:42px;height:42px;border-radius:12px;border:1px solid rgba(255,255,255,.25);background:linear-gradient(135deg,#0d3348,#071d2b);color:#fff;font-size:1.05rem;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.35);align-items:center;justify-content:center;line-height:1}
+.d5s-burger:hover{border-color:#2fa8e0}
+.d5s-backdrop{position:fixed;inset:0;background:rgba(2,10,18,.55);z-index:55;display:none}
+.d5s-backdrop.d5s-show{display:block}
+.shell{grid-template-columns:272px minmax(0,1fr)}
+@media(max-width:940px){
+  .shell{grid-template-columns:1fr}
+  .d5s{position:fixed;left:0;top:0;bottom:0;height:100vh;width:min(85vw,320px);transform:translateX(-103%);transition:transform .22s ease;z-index:60;box-shadow:0 0 40px rgba(0,0,0,.45);border-right:1px solid rgba(0,0,0,.35)}
+  .d5s.d5s-open{transform:none}
+  .d5s-burger{display:flex}
+  .d5s-close{display:block}
+}
+</style></head>
 <body>
 <div id="adem14-splash" role="status" aria-live="polite" aria-label="Chargement du domaine">
 <style id="adem14-style">
@@ -221,7 +323,7 @@ border-bottom:1px solid var(--border)}main{padding:20px 16px 50px}.bars .row{gri
 })();
 </script>
 <div class="shell">
-<aside><div class="bmark"><div class="logo">AR</div><div><b>Admina-RH</b><small>Domaine 5</small></div></div><div class="grp">Pilotage</div><a class="nav" href="/Domaine5_Conges_Absences_Presence/"><span class="dot"></span>Tableau de Bord</a><a class="nav" href="/Domaine5_Conges_Absences_Presence/taux-absenteisme/"><span class="dot"></span>Taux d&#x27;Absentéisme</a><a class="nav" href="/Domaine5_Conges_Absences_Presence/soldes-departement/"><span class="dot"></span>Soldes par Département</a><a class="nav" href="/Domaine5_Conges_Absences_Presence/rapports-statistiques/"><span class="dot"></span>Rapports &amp; Statistiques</a><div class="grp">Congés</div><a class="nav" href="/Domaine5_Conges_Absences_Presence/compteur-conges/"><span class="dot"></span>Compteur Congés Payés</a><a class="nav" href="/Domaine5_Conges_Absences_Presence/planning-departs/"><span class="dot"></span>Planning des Départs</a><a class="nav" href="/Domaine5_Conges_Absences_Presence/permissions-speciales/"><span class="dot"></span>Permissions Spéciales</a><a class="nav" href="/Domaine5_Conges_Absences_Presence/conges-sans-solde/"><span class="dot"></span>Congés Sans Solde</a><a class="nav" href="/Domaine5_Conges_Absences_Presence/maternite-paternite/"><span class="dot"></span>Maternité &amp; Paternité</a><a class="nav on" href="/Domaine5_Conges_Absences_Presence/conges-forces/"><span class="dot"></span>Congés Forcés &amp; Repos</a><a class="nav" href="/Domaine5_Conges_Absences_Presence/calendrier-conges/"><span class="dot"></span>Calendrier des Congés</a><div class="grp">Absences</div><a class="nav" href="/Domaine5_Conges_Absences_Presence/absences-non-justifiees/"><span class="dot"></span>Absences Non Justifiées</a><a class="nav" href="/Domaine5_Conges_Absences_Presence/arrets-maladie/"><span class="dot"></span>Arrêts Maladie</a><a class="nav" href="/Domaine5_Conges_Absences_Presence/accidents-travail/"><span class="dot"></span>Accidents du Travail</a><a class="nav" href="/Domaine5_Conges_Absences_Presence/compteurs-employe/"><span class="dot"></span>Compteurs par Employé</a><div class="grp">Présence</div><a class="nav" href="/Domaine5_Conges_Absences_Presence/journal-pointage/"><span class="dot"></span>Journal de Pointage</a><a class="nav" href="/Domaine5_Conges_Absences_Presence/retards-departs/"><span class="dot"></span>Retards &amp; Départs Anticipés</a><a class="nav" href="/Domaine5_Conges_Absences_Presence/historique-presence/"><span class="dot"></span>Historique Annuel</a><div class="grp">Référentiels</div><a class="nav" href="/Domaine5_Conges_Absences_Presence/employes/"><span class="dot"></span>Employés</a><a class="nav" href="/Domaine5_Conges_Absences_Presence/interconnexions/"><span class="dot"></span>Interconnexions &amp; Documents</a><div class="home"><a class="nav" href="/"><span class="dot"></span>Tous les domaines</a></div></aside>
+<aside class="d5s" id="d5s" aria-label="Navigation du domaine 5"><div class="d5s-brand"><div class="d5s-logo">AR</div><div class="d5s-bname"><b>Admina-RH</b><small>Congés · Absences · Présence</small></div><button type="button" class="d5s-close" id="d5sClose" aria-label="Fermer le menu">✕</button></div><a class="d5s-kpirow" href="/Domaine5_Conges_Absences_Presence/soldes-departement/" title="Voir les soldes par département"><span class="d5s-kpi"><b>145 j</b><small>Solde global</small></span><span class="d5s-kpi"><b>9,7 %</b><small>Absentéisme</small></span><span class="d5s-kpi"><b>95,2</b><small>Présence</small></span></a><div class="d5s-alerts"><a class="d5s-al bad" href="/Domaine5_Conges_Absences_Presence/absences-non-justifiees/" title="Absences Non Justifiées"><b>7 j</b>Abs. non justifiées</a><a class="d5s-al warn" href="/Domaine5_Conges_Absences_Presence/retards-departs/" title="Retards et Départs Anticipés"><b>140 min</b>Retards cumulés</a></div><div class="d5s-search" role="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.6-3.6"/></svg><input id="d5sQ" type="text" placeholder="Rechercher un module…" autocomplete="off" spellcheck="false" aria-label="Rechercher un module"><kbd>/</kbd></div><div class="d5s-count" id="d5sCount" hidden></div><nav class="d5s-menu" id="d5sMenu"><div class="d5s-sec" data-sec="fav" hidden><div class="d5s-grp">★ Favoris</div><div class="d5s-favlist" id="d5sFav"></div><div class="d5s-secempty" id="d5sFavEmpty">Épinglez vos modules avec ☆</div></div><div class="d5s-sec" data-sec="recent" hidden><div class="d5s-grp">⟲ Récents</div><div class="d5s-recentlist" id="d5sRecent"></div></div><div class="d5s-sec" data-grp="Pilotage"><div class="d5s-grp">Pilotage <span class="d5s-badge">4</span></div><div class="d5s-item" data-k="" data-n="Tableau de Bord" data-kw="tdb accueil dashboard ensemble vue synthese"><a class="d5s-link" href="/Domaine5_Conges_Absences_Presence/" title="Vue d'ensemble : soldes, taux et alertes"><span class="d5s-dot"></span><span class="d5s-lbl" data-n="Tableau de Bord">Tableau de Bord</span></a><button type="button" class="d5s-star" data-k="" aria-label="Épingler Tableau de Bord" title="Épingler aux favoris">☆</button></div><div class="d5s-item" data-k="taux-absenteisme/" data-n="Taux d'Absentéisme" data-kw="absenteisme taux service formule pourcentage"><a class="d5s-link" href="/Domaine5_Conges_Absences_Presence/taux-absenteisme/" title="Formules du classeur, par service"><span class="d5s-dot"></span><span class="d5s-lbl" data-n="Taux d'Absentéisme">Taux d'Absentéisme</span></a><button type="button" class="d5s-star" data-k="taux-absenteisme/" aria-label="Épingler Taux d'Absentéisme" title="Épingler aux favoris">☆</button></div><div class="d5s-item" data-k="soldes-departement/" data-n="Soldes par Département" data-kw="solde departement equipe acquis pris restant"><a class="d5s-link" href="/Domaine5_Conges_Absences_Presence/soldes-departement/" title="Acquis, pris et restants par équipe"><span class="d5s-dot"></span><span class="d5s-lbl" data-n="Soldes par Département">Soldes par Département</span></a><button type="button" class="d5s-star" data-k="soldes-departement/" aria-label="Épingler Soldes par Département" title="Épingler aux favoris">☆</button></div><div class="d5s-item" data-k="rapports-statistiques/" data-n="Rapports &amp; Statistiques" data-kw="rapport edition synthese statistique export"><a class="d5s-link" href="/Domaine5_Conges_Absences_Presence/rapports-statistiques/" title="Éditions et synthèses du domaine"><span class="d5s-dot"></span><span class="d5s-lbl" data-n="Rapports &amp; Statistiques">Rapports &amp; Statistiques</span></a><button type="button" class="d5s-star" data-k="rapports-statistiques/" aria-label="Épingler Rapports &amp; Statistiques" title="Épingler aux favoris">☆</button></div></div><div class="d5s-sec" data-grp="Congés"><div class="d5s-grp">Congés <span class="d5s-badge">7</span></div><div class="d5s-item" data-k="compteur-conges/" data-n="Compteur Congés Payés" data-kw="cp conges payes compteur droit solde"><a class="d5s-link" href="/Domaine5_Conges_Absences_Presence/compteur-conges/" title="Suivi des droits CP par employé"><span class="d5s-dot"></span><span class="d5s-lbl" data-n="Compteur Congés Payés">Compteur Congés Payés</span></a><button type="button" class="d5s-star" data-k="compteur-conges/" aria-label="Épingler Compteur Congés Payés" title="Épingler aux favoris">☆</button></div><div class="d5s-item" data-k="planning-departs/" data-n="Planning des Départs" data-kw="planning depart rotation a venir equipe"><a class="d5s-link" href="/Domaine5_Conges_Absences_Presence/planning-departs/" title="Départs en cours et à venir"><span class="d5s-dot"></span><span class="d5s-lbl" data-n="Planning des Départs">Planning des Départs</span></a><button type="button" class="d5s-star" data-k="planning-departs/" aria-label="Épingler Planning des Départs" title="Épingler aux favoris">☆</button></div><div class="d5s-item" data-k="permissions-speciales/" data-n="Permissions Spéciales" data-kw="permission autorisation exceptionnelle horaire absence courte"><a class="d5s-link" href="/Domaine5_Conges_Absences_Presence/permissions-speciales/" title="Autorisations horaires exceptionnelles"><span class="d5s-dot"></span><span class="d5s-lbl" data-n="Permissions Spéciales">Permissions Spéciales</span></a><button type="button" class="d5s-star" data-k="permissions-speciales/" aria-label="Épingler Permissions Spéciales" title="Épingler aux favoris">☆</button></div><div class="d5s-item" data-k="conges-sans-solde/" data-n="Congés Sans Solde" data-kw="sans solde non remunere absence longue"><a class="d5s-link" href="/Domaine5_Conges_Absences_Presence/conges-sans-solde/" title="Absences sans maintien de salaire"><span class="d5s-dot"></span><span class="d5s-lbl" data-n="Congés Sans Solde">Congés Sans Solde</span></a><button type="button" class="d5s-star" data-k="conges-sans-solde/" aria-label="Épingler Congés Sans Solde" title="Épingler aux favoris">☆</button></div><div class="d5s-item" data-k="maternite-paternite/" data-n="Maternité &amp; Paternité" data-kw="maternite paternite famille naissance adoption legal"><a class="d5s-link" href="/Domaine5_Conges_Absences_Presence/maternite-paternite/" title="Congés familiaux légaux"><span class="d5s-dot"></span><span class="d5s-lbl" data-n="Maternité &amp; Paternité">Maternité &amp; Paternité</span></a><button type="button" class="d5s-star" data-k="maternite-paternite/" aria-label="Épingler Maternité &amp; Paternité" title="Épingler aux favoris">☆</button></div><div class="d5s-item" data-k="conges-forces/" data-n="Congés Forcés &amp; Repos" data-kw="force repos compensateur mise ordre"><a class="d5s-link on" href="/Domaine5_Conges_Absences_Presence/conges-forces/" title="Repos compensateur et mises au repos"><span class="d5s-dot"></span><span class="d5s-lbl" data-n="Congés Forcés &amp; Repos">Congés Forcés &amp; Repos</span></a><button type="button" class="d5s-star" data-k="conges-forces/" aria-label="Épingler Congés Forcés &amp; Repos" title="Épingler aux favoris">☆</button></div><div class="d5s-item" data-k="calendrier-conges/" data-n="Calendrier des Congés" data-kw="calendrier mois planification vue annuelle"><a class="d5s-link" href="/Domaine5_Conges_Absences_Presence/calendrier-conges/" title="Vue mensuelle des absences planifiées"><span class="d5s-dot"></span><span class="d5s-lbl" data-n="Calendrier des Congés">Calendrier des Congés</span></a><button type="button" class="d5s-star" data-k="calendrier-conges/" aria-label="Épingler Calendrier des Congés" title="Épingler aux favoris">☆</button></div></div><div class="d5s-sec" data-grp="Absences"><div class="d5s-grp">Absences <span class="d5s-badge">4</span></div><div class="d5s-item" data-k="absences-non-justifiees/" data-n="Absences Non Justifiées" data-kw="injustifiee justificatif abandon poste sanction"><a class="d5s-link" href="/Domaine5_Conges_Absences_Presence/absences-non-justifiees/" title="Absences sans justificatif"><span class="d5s-dot"></span><span class="d5s-lbl" data-n="Absences Non Justifiées">Absences Non Justifiées</span></a><button type="button" class="d5s-star" data-k="absences-non-justifiees/" aria-label="Épingler Absences Non Justifiées" title="Épingler aux favoris">☆</button></div><div class="d5s-item" data-k="arrets-maladie/" data-n="Arrêts Maladie" data-kw="maladie arret certificat indemnite cpam"><a class="d5s-link" href="/Domaine5_Conges_Absences_Presence/arrets-maladie/" title="Certificats et indemnités"><span class="d5s-dot"></span><span class="d5s-lbl" data-n="Arrêts Maladie">Arrêts Maladie</span></a><button type="button" class="d5s-star" data-k="arrets-maladie/" aria-label="Épingler Arrêts Maladie" title="Épingler aux favoris">☆</button></div><div class="d5s-item" data-k="accidents-travail/" data-n="Accidents du Travail" data-kw="accident travail at declaration cnaps suivi"><a class="d5s-link" href="/Domaine5_Conges_Absences_Presence/accidents-travail/" title="Déclarations et suivi AT"><span class="d5s-dot"></span><span class="d5s-lbl" data-n="Accidents du Travail">Accidents du Travail</span></a><button type="button" class="d5s-star" data-k="accidents-travail/" aria-label="Épingler Accidents du Travail" title="Épingler aux favoris">☆</button></div><div class="d5s-item" data-k="compteurs-employe/" data-n="Compteurs par Employé" data-kw="compteur employe individuel detail solde personnel"><a class="d5s-link" href="/Domaine5_Conges_Absences_Presence/compteurs-employe/" title="Soldes individuels détaillés"><span class="d5s-dot"></span><span class="d5s-lbl" data-n="Compteurs par Employé">Compteurs par Employé</span></a><button type="button" class="d5s-star" data-k="compteurs-employe/" aria-label="Épingler Compteurs par Employé" title="Épingler aux favoris">☆</button></div></div><div class="d5s-sec" data-grp="Présence"><div class="d5s-grp">Présence <span class="d5s-badge">3</span></div><div class="d5s-item" data-k="journal-pointage/" data-n="Journal de Pointage" data-kw="pointage badgeuse entree sortie journaliere presence"><a class="d5s-link" href="/Domaine5_Conges_Absences_Presence/journal-pointage/" title="Entrées et sorties quotidiennes"><span class="d5s-dot"></span><span class="d5s-lbl" data-n="Journal de Pointage">Journal de Pointage</span></a><button type="button" class="d5s-star" data-k="journal-pointage/" aria-label="Épingler Journal de Pointage" title="Épingler aux favoris">☆</button></div><div class="d5s-item" data-k="retards-departs/" data-n="Retards &amp; Départs Anticipés" data-kw="retard depart anticipe ecart horaire minute"><a class="d5s-link" href="/Domaine5_Conges_Absences_Presence/retards-departs/" title="Écarts horaires cumulés"><span class="d5s-dot"></span><span class="d5s-lbl" data-n="Retards &amp; Départs Anticipés">Retards &amp; Départs Anticipés</span></a><button type="button" class="d5s-star" data-k="retards-departs/" aria-label="Épingler Retards &amp; Départs Anticipés" title="Épingler aux favoris">☆</button></div><div class="d5s-item" data-k="historique-presence/" data-n="Historique Annuel" data-kw="historique annuel presence 12 mois archive"><a class="d5s-link" href="/Domaine5_Conges_Absences_Presence/historique-presence/" title="Présence sur 12 mois"><span class="d5s-dot"></span><span class="d5s-lbl" data-n="Historique Annuel">Historique Annuel</span></a><button type="button" class="d5s-star" data-k="historique-presence/" aria-label="Épingler Historique Annuel" title="Épingler aux favoris">☆</button></div></div><div class="d5s-sec" data-grp="Référentiels"><div class="d5s-grp">Référentiels <span class="d5s-badge">2</span></div><div class="d5s-item" data-k="employes/" data-n="Employés" data-kw="employe personnel referentiel liste effectif agent"><a class="d5s-link" href="/Domaine5_Conges_Absences_Presence/employes/" title="Référentiel du personnel"><span class="d5s-dot"></span><span class="d5s-lbl" data-n="Employés">Employés</span></a><button type="button" class="d5s-star" data-k="employes/" aria-label="Épingler Employés" title="Épingler aux favoris">☆</button></div><div class="d5s-item" data-k="interconnexions/" data-n="Interconnexions &amp; Documents" data-kw="pdf document manuel procedure interconnexion iso"><a class="d5s-link" href="/Domaine5_Conges_Absences_Presence/interconnexions/" title="PDF D1-D4, GRH/ISO, manuels"><span class="d5s-dot"></span><span class="d5s-lbl" data-n="Interconnexions &amp; Documents">Interconnexions &amp; Documents</span></a><button type="button" class="d5s-star" data-k="interconnexions/" aria-label="Épingler Interconnexions &amp; Documents" title="Épingler aux favoris">☆</button></div></div></nav><div class="d5s-calc"><button type="button" class="d5s-calcbtn" id="d5sCalcBtn" aria-expanded="false" aria-controls="d5sCalcPanel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h6M9 11h.01M12 11h.01M15 11h.01M9 15h.01M12 15h.01M15 15h.01"/></svg>Calculateur de solde</button><div class="d5s-calcpanel" id="d5sCalcPanel" hidden><label>Solde actuel (j)<input type="number" id="d5sS" value="20" min="0" step="0.5"></label><label>Début de l&#x27;absence<input type="date" id="d5sD1"></label><label>Fin de l&#x27;absence<input type="date" id="d5sD2"></label><label class="d5s-chk"><input type="checkbox" id="d5sWe" checked>Exclure samedi &amp; dimanche</label><div class="d5s-cres" id="d5sRes">Renseignez les dates pour estimer.</div><div class="d5s-cnote">Estimation indicative — jours fériés non déduits.</div></div></div><div class="d5s-foot"><a class="d5s-home" href="/">← Tous les domaines</a><span class="d5s-footright"><span>V1.3 · 20 écrans</span><button type="button" class="d5s-help" id="d5sHelp" title="Raccourcis clavier">⌨ Raccourcis</button></span></div></aside><button type="button" class="d5s-burger" id="d5sBurger" aria-label="Ouvrir le menu" aria-controls="d5s">☰</button><div class="d5s-backdrop" id="d5sBk"></div><div class="d5s-modal" id="d5sModal" hidden><div class="d5s-mcard"><h4>Raccourcis de la sidebar</h4><table><tr><td><kbd>/</kbd> ou Ctrl+K</td><td>Rechercher un module</td></tr><tr><td>↑ / ↓</td><td>Naviguer dans les résultats</td></tr><tr><td>Échap</td><td>Effacer / fermer</td></tr><tr><td>☆ étoile</td><td>Épingler aux favoris</td></tr><tr><td>✓ vert</td><td>Module déjà consulté</td></tr></table><button type="button" class="d5s-mclose" id="d5sMClose">Fermer</button></div></div>
 <main id="d5-main">
   <div class="topbar"><span class="crumb"><a href="/">Tous les domaines</a> / <a href="/Domaine5_Conges_Absences_Presence/">Domaine 5</a> / Congés Forcés &amp; Repos</span>
     <a class="tohub" href="/">← Présentation des 31 domaines</a>
@@ -316,7 +418,7 @@ border-bottom:1px solid var(--border)}main{padding:20px 16px 50px}.bars .row{gri
     { n: 30, u: '/Domaine30_Expatrites_Mobilite_Internationale/', l: 'Expatriés & Mobilité Internationale' },
     { n: 31, u: '/Domaine31_Retraites_Prevoyance_Transitions_Carriere/', l: 'Retraites, Prévoyance & Transitions de Carrière' }
   ];
-  var N_ACTIF = 6;
+  var N_ACTIF = 8;
 
   /* hub racine = déjà la présentation complète → aucun bouton */
   var p0 = location.pathname;
@@ -560,5 +662,101 @@ border-bottom:1px solid var(--border)}main{padding:20px 16px 50px}.bars .row{gri
 })();
 
 </script>
-</body>
+<script id="d5s-v24-js">(function(){"use strict";
+var B="/Domaine5_Conges_Absences_Presence/";
+function key(){var p=location.pathname;if(p.indexOf(B)!==0)return "/x";var k=p.slice(B.length);k=k.replace(/^index\.html$/,"");return k;}
+function norm(s){return (s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");}
+function st(n,v){try{if(v===undefined)return JSON.parse(localStorage.getItem(n)||"null");localStorage.setItem(n,JSON.stringify(v));}catch(e){}return null;}
+function $(id){return document.getElementById(id);}
+var cur=key(),aside=$("d5s");if(!aside)return;
+/* --- état persistant : visités, récents, favoris --- */
+var vis=st("d5s_vis")||[];
+if(cur!=="/x"&&vis.indexOf(cur)<0){vis.unshift(cur);st("d5s_vis",vis.slice(0,60));}
+var rec=st("d5s_recent")||[];
+rec=rec.filter(function(k){return k!==cur;});
+if(cur!=="/x"){rec.unshift(cur);rec=rec.slice(0,3);st("d5s_recent",rec);}
+var recShow=rec.filter(function(k){return k!==cur;});
+var fav=st("d5s_fav")||[];
+var items=[].slice.call(aside.querySelectorAll(".d5s-item"));
+function byKey(k){for(var i=0;i<items.length;i++){if(items[i].getAttribute("data-k")===k)return items[i];}return null;}
+/* --- marqueur "déjà consulté" --- */
+items.forEach(function(it){var k=it.getAttribute("data-k");
+ if(k!==cur&&vis.indexOf(k)>=0){var l=it.querySelector(".d5s-link");
+  if(l&&!l.querySelector(".d5s-check")){var s=document.createElement("span");s.className="d5s-check";s.title="Déjà consulté";s.textContent="✓";l.appendChild(s);}}});
+/* --- favoris : rendu par clonage des items statiques --- */
+function paintStars(){items.forEach(function(it){var b=it.querySelector(".d5s-star");if(!b)return;var f=fav.indexOf(it.getAttribute("data-k"))>=0;b.classList.toggle("d5s-on",f);b.textContent=f?"★":"☆";});}
+function renderList(boxId,keys){var box=$(boxId);if(!box)return;box.innerHTML="";
+ keys.forEach(function(k){var src=byKey(k);if(src){var c=src.cloneNode(true);box.appendChild(c);}});
+ var sec=box.closest(".d5s-sec");if(sec)sec.hidden=keys.length===0;}
+function renderDyn(){paintStars();renderList("d5sFav",fav);renderList("d5sRecent",recShow);}
+renderDyn();
+aside.addEventListener("click",function(e){
+ if(!e.target.closest)return;
+ var b=e.target.closest(".d5s-star");
+ if(b){e.preventDefault();e.stopPropagation();var it=b.closest(".d5s-item");var k=b.getAttribute("data-k")||it.getAttribute("data-k");
+  var i=fav.indexOf(k);if(i>=0){fav.splice(i,1);}else{fav.unshift(k);}st("d5s_fav",fav);renderDyn();return;}
+ if(e.target.closest(".d5s-link")&&window.matchMedia("(max-width:940px)").matches)closeDrawer();
+});
+/* --- recherche instantanée --- */
+var q=$("d5sQ"),cnt=$("d5sCount"),menu=$("d5sMenu");
+function visibleLinks(){return [].slice.call(menu.querySelectorAll(".d5s-item:not(.d5s-hide) .d5s-link"));}
+function setLbl(it,html){var l=it.querySelector(".d5s-lbl");if(!l)return;if(html===null){l.textContent=l.getAttribute("data-n");}else{l.innerHTML=html;}}
+function highlight(it,qn){var l=it.querySelector(".d5s-lbl");if(!l)return;var n=l.getAttribute("data-n")||l.textContent;var nn=norm(n);var i=nn.indexOf(qn);
+ if(i<0){setLbl(it,null);return;}
+ var html="";html+=n.slice(0,i).replace(/&/g,"&amp;").replace(/</g,"&lt;");
+ html+="<mark>"+n.slice(i,i+qn.length).replace(/&/g,"&amp;").replace(/</g,"&lt;")+"</mark>";
+ html+=n.slice(i+qn.length).replace(/&/g,"&amp;").replace(/</g,"&lt;");
+ setLbl(it,html);}
+function applyFilter(){var raw=q.value.trim(),qn=norm(raw);
+ var secs=[].slice.call(menu.querySelectorAll(".d5s-sec"));
+ if(!qn){items.forEach(function(it){it.classList.remove("d5s-hide");setLbl(it,null);});
+  secs.forEach(function(s){var g=s.getAttribute("data-grp");if(g){s.classList.remove("d5s-hide");}else{s.hidden=(s.getAttribute("data-sec")==="fav")?(fav.length===0):(recShow.length===0);}});
+  cnt.hidden=true;return;}
+ secs.forEach(function(s){if(s.getAttribute("data-sec"))s.hidden=true;});
+ var n=0;
+ items.forEach(function(it){var hay=norm(it.getAttribute("data-n")||"")+" "+norm(it.getAttribute("data-kw")||"")+" "+norm((it.querySelector(".d5s-link")||{}).title||"");
+  var ok=hay.indexOf(qn)>=0;it.classList.toggle("d5s-hide",!ok);if(ok){n++;highlight(it,qn);}else{setLbl(it,null);}});
+ secs.forEach(function(s){if(s.getAttribute("data-grp"))s.classList.toggle("d5s-hide",s.querySelectorAll(".d5s-item:not(.d5s-hide)").length===0);});
+ cnt.hidden=false;
+ cnt.textContent=n===0?"Aucun module pour \u00ab "+raw+"\u00bb — Échap pour effacer":n+" module"+(n>1?"s":"")+" trouvé"+(n>1?"s":"")+" — Échap pour effacer";}
+if(q){q.addEventListener("input",applyFilter);
+ q.addEventListener("keydown",function(e){if(e.key==="ArrowDown"){var L=visibleLinks();if(L.length){e.preventDefault();L[0].focus();}}});}
+/* --- clavier global --- */
+function inField(t){var tag=(t.tagName||"").toLowerCase();return tag==="input"||tag==="textarea"||tag==="select";}
+document.addEventListener("keydown",function(e){
+ if((e.key==="/"&&!inField(e.target))||((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==="k")){e.preventDefault();openDrawer();if(q){q.focus();q.select();}return;}
+ if(e.key==="Escape"){
+  if(modal&&!modal.hidden){modal.hidden=true;return;}
+  if(cp&&!cp.hidden){toggleCalc(false);return;}
+  if(aside.classList.contains("d5s-open")){closeDrawer();return;}
+  if(q&&q.value){q.value="";applyFilter();}}});
+/* --- drawer mobile --- */
+var bk=$("d5sBk");
+function openDrawer(){aside.classList.add("d5s-open");if(bk)bk.classList.add("d5s-show");}
+function closeDrawer(){aside.classList.remove("d5s-open");if(bk)bk.classList.remove("d5s-show");}
+if($("d5sBurger"))$("d5sBurger").addEventListener("click",openDrawer);
+if($("d5sClose"))$("d5sClose").addEventListener("click",closeDrawer);
+if(bk)bk.addEventListener("click",closeDrawer);
+/* --- calculateur de solde --- */
+var cb=$("d5sCalcBtn"),cp=$("d5sCalcPanel");
+function toggleCalc(force){var show=(force===undefined)?cp.hidden:force;cp.hidden=!show;cb.setAttribute("aria-expanded",show?"true":"false");}
+if(cb&&cp)cb.addEventListener("click",function(){toggleCalc();});
+var cS=$("d5sS"),cD1=$("d5sD1"),cD2=$("d5sD2"),cWe=$("d5sWe"),cR=$("d5sRes");
+function calc(){if(!cR)return;
+ if(!cD1.value||!cD2.value){cR.className="d5s-cres";cR.textContent="Renseignez les dates pour estimer.";return;}
+ var d1=new Date(cD1.value+"T00:00:00"),d2=new Date(cD2.value+"T00:00:00");
+ if(isNaN(d1.getTime())||isNaN(d2.getTime())||d2<d1){cR.className="d5s-cres bad";cR.textContent="Dates invalides (fin avant début ?).";return;}
+ var n=0,dt=new Date(d1.getTime());
+ while(dt<=d2){var dow=dt.getDay();if(!cWe.checked||(dow!==0&&dow!==6))n++;dt.setDate(dt.getDate()+1);}
+ var s=parseFloat(cS.value||"0")||0,rest=Math.round((s-n)*10)/10;
+ cR.className="d5s-cres"+(rest<0?" bad":"");
+ cR.innerHTML="→ <b>"+n+" j</b> déduits · reste <b>"+rest+" j</b>"+(rest<0?" — solde insuffisant":"");}
+[cS,cD1,cD2,cWe].forEach(function(el){if(!el)return;el.addEventListener("input",calc);el.addEventListener("change",calc);});
+/* --- aide / raccourcis --- */
+var modal=$("d5sModal");
+if($("d5sHelp"))$("d5sHelp").addEventListener("click",function(){modal.hidden=false;});
+if($("d5sMClose"))$("d5sMClose").addEventListener("click",function(){modal.hidden=true;});
+if(modal)modal.addEventListener("click",function(e){if(e.target===modal)modal.hidden=true;});
+})();
+</script></body>
 </html>
