@@ -831,6 +831,7 @@
     $('[data-apx="c-cancel"]', dl0).addEventListener('click', closeDialog);
     $('[data-apx="c-save"]', dl0).addEventListener('click', function () { saveDialog(); });
     $('[data-apx="i-dept"]', dl0).focus();
+    try { var __pf = JSON.parse(localStorage.getItem('admina_prev_prefill') || 'null'); if (__pf && __pf.canalDiffusion && Date.now() - (__pf._t || 0) < 120000) { var __ic = $('[data-apx="i-canal"]', dl0); if (__ic && !__ic.value) __ic.value = String(__pf.canalDiffusion); localStorage.removeItem('admina_prev_prefill'); } } catch (__e) {}
   }
   function closeDialog() {
     $$('[data-apx="dialog"],[data-apx="backdrop"][data-apx-for="dialog"]').forEach(function (n) { n.remove(); });
