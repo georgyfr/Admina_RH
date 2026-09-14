@@ -3,21 +3,21 @@
   "role": "Etat de reference partage - Projet Admina-RH",
   "instructions": "Toute session DOIT lire ce fichier avant de travailler et le mettre a jour apres toute publication. Ne jamais modifier etat_production sans deploiement reel correspondant.",
   "etat_production": {
-    "version_label": "V31",
-    "deployment_id": "e3c4e47f",
-    "deploye_le": "2026-09-14T05:31:00Z",
+    "version_label": "V32",
+    "deployment_id": "decae39e",
+    "deploye_le": "2026-09-14T08:00:00Z",
     "deploye_par": "session principale (web-7c37a8bf)",
-    "commit_github": "3d17c7460b34",
-    "coherence": "LIVE = deploy_v31 = GitHub main (720 fichiers)",
+    "commit_github": "697ef98a8ba8",
+    "coherence": "LIVE = staging_d11 = GitHub main (749 fichiers sous V1.4) — D11 complet + ADEM 11 domaines actifs",
     "baselines_md5": {
       "note": "md5 du HTML retourne par curl avec cache-buster (?cb=timestamp)",
-      "index.html (hub)": "13438b557ca26fdb4b03bb82fa71fd56",
+      "index.html (hub)": "c712c8d51f00aeb2faf1abbab65d0fe1",
       "favicon.svg": "7e840862161341271697daa99a40d76b",
-      "Domaine1_Recrutement_Candidats/": "9d2e07d1cd6e11e6f2afcc1675d61c78",
-      "Domaine5_Conges_Absences_Presence/": "838e9432cd996b75c35a964137ce3422",
-      "Domaine8_Relations_Sociales_Syndicats/": "8c5d433e042687e0e15e04e3a97cce0f",
-      "Domaine9_Sante_Securite_Conditions_Travail/": "58153eab2d1dca0253d5b7277c24f589",
-      "Domaine10_Talents_Mobilite_Interne/": "ebea430a68fd6c0bfdf855f49ea02eab"
+      "Domaine1_Recrutement_Candidats/": "2c272c1befa4d7c4c833da7f5cdc2548",
+      "Domaine5_Conges_Absences_Presence/": "09ee4212ce34b2e9d1b9a1e07b1c3c14",
+      "Domaine8_Relations_Sociales_Syndicats/": "a9aa25578600f73abb293d747c282997",
+      "Domaine9_Sante_Securite_Conditions_Travail/": "7ec1f00466a60663f4158812288e2100",
+      "Domaine10_Talents_Mobilite_Interne/": "4a25cf8ad869f2dabf251cc11429cf9f"
     }
   },
   "verrous": [],
@@ -33,6 +33,11 @@
     "regle": "Verrou expire = libere. Ne jamais toucher le perimetre d'un verrou actif d'une autre session."
   },
   "historique_recent": [
+    {
+      "date": "2026-09-14T08:00Z",
+      "event": "V32 deployee en production (decae39e) : promotion D11 autorisee par l'utilisateur — 21 ecrans + 8 documents + ADEM 11 domaines actifs (163 sidebars + hub patches). Verification live 29/29 OK. GitHub main aligne (697ef98a, delta 193 fichiers)",
+      "par": "session principale"
+    },
     {
       "date": "2026-09-14T08:30Z",
       "event": "D11 Droit Travail & Conformite construit (21 ecrans + 8 documents depuis les sources GitHub) et deploye en PREVIEW staging-principal (5e0621cd) — production intacte, en attente de validation",
@@ -75,7 +80,7 @@
       "session": "session principale (web-7c37a8bf)",
       "deployment_id": "5e0621cd",
       "date": "2026-09-14T08:30Z",
-      "note": "D11 complet (21 ecrans + 8 PDFs, ADEM N_ACTIF=11) — en attente de validation utilisateur pour promotion production"
+      "note": "Contenu V32 avant patches ADEM (D11 sans sidebars 11 domaines) — supersede par la promotion V32 en production ; reste utilisable pour tests"
     }
   ]
 }
