@@ -6,99 +6,99 @@
 <title>Successeurs & Relève — Domaine 10 | Admina-RH</title>
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <style>
-:root{--bg:#f7f5fb;--card:#ffffff;--card2:#faf9fd;--border:#e3ddf1;--txt:#1d1832;--mut:#66607f;
---acc:#6d4ac2;--acc2:#56379f;--accsoft:rgba(109,74,194,.12);--ok:#15803d;--warn:#b45309;--bad:#dc2626;
+:root{--bg:#faf5fb;--card:#ffffff;--card2:#fdf9fd;--border:#efddf1;--txt:#2f1832;--mut:#7b607f;
+--acc:#c026d3;--acc2:#a21caf;--accsoft:rgba(191,38,211,.12);--ok:#15803d;--warn:#b45309;--bad:#dc2626;
 --info:#0e7490;--r1:#16a34a;--r2:#ca8a04;--r3:#ea580c;--r4:#dc2626;--r5:#991b1b}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;background:
-radial-gradient(1100px 420px at 78% -12%,rgba(109,74,194,.09),transparent),var(--bg);color:var(--txt);min-height:100vh}
+radial-gradient(1100px 420px at 78% -12%,rgba(191,38,211,.09),transparent),var(--bg);color:var(--txt);min-height:100vh}
 a{color:var(--acc)}
 .shell{display:grid;grid-template-columns:258px 1fr;min-height:100vh}
 /* ============================ SIDEBAR d9s ============================ */
-.d10s{background:linear-gradient(175deg,#2a1d52 0%,#1e1440 55%,#150d2e 100%);border-right:1px solid rgba(0,0,0,.28);
+.d10s{background:linear-gradient(175deg,#4c1d52 0%,#3b1440 55%,#2a0d2e 100%);border-right:1px solid rgba(0,0,0,.28);
 padding:14px 12px 10px;position:sticky;top:0;height:100vh;overflow-y:auto;overflow-x:hidden;
-display:flex;flex-direction:column;gap:10px;color:#f0ecfa;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.22) transparent}
+display:flex;flex-direction:column;gap:10px;color:#f8ecfa;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.22) transparent}
 .d10s::-webkit-scrollbar{width:8px}
 .d10s::-webkit-scrollbar-thumb{background:rgba(255,255,255,.2);border-radius:4px}
 .d10s-brand{display:flex;align-items:center;gap:10px;flex:none}
 .d10s-logo{width:40px;height:40px;border-radius:11px;flex:none;display:flex;align-items:center;justify-content:center;
-background:linear-gradient(135deg,#8b68e0,#3c2680);box-shadow:0 5px 14px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.25)}
+background:linear-gradient(135deg,#d268e0,#752680);box-shadow:0 5px 14px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.25)}
 .d10s-bname{line-height:1.25;min-width:0}
 .d10s-bname b{font-size:.98rem;display:block}
-.d10s-bname small{color:#b9a5ea;font-size:.7rem;letter-spacing:.05em;text-transform:uppercase;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.d10s-close{display:none;margin-left:auto;background:none;border:1px solid rgba(255,255,255,.25);color:#e4dcf6;width:30px;height:30px;border-radius:9px;font-size:.9rem;cursor:pointer}
+.d10s-bname small{color:#e2a5ea;font-size:.7rem;letter-spacing:.05em;text-transform:uppercase;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.d10s-close{display:none;margin-left:auto;background:none;border:1px solid rgba(255,255,255,.25);color:#f3dcf6;width:30px;height:30px;border-radius:9px;font-size:.9rem;cursor:pointer}
 .d10s-kpirow{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;text-decoration:none;flex:none}
-.d10s-kpi{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.13);border-radius:11px;padding:8px 6px;text-align:center;color:#f1edfb}
-.d10s-kpi b{display:block;font-size:1.02rem;color:#a98ff0}
-.d10s-kpi small{font-size:.6rem;color:#b4a6e6;letter-spacing:.02em;text-transform:uppercase}
+.d10s-kpi{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.13);border-radius:11px;padding:8px 6px;text-align:center;color:#f9edfb}
+.d10s-kpi b{display:block;font-size:1.02rem;color:#e58ff0}
+.d10s-kpi small{font-size:.6rem;color:#dfa6e6;letter-spacing:.02em;text-transform:uppercase}
 .d10s-alerts{display:flex;flex-direction:column;gap:6px;flex:none}
-.d10s-al{display:flex;align-items:center;gap:8px;text-decoration:none;font-size:.78rem;color:#f1edfb;
+.d10s-al{display:flex;align-items:center;gap:8px;text-decoration:none;font-size:.78rem;color:#f9edfb;
 background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:7px 9px;line-height:1.3}
 .d10s-al b{flex:none;font-size:.78rem;padding:2px 8px;border-radius:999px}
-.d10s-al.bad b{background:rgba(220,38,38,.28);color:#ffb4b4}
-.d10s-al.warn b{background:rgba(180,83,9,.3);color:#ffd8a8}
-.d10s-al.info b{background:rgba(14,116,144,.32);color:#a5e3f5}
+.d10s-al.bad b{background:rgba(199,38,220,.28);color:#ffb4b4}
+.d10s-al.warn b{background:rgba(160,9,180,.3);color:#ffd8a8}
+.d10s-al.info b{background:rgba(129,14,144,.32);color:#a5e3f5}
 .d10s-al:hover{background:rgba(255,255,255,.11)}
 .d10s-search{position:relative;flex:none}
-.d10s-search svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);width:15px;height:15px;color:#a396dd;pointer-events:none}
+.d10s-search svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);width:15px;height:15px;color:#d596dd;pointer-events:none}
 .d10s-search input{width:100%;padding:9px 30px 9px 32px;border-radius:10px;border:1px solid rgba(255,255,255,.16);
-background:rgba(0,0,0,.25);color:#f3f0fc;font-size:.85rem;outline:none;font-family:inherit}
-.d10s-search input::placeholder{color:#8f82d4}
-.d10s-search input:focus{border-color:#8261d6;box-shadow:0 0 0 3px rgba(47,174,131,.18)}
+background:rgba(0,0,0,.25);color:#fbf0fc;font-size:.85rem;outline:none;font-family:inherit}
+.d10s-search input::placeholder{color:#ca82d4}
+.d10s-search input:focus{border-color:#c861d6;box-shadow:0 0 0 3px rgba(159,47,174,.18)}
 .d10s-search kbd{position:absolute;right:8px;top:50%;transform:translateY(-50%);font-family:inherit;font-size:.65rem;
-color:#a396dd;border:1px solid rgba(255,255,255,.22);border-radius:5px;padding:1px 5px;background:rgba(255,255,255,.06)}
-.d10s-count{font-size:.72rem;color:#b9a5ea;padding:0 4px;flex:none}
+color:#d596dd;border:1px solid rgba(255,255,255,.22);border-radius:5px;padding:1px 5px;background:rgba(255,255,255,.06)}
+.d10s-count{font-size:.72rem;color:#e2a5ea;padding:0 4px;flex:none}
 /* menu (leçon V24b : zone scrollable contrainte) */
 .d10s-menu{display:flex;flex-direction:column;min-height:0;flex:1 1 auto;overflow-y:auto;overflow-x:hidden;
 padding-bottom:6px;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.22) transparent}
 .d10s-menu::-webkit-scrollbar{width:6px}
 .d10s-menu::-webkit-scrollbar-thumb{background:rgba(255,255,255,.18);border-radius:3px}
 .d10s-sec{margin-bottom:9px;flex:none}
-.d10s-grp{font-size:.62rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#8d7fd6;margin:2px 6px 5px;display:flex;align-items:center}
-.d10s-badge{margin-left:auto;background:rgba(255,255,255,.12);color:#d8ccf0;border-radius:999px;font-size:.58rem;padding:1px 7px;font-weight:700;letter-spacing:0}
+.d10s-grp{font-size:.62rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#cc7fd6;margin:2px 6px 5px;display:flex;align-items:center}
+.d10s-badge{margin-left:auto;background:rgba(255,255,255,.12);color:#ecccf0;border-radius:999px;font-size:.58rem;padding:1px 7px;font-weight:700;letter-spacing:0}
 .d10s-item{display:flex;align-items:center;border-radius:9px;position:relative}
 .d10s-item:hover{background:rgba(255,255,255,.07)}
-.d10s-link{flex:1;display:flex;align-items:center;gap:9px;padding:7px 8px 7px 12px;text-decoration:none;color:#e5def6;font-size:.83rem;min-width:0}
-.d10s-link.on{background:linear-gradient(90deg,rgba(139,104,224,.42),rgba(139,104,224,.14));color:#fff;font-weight:700;border-radius:9px}
-.d10s-link.on::before{content:"";position:absolute;left:3px;top:8px;bottom:8px;width:3px;border-radius:2px;background:#8f70e6}
-.d10s-dot{width:7px;height:7px;border-radius:50%;flex:none;background:#5d48aa;box-shadow:0 0 0 2px rgba(63,140,107,.2)}
-.d10s-link.on .d10s-dot{background:#8f70e6;box-shadow:0 0 0 3px rgba(53,192,141,.25)}
+.d10s-link{flex:1;display:flex;align-items:center;gap:9px;padding:7px 8px 7px 12px;text-decoration:none;color:#f3def6;font-size:.83rem;min-width:0}
+.d10s-link.on{background:linear-gradient(90deg,rgba(210,104,224,.42),rgba(210,104,224,.14));color:#fff;font-weight:700;border-radius:9px}
+.d10s-link.on::before{content:"";position:absolute;left:3px;top:8px;bottom:8px;width:3px;border-radius:2px;background:#d870e6}
+.d10s-dot{width:7px;height:7px;border-radius:50%;flex:none;background:#9f48aa;box-shadow:0 0 0 2px rgba(131,63,140,.2)}
+.d10s-link.on .d10s-dot{background:#d870e6;box-shadow:0 0 0 3px rgba(176,53,192,.25)}
 .d10s-lbl{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.d10s-star{background:none;border:none;color:#6f61b8;font-size:.82rem;cursor:pointer;padding:6px 7px;border-radius:8px;flex:none}
+.d10s-star{background:none;border:none;color:#ae61b8;font-size:.82rem;cursor:pointer;padding:6px 7px;border-radius:8px;flex:none}
 .d10s-star:hover{color:#ffd166;background:rgba(255,255,255,.08)}
 .d10s-star.on{color:#ffd166}
 .d10s-favlist,.d10s-recentlist{display:flex;flex-direction:column}
-.d10s-secempty{font-size:.7rem;color:#7f72c4;padding:2px 12px 4px}
+.d10s-secempty{font-size:.7rem;color:#ba72c4;padding:2px 12px 4px}
 /* évaluateur de risque (outil métier D9) */
 .d10s-eval{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.13);border-radius:12px;padding:10px;flex:none}
-.d10s-eval h4{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:#a98ff0;margin-bottom:7px;display:flex;align-items:center;gap:6px}
+.d10s-eval h4{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:#e58ff0;margin-bottom:7px;display:flex;align-items:center;gap:6px}
 .d10s-eval h4 svg{width:13px;height:13px;flex:none}
-.d10s-eval label{display:block;font-size:.64rem;color:#b4a6e6;margin:6px 0 3px;letter-spacing:.04em}
-.d10s-eval select{width:100%;padding:6px 8px;border-radius:8px;border:1px solid rgba(255,255,255,.18);background:rgba(0,0,0,.3);color:#f3f0fc;font-size:.78rem;font-family:inherit;outline:none}
-.d10s-eval select:focus{border-color:#8261d6}
+.d10s-eval label{display:block;font-size:.64rem;color:#dfa6e6;margin:6px 0 3px;letter-spacing:.04em}
+.d10s-eval select{width:100%;padding:6px 8px;border-radius:8px;border:1px solid rgba(255,255,255,.18);background:rgba(0,0,0,.3);color:#fbf0fc;font-size:.78rem;font-family:inherit;outline:none}
+.d10s-eval select:focus{border-color:#c861d6}
 .d10s-eres{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:9px;padding:8px 9px;border-radius:9px;background:rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.12)}
-.d10s-eres b{font-size:1.05rem;color:#a98ff0}
+.d10s-eres b{font-size:1.05rem;color:#e58ff0}
 .d10s-eres span{font-size:.72rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:3px 9px;border-radius:999px}
-.d10s-enote{font-size:.64rem;color:#8f82d4;margin-top:6px;line-height:1.45}
+.d10s-enote{font-size:.64rem;color:#ca82d4;margin-top:6px;line-height:1.45}
 /* footer sidebar */
 .d10s-foot{display:flex;align-items:center;gap:8px;flex:none;padding-top:8px;border-top:1px solid rgba(255,255,255,.12)}
-.d10s-home{display:flex;align-items:center;gap:7px;text-decoration:none;color:#e0d7f4;font-size:.78rem;font-weight:700;padding:7px 9px;border-radius:9px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12)}
+.d10s-home{display:flex;align-items:center;gap:7px;text-decoration:none;color:#f1d7f4;font-size:.78rem;font-weight:700;padding:7px 9px;border-radius:9px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12)}
 .d10s-home:hover{background:rgba(255,255,255,.13)}
-.d10s-footright{margin-left:auto;font-size:.62rem;color:#8f82d4;text-align:right;line-height:1.35}
-.d10s-help{background:none;border:none;color:#6f61b8;cursor:pointer;font-size:.75rem;padding:6px;border-radius:8px;flex:none}
-.d10s-help:hover{background:rgba(255,255,255,.08);color:#e0d7f4}
+.d10s-footright{margin-left:auto;font-size:.62rem;color:#ca82d4;text-align:right;line-height:1.35}
+.d10s-help{background:none;border:none;color:#ae61b8;cursor:pointer;font-size:.75rem;padding:6px;border-radius:8px;flex:none}
+.d10s-help:hover{background:rgba(255,255,255,.08);color:#f1d7f4}
 /* burger + drawer mobile */
 .d10s-burger{display:none;position:fixed;top:10px;left:10px;z-index:65;width:42px;height:42px;border-radius:12px;border:1px solid rgba(255,255,255,.25);
-background:linear-gradient(135deg,#8b68e0,#3c2680);color:#fff;font-size:1.15rem;cursor:pointer;box-shadow:0 6px 18px rgba(7,31,22,.4)}
-.d10s-backdrop{display:none;position:fixed;inset:0;background:rgba(7,25,18,.55);z-index:60;backdrop-filter:blur(2px)}
-.d10s-modal{position:fixed;z-index:90;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(7,25,18,.5)}
+background:linear-gradient(135deg,#d268e0,#752680);color:#fff;font-size:1.15rem;cursor:pointer;box-shadow:0 6px 18px rgba(28,7,31,.4)}
+.d10s-backdrop{display:none;position:fixed;inset:0;background:rgba(23,7,25,.55);z-index:60;backdrop-filter:blur(2px)}
+.d10s-modal{position:fixed;z-index:90;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(23,7,25,.5)}
 .d10s-modal[hidden]{display:none}
 .d10s-mcard{background:#fff;border-radius:16px;padding:22px;max-width:340px;width:calc(100% - 40px);box-shadow:0 24px 60px rgba(0,0,0,.3)}
-.d10s-mcard h4{margin-bottom:10px;color:#1d1832}
-.d10s-mcard table{width:100%;border-collapse:collapse;font-size:.8rem;color:#463a6e}
-.d10s-mcard td{padding:5px 4px;border-bottom:1px solid #ece7f8}
-.d10s-mcard kbd{background:#f1eefb;border:1px solid #ddd4f1;border-radius:5px;padding:1px 6px;font-family:inherit;font-size:.72rem}
-.d10s-mclose{margin-top:12px;width:100%;padding:9px;border-radius:10px;border:1px solid #ddd4f1;background:#f5f2fc;color:#6d4ac2;font-weight:700;cursor:pointer}
+.d10s-mcard h4{margin-bottom:10px;color:#2f1832}
+.d10s-mcard table{width:100%;border-collapse:collapse;font-size:.8rem;color:#683a6e}
+.d10s-mcard td{padding:5px 4px;border-bottom:1px solid #f6e7f8}
+.d10s-mcard kbd{background:#f9eefb;border:1px solid #eed4f1;border-radius:5px;padding:1px 6px;font-family:inherit;font-size:.72rem}
+.d10s-mclose{margin-top:12px;width:100%;padding:9px;border-radius:10px;border:1px solid #eed4f1;background:#fbf2fc;color:#c026d3;font-weight:700;cursor:pointer}
 @media(max-width:940px){
 .shell{grid-template-columns:1fr}
 .d10s{position:fixed;left:0;top:0;bottom:0;width:min(300px,86vw);z-index:70;transform:translateX(-102%);transition:transform .26s ease;box-shadow:12px 0 40px rgba(0,0,0,.35)}
@@ -116,22 +116,22 @@ main#d10-main{padding:0 clamp(16px,3.4vw,42px) 30px;min-width:0}
 .tohub{margin-left:auto;text-decoration:none;color:var(--acc);font-weight:700;font-size:.78rem;border:1px solid var(--border);padding:7px 12px;border-radius:9px;background:var(--card)}
 .tohub:hover{border-color:var(--acc)}
 h1{font-size:clamp(1.5rem,3vw,2.05rem);font-weight:800;letter-spacing:-.02em;margin-top:10px}
-h1 span{background:linear-gradient(90deg,var(--acc),#8a64e2);-webkit-background-clip:text;background-clip:text;color:transparent}
+h1 span{background:linear-gradient(90deg,var(--acc),#d364e2);-webkit-background-clip:text;background-clip:text;color:transparent}
 .sub{color:var(--mut);margin-top:7px;max-width:820px;line-height:1.6;font-size:.94rem}
-.hero{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:20px;background:linear-gradient(135deg,#241549 0%,#1e1440 55%,#190e33 100%);border-radius:18px;padding:22px 24px;color:#f1edfb;flex-wrap:wrap;position:relative;overflow:hidden}
-.hero::after{content:"";position:absolute;right:-60px;top:-70px;width:230px;height:230px;border-radius:50%;background:radial-gradient(circle,rgba(139,104,224,.35),transparent 65%)}
+.hero{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:20px;background:linear-gradient(135deg,#431549 0%,#3b1440 55%,#2f0e33 100%);border-radius:18px;padding:22px 24px;color:#f9edfb;flex-wrap:wrap;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-60px;top:-70px;width:230px;height:230px;border-radius:50%;background:radial-gradient(circle,rgba(210,104,224,.35),transparent 65%)}
 .hl{display:flex;align-items:center;gap:15px;min-width:0}
-.hic{width:52px;height:52px;border-radius:14px;flex:none;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#8b68e0,#3c2680);box-shadow:0 8px 22px rgba(0,0,0,.35)}
+.hic{width:52px;height:52px;border-radius:14px;flex:none;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#d268e0,#752680);box-shadow:0 8px 22px rgba(0,0,0,.35)}
 .hero h2{font-size:1.22rem;letter-spacing:-.01em}
-.hsub{color:#b4a6e6;font-size:.85rem;margin-top:4px;line-height:1.5}
+.hsub{color:#dfa6e6;font-size:.85rem;margin-top:4px;line-height:1.5}
 .hr{display:flex;gap:8px;flex-wrap:wrap;position:relative;z-index:1}
-.hchip{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:6px 13px;font-size:.78rem;font-weight:700;color:#e5def6}
+.hchip{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:6px 13px;font-size:.78rem;font-weight:700;color:#f3def6}
 .chips{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:16px}
 .chip2{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 15px;display:flex;flex-direction:column;gap:3px;position:relative}
 .chip2 b{font-size:1.35rem;letter-spacing:-.02em}
 .chip2 small{color:var(--mut);font-size:.72rem;letter-spacing:.04em;text-transform:uppercase}
 .chip2 .trend{position:absolute;top:12px;right:13px;font-size:.66rem;font-weight:800;padding:2px 8px;border-radius:999px}
-.t-up{color:#b91c1c;background:#fee2e2}.t-down{color:#15803d;background:#dcfce7}.t-flat{color:#66607f;background:#f0edfa}
+.t-up{color:#b91c1c;background:#fee2e2}.t-down{color:#15803d;background:#dcfce7}.t-flat{color:#7b607f;background:#f8edfa}
 .panel{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;margin-top:18px}
 .panel>h2{font-size:1.02rem;font-weight:800;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
 .panel>h2 .pnum{font-size:.62rem;font-weight:800;letter-spacing:.08em;color:var(--acc);background:var(--accsoft);border-radius:999px;padding:3px 9px}
@@ -142,27 +142,27 @@ h1 span{background:linear-gradient(90deg,var(--acc),#8a64e2);-webkit-background-
 .tools .count{color:var(--mut);font-size:.78rem}
 .tblwrap{overflow-x:auto;margin-top:12px;border:1px solid var(--border);border-radius:12px}
 table{width:100%;border-collapse:collapse;font-size:.84rem;min-width:640px}
-thead th{background:#f1eefb;color:#3c3162;text-align:left;font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;padding:10px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
-tbody td{padding:10px 12px;border-bottom:1px solid #f0edfa;vertical-align:top;color:#352a58}
+thead th{background:#f9eefb;color:#5c3162;text-align:left;font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;padding:10px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
+tbody td{padding:10px 12px;border-bottom:1px solid #f8edfa;vertical-align:top;color:#532a58}
 tbody tr:last-child td{border-bottom:none}
-tbody tr:hover td{background:#faf8fe}
+tbody tr:hover td{background:#fdf8fe}
 th.num,td.num{text-align:right;font-variant-numeric:tabular-nums}
 td.ctr{text-align:center}
 .mono{font-family:'Roboto Mono',ui-monospace,monospace;font-size:.78rem;color:var(--acc2);font-weight:600}
 .badge{display:inline-block;font-size:.68rem;font-weight:800;letter-spacing:.03em;border-radius:999px;padding:3px 10px;white-space:nowrap}
 .b-ok{background:#dcfce7;color:#15803d}.b-warn{background:#fef3c7;color:#b45309}.b-bad{background:#fee2e2;color:#b91c1c}
-.b-info{background:#e0f2fe;color:#0369a1}.b-mut{background:#ebe6f7;color:#66607f}
+.b-info{background:#e0f2fe;color:#0369a1}.b-mut{background:#f5e6f7;color:#7b607f}
 .b-faible{background:#dcfce7;color:#15803d}.b-moyen{background:#fef9c3;color:#a16207}
 .b-eleve{background:#ffedd5;color:#c2410c}.b-tres{background:#fee2e2;color:#b91c1c}.b-critique{background:#fde2e2;color:#7f1d1d;border:1px solid #fca5a5}
 .barlist{display:flex;flex-direction:column;gap:9px;margin-top:13px}
 .barrow{display:grid;grid-template-columns:190px 1fr 74px;gap:10px;align-items:center;font-size:.83rem}
-.barrow .bl{color:#3c3162;font-weight:600}
-.barrow .btrack{height:11px;border-radius:6px;background:#ebe6f7;overflow:hidden}
+.barrow .bl{color:#5c3162;font-weight:600}
+.barrow .btrack{height:11px;border-radius:6px;background:#f5e6f7;overflow:hidden}
 .barrow .bfill{height:100%;border-radius:6px}
-.barrow .bval{text-align:right;font-variant-numeric:tabular-nums;font-weight:700;color:#3c3162}
+.barrow .bval{text-align:right;font-variant-numeric:tabular-nums;font-weight:700;color:#5c3162}
 .modgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:13px;margin-top:14px}
 .modcard{display:block;text-decoration:none;color:inherit;background:var(--card2);border:1px solid var(--border);border-radius:14px;padding:15px 16px;transition:.16s}
-.modcard:hover{border-color:var(--acc);transform:translateY(-2px);box-shadow:0 8px 22px rgba(109,74,194,.12)}
+.modcard:hover{border-color:var(--acc);transform:translateY(-2px);box-shadow:0 8px 22px rgba(191,38,211,.12)}
 .modcard .mnum{font-size:.66rem;font-weight:800;color:var(--acc);letter-spacing:.08em;text-transform:uppercase}
 .modcard h3{font-size:.92rem;margin-top:5px}
 .modcard p{color:var(--mut);font-size:.78rem;margin-top:5px;line-height:1.5;min-height:34px}
@@ -198,29 +198,29 @@ footer{display:flex;gap:10px;justify-content:space-between;flex-wrap:wrap;border
 <div id="adem14-splash" role="status" aria-live="polite" aria-label="Chargement du domaine">
 <style id="adem14-style">
 #adem14-splash{position:fixed;inset:0;z-index:1400;min-height:100vh;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,#f5f6fa 0%,#e8edf5 100%);overflow:hidden;transition:opacity .38s ease}
-#adem14-splash::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 40%,rgba(139,104,224,0.1) 0%,transparent 60%);pointer-events:none}
+#adem14-splash::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 40%,rgba(210,104,224,0.1) 0%,transparent 60%);pointer-events:none}
 #adem14-splash.a14-out{opacity:0;pointer-events:none}
-#adem14-splash .a14-card{position:relative;z-index:1;padding:40px 32px;border-radius:16px;display:flex;flex-direction:column;align-items:center;gap:12px;min-width:280px;max-width:420px;margin:0 16px;background:rgba(255,255,255,0.82);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.6);box-shadow:0 24px 60px -12px rgba(11,42,74,0.18),0 0 0 1px rgba(255,255,255,0.7);animation:adem14-fade-in .5s ease-out}
+#adem14-splash .a14-card{position:relative;z-index:1;padding:40px 32px;border-radius:16px;display:flex;flex-direction:column;align-items:center;gap:12px;min-width:280px;max-width:420px;margin:0 16px;background:rgba(255,255,255,0.82);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.6);box-shadow:0 24px 60px -12px rgba(67,11,74,0.18),0 0 0 1px rgba(255,255,255,0.7);animation:adem14-fade-in .5s ease-out}
 @media (min-width:600px){#adem14-splash .a14-card{padding:48px;min-width:340px}}
-#adem14-splash .a14-logo{width:80px;height:80px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#8b68e0 0%,#3c2680 100%);color:#fff;font-weight:800;font-size:1.9rem;letter-spacing:.5px;font-family:"Inter",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;animation:adem14-pulse 2s ease-in-out infinite;margin-bottom:8px;user-select:none}
+#adem14-splash .a14-logo{width:80px;height:80px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#d268e0 0%,#752680 100%);color:#fff;font-weight:800;font-size:1.9rem;letter-spacing:.5px;font-family:"Inter",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;animation:adem14-pulse 2s ease-in-out infinite;margin-bottom:8px;user-select:none}
 #adem14-splash .a14-title{font-family:"Inter",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:1.5rem;font-weight:800;color:#0b2a4a;letter-spacing:-.3px;text-align:center}
 #adem14-splash .a14-sub{color:#6b7a8a;font-size:.78rem;text-align:center;letter-spacing:.2px;font-family:"Inter",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
 #adem14-splash .a14-dots{display:flex;gap:8px;margin:12px 0 4px}
-#adem14-splash .a14-dots i{width:10px;height:10px;border-radius:50%;background:#8b68e0;display:inline-block;animation:adem14-dot-bounce 1.4s ease-in-out infinite}
+#adem14-splash .a14-dots i{width:10px;height:10px;border-radius:50%;background:#d268e0;display:inline-block;animation:adem14-dot-bounce 1.4s ease-in-out infinite}
 #adem14-splash .a14-dots i:nth-child(2){animation-delay:.2s}
 #adem14-splash .a14-dots i:nth-child(3){animation-delay:.4s}
 #adem14-splash .a14-loading{color:#9aa8b8;font-family:"Roboto Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.72rem;letter-spacing:.3px;text-align:center;min-height:1.2em}
-#adem14-splash .a14-bar{margin-top:16px;width:240px;height:4px;border-radius:2px;background:rgba(139,104,224,0.12);position:relative;overflow:hidden}
-#adem14-splash .a14-bar span{position:absolute;left:-35%;right:100%;top:0;bottom:0;background:linear-gradient(90deg,#8b68e0 0%,#3c2680 100%);border-radius:2px;animation:adem14-bar 2.1s cubic-bezier(.65,.815,.735,.395) infinite}
+#adem14-splash .a14-bar{margin-top:16px;width:240px;height:4px;border-radius:2px;background:rgba(210,104,224,0.12);position:relative;overflow:hidden}
+#adem14-splash .a14-bar span{position:absolute;left:-35%;right:100%;top:0;bottom:0;background:linear-gradient(90deg,#d268e0 0%,#752680 100%);border-radius:2px;animation:adem14-bar 2.1s cubic-bezier(.65,.815,.735,.395) infinite}
 #adem14-splash .a14-phases{display:flex;gap:8px;margin-top:20px;align-items:center}
 #adem14-splash .a14-phases i{width:8px;height:8px;border-radius:50%;display:inline-block;animation:adem14-phase-pulse 1.6s ease-in-out infinite}
 #adem14-splash .a14-phases i:nth-child(1){background:#15803d;animation-delay:0s}
-#adem14-splash .a14-phases i:nth-child(2){background:#6d4ac2;animation-delay:.15s}
+#adem14-splash .a14-phases i:nth-child(2){background:#c026d3;animation-delay:.15s}
 #adem14-splash .a14-phases i:nth-child(3){background:#0e7490;animation-delay:.3s}
 #adem14-splash .a14-phases i:nth-child(4){background:#b45309;animation-delay:.45s}
 #adem14-splash .a14-phases i:nth-child(5){background:#dc2626;animation-delay:.6s}
 #adem14-splash .a14-meta{margin-top:8px;color:#9aa8b8;font-family:"Roboto Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.6rem;letter-spacing:.4px;text-transform:uppercase;text-align:center}
-@keyframes adem14-pulse{0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(139,104,224,0.4)}50%{transform:scale(1.05);box-shadow:0 0 0 20px rgba(139,104,224,0)}}
+@keyframes adem14-pulse{0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(210,104,224,0.4)}50%{transform:scale(1.05);box-shadow:0 0 0 20px rgba(210,104,224,0)}}
 @keyframes adem14-dot-bounce{0%,80%,100%{transform:translateY(0);opacity:.5}40%{transform:translateY(-8px);opacity:1}}
 @keyframes adem14-phase-pulse{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.4);opacity:1}}
 @keyframes adem14-fade-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
@@ -249,9 +249,9 @@ setTimeout(function(){clearInterval(iv);hide();},4000);
 })();
 </script>
 <div class="shell">
-<aside class="d10s" id="d10s" aria-label="Navigation du domaine 10"><div class="d10s-brand"><div class="d10s-logo"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2l2.6 5.6 6.1.8-4.5 4.2 1.2 6-5.4-3-5.4 3 1.2-6L3.3 8.4l6.1-.8L12 2z" fill="#f0eafd" opacity=".92"/><path d="M7 21h10" stroke="#4a2f96" stroke-width="2.4" stroke-linecap="round"/></svg></div><div class="d10s-bname"><b>Admina-RH</b><small>Talents · Mobilité Interne</small></div><button type="button" class="d10s-close" id="d10sClose" aria-label="Fermer le menu">✕</button></div><nav class="d10s-menu" id="d10sMenu"><div class="d10s-sec" data-grp="Pilotage"><div class="d10s-grp">Pilotage <span class="d10s-badge">3</span></div><div class="d10s-item" data-k="/" data-n="Tableau de Bord" data-kw="tdb accueil dashboard vue ensemble synthese kpi"><a class="d10s-link" href="/Domaine10_Talents_Mobilite_Interne/" title="Vue synthétique : talents, plans de carrière, mobilités, rétention"><span class="d10s-dot"></span><span class="d10s-lbl" data-n="Tableau de Bord">Tableau de Bord</span></a></div><div class="d10s-item" data-k="cartographie-talents/" data-n="Cartographie Talents" data-kw="talent cartographie categorie performance potentiel risque depart"><a class="d10s-link" href="/Domaine10_Talents_Mobilite_Interne/cartographie-talents/" title="Savoirs rares & talents clés : performance, potentiel, risque de départ"><span class="d10s-dot"></span><span class="d10s-lbl" data-n="Cartographie Talents">Cartographie Talents</span></a></div><div class="d10s-item" data-k="matrice-9box/" data-n="Matrice 9-Box" data-kw="9box matrice potentiel performance position recommandation"><a class="d10s-link" href="/Domaine10_Talents_Mobilite_Interne/matrice-9box/" title="Matrice performance × potentiel et recommandations"><span class="d10s-dot"></span><span class="d10s-lbl" data-n="Matrice 9-Box">Matrice 9-Box</span></a></div></div><div class="d10s-sec" data-grp="Développement & Compétences"><div class="d10s-grp">Développement & Compétences <span class="d10s-badge">6</span></div><div class="d10s-item" data-k="programmes-mentorat/" data-n="Programmes Mentorat" data-kw="mentorat mentor mentore coaching parrainage"><a class="d10s-link" href="/Domaine10_Talents_Mobilite_Interne/programmes-mentorat/" title="Duo mentor-mentoré : objectifs, durées, bilans"><span class="d10s-dot"></span><span class="d10s-lbl" data-n="Programmes Mentorat">Programmes Mentorat</span></a></div><div class="d10s-item" data-k="entretiens-professionnels/" data-n="Entretiens Professionnels" data-kw="entretien professionnel annuel evaluateur engagement"><a class="d10s-link" href="/Domaine10_Talents_Mobilite_Interne/entretiens-professionnels/" title="Entretiens : points forts, axes, engagements"><span class="d10s-dot"></span><span class="d10s-lbl" data-n="Entretiens Professionnels">Entretiens Professionnels</span></a></div><div class="d10s-item" data-k="bilan-competences/" data-n="Bilan Compétences" data-kw="competence bilan niveau ecart plan action"><a class="d10s-link" href="/Domaine10_Talents_Mobilite_Interne/bilan-competences/" title="Niveaux actuels vs requis, écarts et plans d’action"><span class="d10s-dot"></span><span class="d10s-lbl" data-n="Bilan Compétences">Bilan Compétences</span></a></div><div class="d10s-item" data-k="historique-mentorat/" data-n="Historique Mentorat" data-kw="historique mentorat duree appreciation bilan"><a class="d10s-link" href="/Domaine10_Talents_Mobilite_Interne/historique-mentorat/" title="Historique des programmes : durées, appréciations"><span class="d10s-dot"></span><span class="d10s-lbl" data-n="Historique Mentorat">Historique Mentorat</span></a></div><div class="d10s-item" data-k="calendrier-entretiens/" data-n="Calendrier Entretiens" data-kw="calendrier entretien prevu realise retard"><a class="d10s-link" href="/Domaine10_Talents_Mobilite_Interne/calendrier-entretiens/" title="Échéancier des entretiens : prévu, réalisé, retards"><span class="d10s-dot"></span><span class="d10s-lbl" data-n="Calendrier Entretiens">Calendrier Entretiens</span></a></div><div class="d10s-item" data-k="analyse-ecarts/" data-n="Analyse Écarts Compét." data-kw="ecart competence critique cible couverture departement"><a class="d10s-link" href="/Domaine10_Talents_Mobilite_Interne/analyse-ecarts/" title="Écarts de compétences par département et couverture"><span class="d10s-dot"></span><span class="d10s-lbl" data-n="Analyse Écarts Compét.">Analyse Écarts Compét.</span></a></div></div><div class="d10s-sec" data-grp="Carrières & Succession"><div class="d10s-grp">Carrières & Succession <span class="d10s-badge">5</span></div><div class="d10s-item" data-k="plans-carriere/" data-n="Plans de Carrière" data-kw="carriere plan objectif echeance competences formation"><a class="d10s-link" href="/Domaine10_Talents_Mobilite_Interne/plans-carriere/" title="Trajectoires individuelles : objectifs, échéances, accompagnement"><span class="d10s-dot"></span><span class="d10s-lbl" data-n="Plans de Carrière">Plans de Carrière</span></a></div><div class="d10s-item" data-k="successeurs-releve/" data-n="Successeurs & Relève" data-kw="succession releve poste cle prepa successeur"><a class="d10s-link on" href="/Domaine10_Talents_Mobilite_Interne/successeurs-releve/" title="Postes clés et successeurs désignés, niveau de préparation"><span class="d10s-dot"></span><span class="d10s-lbl" data-n="Successeurs & Relève">Successeurs & Relève</span></a></div><div class="d10s-item" data-k="hauts-potentiels-hipo/" data-n="Hauts Potentiels HiPo" data-kw="hipo haut potentiel score comite fast-track"><a class="d10s-link" href="/Domaine10_Talents_Mobilite_Interne/hauts-potentiels-hipo/" title="Scores performance/potentiel et décisions du comité talents"><span class="d10s-dot"></span><span class="d10s-lbl" data-n="Hauts Potentiels HiPo">Hauts Potentiels HiPo</span></a></div><div class="d10s-item" data-k="suivi-plans-carriere/" data-n="Suivi Plans Carrière" data-kw="suivi progression etapes echeance jours restants"><a class="d10s-link" href="/Domaine10_Talents_Mobilite_Interne/suivi-plans-carriere/" title="Avancement des plans : étapes, jours restants, progression"><span class="d10s-dot"></span><span class="d10s-lbl" data-n="Suivi Plans Carrière">Suivi Plans Carrière</span></a></div><div class="d10s-item" data-k="suivi-successeurs/" data-n="Suivi Successeurs" data-kw="suivi succession urgence age anciennete prepa"><a class="d10s-link" href="/Domaine10_Talents_Mobilite_Interne/suivi-successeurs/" title="Urgence relève : âge titulaires, années avant départ"><span class="d10s-dot"></span><span class="d10s-lbl" data-n="Suivi Successeurs">Suivi Successeurs</span></a></div></div><div class="d10s-sec" data-grp="Mobilité & Expatriation"><div class="d10s-grp">Mobilité & Expatriation <span class="d10s-badge">3</span></div><div class="d10s-item" data-k="mobilite-interne/" data-n="Mobilité Interne" data-kw="mobilite promotion mutation rotation demande mouvement"><a class="d10s-link" href="/Domaine10_Talents_Mobilite_Interne/mobilite-interne/" title="Mouvements internes : promotions, mutations, rotations"><span class="d10s-dot"></span><span class="d10s-lbl" data-n="Mobilité Interne">Mobilité Interne</span></a></div><div class="d10s-item" data-k="gestion-expatries/" data-n="Gestion Expatriés" data-kw="expatrie contrat pays affectation indemnite salaire"><a class="d10s-link" href="/Domaine10_Talents_Mobilite_Interne/gestion-expatries/" title="Expatriés : contrats, pays, indemnités, retours"><span class="d10s-dot"></span><span class="d10s-lbl" data-n="Gestion Expatriés">Gestion Expatriés</span></a></div><div class="d10s-item" data-k="taux-mobilite/" data-n="Taux Mobilité Interne" data-kw="taux mobilite mensuel effectif mouvements"><a class="d10s-link" href="/Domaine10_Talents_Mobilite_Interne/taux-mobilite/" title="Taux de mobilité mensuel : mouvements vs effectif"><span class="d10s-dot"></span><span class="d10s-lbl" data-n="Taux Mobilité Interne">Taux Mobilité Interne</span></a></div></div><div class="d10s-sec" data-grp="Rétention & Engagement"><div class="d10s-grp">Rétention & Engagement <span class="d10s-badge">2</span></div><div class="d10s-item" data-k="plan-retention/" data-n="Plan de Rétention" data-kw="retention risque depart cout action fidelisation"><a class="d10s-link" href="/Domaine10_Talents_Mobilite_Interne/plan-retention/" title="Risques de départ, actions de rétention et coûts"><span class="d10s-dot"></span><span class="d10s-lbl" data-n="Plan de Rétention">Plan de Rétention</span></a></div><div class="d10s-item" data-k="indicateurs-retention/" data-n="Indicateurs Rétention" data-kw="rotation retention taux depart effectif mensuel"><a class="d10s-link" href="/Domaine10_Talents_Mobilite_Interne/indicateurs-retention/" title="Taux de rotation et de rétention mensuels"><span class="d10s-dot"></span><span class="d10s-lbl" data-n="Indicateurs Rétention">Indicateurs Rétention</span></a></div></div><div class="d10s-sec" data-grp="Référentiels & Documents"><div class="d10s-grp">Référentiels & Documents <span class="d10s-badge">2</span></div><div class="d10s-item" data-k="employes/" data-n="Données Employés" data-kw="employe matricule personnel effectif departement salaire"><a class="d10s-link" href="/Domaine10_Talents_Mobilite_Interne/employes/" title="Effectif couvert par le domaine Talents & Mobilité"><span class="d10s-dot"></span><span class="d10s-lbl" data-n="Données Employés">Données Employés</span></a></div><div class="d10s-item" data-k="interconnexions/" data-n="Interconnexions &amp; Documents" data-kw="interconnexion d1 d2 d3 d4 d5 d6 d7 d8 d9 bilateral manuel pdf"><a class="d10s-link" href="/Domaine10_Talents_Mobilite_Interne/interconnexions/" title="Documents bilatéraux D10↔D1…D9 et manuel du domaine"><span class="d10s-dot"></span><span class="d10s-lbl" data-n="Interconnexions &amp; Documents">Interconnexions &amp; Documents</span></a></div></div></nav></aside><button type="button" class="d10s-burger" id="d10sBurger" aria-label="Ouvrir le menu" aria-controls="d10s">☰</button><div class="d10s-backdrop" id="d10sBk"></div>
+<aside class="d10s" id="d10s" aria-label="Navigation du domaine 10"><div class="d10s-brand"><div class="d10s-logo"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2l2.6 5.6 6.1.8-4.5 4.2 1.2 6-5.4-3-5.4 3 1.2-6L3.3 8.4l6.1-.8L12 2z" fill="#fbeafd" opacity=".92"/><path d="M7 21h10" stroke="#8a2f96" stroke-width="2.4" stroke-linecap="round"/></svg></div><div class="d10s-bname"><b>Admina-RH</b><small>Talents · Mobilité Interne</small></div><button type="button" class="d10s-close" id="d10sClose" aria-label="Fermer le menu">✕</button></div><nav class="d10s-menu" id="d10sMenu"><div class="d10s-sec" data-grp="Pilotage"><div class="d10s-grp">Pilotage <span class="d10s-badge">3</span></div><div class="d10s-item" data-k="/" data-n="Tableau de Bord" data-kw="tdb accueil dashboard vue ensemble synthese kpi"><a class="d10s-link" href="/Domaine10_Talents_Mobilite_Interne/" title="Vue synthétique : talents, plans de carrière, mobilités, rétention"><span class="d10s-dot"></span><span class="d10s-lbl" data-n="Tableau de Bord">Tableau de Bord</span></a></div><div class="d10s-item" data-k="cartographie-talents/" data-n="Cartographie Talents" data-kw="talent cartographie categorie performance potentiel risque depart"><a class="d10s-link" href="/Domaine10_Talents_Mobilite_Interne/cartographie-talents/" title="Savoirs rares & talents clés : performance, potentiel, risque de départ"><span class="d10s-dot"></span><span class="d10s-lbl" data-n="Cartographie Talents">Cartographie Talents</span></a></div><div class="d10s-item" data-k="matrice-9box/" data-n="Matrice 9-Box" data-kw="9box matrice potentiel performance position recommandation"><a class="d10s-link" href="/Domaine10_Talents_Mobilite_Interne/matrice-9box/" title="Matrice performance × potentiel et recommandations"><span class="d10s-dot"></span><span class="d10s-lbl" data-n="Matrice 9-Box">Matrice 9-Box</span></a></div></div><div class="d10s-sec" data-grp="Développement & Compétences"><div class="d10s-grp">Développement & Compétences <span class="d10s-badge">6</span></div><div class="d10s-item" data-k="programmes-mentorat/" data-n="Programmes Mentorat" data-kw="mentorat mentor mentore coaching parrainage"><a class="d10s-link" href="/Domaine10_Talents_Mobilite_Interne/programmes-mentorat/" title="Duo mentor-mentoré : objectifs, durées, bilans"><span class="d10s-dot"></span><span class="d10s-lbl" data-n="Programmes Mentorat">Programmes Mentorat</span></a></div><div class="d10s-item" data-k="entretiens-professionnels/" data-n="Entretiens Professionnels" data-kw="entretien professionnel annuel evaluateur engagement"><a class="d10s-link" href="/Domaine10_Talents_Mobilite_Interne/entretiens-professionnels/" title="Entretiens : points forts, axes, engagements"><span class="d10s-dot"></span><span class="d10s-lbl" data-n="Entretiens Professionnels">Entretiens Professionnels</span></a></div><div class="d10s-item" data-k="bilan-competences/" data-n="Bilan Compétences" data-kw="competence bilan niveau ecart plan action"><a class="d10s-link" href="/Domaine10_Talents_Mobilite_Interne/bilan-competences/" title="Niveaux actuels vs requis, écarts et plans d’action"><span class="d10s-dot"></span><span class="d10s-lbl" data-n="Bilan Compétences">Bilan Compétences</span></a></div><div class="d10s-item" data-k="historique-mentorat/" data-n="Historique Mentorat" data-kw="historique mentorat duree appreciation bilan"><a class="d10s-link" href="/Domaine10_Talents_Mobilite_Interne/historique-mentorat/" title="Historique des programmes : durées, appréciations"><span class="d10s-dot"></span><span class="d10s-lbl" data-n="Historique Mentorat">Historique Mentorat</span></a></div><div class="d10s-item" data-k="calendrier-entretiens/" data-n="Calendrier Entretiens" data-kw="calendrier entretien prevu realise retard"><a class="d10s-link" href="/Domaine10_Talents_Mobilite_Interne/calendrier-entretiens/" title="Échéancier des entretiens : prévu, réalisé, retards"><span class="d10s-dot"></span><span class="d10s-lbl" data-n="Calendrier Entretiens">Calendrier Entretiens</span></a></div><div class="d10s-item" data-k="analyse-ecarts/" data-n="Analyse Écarts Compét." data-kw="ecart competence critique cible couverture departement"><a class="d10s-link" href="/Domaine10_Talents_Mobilite_Interne/analyse-ecarts/" title="Écarts de compétences par département et couverture"><span class="d10s-dot"></span><span class="d10s-lbl" data-n="Analyse Écarts Compét.">Analyse Écarts Compét.</span></a></div></div><div class="d10s-sec" data-grp="Carrières & Succession"><div class="d10s-grp">Carrières & Succession <span class="d10s-badge">5</span></div><div class="d10s-item" data-k="plans-carriere/" data-n="Plans de Carrière" data-kw="carriere plan objectif echeance competences formation"><a class="d10s-link" href="/Domaine10_Talents_Mobilite_Interne/plans-carriere/" title="Trajectoires individuelles : objectifs, échéances, accompagnement"><span class="d10s-dot"></span><span class="d10s-lbl" data-n="Plans de Carrière">Plans de Carrière</span></a></div><div class="d10s-item" data-k="successeurs-releve/" data-n="Successeurs & Relève" data-kw="succession releve poste cle prepa successeur"><a class="d10s-link on" href="/Domaine10_Talents_Mobilite_Interne/successeurs-releve/" title="Postes clés et successeurs désignés, niveau de préparation"><span class="d10s-dot"></span><span class="d10s-lbl" data-n="Successeurs & Relève">Successeurs & Relève</span></a></div><div class="d10s-item" data-k="hauts-potentiels-hipo/" data-n="Hauts Potentiels HiPo" data-kw="hipo haut potentiel score comite fast-track"><a class="d10s-link" href="/Domaine10_Talents_Mobilite_Interne/hauts-potentiels-hipo/" title="Scores performance/potentiel et décisions du comité talents"><span class="d10s-dot"></span><span class="d10s-lbl" data-n="Hauts Potentiels HiPo">Hauts Potentiels HiPo</span></a></div><div class="d10s-item" data-k="suivi-plans-carriere/" data-n="Suivi Plans Carrière" data-kw="suivi progression etapes echeance jours restants"><a class="d10s-link" href="/Domaine10_Talents_Mobilite_Interne/suivi-plans-carriere/" title="Avancement des plans : étapes, jours restants, progression"><span class="d10s-dot"></span><span class="d10s-lbl" data-n="Suivi Plans Carrière">Suivi Plans Carrière</span></a></div><div class="d10s-item" data-k="suivi-successeurs/" data-n="Suivi Successeurs" data-kw="suivi succession urgence age anciennete prepa"><a class="d10s-link" href="/Domaine10_Talents_Mobilite_Interne/suivi-successeurs/" title="Urgence relève : âge titulaires, années avant départ"><span class="d10s-dot"></span><span class="d10s-lbl" data-n="Suivi Successeurs">Suivi Successeurs</span></a></div></div><div class="d10s-sec" data-grp="Mobilité & Expatriation"><div class="d10s-grp">Mobilité & Expatriation <span class="d10s-badge">3</span></div><div class="d10s-item" data-k="mobilite-interne/" data-n="Mobilité Interne" data-kw="mobilite promotion mutation rotation demande mouvement"><a class="d10s-link" href="/Domaine10_Talents_Mobilite_Interne/mobilite-interne/" title="Mouvements internes : promotions, mutations, rotations"><span class="d10s-dot"></span><span class="d10s-lbl" data-n="Mobilité Interne">Mobilité Interne</span></a></div><div class="d10s-item" data-k="gestion-expatries/" data-n="Gestion Expatriés" data-kw="expatrie contrat pays affectation indemnite salaire"><a class="d10s-link" href="/Domaine10_Talents_Mobilite_Interne/gestion-expatries/" title="Expatriés : contrats, pays, indemnités, retours"><span class="d10s-dot"></span><span class="d10s-lbl" data-n="Gestion Expatriés">Gestion Expatriés</span></a></div><div class="d10s-item" data-k="taux-mobilite/" data-n="Taux Mobilité Interne" data-kw="taux mobilite mensuel effectif mouvements"><a class="d10s-link" href="/Domaine10_Talents_Mobilite_Interne/taux-mobilite/" title="Taux de mobilité mensuel : mouvements vs effectif"><span class="d10s-dot"></span><span class="d10s-lbl" data-n="Taux Mobilité Interne">Taux Mobilité Interne</span></a></div></div><div class="d10s-sec" data-grp="Rétention & Engagement"><div class="d10s-grp">Rétention & Engagement <span class="d10s-badge">2</span></div><div class="d10s-item" data-k="plan-retention/" data-n="Plan de Rétention" data-kw="retention risque depart cout action fidelisation"><a class="d10s-link" href="/Domaine10_Talents_Mobilite_Interne/plan-retention/" title="Risques de départ, actions de rétention et coûts"><span class="d10s-dot"></span><span class="d10s-lbl" data-n="Plan de Rétention">Plan de Rétention</span></a></div><div class="d10s-item" data-k="indicateurs-retention/" data-n="Indicateurs Rétention" data-kw="rotation retention taux depart effectif mensuel"><a class="d10s-link" href="/Domaine10_Talents_Mobilite_Interne/indicateurs-retention/" title="Taux de rotation et de rétention mensuels"><span class="d10s-dot"></span><span class="d10s-lbl" data-n="Indicateurs Rétention">Indicateurs Rétention</span></a></div></div><div class="d10s-sec" data-grp="Référentiels & Documents"><div class="d10s-grp">Référentiels & Documents <span class="d10s-badge">2</span></div><div class="d10s-item" data-k="employes/" data-n="Données Employés" data-kw="employe matricule personnel effectif departement salaire"><a class="d10s-link" href="/Domaine10_Talents_Mobilite_Interne/employes/" title="Effectif couvert par le domaine Talents & Mobilité"><span class="d10s-dot"></span><span class="d10s-lbl" data-n="Données Employés">Données Employés</span></a></div><div class="d10s-item" data-k="interconnexions/" data-n="Interconnexions &amp; Documents" data-kw="interconnexion d1 d2 d3 d4 d5 d6 d7 d8 d9 bilateral manuel pdf"><a class="d10s-link" href="/Domaine10_Talents_Mobilite_Interne/interconnexions/" title="Documents bilatéraux D10↔D1…D9 et manuel du domaine"><span class="d10s-dot"></span><span class="d10s-lbl" data-n="Interconnexions &amp; Documents">Interconnexions &amp; Documents</span></a></div></div></nav></aside><button type="button" class="d10s-burger" id="d10sBurger" aria-label="Ouvrir le menu" aria-controls="d10s">☰</button><div class="d10s-backdrop" id="d10sBk"></div>
 <main id="d10-main">
-<div class="topbar"><span class="crumb"><a href="/">Tous les domaines</a> / <a href="/Domaine10_Talents_Mobilite_Interne/">Domaine 10</a> / Successeurs &amp; Relève — Domaine 10</span><a class="tohub" href="/">← Présentation des 31 domaines</a></div><h1><span>Successeurs &amp; Relève</span></h1><p class="sub">Postes clés et successeurs désignés, niveau de préparation — Domaine 10 Talents &amp; Mobilité Interne.</p><div class="hero"><div class="hl"><span class="hic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#f0eafd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l2.6 5.6 6.1.8-4.5 4.2 1.2 6-5.4-3-5.4 3 1.2-6L3.3 8.4l6.1-.8L12 2z"/></svg></span><div><h2>Successeurs &amp; Relève</h2><p class="hsub">Postes clés et successeurs désignés, niveau de préparation — Hôtel 4★.</p></div></div><div class="hr"><span class="hchip">5 enregistrements</span><span class="hchip">Écran 5</span></div></div><div class="chips"><div class="chip2"><b>5</b><small>Enregistrements</small><span class="trend t-flat">●</span></div><div class="chip2"><b>3</b><small>En formation</small><span class="trend t-flat">●</span></div><div class="chip2"><b>1</b><small>Candidat identifie</small><span class="trend t-flat">●</span></div><div class="chip2"><b>1</b><small>En evaluation</small><span class="trend t-flat">●</span></div></div><div class="panel"><h2>Successeurs &amp; Relève <span class="pnum">REL-001…REL-005</span></h2><p class="note">Données consolidées du référentiel RH, avec identifiants et champs calculés restitués.</p><div class="tools"><input type="search" placeholder="Rechercher…" aria-label="Filtrer le tableau"><span class="count">5 lignes</span></div><div class="tblwrap"><table><thead><tr><th class="">N°</th><th class="">Poste Cle</th><th class="">Titulaire Actuel</th><th class="">Successeur Designe</th><th class="">Departement</th><th class="num">Niveau de Pret</th><th class="">Date Evaluation</th><th class="num">Ecart Competences</th><th class="">Plan de Developp.</th><th class="">Statut</th><th class="">Date Prev. Prise Poste</th></tr></thead><tbody><tr><td>REL-001</td><td>Chef Reception</td><td>Nkoulou Mbarga P.</td><td>Nganou D.</td><td>Réception &amp; Front Office</td><td>En formation</td><td>15/05/2025</td><td>Management, Revenue Mgmt</td><td>Coaching + Formation Opera PMS</td><td>En formation</td><td>01/06/2026</td></tr><tr><td>REL-002</td><td>Chef Cuisine</td><td>Biyong Jean M.</td><td>Fotsing Aude R.</td><td>Cuisine &amp; Restauration</td><td>En formation</td><td>20/04/2025</td><td>Gestion budget cuisine, creativity menu</td><td>HACCP niv.3 + Stages externes</td><td>En formation</td><td>01/07/2026</td></tr><tr><td>REL-003</td><td>DRH</td><td>Fotso M.</td><td>Assistante RH Ngo M.</td><td>Service Client</td><td>Candidat identifie</td><td>01/06/2025</td><td>Droit travail avance, paie, relations sociales</td><td>Formation DRH adjoint + tutorat</td><td>Candidat identifie</td><td>01/01/2027</td></tr><tr><td>REL-004</td><td>Chef Entretien</td><td>Tchinda P.</td><td>Fokam Ernest</td><td>Maintenance</td><td>En evaluation</td><td>10/03/2025</td><td>Technique CVC avance, gestion equipe</td><td>Formation CVC + management</td><td>En evaluation</td><td>01/01/2026</td></tr><tr><td>REL-005</td><td>Chef Securite</td><td>Nganmeni J.</td><td>Wouamba A.</td><td>Sécurité</td><td>En formation</td><td>01/05/2025</td><td>Gestion crise, securite incendie avance</td><td>Formation securite hoteliere niveau 2</td><td>En formation</td><td>01/03/2026</td></tr></tbody></table></div></div><div class="panel imgpanel"><h2>Topologie étoile des successions <span class="pnum">schéma source</span></h2><p class="note">Postes clés et successeurs désignés — vue en étoile.</p><img src="/Domaine10_Talents_Mobilite_Interne/d10_topologie_etoile.png" alt="Topologie étoile des successions" loading="lazy"/></div><footer><span>Admina-RH · Hôtel 4★ — plateforme RH</span></footer>
+<div class="topbar"><span class="crumb"><a href="/">Tous les domaines</a> / <a href="/Domaine10_Talents_Mobilite_Interne/">Domaine 10</a> / Successeurs &amp; Relève — Domaine 10</span><a class="tohub" href="/">← Présentation des 31 domaines</a></div><h1><span>Successeurs &amp; Relève</span></h1><p class="sub">Postes clés et successeurs désignés, niveau de préparation — Domaine 10 Talents &amp; Mobilité Interne.</p><div class="hero"><div class="hl"><span class="hic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fbeafd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l2.6 5.6 6.1.8-4.5 4.2 1.2 6-5.4-3-5.4 3 1.2-6L3.3 8.4l6.1-.8L12 2z"/></svg></span><div><h2>Successeurs &amp; Relève</h2><p class="hsub">Postes clés et successeurs désignés, niveau de préparation — Hôtel 4★.</p></div></div><div class="hr"><span class="hchip">5 enregistrements</span><span class="hchip">Écran 5</span></div></div><div class="chips"><div class="chip2"><b>5</b><small>Enregistrements</small><span class="trend t-flat">●</span></div><div class="chip2"><b>3</b><small>En formation</small><span class="trend t-flat">●</span></div><div class="chip2"><b>1</b><small>Candidat identifie</small><span class="trend t-flat">●</span></div><div class="chip2"><b>1</b><small>En evaluation</small><span class="trend t-flat">●</span></div></div><div class="panel"><h2>Successeurs &amp; Relève <span class="pnum">REL-001…REL-005</span></h2><p class="note">Données consolidées du référentiel RH, avec identifiants et champs calculés restitués.</p><div class="tools"><input type="search" placeholder="Rechercher…" aria-label="Filtrer le tableau"><span class="count">5 lignes</span></div><div class="tblwrap"><table><thead><tr><th class="">N°</th><th class="">Poste Cle</th><th class="">Titulaire Actuel</th><th class="">Successeur Designe</th><th class="">Departement</th><th class="num">Niveau de Pret</th><th class="">Date Evaluation</th><th class="num">Ecart Competences</th><th class="">Plan de Developp.</th><th class="">Statut</th><th class="">Date Prev. Prise Poste</th></tr></thead><tbody><tr><td>REL-001</td><td>Chef Reception</td><td>Nkoulou Mbarga P.</td><td>Nganou D.</td><td>Réception &amp; Front Office</td><td>En formation</td><td>15/05/2025</td><td>Management, Revenue Mgmt</td><td>Coaching + Formation Opera PMS</td><td>En formation</td><td>01/06/2026</td></tr><tr><td>REL-002</td><td>Chef Cuisine</td><td>Biyong Jean M.</td><td>Fotsing Aude R.</td><td>Cuisine &amp; Restauration</td><td>En formation</td><td>20/04/2025</td><td>Gestion budget cuisine, creativity menu</td><td>HACCP niv.3 + Stages externes</td><td>En formation</td><td>01/07/2026</td></tr><tr><td>REL-003</td><td>DRH</td><td>Fotso M.</td><td>Assistante RH Ngo M.</td><td>Service Client</td><td>Candidat identifie</td><td>01/06/2025</td><td>Droit travail avance, paie, relations sociales</td><td>Formation DRH adjoint + tutorat</td><td>Candidat identifie</td><td>01/01/2027</td></tr><tr><td>REL-004</td><td>Chef Entretien</td><td>Tchinda P.</td><td>Fokam Ernest</td><td>Maintenance</td><td>En evaluation</td><td>10/03/2025</td><td>Technique CVC avance, gestion equipe</td><td>Formation CVC + management</td><td>En evaluation</td><td>01/01/2026</td></tr><tr><td>REL-005</td><td>Chef Securite</td><td>Nganmeni J.</td><td>Wouamba A.</td><td>Sécurité</td><td>En formation</td><td>01/05/2025</td><td>Gestion crise, securite incendie avance</td><td>Formation securite hoteliere niveau 2</td><td>En formation</td><td>01/03/2026</td></tr></tbody></table></div></div><div class="panel imgpanel"><h2>Topologie étoile des successions <span class="pnum">schéma source</span></h2><p class="note">Postes clés et successeurs désignés — vue en étoile.</p><img src="/Domaine10_Talents_Mobilite_Interne/d10_topologie_etoile.png" alt="Topologie étoile des successions" loading="lazy"/></div><footer><span>Admina-RH · Hôtel 4★ — plateforme RH</span></footer>
 </main>
 </div>
 <script>(function(){
@@ -304,37 +304,37 @@ inp.addEventListener('input',upd);upd();});
 
   /* ------- données : les 31 domaines (mêmes URLs dédiées que le hub) ------- */
   var DOMAINS = [
-    { n: 1,  u: '/Domaine1_Recrutement_Candidats', l: 'Recrutement & Candidats', a: 1 },
-    { n: 2,  u: '/Domaine2_Gestion_Administrative_Personnel', l: 'Gestion Administrative du Personnel', a: 1 },
-    { n: 3,  u: '/Domaine3_Paie_Remuneration_Avantages/', l: 'Paie, Rémunération & Avantages', a: 1 },
-    { n: 4,  u: '/Domaine4_Temps_Travail_Planification/', l: 'Temps de Travail & Planification', a: 1 },
-    { n: 5,  u: '/Domaine5_Conges_Absences_Presence/', l: 'Congés, Absences & Présence', a: 1 },
-    { n: 6,  u: '/Domaine6_Formation_Developpement_Competences/', l: 'Formation & Développement des Compétences', a: 1 },
-    { n: 7,  u: '/Domaine7_Evaluation_Gestion_Performance/', l: 'Évaluation & Gestion de la Performance', a: 1 },
-    { n: 8,  u: '/Domaine8_Relations_Sociales_Syndicats/', l: 'Relations Sociales & Syndicats', a: 1 },
-    { n: 9,  u: '/Domaine9_Sante_Securite_Conditions_Travail/', l: 'Santé, Sécurité & Conditions de Travail', a: 1 },
-    { n: 10, u: '/Domaine10_Talents_Mobilite_Interne/', l: 'Talents & Mobilité Interne', a: 1 },
-    { n: 11, u: '/Domaine11_Droit_Travail_Conformite/', l: 'Droit du Travail & Conformité', a: 1},
-    { n: 12, u: '/Domaine12_Documentation_Archivage_RH/', l: 'Documentation & Archivage RH' },
-    { n: 13, u: '/Domaine13_Communication_RH_Marque_Employeur/', l: 'Communication RH & Marque Employeur' },
-    { n: 14, u: '/Domaine14_Reporting_Tableaux_Bord_Analyse/', l: 'Reporting & Tableaux de Bord Analyse' },
-    { n: 15, u: '/Domaine15_Budget_Pilotage_Financier_RH/', l: 'Budget & Pilotage Financier RH' },
-    { n: 16, u: '/Domaine16_Diversite_Equite_Inclusion/', l: 'Diversité, Équité & Inclusion' },
-    { n: 17, u: '/Domaine17_Audit_Conformite_Contentieux/', l: 'Audit, Conformité & Contentieux' },
-    { n: 18, u: '/Domaine18_RSE_Developpement_Durable_RH/', l: 'RSE & Développement Durable' },
-    { n: 19, u: '/Domaine19_Innovation_RH_Transformation_Digitale/', l: 'Innovation RH & Transformation Digitale' },
-    { n: 20, u: '/Domaine20_Pilotage_Reporting_RH/', l: 'Pilotage & Reporting RH' },
-    { n: 21, u: '/Domaine21_Fiches_Postes_Profils_Cartographie_Metiers/', l: 'Fiches de Postes & Cartographie des Métiers' },
-    { n: 22, u: '/Domaine22_Avantages_Sociaux_Previsionnelle/', l: 'Avantages Sociaux & Prévoyance' },
-    { n: 23, u: '/Domaine23_Travail_Temporaire/', l: 'Travail Temporaire' },
-    { n: 24, u: '/Domaine24_Stagiaires_Alternants/', l: 'Stagiaires & Alternants' },
-    { n: 25, u: '/Domaine25_Expatries_Personnel_Detache/', l: 'Expatriés & Personnel Détaché' },
-    { n: 26, u: '/Domaine26_Gestion_Budgetaire_Fiscale_RH/', l: 'Gestion Budgétaire & Fiscale RH' },
-    { n: 27, u: '/Domaine27_Reclamations_Contentieux_RH/', l: 'Réclamations & Contentieux RH' },
-    { n: 28, u: '/Domaine28_Mobilite_Carriere_Succession_RH/', l: 'Mobilité, Carrière & Succession' },
-    { n: 29, u: '/Domaine29_Communication_Interne_Engagement/', l: 'Communication Interne & Engagement' },
-    { n: 30, u: '/Domaine30_Expatrites_Mobilite_Internationale/', l: 'Expatriés & Mobilité Internationale' },
-    { n: 31, u: '/Domaine31_Retraites_Prevoyance_Transitions_Carriere/', l: 'Retraites, Prévoyance & Transitions de Carrière' }
+    { n: 1, u: '/Domaine1_Recrutement_Candidats', l: 'Recrutement & Candidats', c: '#0284c7', a: 1 },
+    { n: 2, u: '/Domaine2_Gestion_Administrative_Personnel', l: 'Gestion Administrative du Personnel', c: '#0d7c66', a: 1 },
+    { n: 3, u: '/Domaine3_Paie_Remuneration_Avantages/', l: 'Paie, Rémunération & Avantages', c: '#9f1239', a: 1 },
+    { n: 4, u: '/Domaine4_Temps_Travail_Planification/', l: 'Temps de Travail & Planification', c: '#1d4ed8', a: 1 },
+    { n: 5, u: '/Domaine5_Conges_Absences_Presence/', l: 'Congés, Absences & Présence', c: '#e11d48', a: 1 },
+    { n: 6, u: '/Domaine6_Formation_Developpement_Competences/', l: 'Formation & Développement des Compétences', c: '#b45309', a: 1 },
+    { n: 7, u: '/Domaine7_Evaluation_Gestion_Performance/', l: 'Évaluation & Gestion de la Performance', c: '#6d28d9', a: 1 },
+    { n: 8, u: '/Domaine8_Relations_Sociales_Syndicats/', l: 'Relations Sociales & Syndicats', c: '#1e4e79', a: 1 },
+    { n: 9, u: '/Domaine9_Sante_Securite_Conditions_Travail/', l: 'Santé, Sécurité & Conditions de Travail', c: '#0d9488', a: 1 },
+    { n: 10, u: '/Domaine10_Talents_Mobilite_Interne/', l: 'Talents & Mobilité Interne', c: '#c026d3', a: 1 },
+    { n: 11, u: '/Domaine11_Droit_Travail_Conformite/', l: 'Droit du Travail & Conformité', c: '#3730a3', a: 1 },
+    { n: 12, u: '/Domaine12_Documentation_Archivage_RH/', l: 'Documentation & Archivage RH', c: '#475569' },
+    { n: 13, u: '/Domaine13_Communication_RH_Marque_Employeur/', l: 'Communication RH & Marque Employeur', c: '#ec4899' },
+    { n: 14, u: '/Domaine14_Reporting_Tableaux_Bord_Analyse/', l: 'Reporting & Tableaux de Bord Analyse', c: '#65a30d' },
+    { n: 15, u: '/Domaine15_Budget_Pilotage_Financier_RH/', l: 'Budget & Pilotage Financier RH', c: '#059669' },
+    { n: 16, u: '/Domaine16_Diversite_Equite_Inclusion/', l: 'Diversité, Équité & Inclusion', c: '#8b5cf6' },
+    { n: 17, u: '/Domaine17_Audit_Conformite_Contentieux/', l: 'Audit, Conformité & Contentieux', c: '#1f2937' },
+    { n: 18, u: '/Domaine18_RSE_Developpement_Durable_RH/', l: 'RSE & Développement Durable', c: '#166534' },
+    { n: 19, u: '/Domaine19_Innovation_RH_Transformation_Digitale/', l: 'Innovation RH & Transformation Digitale', c: '#6366f1' },
+    { n: 20, u: '/Domaine20_Pilotage_Reporting_RH/', l: 'Pilotage & Reporting RH', c: '#1e3a8a' },
+    { n: 21, u: '/Domaine21_Fiches_Postes_Profils_Cartographie_Metiers/', l: 'Fiches de Postes & Cartographie des Métiers', c: '#ca8a04' },
+    { n: 22, u: '/Domaine22_Avantages_Sociaux_Previsionnelle/', l: 'Avantages Sociaux & Prévoyance', c: '#60a5fa' },
+    { n: 23, u: '/Domaine23_Travail_Temporaire/', l: 'Travail Temporaire', c: '#eab308' },
+    { n: 24, u: '/Domaine24_Stagiaires_Alternants/', l: 'Stagiaires & Alternants', c: '#4ade80' },
+    { n: 25, u: '/Domaine25_Expatries_Personnel_Detache/', l: 'Expatriés & Personnel Détaché', c: '#a855f7' },
+    { n: 26, u: '/Domaine26_Gestion_Budgetaire_Fiscale_RH/', l: 'Gestion Budgétaire & Fiscale RH', c: '#78716c' },
+    { n: 27, u: '/Domaine27_Reclamations_Contentieux_RH/', l: 'Réclamations & Contentieux RH', c: '#dc2626' },
+    { n: 28, u: '/Domaine28_Mobilite_Carriere_Succession_RH/', l: 'Mobilité, Carrière & Succession', c: '#86198f' },
+    { n: 29, u: '/Domaine29_Communication_Interne_Engagement/', l: 'Communication Interne & Engagement', c: '#f97316' },
+    { n: 30, u: '/Domaine30_Expatrites_Mobilite_Internationale/', l: 'Expatriés & Mobilité Internationale', c: '#115e59' },
+    { n: 31, u: '/Domaine31_Retraites_Prevoyance_Transitions_Carriere/', l: 'Retraites, Prévoyance & Transitions de Carrière', c: '#f59e0b' }
   ];
   var N_ACTIF = 11;
 
@@ -434,9 +434,13 @@ inp.addEventListener('input',upd);upd();});
     for (var i = 0; i < rows.length; i++) {
       var on = cur !== null && rows[i].getAttribute('data-u') === cur;
       rows[i].className = 'adem12-item' + (on ? ' adem12-on' : '') + (DOMAINS[i].a ? '' : '');
+      if (on && DOMAINS[i] && DOMAINS[i].c) { rows[i].style.boxShadow = 'inset 3px 0 0 ' + DOMAINS[i].c; rows[i].style.background = a12tint(DOMAINS[i].c, .10); } else { rows[i].style.boxShadow = ''; rows[i].style.background = ''; }
     }
   }
 
+  function a12rgb(hx){var v=parseInt(hx.slice(1),16);return [(v>>16)&255,(v>>8)&255,v&255];}
+  function a12tint(hx,a){var c=a12rgb(hx);return 'rgba('+c[0]+','+c[1]+','+c[2]+','+a+')';}
+  function a12text(hx){var c=a12rgb(hx);var l=(0.299*c[0]+0.587*c[1]+0.114*c[2])/255;var f=l>0.62?0.55:1;return 'rgb('+Math.round(c[0]*f)+','+Math.round(c[1]*f)+','+Math.round(c[2]*f)+')';}
   function buildPanel() {
     panel = el('div');
     panel.id = 'adem12-panel';
@@ -470,7 +474,7 @@ inp.addEventListener('input',upd);upd();});
       a.href = d.u;
       a.setAttribute('data-u', d.u);
       a.title = 'Domaine ' + d.n + ' — ' + d.l;
-      a.appendChild(el('span', 'adem12-num', 'D' + d.n));
+      var _n = el('span', 'adem12-num', 'D' + d.n); if (d.c) { _n.style.background = a12tint(d.c, .16); _n.style.borderColor = a12tint(d.c, .42); _n.style.color = a12text(d.c); } a.appendChild(_n);
       a.appendChild(el('span', 'adem12-lab', d.l));
       a.appendChild(el('span', 'adem12-chip ' + (d.a ? 'adem12-ok' : 'adem12-warn'), d.a ? 'ACTIF' : 'EN PRÉPARATION'));
       a.appendChild(el('span', 'adem12-cur', ICON_CHECK));
