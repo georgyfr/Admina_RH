@@ -79,9 +79,9 @@
     {
       "branch": "staging-principal",
       "session": "session principale (web-7c37a8bf)",
-      "deployment_id": "5e0621cd",
-      "date": "2026-09-14T08:30Z",
-      "note": "Contenu V32 avant patches ADEM (D11 sans sidebars 11 domaines) — supersede par la promotion V32 en production ; reste utilisable pour tests"
+      "deployment_id": "5fc57d6b",
+      "date": "2026-09-14T09:50Z",
+      "note": "V32 + refonte sidebar V33 : groupes thematiques D9/D10/D11/D6 + de-excelisation D4-D11 (160 fichiers). Production = validation utilisateur avant promotion (regle 5)"
     }
   ],
   "historique": [
@@ -89,6 +89,11 @@
       "quand": "2026-09-14T08:29Z",
       "quoi": "déploiement production f826d7bb (autre session, sans push GitHub)",
       "constat": "contenu = V32 identique (no-op), concilié par session principale à 09:0xZ"
+    },
+    {
+      "quand": "2026-09-14T09:5xZ",
+      "quoi": "preview 5fc57d6b staging-principal — V33 refonte sidebar ADEM",
+      "details": "demande utilisateur : 1) supprimer « Onglets du classeur », 2) regrouper les onglets par themes, 3) suggestions d'interface par onglet. 160 fichiers modifies, 0 residu classeur, checks 21/21 D11 OK"
     }
   ]
 }
