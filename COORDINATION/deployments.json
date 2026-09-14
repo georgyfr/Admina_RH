@@ -34,6 +34,11 @@
   },
   "historique_recent": [
     {
+      "date": "2026-09-14T08:30Z",
+      "event": "D11 Droit Travail & Conformite construit (21 ecrans + 8 documents depuis les sources GitHub) et deploye en PREVIEW staging-principal (5e0621cd) — production intacte, en attente de validation",
+      "par": "session principale"
+    },
+    {
       "date": "2026-09-14T06:40Z",
       "event": "Export V1.4 : snapshot complet de la production (720 fichiers + _EXPORT_INFO.md) publie sur GitHub sous Domaine1_Recrutement_Candidats/Code frontend/ADMINISTRATEUR TOUS DOMAINES V1.4 (commit 9328d13) — 720/720 blob-sha verifies",
       "par": "session principale"
@@ -68,9 +73,9 @@
     {
       "branch": "staging-principal",
       "session": "session principale (web-7c37a8bf)",
-      "deployment_id": "28b78292",
-      "date": "2026-09-14T06:08Z",
-      "note": "snapshot V31 complet (720 fichiers) — test du dispositif de coordination, production intacte"
+      "deployment_id": "5e0621cd",
+      "date": "2026-09-14T08:30Z",
+      "note": "D11 complet (21 ecrans + 8 PDFs, ADEM N_ACTIF=11) — en attente de validation utilisateur pour promotion production"
     }
   ]
 }
