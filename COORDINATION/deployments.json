@@ -4,7 +4,7 @@
   "instructions": "Toute session DOIT lire ce fichier avant de travailler et le mettre a jour apres toute publication. Ne jamais modifier etat_production sans deploiement reel correspondant.",
   "etat_production": {
     "version_label": "V32",
-    "deployment_id": "decae39e",
+    "deployment_id": "f826d7bb",
     "deploye_le": "2026-09-14T08:00:00Z",
     "deploye_par": "session principale (web-7c37a8bf)",
     "commit_github": "697ef98a8ba8",
@@ -18,7 +18,8 @@
       "Domaine8_Relations_Sociales_Syndicats/": "a9aa25578600f73abb293d747c282997",
       "Domaine9_Sante_Securite_Conditions_Travail/": "7ec1f00466a60663f4158812288e2100",
       "Domaine10_Talents_Mobilite_Interne/": "4a25cf8ad869f2dabf251cc11429cf9f"
-    }
+    },
+    "note_conciliation": "Déploiement CF f826d7bb (2026-09-14T08:29Z, branche main) constaté après decae39e : contenu IDENTIQUE à V32 (7/7 baselines md5 vérifiées + spot-check GitHub raw vs live sur D4/D11 = beef921a / 5a035e6c). Déploiement sans changement réel (autre session). Référence de contenu : inchangée (V32). Déploiement de référence : f826d7bb."
   },
   "verrous": [],
   "regle_verrous": {
@@ -81,6 +82,13 @@
       "deployment_id": "5e0621cd",
       "date": "2026-09-14T08:30Z",
       "note": "Contenu V32 avant patches ADEM (D11 sans sidebars 11 domaines) — supersede par la promotion V32 en production ; reste utilisable pour tests"
+    }
+  ],
+  "historique": [
+    {
+      "quand": "2026-09-14T08:29Z",
+      "quoi": "déploiement production f826d7bb (autre session, sans push GitHub)",
+      "constat": "contenu = V32 identique (no-op), concilié par session principale à 09:0xZ"
     }
   ]
 }
