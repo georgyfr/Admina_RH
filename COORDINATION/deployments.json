@@ -34,6 +34,11 @@
   },
   "historique_recent": [
     {
+      "date": "2026-09-14T06:40Z",
+      "event": "Export V1.4 : snapshot complet de la production (720 fichiers + _EXPORT_INFO.md) publie sur GitHub sous Domaine1_Recrutement_Candidats/Code frontend/ADMINISTRATEUR TOUS DOMAINES V1.4 (commit 9328d13) — 720/720 blob-sha verifies",
+      "par": "session principale"
+    },
+    {
       "date": "2026-09-14T06:08Z",
       "event": "Test preview staging-principal (28b78292) : production inchangee (e3c4e47f), pre-vol vert — dispositif de coordination valide",
       "par": "session principale"
