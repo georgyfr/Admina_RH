@@ -236,7 +236,7 @@
       natif.setAttribute('data-asr-hide', '1');
       natif.setAttribute('data-asr-olddisp', natif.style.display || '');
     }
-    natif.style.display = 'none';
+    if (root.style.display !== 'none') natif.style.display = 'none';
     return true;
   }
   function unmountRoot() {
