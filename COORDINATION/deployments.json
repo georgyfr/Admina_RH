@@ -1,0 +1,57 @@
+{
+  "version": 2,
+  "role": "Etat de reference partage - Projet Admina-RH",
+  "instructions": "Toute session DOIT lire ce fichier avant de travailler et le mettre a jour apres toute publication. Ne jamais modifier etat_production sans deploiement reel correspondant.",
+  "etat_production": {
+    "version_label": "V31",
+    "deployment_id": "e3c4e47f",
+    "deploye_le": "2026-09-14T05:31:00Z",
+    "deploye_par": "session principale (web-7c37a8bf)",
+    "commit_github": "3d17c7460b34",
+    "coherence": "LIVE = deploy_v31 = GitHub main (720 fichiers)",
+    "baselines_md5": {
+      "note": "md5 du HTML retourne par curl avec cache-buster (?cb=timestamp)",
+      "index.html (hub)": "13438b557ca26fdb4b03bb82fa71fd56",
+      "favicon.svg": "7e840862161341271697daa99a40d76b",
+      "Domaine1_Recrutement_Candidats/": "9d2e07d1cd6e11e6f2afcc1675d61c78",
+      "Domaine5_Conges_Absences_Presence/": "838e9432cd996b75c35a964137ce3422",
+      "Domaine8_Relations_Sociales_Syndicats/": "8c5d433e042687e0e15e04e3a97cce0f",
+      "Domaine9_Sante_Securite_Conditions_Travail/": "58153eab2d1dca0253d5b7277c24f589",
+      "Domaine10_Talents_Mobilite_Interne/": "ebea430a68fd6c0bfdf855f49ea02eab"
+    }
+  },
+  "verrous": [],
+  "regle_verrous": {
+    "format": {
+      "domaine": "ex: Domaine11_Droit_Travail_Conformite",
+      "session": "nom de la session",
+      "acquis_le": "horodatage ISO 8601",
+      "expire_le": "horodatage ISO 8601 (max 2h)",
+      "perimetre": "fichiers ou dossiers concernes"
+    },
+    "duree_max_heures": 2,
+    "regle": "Verrou expire = libere. Ne jamais toucher le perimetre d'un verrou actif d'une autre session."
+  },
+  "historique_recent": [
+    {
+      "date": "2026-09-14T06:10Z",
+      "event": "Protocole de coordination cree (ce fichier + PROTOCOL_DEPLOIEMENT.md)",
+      "par": "session principale"
+    },
+    {
+      "date": "2026-09-14T06:05Z",
+      "event": "Push GitHub 3d17c746 - delta D1 Couts (6 fichiers), coherence triple complete",
+      "par": "session principale"
+    },
+    {
+      "date": "2026-09-14T05:31Z",
+      "event": "V31 deploye en production (e3c4e47f) - restauration apres ecrasements concurrents",
+      "par": "session principale"
+    },
+    {
+      "date": "2026-09-13T09:23 a 09:49Z",
+      "event": "INCIDENT : 4 deploiements concurrents d'un staging perime (f7bd8040, cc36c110, bb491ce4, a0e16069) ont ecrase la production",
+      "par": "session concurrente"
+    }
+  ]
+}
