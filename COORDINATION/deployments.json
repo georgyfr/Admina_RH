@@ -3,24 +3,24 @@
   "role": "Etat de reference partage - Projet Admina-RH",
   "instructions": "Toute session DOIT lire ce fichier avant de travailler et le mettre a jour apres toute publication. Ne jamais modifier etat_production sans deploiement reel correspondant.",
   "etat_production": {
-    "version_label": "V33",
-    "deployment_id": "292569b0",
-    "deploye_le": "2026-09-14T11:5xZ",
+    "version_label": "V34",
+    "deployment_id": "c1ae4431",
+    "deploye_le": "2026-09-14T16:46:06Z",
     "deploye_par": "session principale (web-7c37a8bf)",
-    "commit_github": "4cb6cc63",
-    "coherence": "LIVE = staging_v24_full = GitHub main V1.2 (720 fichiers) — V33 : sidebars D9/D10/D11 en groupes thématiques + de-excelisation D4-D11 (141 pages). Hub et pill inchangés (11 domaines actifs).",
+    "commit_github": "ef666db",
+    "coherence": "LIVE = staging_v34 = GitHub main V1.2 (740 fichiers) — V34 : une couleur spécifique par domaine. D1 azur #0284c7, D2 vert bouteille #0d7c66 (inchangé), D3 bordeaux #9f1239 (splash), D4 bleu roi #1d4ed8, D5 framboise #e11d48, D6 ambre #b45309 (inchangé), D7 violet #6d28d9 (inchangé), D8 bleu/rouge (inchangé), D9 teal #0d9488, D10 fuchsia #c026d3, D11 indigo #3730a3. Pill V12 : badges D## et barre active aux couleurs des 31 domaines (184 pages). Splash recolorés (82 pages). Hub : cartes à liseré/badge colorés (31). Couleurs sémantiques (succès/danger/alerte) et chrome plateforme violet préservés.",
     "baselines_md5": {
       "note": "md5 du HTML retourne par curl avec cache-buster (?cb=timestamp)",
-      "index.html (hub)": "c712c8d51f00aeb2faf1abbab65d0fe1",
+      "index.html (hub)": "a875db394ac3dba0d42813db0e795224",
       "favicon.svg": "7e840862161341271697daa99a40d76b",
-      "Domaine1_Recrutement_Candidats/": "2c272c1befa4d7c4c833da7f5cdc2548",
-      "Domaine5_Conges_Absences_Presence/": "975e5a1dfe491ac24a510f2edcf7e960",
-      "Domaine8_Relations_Sociales_Syndicats/": "e5d8662d2cfc0dc1df29c19b870518ac",
-      "Domaine9_Sante_Securite_Conditions_Travail/": "ec9d078f88bb7801fa345a3b55636b9a",
-      "Domaine10_Talents_Mobilite_Interne/": "e83422dcb6ae568c768bd66ef0fd8fcd",
-      "Domaine11_Droit_Travail_Conformite/": "d04754c98e97b741e74f17f99190eeff"
+      "Domaine1_Recrutement_Candidats/": "b4955c38b185196c0af098d4bac0496f",
+      "Domaine5_Conges_Absences_Presence/": "1f8b86d9f8989b94ffa0bef0c95c331b",
+      "Domaine8_Relations_Sociales_Syndicats/": "e5bb86240e3ea9480ff5fb1a36505110",
+      "Domaine9_Sante_Securite_Conditions_Travail/": "097adb7f0db0d59a3ee37aedd02a02cd",
+      "Domaine10_Talents_Mobilite_Interne/": "bdf211197e405f9c685157924a1d43dd",
+      "Domaine11_Droit_Travail_Conformite/": "e081da183fc4af31296a067fec0ebc2c"
     },
-    "note_conciliation": "V33 = refonte sidebar demandée par l'utilisateur (capture ibb.co/wFP6TqpX) : 1) suppression « Onglets du classeur » et numérotation, 2) groupes thématiques par domaine, 3) nettoyage lexical classeur/onglet/feuille (D4-D11). Déployée depuis l'état live V32 exact (pré-vol anti-race 141/141). La preview staging-principal 5fc57d6b (V33 antérieure, 160 fichiers) est SUPERSEDÉE par cette promotion."
+    "note_conciliation": "V34 = révision des couleurs demandée par l'utilisateur (« chaque domaine doit avoir une couleur spécifique ») : rotations de teinte S/L-préservées sur 121 pages (D1/D4/D5/D9/D10/D11), presets conformes conservés (D2/D6/D7/D8 + D3 prune), pill et hub expriment la palette des 31 domaines. Pré-vol anti-race 10/10 vert, vérification live 202/202 + 11 marqueurs, push GitHub 185 fichiers."
   },
   "verrous": [],
   "regle_verrous": {
@@ -35,6 +35,11 @@
     "regle": "Verrou expire = libere. Ne jamais toucher le perimetre d'un verrou actif d'une autre session."
   },
   "historique_recent": [
+    {
+      "date": "2026-09-14T16:46:06Z",
+      "event": "V34 deployee en production (c1ae4431, pre-vol 10/10 vert) : une couleur spécifique par domaine — D1 azur, D4 bleu roi, D5 framboise, D9 teal, D10 fuchsia, D11 indigo ; pill badges colorés (184 pages), splash recolorés (82), hub cartes colorées. GitHub main aligne (ef666db, delta 185 fichiers)",
+      "par": "session principale (web-7c37a8bf)"
+    },
     {
       "date": "2026-09-14T12:00:00Z",
       "event": "V33 deployee en production (292569b0, pre-vol 141/141 vert) : sidebar D9/D10/D11 regroupees en themes (6/6/7 groupes), zero mention classeur/onglet/feuille dans l'UI (141 pages D4-D11). GitHub main aligne en miroir production (4cb6cc6, delta 703 fichiers vs f00f9f76)",
