@@ -3,23 +3,24 @@
   "role": "Etat de reference partage - Projet Admina-RH",
   "instructions": "Toute session DOIT lire ce fichier avant de travailler et le mettre a jour apres toute publication. Ne jamais modifier etat_production sans deploiement reel correspondant.",
   "etat_production": {
-    "version_label": "V32",
-    "deployment_id": "f826d7bb",
-    "deploye_le": "2026-09-14T08:00:00Z",
+    "version_label": "V33",
+    "deployment_id": "292569b0",
+    "deploye_le": "2026-09-14T11:5xZ",
     "deploye_par": "session principale (web-7c37a8bf)",
-    "commit_github": "697ef98a8ba8",
-    "coherence": "LIVE = staging_d11 = GitHub main (749 fichiers sous V1.4) — D11 complet + ADEM 11 domaines actifs",
+    "commit_github": "4cb6cc63",
+    "coherence": "LIVE = staging_v24_full = GitHub main V1.2 (720 fichiers) — V33 : sidebars D9/D10/D11 en groupes thématiques + de-excelisation D4-D11 (141 pages). Hub et pill inchangés (11 domaines actifs).",
     "baselines_md5": {
       "note": "md5 du HTML retourne par curl avec cache-buster (?cb=timestamp)",
       "index.html (hub)": "c712c8d51f00aeb2faf1abbab65d0fe1",
       "favicon.svg": "7e840862161341271697daa99a40d76b",
       "Domaine1_Recrutement_Candidats/": "2c272c1befa4d7c4c833da7f5cdc2548",
-      "Domaine5_Conges_Absences_Presence/": "09ee4212ce34b2e9d1b9a1e07b1c3c14",
-      "Domaine8_Relations_Sociales_Syndicats/": "a9aa25578600f73abb293d747c282997",
-      "Domaine9_Sante_Securite_Conditions_Travail/": "7ec1f00466a60663f4158812288e2100",
-      "Domaine10_Talents_Mobilite_Interne/": "4a25cf8ad869f2dabf251cc11429cf9f"
+      "Domaine5_Conges_Absences_Presence/": "975e5a1dfe491ac24a510f2edcf7e960",
+      "Domaine8_Relations_Sociales_Syndicats/": "e5d8662d2cfc0dc1df29c19b870518ac",
+      "Domaine9_Sante_Securite_Conditions_Travail/": "ec9d078f88bb7801fa345a3b55636b9a",
+      "Domaine10_Talents_Mobilite_Interne/": "e83422dcb6ae568c768bd66ef0fd8fcd",
+      "Domaine11_Droit_Travail_Conformite/": "d04754c98e97b741e74f17f99190eeff"
     },
-    "note_conciliation": "Déploiement CF f826d7bb (2026-09-14T08:29Z, branche main) constaté après decae39e : contenu IDENTIQUE à V32 (7/7 baselines md5 vérifiées + spot-check GitHub raw vs live sur D4/D11 = beef921a / 5a035e6c). Déploiement sans changement réel (autre session). Référence de contenu : inchangée (V32). Déploiement de référence : f826d7bb."
+    "note_conciliation": "V33 = refonte sidebar demandée par l'utilisateur (capture ibb.co/wFP6TqpX) : 1) suppression « Onglets du classeur » et numérotation, 2) groupes thématiques par domaine, 3) nettoyage lexical classeur/onglet/feuille (D4-D11). Déployée depuis l'état live V32 exact (pré-vol anti-race 141/141). La preview staging-principal 5fc57d6b (V33 antérieure, 160 fichiers) est SUPERSEDÉE par cette promotion."
   },
   "verrous": [],
   "regle_verrous": {
@@ -34,6 +35,16 @@
     "regle": "Verrou expire = libere. Ne jamais toucher le perimetre d'un verrou actif d'une autre session."
   },
   "historique_recent": [
+    {
+      "date": "2026-09-14T12:00:00Z",
+      "event": "V33 deployee en production (292569b0, pre-vol 141/141 vert) : sidebar D9/D10/D11 regroupees en themes (6/6/7 groupes), zero mention classeur/onglet/feuille dans l'UI (141 pages D4-D11). GitHub main aligne en miroir production (4cb6cc6, delta 703 fichiers vs f00f9f76)",
+      "par": "session principale (web-7c37a8bf)"
+    },
+    {
+      "date": "2026-09-14T11:5xZ",
+      "event": "Preview V33 staging-principal (5fc57d6b) superseeed : la production V33 implemente les 3 demandes utilisateur avec des groupes remanies (Pilotage / Veille & Cadre Legal / Conformite & Declarations / Contrats / Controles & Risques / Litiges & Discipline / Referentiels & Documents pour D11)",
+      "par": "session principale (web-7c37a8bf)"
+    },
     {
       "date": "2026-09-14T08:00Z",
       "event": "V32 deployee en production (decae39e) : promotion D11 autorisee par l'utilisateur — 21 ecrans + 8 documents + ADEM 11 domaines actifs (163 sidebars + hub patches). Verification live 29/29 OK. GitHub main aligne (697ef98a, delta 193 fichiers)",
@@ -81,10 +92,15 @@
       "session": "session principale (web-7c37a8bf)",
       "deployment_id": "5fc57d6b",
       "date": "2026-09-14T09:50Z",
-      "note": "V32 + refonte sidebar V33 : groupes thematiques D9/D10/D11/D6 + de-excelisation D4-D11 (160 fichiers). Production = validation utilisateur avant promotion (regle 5)"
+      "note": "[SUPERSEDÉE] V33 promue en production le 2026-09-14 (292569b0) — preview conservée pour référence"
     }
   ],
   "historique": [
+    {
+      "quand": "2026-09-14T12:00:00Z",
+      "quoi": "promotion production V33 (292569b0) par la session du même lineage que la preview V33",
+      "constat": "les 3 demandes utilisateur (de-classeur, groupes, interfaces) implementees ; pré-vol anti-race 141/141 ; live vérifié 141/141 md5 + spot 12/12 + navigateur"
+    },
     {
       "quand": "2026-09-14T08:29Z",
       "quoi": "déploiement production f826d7bb (autre session, sans push GitHub)",
