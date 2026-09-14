@@ -1,0 +1,477 @@
+/* ============================================================
+   ADMINA-RH — Offres d'Emploi (Domaine 1) — Design & Ergonomie
+   Scopé : html.admina-offres uniquement (page /offres).
+   Ne touche AUCUNE autre page.
+   ============================================================ */
+
+/* ---------- garde-fous ---------- */
+html.admina-offres .admina-ofx { box-sizing: border-box; }
+html.admina-offres .admina-ofx *,
+html.admina-offres .admina-ofx *::before,
+html.admina-offres .admina-ofx *::after { box-sizing: border-box; }
+
+/* ---------- 1. Pleine largeur du contenu ---------- */
+html.admina-offres .MuiContainer-root,
+html.admina-offres .MuiContainer-maxWidthLg,
+html.admina-offres .MuiContainer-maxWidthXl {
+  max-width: 100% !important;
+  padding-left: clamp(12px, 2.4vw, 28px) !important;
+  padding-right: clamp(12px, 2.4vw, 28px) !important;
+}
+html.admina-offres main { max-width: 100% !important; }
+
+/* ---------- 2. Bandeau héro ---------- */
+.admina-ofx-hero {
+  position: relative;
+  margin: 6px 0 14px;
+  padding: 18px 22px;
+  border-radius: 14px;
+  background: linear-gradient(120deg, #0d5c46 0%, #0f7a5e 55%, #12805f 100%);
+  color: #fff;
+  overflow: hidden;
+  box-shadow: 0 10px 28px -14px rgba(13, 92, 70, .55);
+}
+.admina-ofx-hero::after {
+  content: "";
+  position: absolute;
+  right: -60px; top: -70px;
+  width: 240px; height: 240px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .08);
+  pointer-events: none;
+}
+.admina-ofx-hero .admina-ofx-hrow {
+  display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+}
+.admina-ofx-hero h2 {
+  margin: 0; font-size: 1.35rem; font-weight: 800; letter-spacing: .2px;
+  display: flex; align-items: center; gap: 10px;
+}
+.admina-ofx-hero .admina-ofx-badge {
+  font-size: .62rem; font-weight: 700; letter-spacing: .6px;
+  padding: 3px 8px; border-radius: 999px;
+  background: rgba(255, 255, 255, .16); border: 1px solid rgba(255, 255, 255, .35);
+  white-space: nowrap;
+}
+.admina-ofx-hero p {
+  margin: 6px 0 0; font-size: .8rem; opacity: .92;
+}
+.admina-ofx-hero .admina-ofx-hstats {
+  margin-left: auto; display: flex; gap: 18px; flex-wrap: wrap;
+}
+.admina-ofx-hero .admina-ofx-hstat { text-align: right; }
+.admina-ofx-hero .admina-ofx-hstat b {
+  display: block; font-size: 1.15rem; font-weight: 800; line-height: 1.1;
+}
+.admina-ofx-hero .admina-ofx-hstat span {
+  font-size: .62rem; text-transform: uppercase; letter-spacing: .8px; opacity: .85;
+}
+
+/* ---------- 3. Barre d'insights intelligents ---------- */
+.admina-ofx-insights {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  margin: 0 0 14px; padding: 10px 14px;
+  background: #fffde7;
+  border: 1px solid #f0e2a0; border-left: 4px solid #f5b74e;
+  border-radius: 10px;
+}
+.admina-ofx-insights .admina-ofx-ilabel {
+  font-size: .68rem; font-weight: 800; letter-spacing: .8px;
+  text-transform: uppercase; color: #7a5c12; margin-right: 4px;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.admina-ofx-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 12px; border-radius: 999px;
+  font-size: .74rem; font-weight: 600;
+  border: 1px solid transparent; cursor: pointer;
+  transition: transform .12s ease, box-shadow .12s ease;
+  background: #fff; color: #424242;
+}
+.admina-ofx-chip:hover { transform: translateY(-1px); box-shadow: 0 3px 10px -4px rgba(0,0,0,.3); }
+.admina-ofx-chip:focus-visible { outline: 2px solid #0f7a5e; outline-offset: 2px; }
+.admina-ofx-chip .n { font-weight: 800; }
+.admina-ofx-chip[data-tone="danger"]  { border-color: #f3c2c2; background: #fdecec; color: #a31515; }
+.admina-ofx-chip[data-tone="warn"]    { border-color: #f0dca0; background: #fdf4dc; color: #7a5c12; }
+.admina-ofx-chip[data-tone="ok"]      { border-color: #bfe3d2; background: #e8f6ef; color: #0d5c46; }
+.admina-ofx-chip[data-tone="fav"]     { border-color: #f2e1a0; background: #fdf8e3; color: #8a6d1a; }
+.admina-ofx-chip[aria-pressed="true"] {
+  background: #0f7a5e; border-color: #0f7a5e; color: #fff;
+}
+.admina-ofx-chip[aria-pressed="true"] .n { color: #fff; }
+
+/* ---------- 4. Cartes statistiques ---------- */
+html.admina-offres .MuiGrid-container > .MuiGrid-root > .MuiPaper-root {
+  position: relative;
+  overflow: hidden;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+html.admina-offres .MuiGrid-container > .MuiGrid-root > .MuiPaper-root:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px -12px rgba(0, 0, 0, .35);
+}
+.admina-ofx-kpi { cursor: default; position: relative; overflow: hidden; }
+.admina-ofx-kpi::before {
+  content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 5px;
+  background: var(--kpi-c, #0f7a5e);
+}
+.admina-ofx-kpi .admina-ofx-kpi-sub { font-size: .72rem; opacity: .85; margin-top: 2px; }
+.admina-ofx-kpi .admina-ofx-kpi-bar {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 4px;
+  background: rgba(0, 0, 0, .06);
+}
+.admina-ofx-kpi .admina-ofx-kpi-bar i {
+  display: block; height: 100%;
+  background: var(--kpi-c, #0f7a5e);
+  transition: width .4s ease;
+}
+
+/* ---------- 5. Barre filtres collante ---------- */
+.admina-ofx-filters {
+  position: sticky; top: 56px; z-index: 30;
+  margin: 0 -4px; padding: 10px 4px;
+  background: inherit;
+}
+html.admina-dark .admina-ofx-filters { background: inherit; }
+.admina-ofx-filters::after {
+  content: ""; position: absolute; left: -28px; right: -28px; top: 0; bottom: 0;
+  z-index: -1;
+  background: var(--admina-page-bg, #f4f6f8);
+  border-bottom: 1px solid rgba(0, 0, 0, .08);
+}
+html.admina-dark .admina-ofx-filters::after {
+  background: var(--admina-page-bg, #101418);
+  border-bottom-color: rgba(255, 255, 255, .09);
+}
+
+/* ---------- 6. Table : pleine largeur, header sticky, lisibilité ---------- */
+html.admina-offres .MuiTableContainer-root {
+  max-height: none !important;
+  border-radius: 12px;
+}
+/* colonnes compactées : tout tient sans scroll horizontal (1440 / 1280 px) */
+html.admina-offres table th,
+html.admina-offres table td { padding-left: 8px !important; padding-right: 8px !important; }
+html.admina-offres table th:nth-child(2), html.admina-offres table td:nth-child(2) { width: 88px !important; min-width: 88px !important; }
+html.admina-offres table th:nth-child(3), html.admina-offres table td:nth-child(3) { width: 76px !important; min-width: 76px !important; }
+html.admina-offres table th:nth-child(4), html.admina-offres table td:nth-child(4) { width: 112px !important; min-width: 112px !important; }
+html.admina-offres table th:nth-child(5), html.admina-offres table td:nth-child(5) { width: 144px !important; min-width: 144px !important; }
+html.admina-offres table th:nth-child(6), html.admina-offres table td:nth-child(6) { width: 78px !important; min-width: 78px !important; }
+html.admina-offres table th:nth-child(7), html.admina-offres table td:nth-child(7) { width: 82px !important; min-width: 82px !important; }
+html.admina-offres table th:nth-child(8), html.admina-offres table td:nth-child(8) { width: 108px !important; min-width: 108px !important; }
+html.admina-offres table th:nth-child(9), html.admina-offres table td:nth-child(9) { width: 180px !important; min-width: 180px !important; }
+html.admina-offres table td { font-size: .8rem; white-space: normal !important; }
+html.admina-offres table td:nth-child(2),
+html.admina-offres table td:nth-child(3),
+html.admina-offres table td:nth-child(8) { white-space: nowrap !important; }
+html.admina-offres table td:nth-child(2) { font-size: .72rem; }
+/* chips wrap : les cellules respectent leur largeur, plus de scroll horizontal */
+html.admina-offres table .MuiChip-root,
+html.admina-offres table .MuiChip-root .MuiChip-label {
+  white-space: normal !important; height: auto; min-height: 22px;
+  font-size: .66rem; line-height: 1.15; padding: 1px 6px;
+}
+html.admina-offres table td:nth-child(9) .MuiChip-root { font-size: .62rem; padding: 1px 5px; max-width: 120px; }
+html.admina-offres table td:nth-child(9) > div { flex-wrap: wrap; }
+.admina-ofx-tag { white-space: normal; }
+.admina-ofx-fav { width: 22px; height: 22px; font-size: .85rem; }
+.admina-ofx-rowact button { padding: 2px !important; font-size: 13px !important; }
+html.admina-offres .MuiTableHead-root .MuiTableCell-root {
+  position: sticky; top: 0; z-index: 5;
+  background: #eceff1 !important; color: #263238 !important;
+  box-shadow: inset 0 -2px 0 rgba(0, 0, 0, .12);
+}
+html.admina-dark .MuiTableHead-root .MuiTableCell-root,
+html.admina-dark .MuiTableHead-root .MuiTableCell-root.MuiTableCell-head {
+  background: #1c2430 !important; color: #dfe7ef !important;
+  box-shadow: inset 0 -2px 0 rgba(255, 255, 255, .14);
+}
+html.admina-offres .MuiTableRow-root:hover > .MuiTableCell-root {
+  background: rgba(15, 122, 94, .05) !important;
+}
+html.admina-dark .MuiTableRow-root:hover > .MuiTableCell-root {
+  background: rgba(15, 122, 94, .13) !important;
+}
+html.admina-offres .MuiTableCell-root { vertical-align: middle; }
+
+/* ---------- 7. Badges injectés dans les lignes ---------- */
+.admina-ofx-cellsub { margin-top: 4px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.admina-ofx-tag {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: .62rem; font-weight: 800; letter-spacing: .4px;
+  padding: 2px 7px; border-radius: 999px; white-space: nowrap;
+}
+.admina-ofx-tag[data-tone="danger"] { background: #fdecec; color: #a31515; border: 1px solid #f3c2c2; }
+.admina-ofx-tag[data-tone="warn"]   { background: #fdf4dc; color: #7a5c12; border: 1px solid #f0dca0; }
+.admina-ofx-tag[data-tone="info"]   { background: #e8f1fd; color: #174f8c; border: 1px solid #c4dbf5; }
+.admina-ofx-tag[data-tone="muted"]  { background: #f1f3f4; color: #5f6368; border: 1px solid #dfe3e6; }
+html.admina-dark .admina-ofx-tag[data-tone="danger"] { background: #3a1b1b; color: #ffb4b4; border-color: #6b2c2c; }
+html.admina-dark .admina-ofx-tag[data-tone="warn"]   { background: #37301a; color: #ffd97a; border-color: #6b5a24; }
+html.admina-dark .admina-ofx-tag[data-tone="info"]   { background: #1a2a3e; color: #9ec7f7; border-color: #2c4a6e; }
+html.admina-dark .admina-ofx-tag[data-tone="muted"]  { background: #262c33; color: #aeb6bd; border-color: #3a4149; }
+
+/* mini barre candidatures */
+.admina-ofx-cbar {
+  width: 88px; height: 5px; border-radius: 3px;
+  background: rgba(0, 0, 0, .1); overflow: hidden;
+}
+html.admina-dark .admina-ofx-cbar { background: rgba(255, 255, 255, .16); }
+.admina-ofx-cbar i {
+  display: block; height: 100%; border-radius: 3px;
+  background: #0f7a5e; transition: width .35s ease;
+}
+.admina-ofx-cbar i[data-low="1"] { background: #d93025; }
+.admina-ofx-cbar i[data-mid="1"] { background: #f5b74e; }
+
+/* étoile favori */
+.admina-ofx-fav {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px; border-radius: 8px;
+  border: none; background: transparent; cursor: pointer;
+  color: #b9b9b9; transition: transform .12s ease, color .12s ease;
+  vertical-align: middle;
+}
+.admina-ofx-fav:hover { transform: scale(1.15); color: #e8a400; }
+.admina-ofx-fav[aria-pressed="true"] { color: #e8a400; }
+.admina-ofx-fav:focus-visible { outline: 2px solid #0f7a5e; outline-offset: 1px; }
+
+/* cellule n° : wrapper flex */
+.admina-ofx-num { display: flex; align-items: center; gap: 6px; }
+
+/* ---------- 8. Case à cocher (multi-sélection) ---------- */
+.admina-ofx-chk {
+  width: 17px; height: 17px; accent-color: #0f7a5e; cursor: pointer;
+}
+.admina-ofx-chk:focus-visible { outline: 2px solid #0f7a5e; outline-offset: 2px; }
+
+/* ---------- 9. Barre d'actions groupées (flottante) ---------- */
+.admina-ofx-bulk {
+  position: fixed; left: 50%; bottom: 22px; z-index: 1300;
+  transform: translateX(-50%);
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  padding: 10px 16px; border-radius: 14px;
+  background: #10241d; color: #fff;
+  box-shadow: 0 16px 40px -12px rgba(0, 0, 0, .55);
+  animation: admina-ofx-up .18s ease;
+  max-width: min(94vw, 720px);
+}
+@keyframes admina-ofx-up { from { opacity: 0; transform: translate(-50%, 8px); } }
+.admina-ofx-bulk .admina-ofx-bcount { font-weight: 800; font-size: .82rem; white-space: nowrap; }
+.admina-ofx-bulk button {
+  border: 1px solid rgba(255, 255, 255, .28);
+  background: rgba(255, 255, 255, .08); color: #fff;
+  padding: 6px 12px; border-radius: 9px; font-size: .76rem; font-weight: 600;
+  cursor: pointer; transition: background .12s ease;
+  min-height: 32px;
+}
+.admina-ofx-bulk button:hover { background: rgba(255, 255, 255, .2); }
+.admina-ofx-bulk button:focus-visible { outline: 2px solid #7ee2c3; outline-offset: 2px; }
+.admina-ofx-bulk button[data-act="clear"] { border-color: transparent; background: transparent; opacity: .8; }
+
+/* ---------- 10. Vue cartes ---------- */
+.admina-ofx-cards {
+  display: grid; gap: 14px;
+  grid-template-columns: repeat(auto-fill, minmax(285px, 1fr));
+}
+.admina-ofx-card {
+  position: relative;
+  background: #fff; border: 1px solid #e3e7ea; border-radius: 13px;
+  padding: 14px 16px 12px;
+  display: flex; flex-direction: column; gap: 8px;
+  transition: transform .15s ease, box-shadow .15s ease;
+  cursor: pointer;
+}
+.admina-ofx-card:hover { transform: translateY(-3px); box-shadow: 0 14px 30px -14px rgba(0,0,0,.35); }
+.admina-ofx-card:focus-visible { outline: 2px solid #0f7a5e; outline-offset: 2px; }
+html.admina-dark .admina-ofx-card { background: #1a2029; border-color: #2c3540; }
+.admina-ofx-card .admina-ofx-ctop {
+  display: flex; align-items: center; gap: 8px;
+}
+.admina-ofx-card .admina-ofx-cnum {
+  font-family: ui-monospace, monospace; font-size: .72rem; color: #78848e; font-weight: 700;
+}
+.admina-ofx-card .admina-ofx-cfav { margin-left: auto; }
+.admina-ofx-card h4 {
+  margin: 0; font-size: .95rem; font-weight: 800; color: #1d2b36; line-height: 1.25;
+}
+html.admina-dark .admina-ofx-card h4 { color: #e8eef4; }
+.admina-ofx-card .admina-ofx-cdept { font-size: .72rem; color: #78848e; }
+.admina-ofx-card .admina-ofx-cstats {
+  display: flex; gap: 14px; flex-wrap: wrap; margin-top: 2px;
+}
+.admina-ofx-card .admina-ofx-cstat b { display: block; font-size: .86rem; font-weight: 800; }
+.admina-ofx-card .admina-ofx-cstat span { font-size: .6rem; text-transform: uppercase; letter-spacing: .6px; color: #78848e; }
+.admina-ofx-card .admina-ofx-cfoot {
+  display: flex; align-items: center; gap: 8px; margin-top: 4px; flex-wrap: wrap;
+}
+.admina-ofx-card .admina-ofx-cspacer { flex: 1; }
+.admina-ofx-health {
+  --hp: 0%;
+  width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0;
+  background:
+    radial-gradient(closest-side, #fff 74%, transparent 75% 100%),
+    conic-gradient(var(--hc, #0f7a5e) var(--hp), rgba(0,0,0,.08) 0);
+  display: flex; align-items: center; justify-content: center;
+  font-size: .58rem; font-weight: 800; color: #37474f;
+}
+html.admina-dark .admina-ofx-health { background:
+    radial-gradient(closest-side, #1a2029 74%, transparent 75% 100%),
+    conic-gradient(var(--hc, #0f7a5e) var(--hp), rgba(255,255,255,.12) 0);
+  color: #cfd8dc; }
+
+/* ---------- 11. Menu export ---------- */
+.admina-ofx-menu {
+  position: fixed; z-index: 1400; min-width: 230px;
+  background: #fff; border: 1px solid #dfe3e6; border-radius: 12px;
+  box-shadow: 0 18px 44px -14px rgba(0, 0, 0, .4);
+  padding: 6px; animation: admina-ofx-pop .14s ease;
+}
+@keyframes admina-ofx-pop { from { opacity: 0; transform: translateY(-4px); } }
+.admina-ofx-menu button {
+  display: flex; align-items: center; gap: 10px; width: 100%;
+  border: none; background: transparent; text-align: left;
+  padding: 9px 12px; border-radius: 8px;
+  font-size: .8rem; font-weight: 600; color: #263238; cursor: pointer;
+}
+.admina-ofx-menu button:hover { background: #eef4f1; }
+.admina-ofx-menu button:focus-visible { outline: 2px solid #0f7a5e; outline-offset: -2px; }
+.admina-ofx-menu button small { margin-left: auto; color: #90a4ae; font-size: .62rem; }
+html.admina-dark .admina-ofx-menu { background: #1c2430; border-color: #33404e; }
+html.admina-dark .admina-ofx-menu button { color: #dfe7ef; }
+html.admina-dark .admina-ofx-menu button:hover { background: #263140; }
+html.admina-dark .admina-ofx-menu button small { color: #7d8b99; }
+
+/* ---------- 12. Toasts ---------- */
+.admina-ofx-toasts {
+  position: fixed; right: 18px; bottom: 18px; z-index: 1500;
+  display: flex; flex-direction: column; gap: 8px; align-items: flex-end;
+}
+.admina-ofx-toast {
+  display: flex; align-items: center; gap: 10px;
+  background: #10241d; color: #fff;
+  border-radius: 10px; padding: 10px 14px;
+  font-size: .8rem; font-weight: 600; max-width: 340px;
+  box-shadow: 0 12px 30px -10px rgba(0, 0, 0, .5);
+  animation: admina-ofx-up .18s ease;
+}
+.admina-ofx-toast[data-tone="warn"] { background: #4a3410; }
+.admina-ofx-toast[data-tone="danger"] { background: #4a1414; }
+.admina-ofx-toast button {
+  border: none; background: transparent; color: #9fe3cb;
+  font-weight: 800; cursor: pointer; font-size: .95rem; padding: 0 2px;
+}
+
+/* ---------- 13. Aide raccourcis ---------- */
+.admina-ofx-kbd {
+  display: inline-block; padding: 1px 6px; border-radius: 5px;
+  border: 1px solid #b9c2c9; border-bottom-width: 2px;
+  background: #f4f6f8; font-family: ui-monospace, monospace;
+  font-size: .68rem; color: #37474f;
+}
+html.admina-dark .admina-ofx-kbd { background: #262f3a; color: #cfd8dc; border-color: #45525f; }
+.admina-ofx-help {
+  position: fixed; inset: 0; z-index: 1450;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(10, 18, 15, .45);
+}
+.admina-ofx-help .admina-ofx-hpanel {
+  background: #fff; border-radius: 14px; padding: 22px 26px;
+  width: min(92vw, 420px); box-shadow: 0 24px 60px -18px rgba(0,0,0,.5);
+}
+.admina-ofx-help h3 { margin: 0 0 12px; font-size: 1rem; }
+.admina-ofx-help table { width: 100%; border-collapse: collapse; }
+.admina-ofx-help td { padding: 5px 4px; font-size: .8rem; color: #37474f; }
+.admina-ofx-help td:first-child { width: 90px; }
+html.admina-dark .admina-ofx-help .admina-ofx-hpanel { background: #1a2029; }
+html.admina-dark .admina-ofx-help td { color: #cfd8dc; }
+
+/* ---------- 14. Annonces accessibles ---------- */
+.admina-ofx-live {
+  position: absolute; width: 1px; height: 1px;
+  margin: -1px; padding: 0; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* ---------- 15. Impression ---------- */
+@media print {
+  html.admina-offres .admina-ofx-filters,
+  html.admina-offres .admina-ofx-bulk,
+  html.admina-offres .admina-ofx-toasts,
+  html.admina-offres .admina-ofx-insights { display: none !important; }
+}
+
+/* ---------- 16. Responsive ---------- */
+/* correction flexbox : les ancêtres du contenu peuvent rétrécir (min-width:0)
+   pour que la table scrolle DANS son conteneur au lieu de pousser la page */
+.admina-ofx-mw { min-width: 0 !important; }
+
+/* drawer permanent -> slide-over sur petit écran (comme le TDB, pilier 2) */
+.admina-ofx-burger {
+  display: none; align-items: center; justify-content: center;
+  width: 38px; height: 38px; border-radius: 9px;
+  border: none; background: rgba(15, 122, 94, .12); color: #0d5c46;
+  font-size: 1.15rem; cursor: pointer; flex-shrink: 0;
+}
+.admina-ofx-burger:focus-visible { outline: 2px solid #0f7a5e; outline-offset: 2px; }
+html.admina-dark .admina-ofx-burger { background: rgba(15, 122, 94, .25); color: #7ee2c3; }
+.admina-ofx-backdrop {
+  position: fixed; inset: 0; z-index: 1100;
+  background: rgba(8, 12, 10, .5);
+}
+@media (max-width: 900px) {
+  .admina-ofx-burger { display: inline-flex; }
+  html.admina-offres.admina-ofx-nav-open .MuiDrawer-root { display: block !important; }
+  html.admina-offres.admina-ofx-nav-open .MuiDrawer-docked { transform: none !important; }
+  html.admina-offres .MuiDrawer-docked > .MuiDrawer-paper { width: min(84vw, 290px) !important; }
+  html.admina-offres.admina-ofx-nav-open .MuiDrawer-paper { animation: admina-ofx-slidein .26s ease; }
+  html.admina-offres [data-ofx-content] { margin-left: 0 !important; width: 100% !important; }
+  html.admina-offres:not(.admina-ofx-nav-open) .admina-ofx-backdrop { display: none; }
+}
+@keyframes admina-ofx-slidein { from { transform: translateX(-100%); } to { transform: translateX(0); } }
+
+@media (max-width: 720px) {
+  .admina-ofx-hero { padding: 14px 16px; }
+  .admina-ofx-hero .admina-ofx-hstats { margin-left: 0; width: 100%; justify-content: space-between; gap: 8px; }
+  .admina-ofx-hero .admina-ofx-hstat { text-align: left; }
+  .admina-ofx-cards { grid-template-columns: 1fr; }
+  .admina-ofx-bulk { bottom: 12px; width: 94vw; justify-content: center; }
+}
+
+/* ---------- 17. Mouvement réduit ---------- */
+@media (prefers-reduced-motion: reduce) {
+  html.admina-offres .admina-ofx *,
+  html.admina-offres .admina-ofx *::before,
+  html.admina-offres .admina-ofx *::after {
+    animation: none !important; transition: none !important;
+  }
+}
+
+/* ---------- 18. Scrollbars fines ---------- */
+html.admina-offres .admina-ofx-cards { max-height: none; }
+.admina-ofx-menu { max-height: 60vh; overflow-y: auto; scrollbar-width: thin; }
+
+/* ---------- 19. Vue cartes active : masquer table + pagination ---------- */
+html.admina-ofx-cards-on .MuiTableContainer-root,
+html.admina-ofx-cards-on .MuiTablePagination-root { display: none !important; }
+html.admina-ofx-cards-on .admina-ofx-cards { display: grid; }
+/* mode tableau : les cartes ne doivent JAMAIS être visibles sous la table
+   (correctif M11 : elles apparaissaient en doublon après un aller-retour tableau↔cartes) */
+html.admina-offres:not(.admina-ofx-cards-on) .admina-ofx-cards { display: none !important; }
+
+/* ---------- 19bis. Rangée des 2 KPI supplémentaires ---------- */
+.admina-ofx-extrasrow { display: flex; gap: 16px; flex-wrap: wrap; margin: 14px 0 6px; }
+.admina-ofx-extrasrow .admina-ofx-kpi { flex: 1 1 260px; min-width: 240px; }
+
+/* ---------- 20. KPI supplémentaires en mode sombre ---------- */
+html.admina-dark [data-admina-ofx="kpi-extra"] {
+  background: #1a2029 !important; border-color: #2c3540 !important; box-shadow: none !important;
+}
+html.admina-dark [data-admina-ofx="kpi-extra"] > div:first-child { color: #9fb0bd !important; }
+html.admina-dark [data-admina-ofx="kpi-extra"] > div:nth-child(2) { color: #e8eef4 !important; }
+html.admina-dark .admina-ofx-insights { background: #2b2410; border-color: #5a4a1a; border-left-color: #f5b74e; }
+html.admina-dark .admina-ofx-insights .admina-ofx-ilabel { color: #e8c96a; }
+html.admina-dark .admina-ofx-insights .admina-ofx-chip { background: #1f1a0d; color: #e8d9a0; }
+html.admina-dark .admina-ofx-insights .admina-ofx-chip[data-tone="danger"] { background: #3a1b1b; color: #ffb4b4; border-color: #6b2c2c; }
+html.admina-dark .admina-ofx-insights .admina-ofx-chip[data-tone="warn"] { background: #37301a; color: #ffd97a; border-color: #6b5a24; }
+html.admina-dark .admina-ofx-insights .admina-ofx-chip[data-tone="fav"] { background: #37301a; color: #ffd97a; border-color: #6b5a24; }
+html.admina-dark .admina-ofx-insights .admina-ofx-chip[aria-pressed="true"] { background: #0f7a5e; color: #fff; }

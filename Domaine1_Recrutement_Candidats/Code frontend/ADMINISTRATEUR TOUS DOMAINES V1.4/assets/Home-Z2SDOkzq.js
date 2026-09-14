@@ -1,0 +1,1 @@
+import{C as e,bt as t}from"./Box-CHFloNRC.js";var n=t(),r=e((0,n.jsx)(`path`,{d:`M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z`}),`Home`);export{r as t};
