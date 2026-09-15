@@ -3,12 +3,12 @@
   "role": "Etat de reference partage - Projet Admina-RH",
   "instructions": "Toute session DOIT lire ce fichier avant de travailler et le mettre a jour apres toute publication. Ne jamais modifier etat_production sans deploiement reel correspondant.",
   "etat_production": {
-    "version_label": "V34",
-    "deployment_id": "c1ae4431",
-    "deploye_le": "2026-09-14T16:46:06Z",
+    "version_label": "V35",
+    "deployment_id": "296a8f2e",
+    "deploye_le": "2026-09-15T12:35:00Z",
     "deploye_par": "session principale (web-7c37a8bf)",
-    "commit_github": "ef666db",
-    "coherence": "LIVE = staging_v34 = GitHub main V1.2 (740 fichiers) — V34 : une couleur spécifique par domaine. D1 azur #0284c7, D2 vert bouteille #0d7c66 (inchangé), D3 bordeaux #9f1239 (splash), D4 bleu roi #1d4ed8, D5 framboise #e11d48, D6 ambre #b45309 (inchangé), D7 violet #6d28d9 (inchangé), D8 bleu/rouge (inchangé), D9 teal #0d9488, D10 fuchsia #c026d3, D11 indigo #3730a3. Pill V12 : badges D## et barre active aux couleurs des 31 domaines (184 pages). Splash recolorés (82 pages). Hub : cartes à liseré/badge colorés (31). Couleurs sémantiques (succès/danger/alerte) et chrome plateforme violet préservés.",
+    "commit_github": "da52f976",
+    "coherence": "LIVE = staging_v35 = GitHub main V1.2 (740 fichiers) — V35 : redesign Domaine 6 (Formation & Développement des Compétences), le domaine oublié par V33/V34. Index = Tableau de Bord complet (8 KPIs, cycle Planifier·Organiser·Évaluer·Capitaliser, classement heures/département, jauges évaluation & budget, 19 cartes modules, 6 rôles). 19 écrans : sidebars regroupées en 6 thèmes (Pilotage / 1·Planifier / 2·Organiser / 3·Évaluer / 4·Capitaliser / Échanges), zéro mention classeur/feuille/onglet Excel, identité ambre #b45309 conservée, splash V14_D6 + pill V12 V34 conservés. Pré-vol anti-race OK, déploiement = 20 fichiers (724 dédupliqués). NB : restauration préalable 64967223 (production cassée par déploiement non coordonné 1e525f3e à 11:39Z — sous-pages 404) ; feature D1 concurrente (admina-basecand/pipeline) préservée.",
     "baselines_md5": {
       "note": "md5 du HTML retourne par curl avec cache-buster (?cb=timestamp)",
       "index.html (hub)": "a875db394ac3dba0d42813db0e795224",
@@ -18,19 +18,12 @@
       "Domaine8_Relations_Sociales_Syndicats/": "e5bb86240e3ea9480ff5fb1a36505110",
       "Domaine9_Sante_Securite_Conditions_Travail/": "097adb7f0db0d59a3ee37aedd02a02cd",
       "Domaine10_Talents_Mobilite_Interne/": "bdf211197e405f9c685157924a1d43dd",
-      "Domaine11_Droit_Travail_Conformite/": "e081da183fc4af31296a067fec0ebc2c"
+      "Domaine11_Droit_Travail_Conformite/": "e081da183fc4af31296a067fec0ebc2c",
+      "Domaine6_Formation_Developpement_Competences/": "TDB nouveau (voir GitHub V1.2 da52f976)"
     },
     "note_conciliation": "V34 = révision des couleurs demandée par l'utilisateur (« chaque domaine doit avoir une couleur spécifique ») : rotations de teinte S/L-préservées sur 121 pages (D1/D4/D5/D9/D10/D11), presets conformes conservés (D2/D6/D7/D8 + D3 prune), pill et hub expriment la palette des 31 domaines. Pré-vol anti-race 10/10 vert, vérification live 202/202 + 11 marqueurs, push GitHub 185 fichiers."
   },
-  "verrous": [
-    {
-      "domaine": "PRODUCTION (restauration) + Domaine6_Formation_Developpement_Competences",
-      "session": "web-7c37a8bf (Super Z principal)",
-      "acquis_le": "2026-09-15T12:00:00Z",
-      "expire_le": "2026-09-15T14:00:00Z",
-      "perimetre": "Site complet admina-rh (restauration V34) puis 21 pages D6 (redesign sidebar + TDB)"
-    }
-  ],
+  "verrous": [],
   "regle_verrous": {
     "format": {
       "domaine": "ex: Domaine11_Droit_Travail_Conformite",
@@ -43,6 +36,11 @@
     "regle": "Verrou expire = libere. Ne jamais toucher le perimetre d'un verrou actif d'une autre session."
   },
   "historique_recent": [
+    {
+      "date": "2026-09-15T12:35:00Z",
+      "event": "V35 deployee en production (296a8f2e) : redesign Domaine 6 oublie par V33/V34 — TDB complet + sidebars groupees (6 themes), zero vocabulaire classeur. Restauration prealable 64967223 (production cassee par 1e525f3e 11:39Z, deploiement non coordonne avec commit main force-push 5a359c4b disparu ; feature D1 basecand/pipeline preservee). GitHub aligne (da52f976, 20 fichiers).",
+      "par": "session principale (web-7c37a8bf)"
+    },
     {
       "date": "2026-09-15T12:00:00Z",
       "event": "ALERTE + restauration : 2 deploiements production non coordones detects (4926c303 08:37Z, 1e525f3e 11:39Z — commit main force-push puis disparu 5a359c4b). Etat 1e525f3e = site casse (indexes domaines + sous-pages 404 vers fallback SPA). Session web-7c37a8bf prend le verrou : reconstruction staging depuis GitHub V1.2 (= V34, 740 fichiers) puis redeploy production, ensuite redesign Domaine6 (TDB + sidebars groupees, zero mention classeur) en V35.",
@@ -97,11 +95,6 @@
       "date": "2026-09-14T05:31Z",
       "event": "V31 deploye en production (e3c4e47f) - restauration apres ecrasements concurrents",
       "par": "session principale"
-    },
-    {
-      "date": "2026-09-13T09:23 a 09:49Z",
-      "event": "INCIDENT : 4 deploiements concurrents d'un staging perime (f7bd8040, cc36c110, bb491ce4, a0e16069) ont ecrase la production",
-      "par": "session concurrente"
     }
   ],
   "branches_preview": [
