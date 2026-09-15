@@ -22,7 +22,15 @@
     },
     "note_conciliation": "V34 = révision des couleurs demandée par l'utilisateur (« chaque domaine doit avoir une couleur spécifique ») : rotations de teinte S/L-préservées sur 121 pages (D1/D4/D5/D9/D10/D11), presets conformes conservés (D2/D6/D7/D8 + D3 prune), pill et hub expriment la palette des 31 domaines. Pré-vol anti-race 10/10 vert, vérification live 202/202 + 11 marqueurs, push GitHub 185 fichiers."
   },
-  "verrous": [],
+  "verrous": [
+    {
+      "domaine": "PRODUCTION (restauration) + Domaine6_Formation_Developpement_Competences",
+      "session": "web-7c37a8bf (Super Z principal)",
+      "acquis_le": "2026-09-15T12:00:00Z",
+      "expire_le": "2026-09-15T14:00:00Z",
+      "perimetre": "Site complet admina-rh (restauration V34) puis 21 pages D6 (redesign sidebar + TDB)"
+    }
+  ],
   "regle_verrous": {
     "format": {
       "domaine": "ex: Domaine11_Droit_Travail_Conformite",
@@ -35,6 +43,11 @@
     "regle": "Verrou expire = libere. Ne jamais toucher le perimetre d'un verrou actif d'une autre session."
   },
   "historique_recent": [
+    {
+      "date": "2026-09-15T12:00:00Z",
+      "event": "ALERTE + restauration : 2 deploiements production non coordones detects (4926c303 08:37Z, 1e525f3e 11:39Z — commit main force-push puis disparu 5a359c4b). Etat 1e525f3e = site casse (indexes domaines + sous-pages 404 vers fallback SPA). Session web-7c37a8bf prend le verrou : reconstruction staging depuis GitHub V1.2 (= V34, 740 fichiers) puis redeploy production, ensuite redesign Domaine6 (TDB + sidebars groupees, zero mention classeur) en V35.",
+      "par": "session principale (web-7c37a8bf)"
+    },
     {
       "date": "2026-09-14T16:46:06Z",
       "event": "V34 deployee en production (c1ae4431, pre-vol 10/10 vert) : une couleur spécifique par domaine — D1 azur, D4 bleu roi, D5 framboise, D9 teal, D10 fuchsia, D11 indigo ; pill badges colorés (184 pages), splash recolorés (82), hub cartes colorées. GitHub main aligne (ef666db, delta 185 fichiers)",
