@@ -3,25 +3,26 @@
   "role": "Etat de reference partage - Projet Admina-RH",
   "instructions": "Toute session DOIT lire ce fichier avant de travailler et le mettre a jour apres toute publication. Ne jamais modifier etat_production sans deploiement reel correspondant.",
   "etat_production": {
-    "version_label": "V35",
-    "deployment_id": "296a8f2e",
-    "deploye_le": "2026-09-15T12:35:00Z",
+    "version_label": "V36",
+    "deployment_id": "53785b2b",
+    "deploye_le": "2026-09-15T18:31:12Z",
     "deploye_par": "session principale (web-7c37a8bf)",
-    "commit_github": "da52f976",
-    "coherence": "LIVE = staging_v35 = GitHub main V1.2 (740 fichiers) — V35 : redesign Domaine 6 (Formation & Développement des Compétences), le domaine oublié par V33/V34. Index = Tableau de Bord complet (8 KPIs, cycle Planifier·Organiser·Évaluer·Capitaliser, classement heures/département, jauges évaluation & budget, 19 cartes modules, 6 rôles). 19 écrans : sidebars regroupées en 6 thèmes (Pilotage / 1·Planifier / 2·Organiser / 3·Évaluer / 4·Capitaliser / Échanges), zéro mention classeur/feuille/onglet Excel, identité ambre #b45309 conservée, splash V14_D6 + pill V12 V34 conservés. Pré-vol anti-race OK, déploiement = 20 fichiers (724 dédupliqués). NB : restauration préalable 64967223 (production cassée par déploiement non coordonné 1e525f3e à 11:39Z — sous-pages 404) ; feature D1 concurrente (admina-basecand/pipeline) préservée.",
+    "commit_github": "38cbbd7d",
+    "coherence": "LIVE = staging_v36 = GitHub main V1.2 (744 fichiers dont 8 assets D1 de la session parall\u00e8le) \u2014 V36 : (a) restauration du Domaine 6 r\u00e9gress\u00e9 en production par 2 d\u00e9ploiements non coordonn\u00e9s (1ff42e4b 13:43Z, 1af77514 13:58Z \u2014 20 pages D6 revenue \u00e0 l\u2019\u00e9tat pr\u00e9-V35) ; (b) favicon D6 align\u00e9 sur l\u2019\u00e9clair g\u00e9n\u00e9ral /favicon.svg sur les 20 pages (pr\u00e9c\u00e9dent V23c/D8, question utilisateur \u00ab pourquoi le favicon est different \u00bb) ; favicon-d6.svg conserv\u00e9 sur disque non r\u00e9f\u00e9renc\u00e9. TDB V35 (8 KPIs, 19 modules) + sidebars group\u00e9es intacts. Feature D1 de la session parall\u00e8le PR\u00c9SERV\u00c9E telle quelle (index ceb09149 + assets entretiens/evaluations/verifications/selections) \u2014 NON push\u00e9e sur GitHub (p\u00e9rim\u00e8tre autre session, divergence volontairement document\u00e9e).",
     "baselines_md5": {
       "note": "md5 du HTML retourne par curl avec cache-buster (?cb=timestamp)",
       "index.html (hub)": "a875db394ac3dba0d42813db0e795224",
       "favicon.svg": "7e840862161341271697daa99a40d76b",
-      "Domaine1_Recrutement_Candidats/": "b4955c38b185196c0af098d4bac0496f",
+      "Domaine1_Recrutement_Candidats/": "ceb09149fdf50777892781c691a06de1 (feature session parall\u00e8le, non sur GitHub)",
       "Domaine5_Conges_Absences_Presence/": "1f8b86d9f8989b94ffa0bef0c95c331b",
       "Domaine8_Relations_Sociales_Syndicats/": "e5bb86240e3ea9480ff5fb1a36505110",
       "Domaine9_Sante_Securite_Conditions_Travail/": "097adb7f0db0d59a3ee37aedd02a02cd",
       "Domaine10_Talents_Mobilite_Interne/": "bdf211197e405f9c685157924a1d43dd",
       "Domaine11_Droit_Travail_Conformite/": "e081da183fc4af31296a067fec0ebc2c",
-      "Domaine6_Formation_Developpement_Competences/": "TDB nouveau (voir GitHub V1.2 da52f976)"
+      "Domaine6_Formation_Developpement_Competences/": "a607173f232901cd631758cbe605b245 (TDB V36 = V35 + favicon g\u00e9n\u00e9ral)",
+      "Domaine6_Formation_Developpement_Competences/catalogue-formations/": "676d8725008ba826ddfbb9e83db3ffc4"
     },
-    "note_conciliation": "V34 = révision des couleurs demandée par l'utilisateur (« chaque domaine doit avoir une couleur spécifique ») : rotations de teinte S/L-préservées sur 121 pages (D1/D4/D5/D9/D10/D11), presets conformes conservés (D2/D6/D7/D8 + D3 prune), pill et hub expriment la palette des 31 domaines. Pré-vol anti-race 10/10 vert, vérification live 202/202 + 11 marqueurs, push GitHub 185 fichiers."
+    "note_conciliation": "V34 = r\u00e9vision des couleurs demand\u00e9e par l'utilisateur (\u00ab chaque domaine doit avoir une couleur sp\u00e9cifique \u00bb) : rotations de teinte S/L-pr\u00e9serv\u00e9es sur 121 pages (D1/D4/D5/D9/D10/D11), presets conformes conserv\u00e9s (D2/D6/D7/D8 + D3 prune), pill et hub expriment la palette des 31 domaines. Pr\u00e9-vol anti-race 10/10 vert, v\u00e9rification live 202/202 + 11 marqueurs, push GitHub 185 fichiers."
   },
   "verrous": [],
   "regle_verrous": {
@@ -37,18 +38,23 @@
   },
   "historique_recent": [
     {
+      "date": "2026-09-15T18:35:00Z",
+      "event": "V36 deployee (53785b2b) : reponse a \u00ab pourquoi le favicon est different \u00bb \u2014 le D6 etait le seul domaine avec un favicon dedie ambre (favicon-d6.svg, heritage V18) ; aligne sur l\u2019eclair general /favicon.svg (precedent V23c/D8). Au passage, regression D6 detectee et restauree : 1ff42e4b/1af77514 (deploiements non coordonnes, 13:43Z/13:58Z) avaient remis les 20 pages D6 pre-V35 (index \u00ab EN PREPARATION \u00bb, vieilles sidebars, vocabulaire classeur). GitHub aligne (38cbbd7d, 20 fichiers). D1 (index ceb09149 + 8 assets) = travail de la session parallele, preserve en production mais non pushe sur GitHub.",
+      "par": "session principale (web-7c37a8bf)"
+    },
+    {
       "date": "2026-09-15T12:35:00Z",
-      "event": "V35 deployee en production (296a8f2e) : redesign Domaine 6 oublie par V33/V34 — TDB complet + sidebars groupees (6 themes), zero vocabulaire classeur. Restauration prealable 64967223 (production cassee par 1e525f3e 11:39Z, deploiement non coordonne avec commit main force-push 5a359c4b disparu ; feature D1 basecand/pipeline preservee). GitHub aligne (da52f976, 20 fichiers).",
+      "event": "V35 deployee en production (296a8f2e) : redesign Domaine 6 oublie par V33/V34 \u2014 TDB complet + sidebars groupees (6 themes), zero vocabulaire classeur. Restauration prealable 64967223 (production cassee par 1e525f3e 11:39Z, deploiement non coordonne avec commit main force-push 5a359c4b disparu ; feature D1 basecand/pipeline preservee). GitHub aligne (da52f976, 20 fichiers).",
       "par": "session principale (web-7c37a8bf)"
     },
     {
       "date": "2026-09-15T12:00:00Z",
-      "event": "ALERTE + restauration : 2 deploiements production non coordones detects (4926c303 08:37Z, 1e525f3e 11:39Z — commit main force-push puis disparu 5a359c4b). Etat 1e525f3e = site casse (indexes domaines + sous-pages 404 vers fallback SPA). Session web-7c37a8bf prend le verrou : reconstruction staging depuis GitHub V1.2 (= V34, 740 fichiers) puis redeploy production, ensuite redesign Domaine6 (TDB + sidebars groupees, zero mention classeur) en V35.",
+      "event": "ALERTE + restauration : 2 deploiements production non coordones detects (4926c303 08:37Z, 1e525f3e 11:39Z \u2014 commit main force-push puis disparu 5a359c4b). Etat 1e525f3e = site casse (indexes domaines + sous-pages 404 vers fallback SPA). Session web-7c37a8bf prend le verrou : reconstruction staging depuis GitHub V1.2 (= V34, 740 fichiers) puis redeploy production, ensuite redesign Domaine6 (TDB + sidebars groupees, zero mention classeur) en V35.",
       "par": "session principale (web-7c37a8bf)"
     },
     {
       "date": "2026-09-14T16:46:06Z",
-      "event": "V34 deployee en production (c1ae4431, pre-vol 10/10 vert) : une couleur spécifique par domaine — D1 azur, D4 bleu roi, D5 framboise, D9 teal, D10 fuchsia, D11 indigo ; pill badges colorés (184 pages), splash recolorés (82), hub cartes colorées. GitHub main aligne (ef666db, delta 185 fichiers)",
+      "event": "V34 deployee en production (c1ae4431, pre-vol 10/10 vert) : une couleur sp\u00e9cifique par domaine \u2014 D1 azur, D4 bleu roi, D5 framboise, D9 teal, D10 fuchsia, D11 indigo ; pill badges color\u00e9s (184 pages), splash recolor\u00e9s (82), hub cartes color\u00e9es. GitHub main aligne (ef666db, delta 185 fichiers)",
       "par": "session principale (web-7c37a8bf)"
     },
     {
@@ -63,37 +69,12 @@
     },
     {
       "date": "2026-09-14T08:00Z",
-      "event": "V32 deployee en production (decae39e) : promotion D11 autorisee par l'utilisateur — 21 ecrans + 8 documents + ADEM 11 domaines actifs (163 sidebars + hub patches). Verification live 29/29 OK. GitHub main aligne (697ef98a, delta 193 fichiers)",
+      "event": "V32 deployee en production (decae39e) : promotion D11 autorisee par l'utilisateur \u2014 21 ecrans + 8 documents + ADEM 11 domaines actifs (163 sidebars + hub patches). Verification live 29/29 OK. GitHub main aligne (697ef98a, delta 193 fichiers)",
       "par": "session principale"
     },
     {
       "date": "2026-09-14T08:30Z",
-      "event": "D11 Droit Travail & Conformite construit (21 ecrans + 8 documents depuis les sources GitHub) et deploye en PREVIEW staging-principal (5e0621cd) — production intacte, en attente de validation",
-      "par": "session principale"
-    },
-    {
-      "date": "2026-09-14T06:40Z",
-      "event": "Export V1.4 : snapshot complet de la production (720 fichiers + _EXPORT_INFO.md) publie sur GitHub sous Domaine1_Recrutement_Candidats/Code frontend/ADMINISTRATEUR TOUS DOMAINES V1.4 (commit 9328d13) — 720/720 blob-sha verifies",
-      "par": "session principale"
-    },
-    {
-      "date": "2026-09-14T06:08Z",
-      "event": "Test preview staging-principal (28b78292) : production inchangee (e3c4e47f), pre-vol vert — dispositif de coordination valide",
-      "par": "session principale"
-    },
-    {
-      "date": "2026-09-14T06:10Z",
-      "event": "Protocole de coordination cree (ce fichier + PROTOCOL_DEPLOIEMENT.md)",
-      "par": "session principale"
-    },
-    {
-      "date": "2026-09-14T06:05Z",
-      "event": "Push GitHub 3d17c746 - delta D1 Couts (6 fichiers), coherence triple complete",
-      "par": "session principale"
-    },
-    {
-      "date": "2026-09-14T05:31Z",
-      "event": "V31 deploye en production (e3c4e47f) - restauration apres ecrasements concurrents",
+      "event": "D11 Droit Travail & Conformite construit (21 ecrans + 8 documents depuis les sources GitHub) et deploye en PREVIEW staging-principal (5e0621cd) \u2014 production intacte, en attente de validation",
       "par": "session principale"
     }
   ],
@@ -103,24 +84,24 @@
       "session": "session principale (web-7c37a8bf)",
       "deployment_id": "5fc57d6b",
       "date": "2026-09-14T09:50Z",
-      "note": "[SUPERSEDÉE] V33 promue en production le 2026-09-14 (292569b0) — preview conservée pour référence"
+      "note": "[SUPERSED\u00c9E] V33 promue en production le 2026-09-14 (292569b0) \u2014 preview conserv\u00e9e pour r\u00e9f\u00e9rence"
     }
   ],
   "historique": [
     {
       "quand": "2026-09-14T12:00:00Z",
-      "quoi": "promotion production V33 (292569b0) par la session du même lineage que la preview V33",
-      "constat": "les 3 demandes utilisateur (de-classeur, groupes, interfaces) implementees ; pré-vol anti-race 141/141 ; live vérifié 141/141 md5 + spot 12/12 + navigateur"
+      "quoi": "promotion production V33 (292569b0) par la session du m\u00eame lineage que la preview V33",
+      "constat": "les 3 demandes utilisateur (de-classeur, groupes, interfaces) implementees ; pr\u00e9-vol anti-race 141/141 ; live v\u00e9rifi\u00e9 141/141 md5 + spot 12/12 + navigateur"
     },
     {
       "quand": "2026-09-14T08:29Z",
-      "quoi": "déploiement production f826d7bb (autre session, sans push GitHub)",
-      "constat": "contenu = V32 identique (no-op), concilié par session principale à 09:0xZ"
+      "quoi": "d\u00e9ploiement production f826d7bb (autre session, sans push GitHub)",
+      "constat": "contenu = V32 identique (no-op), concili\u00e9 par session principale \u00e0 09:0xZ"
     },
     {
       "quand": "2026-09-14T09:5xZ",
-      "quoi": "preview 5fc57d6b staging-principal — V33 refonte sidebar ADEM",
-      "details": "demande utilisateur : 1) supprimer « Onglets du classeur », 2) regrouper les onglets par themes, 3) suggestions d'interface par onglet. 160 fichiers modifies, 0 residu classeur, checks 21/21 D11 OK"
+      "quoi": "preview 5fc57d6b staging-principal \u2014 V33 refonte sidebar ADEM",
+      "details": "demande utilisateur : 1) supprimer \u00ab Onglets du classeur \u00bb, 2) regrouper les onglets par themes, 3) suggestions d'interface par onglet. 160 fichiers modifies, 0 residu classeur, checks 21/21 D11 OK"
     }
   ]
 }
