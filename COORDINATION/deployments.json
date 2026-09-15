@@ -3,24 +3,24 @@
   "role": "Etat de reference partage - Projet Admina-RH",
   "instructions": "Toute session DOIT lire ce fichier avant de travailler et le mettre a jour apres toute publication. Ne jamais modifier etat_production sans deploiement reel correspondant.",
   "etat_production": {
-    "version_label": "V36",
-    "deployment_id": "53785b2b",
-    "deploye_le": "2026-09-15T18:31:12Z",
+    "version_label": "V36b",
+    "deployment_id": "d10b9361",
+    "deploye_le": "2026-09-15T21:15:00Z",
     "deploye_par": "session principale (web-7c37a8bf)",
-    "commit_github": "38cbbd7d",
-    "coherence": "LIVE = staging_v36 = GitHub main V1.2 (744 fichiers dont 8 assets D1 de la session parall\u00e8le) \u2014 V36 : (a) restauration du Domaine 6 r\u00e9gress\u00e9 en production par 2 d\u00e9ploiements non coordonn\u00e9s (1ff42e4b 13:43Z, 1af77514 13:58Z \u2014 20 pages D6 revenue \u00e0 l\u2019\u00e9tat pr\u00e9-V35) ; (b) favicon D6 align\u00e9 sur l\u2019\u00e9clair g\u00e9n\u00e9ral /favicon.svg sur les 20 pages (pr\u00e9c\u00e9dent V23c/D8, question utilisateur \u00ab pourquoi le favicon est different \u00bb) ; favicon-d6.svg conserv\u00e9 sur disque non r\u00e9f\u00e9renc\u00e9. TDB V35 (8 KPIs, 19 modules) + sidebars group\u00e9es intacts. Feature D1 de la session parall\u00e8le PR\u00c9SERV\u00c9E telle quelle (index ceb09149 + assets entretiens/evaluations/verifications/selections) \u2014 NON push\u00e9e sur GitHub (p\u00e9rim\u00e8tre autre session, divergence volontairement document\u00e9e).",
+    "commit_github": "38cbbd7d (+ coordination)",
+    "coherence": "LIVE = staging_v36 = GitHub main V1.2 pour le p\u00e9rim\u00e8tre D6/hub/domaines \u2014 V36b = 2e restauration du Domaine 6 apr\u00e8s une NOUVELLE r\u00e9gression production par la session parall\u00e8le (e04df293 19:06Z, apr\u00e8s previews 18:50/18:57/19:04) : 20 pages D6 revenues pr\u00e9-V35 (index \u00ab EN PR\u00c9PARATION \u00bb 05472954) ET des sous-pages ABSENTES du d\u00e9ploiement (D6 catalogue, D8 conflits\u2026 \u2192 fallback hub). Favicon D6 = \u00e9clair g\u00e9n\u00e9ral /favicon.svg sur les 20 pages (uniformit\u00e9 31 domaines, pr\u00e9c\u00e9dent V23c/D8). Feature D1 session parall\u00e8le PRESERV\u00c9E (index 9b6df960 + 12 assets). ATTENTION SESSIONS PARALL\u00c8LES : vos builds contiennent un D6 obsol\u00e8te (pr\u00e9-V35) et un manifeste incomplet \u2014 resynchronisez votre baseline depuis GitHub main AVANT tout d\u00e9ploiement production.",
     "baselines_md5": {
       "note": "md5 du HTML retourne par curl avec cache-buster (?cb=timestamp)",
       "index.html (hub)": "a875db394ac3dba0d42813db0e795224",
       "favicon.svg": "7e840862161341271697daa99a40d76b",
-      "Domaine1_Recrutement_Candidats/": "ceb09149fdf50777892781c691a06de1 (feature session parall\u00e8le, non sur GitHub)",
+      "Domaine1_Recrutement_Candidats/": "9b6df960e5f79d3ad7e8aa24781a903b (feature session parall\u00e8le, non sur GitHub)",
       "Domaine5_Conges_Absences_Presence/": "1f8b86d9f8989b94ffa0bef0c95c331b",
       "Domaine8_Relations_Sociales_Syndicats/": "e5bb86240e3ea9480ff5fb1a36505110",
       "Domaine9_Sante_Securite_Conditions_Travail/": "097adb7f0db0d59a3ee37aedd02a02cd",
       "Domaine10_Talents_Mobilite_Interne/": "bdf211197e405f9c685157924a1d43dd",
       "Domaine11_Droit_Travail_Conformite/": "e081da183fc4af31296a067fec0ebc2c",
-      "Domaine6_Formation_Developpement_Competences/": "a607173f232901cd631758cbe605b245 (TDB V36 = V35 + favicon g\u00e9n\u00e9ral)",
-      "Domaine6_Formation_Developpement_Competences/catalogue-formations/": "676d8725008ba826ddfbb9e83db3ffc4"
+      "Domaine6_Formation_Developpement_Competences/": "a607173f (TDB + favicon \u00e9clair g\u00e9n\u00e9ral)",
+      "Domaine6_Formation_Developpement_Competences/catalogue-formations/": "676d8725 (rendu \u00e0 nouveau, \u00e9tait fallback hub)"
     },
     "note_conciliation": "V34 = r\u00e9vision des couleurs demand\u00e9e par l'utilisateur (\u00ab chaque domaine doit avoir une couleur sp\u00e9cifique \u00bb) : rotations de teinte S/L-pr\u00e9serv\u00e9es sur 121 pages (D1/D4/D5/D9/D10/D11), presets conformes conserv\u00e9s (D2/D6/D7/D8 + D3 prune), pill et hub expriment la palette des 31 domaines. Pr\u00e9-vol anti-race 10/10 vert, v\u00e9rification live 202/202 + 11 marqueurs, push GitHub 185 fichiers."
   },
@@ -37,6 +37,11 @@
     "regle": "Verrou expire = libere. Ne jamais toucher le perimetre d'un verrou actif d'une autre session."
   },
   "historique_recent": [
+    {
+      "date": "2026-09-15T21:15:00Z",
+      "event": "V36b (d10b9361) : 2e restauration D6 apr\u00e8s nouvelle regression e04df293 (19:06Z, session parallele) \u2014 20 pages D6 pre-V35 remises + sous-pages manquantes (fallback hub) rendues. Favicon D6 = eclair general sur 20/20 pages (question utilisateur \u00ab pourquoi le favicon est different \u00bb + demande \u00ab refais le deploiement avec le pavillon eclair \u00bb). D1 preserve (9b6df960, 3e iteration du jour de la session parallele, non pushee sur GitHub). Alerte coordination : baseline D6 obsol\u00e8te dans les builds de la session parallele.",
+      "par": "session principale (web-7c37a8bf)"
+    },
     {
       "date": "2026-09-15T18:35:00Z",
       "event": "V36 deployee (53785b2b) : reponse a \u00ab pourquoi le favicon est different \u00bb \u2014 le D6 etait le seul domaine avec un favicon dedie ambre (favicon-d6.svg, heritage V18) ; aligne sur l\u2019eclair general /favicon.svg (precedent V23c/D8). Au passage, regression D6 detectee et restauree : 1ff42e4b/1af77514 (deploiements non coordonnes, 13:43Z/13:58Z) avaient remis les 20 pages D6 pre-V35 (index \u00ab EN PREPARATION \u00bb, vieilles sidebars, vocabulaire classeur). GitHub aligne (38cbbd7d, 20 fichiers). D1 (index ceb09149 + 8 assets) = travail de la session parallele, preserve en production mais non pushe sur GitHub.",
