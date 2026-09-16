@@ -1,5 +1,5 @@
 {
-  "version": "V39",
+  "version": "V40",
   "role": "Etat de reference partage - Projet Admina-RH",
   "instructions": "Toute session DOIT lire ce fichier avant de travailler et le mettre a jour apres toute publication. Ne jamais modifier etat_production sans deploiement reel correspondant.",
   "etat_production": {
@@ -115,6 +115,6 @@
       "details": "demande utilisateur : 1) supprimer « Onglets du classeur », 2) regrouper les onglets par themes, 3) suggestions d'interface par onglet. 160 fichiers modifies, 0 residu classeur, checks 21/21 D11 OK"
     }
   ],
-  "updated": "2026-09-16T14:52Z",
-  "note": "V39 (admina-rh deploy 0cdda4e6, production 14:50Z) : sidebar D1 pleine hauteur GARANTIE (paper fixed top/bottom 0, 100vh + 100dvh, min-height, max-height:none) + cache-bust ?v=39 sur admina-sidebars.css/js dans index D1 + 31 routes. Aucun autre domaine touché. Baselines : D1 index a6adab67, sidebars.css fc2c90d3, D6 TDB a607173f, hub a875db39. NE PAS reconstruire D1 depuis un staging antérieur à V39."
+  "updated": "2026-09-16T15:20Z",
+  "note": "V40 (admina-rh deploy 613fd28c, production 15:1xZ) : colonne latérale D1 sur TOUTE la hauteur du document — canvas dégradé horizontal #1a1a2e 0-260px (couleur exacte du paper) sous le paper fixe V39 ; exclue <820px et en thème sombre ; cache-bust ?v=40 sur admina-sidebars.css/js (index D1 + 31 routes). Baselines : D1 index d67eca3a, sidebars.css da1f8158, D6 TDB a607173f, hub a875db39. NE PAS reconstruire D1 depuis un staging antérieur à V40."
 }

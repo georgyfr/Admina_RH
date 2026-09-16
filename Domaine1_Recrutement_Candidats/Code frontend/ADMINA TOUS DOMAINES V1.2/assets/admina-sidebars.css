@@ -62,3 +62,15 @@ span.adm-sb-head:hover{background:rgba(255,255,255,.05)}
 @supports (height:100dvh){
   .MuiDrawer-paper{height:100dvh !important;min-height:100dvh !important}
 }
+
+/* ============================================================
+   V40 — Colonne latérale sur TOUTE la hauteur du site : le fond
+   sombre (#1a1a2e, couleur exacte du paper) se prolonge jusqu'en
+   bas du document via le canevas (dégradé horizontal 260px),
+   sous le paper fixe pleine hauteur (V39). Désactivé <820px
+   (sidebar masquée) et en thème sombre (canevas déjà sombre).
+   ============================================================ */
+@media (min-width:820px){
+  html:not(.adem7-dark):not(.a14-dark):not(.admina-dark) body{
+    background-image:linear-gradient(to right,#1a1a2e 0,#1a1a2e 260px,#f5f6fa 260px)}
+}
