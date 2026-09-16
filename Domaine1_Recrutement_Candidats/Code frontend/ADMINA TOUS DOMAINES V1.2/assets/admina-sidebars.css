@@ -50,3 +50,15 @@ span.adm-sb-head:hover{background:rgba(255,255,255,.05)}
 .adm-rubnav-a:hover{background:#0D7C66;color:#fff;border-color:#0D7C66;transform:translateY(-1px)}
 .adm-rubnav-on,.adm-rubnav-on:hover{background:#0D7C66;color:#fff;border-color:#0D7C66;transform:none;cursor:default}
 @media (max-width:600px){.adm-rubnav-a{font-size:.74rem;padding:5px 10px}.adm-rubnav{gap:6px}}
+
+/* ============================================================
+   V39 — Barre latérale TOUJOURS pleine hauteur (comme les
+   autres domaines) : le paper est verrouillé fixed, collé aux
+   bords verticaux, hauteur = viewport (vh + dvh mobile).
+   Additif-sur-natif, idempotent, 0 octet natif modifié.
+   ============================================================ */
+.MuiDrawer-paper{position:fixed !important;top:0 !important;bottom:0 !important;left:0 !important;
+  height:100vh !important;min-height:100vh !important;max-height:none !important}
+@supports (height:100dvh){
+  .MuiDrawer-paper{height:100dvh !important;min-height:100dvh !important}
+}

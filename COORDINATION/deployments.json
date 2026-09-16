@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": "V39",
   "role": "Etat de reference partage - Projet Admina-RH",
   "instructions": "Toute session DOIT lire ce fichier avant de travailler et le mettre a jour apres toute publication. Ne jamais modifier etat_production sans deploiement reel correspondant.",
   "etat_production": {
@@ -8,7 +8,7 @@
     "deploye_le": "2026-09-16T14:20:00Z",
     "deploye_par": "session principale (web-7c37a8bf)",
     "commit_github": "428444b1",
-    "coherence": "LIVE = staging_v38 = GitHub main V1.2 \u2014 V38 : barre lat\u00e9rale D1 ergonomique et rubrique ANALYTICS & CONFIGURATION interactive (module additif admina-sidebars.css/js, 0 octet natif modifi\u00e9) : ADMINA_DOMAIN_ID=1 (l\u2019index D1 marquait le Domaine 2 \u00ab ACTUEL \u00bb), groupes repliables avec m\u00e9moire, item actif d\u00e9pli\u00e9 + amen\u00e9 dans le champ (auto-scroll), Tableau de Bord marqu\u00e9 sur la racine, scrollbar visible + d\u00e9grad\u00e9 de continuit\u00e9, breadcrumbs corrig\u00e9s (KPIs & Objectifs RH, Demandes), bandeau de navigation crois\u00e9e sur les 4 pages Analytics. 31 routes profondes D1 d\u00e9sormais servies en fichiers r\u00e9els (le fallback SPA de Pages renvoyait le hub sur cache MISS ; les URLs sans slash 308 vers la version slash). 97 contr\u00f4les des 4 pages test\u00e9s : tous r\u00e9actifs. Tests locaux 17/17 + live 16/16. D1/D6/D8/D5/D11 et les 12 assets de la session parall\u00e8le intacts. NOTE : ne pas reconstruire D1 depuis un ancien staging \u2014 l\u2019index D1 r\u00e9f\u00e9rence d\u00e9sormais admina-sidebars.css/js et les 31 r\u00e9pertoires de routes.",
+    "coherence": "LIVE = staging_v38 = GitHub main V1.2 — V38 : barre latérale D1 ergonomique et rubrique ANALYTICS & CONFIGURATION interactive (module additif admina-sidebars.css/js, 0 octet natif modifié) : ADMINA_DOMAIN_ID=1 (l’index D1 marquait le Domaine 2 « ACTUEL »), groupes repliables avec mémoire, item actif déplié + amené dans le champ (auto-scroll), Tableau de Bord marqué sur la racine, scrollbar visible + dégradé de continuité, breadcrumbs corrigés (KPIs & Objectifs RH, Demandes), bandeau de navigation croisée sur les 4 pages Analytics. 31 routes profondes D1 désormais servies en fichiers réels (le fallback SPA de Pages renvoyait le hub sur cache MISS ; les URLs sans slash 308 vers la version slash). 97 contrôles des 4 pages testés : tous réactifs. Tests locaux 17/17 + live 16/16. D1/D6/D8/D5/D11 et les 12 assets de la session parallèle intacts. NOTE : ne pas reconstruire D1 depuis un ancien staging — l’index D1 référence désormais admina-sidebars.css/js et les 31 répertoires de routes.",
     "baselines_md5": {
       "note": "md5 du HTML retourne par curl avec cache-buster (?cb=timestamp)",
       "index.html (hub)": "a875db394ac3dba0d42813db0e795224",
@@ -19,11 +19,11 @@
       "Domaine9_Sante_Securite_Conditions_Travail/": "097adb7f0db0d59a3ee37aedd02a02cd",
       "Domaine10_Talents_Mobilite_Interne/": "bdf211197e405f9c685157924a1d43dd",
       "Domaine11_Droit_Travail_Conformite/": "e081da183fc4af31296a067fec0ebc2c",
-      "Domaine6_Formation_Developpement_Competences/": "a607173f (TDB + favicon \u00e9clair)",
+      "Domaine6_Formation_Developpement_Competences/": "a607173f (TDB + favicon éclair)",
       "Domaine6_Formation_Developpement_Competences/catalogue-formations/": "676d8725 (V35/36b)",
-      "Domaine1_Recrutement_Candidats/routes profondes": "31 r\u00e9pertoires index.html (copie du V38 index)"
+      "Domaine1_Recrutement_Candidats/routes profondes": "31 répertoires index.html (copie du V38 index)"
     },
-    "note_conciliation": "V34 = r\u00e9vision des couleurs demand\u00e9e par l'utilisateur (\u00ab chaque domaine doit avoir une couleur sp\u00e9cifique \u00bb) : rotations de teinte S/L-pr\u00e9serv\u00e9es sur 121 pages (D1/D4/D5/D9/D10/D11), presets conformes conserv\u00e9s (D2/D6/D7/D8 + D3 prune), pill et hub expriment la palette des 31 domaines. Pr\u00e9-vol anti-race 10/10 vert, v\u00e9rification live 202/202 + 11 marqueurs, push GitHub 185 fichiers."
+    "note_conciliation": "V34 = révision des couleurs demandée par l'utilisateur (« chaque domaine doit avoir une couleur spécifique ») : rotations de teinte S/L-préservées sur 121 pages (D1/D4/D5/D9/D10/D11), presets conformes conservés (D2/D6/D7/D8 + D3 prune), pill et hub expriment la palette des 31 domaines. Pré-vol anti-race 10/10 vert, vérification live 202/202 + 11 marqueurs, push GitHub 185 fichiers."
   },
   "verrous": [],
   "regle_verrous": {
@@ -40,37 +40,37 @@
   "historique_recent": [
     {
       "date": "2026-09-16T14:20:00Z",
-      "event": "V38 (2865a726) : sidebar D1 ergonomique (groupes repliables + m\u00e9moire, actif d\u00e9pli\u00e9/auto-scroll\u00e9, TDB marqu\u00e9 sur /, scrollbar visible + degrade) + ADMINA_DOMAIN_ID=1 (D2 marque ACTUEL par erreur) + breadcrumbs corriges (KPIs, Demandes) + bandeau rubrique ANALYTICS & CONFIGURATION sur les 4 pages (nav croisee SPA) + 31 routes profondes D1 en fichiers reels (fallback SPA = hub sur MISS). 97 controles des 4 pages verifies reactifs. Tests locaux 17/17, live 16/16. GitHub 428444b1 (34 blobs).",
+      "event": "V38 (2865a726) : sidebar D1 ergonomique (groupes repliables + mémoire, actif déplié/auto-scrollé, TDB marqué sur /, scrollbar visible + degrade) + ADMINA_DOMAIN_ID=1 (D2 marque ACTUEL par erreur) + breadcrumbs corriges (KPIs, Demandes) + bandeau rubrique ANALYTICS & CONFIGURATION sur les 4 pages (nav croisee SPA) + 31 routes profondes D1 en fichiers reels (fallback SPA = hub sur MISS). 97 controles des 4 pages verifies reactifs. Tests locaux 17/17, live 16/16. GitHub 428444b1 (34 blobs).",
       "par": "session principale (web-7c37a8bf)"
     },
     {
       "date": "2026-09-16T11:55:00Z",
-      "event": "V37 (26a13f90) : audit D1 complet (31 routes, 0 erreur console/JS/reseau) + 4 correctifs (burger parasite desktop, KPI empiles, etiquettes graphes SVG, legende donut) via patch CSS/JS avec garde-fous ; tests locaux puis live 20+19 checks 0 echec. D6 regresse une 3e fois par les deploiements paralleles du matin \u2014 restaure (TDB + favicon eclair). GitHub aligne (d2b22a91, 74 blobs D1 incluant l\u2019etat de la session parallele, desormais mirror).",
+      "event": "V37 (26a13f90) : audit D1 complet (31 routes, 0 erreur console/JS/reseau) + 4 correctifs (burger parasite desktop, KPI empiles, etiquettes graphes SVG, legende donut) via patch CSS/JS avec garde-fous ; tests locaux puis live 20+19 checks 0 echec. D6 regresse une 3e fois par les deploiements paralleles du matin — restaure (TDB + favicon eclair). GitHub aligne (d2b22a91, 74 blobs D1 incluant l’etat de la session parallele, desormais mirror).",
       "par": "session principale (web-7c37a8bf)"
     },
     {
       "date": "2026-09-15T21:15:00Z",
-      "event": "V36b (d10b9361) : 2e restauration D6 apr\u00e8s nouvelle regression e04df293 (19:06Z, session parallele) \u2014 20 pages D6 pre-V35 remises + sous-pages manquantes (fallback hub) rendues. Favicon D6 = eclair general sur 20/20 pages (question utilisateur \u00ab pourquoi le favicon est different \u00bb + demande \u00ab refais le deploiement avec le pavillon eclair \u00bb). D1 preserve (9b6df960, 3e iteration du jour de la session parallele, non pushee sur GitHub). Alerte coordination : baseline D6 obsol\u00e8te dans les builds de la session parallele.",
+      "event": "V36b (d10b9361) : 2e restauration D6 après nouvelle regression e04df293 (19:06Z, session parallele) — 20 pages D6 pre-V35 remises + sous-pages manquantes (fallback hub) rendues. Favicon D6 = eclair general sur 20/20 pages (question utilisateur « pourquoi le favicon est different » + demande « refais le deploiement avec le pavillon eclair »). D1 preserve (9b6df960, 3e iteration du jour de la session parallele, non pushee sur GitHub). Alerte coordination : baseline D6 obsolète dans les builds de la session parallele.",
       "par": "session principale (web-7c37a8bf)"
     },
     {
       "date": "2026-09-15T18:35:00Z",
-      "event": "V36 deployee (53785b2b) : reponse a \u00ab pourquoi le favicon est different \u00bb \u2014 le D6 etait le seul domaine avec un favicon dedie ambre (favicon-d6.svg, heritage V18) ; aligne sur l\u2019eclair general /favicon.svg (precedent V23c/D8). Au passage, regression D6 detectee et restauree : 1ff42e4b/1af77514 (deploiements non coordonnes, 13:43Z/13:58Z) avaient remis les 20 pages D6 pre-V35 (index \u00ab EN PREPARATION \u00bb, vieilles sidebars, vocabulaire classeur). GitHub aligne (38cbbd7d, 20 fichiers). D1 (index ceb09149 + 8 assets) = travail de la session parallele, preserve en production mais non pushe sur GitHub.",
+      "event": "V36 deployee (53785b2b) : reponse a « pourquoi le favicon est different » — le D6 etait le seul domaine avec un favicon dedie ambre (favicon-d6.svg, heritage V18) ; aligne sur l’eclair general /favicon.svg (precedent V23c/D8). Au passage, regression D6 detectee et restauree : 1ff42e4b/1af77514 (deploiements non coordonnes, 13:43Z/13:58Z) avaient remis les 20 pages D6 pre-V35 (index « EN PREPARATION », vieilles sidebars, vocabulaire classeur). GitHub aligne (38cbbd7d, 20 fichiers). D1 (index ceb09149 + 8 assets) = travail de la session parallele, preserve en production mais non pushe sur GitHub.",
       "par": "session principale (web-7c37a8bf)"
     },
     {
       "date": "2026-09-15T12:35:00Z",
-      "event": "V35 deployee en production (296a8f2e) : redesign Domaine 6 oublie par V33/V34 \u2014 TDB complet + sidebars groupees (6 themes), zero vocabulaire classeur. Restauration prealable 64967223 (production cassee par 1e525f3e 11:39Z, deploiement non coordonne avec commit main force-push 5a359c4b disparu ; feature D1 basecand/pipeline preservee). GitHub aligne (da52f976, 20 fichiers).",
+      "event": "V35 deployee en production (296a8f2e) : redesign Domaine 6 oublie par V33/V34 — TDB complet + sidebars groupees (6 themes), zero vocabulaire classeur. Restauration prealable 64967223 (production cassee par 1e525f3e 11:39Z, deploiement non coordonne avec commit main force-push 5a359c4b disparu ; feature D1 basecand/pipeline preservee). GitHub aligne (da52f976, 20 fichiers).",
       "par": "session principale (web-7c37a8bf)"
     },
     {
       "date": "2026-09-15T12:00:00Z",
-      "event": "ALERTE + restauration : 2 deploiements production non coordones detects (4926c303 08:37Z, 1e525f3e 11:39Z \u2014 commit main force-push puis disparu 5a359c4b). Etat 1e525f3e = site casse (indexes domaines + sous-pages 404 vers fallback SPA). Session web-7c37a8bf prend le verrou : reconstruction staging depuis GitHub V1.2 (= V34, 740 fichiers) puis redeploy production, ensuite redesign Domaine6 (TDB + sidebars groupees, zero mention classeur) en V35.",
+      "event": "ALERTE + restauration : 2 deploiements production non coordones detects (4926c303 08:37Z, 1e525f3e 11:39Z — commit main force-push puis disparu 5a359c4b). Etat 1e525f3e = site casse (indexes domaines + sous-pages 404 vers fallback SPA). Session web-7c37a8bf prend le verrou : reconstruction staging depuis GitHub V1.2 (= V34, 740 fichiers) puis redeploy production, ensuite redesign Domaine6 (TDB + sidebars groupees, zero mention classeur) en V35.",
       "par": "session principale (web-7c37a8bf)"
     },
     {
       "date": "2026-09-14T16:46:06Z",
-      "event": "V34 deployee en production (c1ae4431, pre-vol 10/10 vert) : une couleur sp\u00e9cifique par domaine \u2014 D1 azur, D4 bleu roi, D5 framboise, D9 teal, D10 fuchsia, D11 indigo ; pill badges color\u00e9s (184 pages), splash recolor\u00e9s (82), hub cartes color\u00e9es. GitHub main aligne (ef666db, delta 185 fichiers)",
+      "event": "V34 deployee en production (c1ae4431, pre-vol 10/10 vert) : une couleur spécifique par domaine — D1 azur, D4 bleu roi, D5 framboise, D9 teal, D10 fuchsia, D11 indigo ; pill badges colorés (184 pages), splash recolorés (82), hub cartes colorées. GitHub main aligne (ef666db, delta 185 fichiers)",
       "par": "session principale (web-7c37a8bf)"
     },
     {
@@ -85,7 +85,7 @@
     },
     {
       "date": "2026-09-14T08:00Z",
-      "event": "V32 deployee en production (decae39e) : promotion D11 autorisee par l'utilisateur \u2014 21 ecrans + 8 documents + ADEM 11 domaines actifs (163 sidebars + hub patches). Verification live 29/29 OK. GitHub main aligne (697ef98a, delta 193 fichiers)",
+      "event": "V32 deployee en production (decae39e) : promotion D11 autorisee par l'utilisateur — 21 ecrans + 8 documents + ADEM 11 domaines actifs (163 sidebars + hub patches). Verification live 29/29 OK. GitHub main aligne (697ef98a, delta 193 fichiers)",
       "par": "session principale"
     }
   ],
@@ -95,24 +95,26 @@
       "session": "session principale (web-7c37a8bf)",
       "deployment_id": "5fc57d6b",
       "date": "2026-09-14T09:50Z",
-      "note": "[SUPERSED\u00c9E] V33 promue en production le 2026-09-14 (292569b0) \u2014 preview conserv\u00e9e pour r\u00e9f\u00e9rence"
+      "note": "[SUPERSEDÉE] V33 promue en production le 2026-09-14 (292569b0) — preview conservée pour référence"
     }
   ],
   "historique": [
     {
       "quand": "2026-09-14T12:00:00Z",
-      "quoi": "promotion production V33 (292569b0) par la session du m\u00eame lineage que la preview V33",
-      "constat": "les 3 demandes utilisateur (de-classeur, groupes, interfaces) implementees ; pr\u00e9-vol anti-race 141/141 ; live v\u00e9rifi\u00e9 141/141 md5 + spot 12/12 + navigateur"
+      "quoi": "promotion production V33 (292569b0) par la session du même lineage que la preview V33",
+      "constat": "les 3 demandes utilisateur (de-classeur, groupes, interfaces) implementees ; pré-vol anti-race 141/141 ; live vérifié 141/141 md5 + spot 12/12 + navigateur"
     },
     {
       "quand": "2026-09-14T08:29Z",
-      "quoi": "d\u00e9ploiement production f826d7bb (autre session, sans push GitHub)",
-      "constat": "contenu = V32 identique (no-op), concili\u00e9 par session principale \u00e0 09:0xZ"
+      "quoi": "déploiement production f826d7bb (autre session, sans push GitHub)",
+      "constat": "contenu = V32 identique (no-op), concilié par session principale à 09:0xZ"
     },
     {
       "quand": "2026-09-14T09:5xZ",
-      "quoi": "preview 5fc57d6b staging-principal \u2014 V33 refonte sidebar ADEM",
-      "details": "demande utilisateur : 1) supprimer \u00ab Onglets du classeur \u00bb, 2) regrouper les onglets par themes, 3) suggestions d'interface par onglet. 160 fichiers modifies, 0 residu classeur, checks 21/21 D11 OK"
+      "quoi": "preview 5fc57d6b staging-principal — V33 refonte sidebar ADEM",
+      "details": "demande utilisateur : 1) supprimer « Onglets du classeur », 2) regrouper les onglets par themes, 3) suggestions d'interface par onglet. 160 fichiers modifies, 0 residu classeur, checks 21/21 D11 OK"
     }
-  ]
+  ],
+  "updated": "2026-09-16T14:52Z",
+  "note": "V39 (admina-rh deploy 0cdda4e6, production 14:50Z) : sidebar D1 pleine hauteur GARANTIE (paper fixed top/bottom 0, 100vh + 100dvh, min-height, max-height:none) + cache-bust ?v=39 sur admina-sidebars.css/js dans index D1 + 31 routes. Aucun autre domaine touché. Baselines : D1 index a6adab67, sidebars.css fc2c90d3, D6 TDB a607173f, hub a875db39. NE PAS reconstruire D1 depuis un staging antérieur à V39."
 }
