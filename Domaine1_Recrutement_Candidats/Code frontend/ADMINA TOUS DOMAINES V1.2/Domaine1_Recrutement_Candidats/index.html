@@ -1,14 +1,168 @@
 <!doctype html>
-<html lang="fr"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width,initial-scale=1.0" /><link rel="icon" type="image/svg+xml" href="/favicon.svg" /><link rel="alternate icon" href="/favicon.ico" /><link rel="apple-touch-icon" href="/favicon.svg" /><title>Admina-RH | Domaine 1 — Recrutement</title><meta name="description" content="Admina-RH — Domaine 2 : Gestion Administrative du Personnel. 22 écrans, 5 phases, conformité ISO 30401:2018 + ISO 9001:2015." /><link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin /><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />  <script>(function(){var D=[{numero:`DR-2025-008`,poste:`Chef Approvisionnement`,departement:`Logistique`,statut:`Validée`,date:`2025-02-20`,site:`Siège`,joursAttente:0,alerte:!1,priorite:`haute`,manager:`M. Nkoulou Paul`},{numero:`DR-2025-006`,poste:`Développeur Full Stack`,departement:`Informatique`,statut:`En attente`,date:`2025-02-10`,site:`Siège`,joursAttente:20,alerte:!0,priorite:`haute`,manager:`M. Kamga Blaise`},{numero:`DR-2025-003`,poste:`Comptable Senior`,departement:`Finance`,statut:`Validée`,date:`2025-01-25`,site:`Annexe`,joursAttente:0,alerte:!1,priorite:`moyenne`,manager:`M. Tchouankou Jean`},{numero:`DR-2025-004`,poste:`Agent Accueil`,departement:`Service Client`,statut:`Pourvue`,date:`2025-02-01`,site:`Hôtel Sawa`,joursAttente:0,alerte:!1,priorite:`basse`,manager:`Mme. Eyenga Clarisse`},{numero:`DR-2025-002`,poste:`Réceptionniste Nuit`,departement:`Hébergement`,statut:`En cours`,date:`2025-01-20`,site:`Hôtel Sawa`,joursAttente:41,alerte:!0,priorite:`moyenne`,manager:`Mme. Fotso Marie`},{numero:`DR-2025-001`,poste:`Chef Cuisinier`,departement:`Restauration`,statut:`En attente`,date:`2025-01-15`,site:`Hôtel Sawa`,joursAttente:46,alerte:!0,priorite:`haute`,manager:`M. Ndiaye Moussa`},{numero:`DR-2024-012`,poste:`Agent Sécurité`,departement:`Sécurité`,statut:`Clôturée`,date:`2024-12-10`,site:`Siège`,joursAttente:0,alerte:!1,priorite:`basse`,manager:`M. Nganou André`},{numero:`DR-2025-009`,poste:`Community Manager`,departement:`Marketing`,statut:`En attente`,date:`2025-02-25`,site:`Siège`,joursAttente:5,alerte:!1,priorite:`moyenne`,manager:`Mme. Mebara Nadège`},{numero:`DR-2025-010`,poste:`Serveur`,departement:`Restauration`,statut:`Validée`,date:`2025-02-28`,site:`Hôtel Sawa`,joursAttente:0,alerte:!1,priorite:`basse`,manager:`M. Ndiaye Moussa`},{numero:`DR-2025-011`,poste:`Commercial Senior`,departement:`Commercial`,statut:`En attente`,date:`2025-02-18`,site:`Annexe`,joursAttente:12,alerte:!1,priorite:`haute`,manager:`M. Tabi Arnaud`}];window.__ADMINA_STORE__={demandes:D};window.__ADMINA_AUDIT__={log:function(a,d,r){try{var j=JSON.parse(localStorage.getItem("admina_journal")||"[]");j.unshift({time:new Date().toISOString(),action:a,detail:d,role:r||"-"});if(j.length>200)j.length=200;localStorage.setItem("admina_journal",JSON.stringify(j));console.info("[ADMINA_JOURNAL] "+new Date().toLocaleString("fr-FR")+" | "+a+" | "+d+" | "+(r||"-"))}catch(e){}},read:function(){try{return JSON.parse(localStorage.getItem("admina_journal")||"[]")}catch(e){return[]}}};})();</script><link rel="stylesheet" href="/assets/admina-pilier2.css" /><script defer src="/assets/admina-pilier2.js"></script><link rel="stylesheet" href="/assets/admina-pilier3.css" /><script defer src="/assets/admina-pilier3.js"></script><link rel="stylesheet" href="/assets/admina-offres.css" /><script defer src="/assets/admina-offres.js"></script><link rel="stylesheet" href="/assets/admina-demandes.css" /><script defer src="/assets/admina-demandes.js"></script><link rel="stylesheet" href="/assets/admina-previsions.css" />
+<html lang="fr"><head><style id="admina-shim-css">html.admina-mask:not(.admina-has-box) #root{visibility:hidden!important}html.admina-mask.admina-has-box #root>[data-adm-content]{visibility:hidden!important}[data-adm-native]{display:none!important}@media (max-width:819.95px){#root>[data-adm-content]{margin-left:0!important;width:100%!important;max-width:none!important}}</style><script>
+/* ============================================================
+   [SHIM M29] Admina — Anti-superposition + Intégration layout
+   ============================================================
+   PROBLÈMES RÉSOLUS (retours utilisateur M29) :
+   1. « Superposition » : le modèle natif s'affiche puis est remplacé
+      par le modèle enrichi (flash à chaque chargement/navigation).
+   2. « Écrasement » (5 pages W4 : parametres, kpis-objectifs-rh,
+      sources-roi, gestion-cabinets, departements) : le moteur W4
+      insère sa racine (.adm-w) en PREMIER ENFANT de #root, pleine
+      largeur (x=0, w=100%), SANS décalage sidebar (260px) ni marge
+      topbar — l'app native entière se retrouve EMPILÉE en dessous.
+   3. Barre latérale « incomplète » : conséquence de l'empilement
+      (page 2× trop longue, sidebar fixe perçue comme coupée).
+
+   PRINCIPE (additif-sur-natif, 0 octet natif modifié) :
+   - Masque UNIQUEMENT la zone contenu (conteneur natif) — jamais la
+     topbar fixe ni la sidebar — tant qu'aucune racine de module
+     n'est détectée dedans (détéction générique : élément dont la
+     classe n'est ni Mui* ni css-*).
+   - Déplace la racine orpheline W4 (.adm-w, enfant direct de #root)
+     DANS le conteneur natif, puis masque le contenu natif de page.
+   - Garde-fou 4,5 s : si aucun module ne monte, tout se réaffiche
+     (résilience native intacte).
+   - Idempotent, ne s'applique qu'aux routes câblées d'un module.
+   ============================================================ */
+(function () {
+  'use strict';
+  var D = document, html = D.documentElement;
+  /* Routes du Domaine 1 câblées avec un module Admina (32 routes - tableau-de-bord natif) */
+  var WIRED = {
+    'analyse-des-couts': 1, 'audit': 1, 'audit-statuts': 1, 'base-candidats': 1,
+    'checklist-integration': 1, 'competences': 1, 'demandes': 1, 'departements': 1,
+    'documents-conformite': 1, 'experiences': 1, 'formations-candidats': 1,
+    'gestion-cabinets': 1, 'grille-evaluation': 1, 'integration-employe': 1,
+    'kpis-objectifs-rh': 1, 'offres': 1, 'parametres': 1, 'periode-dessai': 1,
+    'pipeline-candidatures': 1, 'plan-accueil-formation': 1, 'planning-entretiens': 1,
+    'previsions-postes': 1, 'saisonniers-temporaires': 1, 'selections': 1,
+    'sources-recrutement': 1, 'sources-roi': 1, 'stagiaires': 1, 'suivi-contrats': 1,
+    'suivi-post-embauche': 1, 'types-de-contrats': 1, 'verification-references': 1
+  };
+  function route() {
+    try {
+      var p = location.pathname.split('/').filter(Boolean);
+      return (p[0] === 'Domaine1_Recrutement_Candidats' && p[1]) || '';
+    } catch (e) { return ''; }
+  }
+  /* Élément « étranger » = créé par un module Admina (classes customs, pas MUI) */
+  function isForeign(k) {
+    var c = '' + (k.className || '');
+    return k.tagName !== 'SCRIPT' && k.tagName !== 'STYLE' && k.tagName !== 'LINK' &&
+      c !== '' && c.indexOf('Mui') === -1 && c.indexOf('css-') === -1;
+  }
+  /* Conteneur natif de contenu = enfant MuiBox/MuiContainer de #root
+     le plus HAUT (écarte le wrapper topbar css-0 qui fait h=0) */
+  var boxCache = null;
+  function box() {
+    var r = D.getElementById('root');
+    if (!r) return null;
+    if (boxCache && boxCache.parentElement === r) return boxCache;
+    boxCache = null;
+    var ks = [].slice.call(r.children), best = null, bestH = -1;
+    for (var i = 0; i < ks.length; i++) {
+      var k = ks[i];
+      if (/MuiBox|MuiContainer/.test('' + k.className)) {
+        var h = k.getBoundingClientRect().height;
+        if (h > bestH) { best = k; bestH = h; }
+      }
+    }
+    if (best) { boxCache = best; best.setAttribute('data-adm-content', ''); }
+    return boxCache;
+  }
+  /* Racine de module dans le conteneur : niveau 1 (enfants directs,
+     ex. asl-root / adm-w déplacé) ou niveau 2 (pattern profond, ex.
+     admina-ofx-hero / #adt-page injectés dans la boîte native css-0) */
+  function foreignIn(b) {
+    if (!b) return null;
+    var ks = [].slice.call(b.children), i, j;
+    for (i = 0; i < ks.length; i++) if (isForeign(ks[i])) return ks[i];
+    for (i = 0; i < ks.length; i++) {
+      if (/MuiBox|MuiContainer/.test('' + ks[i].className)) {
+        var k2 = [].slice.call(ks[i].children);
+        for (j = 0; j < k2.length; j++) if (isForeign(k2[j])) return k2[j];
+      }
+    }
+    return null;
+  }
+  var guard = null, lastRoute = null, degradedRoute = null;
+  function mask() {
+    /* NE réarme JAMAIS le garde-fou si déjà masqué (sinon blank infini) */
+    if (html.classList.contains('admina-mask')) return;
+    html.classList.add('admina-mask');
+    guard = setTimeout(function () {
+      /* Module absent après 4,5 s : route dégradée → on reste sur le natif,
+         et on NE re-masque PLUS (sinon oscillation blank/natif). */
+      degradedRoute = route();
+      unmask();
+    }, 4500);
+  }
+  function unmask() {
+    html.classList.remove('admina-mask');
+    if (guard) { clearTimeout(guard); guard = null; }
+  }
+  /* Intègre une racine de module orpheline (pattern W4 : enfant direct
+     de #root) dans le conteneur natif + masque le contenu natif de page.
+     La topbar (css-0 extérieur) et la sidebar (Drawer) ne sont JAMAIS touchées. */
+  function integrate() {
+    var r = D.getElementById('root');
+    if (!r) return false;
+    var w = null, ks = [].slice.call(r.children), i;
+    for (i = 0; i < ks.length; i++) if (isForeign(ks[i])) { w = ks[i]; break; }
+    if (!w) return false;
+    var b = box();
+    if (!b) return false;
+    if (w.parentElement !== b) b.insertBefore(w, b.firstChild);
+    [].slice.call(b.children).forEach(function (k) {
+      if (k !== w && !k.hasAttribute('data-adm-native')) {
+        k.setAttribute('data-adm-native', '1');
+        k.style.setProperty('display', 'none', 'important');
+      }
+    });
+    return true;
+  }
+  function tick() {
+    var r = route();
+    if (!r || !WIRED[r]) { unmask(); lastRoute = null; degradedRoute = null; return; }
+    if (r !== lastRoute) { lastRoute = r; degradedRoute = null; }
+    var done = integrate();
+    var b = box();
+    if (b) html.classList.add('admina-has-box'); else html.classList.remove('admina-has-box');
+    if (done || foreignIn(b)) unmask();
+    else if (!degradedRoute) mask();
+    else unmask();
+  }
+  var scheduled = false;
+  function schedule() {
+    if (scheduled) return;
+    scheduled = true;
+    setTimeout(function () { scheduled = false; try { tick(); } catch (e) {} }, 0);
+  }
+  try {
+    if (route() && WIRED[route()]) mask();
+    var mo = new MutationObserver(schedule);
+    function arm() {
+      var r = D.getElementById('root');
+      if (r) { try { mo.observe(r, { childList: true, subtree: true }); } catch (e) {} }
+      setInterval(function () { try { tick(); } catch (e) {} }, 400);
+      tick();
+    }
+    if (D.readyState === 'loading') D.addEventListener('DOMContentLoaded', arm);
+    else arm();
+    addEventListener('popstate', function () { setTimeout(function () { try { tick(); } catch (e) {} }, 60); });
+  } catch (e) { try { unmask(); } catch (e2) {} }
+})();
+</script><!--[SHIM-M29]--><meta charset="UTF-8" /><meta name="viewport" content="width=device-width,initial-scale=1.0" /><link rel="icon" type="image/svg+xml" href="/favicon.svg" /><link rel="alternate icon" href="/favicon.ico" /><link rel="apple-touch-icon" href="/favicon.svg" /><title>Admina-RH | Domaine 1 — Recrutement</title><meta name="description" content="Admina-RH — Domaine 2 : Gestion Administrative du Personnel. 22 écrans, 5 phases, conformité ISO 30401:2018 + ISO 9001:2015." /><link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin /><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />  <script>(function(){var D=[{numero:`DR-2025-008`,poste:`Chef Approvisionnement`,departement:`Logistique`,statut:`Validée`,date:`2025-02-20`,site:`Siège`,joursAttente:0,alerte:!1,priorite:`haute`,manager:`M. Nkoulou Paul`},{numero:`DR-2025-006`,poste:`Développeur Full Stack`,departement:`Informatique`,statut:`En attente`,date:`2025-02-10`,site:`Siège`,joursAttente:20,alerte:!0,priorite:`haute`,manager:`M. Kamga Blaise`},{numero:`DR-2025-003`,poste:`Comptable Senior`,departement:`Finance`,statut:`Validée`,date:`2025-01-25`,site:`Annexe`,joursAttente:0,alerte:!1,priorite:`moyenne`,manager:`M. Tchouankou Jean`},{numero:`DR-2025-004`,poste:`Agent Accueil`,departement:`Service Client`,statut:`Pourvue`,date:`2025-02-01`,site:`Hôtel Sawa`,joursAttente:0,alerte:!1,priorite:`basse`,manager:`Mme. Eyenga Clarisse`},{numero:`DR-2025-002`,poste:`Réceptionniste Nuit`,departement:`Hébergement`,statut:`En cours`,date:`2025-01-20`,site:`Hôtel Sawa`,joursAttente:41,alerte:!0,priorite:`moyenne`,manager:`Mme. Fotso Marie`},{numero:`DR-2025-001`,poste:`Chef Cuisinier`,departement:`Restauration`,statut:`En attente`,date:`2025-01-15`,site:`Hôtel Sawa`,joursAttente:46,alerte:!0,priorite:`haute`,manager:`M. Ndiaye Moussa`},{numero:`DR-2024-012`,poste:`Agent Sécurité`,departement:`Sécurité`,statut:`Clôturée`,date:`2024-12-10`,site:`Siège`,joursAttente:0,alerte:!1,priorite:`basse`,manager:`M. Nganou André`},{numero:`DR-2025-009`,poste:`Community Manager`,departement:`Marketing`,statut:`En attente`,date:`2025-02-25`,site:`Siège`,joursAttente:5,alerte:!1,priorite:`moyenne`,manager:`Mme. Mebara Nadège`},{numero:`DR-2025-010`,poste:`Serveur`,departement:`Restauration`,statut:`Validée`,date:`2025-02-28`,site:`Hôtel Sawa`,joursAttente:0,alerte:!1,priorite:`basse`,manager:`M. Ndiaye Moussa`},{numero:`DR-2025-011`,poste:`Commercial Senior`,departement:`Commercial`,statut:`En attente`,date:`2025-02-18`,site:`Annexe`,joursAttente:12,alerte:!1,priorite:`haute`,manager:`M. Tabi Arnaud`}];window.__ADMINA_STORE__={demandes:D};window.__ADMINA_AUDIT__={log:function(a,d,r){try{var j=JSON.parse(localStorage.getItem("admina_journal")||"[]");j.unshift({time:new Date().toISOString(),action:a,detail:d,role:r||"-"});if(j.length>200)j.length=200;localStorage.setItem("admina_journal",JSON.stringify(j));console.info("[ADMINA_JOURNAL] "+new Date().toLocaleString("fr-FR")+" | "+a+" | "+d+" | "+(r||"-"))}catch(e){}},read:function(){try{return JSON.parse(localStorage.getItem("admina_journal")||"[]")}catch(e){return[]}}};})();</script><link rel="stylesheet" href="/assets/admina-pilier2.css" /><script defer src="/assets/admina-pilier2.js"></script><link rel="stylesheet" href="/assets/admina-pilier3.css" /><script defer src="/assets/admina-pilier3.js"></script><link rel="stylesheet" href="/assets/admina-offres.css" /><script defer src="/assets/admina-offres.js"></script><link rel="stylesheet" href="/assets/admina-demandes.css" /><script defer src="/assets/admina-demandes.js"></script><link rel="stylesheet" href="/assets/admina-previsions.css" />
     <link rel="stylesheet" href="/assets/admina-sources.css"><link rel="stylesheet" href="/assets/admina-couts.css"><script defer src="/assets/admina-previsions.js"></script>
-    <script defer src="/assets/admina-sources.js"></script><script defer src="/assets/admina-couts.js"></script><script type="module" crossorigin src="/assets/index-5-yT4YcR.js"></script>
+    <script defer src="/assets/admina-sources.js"></script><script defer src="/assets/admina-couts.js"></script><link rel="stylesheet" href="/assets/admina-basecand.css"><script defer src="/assets/admina-basecand.js"></script><link rel="stylesheet" href="/assets/admina-pipeline.css"><script defer src="/assets/admina-pipeline.js"></script><link rel="stylesheet" href="/assets/admina-entretiens.css"><script defer src="/assets/admina-entretiens.js"></script><link rel="stylesheet" href="/assets/admina-evaluations.css"><script defer src="/assets/admina-evaluations.js"></script><link rel="stylesheet" href="/assets/admina-verifications.css"><script defer src="/assets/admina-verifications.js"></script><link rel="stylesheet" href="/assets/admina-selections.css"><script defer src="/assets/admina-selections.js"></script><link rel="stylesheet" href="/assets/admina-integration.css"><script defer src="/assets/admina-integration.js"></script><link rel="stylesheet" href="/assets/admina-checklist.css"><script defer src="/assets/admina-checklist.js"></script><link rel="stylesheet" href="/assets/admina-accueil.css"><script defer src="/assets/admina-accueil.js"></script><link rel="stylesheet" href="/assets/admina-postembauche.css"><script defer src="/assets/admina-postembauche.js"></script><link rel="stylesheet" href="/assets/admina-dessai.css"><script defer src="/assets/admina-dessai.js"></script><link rel="stylesheet" href="/assets/admina-stagiaires.css"><script defer src="/assets/admina-stagiaires.js"></script><link rel="stylesheet" href="/assets/admina-saisonniers.css"><script defer src="/assets/admina-saisonniers.js"></script><link rel="stylesheet" href="/assets/admina-formationscand.css"><script defer src="/assets/admina-formationscand.js"></script><link rel="stylesheet" href="/assets/admina-competences.css"><script defer src="/assets/admina-competences.js"></script><link rel="stylesheet" href="/assets/admina-experiences.css"><script defer src="/assets/admina-experiences.js"></script><link rel="stylesheet" href="/assets/admina-contrats.css"><script defer src="/assets/admina-contrats.js"></script><link rel="stylesheet" href="/assets/admina-typescontrats.css"><script defer src="/assets/admina-typescontrats.js"></script><link rel="stylesheet" href="/assets/admina-conformite.css"><script defer src="/assets/admina-conformite.js"></script><link rel="stylesheet" href="/assets/admina-auditstatuts.css"><script defer src="/assets/admina-auditstatuts.js"></script><link rel="stylesheet" href="/assets/admina-rapport.css"><script defer src="/assets/admina-rapport.js"></script><script type="module" crossorigin src="/assets/index-5-yT4YcR.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/rolldown-runtime-hePW80VL.js">
   <link rel="modulepreload" crossorigin href="/assets/Box-CHFloNRC.js">
   <link rel="modulepreload" crossorigin href="/assets/react-dom-BTphueI8.js">
   <link rel="modulepreload" crossorigin href="/assets/Grow-BGmbCfxC.js">
   <link rel="modulepreload" crossorigin href="/assets/Menu-CXTjhrpv.js">
   <link rel="modulepreload" crossorigin href="/assets/isMuiElement-B_alkmYL.js">
-</head><body>
+<link rel="stylesheet" href="/assets/admina-parametres.css" /><script defer src="/assets/admina-parametres.js"></script><link rel="stylesheet" href="/assets/admina-departements.css" /><script defer src="/assets/admina-departements.js"></script><link rel="stylesheet" href="/assets/admina-kpis.css" /><script defer src="/assets/admina-kpis.js"></script><link rel="stylesheet" href="/assets/admina-sourcesroi.css" /><script defer src="/assets/admina-sourcesroi.js"></script><link rel="stylesheet" href="/assets/admina-cabinets.css" /><script defer src="/assets/admina-cabinets.js"></script></head><body>
 <div id="adem14-splash" role="status" aria-live="polite" aria-label="Chargement du domaine">
 <style id="adem14-style">
 #adem14-splash{position:fixed;inset:0;z-index:1400;min-height:100vh;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,#f5f6fa 0%,#e8edf5 100%);overflow:hidden;transition:opacity .38s ease}

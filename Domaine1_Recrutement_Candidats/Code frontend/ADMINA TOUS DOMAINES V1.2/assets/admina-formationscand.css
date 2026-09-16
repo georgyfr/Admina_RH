@@ -1,0 +1,553 @@
+/* =========================================================
+   Admina-RH — Formations des Candidats — couche admina (W3-c)
+   Scope : html.admina-afc (posé uniquement sur /formations-candidats)
+   Thèmes : dark via html.admina-afc[data-dark] (détection auto,
+   LS admina-dark partagé + luminance + prefers-color-scheme)
+   Préfixe : afc- (assets admina-formationscand.*) · variables --afc-
+   Philosophie (le capacitaire) : /formations-candidats n'est pas un
+   registre scolaire mais l'ANNUAIRE DES QUALIFICATIONS — chaque
+   diplôme renseigné est un capital exploitable, chaque école un
+   vivier récoltable, chaque formation « à venir » une relance à
+   préparer au bon moment. Rien de ce qu'un candidat a appris ne doit
+   se perdre. La VUE SIGNATURE « Diplômes & Écoles » (deux volets
+   côte à côte, empilés <760 px) porte cette lecture capacitaires :
+   rangées cliquables → filtre, compteurs recalculés en direct.
+   ========================================================= */
+
+/* ---------- variables ---------- */
+html.admina-afc {
+  --afc-accent: #0f766e;
+  --afc-accent2: #059669;
+  --afc-gold: #b45309;
+  --afc-bg: #ffffff;
+  --afc-bg2: #f5faf9;
+  --afc-card: #ffffff;
+  --afc-line: #d9e8e5;
+  --afc-text: #0f3230;
+  --afc-text2: #5d7a76;
+  --afc-err: #dc2626;
+  --afc-errbg: #fef2f2;
+  --afc-warn: #b45309;
+  --afc-warnbg: #fef3c7;
+  --afc-ok: #047857;
+  --afc-okbg: #d1fae5;
+  --afc-info: #0e7490;
+  --afc-infobg: #e0f2fe;
+  --afc-neutral: #57534e;
+  --afc-neutralbg: #f1f0ee;
+  --afc-shadow: 0 1px 3px rgba(15, 50, 48, .08), 0 4px 16px rgba(15, 50, 48, .06);
+  --afc-radius: 14px;
+}
+html.admina-afc[data-dark] [data-afc="root"] {
+  --afc-bg: #0b1514;
+  --afc-bg2: #101c1a;
+  --afc-card: #142019;
+  --afc-line: #243935;
+  --afc-text: #e6f2ef;
+  --afc-text2: #8fb0aa;
+  --afc-err: #f87171;
+  --afc-errbg: #451a1a;
+  --afc-warn: #fbbf24;
+  --afc-warnbg: #3a2b0e;
+  --afc-ok: #34d399;
+  --afc-okbg: #0c2f24;
+  --afc-info: #67e8f9;
+  --afc-infobg: #0c2f36;
+  --afc-neutralbg: #1d2b28;
+  --afc-shadow: 0 1px 3px rgba(0, 0, 0, .5), 0 6px 20px rgba(0, 0, 0, .35);
+}
+
+/* ---------- racine ---------- */
+html.admina-afc [data-afc="root"] {
+  display: block;
+  padding: 4px 4px 28px;
+  color: var(--afc-text);
+  font-family: Inter, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-size: 14px;
+  line-height: 1.45;
+  background: var(--afc-bg);
+  border-radius: 12px;
+}
+html.admina-afc [data-afc="root"] *,
+html.admina-afc [data-afc="root"] *::before,
+html.admina-afc [data-afc="root"] *::after { box-sizing: border-box; }
+html.admina-afc [data-afc-page] { min-width: 0; }
+@media (max-width: 819px) {
+  html.admina-afc [data-afc-page] { width: 100% !important; margin-left: 0 !important; flex-basis: auto; }
+}
+
+/* ---------- héro ---------- */
+html.admina-afc .afc-hero {
+  background: linear-gradient(120deg, #0f766e 0%, #0d9488 55%, #059669 100%);
+  color: #ecfdf9;
+  border-radius: var(--afc-radius);
+  padding: 18px 20px;
+  box-shadow: var(--afc-shadow);
+  margin-bottom: 14px;
+}
+html.admina-afc .afc-hero-main { display: flex; gap: 14px; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; }
+html.admina-afc .afc-hero-title { display: flex; gap: 12px; align-items: center; }
+html.admina-afc .afc-hero-ico {
+  display: grid; place-items: center; width: 46px; height: 46px; border-radius: 12px;
+  background: rgba(255, 255, 255, .16); flex: 0 0 auto;
+}
+html.admina-afc .afc-h2 { margin: 0; font-size: 1.25rem; font-weight: 800; letter-spacing: .2px; }
+html.admina-afc .afc-hero-sub { margin: 3px 0 0; font-size: .88rem; opacity: .95; font-variant-numeric: tabular-nums; }
+html.admina-afc .afc-hero-sub2 { margin: 1px 0 0; font-size: .78rem; opacity: .8; font-variant-numeric: tabular-nums; }
+html.admina-afc .afc-hero-actions { display: flex; gap: 7px; flex-wrap: wrap; }
+html.admina-afc .afc-hero-alerts { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 13px; }
+
+/* Alertes : pastilles SOLIDES à contraste élevé (AAA M23) */
+html.admina-afc .afc-alert {
+  display: inline-flex; gap: 7px; align-items: center; padding: 5px 11px; border-radius: 999px;
+  font-size: .78rem; font-weight: 700; border: 1px solid transparent; cursor: pointer; text-align: left;
+  color: #0f172a; background: rgba(255, 255, 255, .94);
+  box-shadow: 0 1px 3px rgba(2, 44, 34, .35);
+  -webkit-print-color-adjust: exact; print-color-adjust: exact;
+}
+html.admina-afc .afc-alert:hover { filter: brightness(.96); }
+html.admina-afc .afc-alert.err { background: #fee2e2; border-color: #fca5a5; color: #7f1d1d; }
+html.admina-afc .afc-alert.warn { background: #fef3c7; border-color: #fcd34d; color: #78350f; }
+html.admina-afc .afc-alert.ok { background: #d1fae5; border-color: #6ee7b7; color: #064e3b; }
+html.admina-afc .afc-alert.info { background: #cffafe; border-color: #67e8f9; color: #164e63; }
+
+/* ---------- boutons ---------- */
+html.admina-afc .afc-btn {
+  display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; border-radius: 9px;
+  border: 1px solid rgba(236, 253, 250, .45); background: rgba(255, 255, 255, .12);
+  color: inherit; font: inherit; font-size: .8rem; font-weight: 600; cursor: pointer;
+  transition: background .15s, transform .1s; white-space: nowrap;
+}
+html.admina-afc .afc-hero .afc-btn:hover { background: rgba(255, 255, 255, .22); }
+html.admina-afc .afc-btn:active { transform: translateY(1px); }
+html.admina-afc .afc-btn-primary { background: var(--afc-accent); border-color: var(--afc-accent); color: #fff; }
+html.admina-afc .afc-btn-ghost { background: var(--afc-card); border: 1px solid var(--afc-line); color: var(--afc-text); }
+html.admina-afc .afc-btn-ghost:hover { background: var(--afc-bg2); }
+html.admina-afc .afc-btn-danger { background: var(--afc-errbg); border-color: var(--afc-err); color: var(--afc-err); }
+html.admina-afc .afc-btn[disabled] { opacity: .5; cursor: not-allowed; }
+html.admina-afc .afc-backbtn { background: var(--afc-card); border: 1px solid var(--afc-line); color: var(--afc-text); }
+
+/* ---------- KPI ---------- */
+html.admina-afc .afc-kpis { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin-bottom: 14px; }
+@media (max-width: 1279px) { html.admina-afc .afc-kpis { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 640px) { html.admina-afc .afc-kpis { grid-template-columns: repeat(2, 1fr); } }
+html.admina-afc .afc-kpi {
+  background: var(--afc-card); border: 1px solid var(--afc-line); border-radius: 12px;
+  padding: 12px 14px; cursor: pointer; transition: box-shadow .15s, transform .1s, border-color .15s;
+  position: relative; overflow: hidden; text-align: left; font: inherit; width: 100%;
+  display: flex; flex-direction: column; align-items: flex-start; gap: 2px;
+}
+html.admina-afc .afc-kpi::before {
+  content: ''; position: absolute; inset: 0 auto 0 0; width: 4px; background: var(--afc-accent); opacity: .65;
+}
+html.admina-afc .afc-kpi.gold::before { background: #f59e0b; }
+html.admina-afc .afc-kpi:hover { box-shadow: var(--afc-shadow); transform: translateY(-1px); }
+html.admina-afc .afc-kpi.on { border-color: var(--afc-accent); background: var(--afc-bg2); box-shadow: inset 0 0 0 1px var(--afc-accent); }
+html.admina-afc .afc-kpi-t { font-size: .66rem; font-weight: 800; letter-spacing: .8px; color: var(--afc-text2); }
+html.admina-afc .afc-kpi-v { font-size: 1.24rem; font-weight: 800; margin-top: 2px; color: var(--afc-text); white-space: nowrap; font-variant-numeric: tabular-nums; }
+html.admina-afc .afc-kpi-v.bad { color: var(--afc-err); }
+html.admina-afc .afc-kpi-s { font-size: .7rem; color: var(--afc-text2); margin-top: 1px; }
+
+/* ---------- graphiques (SVG vanilla) ---------- */
+html.admina-afc .afc-charts { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+@media (max-width: 1099px) { html.admina-afc .afc-charts { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 760px) { html.admina-afc .afc-charts { grid-template-columns: 1fr; } }
+html.admina-afc .afc-chart-card {
+  background: var(--afc-card); border: 1px solid var(--afc-line); border-radius: 12px; padding: 12px 14px;
+  min-width: 0;
+}
+html.admina-afc .afc-chart-title { font-size: .74rem; font-weight: 800; letter-spacing: .6px; color: var(--afc-text2); text-transform: uppercase; margin-bottom: 8px; }
+html.admina-afc .afc-donut-wrap { display: flex; gap: 12px; align-items: center; }
+html.admina-afc .afc-donut-legend { display: flex; flex-direction: column; gap: 3px; font-size: .72rem; min-width: 0; flex: 1; }
+html.admina-afc .afc-dl-item { display: flex; gap: 6px; align-items: center; cursor: pointer; border-radius: 6px; padding: 1px 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+html.admina-afc .afc-dl-item:hover { background: var(--afc-bg2); }
+html.admina-afc .afc-dl-item.on { background: var(--afc-okbg); }
+html.admina-afc .afc-dl-dot { width: 9px; height: 9px; border-radius: 3px; flex: 0 0 auto; }
+html.admina-afc .afc-dl-val { color: var(--afc-text2); margin-left: auto; font-variant-numeric: tabular-nums; }
+html.admina-afc .afc-bars { display: flex; flex-direction: column; gap: 6px; }
+html.admina-afc .afc-bar-row { display: grid; grid-template-columns: minmax(90px, 170px) 1fr 58px; gap: 8px; align-items: center; cursor: pointer; font-size: .76rem; border-radius: 7px; padding: 1px 4px; }
+html.admina-afc .afc-bar-row:hover { background: var(--afc-bg2); }
+html.admina-afc .afc-bar-name { color: var(--afc-text); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+html.admina-afc .afc-bar-track { height: 9px; background: var(--afc-neutralbg); border-radius: 5px; overflow: hidden; }
+html.admina-afc .afc-bar-fill { display: block; height: 100%; border-radius: 5px; background: linear-gradient(90deg, #0f766e, #059669); }
+html.admina-afc .afc-bar-val { color: var(--afc-text2); text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/* ---------- barre d'outils ---------- */
+html.admina-afc .afc-toolbar {
+  display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+  background: var(--afc-card); border: 1px solid var(--afc-line); border-radius: 12px;
+  padding: 9px 12px; margin-bottom: 12px; position: sticky; top: 6px; z-index: 30;
+  box-shadow: var(--afc-shadow);
+}
+html.admina-afc .afc-search {
+  display: flex; align-items: center; gap: 6px; background: var(--afc-bg2); border: 1px solid var(--afc-line);
+  border-radius: 9px; padding: 5px 9px; flex: 1 1 230px; min-width: 180px; color: var(--afc-text2);
+}
+html.admina-afc .afc-in {
+  border: 1px solid var(--afc-line); background: var(--afc-bg2); color: var(--afc-text);
+  border-radius: 8px; padding: 6px 9px; font: inherit; font-size: .82rem; width: 100%;
+}
+html.admina-afc .afc-search .afc-in { border: none; background: transparent; padding: 2px 0; outline: none; }
+html.admina-afc .afc-sel {
+  border: 1px solid var(--afc-line); background: var(--afc-bg2); color: var(--afc-text);
+  border-radius: 8px; padding: 6px 8px; font: inherit; font-size: .8rem; max-width: 190px; cursor: pointer;
+}
+html.admina-afc .afc-chipbtn {
+  border: 1px solid var(--afc-line); background: var(--afc-card); color: var(--afc-text2);
+  border-radius: 999px; padding: 4px 11px; font: inherit; font-size: .74rem; font-weight: 700; cursor: pointer;
+}
+html.admina-afc .afc-chipbtn:hover { border-color: var(--afc-accent); color: var(--afc-accent); }
+html.admina-afc .afc-activefs { display: inline-flex; gap: 6px; flex-wrap: wrap; }
+html.admina-afc .afc-afchip {
+  display: inline-flex; gap: 6px; align-items: center; border: 1px dashed var(--afc-accent); color: var(--afc-accent);
+  background: var(--afc-bg2); border-radius: 999px; padding: 3px 10px; font: inherit; font-size: .72rem; font-weight: 700; cursor: pointer;
+}
+html.admina-afc .afc-afchip:hover { background: var(--afc-okbg); }
+html.admina-afc .afc-count { font-size: .74rem; color: var(--afc-text2); white-space: nowrap; font-variant-numeric: tabular-nums; margin-left: auto; }
+html.admina-afc .afc-views { display: flex; gap: 4px; }
+html.admina-afc .afc-vbtn {
+  display: inline-flex; gap: 5px; align-items: center; padding: 5px 10px; font: inherit; font-size: .76rem;
+  font-weight: 700; border-radius: 8px; border: 1px solid var(--afc-line); background: var(--afc-card); color: var(--afc-text2); cursor: pointer;
+}
+html.admina-afc .afc-vbtn.on { background: var(--afc-accent); border-color: var(--afc-accent); color: #fff; }
+
+/* ---------- table ---------- */
+html.admina-afc .afc-tblcard { background: var(--afc-card); border: 1px solid var(--afc-line); border-radius: 12px; overflow: hidden; }
+html.admina-afc .afc-tblwrap { overflow-x: auto; max-width: 100%; }
+html.admina-afc table.afc-tbl { border-collapse: collapse; width: 100%; min-width: 1180px; font-size: .8rem; }
+html.admina-afc .afc-tbl th {
+  position: sticky; top: 0; z-index: 2; text-align: left; font-weight: 800; font-size: .68rem;
+  letter-spacing: .4px; text-transform: uppercase; color: var(--afc-text2);
+  background: var(--afc-bg2); border-bottom: 2px solid var(--afc-line);
+  padding: 9px 10px; white-space: nowrap; user-select: none;
+}
+html.admina-afc .afc-tbl th[data-sort] { cursor: pointer; }
+html.admina-afc .afc-tbl th[data-sort]:hover { color: var(--afc-accent); }
+html.admina-afc .afc-tbl th .afc-arrow { font-size: .62rem; margin-left: 3px; }
+html.admina-afc .afc-tbl th.afc-th-chk { width: 34px; }
+html.admina-afc .afc-tbl td { padding: 8px 10px; border-bottom: 1px solid var(--afc-line); vertical-align: middle; }
+html.admina-afc .afc-tbl tbody tr { transition: background .12s; }
+html.admina-afc .afc-tbl tbody tr:hover { background: var(--afc-bg2); }
+html.admina-afc .afc-tfoot td {
+  position: sticky; bottom: 0; background: var(--afc-bg2); font-weight: 800; font-size: .74rem;
+  border-top: 2px solid var(--afc-line); padding: 8px 10px; white-space: nowrap; font-variant-numeric: tabular-nums;
+}
+html.admina-afc .afc-num { color: var(--afc-text2); font-size: .72rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
+html.admina-afc .afc-cand { font-weight: 700; color: var(--afc-text); cursor: pointer; }
+html.admina-afc .afc-cand:hover { color: var(--afc-accent); text-decoration: underline; }
+html.admina-afc .afc-period { white-space: nowrap; font-variant-numeric: tabular-nums; }
+html.admina-afc .afc-dur { white-space: nowrap; font-weight: 600; font-variant-numeric: tabular-nums; }
+html.admina-afc .afc-chip {
+  display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: .68rem; font-weight: 800; white-space: nowrap;
+}
+html.admina-afc .afc-chip.ok { background: var(--afc-okbg); color: var(--afc-ok); }
+html.admina-afc .afc-chip.warn { background: var(--afc-warnbg); color: var(--afc-warn); }
+html.admina-afc .afc-chip.err { background: var(--afc-errbg); color: var(--afc-err); }
+html.admina-afc .afc-chip.info { background: var(--afc-infobg); color: var(--afc-info); }
+html.admina-afc .afc-chip.neutral { background: var(--afc-neutralbg); color: var(--afc-neutral); }
+html.admina-afc .afc-actions { display: flex; gap: 3px; justify-content: center; }
+html.admina-afc .afc-ic {
+  display: inline-grid; place-items: center; width: 27px; height: 27px; border-radius: 7px;
+  border: 1px solid var(--afc-line); background: var(--afc-card); color: var(--afc-text2);
+  cursor: pointer; font-size: .78rem; transition: all .12s; padding: 0;
+}
+html.admina-afc .afc-ic:hover { color: var(--afc-accent); border-color: var(--afc-accent); background: var(--afc-bg2); }
+html.admina-afc .afc-ic.danger:hover { color: var(--afc-err); border-color: var(--afc-err); }
+html.admina-afc .afc-chk { width: 15px; height: 15px; accent-color: var(--afc-accent); cursor: pointer; }
+html.admina-afc .afc-pager { display: flex; gap: 8px; align-items: center; justify-content: flex-end; padding: 9px 12px; font-size: .76rem; color: var(--afc-text2); flex-wrap: wrap; }
+html.admina-afc .afc-pgbtn {
+  border: 1px solid var(--afc-line); background: var(--afc-card); color: var(--afc-text);
+  border-radius: 7px; padding: 3px 9px; font: inherit; font-size: .76rem; cursor: pointer;
+}
+html.admina-afc .afc-pgbtn[disabled] { opacity: .45; cursor: not-allowed; }
+
+/* ---------- VUE SIGNATURE « Diplômes & Écoles » ---------- */
+html.admina-afc .afc-dual { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: start; }
+@media (max-width: 760px) { html.admina-afc .afc-dual { grid-template-columns: 1fr; } }
+html.admina-afc .afc-pane {
+  background: var(--afc-card); border: 1px solid var(--afc-line); border-radius: 12px; padding: 12px 14px;
+  min-width: 0;
+}
+html.admina-afc .afc-pane-head { border-bottom: 2px solid var(--afc-line); padding-bottom: 8px; margin-bottom: 6px; }
+html.admina-afc .afc-pane-title { margin: 0; font-size: .82rem; font-weight: 800; letter-spacing: .4px; text-transform: uppercase; color: var(--afc-text); display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+html.admina-afc .afc-pane-n { font-size: .7rem; font-weight: 700; color: var(--afc-accent); text-transform: none; letter-spacing: 0; }
+html.admina-afc .afc-pane-hint { display: block; font-size: .72rem; color: var(--afc-text2); font-style: italic; margin-top: 2px; }
+html.admina-afc .afc-vrow {
+  display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(150px, 1fr) 44px; gap: 10px; align-items: center;
+  padding: 9px 8px; border-bottom: 1px solid var(--afc-line); cursor: pointer; border-radius: 8px;
+  transition: background .12s, box-shadow .12s;
+}
+html.admina-afc .afc-vrow:last-child { border-bottom: none; }
+html.admina-afc .afc-vrow:hover { background: var(--afc-bg2); }
+html.admina-afc .afc-vrow.on { background: var(--afc-okbg); box-shadow: inset 0 0 0 1px var(--afc-accent); }
+html.admina-afc .afc-vmain { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+html.admina-afc .afc-vname { font-weight: 800; color: var(--afc-text); font-size: .86rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+html.admina-afc .afc-vmeta { font-size: .72rem; color: var(--afc-text2); font-variant-numeric: tabular-nums; }
+html.admina-afc .afc-vtags { display: flex; gap: 4px; flex-wrap: wrap; }
+html.admina-afc .afc-vtag {
+  font-size: .6rem; font-weight: 800; letter-spacing: .4px; text-transform: uppercase;
+  background: var(--afc-infobg); color: var(--afc-info); border-radius: 5px; padding: 1px 6px;
+}
+html.admina-afc .afc-vtag.gold { background: var(--afc-warnbg); color: var(--afc-warn); }
+html.admina-afc .afc-vbadge {
+  font-size: .62rem; font-weight: 800; letter-spacing: .3px; text-transform: uppercase;
+  background: var(--afc-warnbg); color: var(--afc-gold); border: 1px solid #fcd34d; border-radius: 999px; padding: 2px 8px;
+  -webkit-print-color-adjust: exact; print-color-adjust: exact;
+}
+html.admina-afc .afc-vbar-zone { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+html.admina-afc .afc-vbar-track { display: block; height: 9px; background: var(--afc-neutralbg); border-radius: 5px; overflow: hidden; width: 100%; }
+html.admina-afc .afc-vbar-fill { display: block; height: 100%; border-radius: 5px; background: linear-gradient(90deg, #0f766e, #059669); }
+html.admina-afc .afc-vchips { display: flex; gap: 4px; flex-wrap: wrap; }
+html.admina-afc .afc-vchips .afc-chip { font-size: .62rem; }
+html.admina-afc .afc-vcount {
+  font-weight: 800; font-size: 1.06rem; color: var(--afc-text); text-align: right; font-variant-numeric: tabular-nums;
+}
+
+/* ---------- cartes ---------- */
+html.admina-afc .afc-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; }
+html.admina-afc .afc-cardx {
+  background: var(--afc-card); border: 1px solid var(--afc-line); border-radius: 12px; padding: 13px 14px;
+  box-shadow: var(--afc-shadow); display: flex; flex-direction: column; gap: 8px; position: relative;
+  transition: transform .12s, box-shadow .12s;
+}
+html.admina-afc .afc-cardx:hover { transform: translateY(-2px); }
+html.admina-afc .afc-card-top { display: flex; gap: 9px; align-items: flex-start; justify-content: space-between; }
+html.admina-afc .afc-card-name { font-weight: 800; font-size: .98rem; color: var(--afc-text); cursor: pointer; }
+html.admina-afc .afc-card-name:hover { color: var(--afc-accent); }
+html.admina-afc .afc-card-dipl { color: var(--afc-text); font-weight: 600; font-size: .88rem; }
+html.admina-afc .afc-card-ecole { display: flex; gap: 5px; flex-wrap: wrap; }
+html.admina-afc .afc-card-ecole .afc-chip { cursor: pointer; font-size: .68rem; }
+html.admina-afc .afc-card-ecole .afc-chip:hover { border-color: var(--afc-accent); color: var(--afc-accent); }
+html.admina-afc .afc-card-meta { display: flex; gap: 5px; flex-wrap: wrap; align-items: center; }
+html.admina-afc .afc-card-foot { display: flex; align-items: center; justify-content: space-between; gap: 6px; border-top: 1px dashed var(--afc-line); padding-top: 8px; }
+html.admina-afc .afc-card-act { display: flex; gap: 3px; }
+html.admina-afc .afc-sim-row { display: grid; grid-template-columns: 200px 1fr; gap: 10px; align-items: center; margin: 9px 0; font-size: .8rem; }
+@media (max-width: 560px) { html.admina-afc .afc-sim-row { grid-template-columns: 1fr; } }
+
+/* ---------- barre de sélection ---------- */
+html.admina-afc .afc-selbar {
+  position: sticky; bottom: 8px; z-index: 40; margin-top: 12px;
+  background: var(--afc-card); border: 1px solid var(--afc-accent); border-radius: 12px;
+  padding: 9px 14px; display: flex; gap: 9px; align-items: center; flex-wrap: wrap;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, .18); font-size: .8rem;
+}
+html.admina-afc .afc-selbar-info { font-weight: 700; }
+html.admina-afc .afc-selbar-sub { color: var(--afc-text2); font-size: .72rem; }
+
+/* ---------- drawer ---------- */
+html.admina-afc .afc-backdrop {
+  position: fixed; inset: 0; background: rgba(6, 20, 18, .55); z-index: 1299;
+  backdrop-filter: blur(1.5px); animation: afcFade .18s ease;
+}
+html.admina-afc .afc-drawer {
+  position: fixed; top: 0; right: 0; bottom: 0; width: min(500px, 94vw); z-index: 1300;
+  background: var(--afc-card); color: var(--afc-text); border-left: 1px solid var(--afc-line);
+  box-shadow: -12px 0 40px rgba(0, 0, 0, .25); display: flex; flex-direction: column;
+  animation: afcSlide .2s ease;
+}
+@keyframes afcFade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes afcSlide { from { transform: translateX(30px); opacity: .4; } to { transform: none; opacity: 1; } }
+html.admina-afc .afc-drawer-head { display: flex; gap: 10px; align-items: flex-start; justify-content: space-between; padding: 15px 17px 10px; border-bottom: 1px solid var(--afc-line); }
+html.admina-afc .afc-drawer-title { font-size: 1.02rem; font-weight: 800; }
+html.admina-afc .afc-drawer-sub { font-size: .74rem; color: var(--afc-text2); margin-top: 2px; }
+html.admina-afc .afc-drawer-x {
+  border: 1px solid var(--afc-line); background: var(--afc-card); color: var(--afc-text2);
+  width: 29px; height: 29px; border-radius: 8px; cursor: pointer; font-size: .9rem; flex: 0 0 auto;
+}
+html.admina-afc .afc-drawer-x:hover { color: var(--afc-err); border-color: var(--afc-err); }
+html.admina-afc .afc-drawer-body { overflow-y: auto; padding: 13px 17px 20px; flex: 1; }
+html.admina-afc .afc-fsec { font-size: .68rem; font-weight: 800; letter-spacing: .7px; text-transform: uppercase; color: var(--afc-text2); margin: 14px 0 7px; display: flex; align-items: center; gap: 8px; }
+html.admina-afc .afc-fsec::after { content: ''; flex: 1; height: 1px; background: var(--afc-line); }
+html.admina-afc .afc-notebox { width: 100%; border: 1px solid var(--afc-line); background: var(--afc-bg2); color: var(--afc-text); border-radius: 9px; padding: 8px 10px; font: inherit; font-size: .8rem; min-height: 56px; resize: vertical; }
+html.admina-afc .afc-drawer-actions { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 14px; }
+html.admina-afc .afc-warnblock {
+  background: var(--afc-errbg); color: var(--afc-err); border: 1px dashed var(--afc-err);
+  border-radius: 9px; padding: 7px 11px; font-size: .76rem; font-weight: 700; margin: 8px 0;
+}
+html.admina-afc .afc-warnblock.afc-warnok { background: var(--afc-okbg); color: var(--afc-ok); border-color: var(--afc-ok); }
+html.admina-afc .afc-live { background: var(--afc-bg2); border: 1px dashed var(--afc-line); border-radius: 10px; padding: 8px 12px; font-size: .76rem; display: flex; gap: 14px; flex-wrap: wrap; margin-top: 10px; }
+html.admina-afc .afc-live b { color: var(--afc-accent); }
+html.admina-afc .afc-live .bad { color: var(--afc-err); }
+html.admina-afc .afc-live .good { color: var(--afc-ok); }
+
+/* mini-timeline éducation (parcours du même candidat) */
+html.admina-afc .afc-tl { display: flex; flex-direction: column; gap: 6px; }
+html.admina-afc .afc-tl-node {
+  display: flex; gap: 9px; align-items: center; border: 1px solid var(--afc-line); border-radius: 10px;
+  padding: 7px 9px; background: var(--afc-bg2); cursor: pointer; transition: box-shadow .15s;
+}
+html.admina-afc .afc-tl-node:hover { box-shadow: var(--afc-shadow); }
+html.admina-afc .afc-tl-node.cur { box-shadow: inset 0 0 0 2px var(--afc-accent); background: var(--afc-okbg); }
+html.admina-afc .afc-tl-dot { width: 11px; height: 11px; border-radius: 50%; flex: 0 0 auto; box-shadow: 0 0 0 2px var(--afc-card); }
+html.admina-afc .afc-tl-mid { display: flex; flex-direction: column; gap: 1px; min-width: 0; flex: 1; }
+html.admina-afc .afc-tl-line { font-weight: 700; font-size: .78rem; color: var(--afc-text); white-space: nowrap; font-variant-numeric: tabular-nums; }
+html.admina-afc .afc-tl-sub { font-size: .7rem; color: var(--afc-text2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ---------- dialog ---------- */
+html.admina-afc .afc-dialog {
+  position: fixed; z-index: 1300; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: min(700px, 94vw); max-height: 90vh; display: flex; flex-direction: column;
+  background: var(--afc-card); color: var(--afc-text); border: 1px solid var(--afc-line);
+  border-radius: 14px; box-shadow: 0 24px 70px rgba(0, 0, 0, .35); animation: afcPop .16s ease;
+}
+@keyframes afcPop { from { transform: translate(-50%, -48%); opacity: 0; } to { transform: translate(-50%, -50%); opacity: 1; } }
+html.admina-afc .afc-dialog-head { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px 10px; border-bottom: 1px solid var(--afc-line); }
+html.admina-afc .afc-dialog-head h3 { margin: 0; font-size: 1rem; font-weight: 800; }
+html.admina-afc .afc-dialog-body { padding: 12px 18px 16px; overflow-y: auto; }
+html.admina-afc .afc-dialog-foot { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 11px 18px; border-top: 1px solid var(--afc-line); flex-wrap: wrap; }
+html.admina-afc .afc-fgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px 12px; }
+html.admina-afc .afc-fgrid .full { grid-column: 1 / -1; }
+@media (max-width: 560px) { html.admina-afc .afc-fgrid { grid-template-columns: 1fr; } }
+html.admina-afc .afc-lab { display: flex; flex-direction: column; gap: 3px; font-size: .74rem; font-weight: 700; color: var(--afc-text2); }
+html.admina-afc .afc-ta { resize: vertical; min-height: 46px; font: inherit; font-size: .82rem; }
+html.admina-afc .afc-form-err {
+  background: var(--afc-errbg); color: var(--afc-err); border: 1px solid var(--afc-err);
+  border-radius: 9px; padding: 7px 11px; font-size: .78rem; margin-top: 9px;
+}
+html.admina-afc .afc-form-hint { font-size: .7rem; color: var(--afc-text2); }
+
+/* ---------- confirm ---------- */
+html.admina-afc .afc-confirm {
+  position: fixed; z-index: 1301; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: min(430px, 92vw); background: var(--afc-card); color: var(--afc-text);
+  border: 1px solid var(--afc-line); border-radius: 14px; box-shadow: 0 24px 70px rgba(0, 0, 0, .4); padding: 17px 19px;
+  animation: afcPop .16s ease;
+}
+html.admina-afc .afc-confirm h4 { margin: 0 0 7px; font-size: .95rem; }
+html.admina-afc .afc-confirm p { margin: 0 0 13px; font-size: .8rem; color: var(--afc-text2); }
+html.admina-afc .afc-confirm-row { display: flex; gap: 8px; justify-content: flex-end; }
+
+/* ---------- panneaux (journal / viviers / seuils) ---------- */
+html.admina-afc .afc-panel {
+  position: fixed; z-index: 1300; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: min(680px, 94vw); max-height: 84vh; background: var(--afc-card); color: var(--afc-text);
+  border: 1px solid var(--afc-line); border-radius: 14px; box-shadow: 0 24px 70px rgba(0, 0, 0, .35);
+  display: flex; flex-direction: column; animation: afcPop .16s ease;
+}
+html.admina-afc .afc-panel-head { display: flex; justify-content: space-between; align-items: center; padding: 13px 17px 9px; border-bottom: 1px solid var(--afc-line); }
+html.admina-afc .afc-panel-head h3 { margin: 0; font-size: .98rem; font-weight: 800; }
+html.admina-afc .afc-panel-body { padding: 12px 17px 16px; overflow-y: auto; flex: 1; }
+html.admina-afc .afc-jrow { display: flex; gap: 9px; padding: 6px 2px; border-bottom: 1px dashed var(--afc-line); font-size: .76rem; align-items: baseline; }
+html.admina-afc .afc-jtime { color: var(--afc-text2); font-variant-numeric: tabular-nums; white-space: nowrap; font-size: .68rem; }
+html.admina-afc .afc-jact { font-weight: 800; white-space: nowrap; }
+html.admina-afc .afc-jdet { color: var(--afc-text2); }
+html.admina-afc .afc-empty { text-align: center; color: var(--afc-text2); padding: 26px 0; font-size: .82rem; }
+html.admina-afc .afc-cibles-note { font-size: .78rem; color: var(--afc-text2); margin: 2px 0 10px; }
+html.admina-afc .afc-sim-kpis { display: flex; gap: 9px; flex-wrap: wrap; font-size: .78rem; color: var(--afc-text2); margin-bottom: 9px; }
+html.admina-afc .afc-sim-kpis span { background: var(--afc-bg2); border: 1px solid var(--afc-line); border-radius: 9px; padding: 5px 10px; }
+html.admina-afc .afc-sim-kpis b { color: var(--afc-text); }
+html.admina-afc .afc-sim-tip { background: var(--afc-infobg); color: var(--afc-info); border-radius: 9px; padding: 8px 12px; font-size: .76rem; font-weight: 600; }
+html.admina-afc .afc-viv-row {
+  display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.6fr) auto; gap: 9px; align-items: center;
+  border: 1px solid var(--afc-line); border-radius: 10px; padding: 8px 10px; font-size: .78rem; margin-bottom: 6px; background: var(--afc-bg2);
+  cursor: pointer;
+}
+html.admina-afc .afc-viv-row:hover { box-shadow: var(--afc-shadow); }
+html.admina-afc .afc-viv-row.hot { border-color: var(--afc-err); background: var(--afc-errbg); }
+html.admina-afc .afc-viv-who { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+html.admina-afc .afc-viv-what { color: var(--afc-text2); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+@media (max-width: 620px) { html.admina-afc .afc-viv-row { grid-template-columns: 1fr auto; } }
+
+/* ---------- toasts ---------- */
+html.admina-afc .afc-toasts { position: fixed; bottom: 16px; right: 16px; z-index: 1400; display: flex; flex-direction: column; gap: 7px; max-width: 340px; }
+html.admina-afc .afc-toast {
+  background: var(--afc-card); color: var(--afc-text); border: 1px solid var(--afc-line);
+  border-left: 4px solid var(--afc-accent); border-radius: 10px; padding: 9px 13px; font-size: .8rem;
+  box-shadow: 0 8px 26px rgba(0, 0, 0, .22); display: flex; gap: 9px; align-items: flex-start;
+  animation: afcToast .18s ease;
+}
+html.admina-afc .afc-toast.err { border-left-color: var(--afc-err); }
+html.admina-afc .afc-toast.ok { border-left-color: var(--afc-ok); }
+html.admina-afc .afc-toast button { border: none; background: none; color: var(--afc-text2); cursor: pointer; font-size: .95rem; padding: 0; line-height: 1; }
+@keyframes afcToast { from { transform: translateY(9px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+/* ---------- pied ---------- */
+html.admina-afc .afc-foot { margin-top: 14px; font-size: .72rem; color: var(--afc-text2); text-align: center; }
+html.admina-afc .afc-link { border: none; background: none; color: var(--afc-accent); cursor: pointer; font: inherit; font-size: inherit; text-decoration: underline; padding: 0; }
+
+/* ---------- burger mobile ---------- */
+html.admina-afc .admina-burger {
+  display: none; align-items: center; justify-content: center;
+  width: 38px; height: 38px; border-radius: 9px; border: 1px solid rgba(0, 0, 0, .12);
+  background: rgba(255, 255, 255, .85); color: #134e4a; cursor: pointer; margin-right: 6px; padding: 0;
+}
+html.admina-afc .admina-burger:hover { background: rgba(128, 128, 128, .15); }
+html.admina-afc .admina-nav-backdrop { background: transparent; pointer-events: none; }
+@media (max-width: 819px) {
+  html.admina-afc header.MuiPaper-root { margin-left: 0 !important; width: 100% !important; }
+
+  html.admina-afc .MuiToolbar-root { padding-left: 10px !important; padding-right: 10px !important; }
+  html.admina-afc .MuiDrawer-docked {
+    display: block !important;
+    position: fixed; top: 0; left: 0; bottom: 0;
+    width: 280px; max-width: 86vw;
+    z-index: 1450;
+    transform: translateX(-106%);
+    transition: transform .25s ease;
+  }
+  html.admina-afc.admina-nav-open .MuiDrawer-docked { transform: translateX(0); }
+  html.admina-afc .MuiDrawer-docked .MuiDrawer-paper {
+    width: 280px; max-width: 86vw; box-sizing: border-box;
+    position: absolute; height: 100%;
+  }
+  html.admina-afc .admina-burger { display: inline-flex !important; }
+  html.admina-afc .admina-nav-backdrop {
+    position: fixed; inset: 0; background: rgba(0, 0, 0, .5);
+    z-index: 1440; opacity: 0; pointer-events: none; transition: opacity .22s ease;
+  }
+  html.admina-afc.admina-nav-open .admina-nav-backdrop { opacity: 1; pointer-events: auto; }
+}
+
+/* ---------- garde-fous 390 px (0 débordement horizontal) ---------- */
+@media (max-width: 460px) {
+  html.admina-afc .afc-hero { padding: 14px 12px; }
+  html.admina-afc .afc-h2 { font-size: 1.06rem; }
+  html.admina-afc .afc-hero-actions .afc-btn { padding: 6px 9px; font-size: .74rem; }
+  html.admina-afc .afc-toolbar { position: static; }
+  html.admina-afc .afc-sel { max-width: 100%; flex: 1 1 45%; }
+  html.admina-afc .afc-views { margin-left: 0; }
+  html.admina-afc .afc-count { margin-left: 0; width: 100%; }
+  /* vue signature : les rangées diplômes/écoles passent en colonne */
+  html.admina-afc .afc-vrow { display: flex; flex-direction: column; align-items: stretch; gap: 6px; }
+  html.admina-afc .afc-vbar-zone { width: 100%; }
+  html.admina-afc .afc-vcount { text-align: left; }
+  html.admina-afc .afc-viv-row { grid-template-columns: 1fr; }
+  html.admina-afc .afc-kv { grid-template-columns: 1fr; }
+}
+
+/* ---------- impression ---------- */
+@media print {
+  html.admina-afc [data-afc="toolbar"], html.admina-afc .afc-hero-actions, html.admina-afc .afc-actions,
+  html.admina-afc .afc-selbar, html.admina-afc .afc-toasts, html.admina-afc .afc-pager,
+  html.admina-afc .afc-chk, html.admina-afc .afc-foot, html.admina-afc .admina-burger { display: none !important; }
+  html.admina-afc [data-afc="root"] { padding: 0; }
+  html.admina-afc .afc-tblcard { border: none; }
+}
+
+/* ---------- scrollbars ---------- */
+html.admina-afc .afc-tblwrap::-webkit-scrollbar, html.admina-afc .afc-drawer-body::-webkit-scrollbar,
+html.admina-afc .afc-dialog-body::-webkit-scrollbar, html.admina-afc .afc-panel-body::-webkit-scrollbar { height: 9px; width: 9px; }
+html.admina-afc .afc-tblwrap::-webkit-scrollbar-thumb, html.admina-afc .afc-drawer-body::-webkit-scrollbar-thumb,
+html.admina-afc .afc-dialog-body::-webkit-scrollbar-thumb, html.admina-afc .afc-panel-body::-webkit-scrollbar-thumb {
+  background: var(--afc-line); border-radius: 5px;
+}
+
+/* ---------- garde toolbar native (mobile) ---------- */
+@media (max-width: 480px) {
+  html.admina-afc .MuiToolbar-root { flex-wrap: wrap; row-gap: 6px; padding-bottom: 8px; }
+  html.admina-afc .MuiToolbar-root .MuiBox-root { min-width: 0; }
+}
+
+/* ---------- garde responsive finale (anti-écrasement cascade) ---------- */
+@media (max-width: 760px) {
+  html.admina-afc .afc-charts { grid-template-columns: 1fr !important; }
+  html.admina-afc .afc-charts > * { min-width: 0; max-width: 100%; }
+  html.admina-afc .afc-kpis { grid-template-columns: 1fr 1fr !important; }
+  html.admina-afc .afc-kpis > * { min-width: 0; }
+  html.admina-afc .afc-dual { grid-template-columns: 1fr !important; }
+  html.admina-afc .afc-dual > * { min-width: 0; }
+  html.admina-afc .afc-tblwrap { max-width: 100%; }
+}
+@media (max-width: 480px) {
+  html.admina-afc .afc-kpis { grid-template-columns: 1fr !important; }
+}

@@ -469,3 +469,6 @@ html.admina-aco .aco-dialog-body::-webkit-scrollbar-thumb, html.admina-aco .aco-
   background: var(--aco-line); border-radius: 5px;
 }
 html.admina-aco .aco-tblwrap::-webkit-scrollbar-thumb:hover { background: var(--aco-text2); }
+
+/* V37 — audit D1 : cartes KPI empilées (label/valeur/sous-titre étaient en inline) */
+html.admina-aco .aco-kpi-t,html.admina-aco .aco-kpi-v,html.admina-aco .aco-kpi-s{display:block}

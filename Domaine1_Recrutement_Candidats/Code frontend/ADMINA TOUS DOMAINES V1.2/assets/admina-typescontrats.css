@@ -1,0 +1,1691 @@
+/* ==========================================================================
+   admina-typescontrats.css — v1.0-w4 (W4-b) — module additif /types-de-contrats
+   --------------------------------------------------------------------------
+   LE CADRE JURIDIQUE — la bibliothèque de règles qui donne du sens à chaque
+   contrat signé. Chaque type = des LIMITES (durée max, rupture) et des COÛTS
+   (avantages légaux). Ici on lit le portefeuille À TRAVERS ses règles :
+   répartition, concentrations, garde-fous.
+
+   Préfixe unique : tct- · Racine : html.admina-tct + [data-tct-page]
+   Gardes obligatoires en bas de fichier (drawer natif margin-left, barre
+   haute MUI, media queries <760px en un seul bloc final).
+   ========================================================================== */
+
+/* ------------------------------------------------------------------------
+   1. VARIABLES & THÈMES (clair + sombre auto via LS admina-dark)
+   ------------------------------------------------------------------------ */
+html.admina-tct {
+  --tct-bg: #eef2f7;
+  --tct-panel: #ffffff;
+  --tct-panel2: #f8fafc;
+  --tct-line: #e2e8f0;
+  --tct-line2: #cbd5e1;
+  --tct-txt: #0f172a;
+  --tct-mut: #64748b;
+  --tct-acc: #2563eb;
+  --tct-acc-soft: #dbeafe;
+  --tct-ok: #059669;
+  --tct-ok-soft: #d1fae5;
+  --tct-warn: #d97706;
+  --tct-warn-soft: #fef3c7;
+  --tct-err: #dc2626;
+  --tct-err-soft: #fee2e2;
+  --tct-vio: #7c3aed;
+  --tct-vio-soft: #ede9fe;
+  --tct-r: 14px;
+  --tct-r-s: 9px;
+  --tct-shadow: 0 12px 32px rgba(15, 23, 42, 0.10);
+  --tct-shadow-s: 0 2px 8px rgba(15, 23, 42, 0.08);
+}
+html.admina-tct-dark {
+  --tct-bg: #0b1220;
+  --tct-panel: #111a2c;
+  --tct-panel2: #0e1626;
+  --tct-line: #24304a;
+  --tct-line2: #33415e;
+  --tct-txt: #e6edf7;
+  --tct-mut: #94a6bd;
+  --tct-acc: #60a5fa;
+  --tct-acc-soft: #1e3a5f;
+  --tct-ok: #34d399;
+  --tct-ok-soft: #10382a;
+  --tct-warn: #fbbf24;
+  --tct-warn-soft: #3a2c10;
+  --tct-err: #f87171;
+  --tct-err-soft: #3d1517;
+  --tct-vio: #a78bfa;
+  --tct-vio-soft: #2a2153;
+  --tct-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+  --tct-shadow-s: 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+/* ------------------------------------------------------------------------
+   2. BASE MODULE — tout vit sous .tct-root, zéro fuite hors page
+   ------------------------------------------------------------------------ */
+html.admina-tct body {
+  overflow-x: hidden;
+}
+html.admina-tct body > div > div:nth-child(2) {
+  overflow-x: hidden;
+}
+.tct-root {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 1240px;
+  margin: 18px 0 34px;
+  padding: 0 20px;
+  color: var(--tct-txt);
+  font-family: inherit;
+  font-size: 15px;
+  line-height: 1.5;
+  animation: tct-fadein 0.35s ease both;
+}
+.tct-root *,
+.tct-root *::before,
+.tct-root *::after {
+  box-sizing: border-box;
+}
+.tct-root h2,
+.tct-root h3 {
+  margin: 0;
+  font-weight: 700;
+}
+.tct-root p {
+  margin: 0;
+}
+.tct-root button {
+  font-family: inherit;
+}
+.tct-sr {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+.tct-live {
+  color: transparent;
+}
+.tct-note {
+  margin: 10px 0;
+  padding: 10px 14px;
+  border: 1px dashed var(--tct-line2);
+  border-radius: var(--tct-r-s);
+  background: var(--tct-panel2);
+  color: var(--tct-mut);
+  font-size: 13.5px;
+}
+.tct-root :focus-visible {
+  outline: 2px solid var(--tct-acc);
+  outline-offset: 2px;
+}
+
+/* ------------------------------------------------------------------------
+   3. ANIMATIONS
+   ------------------------------------------------------------------------ */
+@keyframes tct-fadein {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes tct-slidein {
+  from { transform: translateX(60px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+@keyframes tct-pop {
+  from { transform: scale(0.94); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+@keyframes tct-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.35); }
+  50% { box-shadow: 0 0 0 6px rgba(220, 38, 38, 0.12); }
+}
+@keyframes tct-toastin {
+  from { transform: translateY(14px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tct-root *,
+  .tct-drawer,
+  .tct-overlay .tct-dialog,
+  .tct-toast {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* ------------------------------------------------------------------------
+   4. HÉRO — résumé calculé du portefeuille
+   ------------------------------------------------------------------------ */
+.tct-hero {
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 16px;
+  padding: 22px 26px;
+  border: 1px solid var(--tct-line);
+  border-radius: var(--tct-r);
+  background: linear-gradient(135deg, var(--tct-acc-soft) 0%, var(--tct-panel) 55%);
+  box-shadow: var(--tct-shadow-s);
+}
+html.admina-tct-dark .tct-hero {
+  background: linear-gradient(135deg, var(--tct-acc-soft) 0%, var(--tct-panel) 60%);
+}
+.tct-hero::after {
+  content: '';
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 170px;
+  height: 170px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(37, 99, 235, 0.16), transparent 70%);
+  pointer-events: none;
+}
+.tct-hero-kicker {
+  margin-bottom: 4px;
+  color: var(--tct-acc);
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.tct-hero-title {
+  margin: 0 0 6px;
+  font-size: 23px;
+  letter-spacing: -0.01em;
+}
+.tct-hero-line {
+  margin: 0 0 12px;
+  font-size: 15.5px;
+  font-weight: 600;
+  color: var(--tct-txt);
+}
+.tct-hero-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.tct-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border: 1px solid var(--tct-line2);
+  border-radius: 999px;
+  background: var(--tct-panel);
+  color: var(--tct-mut);
+  font-size: 12.5px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.tct-chip--ok {
+  border-color: var(--tct-ok);
+  background: var(--tct-ok-soft);
+  color: var(--tct-ok);
+}
+.tct-chip--warn {
+  border-color: var(--tct-warn);
+  background: var(--tct-warn-soft);
+  color: var(--tct-warn);
+}
+.tct-chip--info {
+  border-color: var(--tct-acc);
+  background: var(--tct-acc-soft);
+  color: var(--tct-acc);
+}
+
+/* ------------------------------------------------------------------------
+   5. ALERTES AAA — cliquables, chacune pousse vers un filtre
+   ------------------------------------------------------------------------ */
+.tct-alertes {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.tct-alerte {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 11px 16px;
+  border: 1px solid var(--tct-line);
+  border-left-width: 5px;
+  border-radius: var(--tct-r-s);
+  background: var(--tct-panel);
+  color: var(--tct-txt);
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.tct-alerte:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--tct-shadow-s);
+}
+.tct-alerte-ico {
+  flex: 0 0 auto;
+  font-size: 17px;
+  line-height: 1;
+}
+.tct-alerte-txt {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.tct-alerte-act {
+  flex: 0 0 auto;
+  color: var(--tct-acc);
+  font-size: 12.5px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.tct-alerte--crit {
+  border-left-color: var(--tct-err);
+  background: var(--tct-err-soft);
+  animation: tct-pulse 2.4s ease-in-out infinite;
+}
+.tct-alerte--crit .tct-alerte-act {
+  color: var(--tct-err);
+}
+.tct-alerte--warn {
+  border-left-color: var(--tct-warn);
+  background: var(--tct-warn-soft);
+}
+.tct-alerte--info {
+  border-left-color: var(--tct-acc);
+  background: var(--tct-panel);
+}
+
+/* ------------------------------------------------------------------------
+   6. KPI — 6 indicateurs, 4 cliquables vers les filtres
+   ------------------------------------------------------------------------ */
+.tct-kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(158px, 1fr));
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.tct-kpi {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 13px 16px;
+  border: 1px solid var(--tct-line);
+  border-radius: var(--tct-r-s);
+  background: var(--tct-panel);
+  text-align: left;
+  box-shadow: var(--tct-shadow-s);
+}
+.tct-kpi--click {
+  cursor: pointer;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+.tct-kpi--click:hover {
+  transform: translateY(-2px);
+  border-color: var(--tct-acc);
+}
+.tct-kpi-val {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+.tct-kpi-lab {
+  color: var(--tct-mut);
+  font-size: 12.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.tct-kpi-sub {
+  color: var(--tct-mut);
+  font-size: 12px;
+}
+.tct-kpi-go {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  color: var(--tct-acc);
+  font-size: 11px;
+  font-weight: 800;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+.tct-kpi--click:hover .tct-kpi-go,
+.tct-kpi--click:focus-visible .tct-kpi-go {
+  opacity: 1;
+}
+
+/* ------------------------------------------------------------------------
+   7. GRAPHIQUES SVG — donut, barres rupture, barres durées
+   ------------------------------------------------------------------------ */
+.tct-charts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.tct-chart {
+  padding: 16px 18px;
+  border: 1px solid var(--tct-line);
+  border-radius: var(--tct-r);
+  background: var(--tct-panel);
+  box-shadow: var(--tct-shadow-s);
+}
+.tct-chart-t {
+  margin-bottom: 2px;
+  font-size: 15px;
+}
+.tct-chart-sub {
+  margin-bottom: 10px;
+  color: var(--tct-mut);
+  font-size: 12.5px;
+}
+.tct-donut-wrap {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.tct-donut-slice {
+  transition: opacity 0.15s ease;
+}
+.tct-chart .tct-svg-row {
+  cursor: pointer;
+}
+.tct-chart .tct-svg-row:hover .tct-donut-slice,
+.tct-chart .tct-svg-row:focus-visible .tct-donut-slice {
+  opacity: 0.72;
+}
+.tct-donut-big {
+  fill: var(--tct-txt);
+  font-size: 24px;
+  font-weight: 800;
+}
+.tct-donut-small {
+  fill: var(--tct-mut);
+  font-size: 10.5px;
+}
+.tct-donut-leg {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 150px;
+  flex: 1 1 150px;
+}
+.tct-leg-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 8px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--tct-txt);
+  font-size: 12.5px;
+  text-align: left;
+  cursor: pointer;
+}
+.tct-leg-item:hover {
+  border-color: var(--tct-line);
+  background: var(--tct-panel2);
+}
+.tct-leg-dot {
+  flex: 0 0 auto;
+  width: 11px;
+  height: 11px;
+  border-radius: 4px;
+}
+.tct-leg-lab {
+  flex: 1 1 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  min-width: 0;
+}
+.tct-leg-val {
+  flex: 0 0 auto;
+  color: var(--tct-mut);
+  white-space: nowrap;
+}
+.tct-svg-lab {
+  fill: var(--tct-txt);
+  font-size: 11.5px;
+  font-weight: 700;
+}
+.tct-svg-val {
+  fill: var(--tct-mut);
+  font-size: 10.5px;
+  font-weight: 600;
+}
+.tct-svg-track {
+  fill: var(--tct-panel2);
+  stroke: var(--tct-line);
+}
+.tct-chart .tct-svg-row:hover .tct-svg-lab {
+  fill: var(--tct-acc);
+}
+
+/* ------------------------------------------------------------------------
+   8. TOOLBAR — recherche, filtres, vues, actions
+   ------------------------------------------------------------------------ */
+.tct-toolbar {
+  position: sticky;
+  top: 63px;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+  padding: 10px 12px;
+  border: 1px solid var(--tct-line);
+  border-radius: var(--tct-r);
+  background: var(--tct-panel);
+  box-shadow: var(--tct-shadow-s);
+}
+.tct-search {
+  flex: 1 1 230px;
+  min-width: 170px;
+  padding: 9px 13px;
+  border: 1px solid var(--tct-line2);
+  border-radius: var(--tct-r-s);
+  background: var(--tct-panel2);
+  color: var(--tct-txt);
+  font-size: 14px;
+}
+.tct-search::placeholder {
+  color: var(--tct-mut);
+}
+.tct-select {
+  padding: 9px 10px;
+  border: 1px solid var(--tct-line2);
+  border-radius: var(--tct-r-s);
+  background: var(--tct-panel2);
+  color: var(--tct-txt);
+  font-size: 13.5px;
+  cursor: pointer;
+}
+.tct-chipzone {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.tct-filtre-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 6px 5px 12px;
+  border: 1px solid var(--tct-acc);
+  border-radius: 999px;
+  background: var(--tct-acc-soft);
+  color: var(--tct-acc);
+  font-size: 12.5px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.tct-filtre-x {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--tct-acc);
+  color: #ffffff;
+  font-size: 10px;
+  cursor: pointer;
+}
+html.admina-tct-dark .tct-filtre-x {
+  color: #0b1220;
+}
+.tct-filtre-x:hover {
+  filter: brightness(1.12);
+}
+.tct-spacer {
+  flex: 1 1 18px;
+}
+.tct-views {
+  display: inline-flex;
+  border: 1px solid var(--tct-line2);
+  border-radius: var(--tct-r-s);
+  overflow: hidden;
+}
+.tct-view-btn {
+  padding: 8px 14px;
+  border: 0;
+  background: var(--tct-panel2);
+  color: var(--tct-mut);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.tct-view-btn + .tct-view-btn {
+  border-left: 1px solid var(--tct-line2);
+}
+.tct-view-btn--on {
+  background: var(--tct-acc);
+  color: #ffffff;
+}
+html.admina-tct-dark .tct-view-btn--on {
+  color: #0b1220;
+}
+.tct-btn {
+  padding: 9px 15px;
+  border: 1px solid var(--tct-line2);
+  border-radius: var(--tct-r-s);
+  background: var(--tct-panel);
+  color: var(--tct-txt);
+  font-size: 13.5px;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+}
+.tct-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: var(--tct-shadow-s);
+}
+.tct-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.tct-btn--primary {
+  border-color: var(--tct-acc);
+  background: var(--tct-acc);
+  color: #ffffff;
+}
+html.admina-tct-dark .tct-btn--primary {
+  color: #0b1220;
+}
+.tct-btn--ghost {
+  background: var(--tct-panel2);
+}
+.tct-btn--danger {
+  border-color: var(--tct-err);
+  background: var(--tct-err-soft);
+  color: var(--tct-err);
+}
+.tct-meta {
+  margin: 0 4px 12px;
+  color: var(--tct-mut);
+  font-size: 12.5px;
+}
+.tct-view {
+  margin-bottom: 18px;
+}
+
+/* ------------------------------------------------------------------------
+   9. TABLE — 6 colonnes triables, sticky, pager
+   ------------------------------------------------------------------------ */
+.tct-batchbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 10px;
+  padding: 10px 14px;
+  border: 1px solid var(--tct-vio);
+  border-radius: var(--tct-r-s);
+  background: var(--tct-vio-soft);
+  font-weight: 700;
+}
+.tct-tablewrap {
+  max-height: 640px;
+  border: 1px solid var(--tct-line);
+  border-radius: var(--tct-r);
+  background: var(--tct-panel);
+  overflow: auto;
+  box-shadow: var(--tct-shadow-s);
+}
+.tct-table {
+  min-width: 1100px;
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 14px;
+}
+.tct-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  padding: 11px 13px;
+  border-bottom: 2px solid var(--tct-line2);
+  background: var(--tct-panel2);
+  color: var(--tct-mut);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-align: left;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.tct-th-sort {
+  cursor: pointer;
+  user-select: none;
+}
+.tct-th-sort:hover {
+  color: var(--tct-acc);
+}
+.tct-ar {
+  display: inline-block;
+  margin-left: 6px;
+  color: var(--tct-acc);
+  font-size: 10px;
+}
+.tct-table th[aria-sort="ascending"] .tct-ar::before {
+  content: '▲';
+}
+.tct-table th[aria-sort="descending"] .tct-ar::before {
+  content: '▼';
+}
+.tct-th-check,
+.tct-td-check {
+  width: 40px;
+  text-align: center;
+}
+.tct-th-act,
+.tct-td-actions {
+  width: 150px;
+  white-space: nowrap;
+}
+.tct-table tbody td {
+  padding: 10px 13px;
+  border-bottom: 1px solid var(--tct-line);
+  vertical-align: middle;
+}
+.tct-table tbody tr {
+  transition: background 0.12s ease;
+}
+.tct-table tbody tr:hover {
+  background: var(--tct-panel2);
+}
+.tct-td-av {
+  max-width: 340px;
+  color: var(--tct-mut);
+  font-size: 13px;
+}
+.tct-td-nb {
+  font-weight: 800;
+  white-space: nowrap;
+}
+.tct-nb-reel {
+  color: var(--tct-mut);
+  font-size: 11.5px;
+  font-weight: 600;
+}
+.tct-linklike {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--tct-acc);
+  font-size: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+.tct-linklike:hover {
+  text-decoration: underline;
+}
+.tct-ico-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  margin-right: 4px;
+  padding: 0;
+  border: 1px solid var(--tct-line2);
+  border-radius: 7px;
+  background: var(--tct-panel2);
+  color: var(--tct-mut);
+  font-size: 13px;
+  cursor: pointer;
+  transition: transform 0.12s ease, color 0.12s ease, border-color 0.12s ease;
+}
+.tct-ico-btn:hover {
+  transform: translateY(-1px);
+  color: var(--tct-acc);
+  border-color: var(--tct-acc);
+}
+.tct-ico-btn--del:hover {
+  color: var(--tct-err);
+  border-color: var(--tct-err);
+}
+.tct-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.tct-badge--ok {
+  background: var(--tct-ok-soft);
+  color: var(--tct-ok);
+}
+.tct-badge--no {
+  background: var(--tct-err-soft);
+  color: var(--tct-err);
+}
+.tct-badge--rare {
+  border: 1.5px dashed var(--tct-warn);
+  background: var(--tct-warn-soft);
+  color: var(--tct-warn);
+  letter-spacing: 0.08em;
+}
+.tct-badge--conc {
+  background: var(--tct-vio-soft);
+  color: var(--tct-vio);
+}
+.tct-badge--duree {
+  background: var(--tct-acc-soft);
+  color: var(--tct-acc);
+}
+.tct-vide {
+  padding: 26px 16px !important;
+  color: var(--tct-mut);
+  font-size: 14px;
+  text-align: center;
+}
+.tct-pager {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 12px;
+}
+.tct-pager-btn {
+  padding: 7px 14px;
+  border: 1px solid var(--tct-line2);
+  border-radius: var(--tct-r-s);
+  background: var(--tct-panel);
+  color: var(--tct-txt);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.tct-pager-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.tct-pager-btn:hover:not(:disabled) {
+  border-color: var(--tct-acc);
+  color: var(--tct-acc);
+}
+.tct-pager-info {
+  color: var(--tct-mut);
+  font-size: 13px;
+}
+
+/* ------------------------------------------------------------------------
+   10. VUE CARTES
+   ------------------------------------------------------------------------ */
+.tct-cartes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 12px;
+}
+.tct-carte {
+  --c: var(--tct-acc);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 15px 17px;
+  border: 1px solid var(--tct-line);
+  border-left: 5px solid var(--c);
+  border-radius: var(--tct-r-s);
+  background: var(--tct-panel);
+  box-shadow: var(--tct-shadow-s);
+  animation: tct-fadein 0.3s ease both;
+}
+.tct-carte-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+.tct-carte-type {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--c);
+}
+.tct-carte-nb {
+  color: var(--tct-mut);
+  font-size: 12.5px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.tct-carte-desc {
+  color: var(--tct-txt);
+  font-size: 13.5px;
+}
+.tct-carte-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.tct-carte-av {
+  flex: 1 1 auto;
+  color: var(--tct-mut);
+  font-size: 13px;
+}
+.tct-carte-foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.tct-carte-foot .tct-btn {
+  padding: 6px 11px;
+  font-size: 12.5px;
+}
+
+/* ------------------------------------------------------------------------
+   11. VUE SIGNATURE — RÉPARTITION & LIMITES
+   ------------------------------------------------------------------------ */
+.tct-sig-head {
+  margin-bottom: 12px;
+}
+.tct-sig-t {
+  font-size: 18px;
+  letter-spacing: 0.04em;
+}
+.tct-sig-sub {
+  margin: 4px 0 10px;
+  color: var(--tct-mut);
+  font-size: 13px;
+}
+.tct-sig-blocks {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+.tct-sig-block {
+  --c: var(--tct-acc);
+  display: block;
+  width: 100%;
+  padding: 13px 17px;
+  border: 1px solid var(--tct-line);
+  border-left: 6px solid var(--c);
+  border-radius: var(--tct-r-s);
+  background: var(--tct-panel);
+  color: var(--tct-txt);
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  animation: tct-fadein 0.35s ease both;
+}
+.tct-sig-block:hover {
+  transform: translateX(3px);
+  box-shadow: var(--tct-shadow-s);
+}
+.tct-sig-top {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.tct-sig-name {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--c);
+}
+.tct-sig-badges {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.tct-sig-n {
+  margin-left: auto;
+  color: var(--tct-mut);
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.tct-sig-pct {
+  min-width: 74px;
+  font-size: 14.5px;
+  font-weight: 800;
+  text-align: right;
+  white-space: nowrap;
+}
+.tct-sig-bar {
+  display: block;
+  height: 16px;
+  border-radius: 9px;
+  background: var(--tct-panel2);
+  border: 1px solid var(--tct-line);
+  overflow: hidden;
+}
+.tct-sig-fill {
+  display: block;
+  height: 100%;
+  min-width: 2px;
+  border-radius: 9px;
+  background: var(--c);
+  background: linear-gradient(90deg, var(--c), color-mix(in srgb, var(--c) 72%, #ffffff));
+  transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.tct-sig-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 9px;
+}
+.tct-sig-av {
+  flex: 1 1 220px;
+  min-width: 0;
+  color: var(--tct-mut);
+  font-size: 12.5px;
+}
+.tct-methode {
+  margin-top: 8px;
+  border: 1px dashed var(--tct-line2);
+  border-radius: var(--tct-r-s);
+  background: var(--tct-panel2);
+}
+.tct-methode-s {
+  padding: 9px 14px;
+  color: var(--tct-acc);
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none;
+}
+.tct-methode-s::before {
+  content: '▸ ';
+}
+.tct-methode[open] .tct-methode-s::before {
+  content: '▾ ';
+}
+.tct-methode-b {
+  padding: 2px 16px 12px;
+  color: var(--tct-mut);
+  font-size: 13px;
+}
+.tct-methode-b p {
+  margin: 8px 0;
+}
+.tct-methode-b strong {
+  color: var(--tct-txt);
+}
+
+/* Garde-fous : engagement fort vs flexibles */
+.tct-garde {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 12px;
+  padding-top: 4px;
+}
+.tct-garde-col {
+  padding: 15px 18px;
+  border: 1px solid var(--tct-line);
+  border-radius: var(--tct-r);
+  background: var(--tct-panel);
+}
+.tct-garde-col--fort {
+  border-top: 4px solid var(--tct-err);
+}
+.tct-garde-col--souple {
+  border-top: 4px solid var(--tct-ok);
+}
+.tct-garde-t {
+  margin-bottom: 8px;
+  font-size: 13.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.tct-garde-col--fort .tct-garde-t {
+  color: var(--tct-err);
+}
+.tct-garde-col--souple .tct-garde-t {
+  color: var(--tct-ok);
+}
+.tct-garde-list {
+  margin: 0;
+  padding: 0 0 0 2px;
+  list-style: none;
+  display: grid;
+  gap: 5px;
+  font-size: 13.5px;
+}
+.tct-garde-item {
+  padding: 7px 10px;
+  border-radius: 8px;
+  background: var(--tct-panel2);
+  border: 1px solid var(--tct-line);
+}
+.tct-garde-note {
+  margin-top: 10px;
+  color: var(--tct-mut);
+  font-size: 12.5px;
+  font-style: italic;
+}
+
+/* ------------------------------------------------------------------------
+   12. FICHE TYPE (drawer latéral) + voile
+   ------------------------------------------------------------------------ */
+.tct-voile {
+  position: fixed;
+  inset: 0;
+  z-index: 1150;
+  background: rgba(15, 23, 42, 0.45);
+  animation: tct-fadein 0.2s ease both;
+}
+.tct-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1160;
+  display: flex;
+  flex-direction: column;
+  width: min(440px, 94vw);
+  background: var(--tct-panel);
+  border-left: 1px solid var(--tct-line);
+  box-shadow: var(--tct-shadow);
+  animation: tct-slidein 0.25s ease both;
+}
+.tct-drawer-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 15px 18px;
+  border-bottom: 1px solid var(--tct-line);
+  background: var(--tct-panel2);
+}
+.tct-drawer-title {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 7px;
+  font-size: 17px;
+}
+.tct-drawer-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 1px solid var(--tct-line2);
+  border-radius: 8px;
+  background: var(--tct-panel);
+  color: var(--tct-mut);
+  font-size: 14px;
+  cursor: pointer;
+}
+.tct-drawer-close:hover {
+  color: var(--tct-err);
+  border-color: var(--tct-err);
+}
+.tct-drawer-body {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 15px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.tct-drawer-sec {
+  font-size: 13.5px;
+}
+.tct-drawer-lab {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--tct-mut);
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+.tct-dl {
+  display: grid;
+  gap: 6px;
+}
+.tct-dl-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 7px 10px;
+  border: 1px solid var(--tct-line);
+  border-radius: 8px;
+  background: var(--tct-panel2);
+}
+.tct-dl-k {
+  color: var(--tct-mut);
+  font-size: 12.5px;
+  font-weight: 700;
+}
+.tct-dl-v {
+  font-size: 13px;
+  font-weight: 700;
+  text-align: right;
+}
+.tct-quickedit {
+  display: flex;
+  gap: 8px;
+}
+.tct-quickedit .tct-input {
+  flex: 1 1 auto;
+  width: auto;
+}
+.tct-mini-bar {
+  height: 12px;
+  margin-top: 6px;
+  border-radius: 7px;
+  background: var(--tct-panel2);
+  border: 1px solid var(--tct-line);
+  overflow: hidden;
+}
+.tct-mini-fill {
+  height: 100%;
+  border-radius: 7px;
+  transition: width 0.4s ease;
+}
+.tct-liens {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 5px;
+}
+.tct-lien-item {
+  padding: 7px 10px;
+  border: 1px solid var(--tct-line);
+  border-radius: 8px;
+  background: var(--tct-panel2);
+  font-size: 13px;
+}
+.tct-lien-more {
+  color: var(--tct-mut);
+  font-style: italic;
+}
+.tct-drawer-foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 13px 18px;
+  border-top: 1px solid var(--tct-line);
+  background: var(--tct-panel2);
+}
+
+/* ------------------------------------------------------------------------
+   13. DIALOGUES — création/édition validée, confirmation maison, seuils,
+       journal, aide. Aucun confirm() natif nulle part.
+   ------------------------------------------------------------------------ */
+.tct-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  background: rgba(15, 23, 42, 0.5);
+  animation: tct-fadein 0.18s ease both;
+}
+.tct-overlay--confirm {
+  z-index: 1250;
+}
+.tct-dialog {
+  width: min(680px, 96vw);
+  max-height: 92vh;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--tct-line);
+  border-radius: var(--tct-r);
+  background: var(--tct-panel);
+  box-shadow: var(--tct-shadow);
+  animation: tct-pop 0.2s ease both;
+  overflow: hidden;
+}
+.tct-dialog--small {
+  width: min(480px, 96vw);
+}
+.tct-confirm {
+  width: min(440px, 96vw);
+}
+.tct-dialog-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 15px 20px;
+  border-bottom: 1px solid var(--tct-line);
+  background: var(--tct-panel2);
+}
+.tct-dialog-t {
+  font-size: 17px;
+}
+.tct-dialog-x {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 1px solid var(--tct-line2);
+  border-radius: 8px;
+  background: var(--tct-panel);
+  color: var(--tct-mut);
+  font-size: 14px;
+  cursor: pointer;
+}
+.tct-dialog-x:hover {
+  color: var(--tct-err);
+  border-color: var(--tct-err);
+}
+.tct-form {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 16px 20px;
+}
+.tct-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+.tct-field--full {
+  grid-column: 1 / -1;
+}
+.tct-label {
+  color: var(--tct-mut);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.tct-input,
+.tct-textarea {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1px solid var(--tct-line2);
+  border-radius: var(--tct-r-s);
+  background: var(--tct-panel2);
+  color: var(--tct-txt);
+  font-family: inherit;
+  font-size: 14px;
+}
+.tct-textarea {
+  resize: vertical;
+  min-height: 70px;
+}
+.tct-input:focus,
+.tct-textarea:focus,
+.tct-select:focus,
+.tct-search:focus {
+  border-color: var(--tct-acc);
+  outline: none;
+  box-shadow: 0 0 0 3px var(--tct-acc-soft);
+}
+.tct-err {
+  margin: 0;
+  color: var(--tct-err);
+  font-size: 12px;
+  font-weight: 700;
+}
+.tct-apercu {
+  padding: 10px 13px;
+  border: 1px solid var(--tct-acc);
+  border-radius: var(--tct-r-s);
+  background: var(--tct-acc-soft);
+  color: var(--tct-txt);
+  font-size: 13px;
+  font-weight: 600;
+}
+.tct-apercu--warn {
+  border-color: var(--tct-err);
+  background: var(--tct-err-soft);
+  color: var(--tct-err);
+}
+.tct-dialog-foot {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 13px 20px;
+  border-top: 1px solid var(--tct-line);
+  background: var(--tct-panel2);
+}
+.tct-confirm-msg {
+  padding: 16px 20px 4px;
+  color: var(--tct-txt);
+  font-size: 14px;
+}
+.tct-help-grid {
+  margin: 0;
+  padding: 14px 20px 4px;
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7px;
+}
+.tct-help-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 10px;
+  border: 1px solid var(--tct-line);
+  border-radius: 8px;
+  background: var(--tct-panel2);
+  font-size: 13px;
+}
+.tct-kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 26px;
+  height: 24px;
+  padding: 0 7px;
+  border: 1px solid var(--tct-line2);
+  border-bottom-width: 2.5px;
+  border-radius: 6px;
+  background: var(--tct-panel);
+  color: var(--tct-txt);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 800;
+}
+.tct-journal {
+  margin: 0;
+  padding: 12px 20px;
+  list-style: none;
+  overflow-y: auto;
+  max-height: 340px;
+  display: grid;
+  gap: 5px;
+}
+.tct-journal-row {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  padding: 6px 9px;
+  border: 1px solid var(--tct-line);
+  border-radius: 7px;
+  background: var(--tct-panel2);
+  font-size: 12.5px;
+}
+.tct-journal-time {
+  flex: 0 0 auto;
+  color: var(--tct-mut);
+  font-variant-numeric: tabular-nums;
+}
+.tct-journal-act {
+  flex: 0 0 auto;
+  min-width: 110px;
+  font-weight: 800;
+  color: var(--tct-acc);
+}
+.tct-journal-det {
+  flex: 1 1 auto;
+  min-width: 0;
+  color: var(--tct-txt);
+}
+
+/* ------------------------------------------------------------------------
+   14. TOASTS
+   ------------------------------------------------------------------------ */
+.tct-toasts {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 1300;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+}
+.tct-toast {
+  padding: 11px 16px;
+  border: 1px solid var(--tct-line2);
+  border-left: 5px solid var(--tct-acc);
+  border-radius: var(--tct-r-s);
+  background: var(--tct-panel);
+  color: var(--tct-txt);
+  font-size: 13.5px;
+  font-weight: 600;
+  box-shadow: var(--tct-shadow);
+  animation: tct-toastin 0.22s ease both;
+  max-width: 340px;
+}
+.tct-toast--ok {
+  border-left-color: var(--tct-ok);
+}
+.tct-toast--err {
+  border-left-color: var(--tct-err);
+}
+
+/* ------------------------------------------------------------------------
+   15. PIED DE MODULE + BURGER
+   ------------------------------------------------------------------------ */
+.tct-foot {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 20px;
+  padding: 13px 4px 0;
+  border-top: 1px solid var(--tct-line);
+  color: var(--tct-mut);
+  font-size: 13px;
+}
+.tct-foot-btn {
+  padding: 5px 10px;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--tct-acc);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.tct-foot-btn:hover {
+  border-color: var(--tct-acc);
+  background: var(--tct-acc-soft);
+}
+.tct-foot-ver {
+  margin-left: auto;
+  color: var(--tct-mut);
+  font-size: 12px;
+}
+.tct-burger {
+  position: fixed;
+  left: 14px;
+  bottom: 14px;
+  z-index: 1100;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid var(--tct-line2);
+  border-radius: 12px;
+  background: var(--tct-panel);
+  color: var(--tct-txt);
+  font-size: 19px;
+  box-shadow: var(--tct-shadow);
+  cursor: pointer;
+}
+
+/* ------------------------------------------------------------------------
+   16. GARDES OBLIGATOIRES (drawer natif, barre haute, burger <820px)
+   ------------------------------------------------------------------------ */
+@media (max-width: 819px) {
+  [data-tct-page] {
+    width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+  }
+  html.admina-tct .tct-host {
+    width: 100% !important;
+    margin-left: 0 !important;
+  }
+}
+@media (max-width: 820px) {
+  html.admina-tct header.MuiPaper-root {
+    margin-left: 0 !important;
+    width: 100% !important;
+  }
+  .tct-burger {
+    display: flex;
+  }
+  .tct-toolbar {
+    top: 56px;
+  }
+}
+
+/* ------------------------------------------------------------------------
+   17. RESPONSIVE <760px — UN SEUL BLOC, en fin de fichier
+   ------------------------------------------------------------------------ */
+@media (max-width: 759px) {
+  .tct-root {
+    padding: 0 10px;
+    margin-top: 12px;
+    font-size: 14px;
+  }
+  .tct-hero {
+    padding: 16px 15px;
+  }
+  .tct-hero-title {
+    font-size: 19px;
+  }
+  .tct-hero-line {
+    font-size: 14px;
+  }
+  .tct-hero-chips {
+    gap: 6px;
+  }
+  .tct-chip {
+    font-size: 11.5px;
+    padding: 3px 10px;
+  }
+  .tct-alerte {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+  .tct-alerte-act {
+    display: none;
+  }
+  .tct-kpis {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+  .tct-kpi {
+    padding: 11px 12px;
+  }
+  .tct-kpi-val {
+    font-size: 19px;
+  }
+  .tct-kpi-go {
+    display: none;
+  }
+  .tct-charts {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .tct-toolbar {
+    top: 52px;
+    padding: 9px 10px;
+  }
+  .tct-search {
+    flex: 1 1 100%;
+  }
+  .tct-select {
+    flex: 1 1 44%;
+    min-width: 0;
+  }
+  .tct-views {
+    flex: 1 1 100%;
+  }
+  .tct-view-btn {
+    flex: 1 1 auto;
+    padding: 8px 6px;
+    font-size: 12px;
+  }
+  .tct-btn {
+    padding: 8px 12px;
+    font-size: 12.5px;
+  }
+  .tct-spacer {
+    flex: 1 1 100%;
+  }
+  .tct-tablewrap {
+    max-height: none;
+  }
+  .tct-table {
+    min-width: 1100px;
+  }
+  .tct-cartes {
+    grid-template-columns: 1fr;
+  }
+  .tct-sig-block {
+    padding: 11px 12px;
+  }
+  .tct-sig-n {
+    margin-left: 0;
+  }
+  .tct-sig-pct {
+    min-width: 0;
+  }
+  .tct-garde {
+    grid-template-columns: 1fr;
+  }
+  .tct-drawer {
+    width: 100vw;
+    border-left: 0;
+  }
+  .tct-overlay {
+    padding: 10px;
+  }
+  .tct-dialog {
+    width: 96vw;
+    max-height: 94vh;
+  }
+  .tct-form {
+    grid-template-columns: 1fr;
+    padding: 13px 14px;
+  }
+  .tct-help-grid {
+    grid-template-columns: 1fr;
+  }
+  .tct-dialog-foot {
+    padding: 11px 14px;
+  }
+  .tct-toasts {
+    left: 12px;
+    right: 12px;
+  }
+  .tct-toast {
+    max-width: none;
+  }
+  .tct-foot {
+    padding-bottom: 60px;
+  }
+  .tct-foot-ver {
+    margin-left: 0;
+    flex-basis: 100%;
+  }
+  .tct-journal-act {
+    min-width: 0;
+  }
+}

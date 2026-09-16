@@ -454,3 +454,18 @@ html.admina-asr .asr-dialog-body::-webkit-scrollbar-thumb, html.admina-asr .asr-
   background: var(--asr-line); border-radius: 5px;
 }
 html.admina-asr .asr-tblwrap::-webkit-scrollbar-thumb:hover { background: var(--asr-text2); }
+
+/* V37 — audit D1 : correctifs sources-recrutement */
+/* 1) le burger injecté par admina-sources.js était visible sur desktop (règle manquante) */
+html.admina-asr .admina-burger{display:none}
+@media (max-width:819px){
+  html.admina-asr .admina-burger{
+    display:inline-flex!important;align-items:center;justify-content:center;
+    width:34px;height:30px;padding:4px;margin:0 8px 0 0;flex:0 0 auto;
+    border:0;border-radius:8px;background:transparent;color:inherit;cursor:pointer
+  }
+}
+/* 2) cartes KPI : libellé / valeur / sous-titre empilés */
+html.admina-asr .asr-kpi-t,html.admina-asr .asr-kpi-v,html.admina-asr .asr-kpi-s{display:block}
+/* 4) légende du donut : libellés complets sur 2 lignes plutôt que tronqués */
+html.admina-asr .asr-dl-item{white-space:normal}
