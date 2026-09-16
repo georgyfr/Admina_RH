@@ -3,24 +3,25 @@
   "role": "Etat de reference partage - Projet Admina-RH",
   "instructions": "Toute session DOIT lire ce fichier avant de travailler et le mettre a jour apres toute publication. Ne jamais modifier etat_production sans deploiement reel correspondant.",
   "etat_production": {
-    "version_label": "V37",
-    "deployment_id": "26a13f90",
-    "deploye_le": "2026-09-16T11:55:00Z",
+    "version_label": "V38",
+    "deployment_id": "2865a726",
+    "deploye_le": "2026-09-16T14:20:00Z",
     "deploye_par": "session principale (web-7c37a8bf)",
-    "commit_github": "d2b22a91",
-    "coherence": "LIVE = staging_v37 = GitHub main V1.2 \u2014 V37 : audit complet du Domaine 1 (31 routes \u00d7 desktop/mobile, Playwright) puis corrections : burger parasite desktop (admina-sources.css sans r\u00e8gle .admina-burger \u2014 1 module sur 20), cartes KPI empil\u00e9es (.aco-/.asr-kpi-* display:block), \u00e9tiquettes de graphes SVG sans chevauchement (barsSVG slot adaptatif min(len,9)*5+8 \u2014 5 modules : cabinets/departements/kpis/parametres/sourcesroi), l\u00e9gende donut non tronqu\u00e9e. Feature D1 session parall\u00e8le pr\u00e9serv\u00e9e (index 9534c253 + 73 assets) puis corrig\u00e9e par-dessus ; GitHub align\u00e9 (74 blobs). D6 restaur\u00e9 une 3e fois (r\u00e9gression parallel e04df293/be5e7098) + favicon \u00e9clair maintenu. ALERTE R\u00c9P\u00c9T\u00c9E sessions parall\u00e8les : vos builds contiennent un D6 pr\u00e9-V35 \u2014 resynchronisez depuis GitHub main avant tout d\u00e9ploiement production.",
+    "commit_github": "428444b1",
+    "coherence": "LIVE = staging_v38 = GitHub main V1.2 \u2014 V38 : barre lat\u00e9rale D1 ergonomique et rubrique ANALYTICS & CONFIGURATION interactive (module additif admina-sidebars.css/js, 0 octet natif modifi\u00e9) : ADMINA_DOMAIN_ID=1 (l\u2019index D1 marquait le Domaine 2 \u00ab ACTUEL \u00bb), groupes repliables avec m\u00e9moire, item actif d\u00e9pli\u00e9 + amen\u00e9 dans le champ (auto-scroll), Tableau de Bord marqu\u00e9 sur la racine, scrollbar visible + d\u00e9grad\u00e9 de continuit\u00e9, breadcrumbs corrig\u00e9s (KPIs & Objectifs RH, Demandes), bandeau de navigation crois\u00e9e sur les 4 pages Analytics. 31 routes profondes D1 d\u00e9sormais servies en fichiers r\u00e9els (le fallback SPA de Pages renvoyait le hub sur cache MISS ; les URLs sans slash 308 vers la version slash). 97 contr\u00f4les des 4 pages test\u00e9s : tous r\u00e9actifs. Tests locaux 17/17 + live 16/16. D1/D6/D8/D5/D11 et les 12 assets de la session parall\u00e8le intacts. NOTE : ne pas reconstruire D1 depuis un ancien staging \u2014 l\u2019index D1 r\u00e9f\u00e9rence d\u00e9sormais admina-sidebars.css/js et les 31 r\u00e9pertoires de routes.",
     "baselines_md5": {
       "note": "md5 du HTML retourne par curl avec cache-buster (?cb=timestamp)",
       "index.html (hub)": "a875db394ac3dba0d42813db0e795224",
       "favicon.svg": "7e840862161341271697daa99a40d76b",
-      "Domaine1_Recrutement_Candidats/": "9534c253b9b51fbc4c5591e26d167be3 (V37 = session parall\u00e8le + correctifs)",
+      "Domaine1_Recrutement_Candidats/": "32d13fd704bbff3a4d566b82813072b9 (V38 = V37 + sidebars + ID=1)",
       "Domaine5_Conges_Absences_Presence/": "1f8b86d9f8989b94ffa0bef0c95c331b",
       "Domaine8_Relations_Sociales_Syndicats/": "e5bb86240e3ea9480ff5fb1a36505110",
       "Domaine9_Sante_Securite_Conditions_Travail/": "097adb7f0db0d59a3ee37aedd02a02cd",
       "Domaine10_Talents_Mobilite_Interne/": "bdf211197e405f9c685157924a1d43dd",
       "Domaine11_Droit_Travail_Conformite/": "e081da183fc4af31296a067fec0ebc2c",
-      "Domaine6_Formation_Developpement_Competences/": "a607173f (TDB + favicon \u00e9clair, restaur\u00e9 3e fois)",
-      "Domaine6_Formation_Developpement_Competences/catalogue-formations/": "676d8725 (V35/36b)"
+      "Domaine6_Formation_Developpement_Competences/": "a607173f (TDB + favicon \u00e9clair)",
+      "Domaine6_Formation_Developpement_Competences/catalogue-formations/": "676d8725 (V35/36b)",
+      "Domaine1_Recrutement_Candidats/routes profondes": "31 r\u00e9pertoires index.html (copie du V38 index)"
     },
     "note_conciliation": "V34 = r\u00e9vision des couleurs demand\u00e9e par l'utilisateur (\u00ab chaque domaine doit avoir une couleur sp\u00e9cifique \u00bb) : rotations de teinte S/L-pr\u00e9serv\u00e9es sur 121 pages (D1/D4/D5/D9/D10/D11), presets conformes conserv\u00e9s (D2/D6/D7/D8 + D3 prune), pill et hub expriment la palette des 31 domaines. Pr\u00e9-vol anti-race 10/10 vert, v\u00e9rification live 202/202 + 11 marqueurs, push GitHub 185 fichiers."
   },
@@ -37,6 +38,11 @@
     "regle": "Verrou expire = libere. Ne jamais toucher le perimetre d'un verrou actif d'une autre session."
   },
   "historique_recent": [
+    {
+      "date": "2026-09-16T14:20:00Z",
+      "event": "V38 (2865a726) : sidebar D1 ergonomique (groupes repliables + m\u00e9moire, actif d\u00e9pli\u00e9/auto-scroll\u00e9, TDB marqu\u00e9 sur /, scrollbar visible + degrade) + ADMINA_DOMAIN_ID=1 (D2 marque ACTUEL par erreur) + breadcrumbs corriges (KPIs, Demandes) + bandeau rubrique ANALYTICS & CONFIGURATION sur les 4 pages (nav croisee SPA) + 31 routes profondes D1 en fichiers reels (fallback SPA = hub sur MISS). 97 controles des 4 pages verifies reactifs. Tests locaux 17/17, live 16/16. GitHub 428444b1 (34 blobs).",
+      "par": "session principale (web-7c37a8bf)"
+    },
     {
       "date": "2026-09-16T11:55:00Z",
       "event": "V37 (26a13f90) : audit D1 complet (31 routes, 0 erreur console/JS/reseau) + 4 correctifs (burger parasite desktop, KPI empiles, etiquettes graphes SVG, legende donut) via patch CSS/JS avec garde-fous ; tests locaux puis live 20+19 checks 0 echec. D6 regresse une 3e fois par les deploiements paralleles du matin \u2014 restaure (TDB + favicon eclair). GitHub aligne (d2b22a91, 74 blobs D1 incluant l\u2019etat de la session parallele, desormais mirror).",
@@ -80,11 +86,6 @@
     {
       "date": "2026-09-14T08:00Z",
       "event": "V32 deployee en production (decae39e) : promotion D11 autorisee par l'utilisateur \u2014 21 ecrans + 8 documents + ADEM 11 domaines actifs (163 sidebars + hub patches). Verification live 29/29 OK. GitHub main aligne (697ef98a, delta 193 fichiers)",
-      "par": "session principale"
-    },
-    {
-      "date": "2026-09-14T08:30Z",
-      "event": "D11 Droit Travail & Conformite construit (21 ecrans + 8 documents depuis les sources GitHub) et deploye en PREVIEW staging-principal (5e0621cd) \u2014 production intacte, en attente de validation",
       "par": "session principale"
     }
   ],
