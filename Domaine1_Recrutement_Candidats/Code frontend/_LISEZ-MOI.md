@@ -3,12 +3,14 @@
 ## Versions à jour (identiques à la production)
 
 - **Tous domaines** → `ADMINA TOUS DOMAINES V1.2/`
-  Dernière mise à jour : **V40** (commit `c9420ca1`, 16/09/2026 — déploiement
-  Cloudflare `613fd28c`). C'est dans ce dossier qu'arrivent toutes les mises à
-  jour depuis V35 : redesign Domaine 6, modules D1 (base-candidats, pipeline),
-  barre latérale ergonomique React MUI du Domaine 1, sidebar pleine hauteur.
+  Dernière mise à jour : **déploiement `bc7f7d5f` (17/09/2026)** — miroir intégral
+  de la production (900 fichiers). Inclut toutes les évolutions depuis V35 :
+  redesign Domaine 6, modules D1, barre latérale ergonomique React MUI du
+  Domaine 1, sidebar pleine hauteur (V39/V40), et la mise à jour du 17/09/2026
+  (migrations Next.js des accueils Domaine 1 et Domaine 3, build `_next/`,
+  rafraîchissement de 209 fichiers sur l'ensemble des domaines).
 - **Domaine 1 uniquement (Recrutement & Candidats)** → `Code front-end recrutement V1.6/`
-  Export autonome de l'état production V40 (32 pages + 75 assets + favicons),
+  Export autonome de l'état production (accueil Next.js + 31 écrans + dépendances),
   avec son propre `README.md`.
 
 ## Dossiers historiques (ne plus utiliser comme référence)
