@@ -1,0 +1,474 @@
+/* =========================================================
+   Admina-RH — Analyse des Coûts de Recrutement — couche admina
+   M24 : Centre de pilotage — coûts de recrutement par demande
+   Scope : html.admina-aco (posé uniquement sur /analyse-des-couts)
+   Thèmes : [data-theme=light|dark] (détection auto)
+   Préfixe : aco- (assets admina-couts.*)
+   Philosophie ISO (Manuel D1 §4.4, Obj. 3) : coût par demande liée,
+   budget prévisionnel par poste, structure par nature de dépense.
+   ========================================================= */
+
+/* ---------- variables ---------- */
+html.admina-aco {
+  --aco-accent: #0f766e;
+  --aco-accent2: #059669;
+  --aco-gold: #b45309;
+  --aco-bg: #ffffff;
+  --aco-bg2: #f7faf9;
+  --aco-card: #ffffff;
+  --aco-line: #dbe7e4;
+  --aco-text: #10312e;
+  --aco-text2: #5d7a76;
+  --aco-err: #dc2626;
+  --aco-errbg: #fef2f2;
+  --aco-warn: #b45309;
+  --aco-warnbg: #fef3c7;
+  --aco-ok: #047857;
+  --aco-okbg: #d1fae5;
+  --aco-info: #0e7490;
+  --aco-infobg: #e0f2fe;
+  --aco-neutral: #57534e;
+  --aco-neutralbg: #f1f0ee;
+  --aco-shadow: 0 1px 3px rgba(16, 49, 46, .08), 0 4px 16px rgba(16, 49, 46, .06);
+  --aco-radius: 14px;
+}
+html.admina-aco [data-aco="root"][data-theme="dark"] {
+  --aco-bg: #0c1514;
+  --aco-bg2: #101c1a;
+  --aco-card: #14201e;
+  --aco-line: #243935;
+  --aco-text: #e6f2ef;
+  --aco-text2: #8fb0aa;
+  --aco-err: #f87171;
+  --aco-errbg: #451a1a;
+  --aco-warn: #fbbf24;
+  --aco-warnbg: #3a2b0e;
+  --aco-ok: #34d399;
+  --aco-okbg: #0c2f24;
+  --aco-info: #67e8f9;
+  --aco-infobg: #0c2f36;
+  --aco-neutralbg: #1d2b28;
+  --aco-shadow: 0 1px 3px rgba(0, 0, 0, .5), 0 6px 20px rgba(0, 0, 0, .35);
+}
+
+/* ---------- racine ---------- */
+html.admina-aco [data-aco="root"] {
+  display: block;
+  padding: 4px 4px 28px;
+  color: var(--aco-text);
+  font-family: Inter, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-size: 14px;
+  line-height: 1.45;
+  background: var(--aco-bg);
+  border-radius: 12px;
+}
+html.admina-aco [data-aco="root"] *,
+html.admina-aco [data-aco="root"] *::before,
+html.admina-aco [data-aco="root"] *::after { box-sizing: border-box; }
+html.admina-aco [data-aco-page] { min-width: 0; }
+@media (max-width: 819px) {
+  html.admina-aco [data-aco-page] { width: 100% !important; margin-left: 0 !important; flex-basis: auto; }
+}
+
+/* ---------- héro ---------- */
+html.admina-aco .aco-hero {
+  background: linear-gradient(120deg, #0f766e 0%, #0d9488 55%, #059669 100%);
+  color: #ecfdf9;
+  border-radius: var(--aco-radius);
+  padding: 18px 20px;
+  box-shadow: var(--aco-shadow);
+  margin-bottom: 14px;
+}
+html.admina-aco .aco-hero-main { display: flex; gap: 14px; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; }
+html.admina-aco .aco-hero-title { display: flex; gap: 12px; align-items: center; }
+html.admina-aco .aco-hero-ico {
+  display: grid; place-items: center; width: 46px; height: 46px; border-radius: 12px;
+  background: rgba(255, 255, 255, .16); flex: 0 0 auto;
+}
+html.admina-aco .aco-h2 { margin: 0; font-size: 1.25rem; font-weight: 800; letter-spacing: .2px; }
+html.admina-aco .aco-hero-sub { margin: 3px 0 0; font-size: .88rem; opacity: .93; }
+html.admina-aco .aco-hero-actions { display: flex; gap: 7px; flex-wrap: wrap; }
+html.admina-aco .aco-hero-alerts { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 13px; }
+
+/* Alertes : pastilles SOLIDES à contraste élevé (M23) — texte foncé sur
+   fond clair ~8-9:1 (AAA), lisibles sur le dégradé teal, light & dark. */
+html.admina-aco .aco-alert {
+  display: inline-flex; gap: 7px; align-items: center; padding: 5px 11px; border-radius: 999px;
+  font-size: .78rem; font-weight: 700; border: 1px solid transparent; cursor: pointer; text-align: left;
+  color: #0f172a; background: rgba(255, 255, 255, .94);
+  box-shadow: 0 1px 3px rgba(2, 44, 34, .35);
+  -webkit-print-color-adjust: exact; print-color-adjust: exact;
+}
+html.admina-aco .aco-alert:hover { filter: brightness(.96); }
+html.admina-aco .aco-alert.err { background: #fee2e2; border-color: #fca5a5; color: #7f1d1d; }
+html.admina-aco .aco-alert.warn { background: #fef3c7; border-color: #fcd34d; color: #78350f; }
+html.admina-aco .aco-alert.ok { background: #d1fae5; border-color: #6ee7b7; color: #064e3b; }
+html.admina-aco .aco-alert.info { background: #cffafe; border-color: #67e8f9; color: #164e63; }
+
+/* ---------- boutons ---------- */
+html.admina-aco .aco-btn {
+  display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; border-radius: 9px;
+  border: 1px solid rgba(236, 253, 250, .45); background: rgba(255, 255, 255, .12);
+  color: inherit; font: inherit; font-size: .8rem; font-weight: 600; cursor: pointer;
+  transition: background .15s, transform .1s; white-space: nowrap;
+}
+html.admina-aco .aco-hero .aco-btn:hover { background: rgba(255, 255, 255, .22); }
+html.admina-aco .aco-btn:active { transform: translateY(1px); }
+html.admina-aco .aco-btn-primary { background: var(--aco-accent); border-color: var(--aco-accent); color: #fff; }
+html.admina-aco .aco-btn-ghost { background: var(--aco-card); border: 1px solid var(--aco-line); color: var(--aco-text); }
+html.admina-aco .aco-btn-ghost:hover { background: var(--aco-bg2); }
+html.admina-aco .aco-btn-danger { background: var(--aco-errbg); border-color: var(--aco-err); color: var(--aco-err); }
+html.admina-aco .aco-btn[disabled] { opacity: .5; cursor: not-allowed; }
+html.admina-aco .aco-nc-badge {
+  display: inline-grid; place-items: center; min-width: 17px; height: 17px; padding: 0 4px;
+  border-radius: 999px; background: #fbbf24; color: #422006; font-size: .68rem; font-weight: 800;
+  margin-left: 4px; vertical-align: 1px;
+}
+
+/* ---------- KPI ---------- */
+html.admina-aco .aco-kpis { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin-bottom: 14px; }
+@media (max-width: 1279px) { html.admina-aco .aco-kpis { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 640px) { html.admina-aco .aco-kpis { grid-template-columns: repeat(2, 1fr); } }
+html.admina-aco .aco-kpi {
+  background: var(--aco-card); border: 1px solid var(--aco-line); border-radius: 12px;
+  padding: 12px 14px; cursor: pointer; transition: box-shadow .15s, transform .1s, border-color .15s;
+  position: relative; overflow: hidden; text-align: left; font: inherit; width: 100%;
+}
+html.admina-aco .aco-kpi::before {
+  content: ''; position: absolute; inset: 0 auto 0 0; width: 4px; background: var(--aco-accent); opacity: .65;
+}
+html.admina-aco .aco-kpi.gold::before { background: #f59e0b; }
+html.admina-aco .aco-kpi:hover { box-shadow: var(--aco-shadow); transform: translateY(-1px); }
+html.admina-aco .aco-kpi.on { border-color: var(--aco-accent); background: var(--aco-bg2); box-shadow: inset 0 0 0 1px var(--aco-accent); }
+html.admina-aco .aco-kpi-t { font-size: .66rem; font-weight: 800; letter-spacing: .8px; color: var(--aco-text2); }
+html.admina-aco .aco-kpi-v { font-size: 1.24rem; font-weight: 800; margin-top: 2px; color: var(--aco-text); white-space: nowrap; }
+html.admina-aco .aco-kpi-v.bad { color: var(--aco-err); }
+html.admina-aco .aco-kpi-s { font-size: .7rem; color: var(--aco-text2); margin-top: 1px; }
+
+/* ---------- graphiques ---------- */
+html.admina-aco .aco-charts { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+@media (max-width: 1099px) { html.admina-aco .aco-charts { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 760px) { html.admina-aco .aco-charts { grid-template-columns: 1fr; } }
+html.admina-aco .aco-chart-card {
+  background: var(--aco-card); border: 1px solid var(--aco-line); border-radius: 12px; padding: 12px 14px;
+}
+html.admina-aco .aco-chart-title { font-size: .74rem; font-weight: 800; letter-spacing: .6px; color: var(--aco-text2); text-transform: uppercase; margin-bottom: 8px; }
+html.admina-aco .aco-donut-wrap { display: flex; gap: 12px; align-items: center; }
+html.admina-aco .aco-donut-legend { display: flex; flex-direction: column; gap: 3px; font-size: .72rem; min-width: 0; flex: 1; }
+html.admina-aco .aco-dl-item { display: flex; gap: 6px; align-items: center; cursor: pointer; border-radius: 6px; padding: 1px 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+html.admina-aco .aco-dl-item:hover { background: var(--aco-bg2); }
+html.admina-aco .aco-dl-item.on { background: var(--aco-okbg); }
+html.admina-aco .aco-dl-dot { width: 9px; height: 9px; border-radius: 3px; flex: 0 0 auto; }
+html.admina-aco .aco-dl-val { color: var(--aco-text2); margin-left: auto; font-variant-numeric: tabular-nums; }
+html.admina-aco .aco-bars { display: flex; flex-direction: column; gap: 7px; }
+html.admina-aco .aco-bar-row { display: grid; grid-template-columns: 132px 1fr 78px; gap: 8px; align-items: center; font-size: .74rem; cursor: pointer; border-radius: 6px; padding: 1px 3px; }
+html.admina-aco .aco-bar-row:hover { background: var(--aco-bg2); }
+html.admina-aco .aco-bar-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+html.admina-aco .aco-bar-track { height: 13px; border-radius: 7px; background: var(--aco-neutralbg); overflow: hidden; position: relative; }
+html.admina-aco .aco-bar-fill { display: block; height: 100%; border-radius: 7px; background: linear-gradient(90deg, #0d9488, #059669); min-width: 3px; }
+html.admina-aco .aco-bar-fill.over { background: linear-gradient(90deg, #f59e0b, #dc2626); }
+html.admina-aco .aco-bar-cible { position: absolute; top: -2px; bottom: -2px; width: 2px; background: var(--aco-text); opacity: .55; }
+html.admina-aco .aco-bar-val { text-align: right; font-variant-numeric: tabular-nums; color: var(--aco-text2); white-space: nowrap; }
+
+/* ---------- barre d'outils ---------- */
+html.admina-aco .aco-toolbar {
+  display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+  background: var(--aco-card); border: 1px solid var(--aco-line); border-radius: 12px;
+  padding: 9px 12px; margin-bottom: 12px; position: sticky; top: 6px; z-index: 30;
+  box-shadow: var(--aco-shadow);
+}
+html.admina-aco .aco-search {
+  display: flex; align-items: center; gap: 6px; background: var(--aco-bg2); border: 1px solid var(--aco-line);
+  border-radius: 9px; padding: 5px 9px; flex: 1 1 210px; min-width: 170px; color: var(--aco-text2);
+}
+html.admina-aco .aco-in {
+  border: 1px solid var(--aco-line); background: var(--aco-bg2); color: var(--aco-text);
+  border-radius: 8px; padding: 6px 9px; font: inherit; font-size: .82rem; width: 100%;
+}
+html.admina-aco .aco-search .aco-in { border: none; background: transparent; padding: 2px 0; outline: none; }
+html.admina-aco .aco-sel {
+  border: 1px solid var(--aco-line); background: var(--aco-bg2); color: var(--aco-text);
+  border-radius: 8px; padding: 6px 8px; font: inherit; font-size: .8rem; max-width: 175px; cursor: pointer;
+}
+html.admina-aco .aco-chipbtn {
+  border: 1px solid var(--aco-line); background: var(--aco-card); color: var(--aco-text2);
+  border-radius: 999px; padding: 4px 11px; font: inherit; font-size: .74rem; font-weight: 700; cursor: pointer;
+}
+html.admina-aco .aco-chipbtn:hover { border-color: var(--aco-accent); color: var(--aco-accent); }
+html.admina-aco .aco-count { font-size: .74rem; color: var(--aco-text2); white-space: nowrap; font-variant-numeric: tabular-nums; }
+html.admina-aco .aco-views { display: flex; gap: 4px; margin-left: auto; }
+html.admina-aco .aco-vbtn {
+  display: inline-flex; gap: 5px; align-items: center; padding: 5px 10px; font: inherit; font-size: .76rem;
+  font-weight: 700; border-radius: 8px; border: 1px solid var(--aco-line); background: var(--aco-card); color: var(--aco-text2); cursor: pointer;
+}
+html.admina-aco .aco-vbtn.on { background: var(--aco-accent); border-color: var(--aco-accent); color: #fff; }
+
+/* ---------- table ---------- */
+html.admina-aco .aco-tblcard { background: var(--aco-card); border: 1px solid var(--aco-line); border-radius: 12px; overflow: hidden; }
+html.admina-aco .aco-tblwrap { overflow-x: auto; max-width: 100%; }
+html.admina-aco table.aco-tbl { border-collapse: collapse; width: 100%; min-width: 1490px; font-size: .8rem; }
+html.admina-aco .aco-tbl th {
+  position: sticky; top: 0; z-index: 2; text-align: left; font-weight: 800; font-size: .68rem;
+  letter-spacing: .4px; text-transform: uppercase; color: var(--aco-text2);
+  background: var(--aco-bg2); border-bottom: 2px solid var(--aco-line);
+  padding: 9px 10px; white-space: nowrap; user-select: none;
+}
+html.admina-aco .aco-tbl th[data-sort] { cursor: pointer; }
+html.admina-aco .aco-tbl th[data-sort]:hover { color: var(--aco-accent); }
+html.admina-aco .aco-tbl th .aco-arrow { font-size: .62rem; margin-left: 3px; }
+html.admina-aco .aco-tbl td { padding: 8px 10px; border-bottom: 1px solid var(--aco-line); vertical-align: middle; }
+html.admina-aco .aco-tbl tbody tr { transition: background .12s; }
+html.admina-aco .aco-tbl tbody tr:hover { background: var(--aco-bg2); }
+html.admina-aco .aco-tfoot td {
+  position: sticky; bottom: 0; background: var(--aco-bg2); font-weight: 800; font-size: .74rem;
+  border-top: 2px solid var(--aco-line); padding: 8px 10px; white-space: nowrap; font-variant-numeric: tabular-nums;
+}
+html.admina-aco .aco-tfoot .aco-footpct { display: block; font-weight: 600; color: var(--aco-text2); font-size: .66rem; }
+html.admina-aco .aco-num { color: var(--aco-text2); font-size: .72rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
+html.admina-aco .aco-poste { font-weight: 700; color: var(--aco-text); cursor: pointer; }
+html.admina-aco .aco-poste:hover { color: var(--aco-accent); text-decoration: underline; }
+html.admina-aco .aco-right { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+html.admina-aco .aco-right.zero { color: var(--aco-text2); opacity: .75; }
+html.admina-aco .aco-chip {
+  display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: .68rem; font-weight: 800; white-space: nowrap;
+}
+html.admina-aco .aco-chip.ok { background: var(--aco-okbg); color: var(--aco-ok); }
+html.admina-aco .aco-chip.warn { background: var(--aco-warnbg); color: var(--aco-warn); }
+html.admina-aco .aco-chip.err { background: var(--aco-errbg); color: var(--aco-err); }
+html.admina-aco .aco-chip.info { background: var(--aco-infobg); color: var(--aco-info); }
+html.admina-aco .aco-chip.neutral { background: var(--aco-neutralbg); color: var(--aco-neutral); }
+html.admina-aco .aco-chip.gold { background: var(--aco-warnbg); color: var(--aco-warn); }
+html.admina-aco .aco-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 4px; vertical-align: 1px; }
+html.admina-aco .aco-dot.ok { background: #10b981; }
+html.admina-aco .aco-dot.warn { background: #f59e0b; }
+html.admina-aco .aco-dot.err { background: #ef4444; }
+html.admina-aco .aco-pbar { display: block; width: 74px; height: 6px; border-radius: 4px; background: var(--aco-neutralbg); overflow: hidden; margin: 3px 0 0 auto; }
+html.admina-aco .aco-pbar i { display: block; height: 100%; background: linear-gradient(90deg, #0d9488, #10b981); }
+html.admina-aco .aco-pbar.over i { background: linear-gradient(90deg, #f59e0b, #dc2626); }
+html.admina-aco .aco-fmini { display: flex; gap: 2px; width: 96px; height: 9px; border-radius: 5px; overflow: hidden; }
+html.admina-aco .aco-fmini i { display: block; height: 100%; }
+html.admina-aco .f1 { background: #0ea5a0; }
+html.admina-aco .f2 { background: #f59e0b; }
+html.admina-aco .f3 { background: #8b5cf6; }
+html.admina-aco .f4 { background: #ef4444; }
+html.admina-aco .f5 { background: #06b6d4; }
+html.admina-aco .f6 { background: #10b981; }
+html.admina-aco .f7 { background: #64748b; }
+html.admina-aco .aco-actions { display: flex; gap: 3px; justify-content: center; }
+html.admina-aco .aco-ic {
+  display: inline-grid; place-items: center; width: 27px; height: 27px; border-radius: 7px;
+  border: 1px solid var(--aco-line); background: var(--aco-card); color: var(--aco-text2);
+  cursor: pointer; font-size: .78rem; transition: all .12s; padding: 0;
+}
+html.admina-aco .aco-ic:hover { color: var(--aco-accent); border-color: var(--aco-accent); background: var(--aco-bg2); }
+html.admina-aco .aco-ic.danger:hover { color: var(--aco-err); border-color: var(--aco-err); }
+html.admina-aco .aco-chk { width: 15px; height: 15px; accent-color: var(--aco-accent); cursor: pointer; }
+html.admina-aco .aco-pager { display: flex; gap: 8px; align-items: center; justify-content: flex-end; padding: 9px 12px; font-size: .76rem; color: var(--aco-text2); flex-wrap: wrap; }
+html.admina-aco .aco-pgbtn {
+  border: 1px solid var(--aco-line); background: var(--aco-card); color: var(--aco-text);
+  border-radius: 7px; padding: 3px 9px; font: inherit; font-size: .76rem; cursor: pointer;
+}
+html.admina-aco .aco-pgbtn[disabled] { opacity: .45; cursor: not-allowed; }
+html.admina-aco .aco-pgbtn.on { background: var(--aco-accent); border-color: var(--aco-accent); color: #fff; }
+
+/* ---------- cartes ---------- */
+html.admina-aco .aco-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 12px; }
+html.admina-aco .aco-cardx {
+  background: var(--aco-card); border: 1px solid var(--aco-line); border-radius: 12px; padding: 13px 14px;
+  box-shadow: var(--aco-shadow); display: flex; flex-direction: column; gap: 8px; position: relative;
+  transition: transform .12s, box-shadow .12s;
+}
+html.admina-aco .aco-cardx:hover { transform: translateY(-2px); }
+html.admina-aco .aco-cardx.over { border-color: rgba(220, 38, 38, .4); }
+html.admina-aco .aco-card-top { display: flex; gap: 9px; align-items: flex-start; justify-content: space-between; }
+html.admina-aco .aco-card-name { font-weight: 800; font-size: .92rem; color: var(--aco-text); cursor: pointer; }
+html.admina-aco .aco-card-name:hover { color: var(--aco-accent); }
+html.admina-aco .aco-card-total { font-size: 1.14rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+html.admina-aco .aco-cardx.over .aco-card-total { color: var(--aco-err); }
+html.admina-aco .aco-card-meta { display: flex; gap: 5px; flex-wrap: wrap; }
+html.admina-aco .aco-card-meta .aco-chip { font-size: .64rem; }
+html.admina-aco .aco-card-struct { display: flex; flex-direction: column; gap: 3px; font-size: .68rem; color: var(--aco-text2); }
+html.admina-aco .aco-card-struct .aco-fmini { width: 100%; height: 7px; }
+html.admina-aco .aco-card-foot { display: flex; align-items: center; justify-content: space-between; gap: 6px; border-top: 1px dashed var(--aco-line); padding-top: 8px; }
+html.admina-aco .aco-card-act { display: flex; gap: 3px; }
+
+/* ---------- barre de sélection ---------- */
+html.admina-aco .aco-selbar {
+  position: sticky; bottom: 8px; z-index: 40; margin-top: 12px;
+  background: var(--aco-card); border: 1px solid var(--aco-accent); border-radius: 12px;
+  padding: 9px 14px; display: flex; gap: 9px; align-items: center; flex-wrap: wrap;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, .18); font-size: .8rem;
+}
+html.admina-aco .aco-selbar-info { font-weight: 700; }
+html.admina-aco .aco-selbar-sub { color: var(--aco-text2); font-size: .72rem; }
+
+/* ---------- drawer ---------- */
+html.admina-aco .aco-backdrop {
+  position: fixed; inset: 0; background: rgba(6, 20, 18, .55); z-index: 1299;
+  backdrop-filter: blur(1.5px); animation: acoFade .18s ease;
+}
+html.admina-aco .aco-drawer {
+  position: fixed; top: 0; right: 0; bottom: 0; width: min(490px, 94vw); z-index: 1300;
+  background: var(--aco-card); color: var(--aco-text); border-left: 1px solid var(--aco-line);
+  box-shadow: -12px 0 40px rgba(0, 0, 0, .25); display: flex; flex-direction: column;
+  animation: acoSlide .2s ease;
+}
+@keyframes acoFade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes acoSlide { from { transform: translateX(30px); opacity: .4; } to { transform: none; opacity: 1; } }
+html.admina-aco .aco-drawer-head { display: flex; gap: 10px; align-items: flex-start; justify-content: space-between; padding: 15px 17px 10px; border-bottom: 1px solid var(--aco-line); }
+html.admina-aco .aco-drawer-title { font-size: 1.02rem; font-weight: 800; }
+html.admina-aco .aco-drawer-sub { font-size: .74rem; color: var(--aco-text2); margin-top: 2px; }
+html.admina-aco .aco-drawer-x {
+  border: 1px solid var(--aco-line); background: var(--aco-card); color: var(--aco-text2);
+  width: 29px; height: 29px; border-radius: 8px; cursor: pointer; font-size: .9rem; flex: 0 0 auto;
+}
+html.admina-aco .aco-drawer-x:hover { color: var(--aco-err); border-color: var(--aco-err); }
+html.admina-aco .aco-drawer-body { overflow-y: auto; padding: 13px 17px 20px; flex: 1; }
+html.admina-aco .aco-fsec { font-size: .68rem; font-weight: 800; letter-spacing: .7px; text-transform: uppercase; color: var(--aco-text2); margin: 14px 0 7px; display: flex; align-items: center; gap: 8px; }
+html.admina-aco .aco-fsec::after { content: ''; flex: 1; height: 1px; background: var(--aco-line); }
+html.admina-aco .aco-kv { display: grid; grid-template-columns: 150px 1fr; gap: 5px 12px; font-size: .8rem; }
+html.admina-aco .aco-kv dt { color: var(--aco-text2); }
+html.admina-aco .aco-kv dd { margin: 0; color: var(--aco-text); font-weight: 600; }
+html.admina-aco .aco-notebox { width: 100%; border: 1px solid var(--aco-line); background: var(--aco-bg2); color: var(--aco-text); border-radius: 9px; padding: 8px 10px; font: inherit; font-size: .8rem; min-height: 56px; resize: vertical; }
+html.admina-aco .aco-drawer-actions { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 14px; }
+
+/* ---------- dialog ---------- */
+html.admina-aco .aco-dialog {
+  position: fixed; z-index: 1300; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: min(660px, 94vw); max-height: 90vh; display: flex; flex-direction: column;
+  background: var(--aco-card); color: var(--aco-text); border: 1px solid var(--aco-line);
+  border-radius: 14px; box-shadow: 0 24px 70px rgba(0, 0, 0, .35); animation: acoPop .16s ease;
+}
+@keyframes acoPop { from { transform: translate(-50%, -48%); opacity: 0; } to { transform: translate(-50%, -50%); opacity: 1; } }
+html.admina-aco .aco-dialog-head { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px 10px; border-bottom: 1px solid var(--aco-line); }
+html.admina-aco .aco-dialog-head h3 { margin: 0; font-size: 1rem; font-weight: 800; }
+html.admina-aco .aco-dialog-body { padding: 12px 18px 16px; overflow-y: auto; }
+html.admina-aco .aco-dialog-foot { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 11px 18px; border-top: 1px solid var(--aco-line); }
+html.admina-aco .aco-fgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px 12px; }
+html.admina-aco .aco-fgrid .full { grid-column: 1 / -1; }
+@media (max-width: 560px) { html.admina-aco .aco-fgrid { grid-template-columns: 1fr; } }
+html.admina-aco .aco-lab { display: flex; flex-direction: column; gap: 3px; font-size: .74rem; font-weight: 700; color: var(--aco-text2); }
+html.admina-aco .aco-ta { resize: vertical; min-height: 46px; font: inherit; font-size: .82rem; }
+html.admina-aco .aco-form-err {
+  background: var(--aco-errbg); color: var(--aco-err); border: 1px solid var(--aco-err);
+  border-radius: 9px; padding: 7px 11px; font-size: .78rem; margin-top: 9px;
+}
+html.admina-aco .aco-form-warn {
+  background: var(--aco-warnbg); color: var(--aco-warn); border: 1px dashed var(--aco-warn);
+  border-radius: 9px; padding: 7px 11px; font-size: .74rem; margin-top: 9px; font-weight: 600;
+}
+html.admina-aco .aco-form-hint { font-size: .7rem; color: var(--aco-text2); }
+html.admina-aco .aco-live { background: var(--aco-bg2); border: 1px dashed var(--aco-line); border-radius: 10px; padding: 8px 12px; font-size: .76rem; display: flex; gap: 14px; flex-wrap: wrap; margin-top: 10px; }
+html.admina-aco .aco-live b { color: var(--aco-accent); }
+html.admina-aco .aco-live .bad { color: var(--aco-err); }
+html.admina-aco .aco-live .good { color: var(--aco-ok); }
+
+/* ---------- confirm ---------- */
+html.admina-aco .aco-confirm {
+  position: fixed; z-index: 1301; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: min(430px, 92vw); background: var(--aco-card); color: var(--aco-text);
+  border: 1px solid var(--aco-line); border-radius: 14px; box-shadow: 0 24px 70px rgba(0, 0, 0, .4); padding: 17px 19px;
+  animation: acoPop .16s ease;
+}
+html.admina-aco .aco-confirm h4 { margin: 0 0 7px; font-size: .95rem; }
+html.admina-aco .aco-confirm p { margin: 0 0 13px; font-size: .8rem; color: var(--aco-text2); }
+html.admina-aco .aco-confirm-row { display: flex; gap: 8px; justify-content: flex-end; }
+
+/* ---------- journal / simulateur / comparer / cibles ---------- */
+html.admina-aco .aco-panel {
+  position: fixed; z-index: 1300; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: min(660px, 94vw); max-height: 84vh; background: var(--aco-card); color: var(--aco-text);
+  border: 1px solid var(--aco-line); border-radius: 14px; box-shadow: 0 24px 70px rgba(0, 0, 0, .35);
+  display: flex; flex-direction: column; animation: acoPop .16s ease;
+}
+html.admina-aco .aco-panel-head { display: flex; justify-content: space-between; align-items: center; padding: 13px 17px 9px; border-bottom: 1px solid var(--aco-line); }
+html.admina-aco .aco-panel-head h3 { margin: 0; font-size: .98rem; font-weight: 800; }
+html.admina-aco .aco-panel-body { padding: 12px 17px 16px; overflow-y: auto; flex: 1; }
+html.admina-aco .aco-jrow { display: flex; gap: 9px; padding: 6px 2px; border-bottom: 1px dashed var(--aco-line); font-size: .76rem; align-items: baseline; }
+html.admina-aco .aco-jtime { color: var(--aco-text2); font-variant-numeric: tabular-nums; white-space: nowrap; font-size: .68rem; }
+html.admina-aco .aco-jact { font-weight: 800; white-space: nowrap; }
+html.admina-aco .aco-jdet { color: var(--aco-text2); }
+html.admina-aco .aco-empty { text-align: center; color: var(--aco-text2); padding: 26px 0; font-size: .82rem; }
+html.admina-aco .aco-sim-row { display: grid; grid-template-columns: 200px 1fr 110px; gap: 10px; align-items: center; margin: 9px 0; font-size: .8rem; }
+html.admina-aco .aco-sim-row input[type="range"] { width: 100%; accent-color: var(--aco-accent); }
+html.admina-aco .aco-sim-out { background: var(--aco-bg2); border: 1px solid var(--aco-line); border-radius: 11px; padding: 11px 13px; margin-top: 11px; font-size: .8rem; }
+html.admina-aco .aco-sim-kpis { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 9px; }
+html.admina-aco .aco-sim-kpis b { font-size: 1.02rem; color: var(--aco-accent); }
+html.admina-aco .aco-sim-tip { margin-top: 10px; background: var(--aco-infobg); color: var(--aco-info); border-radius: 9px; padding: 8px 12px; font-size: .76rem; font-weight: 600; }
+html.admina-aco .aco-cmp-wrap { overflow-x: auto; }
+html.admina-aco table.aco-cmp { border-collapse: collapse; width: 100%; font-size: .78rem; min-width: 520px; }
+html.admina-aco .aco-cmp th, html.admina-aco .aco-cmp td { border: 1px solid var(--aco-line); padding: 7px 10px; text-align: center; }
+html.admina-aco .aco-cmp th { background: var(--aco-bg2); font-size: .74rem; }
+html.admina-aco .aco-cmp td:first-child { text-align: left; font-weight: 700; color: var(--aco-text2); font-size: .72rem; white-space: nowrap; }
+html.admina-aco .aco-cmp td.best { background: var(--aco-okbg); color: var(--aco-ok); font-weight: 800; }
+html.admina-aco .aco-cmp td.bad { background: var(--aco-errbg); color: var(--aco-err); }
+html.admina-aco .aco-cibles-note { font-size: .76rem; color: var(--aco-text2); margin: 4px 0 10px; }
+
+/* ---------- toasts ---------- */
+html.admina-aco .aco-toasts { position: fixed; bottom: 16px; right: 16px; z-index: 1400; display: flex; flex-direction: column; gap: 7px; max-width: 340px; }
+html.admina-aco .aco-toast {
+  background: var(--aco-card); color: var(--aco-text); border: 1px solid var(--aco-line);
+  border-left: 4px solid var(--aco-accent); border-radius: 10px; padding: 9px 13px; font-size: .8rem;
+  box-shadow: 0 8px 26px rgba(0, 0, 0, .22); display: flex; gap: 9px; align-items: flex-start;
+  animation: acoToast .18s ease;
+}
+html.admina-aco .aco-toast.err { border-left-color: var(--aco-err); }
+html.admina-aco .aco-toast.ok { border-left-color: var(--aco-ok); }
+html.admina-aco .aco-toast button { border: none; background: none; color: var(--aco-text2); cursor: pointer; font-size: .95rem; padding: 0; line-height: 1; }
+@keyframes acoToast { from { transform: translateY(9px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+/* ---------- pied ---------- */
+html.admina-aco .aco-foot { margin-top: 14px; font-size: .72rem; color: var(--aco-text2); text-align: center; }
+html.admina-aco .aco-link { border: none; background: none; color: var(--aco-accent); cursor: pointer; font: inherit; font-size: inherit; text-decoration: underline; padding: 0; }
+
+/* ---------- burger mobile ---------- */
+html.admina-aco .admina-burger {
+  display: none; align-items: center; justify-content: center;
+  width: 38px; height: 38px; border-radius: 9px; border: 1px solid rgba(0, 0, 0, .12);
+  background: rgba(255, 255, 255, .85); color: #134e4a; cursor: pointer; margin-right: 6px; padding: 0;
+}
+html.admina-aco .admina-burger:hover { background: rgba(128, 128, 128, .15); }
+html.admina-aco .admina-nav-backdrop { background: transparent; pointer-events: none; }
+@media (max-width: 819px) {
+  html.admina-aco .MuiToolbar-root { padding-left: 10px !important; padding-right: 10px !important; }
+  html.admina-aco .MuiDrawer-docked {
+    display: block !important;
+    position: fixed; top: 0; left: 0; bottom: 0;
+    width: 280px; max-width: 86vw;
+    z-index: 1450;
+    transform: translateX(-106%);
+    transition: transform .25s ease;
+  }
+  html.admina-aco.admina-nav-open .MuiDrawer-docked { transform: translateX(0); }
+  html.admina-aco .MuiDrawer-docked .MuiDrawer-paper {
+    width: 280px; max-width: 86vw; box-sizing: border-box;
+    position: absolute; height: 100%;
+  }
+  html.admina-aco .admina-burger { display: inline-flex !important; }
+  html.admina-aco .admina-nav-backdrop {
+    position: fixed; inset: 0; background: rgba(0, 0, 0, .5);
+    z-index: 1440; opacity: 0; pointer-events: none; transition: opacity .22s ease;
+  }
+  html.admina-aco.admina-nav-open .admina-nav-backdrop { opacity: 1; pointer-events: auto; }
+}
+
+/* ---------- impression ---------- */
+@media print {
+  html.admina-aco [data-aco="toolbar"], html.admina-aco .aco-hero-actions, html.admina-aco .aco-actions,
+  html.admina-aco .aco-selbar, html.admina-aco .aco-toasts, html.admina-aco .aco-pager,
+  html.admina-aco .aco-chk, html.admina-aco .aco-foot, html.admina-aco .admina-burger { display: none !important; }
+  html.admina-aco [data-aco="root"] { padding: 0; }
+  html.admina-aco .aco-tblcard { border: none; }
+}
+
+/* ---------- scrollbars ---------- */
+html.admina-aco .aco-tblwrap::-webkit-scrollbar, html.admina-aco .aco-drawer-body::-webkit-scrollbar,
+html.admina-aco .aco-dialog-body::-webkit-scrollbar, html.admina-aco .aco-panel-body::-webkit-scrollbar { height: 9px; width: 9px; }
+html.admina-aco .aco-tblwrap::-webkit-scrollbar-thumb, html.admina-aco .aco-drawer-body::-webkit-scrollbar-thumb,
+html.admina-aco .aco-dialog-body::-webkit-scrollbar-thumb, html.admina-aco .aco-panel-body::-webkit-scrollbar-thumb {
+  background: var(--aco-line); border-radius: 5px;
+}
+html.admina-aco .aco-tblwrap::-webkit-scrollbar-thumb:hover { background: var(--aco-text2); }
+
+/* V37 — audit D1 : cartes KPI empilées (label/valeur/sous-titre étaient en inline) */
+html.admina-aco .aco-kpi-t,html.admina-aco .aco-kpi-v,html.admina-aco .aco-kpi-s{display:block}

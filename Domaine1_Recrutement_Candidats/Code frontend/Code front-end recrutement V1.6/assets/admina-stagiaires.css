@@ -1,0 +1,567 @@
+/* =========================================================
+   Admina-RH — Stagiaires (vivier) — couche admina (W3-a)
+   Scope : html.admina-ast (posé uniquement sur /stagiaires)
+   Thèmes : [data-theme=light|dark] (détection auto, LS admina-dark partagé)
+   Préfixe : ast- (assets admina-stagiaires.*) · variables --ast-
+   Philosophie : /stagiaires = L'ESSAI MUTUEL — période d'observation
+   à double sens ; le stagiaire bien évalué est un vivier pré-qualifié,
+   le statut "Embauche" est l'aboutissement naturel. La VUE AVANCEMENT
+   (barre % écoulé, J-restants, note /20, pastille de décision) est la
+   signature de la page. Ni tableur de main d'œuvre, ni carnet de
+   notes : trancher AVANT la fin, convertir les meilleurs.
+   ========================================================= */
+
+/* ---------- variables ---------- */
+html.admina-ast {
+  --ast-accent: #0d9488;
+  --ast-accent2: #16a34a;
+  --ast-gold: #b45309;
+  --ast-bg: #ffffff;
+  --ast-bg2: #f4faf8;
+  --ast-card: #ffffff;
+  --ast-line: #d8e8e3;
+  --ast-text: #0f2e2a;
+  --ast-text2: #587a74;
+  --ast-err: #dc2626;
+  --ast-errbg: #fef2f2;
+  --ast-warn: #b45309;
+  --ast-warnbg: #fef3c7;
+  --ast-ok: #047857;
+  --ast-okbg: #d1fae5;
+  --ast-info: #0e7490;
+  --ast-infobg: #e0f2fe;
+  --ast-neutral: #57534e;
+  --ast-neutralbg: #f1f0ee;
+  --ast-shadow: 0 1px 3px rgba(15, 46, 42, .08), 0 4px 16px rgba(15, 46, 42, .06);
+  --ast-radius: 14px;
+}
+html.admina-ast [data-ast="root"][data-theme="dark"] {
+  --ast-bg: #0b1413;
+  --ast-bg2: #101c19;
+  --ast-card: #13201d;
+  --ast-line: #24413b;
+  --ast-text: #e6f2ef;
+  --ast-text2: #8fb0aa;
+  --ast-err: #f87171;
+  --ast-errbg: #451a1a;
+  --ast-warn: #fbbf24;
+  --ast-warnbg: #3f2d0c;
+  --ast-ok: #34d399;
+  --ast-okbg: #0c2f24;
+  --ast-info: #38bdf8;
+  --ast-infobg: #0c2a36;
+  --ast-neutral: #a8a29e;
+  --ast-neutralbg: #232b28;
+  --ast-shadow: 0 1px 3px rgba(0, 0, 0, .4), 0 4px 16px rgba(0, 0, 0, .3);
+}
+
+/* ---------- animations ---------- */
+@keyframes astFadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes astFadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes astSlideIn { from { transform: translateX(28px); opacity: .4; } to { transform: translateX(0); opacity: 1; } }
+
+/* ---------- base ---------- */
+html.admina-ast [data-ast="root"] {
+  color: var(--ast-text);
+  font-family: inherit;
+  padding: 4px 2px 26px;
+  animation: astFadeUp .3s ease both;
+  max-width: 100%;
+  min-width: 0;
+}
+html.admina-ast [data-ast="root"] *,
+html.admina-ast [data-ast="root"] *::before,
+html.admina-ast [data-ast="root"] *::after { box-sizing: border-box; }
+html.admina-ast [data-ast-page] { min-width: 0; }
+@media (max-width: 819px) {
+  html.admina-ast [data-ast-page] { width: 100% !important; margin-left: 0 !important; flex-basis: auto; }
+}
+html.admina-ast [data-ast="root"] button { font: inherit; }
+html.admina-ast [data-ast="root"] :focus-visible { outline: 2px solid var(--ast-accent); outline-offset: 2px; }
+
+/* ---------- héro ---------- */
+html.admina-ast .ast-hero {
+  background: linear-gradient(120deg, #0f766e, #15803d 88%);
+  color: #fff;
+  border-radius: var(--ast-radius);
+  padding: 16px 18px;
+  margin-bottom: 14px;
+  box-shadow: var(--ast-shadow);
+}
+html.admina-ast .ast-hero-main { display: flex; gap: 14px; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; }
+html.admina-ast .ast-hero-title { display: flex; gap: 12px; align-items: center; min-width: 0; }
+html.admina-ast .ast-hero-ico {
+  flex: 0 0 auto; width: 46px; height: 46px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(255, 255, 255, .16); border: 1px solid rgba(255, 255, 255, .28);
+}
+html.admina-ast .ast-h2 { margin: 0; font-size: 1.25rem; font-weight: 800; letter-spacing: .2px; }
+html.admina-ast .ast-hero-sub { margin: 3px 0 0; font-size: .88rem; opacity: .95; font-weight: 600; }
+html.admina-ast .ast-hero-sub2 { margin: 2px 0 0; font-size: .76rem; opacity: .82; }
+html.admina-ast .ast-hero-actions { display: flex; gap: 7px; flex-wrap: wrap; }
+html.admina-ast .ast-hero-alerts { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 13px; }
+
+/* ---------- alertes AAA ---------- */
+html.admina-ast .ast-alert {
+  display: block; text-align: left; font: inherit; cursor: pointer;
+  border: 1px solid transparent; border-radius: 10px; padding: 7px 11px;
+  font-size: .78rem; font-weight: 600; line-height: 1.35; max-width: 100%;
+  transition: filter .12s, transform .12s;
+}
+html.admina-ast .ast-alert:hover { filter: brightness(.96); transform: translateY(-1px); }
+html.admina-ast .ast-alert.err { background: #fee2e2; border-color: #fca5a5; color: #7f1d1d; }
+html.admina-ast .ast-alert.warn { background: #fef3c7; border-color: #fcd34d; color: #78350f; }
+html.admina-ast .ast-alert.ok { background: #d1fae5; border-color: #6ee7b7; color: #064e3b; }
+html.admina-ast .ast-alert.info { background: #cffafe; border-color: #67e8f9; color: #164e63; }
+
+/* ---------- boutons ---------- */
+html.admina-ast .ast-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  font: inherit; font-size: .78rem; font-weight: 700; cursor: pointer;
+  color: #fff; background: rgba(255, 255, 255, .14);
+  border: 1px solid rgba(255, 255, 255, .35); border-radius: 10px;
+  padding: 7px 11px; transition: background .12s, transform .1s;
+}
+html.admina-ast .ast-hero .ast-btn:hover { background: rgba(255, 255, 255, .22); }
+html.admina-ast .ast-btn:active { transform: translateY(1px); }
+html.admina-ast .ast-btn-primary { background: var(--ast-accent); border-color: var(--ast-accent); color: #fff; }
+html.admina-ast .ast-btn-ghost { background: var(--ast-card); border: 1px solid var(--ast-line); color: var(--ast-text); }
+html.admina-ast .ast-btn-ghost:hover { background: var(--ast-bg2); }
+html.admina-ast .ast-btn-danger { background: var(--ast-errbg); border-color: var(--ast-err); color: var(--ast-err); }
+html.admina-ast .ast-btn[disabled] { opacity: .5; cursor: not-allowed; }
+html.admina-ast .ast-backbtn { background: var(--ast-card); border: 1px solid var(--ast-line); color: var(--ast-text); }
+
+/* ---------- KPI ---------- */
+html.admina-ast .ast-kpis { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin-bottom: 14px; }
+html.admina-ast .ast-kpi {
+  text-align: left; font: inherit; cursor: pointer; display: flex; flex-direction: column; min-width: 0;
+  background: var(--ast-card); border: 1px solid var(--ast-line); border-radius: 12px; padding: 10px 12px;
+  transition: box-shadow .15s, transform .15s; position: relative; overflow: hidden;
+}
+html.admina-ast .ast-kpi::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+  background: linear-gradient(180deg, var(--ast-accent), var(--ast-accent2));
+}
+html.admina-ast .ast-kpi.gold::before { background: #f59e0b; }
+html.admina-ast .ast-kpi:hover { box-shadow: var(--ast-shadow); transform: translateY(-1px); }
+html.admina-ast .ast-kpi.on { border-color: var(--ast-accent); background: var(--ast-bg2); box-shadow: inset 0 0 0 1px var(--ast-accent); }
+html.admina-ast .ast-kpi-t { font-size: .64rem; font-weight: 800; letter-spacing: .8px; color: var(--ast-text2); text-transform: uppercase; }
+html.admina-ast .ast-kpi-v { font-size: 1.2rem; font-weight: 800; margin-top: 2px; color: var(--ast-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+html.admina-ast .ast-kpi-v.bad { color: var(--ast-err); }
+html.admina-ast .ast-kpi-s { font-size: .68rem; color: var(--ast-text2); margin-top: 1px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ---------- graphiques ---------- */
+html.admina-ast .ast-charts { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+html.admina-ast .ast-chart-card { background: var(--ast-card); border: 1px solid var(--ast-line); border-radius: 12px; padding: 12px 14px; min-width: 0; }
+html.admina-ast .ast-chart-title { font-size: .72rem; font-weight: 800; letter-spacing: .6px; color: var(--ast-text2); text-transform: uppercase; margin-bottom: 8px; }
+html.admina-ast .ast-donut-wrap { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+html.admina-ast .ast-donut-legend { display: flex; flex-direction: column; gap: 3px; font-size: .72rem; min-width: 0; flex: 1; }
+html.admina-ast .ast-dl-item { display: flex; gap: 6px; align-items: center; cursor: pointer; border-radius: 6px; padding: 1px 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+html.admina-ast .ast-dl-item:hover { background: var(--ast-bg2); }
+html.admina-ast .ast-dl-item.on { background: var(--ast-okbg); }
+html.admina-ast .ast-dl-dot { width: 9px; height: 9px; border-radius: 3px; flex: 0 0 auto; }
+html.admina-ast .ast-dl-val { color: var(--ast-text2); margin-left: auto; font-variant-numeric: tabular-nums; }
+html.admina-ast .ast-bars { display: flex; flex-direction: column; gap: 6px; }
+html.admina-ast .ast-bar-row { display: grid; grid-template-columns: minmax(90px, 160px) 1fr 58px; gap: 8px; align-items: center; cursor: pointer; font-size: .76rem; border-radius: 7px; padding: 1px 4px; }
+html.admina-ast .ast-bar-row:hover { background: var(--ast-bg2); }
+html.admina-ast .ast-bar-name { color: var(--ast-text); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+html.admina-ast .ast-bar-track { height: 9px; background: var(--ast-neutralbg); border-radius: 5px; overflow: hidden; }
+html.admina-ast .ast-bar-fill { display: block; height: 100%; border-radius: 5px; background: linear-gradient(90deg, #0d9488, #16a34a); }
+html.admina-ast .ast-bar-val { color: var(--ast-text2); text-align: right; font-variant-numeric: tabular-nums; }
+
+/* ---------- barre d'outils ---------- */
+html.admina-ast .ast-toolbar {
+  position: sticky; top: 6px; z-index: 40;
+  display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+  background: var(--ast-card); border: 1px solid var(--ast-line); border-radius: 12px;
+  padding: 8px 10px; margin-bottom: 12px; box-shadow: var(--ast-shadow);
+}
+html.admina-ast .ast-search {
+  display: flex; gap: 6px; align-items: center; color: var(--ast-text2);
+  background: var(--ast-bg2); border: 1px solid var(--ast-line); border-radius: 10px; padding: 6px 10px; min-width: 210px; flex: 1 1 210px;
+}
+html.admina-ast .ast-in {
+  width: 100%; font: inherit; font-size: .8rem; color: var(--ast-text);
+  background: var(--ast-bg2); border: 1px solid var(--ast-line); border-radius: 9px; padding: 7px 10px; outline: none; min-width: 0;
+}
+html.admina-ast .ast-in:focus { border-color: var(--ast-accent); }
+html.admina-ast .ast-search .ast-in { border: none; background: transparent; padding: 2px 0; outline: none; }
+html.admina-ast .ast-sel {
+  font: inherit; font-size: .76rem; color: var(--ast-text); cursor: pointer;
+  background: var(--ast-bg2); border: 1px solid var(--ast-line); border-radius: 10px; padding: 7px 8px; max-width: 190px; min-width: 0;
+}
+html.admina-ast .ast-chipbtn {
+  font: inherit; font-size: .74rem; font-weight: 700; cursor: pointer;
+  background: var(--ast-errbg); color: var(--ast-err); border: 1px solid var(--ast-err);
+  border-radius: 999px; padding: 6px 12px;
+}
+html.admina-ast .ast-chipbtn:hover { border-color: var(--ast-err); color: var(--ast-err); filter: brightness(.97); }
+html.admina-ast .ast-count { font-size: .74rem; color: var(--ast-text2); white-space: nowrap; font-variant-numeric: tabular-nums; }
+html.admina-ast .ast-views { display: flex; gap: 4px; margin-left: auto; }
+html.admina-ast .ast-vbtn {
+  display: inline-flex; align-items: center; gap: 5px; font: inherit; font-size: .74rem; font-weight: 700; cursor: pointer;
+  color: var(--ast-text2); background: var(--ast-bg2); border: 1px solid var(--ast-line); border-radius: 10px; padding: 6px 10px;
+}
+html.admina-ast .ast-vbtn.on { background: var(--ast-accent); border-color: var(--ast-accent); color: #fff; }
+
+/* ---------- table ---------- */
+html.admina-ast .ast-tblcard { background: var(--ast-card); border: 1px solid var(--ast-line); border-radius: 12px; overflow: hidden; }
+html.admina-ast .ast-tblwrap { overflow-x: auto; max-width: 100%; }
+html.admina-ast table.ast-tbl { border-collapse: collapse; width: 100%; min-width: 1500px; font-size: .8rem; }
+html.admina-ast .ast-tbl th {
+  text-align: left; font-size: .68rem; letter-spacing: .4px; text-transform: uppercase; color: var(--ast-text2);
+  background: var(--ast-bg2); padding: 9px 10px; border-bottom: 1px solid var(--ast-line); white-space: nowrap; position: sticky; top: 0;
+}
+html.admina-ast .ast-tbl th[data-sort] { cursor: pointer; }
+html.admina-ast .ast-tbl th[data-sort]:hover { color: var(--ast-accent); }
+html.admina-ast .ast-tbl th .ast-arrow { font-size: .62rem; margin-left: 3px; }
+html.admina-ast .ast-tbl td { padding: 8px 10px; border-bottom: 1px solid var(--ast-line); vertical-align: middle; }
+html.admina-ast .ast-tbl tbody tr { transition: background .12s; }
+html.admina-ast .ast-tbl tbody tr:hover { background: var(--ast-bg2); }
+html.admina-ast .ast-th-chk { width: 30px; }
+html.admina-ast .ast-tfoot td { background: var(--ast-bg2); font-weight: 800; font-size: .74rem; color: var(--ast-text); padding: 9px 10px; }
+html.admina-ast .ast-num { color: var(--ast-text2); font-size: .72rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
+html.admina-ast .ast-cand { font-weight: 700; color: var(--ast-text); cursor: pointer; }
+html.admina-ast .ast-cand:hover { color: var(--ast-accent); text-decoration: underline; }
+html.admina-ast .ast-arr { white-space: nowrap; font-variant-numeric: tabular-nums; }
+html.admina-ast .ast-chip {
+  display: inline-block; font-size: .68rem; font-weight: 700; line-height: 1.3;
+  padding: 2px 8px; border-radius: 999px; border: 1px solid var(--ast-line);
+  background: var(--ast-neutralbg); color: var(--ast-neutral); white-space: nowrap;
+}
+html.admina-ast .ast-chip.ok { background: var(--ast-okbg); color: var(--ast-ok); }
+html.admina-ast .ast-chip.warn { background: var(--ast-warnbg); color: var(--ast-warn); }
+html.admina-ast .ast-chip.err { background: var(--ast-errbg); color: var(--ast-err); }
+html.admina-ast .ast-chip.info { background: var(--ast-infobg); color: var(--ast-info); }
+html.admina-ast .ast-chip.neutral { background: var(--ast-neutralbg); color: var(--ast-neutral); }
+html.admina-ast .ast-actions { display: flex; gap: 3px; justify-content: center; }
+html.admina-ast .ast-ic {
+  display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; cursor: pointer;
+  border: 1px solid var(--ast-line); background: var(--ast-card); color: var(--ast-text2); border-radius: 7px;
+}
+html.admina-ast .ast-ic:hover { color: var(--ast-accent); border-color: var(--ast-accent); background: var(--ast-bg2); }
+html.admina-ast .ast-ic.danger:hover { color: var(--ast-err); border-color: var(--ast-err); }
+html.admina-ast .ast-chk { width: 15px; height: 15px; accent-color: var(--ast-accent); cursor: pointer; }
+html.admina-ast .ast-pager { display: flex; gap: 8px; align-items: center; justify-content: flex-end; padding: 9px 12px; font-size: .76rem; color: var(--ast-text2); flex-wrap: wrap; }
+html.admina-ast .ast-pgbtn {
+  font: inherit; cursor: pointer; min-width: 28px; height: 28px; border-radius: 8px;
+  border: 1px solid var(--ast-line); background: var(--ast-card); color: var(--ast-text);
+}
+html.admina-ast .ast-pgbtn[disabled] { opacity: .45; cursor: not-allowed; }
+
+/* mini-barre de progression (table + cartes) */
+html.admina-ast .ast-prog {
+  display: inline-block; width: 92px; height: 8px; vertical-align: middle;
+  background: var(--ast-neutralbg); border-radius: 5px; overflow: hidden;
+}
+html.admina-ast .ast-prog i { display: block; height: 100%; border-radius: 5px; background: linear-gradient(90deg, #0d9488, #16a34a); }
+html.admina-ast .ast-prog-pct { font-size: .7rem; color: var(--ast-text2); margin-left: 7px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+/* évaluation : chip + jauge */
+html.admina-ast .ast-evalchip {
+  display: inline-block; font-size: .72rem; font-weight: 800; font-variant-numeric: tabular-nums;
+  padding: 2px 7px; border-radius: 8px; border: 1px solid var(--ast-line); margin-right: 6px;
+}
+html.admina-ast .ast-evalchip i { font-style: normal; font-weight: 600; opacity: .65; font-size: .62rem; }
+html.admina-ast .ast-evalchip.ok { background: var(--ast-okbg); color: var(--ast-ok); border-color: #6ee7b7; }
+html.admina-ast .ast-evalchip.warn { background: var(--ast-warnbg); color: var(--ast-warn); border-color: #fcd34d; }
+html.admina-ast .ast-evalchip.err { background: var(--ast-errbg); color: var(--ast-err); border-color: #fca5a5; }
+html.admina-ast .ast-gauge {
+  display: inline-block; width: 52px; height: 6px; border-radius: 4px;
+  background: var(--ast-neutralbg); overflow: hidden; vertical-align: middle;
+}
+html.admina-ast .ast-gauge-fill { display: block; height: 100%; border-radius: 4px; }
+html.admina-ast .ast-gauge-fill.ok { background: #059669; }
+html.admina-ast .ast-gauge-fill.warn { background: #d97706; }
+html.admina-ast .ast-gauge-fill.err { background: #dc2626; }
+
+/* pastille d'alerte (décision / évaluation manquante) */
+html.admina-ast .ast-pastille {
+  display: inline-block; width: 12px; height: 12px; border-radius: 50%; cursor: pointer; font: inherit;
+  border: 2px solid #dc2626; background: #fee2e2; padding: 0; margin-left: 7px; vertical-align: middle;
+  animation: astFadeIn 1.2s ease-in-out infinite alternate;
+}
+html.admina-ast .ast-pastille.hot { border-color: #dc2626; background: #ef4444; box-shadow: 0 0 0 3px rgba(239, 68, 68, .18); }
+html.admina-ast .ast-pastille.warm { border-color: #d97706; background: #fbbf24; box-shadow: 0 0 0 3px rgba(217, 119, 6, .15); }
+
+/* ---------- VUE AVANCEMENT (signature) ---------- */
+html.admina-ast .ast-avcard { background: var(--ast-card); border: 1px solid var(--ast-line); border-radius: 12px; padding: 12px 14px; }
+html.admina-ast .ast-av-legend { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; font-size: .72rem; color: var(--ast-text2); margin-bottom: 10px; }
+html.admina-ast .ast-av-legend > span { display: inline-flex; gap: 5px; align-items: center; }
+html.admina-ast .ast-leg { display: inline-block; border-radius: 2px; flex: 0 0 auto; }
+html.admina-ast .ast-leg.lg-bar { width: 18px; height: 8px; background: linear-gradient(90deg, #0d9488, #16a34a); }
+html.admina-ast .ast-leg.lg-j { width: 14px; height: 8px; border-radius: 999px; background: var(--ast-infobg); border: 1px solid var(--ast-info); }
+html.admina-ast .ast-leg.lg-p { width: 9px; height: 9px; border-radius: 50%; background: #ef4444; border: 2px solid #dc2626; }
+html.admina-ast .ast-av-hint { margin-left: auto; font-style: italic; }
+html.admina-ast .ast-avrow {
+  display: grid; grid-template-columns: minmax(210px, 1.1fr) minmax(260px, 2.1fr) 170px 190px;
+  gap: 10px 16px; align-items: center; padding: 11px 8px; border-bottom: 1px solid var(--ast-line);
+  cursor: pointer; border-radius: 9px; transition: background .12s; min-width: 0;
+}
+html.admina-ast .ast-avrow:last-child { border-bottom: none; }
+html.admina-ast .ast-avrow:hover { background: var(--ast-bg2); }
+html.admina-ast .ast-avrow.late { background: var(--ast-errbg); }
+html.admina-ast .ast-avrow.late:hover { background: var(--ast-warnbg); }
+html.admina-ast .ast-av-id { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+html.admina-ast .ast-av-name { font-weight: 800; color: var(--ast-text); font-size: .92rem; }
+html.admina-ast .ast-avrow:hover .ast-av-name { color: var(--ast-accent); }
+html.admina-ast .ast-av-badges { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 3px; }
+html.admina-ast .ast-av-badges .ast-chip { font-size: .6rem; }
+html.admina-ast .ast-av-mid { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+html.admina-ast .ast-av-bar {
+  position: relative; display: block; height: 12px; border-radius: 7px;
+  background: var(--ast-neutralbg); overflow: visible;
+}
+html.admina-ast .ast-av-bar.big { height: 16px; border-radius: 9px; }
+html.admina-ast .ast-av-fill {
+  display: block; height: 100%; border-radius: 7px; min-width: 2px;
+  background: linear-gradient(90deg, #0d9488, #16a34a);
+  transition: width .3s ease;
+}
+html.admina-ast .ast-av-fill.full { background: linear-gradient(90deg, #b45309, #d97706); }
+html.admina-ast .ast-av-tick {
+  position: absolute; top: -3px; bottom: -3px; width: 0;
+  border-left: 2px dashed rgba(15, 46, 42, .35);
+}
+html.admina-ast .ast-av-dates { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; min-width: 0; }
+html.admina-ast .ast-av-pct { font-size: .78rem; font-weight: 800; color: var(--ast-accent); white-space: nowrap; }
+html.admina-ast .ast-av-eval { display: flex; flex-direction: column; gap: 4px; align-items: flex-start; min-width: 0; }
+html.admina-ast .ast-av-end { display: flex; flex-direction: column; gap: 5px; align-items: flex-start; min-width: 0; }
+
+/* ---------- vue cartes ---------- */
+html.admina-ast .ast-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; }
+html.admina-ast .ast-cardx {
+  background: var(--ast-card); border: 1px solid var(--ast-line); border-radius: 12px; padding: 12px 14px;
+  display: flex; flex-direction: column; gap: 7px; min-width: 0; transition: transform .15s, box-shadow .15s;
+}
+html.admina-ast .ast-cardx:hover { transform: translateY(-2px); box-shadow: var(--ast-shadow); }
+html.admina-ast .ast-card-top { display: flex; gap: 9px; align-items: flex-start; justify-content: space-between; }
+html.admina-ast .ast-card-name { font-weight: 800; font-size: .98rem; color: var(--ast-text); cursor: pointer; }
+html.admina-ast .ast-card-name:hover { color: var(--ast-accent); }
+html.admina-ast .ast-card-poste { color: var(--ast-text2); }
+html.admina-ast .ast-card-prog { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+html.admina-ast .ast-card-segs { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+html.admina-ast .ast-card-meta { display: flex; gap: 5px; flex-wrap: wrap; align-items: center; }
+html.admina-ast .ast-card-meta .ast-chip { font-size: .64rem; }
+html.admina-ast .ast-card-foot { display: flex; align-items: center; justify-content: space-between; gap: 6px; border-top: 1px dashed var(--ast-line); padding-top: 8px; }
+html.admina-ast .ast-card-act { display: flex; gap: 3px; }
+
+/* ---------- barre de sélection ---------- */
+html.admina-ast .ast-selbar {
+  display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
+  background: var(--ast-infobg); border: 1px solid var(--ast-info); color: var(--ast-text);
+  border-radius: 12px; padding: 9px 13px; margin-top: 12px;
+}
+html.admina-ast .ast-selbar-info { font-weight: 700; }
+html.admina-ast .ast-selbar-sub { color: var(--ast-text2); font-size: .72rem; }
+
+/* ---------- overlays ---------- */
+html.admina-ast .ast-backdrop {
+  position: fixed; inset: 0; background: rgba(9, 30, 27, .45); z-index: 1200;
+  animation: astFadeIn .18s ease both;
+}
+html.admina-ast .ast-drawer {
+  position: fixed; top: 0; right: 0; bottom: 0; width: min(470px, 94vw); z-index: 1210;
+  background: var(--ast-card); color: var(--ast-text); border-left: 1px solid var(--ast-line);
+  box-shadow: -8px 0 30px rgba(0, 0, 0, .18); display: flex; flex-direction: column;
+  animation: astSlideIn .22s ease both;
+}
+html.admina-ast .ast-drawer-head { display: flex; gap: 10px; align-items: flex-start; justify-content: space-between; padding: 15px 17px 10px; border-bottom: 1px solid var(--ast-line); }
+html.admina-ast .ast-drawer-title { font-size: 1.02rem; font-weight: 800; }
+html.admina-ast .ast-drawer-sub { font-size: .74rem; color: var(--ast-text2); margin-top: 2px; }
+html.admina-ast .ast-drawer-x {
+  flex: 0 0 auto; cursor: pointer; font: inherit; width: 30px; height: 30px; border-radius: 8px;
+  border: 1px solid var(--ast-line); background: var(--ast-card); color: var(--ast-text2);
+}
+html.admina-ast .ast-drawer-x:hover { color: var(--ast-err); border-color: var(--ast-err); }
+html.admina-ast .ast-drawer-body { overflow-y: auto; padding: 13px 17px 20px; flex: 1; min-width: 0; }
+html.admina-ast .ast-fsec { font-size: .68rem; font-weight: 800; letter-spacing: .7px; text-transform: uppercase; color: var(--ast-text2); margin: 14px 0 7px; display: flex; align-items: center; gap: 8px; }
+html.admina-ast .ast-fsec::after { content: ''; flex: 1; height: 1px; background: var(--ast-line); }
+html.admina-ast .ast-kv { display: grid; grid-template-columns: 160px 1fr; gap: 5px 12px; font-size: .8rem; margin: 0; }
+html.admina-ast .ast-kv dt { color: var(--ast-text2); }
+html.admina-ast .ast-kv dd { margin: 0; color: var(--ast-text); font-weight: 600; min-width: 0; overflow-wrap: anywhere; }
+html.admina-ast .ast-notebox { width: 100%; border: 1px solid var(--ast-line); background: var(--ast-bg2); color: var(--ast-text); border-radius: 9px; padding: 8px 10px; font: inherit; font-size: .8rem; min-height: 64px; resize: vertical; }
+html.admina-ast .ast-drawer-actions { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 14px; }
+html.admina-ast .ast-warnblock {
+  background: var(--ast-warnbg); color: var(--ast-warn); border: 1px solid #fcd34d;
+  border-radius: 10px; padding: 8px 12px; font-size: .78rem; font-weight: 600; margin-top: 10px;
+}
+html.admina-ast .ast-drawer .hl,
+html.admina-ast .ast-drawer [data-ast="sec-eval"].hl,
+html.admina-ast .ast-drawer [data-ast="sec-prog"].hl,
+html.admina-ast .ast-drawer [data-ast="sec-notes"].hl {
+  box-shadow: inset 0 0 0 2px var(--ast-accent); background: var(--ast-okbg); border-radius: 10px; padding: 8px;
+}
+
+/* ---------- dialog ---------- */
+html.admina-ast .ast-dialog {
+  position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: min(720px, calc(100vw - 20px)); max-height: 92vh; z-index: 1210;
+  background: var(--ast-card); color: var(--ast-text); border: 1px solid var(--ast-line); border-radius: 16px;
+  box-shadow: var(--ast-shadow); display: flex; flex-direction: column; animation: astFadeUp .2s ease both;
+}
+html.admina-ast .ast-dialog-head { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px 10px; border-bottom: 1px solid var(--ast-line); }
+html.admina-ast .ast-dialog-head h3 { margin: 0; font-size: 1rem; font-weight: 800; }
+html.admina-ast .ast-dialog-body { padding: 12px 18px 16px; overflow-y: auto; }
+html.admina-ast .ast-dialog-foot { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 11px 18px; border-top: 1px solid var(--ast-line); flex-wrap: wrap; }
+html.admina-ast .ast-fgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px 12px; }
+html.admina-ast .ast-fgrid .full { grid-column: 1 / -1; }
+html.admina-ast .ast-lab { display: flex; flex-direction: column; gap: 3px; font-size: .74rem; font-weight: 700; color: var(--ast-text2); min-width: 0; }
+html.admina-ast .ast-ta { resize: vertical; min-height: 46px; font: inherit; font-size: .82rem; }
+html.admina-ast .ast-form-hint { font-size: .7rem; color: var(--ast-text2); }
+html.admina-ast .ast-form-err { background: var(--ast-errbg); color: var(--ast-err); border: 1px solid var(--ast-err); border-radius: 9px; padding: 7px 11px; font-size: .78rem; font-weight: 700; margin-top: 8px; }
+html.admina-ast .ast-live { background: var(--ast-bg2); border: 1px dashed var(--ast-line); border-radius: 10px; padding: 8px 12px; font-size: .76rem; display: flex; gap: 14px; flex-wrap: wrap; margin-top: 10px; }
+html.admina-ast .ast-live b { color: var(--ast-accent); }
+html.admina-ast .ast-live .bad { color: var(--ast-err); }
+html.admina-ast .ast-live .good { color: var(--ast-ok); }
+html.admina-ast .ast-sim-row { display: grid; grid-template-columns: 220px 1fr; gap: 10px; align-items: center; margin: 9px 0; font-size: .8rem; }
+
+/* ---------- confirm ---------- */
+html.admina-ast .ast-confirm {
+  position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: min(430px, calc(100vw - 24px)); z-index: 1210;
+  background: var(--ast-card); color: var(--ast-text); border: 1px solid var(--ast-line); border-radius: 14px;
+  box-shadow: var(--ast-shadow); padding: 16px 18px; animation: astFadeUp .18s ease both;
+}
+html.admina-ast .ast-confirm h4 { margin: 0 0 7px; font-size: .95rem; }
+html.admina-ast .ast-confirm p { margin: 0 0 13px; font-size: .8rem; color: var(--ast-text2); }
+html.admina-ast .ast-confirm-row { display: flex; gap: 8px; justify-content: flex-end; }
+
+/* ---------- panneaux (échéances, seuils, journal) ---------- */
+html.admina-ast .ast-panel {
+  position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: min(640px, calc(100vw - 20px)); max-height: 88vh; z-index: 1210;
+  background: var(--ast-card); color: var(--ast-text); border: 1px solid var(--ast-line); border-radius: 16px;
+  box-shadow: var(--ast-shadow); display: flex; flex-direction: column; animation: astFadeUp .2s ease both;
+}
+html.admina-ast .ast-panel-head { display: flex; justify-content: space-between; align-items: center; padding: 13px 17px 9px; border-bottom: 1px solid var(--ast-line); }
+html.admina-ast .ast-panel-head h3 { margin: 0; font-size: .98rem; font-weight: 800; }
+html.admina-ast .ast-panel-body { padding: 12px 17px 16px; overflow-y: auto; flex: 1; min-width: 0; }
+html.admina-ast .ast-jrow { display: flex; gap: 9px; padding: 6px 2px; border-bottom: 1px dashed var(--ast-line); font-size: .76rem; align-items: baseline; }
+html.admina-ast .ast-jtime { color: var(--ast-text2); font-variant-numeric: tabular-nums; white-space: nowrap; font-size: .68rem; }
+html.admina-ast .ast-jact { font-weight: 800; white-space: nowrap; }
+html.admina-ast .ast-jdet { color: var(--ast-text2); min-width: 0; }
+html.admina-ast .ast-empty { text-align: center; color: var(--ast-text2); padding: 26px 0; font-size: .82rem; }
+html.admina-ast .ast-cibles-note { font-size: .78rem; color: var(--ast-text2); margin: 2px 0 10px; }
+html.admina-ast .ast-sim-kpis { display: flex; gap: 9px; flex-wrap: wrap; font-size: .78rem; color: var(--ast-text2); margin-bottom: 9px; }
+html.admina-ast .ast-sim-kpis span { background: var(--ast-bg2); border: 1px solid var(--ast-line); border-radius: 9px; padding: 5px 10px; }
+html.admina-ast .ast-sim-kpis b { color: var(--ast-text); }
+html.admina-ast .ast-sim-tip { background: var(--ast-infobg); color: var(--ast-info); border-radius: 9px; padding: 8px 12px; font-size: .76rem; font-weight: 600; }
+html.admina-ast .ast-ech-row {
+  display: grid; grid-template-columns: 130px minmax(0, 1fr) minmax(0, 1.3fr) 30px; gap: 8px; align-items: center;
+  border: 1px solid var(--ast-line); border-radius: 10px; padding: 7px 10px; margin-bottom: 6px; font-size: .78rem; background: var(--ast-bg2);
+}
+html.admina-ast .ast-ech-row.hot { border-color: var(--ast-err); background: var(--ast-errbg); }
+html.admina-ast .ast-ech-when { font-variant-numeric: tabular-nums; white-space: nowrap; color: var(--ast-text2); }
+html.admina-ast .ast-ech-when b { color: var(--ast-text); }
+html.admina-ast .ast-ech-who { font-weight: 600; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+html.admina-ast .ast-ech-what { color: var(--ast-text2); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: flex; gap: 6px; align-items: center; }
+
+/* ---------- toasts ---------- */
+html.admina-ast .ast-toasts { position: fixed; bottom: 16px; right: 16px; z-index: 1400; display: flex; flex-direction: column; gap: 7px; max-width: 340px; }
+html.admina-ast .ast-toast {
+  display: flex; gap: 10px; align-items: center; justify-content: space-between;
+  background: var(--ast-card); color: var(--ast-text); border: 1px solid var(--ast-line);
+  border-left: 4px solid var(--ast-accent); border-radius: 10px; padding: 9px 12px;
+  font-size: .78rem; font-weight: 600; box-shadow: var(--ast-shadow); animation: astFadeIn .2s ease both;
+}
+html.admina-ast .ast-toast.err { border-left-color: var(--ast-err); }
+html.admina-ast .ast-toast.ok { border-left-color: var(--ast-ok); }
+html.admina-ast .ast-toast button { border: none; background: none; color: var(--ast-text2); cursor: pointer; font-size: .95rem; padding: 0; line-height: 1; }
+html.admina-ast .ast-foot { margin-top: 14px; font-size: .72rem; color: var(--ast-text2); text-align: center; }
+html.admina-ast .ast-link { border: none; background: none; color: var(--ast-accent); cursor: pointer; font: inherit; font-size: inherit; text-decoration: underline; padding: 0; }
+
+/* ---------- burger mobile (canon commun admina) ---------- */
+html.admina-ast .admina-burger {
+  display: none; position: relative; z-index: 60; cursor: pointer;
+  width: 38px; height: 38px; align-items: center; justify-content: center;
+  border: 1px solid rgba(128, 128, 128, .35); border-radius: 9px;
+  background: rgba(128, 128, 128, .08); color: inherit; flex: 0 0 auto;
+}
+html.admina-ast .admina-burger:hover { background: rgba(128, 128, 128, .15); }
+html.admina-ast .admina-nav-backdrop { display: none; position: fixed; inset: 0; z-index: 1090; background: rgba(0, 0, 0, .3); }
+html.admina-ast.admina-nav-open .admina-nav-backdrop { display: block; }
+
+/* ---------- impression ---------- */
+@media print {
+  html.admina-ast .ast-hero-actions,
+  html.admina-ast .ast-toolbar,
+  html.admina-ast .ast-toasts,
+  html.admina-ast .ast-backdrop,
+  html.admina-ast .ast-drawer,
+  html.admina-ast .ast-dialog,
+  html.admina-ast .ast-panel,
+  html.admina-ast .ast-confirm { display: none !important; }
+  html.admina-ast .ast-hero { background: #0f766e !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+
+/* ---------- écrans moyens ---------- */
+@media (max-width: 1150px) {
+  html.admina-ast .ast-kpis { grid-template-columns: repeat(3, 1fr); }
+  html.admina-ast .ast-charts { grid-template-columns: 1fr 1fr; }
+  html.admina-ast .ast-avrow { grid-template-columns: minmax(180px, 1fr) minmax(220px, 1.8fr) 150px 170px; }
+}
+
+/* ---------- garde burger <820px ---------- */
+@media (max-width: 819.98px) {
+  html.admina-ast .admina-burger { display: inline-flex; }
+  html.admina-ast header.MuiPaper-root { margin-left: 0 !important; }
+  html.admina-ast .MuiDrawer-docked {
+    transform: translateX(-105%);
+    transition: transform .25s ease;
+    position: fixed !important; top: 0; bottom: 0; left: 0; z-index: 1100;
+  }
+  html.admina-ast.admina-nav-open .MuiDrawer-docked { transform: translateX(0); }
+  html.admina-ast .ast-kpis { grid-template-columns: repeat(2, 1fr); }
+  html.admina-ast .ast-charts { grid-template-columns: 1fr; }
+  html.admina-ast .ast-views { margin-left: 0; }
+  html.admina-ast .ast-toolbar { position: static; }
+}
+
+/* ---------- garde finale <760px : 0 débordement ---------- */
+@media (max-width: 760px) {
+  html.admina-ast .ast-kpis { grid-template-columns: 1fr !important; }
+  html.admina-ast .ast-charts { grid-template-columns: 1fr !important; }
+  html.admina-ast .ast-avrow { grid-template-columns: 1fr !important; gap: 7px; }
+  html.admina-ast .ast-av-id, html.admina-ast .ast-av-mid, html.admina-ast .ast-av-eval,
+  html.admina-ast .ast-av-end, html.admina-ast .ast-av-dates, html.admina-ast .ast-bar-row,
+  html.admina-ast .ast-ech-row, html.admina-ast .ast-sim-row, html.admina-ast .ast-cardx { min-width: 0 !important; max-width: 100%; }
+  html.admina-ast .ast-av-eval, html.admina-ast .ast-av-end { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 6px; }
+  html.admina-ast .ast-ech-row { grid-template-columns: 1fr !important; gap: 4px; }
+  html.admina-ast .ast-ech-what { white-space: normal; }
+  html.admina-ast .ast-sim-row { grid-template-columns: 1fr !important; }
+  html.admina-ast .ast-kv { grid-template-columns: 1fr; gap: 2px 0; }
+  html.admina-ast .ast-kv dd { margin-bottom: 5px; }
+  html.admina-ast .ast-search { min-width: 0; flex: 1 1 100%; }
+  html.admina-ast .ast-sel { flex: 1 1 45%; max-width: none; }
+  html.admina-ast .ast-av-hint { margin-left: 0; }
+}
+
+/* ---------- garde 390px / petits mobiles ---------- */
+@media (max-width: 460px) {
+  html.admina-ast [data-ast="root"] { padding: 2px 0 22px; }
+  html.admina-ast .ast-hero { padding: 13px 12px; }
+  html.admina-ast .ast-hero-main { flex-direction: column; }
+  html.admina-ast .ast-hero-actions { width: 100%; }
+  html.admina-ast .ast-hero-actions .ast-btn { flex: 1 1 46%; justify-content: center; }
+  html.admina-ast .ast-h2 { font-size: 1.06rem; }
+  html.admina-ast .ast-fgrid { grid-template-columns: 1fr; }
+  html.admina-ast .ast-drawer { width: 100vw; border-left: none; }
+  html.admina-ast .ast-dialog { width: calc(100vw - 10px); }
+  html.admina-ast table.ast-tbl { font-size: .74rem; }
+  html.admina-ast .ast-prog { width: 64px; }
+  html.admina-ast .ast-toasts { left: 12px; right: 12px; max-width: none; }
+}
+
+/* ==================================================================
+   Garde 390px — barre haute native (fil d'Ariane + badges de statut)
+   : le module masque le contenu de la page native (h5 + table), mais
+   la barre haute native (body > div > div:nth-child(2)) reste rendue
+   avec 25 chips en ligne qui élargissent le document (sw 632 → 390).
+   Clip horizontal : rien de visible n'est perdu (wrapper 0-height),
+   le document redevient exactement 390px.
+   ================================================================== */
+html.admina-ast body > div > div:nth-child(2) {
+  max-width: 100vw;
+  overflow-x: hidden;
+}

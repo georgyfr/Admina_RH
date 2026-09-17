@@ -1,0 +1,479 @@
+/* ============================================================
+   ADMINA-RH — Demandes de Recrutement (Domaine 1, route /demandes)
+   Couche M14 : persistance, tri, passerelle DR→Offre, export, analyse.
+   Scopé : html.admina-dmx + éléments [data-dmx]. Thème sombre : html.adem7-dark.
+   ============================================================ */
+
+/* ---------- boutons couche M14 (toolbar) ---------- */
+html.admina-dmx .dmx-btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 7px 14px; border-radius: 9px; min-height: 37px;
+  border: 1px solid rgba(13, 124, 102, .45);
+  background: #eef7f4; color: #0a5c4c;
+  font: 700 .8rem/1.2 Inter, system-ui, sans-serif;
+  cursor: pointer; transition: background .18s, box-shadow .18s, transform .12s;
+  white-space: nowrap;
+}
+html.admina-dmx .dmx-btn:hover { background: #dff0ea; box-shadow: 0 3px 10px rgba(13,124,102,.18); }
+html.admina-dmx .dmx-btn:active { transform: translateY(1px); }
+html.admina-dmx .dmx-btn:focus-visible { outline: 2px solid #0D7C66; outline-offset: 2px; }
+html.admina-dmx .dmx-btn.dmx-ghost {
+  border-color: #c7d0d6; background: #fff; color: #37474f;
+}
+html.admina-dmx .dmx-btn.dmx-ghost:hover { background: #f4f7f6; }
+html.admina-dmx .dmx-btn .dmx-caret { font-size: .62rem; opacity: .8; }
+
+/* ---------- menu export / menus ---------- */
+html.admina-dmx .dmx-menu {
+  position: fixed; z-index: 4600; min-width: 250px; padding: 6px;
+  background: #fff; border: 1px solid #dfe7e4; border-radius: 12px;
+  box-shadow: 0 14px 44px rgba(0,0,0,.18); font-family: Inter, system-ui, sans-serif;
+}
+html.admina-dmx .dmx-menu button {
+  display: block; width: 100%; text-align: left;
+  border: none; background: transparent; border-radius: 8px;
+  padding: 9px 11px; cursor: pointer; font: 600 .82rem/1.3 Inter, sans-serif; color: #1d2b36;
+}
+html.admina-dmx .dmx-menu button:hover { background: #eef7f4; color: #0a5c4c; }
+html.admina-dmx .dmx-menu button small { display: block; font: 400 .68rem/1.35 Inter, sans-serif; color: #78848e; }
+html.admina-dmx .dmx-menu button:focus-visible { outline: 2px solid #0D7C66; }
+
+/* ---------- tri des colonnes ---------- */
+html.admina-dmx th[data-dmx-sortable] { cursor: pointer; user-select: none; position: relative; }
+html.admina-dmx th[data-dmx-sortable]:hover { color: #0D7C66; }
+html.admina-dmx th[data-dmx-sortable]:focus-visible { outline: 2px solid #0D7C66; outline-offset: -2px; }
+html.admina-dmx th .dmx-sort {
+  display: inline-block; margin-left: 4px; font-size: .62rem; opacity: .45;
+  transition: opacity .15s, transform .15s; vertical-align: middle;
+}
+html.admina-dmx th[data-dmx-dir="asc"] .dmx-sort { opacity: 1; color: #0D7C66; transform: none; }
+html.admina-dmx th[data-dmx-dir="desc"] .dmx-sort { opacity: 1; color: #0D7C66; transform: rotate(180deg); }
+html.admina-dmx th[aria-sort] { color: #0a5c4c; }
+
+/* ---------- passerelle : bouton dans le drawer ---------- */
+html.admina-dmx .dmx-mkoffer {
+  display: inline-flex; align-items: center; gap: 6px;
+  border: 1px solid #0D7C66; background: #0D7C66; color: #fff;
+  border-radius: 8px; padding: 6px 13px; min-height: 32px;
+  font: 700 .78rem/1.2 Inter, sans-serif; cursor: pointer;
+  transition: background .18s, box-shadow .18s;
+}
+html.admina-dmx .dmx-mkoffer:hover { background: #0a6b58; box-shadow: 0 4px 12px rgba(13,124,102,.35); }
+html.admina-dmx .dmx-mkoffer:focus-visible { outline: 2px solid #0a5c4c; outline-offset: 2px; }
+html.admina-dmx .dmx-olink {
+  display: inline-flex; align-items: center; gap: 4px;
+  border-radius: 999px; padding: 2px 9px; border: 1px solid rgba(255,255,255,.55);
+  background: rgba(255,255,255,.18); color: #fff;
+  font: 600 .68rem/1.4 Inter, sans-serif; cursor: pointer;
+}
+html.admina-dmx .dmx-olink:hover { background: rgba(255,255,255,.3); }
+
+/* ---------- hint kanban ---------- */
+html.admina-dmx .dmx-khint {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  margin: 0 0 8px; padding: 8px 13px; border-radius: 10px;
+  background: linear-gradient(90deg, rgba(13,124,102,.09), rgba(13,124,102,.02));
+  border: 1px dashed rgba(13,124,102,.4);
+  font: 500 .74rem/1.45 Inter, sans-serif; color: #0a5c4c;
+}
+html.admina-dmx .dmx-khint .dmx-kbadge {
+  font: 700 .62rem/1 Inter, sans-serif; letter-spacing: .4px; text-transform: uppercase;
+  background: #0D7C66; color: #fff; border-radius: 999px; padding: 3px 8px;
+}
+
+/* ---------- panneau analyse intelligente ---------- */
+html.admina-dmx .dmx-aback {
+  position: fixed; inset: 0; z-index: 4700; background: rgba(10, 20, 17, .5);
+  display: flex; align-items: center; justify-content: center; padding: 16px;
+  font-family: Inter, system-ui, sans-serif;
+}
+html.admina-dmx .dmx-apanel {
+  background: #fff; border-radius: 16px; width: 100%; max-width: 760px;
+  max-height: 88vh; overflow: auto; box-shadow: 0 24px 70px rgba(0,0,0,.32);
+}
+html.admina-dmx .dmx-ahead {
+  position: sticky; top: 0; z-index: 1;
+  display: flex; align-items: center; gap: 10px;
+  padding: 15px 20px; border-bottom: 1px solid #e6efec;
+  background: linear-gradient(135deg, #0D7C66 0%, #0a5c4c 100%); color: #fff;
+  border-radius: 16px 16px 0 0;
+}
+html.admina-dmx .dmx-ahead h3 { margin: 0; font: 700 16px/22px Inter, sans-serif; }
+html.admina-dmx .dmx-ahead .dmx-asub { font: 400 11px/15px Inter, sans-serif; opacity: .85; }
+html.admina-dmx .dmx-ahead .dmx-aclose {
+  margin-left: auto; border: none; background: rgba(255,255,255,.16); color: #fff;
+  width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-size: 14px;
+}
+html.admina-dmx .dmx-ahead .dmx-aclose:hover { background: rgba(255,255,255,.3); }
+html.admina-dmx .dmx-abody { padding: 16px 20px 20px; }
+html.admina-dmx .dmx-akpis {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 10px; margin-bottom: 14px;
+}
+html.admina-dmx .dmx-akpi {
+  background: #f6faf8; border: 1px solid #e2eeea; border-radius: 10px; padding: 10px 12px;
+}
+html.admina-dmx .dmx-akpi .l { font: 600 10px/14px Inter, sans-serif; color: #78909c; text-transform: uppercase; letter-spacing: .4px; }
+html.admina-dmx .dmx-akpi .v { font: 800 18px/24px Inter, sans-serif; color: #0D7C66; margin-top: 2px; }
+html.admina-dmx .dmx-akpi .v.red { color: #d32f2f; }
+html.admina-dmx .dmx-akpi .v.amber { color: #e65100; }
+html.admina-dmx .dmx-asect { margin: 14px 0 6px; font: 700 12px/17px Inter, sans-serif; color: #37474f; text-transform: uppercase; letter-spacing: .5px; }
+html.admina-dmx .dmx-alist { display: flex; flex-direction: column; gap: 6px; }
+html.admina-dmx .dmx-aline {
+  display: flex; align-items: center; gap: 9px; flex-wrap: wrap;
+  background: #fff; border: 1px solid #e7edeb; border-radius: 9px; padding: 8px 11px;
+  font: 400 12.5px/18px Inter, sans-serif; color: #37474f;
+}
+html.admina-dmx .dmx-aline b { color: #10201b; }
+html.admina-dmx .dmx-aline.dmx-click { cursor: pointer; transition: background .15s, border-color .15s; }
+html.admina-dmx .dmx-aline.dmx-click:hover { background: #f0f9f6; border-color: #9fd4c6; }
+html.admina-dmx .dmx-aline .dmx-tag {
+  font: 700 10px/14px Inter, sans-serif; border-radius: 999px; padding: 2px 8px; white-space: nowrap;
+}
+html.admina-dmx .dmx-aline .dmx-tag.crit { background: #fdecea; color: #c62828; }
+html.admina-dmx .dmx-aline .dmx-tag.warn { background: #fff4e0; color: #b26a00; }
+html.admina-dmx .dmx-aline .dmx-tag.ok { background: #e6f5ee; color: #0a6b58; }
+html.admina-dmx .dmx-aline .dmx-tag.info { background: #e8f1fb; color: #155a9c; }
+html.admina-dmx .dmx-aline .dmx-tag.muted { background: #eef1f0; color: #5f6b67; }
+html.admina-dmx .dmx-aline .dmx-go {
+  margin-left: auto; border: 1px solid #0D7C66; background: #eef7f4; color: #0a5c4c;
+  font: 700 11px/1 Inter, sans-serif; border-radius: 7px; padding: 5px 9px; cursor: pointer; white-space: nowrap;
+}
+html.admina-dmx .dmx-aline .dmx-go:hover { background: #0D7C66; color: #fff; }
+html.admina-dmx .dmx-aempty { color: #78848e; font: 400 12.5px/18px Inter, sans-serif; padding: 6px 2px; }
+html.admina-dmx .dmx-afoot {
+  display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
+  margin-top: 16px; padding-top: 12px; border-top: 1px dashed #dfe7e4;
+}
+html.admina-dmx .dmx-afoot .spacer { flex: 1; }
+html.admina-dmx .dmx-abtn {
+  border: 1px solid #c7d0d6; background: #fff; color: #37474f;
+  border-radius: 8px; padding: 7px 13px; font: 600 12px/1 Inter, sans-serif; cursor: pointer;
+}
+html.admina-dmx .dmx-abtn:hover { border-color: #0D7C66; color: #0a5c4c; }
+html.admina-dmx .dmx-abtn.danger { color: #b3261e; border-color: #eecac7; }
+html.admina-dmx .dmx-abtn.danger:hover { background: #fdecea; border-color: #d32f2f; }
+html.admina-dmx .dmx-anote { font: 400 10.5px/15px Inter, sans-serif; color: #90a4ae; }
+
+/* ---------- toasts ---------- */
+html.admina-dmx .dmx-toasts { position: fixed; right: 18px; bottom: 18px; z-index: 4800; display: flex; flex-direction: column; gap: 8px; }
+html.admina-dmx .dmx-toast {
+  display: flex; align-items: center; gap: 10px;
+  background: #14332b; color: #eafff8; border-left: 4px solid #0D7C66;
+  border-radius: 10px; padding: 10px 13px; min-width: 230px; max-width: 380px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.28);
+  font: 500 12.5px/17px Inter, sans-serif;
+  animation: dmxIn .22s ease;
+}
+html.admina-dmx .dmx-toast[data-tone="warn"] { border-left-color: #e65100; }
+html.admina-dmx .dmx-toast[data-tone="err"] { border-left-color: #d32f2f; }
+html.admina-dmx .dmx-toast button {
+  margin-left: auto; border: none; background: transparent; color: #9fd4c6;
+  font-size: 14px; cursor: pointer; padding: 2px 4px; border-radius: 6px;
+}
+html.admina-dmx .dmx-toast button:hover { background: rgba(255,255,255,.12); }
+@keyframes dmxIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+/* ---------- live region ---------- */
+html.admina-dmx .dmx-live { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* ---------- restoration notice ---------- */
+html.admina-dmx .dmx-restored {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: #eef7f4; border: 1px solid rgba(13,124,102,.4); color: #0a5c4c;
+  border-radius: 999px; padding: 3px 10px;
+  font: 600 11px/16px Inter, sans-serif;
+}
+
+/* ======================= THÈME SOMBRE (html.adem7-dark) ======================= */
+html.adem7-dark.admina-dmx .dmx-btn { background: #1c2f2a; border-color: #2c5c4a; color: #7fe0c3; }
+html.adem7-dark.admina-dmx .dmx-btn:hover { background: #23433a; }
+html.adem7-dark.admina-dmx .dmx-btn.dmx-ghost { background: #20203c; border-color: #3a3a5c; color: #d4d4ee; }
+html.adem7-dark.admina-dmx .dmx-btn.dmx-ghost:hover { background: #282848; }
+html.adem7-dark.admina-dmx .dmx-menu { background: #20203c; border-color: #3a3a5c; }
+html.adem7-dark.admina-dmx .dmx-menu button { color: #e4e4f6; }
+html.adem7-dark.admina-dmx .dmx-menu button:hover { background: #26264a; color: #4fd1b5; }
+html.adem7-dark.admina-dmx .dmx-menu button small { color: #8f8fb8; }
+html.adem7-dark.admina-dmx th[data-dmx-sortable]:hover { color: #4fd1b5; }
+html.adem7-dark.admina-dmx th[data-dmx-dir="asc"] .dmx-sort,
+html.adem7-dark.admina-dmx th[data-dmx-dir="desc"] .dmx-sort { color: #4fd1b5; }
+html.adem7-dark.admina-dmx th[aria-sort] { color: #7fe0c3; }
+html.adem7-dark.admina-dmx .dmx-khint { background: linear-gradient(90deg, rgba(79,209,181,.12), rgba(79,209,181,.03)); border-color: #2c5c4a; color: #7fe0c3; }
+html.adem7-dark.admina-dmx .dmx-aback { background: rgba(5, 10, 16, .62); }
+html.adem7-dark.admina-dmx .dmx-apanel { background: #1e1e3a; }
+html.adem7-dark.admina-dmx .dmx-abody { color: #e4e4f6; }
+html.adem7-dark.admina-dmx .dmx-akpi { background: #26264a; border-color: #34345c; }
+html.adem7-dark.admina-dmx .dmx-akpi .l { color: #8f8fb8; }
+html.adem7-dark.admina-dmx .dmx-akpi .v { color: #4fd1b5; }
+html.adem7-dark.admina-dmx .dmx-akpi .v.red { color: #ff8a80; }
+html.adem7-dark.admina-dmx .dmx-akpi .v.amber { color: #ffcc80; }
+html.adem7-dark.admina-dmx .dmx-asect { color: #c5c5e2; }
+html.adem7-dark.admina-dmx .dmx-aline { background: #26264a; border-color: #34345c; color: #d4d4ee; }
+html.adem7-dark.admina-dmx .dmx-aline b { color: #f0f0fc; }
+html.adem7-dark.admina-dmx .dmx-aline.dmx-click:hover { background: #2c2c52; border-color: #2c5c4a; }
+html.adem7-dark.admina-dmx .dmx-aline .dmx-tag.crit { background: #4a2020; color: #ff8a80; }
+html.adem7-dark.admina-dmx .dmx-aline .dmx-tag.warn { background: #46351a; color: #ffcc80; }
+html.adem7-dark.admina-dmx .dmx-aline .dmx-tag.ok { background: #163a30; color: #4fd1b5; }
+html.adem7-dark.admina-dmx .dmx-aline .dmx-tag.info { background: #1a2c46; color: #82b1ff; }
+html.adem7-dark.admina-dmx .dmx-aline .dmx-tag.muted { background: #2c2c52; color: #a5a5c8; }
+html.adem7-dark.admina-dmx .dmx-aline .dmx-go { background: #1c2f2a; border-color: #2c5c4a; color: #7fe0c3; }
+html.adem7-dark.admina-dmx .dmx-aline .dmx-go:hover { background: #0D7C66; color: #fff; }
+html.adem7-dark.admina-dmx .dmx-aempty { color: #8f8fb8; }
+html.adem7-dark.admina-dmx .dmx-abtn { background: #26264a; border-color: #3a3a5c; color: #d4d4ee; }
+html.adem7-dark.admina-dmx .dmx-abtn:hover { border-color: #4fd1b5; color: #4fd1b5; }
+html.adem7-dark.admina-dmx .dmx-abtn.danger { color: #ff8a80; border-color: #5c2c2c; }
+html.adem7-dark.admina-dmx .dmx-abtn.danger:hover { background: #4a2020; }
+html.adem7-dark.admina-dmx .dmx-afoot { border-top-color: #34345c; }
+html.adem7-dark.admina-dmx .dmx-anote { color: #8f8fb8; }
+html.adem7-dark.admina-dmx .dmx-toast { background: #20203c; color: #e4e4f6; border-left-color: #4fd1b5; }
+html.adem7-dark.admina-dmx .dmx-restored { background: #1c2f2a; border-color: #2c5c4a; color: #7fe0c3; }
+
+/* ======================= RESPONSIVE ======================= */
+@media (max-width: 820px) {
+  html.admina-dmx .dmx-btn { padding: 6px 11px; font-size: .74rem; min-height: 34px; }
+  html.admina-dmx .dmx-apanel { max-height: 92vh; border-radius: 12px; }
+  html.admina-dmx .dmx-ahead { border-radius: 12px 12px 0 0; padding: 13px 16px; }
+  html.admina-dmx .dmx-abody { padding: 13px 14px 16px; }
+  html.admina-dmx .dmx-toasts { left: 14px; right: 14px; }
+  html.admina-dmx .dmx-toast { max-width: none; }
+}
+
+/* ======================= LOT 2 — FAVORIS / SÉLECTION / IMPORT / RACCOURCIS ======================= */
+html.admina-dmx .dmx-favstar {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 24px; height: 24px; margin-right: 2px; padding: 0;
+  border: none; background: transparent; border-radius: 6px;
+  font-size: 15px; line-height: 1; color: #b0bec5; cursor: pointer; vertical-align: middle;
+}
+html.admina-dmx .dmx-favstar:hover { background: #fff7e0; color: #f9a825; }
+html.admina-dmx .dmx-favstar[aria-pressed="true"] { color: #f9a825; }
+html.admina-dmx .dmx-chk, html.admina-dmx .dmx-selall {
+  width: 15px; height: 15px; margin: 0 7px 0 0; padding: 0;
+  accent-color: #0D7C66; cursor: pointer; vertical-align: middle; flex: none;
+}
+html.admina-dmx table tbody tr[data-dmx-sel] td { background: #e7f4ef !important; }
+html.admina-dmx .dmx-favhide { display: none !important; }
+html.admina-dmx [data-rfd-draggable-id] { position: relative; }
+html.admina-dmx .dmx-kfav {
+  position: absolute; top: 4px; right: 4px; z-index: 3;
+  width: 26px; height: 26px; padding: 0; border: none; background: transparent; border-radius: 50%;
+  font-size: 14px; line-height: 1; color: #b0bec5; cursor: pointer;
+}
+html.admina-dmx .dmx-kfav:hover { background: #fff7e0; color: #f9a825; }
+html.admina-dmx .dmx-kfav[aria-pressed="true"] { color: #f9a825; }
+html.admina-dmx .dmx-favbtn.dmx-on { background: #fff7e0; border-color: #f9a825; color: #8d6e00; }
+html.admina-dmx .dmx-bulk {
+  position: fixed; left: 50%; bottom: 22px; z-index: 1300;
+  transform: translateX(-50%);
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  padding: 10px 16px; border-radius: 14px;
+  background: #10241d; color: #fff;
+  box-shadow: 0 16px 40px -12px rgba(0, 0, 0, .55);
+  font-family: Inter, sans-serif; max-width: min(94vw, 880px);
+}
+html.admina-dmx .dmx-bcount { font-weight: 800; font-size: .82rem; white-space: nowrap; }
+html.admina-dmx .dmx-bulk button {
+  border: 1px solid rgba(255, 255, 255, .28);
+  background: rgba(255, 255, 255, .08); color: #fff;
+  padding: 6px 12px; border-radius: 9px; font: 600 .76rem/1.2 Inter, sans-serif;
+  cursor: pointer; transition: background .12s ease; min-height: 32px;
+}
+html.admina-dmx .dmx-bulk button:hover { background: rgba(255, 255, 255, .2); }
+html.admina-dmx .dmx-bulk button:focus-visible { outline: 2px solid #7ee2c3; outline-offset: 2px; }
+html.admina-dmx .dmx-bulk button[data-act="clear"] { border-color: transparent; background: transparent; opacity: .8; }
+html.admina-dmx .dmx-bsel {
+  border: 1px solid rgba(255, 255, 255, .28);
+  background: rgba(255, 255, 255, .08); color: #fff;
+  border-radius: 9px; padding: 6px 8px; font: 600 .76rem/1.2 Inter, sans-serif;
+  cursor: pointer; min-height: 32px;
+}
+html.admina-dmx .dmx-bsel option { color: #263238; background: #fff; }
+html.admina-dmx .dmx-help {
+  position: fixed; inset: 0; z-index: 1450;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(10, 18, 15, .45);
+}
+html.admina-dmx .dmx-hpanel {
+  background: #fff; border-radius: 14px; padding: 22px 26px;
+  width: min(92vw, 460px); box-shadow: 0 24px 60px -18px rgba(0, 0, 0, .5);
+  font-family: Inter, sans-serif;
+}
+html.admina-dmx .dmx-hpanel h3 { margin: 0 0 12px; font-size: 1rem; color: #10241d; }
+html.admina-dmx .dmx-hpanel table { width: 100%; border-collapse: collapse; }
+html.admina-dmx .dmx-hpanel td { padding: 5px 4px; font-size: .8rem; color: #37474f; }
+html.admina-dmx .dmx-hpanel td:first-child { width: 130px; }
+html.admina-dmx .dmx-hfoot { margin-top: 14px; text-align: right; }
+html.admina-dmx .dmx-hclose {
+  border: 1px solid #c7d0d6; background: #eef6f2; color: #0d5c46;
+  font-weight: 700; border-radius: 8px; padding: 6px 14px; cursor: pointer;
+}
+html.admina-dmx .dmx-kbd {
+  display: inline-block; padding: 1px 6px; border-radius: 5px;
+  border: 1px solid #b9c2c9; border-bottom-width: 2px;
+  background: #f4f6f8; font-family: ui-monospace, monospace;
+  font-size: .68rem; color: #37474f;
+}
+/* ---------- thème sombre ---------- */
+html.adem7-dark.admina-dmx .dmx-favstar { color: #5c6b76; }
+html.adem7-dark.admina-dmx .dmx-favstar:hover { background: #3a3320; color: #ffd54f; }
+html.adem7-dark.admina-dmx .dmx-favstar[aria-pressed="true"] { color: #ffd54f; }
+html.adem7-dark.admina-dmx table tbody tr[data-dmx-sel] td { background: #1c2f2a !important; }
+html.adem7-dark.admina-dmx .dmx-kfav { color: #5c6b76; }
+html.adem7-dark.admina-dmx .dmx-kfav:hover { background: #3a3320; color: #ffd54f; }
+html.adem7-dark.admina-dmx .dmx-kfav[aria-pressed="true"] { color: #ffd54f; }
+html.adem7-dark.admina-dmx .dmx-favbtn.dmx-on { background: #3a3320; border-color: #f9a825; color: #ffd54f; }
+html.adem7-dark.admina-dmx .dmx-bulk { background: #0d1a15; }
+html.adem7-dark.admina-dmx .dmx-hpanel { background: #1e1e3a; }
+html.adem7-dark.admina-dmx .dmx-hpanel h3 { color: #f0f0fc; }
+html.adem7-dark.admina-dmx .dmx-hpanel td { color: #d4d4ee; }
+html.adem7-dark.admina-dmx .dmx-kbd { background: #26264a; color: #cfd8dc; border-color: #45525f; }
+html.adem7-dark.admina-dmx .dmx-hclose { background: #1c2f2a; border-color: #2c5c4a; color: #7fe0c3; }
+/* ---------- impression / responsive ---------- */
+@media print {
+  html.admina-dmx .dmx-bulk, html.admina-dmx .dmx-help { display: none !important; }
+}
+@media (max-width: 820px) {
+  html.admina-dmx .dmx-bulk { bottom: 12px; width: 94vw; justify-content: center; }
+}
+
+/* ============================================================
+   LOT 3 — HÉRO (harmonisation design /offres) + ÉCHÉANCIER +
+   JOURNAL D'ACTIVITÉ + RÉGLAGES CIBLE ISO
+   ============================================================ */
+
+/* ---------- héro dégradé vert (identique /offres) ---------- */
+html.admina-dmx .dmx-hero {
+  position: relative;
+  margin: 6px 0 14px;
+  padding: 18px 22px;
+  border-radius: 14px;
+  background: linear-gradient(120deg, #0d5c46 0%, #0f7a5e 55%, #12805f 100%);
+  color: #fff;
+  overflow: hidden;
+  box-shadow: 0 10px 28px -14px rgba(13, 92, 70, .55);
+}
+html.admina-dmx .dmx-hero::after {
+  content: ""; position: absolute; right: -60px; top: -70px;
+  width: 240px; height: 240px; border-radius: 50%;
+  background: rgba(255, 255, 255, .08); pointer-events: none;
+}
+html.admina-dmx .dmx-hero .dmx-hrow { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+html.admina-dmx .dmx-hero h2 {
+  margin: 0; font-size: 1.35rem; font-weight: 800; letter-spacing: .2px;
+  display: flex; align-items: center; gap: 10px; color: #fff;
+}
+html.admina-dmx .dmx-hero .dmx-hbadge {
+  font-size: .62rem; font-weight: 700; letter-spacing: .6px;
+  padding: 3px 8px; border-radius: 999px;
+  background: rgba(255, 255, 255, .16); border: 1px solid rgba(255, 255, 255, .35);
+  white-space: nowrap;
+}
+html.admina-dmx .dmx-hero p { margin: 6px 0 0; font-size: .8rem; opacity: .92; }
+html.admina-dmx .dmx-hero .dmx-hstats { margin-left: auto; display: flex; gap: 18px; flex-wrap: wrap; }
+html.admina-dmx .dmx-hero .dmx-hstat { text-align: right; }
+html.admina-dmx .dmx-hero .dmx-hstat b { display: block; font-size: 1.15rem; font-weight: 800; line-height: 1.1; }
+html.admina-dmx .dmx-hero .dmx-hstat b.dmx-hwarn { color: #ffd54f; }
+html.admina-dmx .dmx-hero .dmx-hstat span { font-size: .62rem; text-transform: uppercase; letter-spacing: .8px; opacity: .85; }
+
+/* ---------- panneau échéancier ---------- */
+html.admina-dmx .dmx-epanel { max-width: 880px; }
+html.admina-dmx .dmx-echips { display: flex; gap: 8px; flex-wrap: wrap; margin: 2px 0 12px; }
+html.admina-dmx .dmx-echip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 12px; border-radius: 999px;
+  font-size: .74rem; font-weight: 600; font-family: inherit;
+  border: 1px solid #cdd6db; background: #fff; color: #424242;
+  cursor: pointer; transition: transform .12s ease, box-shadow .12s ease;
+}
+html.admina-dmx .dmx-echip:hover { transform: translateY(-1px); box-shadow: 0 3px 10px -4px rgba(0, 0, 0, .3); }
+html.admina-dmx .dmx-echip:focus-visible { outline: 2px solid #0f7a5e; outline-offset: 2px; }
+html.admina-dmx .dmx-echip[aria-pressed="true"] { background: #0f7a5e; border-color: #0f7a5e; color: #fff; }
+html.admina-dmx .dmx-egroup {
+  font-size: .72rem; font-weight: 800; text-transform: uppercase; letter-spacing: .8px;
+  color: #0d5c46; margin: 14px 0 6px; padding-bottom: 4px;
+  border-bottom: 1px dashed #bcd8cd;
+}
+/* ---------- réglages cible ISO ---------- */
+html.admina-dmx .dmx-ecfg {
+  display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+  padding: 10px 12px; border: 1px dashed #bcd8cd; border-radius: 10px; background: #f4faf7;
+}
+html.admina-dmx .dmx-ecfg label { font-size: .78rem; color: #37474f; display: inline-flex; align-items: center; gap: 6px; font-weight: 600; }
+html.admina-dmx .dmx-ecfg input[type="number"] {
+  width: 64px; padding: 4px 6px; border: 1px solid #cdd6db; border-radius: 6px;
+  font: inherit; font-size: .8rem; background: #fff; color: #1d2b36;
+}
+html.admina-dmx .dmx-ecfg input[type="number"]:focus-visible { outline: 2px solid #0f7a5e; outline-offset: 1px; }
+html.admina-dmx .dmx-ecfgnote { font-size: .68rem; color: #78848e; flex-basis: 100%; }
+/* ---------- journal d'activité ---------- */
+html.admina-dmx .dmx-jpanel { max-width: 980px; }
+html.admina-dmx .dmx-jtools { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
+html.admina-dmx .dmx-jsearch {
+  flex: 1 1 220px; min-width: 180px; padding: 7px 10px;
+  border: 1px solid #cdd6db; border-radius: 8px; font: inherit; font-size: .8rem;
+  background: #fff; color: #1d2b36;
+}
+html.admina-dmx .dmx-jsearch:focus-visible { outline: 2px solid #0f7a5e; outline-offset: 1px; }
+html.admina-dmx .dmx-jcount { font-size: .72rem; color: #78848e; margin-left: auto; white-space: nowrap; }
+html.admina-dmx .dmx-jrow {
+  display: grid; grid-template-columns: 118px 200px 1fr 92px;
+  gap: 10px; align-items: baseline;
+  padding: 6px 8px; border-bottom: 1px solid #edf1f3; font-size: .78rem;
+}
+html.admina-dmx .dmx-jrow.dmx-jhead {
+  font-weight: 800; text-transform: uppercase; letter-spacing: .6px;
+  font-size: .66rem; color: #607080; border-bottom: 1px solid #cdd6db;
+}
+html.admina-dmx .dmx-jtime { font-family: ui-monospace, monospace; font-size: .7rem; color: #78848e; white-space: nowrap; }
+html.admina-dmx .dmx-jact { font-weight: 700; color: #0d5c46; }
+html.admina-dmx .dmx-jdet { color: #37474f; overflow-wrap: anywhere; }
+html.admina-dmx .dmx-jrole { font-size: .68rem; color: #78848e; text-align: right; }
+/* ---------- bouton relancer dans le drawer ---------- */
+html.admina-dmx .dmx-drel {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 7px 14px; border-radius: 8px; font: inherit; font-size: .78rem; font-weight: 700;
+  cursor: pointer; border: 1px solid #f0dca0; background: #fdf4dc; color: #7a5c12;
+  transition: background .15s ease, transform .12s ease;
+}
+html.admina-dmx .dmx-drel:hover { background: #fbe9b8; transform: translateY(-1px); }
+html.admina-dmx .dmx-drel:focus-visible { outline: 2px solid #f9a825; outline-offset: 2px; }
+
+/* ---------- THÈME SOMBRE — LOT 3 ---------- */
+html.adem7-dark.admina-dmx .dmx-hero { box-shadow: 0 10px 28px -12px rgba(0, 0, 0, .6); }
+html.adem7-dark.admina-dmx .dmx-hero h2 { color: #fff; }
+html.adem7-dark.admina-dmx .dmx-echip { background: #1f2429; border-color: #45525f; color: #cfd8dc; }
+html.adem7-dark.admina-dmx .dmx-echip[aria-pressed="true"] { background: #0f7a5e; border-color: #0f7a5e; color: #fff; }
+html.adem7-dark.admina-dmx .dmx-egroup { color: #7fe0c3; border-bottom-color: #2c5c4a; }
+html.adem7-dark.admina-dmx .dmx-ecfg { border-color: #2c5c4a; background: #10201a; }
+html.adem7-dark.admina-dmx .dmx-ecfg label { color: #cfd8dc; }
+html.adem7-dark.admina-dmx .dmx-ecfg input[type="number"] { background: #1a2b25; border-color: #45525f; color: #eceff1; }
+html.adem7-dark.admina-dmx .dmx-jsearch { background: #1a2b25; border-color: #45525f; color: #eceff1; }
+html.adem7-dark.admina-dmx .dmx-jrow { border-bottom-color: #263238; }
+html.adem7-dark.admina-dmx .dmx-jrow.dmx-jhead { color: #90a4ae; border-bottom-color: #45525f; }
+html.adem7-dark.admina-dmx .dmx-jtime { color: #90a4ae; }
+html.adem7-dark.admina-dmx .dmx-jact { color: #7fe0c3; }
+html.adem7-dark.admina-dmx .dmx-jdet { color: #cfd8dc; }
+html.adem7-dark.admina-dmx .dmx-jrole { color: #90a4ae; }
+html.adem7-dark.admina-dmx .dmx-drel { background: #37301a; border-color: #6b5a24; color: #ffd97a; }
+html.adem7-dark.admina-dmx .dmx-drel:hover { background: #4a4022; }
+
+/* ---------- impression / responsive — LOT 3 ---------- */
+@media print {
+  html.admina-dmx .dmx-hero, html.admina-dmx .dmx-echips, html.admina-dmx .dmx-ecfg,
+  html.admina-dmx .dmx-drel, html.admina-dmx .dmx-aback { display: none !important; }
+}
+@media (max-width: 820px) {
+  html.admina-dmx .dmx-hero { padding: 14px 16px; }
+  /* correctif mobile /demandes (préexistant au lot 3, découvert t16) :
+     .adem7-main garde margin-left:260px (sidebar dockée) même quand la
+     sidebar MUI passe en overlay → contenu écrasé (115px @375). Sur
+     mobile la sidebar est un Drawer temporaire : marge retirée. */
+  html.admina-dmx .adem7-main { margin-left: 0 !important; width: 100% !important; max-width: 100% !important; }
+  html.admina-dmx .dmx-hero .dmx-hstats { margin-left: 0; width: 100%; justify-content: space-between; gap: 8px; }
+  html.admina-dmx .dmx-hero .dmx-hstat { text-align: left; }
+  html.admina-dmx .dmx-jrow { grid-template-columns: 92px 1fr; }
+  html.admina-dmx .dmx-jrow .dmx-jdet { grid-column: 1 / -1; }
+  html.admina-dmx .dmx-jrow.dmx-jhead .dmx-jdet,
+  html.admina-dmx .dmx-jrow.dmx-jhead .dmx-jrole { display: none; }
+  html.admina-dmx .dmx-ecfg { gap: 10px; }
+}

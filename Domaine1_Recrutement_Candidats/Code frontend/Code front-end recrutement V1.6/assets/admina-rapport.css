@@ -1,0 +1,1199 @@
+/* =============================================================================
+   admina-rapport.css — Module additif « Photographie de synthèse » (W4-e)
+   Route : /audit — Admina-RH · Vague 4 · version 1.0-w4
+   Préfixe unique : arp- — Racine : html.admina-arp + [data-arp-page]
+   -----------------------------------------------------------------------------
+   « LA PHOTOGRAPHIE DE SYNTHÈSE — Chaque page de l'application gère son propre
+   sujet : ici, on ne gère rien. Cette page est le rapport consolidé : elle
+   parcourt toutes les sources actives du système (contrats, types, conformité,
+   journal d'audit, candidats, pipeline, sélections, entretiens, évaluations,
+   vérifications, intégration, post-embauche, stagiaires, saisonniers,
+   compétences, expériences…) et en tire une photographie à l'instant T. Elle
+   est en lecture seule par principe : un rapport qui s'édite est un rapport
+   qui ment. On la consulte, on l'exporte, on l'imprime — et on retourne
+   travailler dans les pages spécialisées. »
+   -----------------------------------------------------------------------------
+   Gardes obligatoires héritées des vagues précédentes :
+   - [data-arp-page]{width:100%!important;margin-left:0!important} <819px
+     (le conteneur natif garde margin-left:250px du drawer permanent).
+   - header.MuiPaper-root{margin-left:0!important} <820px.
+   - clip overflow-x:hidden (les barres hautes natives élargissent le document).
+   - media queries <760px D'UN BLOC en fin de fichier.
+   ==========================================================================*/
+
+/* ---------------------------------------------------------------------------
+   1. VARIABLES (clair) — portée html.admina-arp, rien ne fuit hors la page
+   -------------------------------------------------------------------------*/
+html.admina-arp {
+  --arp-bg: #eef2f9;
+  --arp-panel: #ffffff;
+  --arp-panel2: #f7f9fe;
+  --arp-ink: #182238;
+  --arp-mut: #5d6b86;
+  --arp-line: #d9e1ef;
+  --arp-line2: #c3cfe4;
+  --arp-acc: #2f5fe0;
+  --arp-acc-soft: #e6edfd;
+  --arp-acc2: #7a5af5;
+  --arp-ok: #0f9d6f;
+  --arp-ok-soft: #e2f6ee;
+  --arp-warn: #c77414;
+  --arp-warn-soft: #fdf0dd;
+  --arp-bad: #d43f3f;
+  --arp-bad-soft: #fde8e8;
+  --arp-hero1: #16307c;
+  --arp-hero2: #2f5fe0;
+  --arp-hero3: #7a5af5;
+  --arp-c0: #2f5fe0;
+  --arp-c1: #7a5af5;
+  --arp-c2: #0f9d6f;
+  --arp-c3: #c77414;
+  --arp-c4: #d43f3f;
+  --arp-c5: #5d6b86;
+  --arp-shadow: 0 10px 30px rgba(23, 43, 99, 0.10);
+  --arp-shadow-sm: 0 2px 8px rgba(23, 43, 99, 0.08);
+  --arp-r: 14px;
+  --arp-r-sm: 9px;
+  --arp-font: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* Sombre automatique — piloté par LS admina-dark (attribut data-arp-dark). */
+html.admina-arp[data-arp-dark="1"] {
+  --arp-bg: #0d1526;
+  --arp-panel: #131e33;
+  --arp-panel2: #0f1830;
+  --arp-ink: #e8edf8;
+  --arp-mut: #9aa8c4;
+  --arp-line: #26344f;
+  --arp-line2: #33415e;
+  --arp-acc: #7ea2ff;
+  --arp-acc-soft: #1b2a4a;
+  --arp-acc2: #a78bfa;
+  --arp-ok: #34d399;
+  --arp-ok-soft: #10281f;
+  --arp-warn: #fbbf24;
+  --arp-warn-soft: #2d2210;
+  --arp-bad: #f87171;
+  --arp-bad-soft: #331519;
+  --arp-hero1: #101c3f;
+  --arp-hero2: #1d3a8a;
+  --arp-hero3: #3d2f86;
+  --arp-c0: #7ea2ff;
+  --arp-c1: #a78bfa;
+  --arp-c2: #34d399;
+  --arp-c3: #fbbf24;
+  --arp-c4: #f87171;
+  --arp-c5: #9aa8c4;
+  --arp-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+  --arp-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+/* ---------------------------------------------------------------------------
+   2. GARDE ANTI-DÉBORDEMENT (leçon des vagues précédentes)
+   -------------------------------------------------------------------------*/
+html.admina-arp body {
+  overflow-x: hidden;
+}
+
+html.admina-arp [data-arp-page] {
+  overflow-x: clip;
+}
+
+/* ---------------------------------------------------------------------------
+   3. COQUILLE DE PAGE
+   -------------------------------------------------------------------------*/
+html.admina-arp [data-arp-page] {
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 1240px;
+  margin: 18px auto 46px;
+  padding: 0 18px;
+  color: var(--arp-ink);
+  font-family: var(--arp-font);
+  font-size: 15px;
+  line-height: 1.5;
+  animation: arpFade 0.5s ease both;
+}
+
+html.admina-arp [data-arp-page] *,
+html.admina-arp [data-arp-page] *::before,
+html.admina-arp [data-arp-page] *::after {
+  box-sizing: border-box;
+}
+
+html.admina-arp [data-arp-page] .arp-hidden {
+  display: none !important;
+}
+
+/* ---------------------------------------------------------------------------
+   4. HÉRO DÉGRADÉ
+   -------------------------------------------------------------------------*/
+.arp-hero {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--arp-r);
+  background: linear-gradient(135deg, var(--arp-hero1) 0%, var(--arp-hero2) 55%, var(--arp-hero3) 100%);
+  color: #fff;
+  padding: 26px 30px 28px;
+  box-shadow: var(--arp-shadow);
+}
+
+.arp-hero::before {
+  content: "";
+  position: absolute;
+  top: -90px;
+  right: -70px;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0) 70%);
+  pointer-events: none;
+}
+
+.arp-hero::after {
+  content: "";
+  position: absolute;
+  bottom: -120px;
+  left: 34%;
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.10) 0%, rgba(255, 255, 255, 0) 70%);
+  pointer-events: none;
+}
+
+.arp-kicker {
+  margin: 0 0 6px;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+.arp-title {
+  margin: 0 0 12px;
+  font-size: clamp(26px, 4vw, 38px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.12;
+}
+
+.arp-live {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 14px;
+}
+
+.arp-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.arp-chip--gen {
+  background: rgba(255, 255, 255, 0.10);
+  font-weight: 500;
+}
+
+.arp-phil {
+  margin: 0 0 16px;
+  max-width: 82ch;
+  border-left: 3px solid rgba(255, 255, 255, 0.5);
+  padding-left: 12px;
+  font-size: 13.5px;
+  font-style: italic;
+  line-height: 1.55;
+  opacity: 0.93;
+}
+
+.arp-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ---------------------------------------------------------------------------
+   5. BOUTONS (lecture seule : actualiser / exporter / imprimer — RIEN d'autre)
+   -------------------------------------------------------------------------*/
+.arp-btn {
+  appearance: none;
+  border: 0;
+  border-radius: var(--arp-r-sm);
+  padding: 9px 18px;
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.arp-btn:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+.arp-btn--primary {
+  background: #fff;
+  color: var(--arp-hero2);
+  box-shadow: var(--arp-shadow-sm);
+}
+
+.arp-btn--primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22);
+}
+
+.arp-btn--ghost {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.arp-btn--ghost:hover {
+  background: rgba(255, 255, 255, 0.22);
+  transform: translateY(-1px);
+}
+
+.arp-btn:disabled,
+.arp-btn.arp-busy {
+  opacity: 0.65;
+  cursor: progress;
+  pointer-events: none;
+}
+
+.arp-btn.arp-busy {
+  animation: arpPulse 0.9s ease infinite;
+}
+
+/* ---------------------------------------------------------------------------
+   6. BANDEAU D'ALERTES TRANSVERSES
+   -------------------------------------------------------------------------*/
+.arp-alerts {
+  margin-top: 14px;
+  background: var(--arp-panel);
+  border: 1px solid var(--arp-line);
+  border-left: 4px solid var(--arp-warn);
+  border-radius: var(--arp-r);
+  box-shadow: var(--arp-shadow-sm);
+  padding: 14px 18px;
+  animation: arpUp 0.45s ease both;
+  animation-delay: 0.06s;
+}
+
+.arp-alerts-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.arp-alerts-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.arp-alerts-sub {
+  font-size: 12px;
+  color: var(--arp-mut);
+}
+
+.arp-totalbadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 12px;
+  border-radius: 999px;
+  font-size: 12.5px;
+  font-weight: 800;
+}
+
+.arp-totalbadge--warn {
+  background: var(--arp-warn-soft);
+  color: var(--arp-warn);
+}
+
+.arp-totalbadge--ok {
+  background: var(--arp-ok-soft);
+  color: var(--arp-ok);
+}
+
+.arp-alchips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.arp-alchip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--arp-warn-soft);
+  color: var(--arp-warn);
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.arp-alchip b {
+  font-weight: 800;
+}
+
+.arp-alnote,
+.arp-allok {
+  margin: 10px 0 0;
+  font-size: 12.5px;
+  color: var(--arp-mut);
+}
+
+.arp-allok {
+  color: var(--arp-ok);
+  font-weight: 600;
+}
+
+/* ---------------------------------------------------------------------------
+   7. BARRE D'OUTILS — recherche locale de cartes (touche /)
+   -------------------------------------------------------------------------*/
+.arp-toolbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 18px 0 12px;
+}
+
+.arp-search {
+  flex: 1 1 260px;
+  max-width: 420px;
+  padding: 9px 14px;
+  border: 1px solid var(--arp-line2);
+  border-radius: var(--arp-r-sm);
+  background: var(--arp-panel);
+  color: var(--arp-ink);
+  font-family: inherit;
+  font-size: 13.5px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.arp-search::placeholder {
+  color: var(--arp-mut);
+}
+
+.arp-search:focus {
+  outline: none;
+  border-color: var(--arp-acc);
+  box-shadow: 0 0 0 3px var(--arp-acc-soft);
+}
+
+.arp-search-info {
+  font-size: 12.5px;
+  color: var(--arp-mut);
+  font-weight: 600;
+}
+
+/* ---------------------------------------------------------------------------
+   8. GRILLE DE CARTES (auto-fill minmax(280px, 1fr))
+   -------------------------------------------------------------------------*/
+.arp-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 14px;
+}
+
+.arp-card {
+  background: var(--arp-panel);
+  border: 1px solid var(--arp-line);
+  border-radius: var(--arp-r);
+  box-shadow: var(--arp-shadow-sm);
+  padding: 14px 16px 12px;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+  animation: arpUp 0.45s ease both;
+}
+
+.arp-card:nth-child(-n + 12) {
+  animation-delay: calc(0.04s * 0);
+}
+
+.arp-card:nth-child(2) { animation-delay: 0.04s; }
+.arp-card:nth-child(3) { animation-delay: 0.08s; }
+.arp-card:nth-child(4) { animation-delay: 0.12s; }
+.arp-card:nth-child(5) { animation-delay: 0.16s; }
+.arp-card:nth-child(6) { animation-delay: 0.20s; }
+.arp-card:nth-child(7) { animation-delay: 0.24s; }
+.arp-card:nth-child(8) { animation-delay: 0.28s; }
+
+.arp-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--arp-shadow);
+  border-color: var(--arp-line2);
+}
+
+/* Carte grise — module absent de la session (jamais une erreur). */
+.arp-card--off {
+  background: var(--arp-panel2);
+  border-style: dashed;
+  box-shadow: none;
+  color: var(--arp-mut);
+}
+
+.arp-card--off:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.arp-card-offtxt {
+  margin: 8px 0 2px;
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+
+.arp-card-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.arp-mono {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--arp-c0), var(--arp-c1));
+  color: #fff;
+  font-size: 12.5px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.arp-card--off .arp-mono {
+  background: var(--arp-line);
+  color: var(--arp-mut);
+}
+
+.arp-card-idt {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.arp-card-name {
+  margin: 0;
+  font-size: 14.5px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.arp-card-cat {
+  display: inline-block;
+  margin-top: 2px;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--arp-mut);
+}
+
+.arp-state {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 3px 9px;
+}
+
+.arp-state i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.arp-state--on {
+  background: var(--arp-ok-soft);
+  color: var(--arp-ok);
+}
+
+.arp-state--on i {
+  background: var(--arp-ok);
+}
+
+.arp-state--off {
+  background: var(--arp-line);
+  color: var(--arp-mut);
+}
+
+.arp-state--off i {
+  background: var(--arp-mut);
+}
+
+.arp-card-count {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  margin: 10px 0 4px;
+}
+
+.arp-card-count strong {
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--arp-ink);
+}
+
+.arp-card-count span {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--arp-mut);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+
+.arp-card-metrics {
+  margin-top: 4px;
+}
+
+.arp-metric {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 5px 0;
+  border-top: 1px dashed var(--arp-line);
+  font-size: 12.5px;
+}
+
+.arp-metric-k {
+  color: var(--arp-mut);
+}
+
+.arp-metric-v {
+  font-weight: 700;
+  color: var(--arp-ink);
+  text-align: right;
+}
+
+/* ---------------------------------------------------------------------------
+   9. SPARKLINES + BARRES DE RÉPARTITION
+   -------------------------------------------------------------------------*/
+.arp-spark {
+  display: block;
+  width: 100%;
+  height: 38px;
+  margin-top: 8px;
+  border-radius: 6px;
+  background: var(--arp-panel2);
+}
+
+.arp-spark-line {
+  fill: none;
+  stroke: var(--arp-acc);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.arp-spark-area {
+  fill: var(--arp-acc);
+  opacity: 0.12;
+}
+
+.arp-spark-cap {
+  margin: 5px 0 0;
+  font-size: 11px;
+  color: var(--arp-mut);
+}
+
+.arp-spark-cap--mute {
+  font-style: italic;
+}
+
+.arp-repart {
+  display: flex;
+  width: 100%;
+  height: 10px;
+  margin-top: 10px;
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--arp-line);
+}
+
+.arp-seg {
+  display: inline-block;
+  height: 100%;
+}
+
+.arp-seg-0 { background: var(--arp-c0); }
+.arp-seg-1 { background: var(--arp-c1); }
+.arp-seg-2 { background: var(--arp-c2); }
+.arp-seg-3 { background: var(--arp-c3); }
+.arp-seg-4 { background: var(--arp-c4); }
+.arp-seg-5 { background: var(--arp-c5); }
+
+.arp-repart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  margin-top: 7px;
+}
+
+.arp-lgd {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: var(--arp-mut);
+  font-weight: 600;
+}
+
+.arp-seg-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 3px;
+  display: inline-block;
+}
+
+.arp-card-desc {
+  margin: 8px 0 2px;
+  font-size: 11.5px;
+  line-height: 1.45;
+  color: var(--arp-mut);
+  border-top: 1px dashed var(--arp-line);
+  padding-top: 7px;
+}
+
+/* ---------------------------------------------------------------------------
+   10. GRAPHIQUE SVG — répartition des enregistrements par module
+   -------------------------------------------------------------------------*/
+.arp-chart-wrap {
+  margin-top: 18px;
+  background: var(--arp-panel);
+  border: 1px solid var(--arp-line);
+  border-radius: var(--arp-r);
+  box-shadow: var(--arp-shadow-sm);
+  padding: 16px 20px 12px;
+  animation: arpUp 0.45s ease both;
+  animation-delay: 0.1s;
+}
+
+.arp-h2 {
+  margin: 0 0 10px;
+  font-size: 16.5px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.arp-chart {
+  width: 100%;
+}
+
+.arp-chart-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.arp-row {
+  cursor: pointer;
+  outline: none;
+}
+
+.arp-row:focus-visible .arp-row-hit {
+  stroke: var(--arp-acc);
+  stroke-width: 1.5;
+}
+
+.arp-row:hover .arp-bar {
+  filter: brightness(1.12);
+}
+
+.arp-row-lab {
+  fill: var(--arp-mut);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.arp-row-val {
+  fill: var(--arp-ink);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.arp-chart-empty {
+  margin: 6px 0;
+  font-size: 13px;
+  color: var(--arp-mut);
+  font-style: italic;
+}
+
+.arp-chart-note {
+  margin: 8px 0 0;
+  font-size: 11.5px;
+  color: var(--arp-mut);
+}
+
+/* ---------------------------------------------------------------------------
+   11. PIED DE PAGE
+   -------------------------------------------------------------------------*/
+.arp-foot {
+  margin-top: 18px;
+  padding-top: 12px;
+  border-top: 1px solid var(--arp-line);
+  color: var(--arp-mut);
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.arp-foot p {
+  margin: 0 0 6px;
+}
+
+.arp-foot strong {
+  color: var(--arp-ink);
+}
+
+/* ---------------------------------------------------------------------------
+   12. TOASTS (informateurs — aucun confirm/alert natif)
+   -------------------------------------------------------------------------*/
+.arp-toasts {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 360px;
+}
+
+.arp-toast {
+  background: var(--arp-ink);
+  color: var(--arp-bg);
+  border-radius: var(--arp-r-sm);
+  padding: 11px 15px;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.45;
+  box-shadow: var(--arp-shadow);
+  cursor: pointer;
+  animation: arpPop 0.3s ease both;
+}
+
+html.admina-arp[data-arp-dark="1"] .arp-toast {
+  background: var(--arp-panel);
+  color: var(--arp-ink);
+  border: 1px solid var(--arp-line2);
+}
+
+.arp-toast--ok {
+  border-left: 4px solid var(--arp-ok);
+}
+
+.arp-toast--warn {
+  border-left: 4px solid var(--arp-warn);
+}
+
+.arp-toast--info {
+  border-left: 4px solid var(--arp-acc);
+}
+
+.arp-toast--out {
+  animation: arpOut 0.3s ease both;
+}
+
+/* ---------------------------------------------------------------------------
+   13. AIDE (touche ?) — panneau, jamais de confirm() natif
+   -------------------------------------------------------------------------*/
+.arp-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(9, 14, 28, 0.58);
+  padding: 18px;
+  animation: arpFade 0.25s ease both;
+}
+
+.arp-overlay[hidden] {
+  display: none !important;
+}
+
+.arp-help {
+  background: var(--arp-panel);
+  color: var(--arp-ink);
+  border: 1px solid var(--arp-line);
+  border-radius: var(--arp-r);
+  box-shadow: var(--arp-shadow);
+  max-width: 540px;
+  width: 100%;
+  max-height: 86vh;
+  overflow: auto;
+  padding: 18px 22px;
+}
+
+.arp-help-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.arp-help-head h2 {
+  margin: 0;
+  font-size: 16.5px;
+  font-weight: 800;
+}
+
+.arp-help-close {
+  appearance: none;
+  border: 1px solid var(--arp-line2);
+  background: var(--arp-panel2);
+  color: var(--arp-ink);
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  font-size: 17px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.arp-help-close:hover {
+  border-color: var(--arp-acc);
+  color: var(--arp-acc);
+}
+
+.arp-help-lead {
+  margin: 0 0 12px;
+  font-size: 12.5px;
+  font-style: italic;
+  color: var(--arp-mut);
+  border-left: 3px solid var(--arp-acc);
+  padding-left: 10px;
+  line-height: 1.5;
+}
+
+.arp-help-list {
+  margin: 0 0 12px;
+  padding: 0;
+  list-style: none;
+}
+
+.arp-help-list li {
+  padding: 7px 0;
+  border-bottom: 1px dashed var(--arp-line);
+  font-size: 13px;
+}
+
+.arp-kbd,
+.arp-help-list kbd {
+  display: inline-block;
+  min-width: 22px;
+  text-align: center;
+  padding: 2px 7px;
+  margin-right: 7px;
+  border: 1px solid var(--arp-line2);
+  border-bottom-width: 2px;
+  border-radius: 6px;
+  background: var(--arp-panel2);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--arp-acc);
+}
+
+.arp-help-foot {
+  margin: 0;
+  font-size: 11.5px;
+  color: var(--arp-mut);
+}
+
+/* ---------------------------------------------------------------------------
+   14. ANIMATIONS (fade — discrètes, page de lecture)
+   -------------------------------------------------------------------------*/
+@keyframes arpFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes arpUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes arpPop {
+  from { opacity: 0; transform: translateY(8px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes arpOut {
+  from { opacity: 1; }
+  to { opacity: 0; transform: translateY(6px); }
+}
+
+@keyframes arpPulse {
+  0%, 100% { opacity: 0.65; }
+  50% { opacity: 1; }
+}
+
+/* Classe arp-print (posée avant window.print(), retirée après) : allège tout. */
+.arp-print * {
+  animation: none !important;
+  transition: none !important;
+}
+
+/* ---------------------------------------------------------------------------
+   15. GARDES OBLIGATOIRES (héritées des vagues 2-3)
+   -------------------------------------------------------------------------*/
+@media (max-width: 819px) {
+  [data-arp-page] {
+    width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+}
+
+@media (max-width: 820px) {
+  html.admina-arp header.MuiPaper-root {
+    margin-left: 0 !important;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   16. IMPRESSION — @media print (rendu allégé, noir sur blanc)
+   -------------------------------------------------------------------------*/
+@media print {
+  html.admina-arp body {
+    background: #fff !important;
+    overflow: visible !important;
+  }
+
+  [data-arp-page] {
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+    color: #111;
+    animation: none;
+  }
+
+  .arp-actions,
+  .arp-toasts,
+  .arp-overlay,
+  .arp-search,
+  .arp-search-info,
+  .arp-chart-note,
+  .arp-toolbar {
+    display: none !important;
+  }
+
+  .arp-hero {
+    background: #fff !important;
+    color: #111 !important;
+    border: 2px solid #333;
+    box-shadow: none;
+    border-radius: 0;
+    padding: 14px 16px;
+  }
+
+  .arp-hero::before,
+  .arp-hero::after {
+    display: none;
+  }
+
+  .arp-chip {
+    background: #f0f0f0 !important;
+    border-color: #bbb !important;
+    color: #111 !important;
+  }
+
+  .arp-phil {
+    color: #333 !important;
+    border-left-color: #999 !important;
+  }
+
+  .arp-btn--ghost,
+  .arp-btn--primary {
+    display: none !important;
+  }
+
+  .arp-alerts,
+  .arp-card,
+  .arp-chart-wrap {
+    box-shadow: none;
+    border: 1px solid #bbb;
+    break-inside: avoid;
+  }
+
+  .arp-alerts {
+    border-left: 4px solid #666;
+  }
+
+  .arp-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .arp-metric-k,
+  .arp-card-cat,
+  .arp-spark-cap,
+  .arp-lgd,
+  .arp-row-lab,
+  .arp-chart-empty,
+  .arp-foot,
+  .arp-alnote {
+    color: #444 !important;
+  }
+
+  .arp-spark,
+  .arp-repart {
+    background: #f3f3f3 !important;
+  }
+
+  .arp-spark-line {
+    stroke: #333;
+  }
+
+  .arp-spark-area {
+    fill: #999;
+    opacity: 0.3;
+  }
+
+  .arp-seg,
+  .arp-bar {
+    filter: grayscale(1);
+  }
+
+  .arp-row-val,
+  .arp-card-count strong {
+    color: #111 !important;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   17. MOBILE <760px — D'UN SEUL BLOC, EN FIN DE FICHIER
+   -------------------------------------------------------------------------*/
+@media (max-width: 760px) {
+  [data-arp-page] {
+    margin-top: 12px;
+    margin-bottom: 28px;
+    padding: 0 10px;
+    font-size: 14px;
+  }
+
+  .arp-hero {
+    padding: 20px 16px 22px;
+  }
+
+  .arp-title {
+    font-size: 24px;
+  }
+
+  .arp-live {
+    gap: 6px;
+  }
+
+  .arp-chip {
+    font-size: 12px;
+    padding: 4px 10px;
+  }
+
+  .arp-phil {
+    font-size: 12.5px;
+  }
+
+  .arp-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .arp-btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  .arp-alerts {
+    padding: 12px 14px;
+  }
+
+  .arp-alerts-head {
+    gap: 7px;
+  }
+
+  .arp-alerts-sub {
+    flex-basis: 100%;
+  }
+
+  .arp-toolbar {
+    margin: 14px 0 10px;
+  }
+
+  .arp-search {
+    flex-basis: 100%;
+    max-width: none;
+  }
+
+  .arp-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .arp-card {
+    padding: 12px 13px 10px;
+  }
+
+  .arp-card-count strong {
+    font-size: 23px;
+  }
+
+  .arp-chart-wrap {
+    padding: 13px 12px 9px;
+  }
+
+  .arp-h2 {
+    font-size: 15px;
+  }
+
+  .arp-row-lab {
+    font-size: 10.5px;
+  }
+
+  .arp-row-val {
+    font-size: 10.5px;
+  }
+
+  .arp-toasts {
+    left: 12px;
+    right: 12px;
+    max-width: none;
+    bottom: 12px;
+  }
+
+  .arp-foot {
+    text-align: left;
+  }
+}

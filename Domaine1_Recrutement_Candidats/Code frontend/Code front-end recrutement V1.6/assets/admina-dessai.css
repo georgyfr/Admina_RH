@@ -1,0 +1,603 @@
+/* =========================================================
+   Admina-RH — Périodes d'Essai (/periode-dessai) — couche admina
+   W2-e : ÉCHÉANCIER D'ÉCHÉANCES — surveillance des fins de période
+   Scope : html.admina-ade (posé uniquement sur /periode-dessai)
+   Thèmes : [data-theme=light|dark] (détection auto)
+   Préfixe : ade- (assets admina-dessai.*)
+   Philosophie : le temps de l'épreuve mutuelle — chaque période
+   d'essai porte des échéances contractuelles fermes (date de fin,
+   délai de prévenance, renouvellements plafonnés) et une question
+   finale (confirmer / renouveler / rompre). Approcher une date de
+   fin sans décision est un risque : alertes, compteurs J-restants
+   omniprésents, frise des semaines = signature de la page.
+   ========================================================= */
+/* ---------- variables ---------- */
+html.admina-ade {
+  --ade-accent: #0f766e;
+  --ade-accent2: #059669;
+  --ade-gold: #b45309;
+  --ade-bg: #ffffff;
+  --ade-bg2: #f7faf9;
+  --ade-card: #ffffff;
+  --ade-line: #dbe7e4;
+  --ade-text: #10312e;
+  --ade-text2: #5d7a76;
+  --ade-err: #dc2626;
+  --ade-errbg: #fef2f2;
+  --ade-warn: #b45309;
+  --ade-warnbg: #fef3c7;
+  --ade-ok: #047857;
+  --ade-okbg: #d1fae5;
+  --ade-info: #0e7490;
+  --ade-infobg: #e0f2fe;
+  --ade-neutral: #57534e;
+  --ade-neutralbg: #f1f0ee;
+  --ade-crit: #c2410c;
+  --ade-critbg: #ffedd5;
+  --ade-shadow: 0 1px 3px rgba(16, 49, 46, .08), 0 4px 16px rgba(16, 49, 46, .06);
+  --ade-radius: 14px;
+}
+html.admina-ade [data-ade="root"][data-theme="dark"] {
+  --ade-bg: #0c1514;
+  --ade-bg2: #101c1a;
+  --ade-card: #14201e;
+  --ade-line: #243935;
+  --ade-text: #e6f2ef;
+  --ade-text2: #8fb0aa;
+  --ade-err: #f87171;
+  --ade-errbg: #451a1a;
+  --ade-warn: #fbbf24;
+  --ade-warnbg: #3a2b0e;
+  --ade-ok: #34d399;
+  --ade-okbg: #0c2f24;
+  --ade-info: #67e8f9;
+  --ade-infobg: #0c2f36;
+  --ade-neutralbg: #1d2b28;
+  --ade-crit: #fb923c;
+  --ade-critbg: #3a1e0c;
+  --ade-shadow: 0 1px 3px rgba(0, 0, 0, .5), 0 6px 20px rgba(0, 0, 0, .35);
+}
+
+/* ---------- racine ---------- */
+html.admina-ade [data-ade="root"] {
+  display: block;
+  padding: 4px 4px 28px;
+  color: var(--ade-text);
+  font-family: Inter, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-size: 14px;
+  line-height: 1.45;
+  background: var(--ade-bg);
+  border-radius: 12px;
+}
+html.admina-ade [data-ade="root"] *,
+html.admina-ade [data-ade="root"] *::before,
+html.admina-ade [data-ade="root"] *::after { box-sizing: border-box; }
+html.admina-ade [data-ade-page] { min-width: 0; }
+@media (max-width: 819px) {
+  html.admina-ade [data-ade-page] { width: 100% !important; margin-left: 0 !important; flex-basis: auto; }
+}
+
+/* ---------- héro ---------- */
+html.admina-ade .ade-hero {
+  background: linear-gradient(120deg, #0f766e 0%, #0d9488 55%, #059669 100%);
+  color: #ecfdf9;
+  border-radius: var(--ade-radius);
+  padding: 18px 20px;
+  box-shadow: var(--ade-shadow);
+  margin-bottom: 14px;
+}
+html.admina-ade .ade-hero-main { display: flex; gap: 14px; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; }
+html.admina-ade .ade-hero-title { display: flex; gap: 12px; align-items: center; }
+html.admina-ade .ade-hero-ico {
+  display: grid; place-items: center; width: 46px; height: 46px; border-radius: 12px;
+  background: rgba(255, 255, 255, .16); flex: 0 0 auto;
+}
+html.admina-ade .ade-h2 { margin: 0; font-size: 1.25rem; font-weight: 800; letter-spacing: .2px; }
+html.admina-ade .ade-hero-sub { margin: 3px 0 0; font-size: .88rem; opacity: .93; }
+html.admina-ade .ade-hero-actions { display: flex; gap: 7px; flex-wrap: wrap; }
+html.admina-ade .ade-hero-alerts { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 13px; }
+
+/* Alertes : pastilles SOLIDES à contraste élevé (AAA) — texte foncé sur
+   fond clair ~8-9:1, lisibles sur le dégradé teal, light & dark. */
+html.admina-ade .ade-alert {
+  display: inline-flex; gap: 7px; align-items: center; padding: 5px 11px; border-radius: 999px;
+  font-size: .78rem; font-weight: 700; border: 1px solid transparent; cursor: pointer; text-align: left;
+  color: #0f172a; background: rgba(255, 255, 255, .94);
+  box-shadow: 0 1px 3px rgba(2, 44, 34, .35);
+  -webkit-print-color-adjust: exact; print-color-adjust: exact;
+}
+html.admina-ade .ade-alert:hover { filter: brightness(.96); }
+html.admina-ade .ade-alert.err { background: #fee2e2; border-color: #fca5a5; color: #7f1d1d; }
+html.admina-ade .ade-alert.warn { background: #fef3c7; border-color: #fcd34d; color: #78350f; }
+html.admina-ade .ade-alert.ok { background: #d1fae5; border-color: #6ee7b7; color: #064e3b; }
+html.admina-ade .ade-alert.info { background: #cffafe; border-color: #67e8f9; color: #164e63; }
+
+/* ---------- boutons ---------- */
+html.admina-ade .ade-btn {
+  display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; border-radius: 9px;
+  border: 1px solid rgba(236, 253, 250, .45); background: rgba(255, 255, 255, .12);
+  color: inherit; font: inherit; font-size: .8rem; font-weight: 600; cursor: pointer;
+  transition: background .15s, transform .1s; white-space: nowrap;
+}
+html.admina-ade .ade-hero .ade-btn:hover { background: rgba(255, 255, 255, .22); }
+html.admina-ade .ade-btn:active { transform: translateY(1px); }
+html.admina-ade .ade-btn-primary { background: var(--ade-accent); border-color: var(--ade-accent); color: #fff; }
+html.admina-ade .ade-btn-ghost { background: var(--ade-card); border: 1px solid var(--ade-line); color: var(--ade-text); }
+html.admina-ade .ade-btn-ghost:hover { background: var(--ade-bg2); }
+html.admina-ade .ade-btn-danger { background: var(--ade-errbg); border-color: var(--ade-err); color: var(--ade-err); }
+html.admina-ade .ade-btn[disabled] { opacity: .5; cursor: not-allowed; }
+html.admina-ade .ade-nc-badge {
+  display: inline-grid; place-items: center; min-width: 17px; height: 17px; padding: 0 4px;
+  border-radius: 999px; background: #fbbf24; color: #422006; font-size: .68rem; font-weight: 800;
+  margin-left: 4px; vertical-align: 1px;
+}
+
+/* ---------- KPI ---------- */
+html.admina-ade .ade-kpis { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin-bottom: 14px; }
+@media (max-width: 1279px) { html.admina-ade .ade-kpis { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 640px) { html.admina-ade .ade-kpis { grid-template-columns: repeat(2, 1fr); } }
+html.admina-ade .ade-kpi {
+  background: var(--ade-card); border: 1px solid var(--ade-line); border-radius: 12px;
+  padding: 12px 14px; cursor: pointer; transition: box-shadow .15s, transform .1s, border-color .15s;
+  position: relative; overflow: hidden; text-align: left; font: inherit; width: 100%;
+  display: flex; flex-direction: column; align-items: flex-start; gap: 2px;
+}
+html.admina-ade .ade-kpi::before {
+  content: ''; position: absolute; inset: 0 auto 0 0; width: 4px; background: var(--ade-accent); opacity: .65;
+}
+html.admina-ade .ade-kpi.gold::before { background: #f59e0b; }
+html.admina-ade .ade-kpi.red::before { background: #dc2626; }
+html.admina-ade .ade-kpi:hover { box-shadow: var(--ade-shadow); transform: translateY(-1px); }
+html.admina-ade .ade-kpi.on { border-color: var(--ade-accent); background: var(--ade-bg2); box-shadow: inset 0 0 0 1px var(--ade-accent); }
+html.admina-ade .ade-kpi-t { font-size: .66rem; font-weight: 800; letter-spacing: .8px; color: var(--ade-text2); display: block; }
+html.admina-ade .ade-kpi-v { font-size: 1.24rem; font-weight: 800; margin-top: 2px; color: var(--ade-text); white-space: nowrap; display: block; }
+html.admina-ade .ade-kpi-v.bad { color: var(--ade-err); }
+html.admina-ade .ade-kpi-v.good { color: var(--ade-ok); }
+html.admina-ade .ade-kpi-s { font-size: .7rem; color: var(--ade-text2); margin-top: 1px; display: block; }
+
+/* ---------- graphiques ---------- */
+html.admina-ade .ade-charts { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+@media (max-width: 1099px) { html.admina-ade .ade-charts { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 760px) { html.admina-ade .ade-charts { grid-template-columns: 1fr; } }
+html.admina-ade .ade-chart-card {
+  background: var(--ade-card); border: 1px solid var(--ade-line); border-radius: 12px; padding: 12px 14px;
+}
+html.admina-ade .ade-chart-title { font-size: .74rem; font-weight: 800; letter-spacing: .6px; color: var(--ade-text2); text-transform: uppercase; margin-bottom: 8px; }
+html.admina-ade .ade-donut-wrap { display: flex; gap: 12px; align-items: center; }
+html.admina-ade .ade-donut-legend { display: flex; flex-direction: column; gap: 3px; font-size: .72rem; min-width: 0; flex: 1; }
+html.admina-ade .ade-dl-item { display: flex; gap: 6px; align-items: center; cursor: pointer; border-radius: 6px; padding: 1px 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+html.admina-ade .ade-dl-item:hover { background: var(--ade-bg2); }
+html.admina-ade .ade-dl-item.on { background: var(--ade-okbg); }
+html.admina-ade .ade-dl-dot { width: 9px; height: 9px; border-radius: 3px; flex: 0 0 auto; }
+html.admina-ade .ade-dl-val { color: var(--ade-text2); margin-left: auto; font-variant-numeric: tabular-nums; }
+html.admina-ade .ade-bars { display: flex; flex-direction: column; gap: 7px; }
+html.admina-ade .ade-bar-row { display: grid; grid-template-columns: 132px 1fr 64px; gap: 8px; align-items: center; font-size: .74rem; cursor: pointer; border-radius: 6px; padding: 1px 3px; }
+html.admina-ade .ade-bar-row:hover { background: var(--ade-bg2); }
+html.admina-ade .ade-bar-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+html.admina-ade .ade-bar-track { height: 13px; border-radius: 7px; background: var(--ade-neutralbg); overflow: hidden; position: relative; }
+html.admina-ade .ade-bar-fill { display: block; height: 100%; border-radius: 7px; background: linear-gradient(90deg, #0d9488, #059669); min-width: 3px; }
+html.admina-ade .ade-bar-fill.hot { background: linear-gradient(90deg, #f59e0b, #dc2626); }
+html.admina-ade .ade-bar-val { text-align: right; font-variant-numeric: tabular-nums; color: var(--ade-text2); white-space: nowrap; }
+
+/* ---------- barre d'outils ---------- */
+html.admina-ade .ade-toolbar {
+  display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+  background: var(--ade-card); border: 1px solid var(--ade-line); border-radius: 12px;
+  padding: 9px 12px; margin-bottom: 12px; position: sticky; top: 6px; z-index: 30;
+  box-shadow: var(--ade-shadow);
+}
+html.admina-ade .ade-search {
+  display: flex; align-items: center; gap: 6px; background: var(--ade-bg2); border: 1px solid var(--ade-line);
+  border-radius: 9px; padding: 5px 9px; flex: 1 1 210px; min-width: 170px; color: var(--ade-text2);
+}
+html.admina-ade .ade-in {
+  border: 1px solid var(--ade-line); background: var(--ade-bg2); color: var(--ade-text);
+  border-radius: 8px; padding: 6px 9px; font: inherit; font-size: .82rem; width: 100%;
+}
+html.admina-ade .ade-search .ade-in { border: none; background: transparent; padding: 2px 0; outline: none; }
+html.admina-ade .ade-sel {
+  border: 1px solid var(--ade-line); background: var(--ade-bg2); color: var(--ade-text);
+  border-radius: 8px; padding: 6px 8px; font: inherit; font-size: .8rem; max-width: 180px; cursor: pointer;
+}
+html.admina-ade .ade-chipbtn {
+  border: 1px solid var(--ade-line); background: var(--ade-card); color: var(--ade-text2);
+  border-radius: 999px; padding: 4px 11px; font: inherit; font-size: .74rem; font-weight: 700; cursor: pointer;
+}
+html.admina-ade .ade-chipbtn:hover { border-color: var(--ade-accent); color: var(--ade-accent); }
+html.admina-ade .ade-count { font-size: .74rem; color: var(--ade-text2); white-space: nowrap; font-variant-numeric: tabular-nums; }
+html.admina-ade .ade-views { display: flex; gap: 4px; margin-left: auto; }
+html.admina-ade .ade-vbtn {
+  display: inline-flex; gap: 5px; align-items: center; padding: 5px 10px; font: inherit; font-size: .76rem;
+  font-weight: 700; border-radius: 8px; border: 1px solid var(--ade-line); background: var(--ade-card); color: var(--ade-text2); cursor: pointer;
+}
+html.admina-ade .ade-vbtn.on { background: var(--ade-accent); border-color: var(--ade-accent); color: #fff; }
+
+/* ---------- table ---------- */
+html.admina-ade .ade-tblcard { background: var(--ade-card); border: 1px solid var(--ade-line); border-radius: 12px; overflow: hidden; }
+html.admina-ade .ade-tblwrap { overflow-x: auto; max-width: 100%; }
+html.admina-ade table.ade-tbl { border-collapse: collapse; width: 100%; min-width: 1420px; font-size: .8rem; }
+html.admina-ade .ade-tbl th {
+  position: sticky; top: 0; z-index: 2; text-align: left; font-weight: 800; font-size: .68rem;
+  letter-spacing: .4px; text-transform: uppercase; color: var(--ade-text2);
+  background: var(--ade-bg2); border-bottom: 2px solid var(--ade-line);
+  padding: 9px 10px; white-space: nowrap; user-select: none;
+}
+html.admina-ade .ade-tbl th[data-sort] { cursor: pointer; }
+html.admina-ade .ade-tbl th[data-sort]:hover { color: var(--ade-accent); }
+html.admina-ade .ade-tbl th .ade-arrow { font-size: .62rem; margin-left: 3px; }
+html.admina-ade .ade-tbl td { padding: 8px 10px; border-bottom: 1px solid var(--ade-line); vertical-align: middle; }
+html.admina-ade .ade-tbl tbody tr { transition: background .12s; }
+html.admina-ade .ade-tbl tbody tr:hover { background: var(--ade-bg2); }
+html.admina-ade .ade-tfoot td {
+  position: sticky; bottom: 0; background: var(--ade-bg2); font-weight: 800; font-size: .74rem;
+  border-top: 2px solid var(--ade-line); padding: 8px 10px; white-space: nowrap; font-variant-numeric: tabular-nums;
+}
+html.admina-ade .ade-num { color: var(--ade-text2); font-size: .72rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
+html.admina-ade .ade-emp { font-weight: 700; color: var(--ade-text); cursor: pointer; }
+html.admina-ade .ade-emp:hover { color: var(--ade-accent); text-decoration: underline; }
+html.admina-ade .ade-right { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+html.admina-ade .ade-chip {
+  display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: .68rem; font-weight: 800; white-space: nowrap;
+}
+html.admina-ade .ade-chip.ok { background: var(--ade-okbg); color: var(--ade-ok); }
+html.admina-ade .ade-chip.warn { background: var(--ade-warnbg); color: var(--ade-warn); }
+html.admina-ade .ade-chip.err { background: var(--ade-errbg); color: var(--ade-err); }
+html.admina-ade .ade-chip.info { background: var(--ade-infobg); color: var(--ade-info); }
+html.admina-ade .ade-chip.crit { background: var(--ade-critbg); color: var(--ade-crit); }
+html.admina-ade .ade-chip.neutral { background: var(--ade-neutralbg); color: var(--ade-neutral); }
+html.admina-ade .ade-actions { display: flex; gap: 3px; justify-content: center; }
+html.admina-ade .ade-ic {
+  display: inline-grid; place-items: center; width: 27px; height: 27px; border-radius: 7px;
+  border: 1px solid var(--ade-line); background: var(--ade-card); color: var(--ade-text2);
+  cursor: pointer; font-size: .78rem; transition: all .12s; padding: 0;
+}
+html.admina-ade .ade-ic:hover { color: var(--ade-accent); border-color: var(--ade-accent); background: var(--ade-bg2); }
+html.admina-ade .ade-ic.danger:hover { color: var(--ade-err); border-color: var(--ade-err); }
+html.admina-ade .ade-chk { width: 15px; height: 15px; accent-color: var(--ade-accent); cursor: pointer; }
+html.admina-ade .ade-pager { display: flex; gap: 8px; align-items: center; justify-content: flex-end; padding: 9px 12px; font-size: .76rem; color: var(--ade-text2); flex-wrap: wrap; }
+html.admina-ade .ade-pgbtn {
+  border: 1px solid var(--ade-line); background: var(--ade-card); color: var(--ade-text);
+  border-radius: 7px; padding: 3px 9px; font: inherit; font-size: .76rem; cursor: pointer;
+}
+html.admina-ade .ade-pgbtn[disabled] { opacity: .45; cursor: not-allowed; }
+
+/* décisions (couleurs natives : En cours=warning, Embauche confirmee=success,
+   Prolongation essai=info, Rupture essai=error) */
+html.admina-ade .f1 { background: #d97706; }
+html.admina-ade .f2 { background: #059669; }
+html.admina-ade .f3 { background: #0891b2; }
+html.admina-ade .f4 { background: #dc2626; }
+
+/* ---------- badge J-restants ---------- */
+html.admina-ade .ade-jb {
+  display: inline-flex; align-items: center; justify-content: center; gap: 4px;
+  min-width: 52px; padding: 3px 9px; border-radius: 999px; font-weight: 800; font-size: .76rem;
+  border: 1px solid transparent; font-variant-numeric: tabular-nums; white-space: nowrap;
+  -webkit-print-color-adjust: exact; print-color-adjust: exact;
+}
+html.admina-ade .ade-jb.dep { background: var(--ade-errbg); border-color: var(--ade-err); color: var(--ade-err); }
+html.admina-ade .ade-jb.crit { background: var(--ade-critbg); border-color: var(--ade-crit); color: var(--ade-crit); }
+html.admina-ade .ade-jb.warn { background: var(--ade-warnbg); border-color: var(--ade-warn); color: var(--ade-warn); }
+html.admina-ade .ade-jb.ok { background: var(--ade-okbg); border-color: #6ee7b7; color: var(--ade-ok); }
+html.admina-ade .ade-jb.far { background: var(--ade-neutralbg); border-color: var(--ade-line); color: var(--ade-text2); }
+html.admina-ade [data-theme="dark"] .ade-jb.dep { background: #451a1a; border-color: #b91c1c; color: #fca5a5; }
+html.admina-ade [data-theme="dark"] .ade-jb.crit { background: #3a1e0c; border-color: #c2410c; color: #fdba74; }
+html.admina-ade [data-theme="dark"] .ade-jb.warn { background: #3a2b0e; border-color: #b45309; color: #fcd34d; }
+html.admina-ade [data-theme="dark"] .ade-jb.ok { background: #0c2f24; border-color: #196c55; color: #6ee7b7; }
+html.admina-ade [data-theme="dark"] .ade-jb.far { background: #1d2b28; border-color: #31403c; color: #a8b5b2; }
+
+/* ---------- progression de période ---------- */
+html.admina-ade .ade-prog { display: block; width: 100%; min-width: 70px; max-width: 130px; height: 6px; border-radius: 4px; background: var(--ade-neutralbg); overflow: hidden; }
+html.admina-ade .ade-prog i { display: block; height: 100%; border-radius: 4px; background: linear-gradient(90deg, #0d9488, #10b981); }
+html.admina-ade .ade-prog.late i { background: linear-gradient(90deg, #f59e0b, #dc2626); }
+html.admina-ade .ade-progtxt { font-size: .66rem; color: var(--ade-text2); font-variant-numeric: tabular-nums; }
+
+/* ---------- renouvellements / motif ---------- */
+html.admina-ade .ade-renv { display: inline-flex; gap: 3px; align-items: center; }
+html.admina-ade .ade-renv i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; background: var(--ade-neutralbg); border: 1px solid var(--ade-line); }
+html.admina-ade .ade-renv i.used { background: #0891b2; border-color: #0891b2; }
+html.admina-ade .ade-renv i.full { background: #dc2626; border-color: #dc2626; }
+html.admina-ade .ade-motifchip { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: .66rem; font-weight: 800; }
+html.admina-ade .ade-motifchip.doc { background: var(--ade-okbg); color: var(--ade-ok); }
+html.admina-ade .ade-motifchip.abs { background: var(--ade-errbg); color: var(--ade-err); }
+
+/* ---------- cartes ---------- */
+html.admina-ade .ade-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 12px; }
+html.admina-ade .ade-cardx {
+  background: var(--ade-card); border: 1px solid var(--ade-line); border-radius: 12px; padding: 13px 14px;
+  box-shadow: var(--ade-shadow); display: flex; flex-direction: column; gap: 8px; position: relative;
+  transition: transform .12s, box-shadow .12s;
+}
+html.admina-ade .ade-cardx:hover { transform: translateY(-2px); }
+html.admina-ade .ade-cardx.dep { border-color: rgba(220, 38, 38, .45); }
+html.admina-ade .ade-card-top { display: flex; gap: 9px; align-items: flex-start; justify-content: space-between; }
+html.admina-ade .ade-card-name { font-weight: 800; font-size: .95rem; color: var(--ade-text); cursor: pointer; }
+html.admina-ade .ade-card-name:hover { color: var(--ade-accent); }
+html.admina-ade .ade-card-role { font-size: .82rem; font-weight: 600; color: var(--ade-text2); }
+html.admina-ade .ade-card-jrest { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+html.admina-ade .ade-card-jrest .ade-jb { font-size: .92rem; min-width: 64px; }
+html.admina-ade .ade-card-meta { display: flex; gap: 5px; flex-wrap: wrap; }
+html.admina-ade .ade-card-meta .ade-chip { font-size: .64rem; }
+html.admina-ade .ade-card-prog { display: flex; flex-direction: column; gap: 3px; font-size: .68rem; color: var(--ade-text2); }
+html.admina-ade .ade-card-prog .ade-prog { max-width: none; }
+html.admina-ade .ade-card-foot { display: flex; align-items: center; justify-content: space-between; gap: 6px; border-top: 1px dashed var(--ade-line); padding-top: 8px; }
+html.admina-ade .ade-card-act { display: flex; gap: 3px; }
+
+/* ---------- barre de sélection ---------- */
+html.admina-ade .ade-selbar {
+  position: sticky; bottom: 8px; z-index: 40; margin-top: 12px;
+  background: var(--ade-card); border: 1px solid var(--ade-accent); border-radius: 12px;
+  padding: 9px 14px; display: flex; gap: 9px; align-items: center; flex-wrap: wrap;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, .18); font-size: .8rem;
+}
+html.admina-ade .ade-selbar-info { font-weight: 700; }
+html.admina-ade .ade-selbar-sub { color: var(--ade-text2); font-size: .72rem; }
+
+/* =========================================================
+   VUE ÉCHÉANCIER (signature) — frise des semaines à venir
+   ========================================================= */
+html.admina-ade .ade-ech-head {
+  display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+  background: var(--ade-card); border: 1px solid var(--ade-line); border-radius: 12px;
+  padding: 9px 12px; margin-bottom: 10px;
+}
+html.admina-ade .ade-ech-title { font-size: .84rem; font-weight: 800; margin-right: auto; }
+html.admina-ade .ade-ech-nav { display: flex; gap: 4px; align-items: center; }
+html.admina-ade .ade-ech-nav .ade-pgbtn { padding: 5px 11px; }
+html.admina-ade .ade-ech-range { font-size: .72rem; color: var(--ade-text2); font-variant-numeric: tabular-nums; }
+html.admina-ade .ade-frise-wrap {
+  background: var(--ade-card); border: 1px solid var(--ade-line); border-radius: 12px;
+  padding: 10px; overflow-x: auto; -webkit-overflow-scrolling: touch;
+}
+html.admina-ade .ade-frise { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(148px, 1fr); gap: 8px; min-width: min-content; }
+html.admina-ade .ade-week {
+  background: var(--ade-bg2); border: 1px solid var(--ade-line); border-radius: 10px;
+  display: flex; flex-direction: column; min-height: 118px; min-width: 0;
+}
+html.admina-ade .ade-week.now { border-color: var(--ade-accent); box-shadow: inset 0 0 0 1px var(--ade-accent); background: var(--ade-card); }
+html.admina-ade .ade-week-head {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 4px;
+  padding: 6px 8px; border-bottom: 1px dashed var(--ade-line);
+  font-size: .64rem; font-weight: 800; letter-spacing: .3px; color: var(--ade-text2); white-space: nowrap;
+}
+html.admina-ade .ade-week-head b { color: var(--ade-text); font-size: .7rem; }
+html.admina-ade .ade-week-cnt { font-variant-numeric: tabular-nums; color: var(--ade-accent); }
+html.admina-ade .ade-week-body { padding: 6px; display: flex; flex-direction: column; gap: 5px; overflow-y: auto; }
+html.admina-ade .ade-essep {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 1px; width: 100%;
+  text-align: left; font: inherit; font-size: .68rem; line-height: 1.3;
+  border: 1px solid var(--ade-line); border-left-width: 4px; border-radius: 8px;
+  background: var(--ade-card); color: var(--ade-text); padding: 4px 7px; cursor: pointer;
+  -webkit-print-color-adjust: exact; print-color-adjust: exact;
+}
+html.admina-ade .ade-essep:hover { filter: brightness(.97); transform: translateY(-1px); }
+html.admina-ade .ade-essep b { font-size: .66rem; letter-spacing: .3px; }
+html.admina-ade .ade-essep .ade-jb { font-size: .62rem; min-width: 0; padding: 1px 7px; }
+html.admina-ade .ade-essep.u-dep { border-left-color: var(--ade-err); background: var(--ade-errbg); }
+html.admina-ade .ade-essep.u-crit { border-left-color: var(--ade-crit); background: var(--ade-critbg); }
+html.admina-ade .ade-essep.u-warn { border-left-color: #f59e0b; background: var(--ade-warnbg); }
+html.admina-ade .ade-essep.u-ok { border-left-color: var(--ade-accent); background: var(--ade-infobg); }
+html.admina-ade .ade-essep.u-far { border-left-color: var(--ade-line); background: var(--ade-neutralbg); color: var(--ade-text2); }
+html.admina-ade .ade-echempty {
+  text-align: center; padding: 22px 10px; color: var(--ade-text2); font-size: .82rem;
+  display: flex; flex-direction: column; gap: 10px; align-items: center;
+}
+html.admina-ade .ade-legend { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 9px; font-size: .68rem; color: var(--ade-text2); align-items: center; }
+html.admina-ade .ade-legend span { display: inline-flex; gap: 5px; align-items: center; }
+html.admina-ade .ade-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; border-left-width: 3px; border-left-style: solid; }
+html.admina-ade .ade-legend .l-dep { background: var(--ade-errbg); border-left-color: var(--ade-err); }
+html.admina-ade .ade-legend .l-crit { background: var(--ade-critbg); border-left-color: var(--ade-crit); }
+html.admina-ade .ade-legend .l-warn { background: var(--ade-warnbg); border-left-color: #f59e0b; }
+html.admina-ade .ade-legend .l-ok { background: var(--ade-infobg); border-left-color: var(--ade-accent); }
+html.admina-ade .ade-legend .l-far { background: var(--ade-neutralbg); border-left-color: var(--ade-line); }
+
+/* compteurs J-restants sous la frise */
+html.admina-ade .ade-cnts { margin-top: 12px; }
+html.admina-ade .ade-cnt-row {
+  display: grid; grid-template-columns: 78px minmax(120px, 1.3fr) minmax(90px, 1fr) 92px 70px 1fr 120px;
+  gap: 8px; align-items: center; padding: 7px 10px; border-bottom: 1px dashed var(--ade-line);
+  font-size: .76rem; cursor: pointer; border-radius: 8px;
+}
+html.admina-ade .ade-cnt-row:hover { background: var(--ade-bg2); }
+html.admina-ade .ade-cnt-row .ade-num { font-size: .7rem; }
+html.admina-ade .ade-cnt-emp { font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+html.admina-ade .ade-cnt-fin { color: var(--ade-text2); font-variant-numeric: tabular-nums; white-space: nowrap; }
+@media (max-width: 900px) {
+  html.admina-ade .ade-cnt-row { grid-template-columns: 70px 1fr 86px 92px; }
+  html.admina-ade .ade-cnt-row .ade-hide-m { display: none; }
+}
+
+/* ---------- drawer ---------- */
+html.admina-ade .ade-backdrop {
+  position: fixed; inset: 0; background: rgba(6, 20, 18, .55); z-index: 1299;
+  backdrop-filter: blur(1.5px); animation: adeFade .18s ease;
+}
+html.admina-ade .ade-drawer {
+  position: fixed; top: 0; right: 0; bottom: 0; width: min(500px, 94vw); z-index: 1300;
+  background: var(--ade-card); color: var(--ade-text); border-left: 1px solid var(--ade-line);
+  box-shadow: -12px 0 40px rgba(0, 0, 0, .25); display: flex; flex-direction: column;
+  animation: adeSlide .2s ease;
+}
+@keyframes adeFade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes adeSlide { from { transform: translateX(30px); opacity: .4; } to { transform: none; opacity: 1; } }
+html.admina-ade .ade-drawer-head { display: flex; gap: 10px; align-items: flex-start; justify-content: space-between; padding: 15px 17px 10px; border-bottom: 1px solid var(--ade-line); }
+html.admina-ade .ade-drawer-title { font-size: 1.02rem; font-weight: 800; }
+html.admina-ade .ade-drawer-sub { font-size: .74rem; color: var(--ade-text2); margin-top: 2px; }
+html.admina-ade .ade-drawer-x {
+  border: 1px solid var(--ade-line); background: var(--ade-card); color: var(--ade-text2);
+  width: 29px; height: 29px; border-radius: 8px; cursor: pointer; font-size: .9rem; flex: 0 0 auto;
+}
+html.admina-ade .ade-drawer-x:hover { color: var(--ade-err); border-color: var(--ade-err); }
+html.admina-ade .ade-drawer-body { overflow-y: auto; padding: 13px 17px 20px; flex: 1; }
+html.admina-ade .ade-fsec { font-size: .68rem; font-weight: 800; letter-spacing: .7px; text-transform: uppercase; color: var(--ade-text2); margin: 14px 0 7px; display: flex; align-items: center; gap: 8px; }
+html.admina-ade .ade-fsec::after { content: ''; flex: 1; height: 1px; background: var(--ade-line); }
+html.admina-ade .ade-kv { display: grid; grid-template-columns: 158px 1fr; gap: 5px 12px; font-size: .8rem; }
+html.admina-ade .ade-kv dt { color: var(--ade-text2); }
+html.admina-ade .ade-kv dd { margin: 0; color: var(--ade-text); font-weight: 600; }
+html.admina-ade .ade-live { background: var(--ade-bg2); border: 1px dashed var(--ade-line); border-radius: 10px; padding: 8px 12px; font-size: .76rem; display: flex; gap: 14px; flex-wrap: wrap; margin-top: 10px; }
+html.admina-ade .ade-live b { color: var(--ade-accent); }
+html.admina-ade .ade-live .bad { color: var(--ade-err); }
+html.admina-ade .ade-live .good { color: var(--ade-ok); }
+html.admina-ade .ade-notebox { width: 100%; border: 1px solid var(--ade-line); background: var(--ade-bg2); color: var(--ade-text); border-radius: 9px; padding: 8px 10px; font: inherit; font-size: .8rem; min-height: 56px; resize: vertical; }
+html.admina-ade .ade-drawer-actions { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 14px; }
+html.admina-ade .ade-decrow { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 10px; }
+html.admina-ade .ade-decrow label { font-size: .74rem; font-weight: 700; color: var(--ade-text2); }
+html.admina-ade .ade-decrow select { max-width: 220px; }
+html.admina-ade .ade-tip { margin-top: 10px; background: var(--ade-infobg); color: var(--ade-info); border-radius: 9px; padding: 8px 12px; font-size: .76rem; font-weight: 600; }
+html.admina-ade .ade-tip.hot { background: var(--ade-errbg); color: var(--ade-err); }
+html.admina-ade .ade-tip.warn { background: var(--ade-warnbg); color: var(--ade-warn); }
+
+/* ---------- dialog ---------- */
+html.admina-ade .ade-dialog {
+  position: fixed; z-index: 1300; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: min(680px, 94vw); max-height: 90vh; display: flex; flex-direction: column;
+  background: var(--ade-card); color: var(--ade-text); border: 1px solid var(--ade-line);
+  border-radius: 14px; box-shadow: 0 24px 70px rgba(0, 0, 0, .35); animation: adePop .16s ease;
+}
+@keyframes adePop { from { transform: translate(-50%, -48%); opacity: 0; } to { transform: translate(-50%, -50%); opacity: 1; } }
+html.admina-ade .ade-dialog-head { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px 10px; border-bottom: 1px solid var(--ade-line); }
+html.admina-ade .ade-dialog-head h3 { margin: 0; font-size: 1rem; font-weight: 800; }
+html.admina-ade .ade-dialog-body { padding: 12px 18px 16px; overflow-y: auto; }
+html.admina-ade .ade-dialog-foot { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 11px 18px; border-top: 1px solid var(--ade-line); flex-wrap: wrap; }
+html.admina-ade .ade-fgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px 12px; }
+html.admina-ade .ade-fgrid .full { grid-column: 1 / -1; }
+@media (max-width: 560px) { html.admina-ade .ade-fgrid { grid-template-columns: 1fr; } }
+html.admina-ade .ade-lab { display: flex; flex-direction: column; gap: 3px; font-size: .74rem; font-weight: 700; color: var(--ade-text2); }
+html.admina-ade .ade-ta { resize: vertical; min-height: 46px; font: inherit; font-size: .82rem; }
+html.admina-ade .ade-form-err {
+  background: var(--ade-errbg); color: var(--ade-err); border: 1px solid var(--ade-err);
+  border-radius: 9px; padding: 7px 11px; font-size: .78rem; margin-top: 9px;
+}
+html.admina-ade .ade-form-hint { font-size: .7rem; color: var(--ade-text2); }
+
+/* ---------- confirm ---------- */
+html.admina-ade .ade-confirm {
+  position: fixed; z-index: 1301; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: min(430px, 92vw); background: var(--ade-card); color: var(--ade-text);
+  border: 1px solid var(--ade-line); border-radius: 14px; box-shadow: 0 24px 70px rgba(0, 0, 0, .4); padding: 17px 19px;
+  animation: adePop .16s ease;
+}
+html.admina-ade .ade-confirm h4 { margin: 0 0 7px; font-size: .95rem; }
+html.admina-ade .ade-confirm p { margin: 0 0 13px; font-size: .8rem; color: var(--ade-text2); }
+html.admina-ade .ade-confirm-row { display: flex; gap: 8px; justify-content: flex-end; }
+
+/* ---------- journal / seuils ---------- */
+html.admina-ade .ade-panel {
+  position: fixed; z-index: 1300; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: min(660px, 94vw); max-height: 84vh; background: var(--ade-card); color: var(--ade-text);
+  border: 1px solid var(--ade-line); border-radius: 14px; box-shadow: 0 24px 70px rgba(0, 0, 0, .35);
+  display: flex; flex-direction: column; animation: adePop .16s ease;
+}
+html.admina-ade .ade-panel-head { display: flex; justify-content: space-between; align-items: center; padding: 13px 17px 9px; border-bottom: 1px solid var(--ade-line); }
+html.admina-ade .ade-panel-head h3 { margin: 0; font-size: .98rem; font-weight: 800; }
+html.admina-ade .ade-panel-body { padding: 12px 17px 16px; overflow-y: auto; flex: 1; }
+html.admina-ade .ade-jrow { display: flex; gap: 9px; padding: 6px 2px; border-bottom: 1px dashed var(--ade-line); font-size: .76rem; align-items: baseline; }
+html.admina-ade .ade-jtime { color: var(--ade-text2); font-variant-numeric: tabular-nums; white-space: nowrap; font-size: .68rem; }
+html.admina-ade .ade-jact { font-weight: 800; white-space: nowrap; }
+html.admina-ade .ade-jdet { color: var(--ade-text2); }
+html.admina-ade .ade-empty { text-align: center; color: var(--ade-text2); padding: 26px 0; font-size: .82rem; }
+html.admina-ade .ade-sim-row { display: grid; grid-template-columns: 220px 1fr 110px; gap: 10px; align-items: center; margin: 9px 0; font-size: .8rem; }
+html.admina-ade .ade-sim-row input[type="range"] { width: 100%; accent-color: var(--ade-accent); }
+html.admina-ade .ade-cibles-note { font-size: .76rem; color: var(--ade-text2); margin: 4px 0 10px; }
+
+/* ---------- toasts ---------- */
+html.admina-ade .ade-toasts { position: fixed; bottom: 16px; right: 16px; z-index: 1400; display: flex; flex-direction: column; gap: 7px; max-width: 340px; }
+html.admina-ade .ade-toast {
+  background: var(--ade-card); color: var(--ade-text); border: 1px solid var(--ade-line);
+  border-left: 4px solid var(--ade-accent); border-radius: 10px; padding: 9px 13px; font-size: .8rem;
+  box-shadow: 0 8px 26px rgba(0, 0, 0, .22); display: flex; gap: 9px; align-items: flex-start;
+  animation: adeToast .18s ease;
+}
+html.admina-ade .ade-toast.err { border-left-color: var(--ade-err); }
+html.admina-ade .ade-toast.ok { border-left-color: var(--ade-ok); }
+html.admina-ade .ade-toast button { border: none; background: none; color: var(--ade-text2); cursor: pointer; font-size: .95rem; padding: 0; line-height: 1; }
+@keyframes adeToast { from { transform: translateY(9px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+/* ---------- pied ---------- */
+html.admina-ade .ade-foot { margin-top: 14px; font-size: .72rem; color: var(--ade-text2); text-align: center; }
+html.admina-ade .ade-link { border: none; background: none; color: var(--ade-accent); cursor: pointer; font: inherit; font-size: inherit; text-decoration: underline; padding: 0; }
+
+/* ---------- burger mobile ---------- */
+html.admina-ade .admina-burger {
+  display: none; align-items: center; justify-content: center;
+  width: 38px; height: 38px; border-radius: 9px; border: 1px solid rgba(0, 0, 0, .12);
+  background: rgba(255, 255, 255, .85); color: #134e4a; cursor: pointer; margin-right: 6px; padding: 0;
+}
+html.admina-ade .admina-burger:hover { background: rgba(128, 128, 128, .15); }
+html.admina-ade .admina-nav-backdrop { background: transparent; pointer-events: none; }
+@media (max-width: 819px) {
+  html.admina-ade header.MuiPaper-root { margin-left: 0 !important; width: 100% !important; }
+
+  html.admina-ade .MuiToolbar-root { padding-left: 10px !important; padding-right: 10px !important; }
+  html.admina-ade .MuiDrawer-docked {
+    display: block !important;
+    position: fixed; top: 0; left: 0; bottom: 0;
+    width: 280px; max-width: 86vw;
+    z-index: 1450;
+    transform: translateX(-106%);
+    transition: transform .25s ease;
+  }
+  html.admina-ade.admina-nav-open .MuiDrawer-docked { transform: translateX(0); }
+  html.admina-ade .MuiDrawer-docked .MuiDrawer-paper {
+    width: 280px; max-width: 86vw; box-sizing: border-box;
+    position: absolute; height: 100%;
+  }
+  html.admina-ade .admina-burger { display: inline-flex !important; }
+  html.admina-ade .admina-nav-backdrop {
+    position: fixed; inset: 0; background: rgba(0, 0, 0, .5);
+    z-index: 1440; opacity: 0; pointer-events: none; transition: opacity .22s ease;
+  }
+  html.admina-ade.admina-nav-open .admina-nav-backdrop { opacity: 1; pointer-events: auto; }
+}
+
+/* ---------- impression ---------- */
+@media print {
+  html.admina-ade [data-ade="toolbar"], html.admina-ade .ade-hero-actions, html.admina-ade .ade-actions,
+  html.admina-ade .ade-selbar, html.admina-ade .ade-toasts, html.admina-ade .ade-pager,
+  html.admina-ade .ade-chk, html.admina-ade .ade-foot, html.admina-ade .admina-burger,
+  html.admina-ade .ade-ech-head .ade-pgbtn { display: none !important; }
+  html.admina-ade [data-ade="root"] { padding: 0; }
+  html.admina-ade .ade-tblcard { border: none; }
+}
+
+/* ---------- scrollbars ---------- */
+html.admina-ade .ade-tblwrap::-webkit-scrollbar, html.admina-ade .ade-drawer-body::-webkit-scrollbar,
+html.admina-ade .ade-dialog-body::-webkit-scrollbar, html.admina-ade .ade-panel-body::-webkit-scrollbar,
+html.admina-ade .ade-frise-wrap::-webkit-scrollbar, html.admina-ade .ade-week-body::-webkit-scrollbar { height: 9px; width: 9px; }
+html.admina-ade .ade-tblwrap::-webkit-scrollbar-thumb, html.admina-ade .ade-drawer-body::-webkit-scrollbar-thumb,
+html.admina-ade .ade-dialog-body::-webkit-scrollbar-thumb, html.admina-ade .ade-panel-body::-webkit-scrollbar-thumb,
+html.admina-ade .ade-frise-wrap::-webkit-scrollbar-thumb, html.admina-ade .ade-week-body::-webkit-scrollbar-thumb {
+  background: var(--ade-line); border-radius: 5px;
+}
+html.admina-ade .ade-tblwrap::-webkit-scrollbar-thumb:hover { background: var(--ade-text2); }
+
+/* ---------- garde-fous 390px ---------- */
+@media (max-width: 420px) {
+  html.admina-ade [data-ade="root"] { padding: 2px 2px 22px; }
+  html.admina-ade .ade-hero { padding: 14px 12px; }
+  html.admina-ade .ade-h2 { font-size: 1.05rem; }
+  html.admina-ade .ade-frise { grid-auto-columns: minmax(132px, 1fr); }
+  html.admina-ade .ade-sim-row { grid-template-columns: 1fr; gap: 4px; }
+  html.admina-ade .ade-toasts { max-width: 92vw; right: 8px; bottom: 8px; }
+  html.admina-ade .ade-ech-nav { flex-wrap: wrap; min-width: 0; row-gap: 4px; }
+  html.admina-ade .ade-ech-range { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  html.admina-ade .ade-ech-head, html.admina-ade .ade-ech-title { min-width: 0; }
+}
+
+/* ---------- garde toolbar native (mobile) ---------- */
+@media (max-width: 480px) {
+  html.admina-ade .MuiToolbar-root { flex-wrap: wrap; row-gap: 6px; padding-bottom: 8px; }
+  html.admina-ade .MuiToolbar-root .MuiBox-root { min-width: 0; }
+}
+
+/* ---------- garde responsive final (anti-écrasement cascade) ---------- */
+@media (max-width: 760px) {
+  html.admina-ade .ade-charts { grid-template-columns: 1fr !important; }
+  html.admina-ade .ade-charts > * { min-width: 0; max-width: 100%; }
+  html.admina-ade .ade-kpis { grid-template-columns: 1fr 1fr !important; }
+  html.admina-ade .ade-kpis > * { min-width: 0; }
+  html.admina-ade .ade-tblwrap { max-width: 100%; }
+}
+@media (max-width: 480px) {
+  html.admina-ade .ade-kpis { grid-template-columns: 1fr !important; }
+}

@@ -1,0 +1,595 @@
+/* =========================================================
+   Admina-RH — Expériences des Candidats — couche admina (W3-e)
+   Scope : html.admina-aex (posé uniquement sur /experiences)
+   Thèmes : light + dark auto (html.admina-aex[data-dark],
+            LS admina-dark partagé + luminance + prefers-color-scheme)
+   Préfixe : aex- (assets admina-experiences.*) · variables --aex-
+   Philosophie : /experiences = L'HISTORIQUE PROFESSIONNEL VÉRIFIÉ.
+   La VUE PARCOURS PAR CANDIDAT (frise chronologique horizontale,
+   segments ∝ durées, vérifié = plein / non vérifié = hachuré,
+   trous matérialisés) est la signature de la page. La page sépare
+   nettement le vérifié du non-vérifié et pousse à lancer les
+   vérifications. Ni kanban, ni tableur : une trajectoire datée,
+   cumulée, confirmée par un tiers.
+   ========================================================= */
+
+/* ---------- variables ---------- */
+html.admina-aex {
+  --aex-accent: #0f766e;
+  --aex-accent2: #059669;
+  --aex-gold: #b45309;
+  --aex-bg: #ffffff;
+  --aex-bg2: #f6faf8;
+  --aex-card: #ffffff;
+  --aex-line: #dde8e4;
+  --aex-text: #10312e;
+  --aex-text2: #5d7a76;
+  --aex-err: #dc2626;
+  --aex-errbg: #fef2f2;
+  --aex-warn: #b45309;
+  --aex-warnbg: #fef3c7;
+  --aex-ok: #047857;
+  --aex-okbg: #d1fae5;
+  --aex-info: #0e7490;
+  --aex-infobg: #e0f2fe;
+  --aex-neutral: #57534e;
+  --aex-neutralbg: #f1f0ee;
+  --aex-shadow: 0 1px 3px rgba(16, 49, 46, .08), 0 4px 16px rgba(16, 49, 46, .06);
+  --aex-radius: 14px;
+}
+html.admina-aex[data-dark] {
+  --aex-bg: #0c1514;
+  --aex-bg2: #101c1a;
+  --aex-card: #14201e;
+  --aex-line: #243935;
+  --aex-text: #e6f2ef;
+  --aex-text2: #8fb0aa;
+  --aex-err: #f87171;
+  --aex-errbg: #451a1a;
+  --aex-warn: #fbbf24;
+  --aex-warnbg: #3a2b0e;
+  --aex-ok: #34d399;
+  --aex-okbg: #0c2f24;
+  --aex-info: #67e8f9;
+  --aex-infobg: #0c2f36;
+  --aex-neutral: #cbd5d1;
+  --aex-neutralbg: #1d2b28;
+  --aex-shadow: 0 1px 3px rgba(0, 0, 0, .5), 0 6px 20px rgba(0, 0, 0, .35);
+}
+
+/* ---------- racine ---------- */
+html.admina-aex [data-aex="root"], html.admina-aex .aex-root {
+  display: block;
+  padding: 4px 4px 28px;
+  color: var(--aex-text);
+  font-family: Inter, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-size: 14px;
+  line-height: 1.45;
+  background: var(--aex-bg);
+  border-radius: 12px;
+}
+html.admina-aex [data-aex="root"] *,
+html.admina-aex [data-aex="root"] *::before,
+html.admina-aex [data-aex="root"] *::after { box-sizing: border-box; }
+html.admina-aex [data-aex-page] { min-width: 0; }
+@media (max-width: 819px) {
+  html.admina-aex [data-aex-page] { width: 100% !important; margin-left: 0 !important; flex-basis: auto; }
+}
+
+/* ---------- héro ---------- */
+html.admina-aex .aex-hero {
+  background: linear-gradient(120deg, #0f766e 0%, #0d9488 55%, #059669 100%);
+  color: #ecfdf9;
+  border-radius: var(--aex-radius);
+  padding: 18px 20px;
+  box-shadow: var(--aex-shadow);
+  margin-bottom: 14px;
+}
+html.admina-aex .aex-hero-main { display: flex; gap: 14px; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; }
+html.admina-aex .aex-hero-title { display: flex; gap: 12px; align-items: center; }
+html.admina-aex .aex-hero-ico {
+  display: grid; place-items: center; width: 46px; height: 46px; border-radius: 12px;
+  background: rgba(255, 255, 255, .16); flex: 0 0 auto;
+}
+html.admina-aex .aex-h2 { margin: 0; font-size: 1.25rem; font-weight: 800; letter-spacing: .2px; }
+html.admina-aex .aex-hero-sub { margin: 3px 0 0; font-size: .9rem; font-weight: 700; opacity: .97; }
+html.admina-aex .aex-hero-sub2 { margin: 2px 0 0; font-size: .78rem; opacity: .82; }
+html.admina-aex .aex-hero-actions { display: flex; gap: 7px; flex-wrap: wrap; }
+html.admina-aex .aex-hero-alerts { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 13px; align-items: center; }
+
+/* Alertes : pastilles SOLIDES à contraste élevé (AAA M23) */
+html.admina-aex .aex-alert {
+  display: inline-flex; gap: 7px; align-items: center; padding: 5px 11px; border-radius: 999px;
+  font-size: .78rem; font-weight: 700; border: 1px solid transparent; cursor: pointer; text-align: left;
+  color: #0f172a; background: rgba(255, 255, 255, .94);
+  box-shadow: 0 1px 3px rgba(2, 44, 34, .35);
+  -webkit-print-color-adjust: exact; print-color-adjust: exact;
+}
+html.admina-aex .aex-alert:hover { filter: brightness(.96); }
+html.admina-aex .aex-alert.err { background: #fee2e2; border-color: #fca5a5; color: #7f1d1d; }
+html.admina-aex .aex-alert.warn { background: #fef3c7; border-color: #fcd34d; color: #78350f; }
+html.admina-aex .aex-alert.ok { background: #d1fae5; border-color: #6ee7b7; color: #064e3b; }
+html.admina-aex .aex-alert.info { background: #cffafe; border-color: #67e8f9; color: #164e63; }
+html.admina-aex .aex-actchip {
+  display: inline-flex; gap: 6px; align-items: center; padding: 6px 12px; border-radius: 999px;
+  font-size: .76rem; font-weight: 800; cursor: pointer; border: 1px dashed rgba(255, 255, 255, .8);
+  background: rgba(255, 255, 255, .14); color: #ecfdf9;
+}
+html.admina-aex .aex-actchip:hover { background: rgba(255, 255, 255, .26); }
+
+/* ---------- boutons ---------- */
+html.admina-aex .aex-btn {
+  display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; border-radius: 9px;
+  border: 1px solid rgba(236, 253, 250, .45); background: rgba(255, 255, 255, .12);
+  color: inherit; font: inherit; font-size: .8rem; font-weight: 600; cursor: pointer;
+  transition: background .15s, transform .1s; white-space: nowrap;
+}
+html.admina-aex .aex-hero .aex-btn:hover { background: rgba(255, 255, 255, .22); }
+html.admina-aex .aex-btn:active { transform: translateY(1px); }
+html.admina-aex .aex-btn-primary { background: var(--aex-accent); border-color: var(--aex-accent); color: #fff; }
+html.admina-aex .aex-btn-ghost { background: var(--aex-card); border: 1px solid var(--aex-line); color: var(--aex-text); }
+html.admina-aex .aex-btn-ghost:hover { background: var(--aex-bg2); }
+html.admina-aex .aex-btn-danger { background: var(--aex-errbg); border-color: var(--aex-err); color: var(--aex-err); }
+html.admina-aex .aex-btn[disabled] { opacity: .5; cursor: not-allowed; }
+html.admina-aex .aex-backbtn { background: var(--aex-card); border: 1px solid var(--aex-line); color: var(--aex-text); }
+
+/* ---------- KPI ---------- */
+html.admina-aex .aex-kpis { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin-bottom: 14px; }
+@media (max-width: 1279px) { html.admina-aex .aex-kpis { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 640px) { html.admina-aex .aex-kpis { grid-template-columns: repeat(2, 1fr); } }
+html.admina-aex .aex-kpi {
+  background: var(--aex-card); border: 1px solid var(--aex-line); border-radius: 12px;
+  padding: 12px 14px; cursor: pointer; transition: box-shadow .15s, transform .1s, border-color .15s;
+  position: relative; overflow: hidden; text-align: left; font: inherit; width: 100%;
+  display: flex; flex-direction: column; align-items: flex-start; gap: 2px;
+}
+html.admina-aex .aex-kpi::before {
+  content: ''; position: absolute; inset: 0 auto 0 0; width: 4px; background: var(--aex-accent); opacity: .65;
+}
+html.admina-aex .aex-kpi.gold::before { background: #f59e0b; }
+html.admina-aex .aex-kpi:hover { box-shadow: var(--aex-shadow); transform: translateY(-1px); }
+html.admina-aex .aex-kpi.on { border-color: var(--aex-accent); background: var(--aex-bg2); box-shadow: inset 0 0 0 1px var(--aex-accent); }
+html.admina-aex .aex-kpi-t { font-size: .66rem; font-weight: 800; letter-spacing: .8px; color: var(--aex-text2); }
+html.admina-aex .aex-kpi-v { font-size: 1.24rem; font-weight: 800; margin-top: 2px; color: var(--aex-text); white-space: nowrap; }
+html.admina-aex .aex-kpi-v.bad { color: var(--aex-err); }
+html.admina-aex .aex-kpi-s { font-size: .7rem; color: var(--aex-text2); margin-top: 1px; }
+
+/* ---------- graphiques (SVG vanilla) ---------- */
+html.admina-aex .aex-charts { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+@media (max-width: 1099px) { html.admina-aex .aex-charts { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 760px) { html.admina-aex .aex-charts { grid-template-columns: 1fr; } }
+html.admina-aex .aex-chart-card {
+  background: var(--aex-card); border: 1px solid var(--aex-line); border-radius: 12px; padding: 12px 14px;
+  min-width: 0;
+}
+html.admina-aex .aex-chart-title { font-size: .74rem; font-weight: 800; letter-spacing: .6px; color: var(--aex-text2); text-transform: uppercase; margin-bottom: 8px; }
+html.admina-aex .aex-svgwrap { min-width: 0; overflow: hidden; }
+html.admina-aex .aex-svgrow { cursor: pointer; }
+html.admina-aex .aex-svgrow:hover rect { opacity: 1 !important; filter: brightness(1.08); }
+html.admina-aex .aex-svgrow.on rect { stroke: var(--aex-accent); stroke-width: 2; }
+html.admina-aex .aex-donut-wrap { display: flex; gap: 12px; align-items: center; }
+html.admina-aex .aex-donut-legend { display: flex; flex-direction: column; gap: 3px; font-size: .72rem; min-width: 0; flex: 1; }
+html.admina-aex .aex-dl-item { display: flex; gap: 6px; align-items: center; cursor: pointer; border-radius: 6px; padding: 1px 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+html.admina-aex .aex-dl-item:hover { background: var(--aex-bg2); }
+html.admina-aex .aex-dl-item.on { background: var(--aex-okbg); }
+html.admina-aex .aex-dl-dot { width: 9px; height: 9px; border-radius: 3px; flex: 0 0 auto; }
+html.admina-aex .aex-dl-val { color: var(--aex-text2); margin-left: auto; font-variant-numeric: tabular-nums; }
+
+/* ---------- barre d'outils ---------- */
+html.admina-aex .aex-toolbar {
+  display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+  background: var(--aex-card); border: 1px solid var(--aex-line); border-radius: 12px;
+  padding: 9px 12px; margin-bottom: 12px; position: sticky; top: 6px; z-index: 30;
+  box-shadow: var(--aex-shadow);
+}
+html.admina-aex .aex-search {
+  display: flex; align-items: center; gap: 6px; background: var(--aex-bg2); border: 1px solid var(--aex-line);
+  border-radius: 9px; padding: 5px 9px; flex: 1 1 210px; min-width: 170px; color: var(--aex-text2);
+}
+html.admina-aex .aex-in {
+  border: 1px solid var(--aex-line); background: var(--aex-bg2); color: var(--aex-text);
+  border-radius: 8px; padding: 6px 9px; font: inherit; font-size: .82rem; width: 100%;
+}
+html.admina-aex .aex-search .aex-in { border: none; background: transparent; padding: 2px 0; outline: none; }
+html.admina-aex .aex-in[disabled] { opacity: .5; }
+html.admina-aex .aex-sel {
+  border: 1px solid var(--aex-line); background: var(--aex-bg2); color: var(--aex-text);
+  border-radius: 8px; padding: 6px 8px; font: inherit; font-size: .8rem; max-width: 190px; cursor: pointer;
+}
+html.admina-aex .aex-chipbtn {
+  border: 1px solid var(--aex-line); background: var(--aex-card); color: var(--aex-text2);
+  border-radius: 999px; padding: 4px 11px; font: inherit; font-size: .74rem; font-weight: 700; cursor: pointer;
+}
+html.admina-aex .aex-chipbtn:hover { border-color: var(--aex-accent); color: var(--aex-accent); }
+html.admina-aex .aex-count { font-size: .74rem; color: var(--aex-text2); white-space: nowrap; font-variant-numeric: tabular-nums; }
+html.admina-aex .aex-views { display: flex; gap: 4px; margin-left: auto; }
+html.admina-aex .aex-vbtn {
+  display: inline-flex; gap: 5px; align-items: center; padding: 5px 10px; font: inherit; font-size: .76rem;
+  font-weight: 700; border-radius: 8px; border: 1px solid var(--aex-line); background: var(--aex-card); color: var(--aex-text2); cursor: pointer;
+}
+html.admina-aex .aex-vbtn.on { background: var(--aex-accent); border-color: var(--aex-accent); color: #fff; }
+
+/* ---------- table ---------- */
+html.admina-aex .aex-tblcard { background: var(--aex-card); border: 1px solid var(--aex-line); border-radius: 12px; overflow: hidden; }
+html.admina-aex .aex-tblwrap { overflow-x: auto; max-width: 100%; }
+html.admina-aex table.aex-tbl { border-collapse: collapse; width: 100%; min-width: 1080px; font-size: .8rem; }
+html.admina-aex .aex-tbl th {
+  position: sticky; top: 0; z-index: 2; text-align: left; font-weight: 800; font-size: .68rem;
+  letter-spacing: .4px; text-transform: uppercase; color: var(--aex-text2);
+  background: var(--aex-bg2); border-bottom: 2px solid var(--aex-line);
+  padding: 9px 10px; white-space: nowrap; user-select: none;
+}
+html.admina-aex .aex-tbl th[data-sort] { cursor: pointer; }
+html.admina-aex .aex-tbl th.aex-th-chk { width: 36px; }
+html.admina-aex .aex-tbl th[data-sort]:hover { color: var(--aex-accent); }
+html.admina-aex .aex-tbl th .aex-arrow { font-size: .62rem; margin-left: 3px; }
+html.admina-aex .aex-tbl td { padding: 8px 10px; border-bottom: 1px solid var(--aex-line); vertical-align: middle; }
+html.admina-aex .aex-tbl tbody tr { transition: background .12s; }
+html.admina-aex .aex-tbl tbody tr:hover { background: var(--aex-bg2); }
+html.admina-aex .aex-tfoot td {
+  position: sticky; bottom: 0; background: var(--aex-bg2); font-weight: 800; font-size: .74rem;
+  border-top: 2px solid var(--aex-line); padding: 8px 10px; white-space: nowrap; font-variant-numeric: tabular-nums;
+}
+html.admina-aex .aex-num { color: var(--aex-text2); font-size: .72rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
+html.admina-aex .aex-cand { font-weight: 700; color: var(--aex-text); cursor: pointer; }
+html.admina-aex .aex-cand:hover { color: var(--aex-accent); text-decoration: underline; }
+html.admina-aex .aex-per, html.admina-aex .aex-dur { white-space: nowrap; font-variant-numeric: tabular-nums; }
+html.admina-aex .aex-desc { max-width: 260px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+html.admina-aex .aex-chip {
+  display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: .68rem; font-weight: 800; white-space: nowrap;
+}
+html.admina-aex .aex-chip.ok { background: var(--aex-okbg); color: var(--aex-ok); }
+html.admina-aex .aex-chip.warn { background: var(--aex-warnbg); color: var(--aex-warn); }
+html.admina-aex .aex-chip.err { background: var(--aex-errbg); color: var(--aex-err); }
+html.admina-aex .aex-chip.info { background: var(--aex-infobg); color: var(--aex-info); }
+html.admina-aex .aex-chip.neutral { background: var(--aex-neutralbg); color: var(--aex-neutral); }
+html.admina-aex .aex-actions { display: flex; gap: 3px; justify-content: center; }
+html.admina-aex .aex-ic {
+  display: inline-grid; place-items: center; width: 27px; height: 27px; border-radius: 7px;
+  border: 1px solid var(--aex-line); background: var(--aex-card); color: var(--aex-text2);
+  cursor: pointer; font-size: .78rem; transition: all .12s; padding: 0;
+}
+html.admina-aex .aex-ic:hover { color: var(--aex-accent); border-color: var(--aex-accent); background: var(--aex-bg2); }
+html.admina-aex .aex-ic.danger:hover { color: var(--aex-err); border-color: var(--aex-err); }
+html.admina-aex .aex-chk { width: 15px; height: 15px; accent-color: var(--aex-accent); cursor: pointer; }
+html.admina-aex .aex-pager { display: flex; gap: 8px; align-items: center; justify-content: flex-end; padding: 9px 12px; font-size: .76rem; color: var(--aex-text2); flex-wrap: wrap; }
+html.admina-aex .aex-pgbtn {
+  border: 1px solid var(--aex-line); background: var(--aex-card); color: var(--aex-text);
+  border-radius: 7px; padding: 3px 9px; font: inherit; font-size: .76rem; cursor: pointer;
+}
+html.admina-aex .aex-pgbtn[disabled] { opacity: .45; cursor: not-allowed; }
+
+/* ---------- VUE PARCOURS PAR CANDIDAT (signature) ---------- */
+html.admina-aex .aex-pccard { background: var(--aex-card); border: 1px solid var(--aex-line); border-radius: 12px; padding: 12px 14px; }
+html.admina-aex .aex-pc-legend { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; font-size: .72rem; color: var(--aex-text2); margin-bottom: 10px; }
+html.admina-aex .aex-pc-legend > span { display: inline-flex; gap: 5px; align-items: center; }
+html.admina-aex .aex-leg { display: inline-block; width: 18px; height: 10px; border-radius: 3px; background: var(--aex-neutralbg); }
+html.admina-aex .aex-leg.ok { background: linear-gradient(135deg, #0d9488, #059669); }
+html.admina-aex .aex-leg.no { background: repeating-linear-gradient(45deg, rgba(245, 158, 11, .18) 0 3px, rgba(245, 158, 11, .4) 3px 6px); border: 1px dashed #d97706; }
+html.admina-aex .aex-leg.gap { background: repeating-linear-gradient(90deg, transparent 0 2px, var(--aex-line) 2px 5px); border: 1px dashed var(--aex-line); }
+html.admina-aex .aex-pc-hint { margin-left: auto; font-style: italic; }
+html.admina-aex .aex-chead {
+  display: grid; grid-template-columns: minmax(190px, 250px) 1fr minmax(140px, 170px);
+  gap: 12px; padding: 4px 8px 8px; border-bottom: 2px solid var(--aex-line);
+  font-size: .66rem; font-weight: 800; letter-spacing: .5px; text-transform: uppercase; color: var(--aex-text2);
+}
+html.admina-aex .aex-crow {
+  display: grid; grid-template-columns: minmax(190px, 250px) 1fr minmax(140px, 170px);
+  gap: 12px; align-items: center; padding: 12px 8px; border-bottom: 1px solid var(--aex-line);
+}
+html.admina-aex .aex-crow:hover { background: var(--aex-bg2); }
+html.admina-aex .aex-crow.has-trou { background: var(--aex-errbg); }
+html.admina-aex .aex-crow.has-trou:hover { background: var(--aex-warnbg); }
+html.admina-aex .aex-cid { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+html.admina-aex .aex-cname { font-weight: 800; color: var(--aex-text); cursor: pointer; font-size: .92rem; }
+html.admina-aex .aex-cname:hover { color: var(--aex-accent); text-decoration: underline; }
+html.admina-aex .aex-pc-badges { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 3px; }
+html.admina-aex .aex-pc-badges .aex-chip { font-size: .6rem; }
+html.admina-aex .aex-frise { min-width: 0; overflow-x: auto; padding: 10px 2px 4px; }
+html.admina-aex .aex-frise-inner {
+  display: flex; align-items: stretch; gap: 3px; min-width: 520px; height: 56px;
+}
+html.admina-aex .aex-frise.mini .aex-frise-inner { height: 40px; min-width: 420px; }
+html.admina-aex .aex-seg {
+  flex: 1 1 0; min-width: 46px; border-radius: 8px; border: 1px solid transparent;
+  display: flex; flex-direction: column; justify-content: center; gap: 1px; padding: 4px 8px;
+  font: inherit; cursor: pointer; overflow: hidden; position: relative; text-align: left;
+  transition: transform .1s, box-shadow .1s;
+}
+html.admina-aex .aex-seg.ok {
+  background: linear-gradient(135deg, #0d9488, #059669); color: #ecfdf9; border-color: #0f766e;
+  -webkit-print-color-adjust: exact; print-color-adjust: exact;
+}
+html.admina-aex .aex-seg.no {
+  background: repeating-linear-gradient(45deg, rgba(245, 158, 11, .14) 0 6px, rgba(245, 158, 11, .32) 6px 12px);
+  border: 1.5px dashed #d97706; color: #92400e;
+  -webkit-print-color-adjust: exact; print-color-adjust: exact;
+}
+html.admina-aex .aex-seg:hover { transform: translateY(-1px); box-shadow: var(--aex-shadow); z-index: 2; }
+html.admina-aex .aex-seg.cur { box-shadow: 0 0 0 2px var(--aex-accent); z-index: 3; }
+html.admina-aex .aex-seg.mini { padding: 2px 6px; border-radius: 6px; }
+html.admina-aex .aex-seg-ent { font-size: .72rem; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+html.admina-aex .aex-seg.mini .aex-seg-ent { font-size: .64rem; }
+html.admina-aex .aex-seg-per { font-size: .6rem; opacity: .88; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-variant-numeric: tabular-nums; }
+html.admina-aex .aex-frise.mini .aex-seg-per { display: none; }
+html.admina-aex .aex-gap {
+  flex: 1 1 0; min-width: 12px; border-radius: 6px; position: relative;
+  background: repeating-linear-gradient(90deg, transparent 0 5px, var(--aex-line) 5px 9px);
+  border: 1px dashed var(--aex-line);
+}
+html.admina-aex .aex-gap.hot {
+  border-color: var(--aex-err);
+  background: repeating-linear-gradient(90deg, transparent 0 5px, rgba(220, 38, 38, .45) 5px 9px);
+}
+html.admina-aex .aex-gapmark {
+  position: absolute; top: -11px; left: 50%; transform: translateX(-50%);
+  background: var(--aex-errbg); color: var(--aex-err); border: 1px solid var(--aex-err);
+  font-size: .56rem; font-weight: 800; border-radius: 999px; padding: 0 5px; font-style: normal; white-space: nowrap;
+}
+html.admina-aex .aex-ovl {
+  flex: 0 0 16px; align-self: center; text-align: center; color: var(--aex-warn);
+  font-size: .8rem; font-weight: 800; cursor: help;
+}
+html.admina-aex .aex-cstats { display: flex; flex-direction: column; gap: 6px; align-items: flex-start; }
+html.admina-aex .aex-cumul { display: flex; flex-direction: column; line-height: 1.15; }
+html.admina-aex .aex-cumul b { font-size: .92rem; font-weight: 800; color: var(--aex-text); }
+html.admina-aex .aex-cumul i { font-size: .62rem; color: var(--aex-text2); font-style: normal; text-transform: uppercase; letter-spacing: .5px; }
+html.admina-aex .aex-pct {
+  display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: .68rem; font-weight: 800; white-space: nowrap;
+}
+html.admina-aex .aex-pct.ok { background: var(--aex-okbg); color: var(--aex-ok); }
+html.admina-aex .aex-pct.mid { background: var(--aex-warnbg); color: var(--aex-warn); }
+html.admina-aex .aex-pct.zero { background: var(--aex-errbg); color: var(--aex-err); }
+
+/* ---------- cartes ---------- */
+html.admina-aex .aex-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; }
+html.admina-aex .aex-cardx {
+  background: var(--aex-card); border: 1px solid var(--aex-line); border-radius: 12px; padding: 13px 14px;
+  box-shadow: var(--aex-shadow); display: flex; flex-direction: column; gap: 7px; position: relative;
+  transition: transform .12s, box-shadow .12s;
+}
+html.admina-aex .aex-cardx:hover { transform: translateY(-2px); }
+html.admina-aex .aex-card-top { display: flex; gap: 9px; align-items: flex-start; justify-content: space-between; }
+html.admina-aex .aex-card-name { font-weight: 800; font-size: .98rem; color: var(--aex-text); cursor: pointer; }
+html.admina-aex .aex-card-name:hover { color: var(--aex-accent); }
+html.admina-aex .aex-card-poste { color: var(--aex-text2); font-size: .84rem; min-width: 0; }
+html.admina-aex .aex-card-poste b { color: var(--aex-text); }
+html.admina-aex .aex-card-meta { display: flex; gap: 5px; flex-wrap: wrap; align-items: center; font-size: .78rem; }
+html.admina-aex .aex-card-meta .aex-chip { font-size: .62rem; }
+html.admina-aex .aex-card-desc { color: var(--aex-text2); font-size: .76rem; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+html.admina-aex .aex-card-foot { display: flex; align-items: center; justify-content: space-between; gap: 6px; border-top: 1px dashed var(--aex-line); padding-top: 8px; }
+html.admina-aex .aex-card-act { display: flex; gap: 3px; }
+html.admina-aex .aex-sim-row { display: grid; grid-template-columns: minmax(180px, 260px) 1fr 90px; gap: 10px; align-items: center; margin: 9px 0; font-size: .8rem; }
+@media (max-width: 560px) { html.admina-aex .aex-sim-row { grid-template-columns: 1fr; } }
+
+/* ---------- barre de sélection ---------- */
+html.admina-aex .aex-selbar {
+  position: sticky; bottom: 8px; z-index: 40; margin-top: 12px;
+  background: var(--aex-card); border: 1px solid var(--aex-accent); border-radius: 12px;
+  padding: 9px 14px; display: flex; gap: 9px; align-items: center; flex-wrap: wrap;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, .18); font-size: .8rem;
+}
+html.admina-aex .aex-selbar-info { font-weight: 700; }
+html.admina-aex .aex-selbar-sub { color: var(--aex-text2); font-size: .72rem; }
+
+/* ---------- drawer ---------- */
+html.admina-aex .aex-backdrop {
+  position: fixed; inset: 0; background: rgba(6, 20, 18, .55); z-index: 1299;
+  backdrop-filter: blur(1.5px); animation: aexFade .18s ease;
+}
+html.admina-aex .aex-drawer {
+  position: fixed; top: 0; right: 0; bottom: 0; width: min(520px, 94vw); z-index: 1300;
+  background: var(--aex-card); color: var(--aex-text); border-left: 1px solid var(--aex-line);
+  box-shadow: -12px 0 40px rgba(0, 0, 0, .25); display: flex; flex-direction: column;
+  animation: aexSlide .2s ease;
+}
+@keyframes aexFade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes aexSlide { from { transform: translateX(30px); opacity: .4; } to { transform: none; opacity: 1; } }
+html.admina-aex .aex-drawer-head { display: flex; gap: 10px; align-items: flex-start; justify-content: space-between; padding: 15px 17px 10px; border-bottom: 1px solid var(--aex-line); }
+html.admina-aex .aex-drawer-title { font-size: 1.02rem; font-weight: 800; }
+html.admina-aex .aex-drawer-sub { font-size: .74rem; color: var(--aex-text2); margin-top: 2px; }
+html.admina-aex .aex-drawer-x {
+  border: 1px solid var(--aex-line); background: var(--aex-card); color: var(--aex-text2);
+  width: 29px; height: 29px; border-radius: 8px; cursor: pointer; font-size: .9rem; flex: 0 0 auto;
+}
+html.admina-aex .aex-drawer-x:hover { color: var(--aex-err); border-color: var(--aex-err); }
+html.admina-aex .aex-drawer-body { overflow-y: auto; padding: 13px 17px 20px; flex: 1; }
+html.admina-aex .aex-fsec { font-size: .68rem; font-weight: 800; letter-spacing: .7px; text-transform: uppercase; color: var(--aex-text2); margin: 14px 0 7px; display: flex; align-items: center; gap: 8px; }
+html.admina-aex .aex-fsec::after { content: ''; flex: 1; height: 1px; background: var(--aex-line); }
+html.admina-aex .aex-kv { display: grid; grid-template-columns: 140px 1fr; gap: 5px 12px; font-size: .8rem; }
+html.admina-aex .aex-kv dt { color: var(--aex-text2); }
+html.admina-aex .aex-kv dd { margin: 0; color: var(--aex-text); font-weight: 600; }
+html.admina-aex .aex-notebox { width: 100%; border: 1px solid var(--aex-line); background: var(--aex-bg2); color: var(--aex-text); border-radius: 9px; padding: 8px 10px; font: inherit; font-size: .8rem; min-height: 56px; resize: vertical; }
+html.admina-aex .aex-drawer-actions { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 14px; }
+html.admina-aex .aex-warnblock {
+  background: var(--aex-errbg); color: var(--aex-err); border: 1px dashed var(--aex-err);
+  border-radius: 9px; padding: 7px 11px; font-size: .76rem; font-weight: 700; margin: 8px 0;
+}
+html.admina-aex .aex-warnblock.soft { background: var(--aex-warnbg); color: var(--aex-warn); border-color: var(--aex-warn); }
+html.admina-aex .aex-warnblock.info { background: var(--aex-infobg); color: var(--aex-info); border-color: var(--aex-info); }
+html.admina-aex .aex-linkbtn {
+  display: inline-flex; gap: 5px; align-items: center; border: 1px solid currentColor; background: transparent;
+  color: inherit; border-radius: 7px; padding: 2px 8px; font: inherit; font-size: .7rem; font-weight: 800; cursor: pointer;
+}
+html.admina-aex .aex-linkbtn:hover { background: rgba(255, 255, 255, .35); }
+html.admina-aex .aex-verrow {
+  display: flex; gap: 10px; align-items: center; justify-content: space-between; flex-wrap: wrap;
+  font-size: .8rem; font-weight: 600;
+}
+html.admina-aex .aex-seg2 { display: inline-flex; gap: 0; border: 1px solid var(--aex-line); border-radius: 9px; overflow: hidden; }
+html.admina-aex .aex-toggle {
+  border: none; background: var(--aex-bg2); color: var(--aex-text2); font: inherit; font-size: .78rem;
+  font-weight: 800; padding: 6px 16px; cursor: pointer;
+}
+html.admina-aex .aex-toggle.on { background: var(--aex-accent); color: #fff; }
+
+/* ---------- dialog ---------- */
+html.admina-aex .aex-dialog {
+  position: fixed; z-index: 1300; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: min(720px, 94vw); max-height: 90vh; display: flex; flex-direction: column;
+  background: var(--aex-card); color: var(--aex-text); border: 1px solid var(--aex-line);
+  border-radius: 14px; box-shadow: 0 24px 70px rgba(0, 0, 0, .35); animation: aexPop .16s ease;
+}
+html.admina-aex .aex-dialog.small { width: min(560px, 94vw); }
+@keyframes aexPop { from { transform: translate(-50%, -48%); opacity: 0; } to { transform: translate(-50%, -50%); opacity: 1; } }
+html.admina-aex .aex-dialog-head { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px 10px; border-bottom: 1px solid var(--aex-line); }
+html.admina-aex .aex-dialog-head h3 { margin: 0; font-size: 1rem; font-weight: 800; display: flex; gap: 8px; align-items: center; }
+html.admina-aex .aex-dialog-body { padding: 12px 18px 16px; overflow-y: auto; }
+html.admina-aex .aex-dialog-foot { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 11px 18px; border-top: 1px solid var(--aex-line); flex-wrap: wrap; }
+html.admina-aex .aex-fgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px 12px; }
+html.admina-aex .aex-fgrid .full { grid-column: 1 / -1; }
+@media (max-width: 560px) { html.admina-aex .aex-fgrid { grid-template-columns: 1fr; } }
+html.admina-aex .aex-lab { display: flex; flex-direction: column; gap: 3px; font-size: .74rem; font-weight: 700; color: var(--aex-text2); }
+html.admina-aex .aex-lab.aex-chkbox { flex-direction: row; align-items: center; gap: 7px; padding-top: 20px; }
+html.admina-aex .aex-lab.aex-chkbox input { width: 16px; height: 16px; accent-color: var(--aex-accent); }
+html.admina-aex .aex-ta { resize: vertical; min-height: 46px; font: inherit; font-size: .82rem; }
+html.admina-aex .aex-form-err {
+  background: var(--aex-errbg); color: var(--aex-err); border: 1px solid var(--aex-err);
+  border-radius: 9px; padding: 7px 11px; font-size: .78rem; margin-top: 9px;
+}
+html.admina-aex .aex-form-hint { font-size: .7rem; color: var(--aex-text2); }
+html.admina-aex .aex-live { background: var(--aex-bg2); border: 1px dashed var(--aex-line); border-radius: 10px; padding: 8px 12px; font-size: .76rem; display: flex; gap: 14px; flex-wrap: wrap; margin-top: 10px; }
+html.admina-aex .aex-live b { color: var(--aex-accent); }
+html.admina-aex .aex-live .bad { color: var(--aex-err); }
+html.admina-aex .aex-live .good { color: var(--aex-ok); }
+
+/* ---------- confirm ---------- */
+html.admina-aex .aex-confirm {
+  position: fixed; z-index: 1301; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: min(430px, 92vw); background: var(--aex-card); color: var(--aex-text);
+  border: 1px solid var(--aex-line); border-radius: 14px; box-shadow: 0 24px 70px rgba(0, 0, 0, .4); padding: 17px 19px;
+  animation: aexPop .16s ease;
+}
+html.admina-aex .aex-confirm h4 { margin: 0 0 7px; font-size: .95rem; }
+html.admina-aex .aex-confirm p { margin: 0 0 13px; font-size: .8rem; color: var(--aex-text2); }
+html.admina-aex .aex-confirm-row { display: flex; gap: 8px; justify-content: flex-end; }
+
+/* ---------- panneaux (journal / seuils) ---------- */
+html.admina-aex .aex-panel {
+  position: fixed; z-index: 1300; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: min(680px, 94vw); max-height: 84vh; background: var(--aex-card); color: var(--aex-text);
+  border: 1px solid var(--aex-line); border-radius: 14px; box-shadow: 0 24px 70px rgba(0, 0, 0, .35);
+  display: flex; flex-direction: column; animation: aexPop .16s ease;
+}
+html.admina-aex .aex-panel-head { display: flex; justify-content: space-between; align-items: center; padding: 13px 17px 9px; border-bottom: 1px solid var(--aex-line); }
+html.admina-aex .aex-panel-head h3 { margin: 0; font-size: .98rem; font-weight: 800; }
+html.admina-aex .aex-panel-body { padding: 12px 17px 16px; overflow-y: auto; flex: 1; }
+html.admina-aex .aex-jrow { display: flex; gap: 9px; padding: 6px 2px; border-bottom: 1px dashed var(--aex-line); font-size: .76rem; align-items: baseline; }
+html.admina-aex .aex-jtime { color: var(--aex-text2); font-variant-numeric: tabular-nums; white-space: nowrap; font-size: .68rem; }
+html.admina-aex .aex-jact { font-weight: 800; white-space: nowrap; }
+html.admina-aex .aex-jdet { color: var(--aex-text2); }
+html.admina-aex .aex-empty { text-align: center; color: var(--aex-text2); padding: 26px 0; font-size: .82rem; }
+html.admina-aex .aex-cibles-note { font-size: .78rem; color: var(--aex-text2); margin: 2px 0 10px; }
+
+/* ---------- toasts ---------- */
+html.admina-aex .aex-toasts { position: fixed; bottom: 16px; right: 16px; z-index: 1400; display: flex; flex-direction: column; gap: 7px; max-width: 340px; }
+html.admina-aex .aex-toast {
+  background: var(--aex-card); color: var(--aex-text); border: 1px solid var(--aex-line);
+  border-left: 4px solid var(--aex-accent); border-radius: 10px; padding: 9px 13px; font-size: .8rem;
+  box-shadow: 0 8px 26px rgba(0, 0, 0, .22); display: flex; gap: 9px; align-items: flex-start;
+  animation: aexToast .18s ease;
+}
+html.admina-aex .aex-toast.err { border-left-color: var(--aex-err); }
+html.admina-aex .aex-toast.ok { border-left-color: var(--aex-ok); }
+html.admina-aex .aex-toast button { border: none; background: none; color: var(--aex-text2); cursor: pointer; font-size: .95rem; padding: 0; line-height: 1; }
+@keyframes aexToast { from { transform: translateY(9px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+/* ---------- pied ---------- */
+html.admina-aex .aex-foot { margin-top: 14px; font-size: .72rem; color: var(--aex-text2); text-align: center; }
+html.admina-aex .aex-link { border: none; background: none; color: var(--aex-accent); cursor: pointer; font: inherit; font-size: inherit; text-decoration: underline; padding: 0; }
+
+/* ---------- burger mobile ---------- */
+html.admina-aex .admina-burger {
+  display: none; align-items: center; justify-content: center;
+  width: 38px; height: 38px; border-radius: 9px; border: 1px solid rgba(0, 0, 0, .12);
+  background: rgba(255, 255, 255, .85); color: #134e4a; cursor: pointer; margin-right: 6px; padding: 0;
+}
+html.admina-aex .admina-burger:hover { background: rgba(128, 128, 128, .15); }
+html.admina-aex .admina-nav-backdrop { background: transparent; pointer-events: none; }
+@media (max-width: 819px) {
+  html.admina-aex header.MuiPaper-root { margin-left: 0 !important; width: 100% !important; }
+
+  html.admina-aex .MuiToolbar-root { padding-left: 10px !important; padding-right: 10px !important; }
+  html.admina-aex .MuiDrawer-docked {
+    display: block !important;
+    position: fixed; top: 0; left: 0; bottom: 0;
+    width: 280px; max-width: 86vw;
+    z-index: 1450;
+    transform: translateX(-106%);
+    transition: transform .25s ease;
+  }
+  html.admina-aex.admina-nav-open .MuiDrawer-docked { transform: translateX(0); }
+  html.admina-aex .MuiDrawer-docked .MuiDrawer-paper {
+    width: 280px; max-width: 86vw; box-sizing: border-box;
+    position: absolute; height: 100%;
+  }
+  html.admina-aex .admina-burger { display: inline-flex !important; }
+  html.admina-aex .admina-nav-backdrop {
+    position: fixed; inset: 0; background: rgba(0, 0, 0, .5);
+    z-index: 1440; opacity: 0; pointer-events: none; transition: opacity .22s ease;
+  }
+  html.admina-aex.admina-nav-open .admina-nav-backdrop { opacity: 1; pointer-events: auto; }
+}
+
+/* ---------- garde-fous 390 px (0 débordement horizontal) ----------
+   La frise reste SCROLLABLE HORIZONTALEMENT DANS SON CONTENEUR
+   (.aex-frise overflow-x:auto + .aex-frise-inner min-width) : jamais
+   de débordement de page. Les colonnes latérales passent en pile. */
+@media (max-width: 760px) {
+  html.admina-aex .aex-chead { display: none; }
+  html.admina-aex .aex-crow { display: flex; flex-direction: column; align-items: stretch; gap: 8px; }
+  html.admina-aex .aex-cstats { flex-direction: row; align-items: center; justify-content: space-between; width: 100%; }
+  html.admina-aex .aex-cumul { flex-direction: row; gap: 5px; align-items: baseline; }
+}
+@media (max-width: 460px) {
+  html.admina-aex .aex-hero { padding: 14px 12px; }
+  html.admina-aex .aex-h2 { font-size: 1.06rem; }
+  html.admina-aex .aex-hero-actions .aex-btn { padding: 6px 9px; font-size: .74rem; }
+  html.admina-aex .aex-toolbar { position: static; }
+  html.admina-aex .aex-sel { max-width: 100%; flex: 1 1 45%; }
+  html.admina-aex .aex-views { margin-left: 0; }
+  html.admina-aex .aex-frise-inner { min-width: 430px; }
+  html.admina-aex .aex-frise.mini .aex-frise-inner { min-width: 360px; }
+  html.admina-aex .aex-seg-ent { font-size: .64rem; }
+  html.admina-aex .aex-pc-hint { display: none; }
+  html.admina-aex .aex-kv { grid-template-columns: 120px 1fr; }
+}
+
+/* ---------- impression ---------- */
+@media print {
+  html.admina-aex [data-aex="toolbar"], html.admina-aex .aex-hero-actions, html.admina-aex .aex-actions,
+  html.admina-aex .aex-selbar, html.admina-aex .aex-toasts, html.admina-aex .aex-pager,
+  html.admina-aex .aex-chk, html.admina-aex .aex-foot, html.admina-aex .admina-burger { display: none !important; }
+  html.admina-aex [data-aex="root"] { padding: 0; }
+  html.admina-aex .aex-tblcard { border: none; }
+  html.admina-aex .aex-frise { overflow: visible; }
+}
+
+/* ---------- scrollbars ---------- */
+html.admina-aex .aex-tblwrap::-webkit-scrollbar, html.admina-aex .aex-drawer-body::-webkit-scrollbar,
+html.admina-aex .aex-dialog-body::-webkit-scrollbar, html.admina-aex .aex-panel-body::-webkit-scrollbar,
+html.admina-aex .aex-frise::-webkit-scrollbar { height: 9px; width: 9px; }
+html.admina-aex .aex-tblwrap::-webkit-scrollbar-thumb, html.admina-aex .aex-drawer-body::-webkit-scrollbar-thumb,
+html.admina-aex .aex-dialog-body::-webkit-scrollbar-thumb, html.admina-aex .aex-panel-body::-webkit-scrollbar-thumb,
+html.admina-aex .aex-frise::-webkit-scrollbar-thumb {
+  background: var(--aex-line); border-radius: 5px;
+}
+
+/* ---------- garde toolbar native (mobile) ---------- */
+@media (max-width: 480px) {
+  html.admina-aex .MuiToolbar-root { flex-wrap: wrap; row-gap: 6px; padding-bottom: 8px; }
+  html.admina-aex .MuiToolbar-root .MuiBox-root { min-width: 0; }
+}
+
+/* ---------- garde responsive final (anti-écrasement cascade) ---------- */
+@media (max-width: 760px) {
+  html.admina-aex .aex-charts { grid-template-columns: 1fr !important; }
+  html.admina-aex .aex-charts > * { min-width: 0; max-width: 100%; }
+  html.admina-aex .aex-kpis { grid-template-columns: 1fr 1fr !important; }
+  html.admina-aex .aex-kpis > * { min-width: 0; }
+  html.admina-aex .aex-tblwrap { max-width: 100%; }
+  html.admina-aex .aex-pccard, html.admina-aex .aex-tblcard { min-width: 0; max-width: 100%; overflow-x: hidden; }
+}
+@media (max-width: 480px) {
+  html.admina-aex .aex-kpis { grid-template-columns: 1fr !important; }
+}

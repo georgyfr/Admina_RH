@@ -1,0 +1,76 @@
+/* ============================================================
+   Admina V38 — Sidebar D1 ergonomique (additif-sur-natif)
+   - Scrollbar visible et fine (affordance de défilement)
+   - Têtes de groupe cliquables (repli/mémoire)
+   - Item actif renforcé (barre latérale + fond)
+   - Dégradé bas quand il reste du contenu à faire défiler
+   - Breadcrumb corrigé (routes à libellé faux)
+   - Bandeau rubrique ANALYTICS & CONFIGURATION (4 pages)
+   0 octet natif modifié — idempotent, défendu (try/catch).
+   ============================================================ */
+
+/* --- Scrollbar de la sidebar : visible, fine, discrète --- */
+.MuiDrawer-paper{scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.26) transparent}
+.MuiDrawer-paper::-webkit-scrollbar{width:8px}
+.MuiDrawer-paper::-webkit-scrollbar-track{background:transparent}
+.MuiDrawer-paper::-webkit-scrollbar-thumb{background:rgba(255,255,255,.20);border-radius:8px;border:2px solid transparent;background-clip:padding-box}
+.MuiDrawer-paper::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,.38);border:2px solid transparent;background-clip:padding-box}
+
+/* --- Titres de groupe cliquables (chevron + hover) ---
+   Le SPAN du titre devient la zone cliquable ; le repli s'applique
+   au Box groupe parent (masque la UL des items). */
+span.adm-sb-head{display:flex;align-items:center;justify-content:space-between;gap:6px;cursor:pointer;user-select:none;-webkit-user-select:none;border-radius:6px;width:100%}
+span.adm-sb-head:hover{background:rgba(255,255,255,.05)}
+.adm-sb-chev{width:0;height:0;flex:0 0 auto;border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid rgba(255,255,255,.5);transition:transform .18s ease;margin-right:2px}
+.adm-sb-folded .adm-sb-chev{transform:rotate(-90deg)}
+.adm-sb-folded ul{display:none !important}
+
+/* --- Item actif : lisible immédiatement --- */
+.MuiDrawer-paper .MuiListItemButton-root.Mui-selected,
+.MuiDrawer-paper .MuiListItemButton-root.adm-sb-on{background:rgba(13,124,102,.22) !important;border-left:3px solid #0D7C66;border-radius:4px}
+.MuiDrawer-paper .MuiListItemButton-root.Mui-selected .MuiTypography-root,
+.MuiDrawer-paper .MuiListItemButton-root.adm-sb-on .MuiTypography-root{color:#fff !important;font-weight:600}
+
+/* --- Dégradé bas (il reste du contenu) --- */
+.adm-sb-fade{position:fixed;left:0;bottom:0;width:260px;height:34px;pointer-events:none;z-index:1199;display:none;
+  background:linear-gradient(to bottom, rgba(26,26,46,0), rgba(14,14,30,.94))}
+
+/* --- Breadcrumb corrigé (mêmes codes que le natif) --- */
+.adm-bc{font-size:.72rem;color:rgba(0,0,0,.55);font-weight:500;letter-spacing:.2px}
+.adm-bc-sep{font-size:.72rem;color:rgba(0,0,0,.35);margin:0 6px}
+.adm-bc-cur{color:rgba(0,0,0,.9);font-weight:700}
+
+/* --- Bandeau rubrique ANALYTICS & CONFIGURATION --- */
+.adm-rubnav{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:10px 14px;margin:0 0 14px;
+  background:#fff;border:1px solid rgba(13,124,102,.25);border-left:4px solid #0D7C66;border-radius:10px;
+  box-shadow:0 1px 4px rgba(16,24,40,.06);font-family:Inter,system-ui,sans-serif}
+.adm-rubnav-t{font-size:.62rem;font-weight:800;letter-spacing:1.2px;color:#0D7C66;text-transform:uppercase;margin-right:6px;flex:0 0 100%}
+.adm-rubnav-a{font-size:.8rem;font-weight:600;color:#334155;text-decoration:none;padding:6px 12px;border-radius:999px;
+  background:#f1f5f9;border:1px solid #e2e8f0;transition:background .15s ease,color .15s ease,transform .15s ease}
+.adm-rubnav-a:hover{background:#0D7C66;color:#fff;border-color:#0D7C66;transform:translateY(-1px)}
+.adm-rubnav-on,.adm-rubnav-on:hover{background:#0D7C66;color:#fff;border-color:#0D7C66;transform:none;cursor:default}
+@media (max-width:600px){.adm-rubnav-a{font-size:.74rem;padding:5px 10px}.adm-rubnav{gap:6px}}
+
+/* ============================================================
+   V39 — Barre latérale TOUJOURS pleine hauteur (comme les
+   autres domaines) : le paper est verrouillé fixed, collé aux
+   bords verticaux, hauteur = viewport (vh + dvh mobile).
+   Additif-sur-natif, idempotent, 0 octet natif modifié.
+   ============================================================ */
+.MuiDrawer-paper{position:fixed !important;top:0 !important;bottom:0 !important;left:0 !important;
+  height:100vh !important;min-height:100vh !important;max-height:none !important}
+@supports (height:100dvh){
+  .MuiDrawer-paper{height:100dvh !important;min-height:100dvh !important}
+}
+
+/* ============================================================
+   V40 — Colonne latérale sur TOUTE la hauteur du site : le fond
+   sombre (#1a1a2e, couleur exacte du paper) se prolonge jusqu'en
+   bas du document via le canevas (dégradé horizontal 260px),
+   sous le paper fixe pleine hauteur (V39). Désactivé <820px
+   (sidebar masquée) et en thème sombre (canevas déjà sombre).
+   ============================================================ */
+@media (min-width:820px){
+  html:not(.adem7-dark):not(.a14-dark):not(.admina-dark) body{
+    background-image:linear-gradient(to right,#1a1a2e 0,#1a1a2e 260px,#f5f6fa 260px)}
+}

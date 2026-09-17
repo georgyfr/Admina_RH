@@ -1,0 +1,567 @@
+/* =========================================================
+   Admina-RH — Compétences des Candidats — couche admina (W3-d)
+   Scope : html.admina-acp (posé uniquement sur /competences)
+   Thèmes : light + dark via html.admina-acp[data-dark]
+            (détection auto : LS admina-dark + luminance +
+            prefers-color-scheme)
+   Préfixe : acp- (assets admina-competences.*) · variables --acp-
+   Philosophie : /competences = LA MATRICE DE TALENTS. Recruter
+   vite, c'est savoir qui sait quoi. La matrice révèle ce qu'aucun
+   CV ne montre : la RARETÉ, les DOUBLONS, les COMBINAISONS rares,
+   les experts sous-exploités. Niveau × années × catégorie font
+   passer la compétence d'une étiquette à une mesure. La page ne
+   juge pas les gens : elle mesure le portefeuille de savoir-faire
+   de l'entreprise et son exposition au risque de départ.
+   VUE MATRICE (signature) : une rangée par compétence distincte,
+   barre empilée des niveaux, badge RARE, tri rareté / alpha.
+   ========================================================= */
+
+/* ---------- variables ---------- */
+html.admina-acp [data-acp="root"] {
+  --acp-accent: #0f766e;
+  --acp-accent2: #059669;
+  --acp-gold: #b45309;
+  --acp-bg: #ffffff;
+  --acp-bg2: #f6faf8;
+  --acp-card: #ffffff;
+  --acp-line: #dde8e4;
+  --acp-text: #10312e;
+  --acp-text2: #5d7a76;
+  --acp-err: #dc2626;
+  --acp-errbg: #fef2f2;
+  --acp-warn: #b45309;
+  --acp-warnbg: #fef3c7;
+  --acp-ok: #047857;
+  --acp-okbg: #d1fae5;
+  --acp-info: #0e7490;
+  --acp-infobg: #e0f2fe;
+  --acp-neutral: #57534e;
+  --acp-neutralbg: #f1f0ee;
+  --acp-lvl-expert: #059669;
+  --acp-lvl-avance: #d97706;
+  --acp-lvl-inter: #0e7490;
+  --acp-lvl-deb: #94a3b8;
+  --acp-shadow: 0 1px 3px rgba(16, 49, 46, .08), 0 4px 16px rgba(16, 49, 46, .06);
+  --acp-radius: 14px;
+}
+html.admina-acp[data-dark] [data-acp="root"] {
+  --acp-bg: #0c1514;
+  --acp-bg2: #101c1a;
+  --acp-card: #14201e;
+  --acp-line: #243935;
+  --acp-text: #e6f2ef;
+  --acp-text2: #8fb0aa;
+  --acp-err: #f87171;
+  --acp-errbg: #451a1a;
+  --acp-warn: #fbbf24;
+  --acp-warnbg: #3a2b0e;
+  --acp-ok: #34d399;
+  --acp-okbg: #0c2f24;
+  --acp-info: #67e8f9;
+  --acp-infobg: #0c2f36;
+  --acp-neutral: #a8a29e;
+  --acp-neutralbg: #1d2b28;
+  --acp-lvl-expert: #34d399;
+  --acp-lvl-avance: #fbbf24;
+  --acp-lvl-inter: #67e8f9;
+  --acp-lvl-deb: #94a3b8;
+  --acp-shadow: 0 1px 3px rgba(0, 0, 0, .5), 0 6px 20px rgba(0, 0, 0, .35);
+}
+
+/* ---------- racine ---------- */
+html.admina-acp [data-acp="root"] {
+  display: block;
+  padding: 4px 4px 28px;
+  color: var(--acp-text);
+  font-family: Inter, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-size: 14px;
+  line-height: 1.45;
+  background: var(--acp-bg);
+  border-radius: 12px;
+}
+html.admina-acp [data-acp="root"] *,
+html.admina-acp [data-acp="root"] *::before,
+html.admina-acp [data-acp="root"] *::after { box-sizing: border-box; }
+html.admina-acp [data-acp-page] { min-width: 0; }
+
+/* ---------- héro ---------- */
+html.admina-acp .acp-hero {
+  background: linear-gradient(120deg, #0f766e 0%, #0d9488 55%, #059669 100%);
+  color: #ecfdf9;
+  border-radius: var(--acp-radius);
+  padding: 18px 20px;
+  box-shadow: var(--acp-shadow);
+  margin-bottom: 14px;
+}
+html.admina-acp .acp-hero-main { display: flex; gap: 14px; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; }
+html.admina-acp .acp-hero-title { display: flex; gap: 12px; align-items: center; }
+html.admina-acp .acp-hero-ico {
+  display: grid; place-items: center; width: 46px; height: 46px; border-radius: 12px;
+  background: rgba(255, 255, 255, .16); flex: 0 0 auto;
+}
+html.admina-acp .acp-h2 { margin: 0; font-size: 1.25rem; font-weight: 800; letter-spacing: .2px; }
+html.admina-acp .acp-hero-sub { margin: 3px 0 0; font-size: .88rem; opacity: .95; font-weight: 600; }
+html.admina-acp .acp-hero-mini { margin: 2px 0 0; font-size: .76rem; opacity: .82; }
+html.admina-acp .acp-hero-actions { display: flex; gap: 7px; flex-wrap: wrap; }
+html.admina-acp .acp-hero-alerts { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 13px; }
+
+/* Alertes : pastilles SOLIDES à contraste élevé (AAA M23) */
+html.admina-acp .acp-alert {
+  display: inline-flex; gap: 7px; align-items: center; padding: 5px 11px; border-radius: 999px;
+  font-size: .78rem; font-weight: 700; border: 1px solid transparent; cursor: pointer; text-align: left;
+  color: #0f172a; background: rgba(255, 255, 255, .94);
+  box-shadow: 0 1px 3px rgba(2, 44, 34, .35);
+  -webkit-print-color-adjust: exact; print-color-adjust: exact;
+}
+html.admina-acp .acp-alert:hover { filter: brightness(.96); }
+html.admina-acp .acp-alert.err { background: #fee2e2; border-color: #fca5a5; color: #7f1d1d; }
+html.admina-acp .acp-alert.warn { background: #fef3c7; border-color: #fcd34d; color: #78350f; }
+html.admina-acp .acp-alert.ok { background: #d1fae5; border-color: #6ee7b7; color: #064e3b; }
+html.admina-acp .acp-alert.info { background: #cffafe; border-color: #67e8f9; color: #164e63; }
+
+/* ---------- boutons ---------- */
+html.admina-acp .acp-btn {
+  display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; border-radius: 9px;
+  border: 1px solid rgba(236, 253, 250, .45); background: rgba(255, 255, 255, .12);
+  color: inherit; font: inherit; font-size: .8rem; font-weight: 600; cursor: pointer;
+  transition: background .15s, transform .1s; white-space: nowrap;
+}
+html.admina-acp .acp-hero .acp-btn:hover { background: rgba(255, 255, 255, .22); }
+html.admina-acp .acp-btn:active { transform: translateY(1px); }
+html.admina-acp .acp-btn-primary { background: var(--acp-accent); border-color: var(--acp-accent); color: #fff; }
+html.admina-acp .acp-btn-ghost { background: var(--acp-card); border: 1px solid var(--acp-line); color: var(--acp-text); }
+html.admina-acp .acp-btn-ghost:hover { background: var(--acp-bg2); }
+html.admina-acp .acp-btn-danger { background: var(--acp-errbg); border-color: var(--acp-err); color: var(--acp-err); }
+html.admina-acp .acp-btn[disabled] { opacity: .5; cursor: not-allowed; }
+html.admina-acp .acp-backbtn { background: var(--acp-card); border: 1px solid var(--acp-line); color: var(--acp-text); }
+
+/* ---------- KPI ---------- */
+html.admina-acp .acp-kpis { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin-bottom: 14px; }
+html.admina-acp .acp-kpi {
+  background: var(--acp-card); border: 1px solid var(--acp-line); border-radius: 12px;
+  padding: 12px 14px; cursor: pointer; transition: box-shadow .15s, transform .1s, border-color .15s;
+  position: relative; overflow: hidden; text-align: left; font: inherit; width: 100%;
+  display: flex; flex-direction: column; align-items: flex-start; gap: 2px;
+}
+html.admina-acp .acp-kpi::before {
+  content: ''; position: absolute; inset: 0 auto 0 0; width: 4px; background: var(--acp-accent); opacity: .65;
+}
+html.admina-acp .acp-kpi.gold::before { background: #f59e0b; }
+html.admina-acp .acp-kpi:hover { box-shadow: var(--acp-shadow); transform: translateY(-1px); }
+html.admina-acp .acp-kpi.on { border-color: var(--acp-accent); background: var(--acp-bg2); box-shadow: inset 0 0 0 1px var(--acp-accent); }
+html.admina-acp .acp-root { isolation: isolate; }
+html.admina-acp .acp-th-chk { width: 34px; }
+html.admina-acp .acp-kpi-t { font-size: .66rem; font-weight: 800; letter-spacing: .8px; color: var(--acp-text2); }
+html.admina-acp .acp-kpi-v { font-size: 1.24rem; font-weight: 800; margin-top: 2px; color: var(--acp-text); white-space: nowrap; }
+html.admina-acp .acp-kpi-s { font-size: .7rem; color: var(--acp-text2); margin-top: 1px; }
+
+/* ---------- graphiques (SVG vanilla) ---------- */
+html.admina-acp .acp-charts { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+html.admina-acp .acp-chart-card {
+  background: var(--acp-card); border: 1px solid var(--acp-line); border-radius: 12px; padding: 12px 14px;
+  min-width: 0;
+}
+html.admina-acp .acp-chart-title { font-size: .74rem; font-weight: 800; letter-spacing: .6px; color: var(--acp-text2); text-transform: uppercase; margin-bottom: 8px; }
+html.admina-acp .acp-donut-wrap { display: flex; gap: 12px; align-items: center; }
+html.admina-acp .acp-donut-legend { display: flex; flex-direction: column; gap: 3px; font-size: .72rem; min-width: 0; flex: 1; }
+html.admina-acp .acp-dl-item { display: flex; gap: 6px; align-items: center; cursor: pointer; border-radius: 6px; padding: 1px 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+html.admina-acp .acp-dl-item:hover { background: var(--acp-bg2); }
+html.admina-acp .acp-dl-item.on { background: var(--acp-okbg); }
+html.admina-acp .acp-dl-dot { width: 9px; height: 9px; border-radius: 3px; flex: 0 0 auto; }
+html.admina-acp .acp-dl-val { color: var(--acp-text2); margin-left: auto; font-variant-numeric: tabular-nums; }
+html.admina-acp .acp-svgbar { cursor: pointer; }
+html.admina-acp .acp-svgbar:hover .acp-sb-name { fill: var(--acp-accent); }
+html.admina-acp .acp-svgbar:hover .acp-sb-fill, html.admina-acp .acp-svgbar:hover .acp-hist-bar { opacity: .82; }
+html.admina-acp .acp-sb-name { font-size: 11px; font-weight: 600; fill: var(--acp-text); }
+html.admina-acp .acp-sb-track { fill: var(--acp-neutralbg); }
+html.admina-acp .acp-sb-fill { fill: var(--acp-accent); }
+html.admina-acp .acp-sb-val { font-size: 11px; font-weight: 800; fill: var(--acp-text2); font-variant-numeric: tabular-nums; }
+html.admina-acp .acp-hist-axis { stroke: var(--acp-line); stroke-width: 1.5; }
+html.admina-acp .acp-hist-bar { fill: var(--acp-accent); }
+html.admina-acp .acp-hist-val { font-size: 12px; font-weight: 800; fill: var(--acp-text); }
+html.admina-acp .acp-hist-lab { font-size: 10px; font-weight: 600; fill: var(--acp-text2); }
+
+/* ---------- barre d'outils ---------- */
+html.admina-acp .acp-toolbar {
+  display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+  background: var(--acp-card); border: 1px solid var(--acp-line); border-radius: 12px;
+  padding: 9px 12px; margin-bottom: 12px; position: sticky; top: 6px; z-index: 30;
+  box-shadow: var(--acp-shadow);
+}
+html.admina-acp .acp-search {
+  display: flex; align-items: center; gap: 6px; background: var(--acp-bg2); border: 1px solid var(--acp-line);
+  border-radius: 9px; padding: 5px 9px; flex: 1 1 210px; min-width: 170px; color: var(--acp-text2);
+}
+html.admina-acp .acp-in {
+  border: 1px solid var(--acp-line); background: var(--acp-bg2); color: var(--acp-text);
+  border-radius: 8px; padding: 6px 9px; font: inherit; font-size: .82rem; width: 100%;
+}
+html.admina-acp .acp-search .acp-in { border: none; background: transparent; padding: 2px 0; outline: none; }
+html.admina-acp .acp-sel {
+  border: 1px solid var(--acp-line); background: var(--acp-bg2); color: var(--acp-text);
+  border-radius: 8px; padding: 6px 8px; font: inherit; font-size: .8rem; max-width: 176px; cursor: pointer;
+}
+html.admina-acp .acp-chipbtn {
+  border: 1px solid var(--acp-line); background: var(--acp-card); color: var(--acp-text2);
+  border-radius: 999px; padding: 4px 11px; font: inherit; font-size: .74rem; font-weight: 700; cursor: pointer;
+}
+html.admina-acp .acp-chipbtn:hover { border-color: var(--acp-accent); color: var(--acp-accent); }
+html.admina-acp .acp-count { font-size: .74rem; color: var(--acp-text2); white-space: nowrap; font-variant-numeric: tabular-nums; }
+html.admina-acp .acp-views { display: flex; gap: 4px; margin-left: auto; }
+html.admina-acp .acp-vbtn {
+  display: inline-flex; gap: 5px; align-items: center; padding: 5px 10px; font: inherit; font-size: .76rem;
+  font-weight: 700; border-radius: 8px; border: 1px solid var(--acp-line); background: var(--acp-card); color: var(--acp-text2); cursor: pointer;
+}
+html.admina-acp .acp-vbtn.on { background: var(--acp-accent); border-color: var(--acp-accent); color: #fff; }
+
+/* ---------- chips ---------- */
+html.admina-acp .acp-chip {
+  display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: .68rem; font-weight: 800; white-space: nowrap;
+}
+html.admina-acp .acp-chip.ok { background: var(--acp-okbg); color: var(--acp-ok); }
+html.admina-acp .acp-chip.warn { background: var(--acp-warnbg); color: var(--acp-warn); }
+html.admina-acp .acp-chip.err { background: var(--acp-errbg); color: var(--acp-err); }
+html.admina-acp .acp-chip.info { background: var(--acp-infobg); color: var(--acp-info); }
+html.admina-acp .acp-chip.neutral { background: var(--acp-neutralbg); color: var(--acp-neutral); }
+/* niveaux : Expert=warning · Avance=info · Intermédiaire/Débutant=default (vocabulaire natif) */
+html.admina-acp .acp-chip.lvl-expert { background: var(--acp-warnbg); color: var(--acp-warn); }
+html.admina-acp .acp-chip.lvl-avance { background: var(--acp-infobg); color: var(--acp-info); }
+html.admina-acp .acp-chip.lvl-inter { background: var(--acp-neutralbg); color: var(--acp-neutral); }
+html.admina-acp .acp-chip.lvl-deb { background: var(--acp-neutralbg); color: var(--acp-text2); }
+html.admina-acp .acp-rare {
+  display: inline-block; padding: 1px 7px; border-radius: 999px; font-size: .62rem; font-weight: 800;
+  letter-spacing: .6px; background: var(--acp-warnbg); color: var(--acp-warn); border: 1px solid var(--acp-warn);
+  -webkit-print-color-adjust: exact; print-color-adjust: exact;
+}
+
+/* ---------- table ---------- */
+html.admina-acp .acp-tblcard { background: var(--acp-card); border: 1px solid var(--acp-line); border-radius: 12px; overflow: hidden; }
+html.admina-acp .acp-tblwrap { overflow-x: auto; max-width: 100%; }
+html.admina-acp table.acp-tbl { border-collapse: collapse; width: 100%; min-width: 920px; font-size: .8rem; }
+html.admina-acp .acp-tbl th {
+  position: sticky; top: 0; z-index: 2; text-align: left; font-weight: 800; font-size: .68rem;
+  letter-spacing: .4px; text-transform: uppercase; color: var(--acp-text2);
+  background: var(--acp-bg2); border-bottom: 2px solid var(--acp-line);
+  padding: 9px 10px; white-space: nowrap; user-select: none;
+}
+html.admina-acp .acp-tbl th[data-sort] { cursor: pointer; }
+html.admina-acp .acp-tbl th[data-sort]:hover { color: var(--acp-accent); }
+html.admina-acp .acp-tbl th .acp-arrow { font-size: .62rem; margin-left: 3px; }
+html.admina-acp .acp-tbl td { padding: 8px 10px; border-bottom: 1px solid var(--acp-line); vertical-align: middle; }
+html.admina-acp .acp-tbl tbody tr { transition: background .12s; }
+html.admina-acp .acp-tbl tbody tr:hover { background: var(--acp-bg2); }
+html.admina-acp .acp-tfoot td {
+  position: sticky; bottom: 0; background: var(--acp-bg2); font-weight: 800; font-size: .74rem;
+  border-top: 2px solid var(--acp-line); padding: 8px 10px; white-space: nowrap; font-variant-numeric: tabular-nums;
+}
+html.admina-acp .acp-num { color: var(--acp-text2); font-size: .72rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
+html.admina-acp .acp-cand { font-weight: 700; color: var(--acp-text); cursor: pointer; }
+html.admina-acp .acp-cand:hover { color: var(--acp-accent); text-decoration: underline; }
+html.admina-acp .acp-ybar { display: inline-block; width: 72px; height: 7px; border-radius: 4px; background: var(--acp-neutralbg); overflow: hidden; vertical-align: middle; margin-right: 6px; }
+html.admina-acp .acp-ybar i { display: block; height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--acp-accent), var(--acp-accent2)); }
+html.admina-acp .acp-actions { display: flex; gap: 3px; justify-content: center; }
+html.admina-acp .acp-ic {
+  display: inline-grid; place-items: center; width: 27px; height: 27px; border-radius: 7px;
+  border: 1px solid var(--acp-line); background: var(--acp-card); color: var(--acp-text2);
+  cursor: pointer; font-size: .78rem; transition: all .12s; padding: 0;
+}
+html.admina-acp .acp-ic:hover { color: var(--acp-accent); border-color: var(--acp-accent); background: var(--acp-bg2); }
+html.admina-acp .acp-ic.danger:hover { color: var(--acp-err); border-color: var(--acp-err); }
+html.admina-acp .acp-chk { width: 15px; height: 15px; accent-color: var(--acp-accent); cursor: pointer; }
+html.admina-acp .acp-pager { display: flex; gap: 8px; align-items: center; justify-content: flex-end; padding: 9px 12px; font-size: .76rem; color: var(--acp-text2); flex-wrap: wrap; }
+html.admina-acp .acp-pgbtn {
+  border: 1px solid var(--acp-line); background: var(--acp-card); color: var(--acp-text);
+  border-radius: 7px; padding: 3px 9px; font: inherit; font-size: .76rem; cursor: pointer;
+}
+html.admina-acp .acp-pgbtn[disabled] { opacity: .45; cursor: not-allowed; }
+
+/* ---------- VUE MATRICE DES TALENTS (signature) ---------- */
+html.admina-acp .acp-matcard { background: var(--acp-card); border: 1px solid var(--acp-line); border-radius: 12px; padding: 12px 14px; }
+html.admina-acp .acp-mat-legend { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; font-size: .72rem; color: var(--acp-text2); margin-bottom: 10px; }
+html.admina-acp .acp-mat-legend > span { display: inline-flex; gap: 5px; align-items: center; }
+html.admina-acp .acp-leg { display: inline-block; width: 14px; height: 9px; border-radius: 2px; }
+html.admina-acp .acp-mat-hint { font-style: italic; margin-left: auto; }
+html.admina-acp .acp-mat-sort { display: inline-flex; gap: 4px; }
+html.admina-acp .acp-sortbtn {
+  border: 1px solid var(--acp-line); background: var(--acp-card); color: var(--acp-text2);
+  border-radius: 999px; padding: 3px 10px; font: inherit; font-size: .7rem; font-weight: 800; cursor: pointer;
+}
+html.admina-acp .acp-sortbtn.on { background: var(--acp-accent); border-color: var(--acp-accent); color: #fff; }
+html.admina-acp .acp-mat-head {
+  display: grid; grid-template-columns: minmax(190px, 1.3fr) minmax(180px, 1.8fr) 62px 82px 82px 76px;
+  gap: 8px; padding: 4px 6px 8px; border-bottom: 2px solid var(--acp-line);
+  font-size: .66rem; font-weight: 800; letter-spacing: .5px; text-transform: uppercase; color: var(--acp-text2);
+}
+html.admina-acp .acp-mrow {
+  display: grid; grid-template-columns: minmax(190px, 1.3fr) minmax(180px, 1.8fr) 62px 82px 82px 76px;
+  gap: 8px; align-items: center; padding: 9px 6px; border-bottom: 1px solid var(--acp-line);
+}
+html.admina-acp .acp-mrow.israre { box-shadow: inset 3px 0 0 var(--acp-warn); }
+html.admina-acp .acp-mrow.israre:hover { background: var(--acp-bg2); }
+html.admina-acp .acp-mat-id { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+html.admina-acp .acp-mat-name { font-weight: 800; color: var(--acp-text); cursor: pointer; font-size: .9rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+html.admina-acp .acp-mat-name:hover { color: var(--acp-accent); text-decoration: underline; }
+html.admina-acp .acp-mat-cats { display: flex; gap: 4px; flex-wrap: wrap; }
+html.admina-acp .acp-mat-cats .acp-chip { font-size: .6rem; }
+html.admina-acp .acp-mat-bar {
+  display: flex; height: 15px; border-radius: 8px; overflow: hidden; background: var(--acp-neutralbg); min-width: 0;
+}
+html.admina-acp .acp-mat-bar i { display: block; height: 100%; min-width: 3px; }
+html.admina-acp .acp-mat-bar i.seg-expert { background: var(--acp-lvl-expert); }
+html.admina-acp .acp-mat-bar i.seg-avance { background: var(--acp-lvl-avance); }
+html.admina-acp .acp-mat-bar i.seg-intermediaire { background: var(--acp-lvl-inter); }
+html.admina-acp .acp-mat-bar i.seg-debutant { background: var(--acp-lvl-deb); }
+html.admina-acp .acp-mat-num { font-size: .84rem; color: var(--acp-text2); font-variant-numeric: tabular-nums; white-space: nowrap; }
+html.admina-acp .acp-mat-num.strong { font-weight: 800; color: var(--acp-ok); font-size: .95rem; }
+html.admina-acp .acp-mat-rare { display: flex; align-items: center; }
+html.admina-acp .acp-mat-foot { margin-top: 9px; font-size: .72rem; color: var(--acp-text2); text-align: right; font-variant-numeric: tabular-nums; }
+
+/* ---------- cartes ---------- */
+html.admina-acp .acp-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; }
+html.admina-acp .acp-cardx {
+  background: var(--acp-card); border: 1px solid var(--acp-line); border-radius: 12px; padding: 13px 14px;
+  box-shadow: var(--acp-shadow); display: flex; flex-direction: column; gap: 8px; position: relative;
+  transition: transform .12s, box-shadow .12s;
+}
+html.admina-acp .acp-cardx:hover { transform: translateY(-2px); }
+html.admina-acp .acp-card-top { display: flex; gap: 9px; align-items: flex-start; justify-content: space-between; }
+html.admina-acp .acp-card-top > span { display: inline-flex; gap: 6px; align-items: center; }
+html.admina-acp .acp-card-name { font-weight: 800; font-size: .98rem; color: var(--acp-text); cursor: pointer; }
+html.admina-acp .acp-card-name:hover { color: var(--acp-accent); }
+html.admina-acp .acp-card-poste { color: var(--acp-text); }
+html.admina-acp .acp-card-prog { display: flex; gap: 4px; align-items: center; flex-wrap: wrap; }
+html.admina-acp .acp-card-meta { display: flex; gap: 5px; flex-wrap: wrap; align-items: center; }
+html.admina-acp .acp-card-meta .acp-chip { font-size: .64rem; }
+html.admina-acp .acp-card-foot { display: flex; align-items: center; justify-content: space-between; gap: 6px; border-top: 1px dashed var(--acp-line); padding-top: 8px; }
+html.admina-acp .acp-card-act { display: flex; gap: 3px; }
+html.admina-acp .acp-sim-row { display: grid; grid-template-columns: 200px 1fr 90px; gap: 10px; align-items: center; margin: 9px 0; font-size: .8rem; }
+
+/* ---------- barre de sélection ---------- */
+html.admina-acp .acp-selbar {
+  position: sticky; bottom: 8px; z-index: 40; margin-top: 12px;
+  background: var(--acp-card); border: 1px solid var(--acp-accent); border-radius: 12px;
+  padding: 9px 14px; display: flex; gap: 9px; align-items: center; flex-wrap: wrap;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, .18); font-size: .8rem;
+}
+html.admina-acp .acp-selbar-info { font-weight: 700; }
+html.admina-acp .acp-selbar-sub { color: var(--acp-text2); font-size: .72rem; }
+
+/* ---------- drawer ---------- */
+html.admina-acp .acp-backdrop {
+  position: fixed; inset: 0; background: rgba(6, 20, 18, .55); z-index: 1299;
+  backdrop-filter: blur(1.5px); animation: acpFade .18s ease;
+}
+html.admina-acp .acp-drawer {
+  position: fixed; top: 0; right: 0; bottom: 0; width: min(520px, 94vw); z-index: 1300;
+  background: var(--acp-card); color: var(--acp-text); border-left: 1px solid var(--acp-line);
+  box-shadow: -12px 0 40px rgba(0, 0, 0, .25); display: flex; flex-direction: column;
+  animation: acpSlide .2s ease;
+}
+@keyframes acpFade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes acpSlide { from { transform: translateX(30px); opacity: .4; } to { transform: none; opacity: 1; } }
+html.admina-acp .acp-drawer-head { display: flex; gap: 10px; align-items: flex-start; justify-content: space-between; padding: 15px 17px 10px; border-bottom: 1px solid var(--acp-line); }
+html.admina-acp .acp-drawer-title { font-size: 1.02rem; font-weight: 800; }
+html.admina-acp .acp-drawer-sub { font-size: .74rem; color: var(--acp-text2); margin-top: 2px; }
+html.admina-acp .acp-drawer-x {
+  border: 1px solid var(--acp-line); background: var(--acp-card); color: var(--acp-text2);
+  width: 29px; height: 29px; border-radius: 8px; cursor: pointer; font-size: .9rem; flex: 0 0 auto;
+}
+html.admina-acp .acp-drawer-x:hover { color: var(--acp-err); border-color: var(--acp-err); }
+html.admina-acp .acp-drawer-body { overflow-y: auto; padding: 13px 17px 20px; flex: 1; }
+html.admina-acp .acp-fsec { font-size: .68rem; font-weight: 800; letter-spacing: .7px; text-transform: uppercase; color: var(--acp-text2); margin: 14px 0 7px; display: flex; align-items: center; gap: 8px; }
+html.admina-acp .acp-fsec::after { content: ''; flex: 1; height: 1px; background: var(--acp-line); }
+html.admina-acp .acp-warnblock {
+  background: var(--acp-errbg); color: var(--acp-err); border: 1px dashed var(--acp-err);
+  border-radius: 9px; padding: 7px 11px; font-size: .76rem; font-weight: 700; margin: 8px 0;
+}
+/* portrait de profil */
+html.admina-acp .acp-prof { display: flex; flex-direction: column; gap: 6px; }
+html.admina-acp .acp-profrow {
+  display: flex; gap: 8px; align-items: center; justify-content: space-between; flex-wrap: wrap;
+  border: 1px solid var(--acp-line); border-radius: 10px; padding: 7px 9px; background: var(--acp-bg2);
+}
+html.admina-acp .acp-profrow.cur { border-color: var(--acp-accent); box-shadow: inset 0 0 0 1.5px var(--acp-accent); }
+html.admina-acp .acp-profrow-main { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1 1 180px; }
+html.admina-acp .acp-profrow-comp { font-weight: 700; font-size: .82rem; color: var(--acp-text); }
+html.admina-acp .acp-profrow-meta { display: flex; gap: 5px; align-items: center; flex-wrap: wrap; }
+html.admina-acp .acp-seg { display: inline-flex; border: 1px solid var(--acp-line); border-radius: 8px; overflow: hidden; flex: 0 0 auto; }
+html.admina-acp .acp-seg button {
+  border: none; background: var(--acp-card); color: var(--acp-text2); font: inherit; font-size: .62rem;
+  font-weight: 800; padding: 4px 8px; cursor: pointer;
+}
+html.admina-acp .acp-seg button:not(:first-child) { border-left: 1px solid var(--acp-line); }
+html.admina-acp .acp-seg button:hover { background: var(--acp-bg2); color: var(--acp-accent); }
+html.admina-acp .acp-seg button.on { background: var(--acp-accent); color: #fff; }
+html.admina-acp .acp-drawer-actions { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 14px; }
+
+/* ---------- dialog ---------- */
+html.admina-acp .acp-dialog {
+  position: fixed; z-index: 1300; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: min(640px, 94vw); max-height: 90vh; display: flex; flex-direction: column;
+  background: var(--acp-card); color: var(--acp-text); border: 1px solid var(--acp-line);
+  border-radius: 14px; box-shadow: 0 24px 70px rgba(0, 0, 0, .35); animation: acpPop .16s ease;
+}
+@keyframes acpPop { from { transform: translate(-50%, -48%); opacity: 0; } to { transform: translate(-50%, -50%); opacity: 1; } }
+html.admina-acp .acp-dialog-head { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px 10px; border-bottom: 1px solid var(--acp-line); }
+html.admina-acp .acp-dialog-head h3 { margin: 0; font-size: 1rem; font-weight: 800; }
+html.admina-acp .acp-dialog-body { padding: 12px 18px 16px; overflow-y: auto; }
+html.admina-acp .acp-dialog-foot { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 11px 18px; border-top: 1px solid var(--acp-line); flex-wrap: wrap; }
+html.admina-acp .acp-fgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px 12px; }
+html.admina-acp .acp-fgrid .full { grid-column: 1 / -1; }
+html.admina-acp .acp-lab { display: flex; flex-direction: column; gap: 3px; font-size: .74rem; font-weight: 700; color: var(--acp-text2); }
+html.admina-acp .acp-form-err {
+  background: var(--acp-errbg); color: var(--acp-err); border: 1px solid var(--acp-err);
+  border-radius: 9px; padding: 7px 11px; font-size: .78rem; margin-top: 9px;
+}
+html.admina-acp .acp-form-hint { font-size: .7rem; color: var(--acp-text2); }
+html.admina-acp .acp-live { background: var(--acp-bg2); border: 1px dashed var(--acp-line); border-radius: 10px; padding: 8px 12px; font-size: .76rem; display: flex; gap: 14px; flex-wrap: wrap; margin-top: 10px; }
+html.admina-acp .acp-live b { color: var(--acp-accent); }
+html.admina-acp .acp-live .bad { color: var(--acp-err); }
+html.admina-acp .acp-live .good { color: var(--acp-ok); }
+
+/* ---------- confirm ---------- */
+html.admina-acp .acp-confirm {
+  position: fixed; z-index: 1301; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: min(430px, 92vw); background: var(--acp-card); color: var(--acp-text);
+  border: 1px solid var(--acp-line); border-radius: 14px; box-shadow: 0 24px 70px rgba(0, 0, 0, .4); padding: 17px 19px;
+  animation: acpPop .16s ease;
+}
+html.admina-acp .acp-confirm h4 { margin: 0 0 7px; font-size: .95rem; }
+html.admina-acp .acp-confirm p { margin: 0 0 13px; font-size: .8rem; color: var(--acp-text2); }
+html.admina-acp .acp-confirm-row { display: flex; gap: 8px; justify-content: flex-end; }
+
+/* ---------- panneaux (journal / seuils / synthèse) ---------- */
+html.admina-acp .acp-panel {
+  position: fixed; z-index: 1300; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: min(680px, 94vw); max-height: 84vh; background: var(--acp-card); color: var(--acp-text);
+  border: 1px solid var(--acp-line); border-radius: 14px; box-shadow: 0 24px 70px rgba(0, 0, 0, .35);
+  display: flex; flex-direction: column; animation: acpPop .16s ease;
+}
+html.admina-acp .acp-panel-head { display: flex; justify-content: space-between; align-items: center; padding: 13px 17px 9px; border-bottom: 1px solid var(--acp-line); }
+html.admina-acp .acp-panel-head h3 { margin: 0; font-size: .98rem; font-weight: 800; }
+html.admina-acp .acp-panel-body { padding: 12px 17px 16px; overflow-y: auto; flex: 1; }
+html.admina-acp .acp-jrow { display: flex; gap: 9px; padding: 6px 2px; border-bottom: 1px dashed var(--acp-line); font-size: .76rem; align-items: baseline; }
+html.admina-acp .acp-jtime { color: var(--acp-text2); font-variant-numeric: tabular-nums; white-space: nowrap; font-size: .68rem; }
+html.admina-acp .acp-jact { font-weight: 800; white-space: nowrap; }
+html.admina-acp .acp-jdet { color: var(--acp-text2); }
+html.admina-acp .acp-empty { text-align: center; color: var(--acp-text2); padding: 26px 0; font-size: .82rem; }
+html.admina-acp .acp-cibles-note { font-size: .78rem; color: var(--acp-text2); margin: 2px 0 10px; }
+html.admina-acp .acp-sim-kpis { display: flex; gap: 9px; flex-wrap: wrap; font-size: .78rem; color: var(--acp-text2); margin-bottom: 9px; }
+html.admina-acp .acp-sim-kpis span { background: var(--acp-bg2); border: 1px solid var(--acp-line); border-radius: 9px; padding: 5px 10px; }
+html.admina-acp .acp-sim-kpis b { color: var(--acp-text); }
+html.admina-acp .acp-sim-tip { background: var(--acp-infobg); color: var(--acp-info); border-radius: 9px; padding: 8px 12px; font-size: .76rem; font-weight: 600; }
+html.admina-acp .acp-syn-rows { display: flex; flex-direction: column; gap: 5px; }
+html.admina-acp .acp-syn-row {
+  display: flex; gap: 9px; align-items: baseline; justify-content: space-between; flex-wrap: wrap;
+  border: 1px solid var(--acp-line); border-radius: 9px; padding: 6px 10px; font-size: .78rem; background: var(--acp-bg2);
+}
+html.admina-acp .acp-syn-row b { font-weight: 700; }
+
+/* ---------- toasts ---------- */
+html.admina-acp .acp-toasts { position: fixed; bottom: 16px; right: 16px; z-index: 1400; display: flex; flex-direction: column; gap: 7px; max-width: 340px; }
+html.admina-acp .acp-toast {
+  background: var(--acp-card); color: var(--acp-text); border: 1px solid var(--acp-line);
+  border-left: 4px solid var(--acp-accent); border-radius: 10px; padding: 9px 13px; font-size: .8rem;
+  box-shadow: 0 8px 26px rgba(0, 0, 0, .22); display: flex; gap: 9px; align-items: flex-start;
+  animation: acpToast .18s ease;
+}
+html.admina-acp .acp-toast.err { border-left-color: var(--acp-err); }
+html.admina-acp .acp-toast.ok { border-left-color: var(--acp-ok); }
+html.admina-acp .acp-toast button { border: none; background: none; color: var(--acp-text2); cursor: pointer; font-size: .95rem; padding: 0; line-height: 1; }
+@keyframes acpToast { from { transform: translateY(9px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+/* ---------- pied ---------- */
+html.admina-acp .acp-foot { margin-top: 14px; font-size: .72rem; color: var(--acp-text2); text-align: center; }
+html.admina-acp .acp-link { border: none; background: none; color: var(--acp-accent); cursor: pointer; font: inherit; font-size: inherit; text-decoration: underline; padding: 0; }
+
+/* ---------- burger mobile ---------- */
+html.admina-acp .admina-burger {
+  display: none; align-items: center; justify-content: center;
+  width: 38px; height: 38px; border-radius: 9px; border: 1px solid rgba(0, 0, 0, .12);
+  background: rgba(255, 255, 255, .85); color: #134e4a; cursor: pointer; margin-right: 6px; padding: 0;
+}
+html.admina-acp .admina-burger:hover { background: rgba(128, 128, 128, .15); }
+html.admina-acp .admina-nav-backdrop { background: transparent; pointer-events: none; }
+
+/* ---------- impression ---------- */
+@media print {
+  html.admina-acp [data-acp="toolbar"], html.admina-acp .acp-hero-actions, html.admina-acp .acp-actions,
+  html.admina-acp .acp-selbar, html.admina-acp .acp-toasts, html.admina-acp .acp-pager,
+  html.admina-acp .acp-chk, html.admina-acp .acp-foot, html.admina-acp .admina-burger { display: none !important; }
+  html.admina-acp [data-acp="root"] { padding: 0; }
+  html.admina-acp .acp-tblcard { border: none; }
+}
+
+/* ---------- scrollbars ---------- */
+html.admina-acp .acp-tblwrap::-webkit-scrollbar, html.admina-acp .acp-drawer-body::-webkit-scrollbar,
+html.admina-acp .acp-dialog-body::-webkit-scrollbar, html.admina-acp .acp-panel-body::-webkit-scrollbar { height: 9px; width: 9px; }
+html.admina-acp .acp-tblwrap::-webkit-scrollbar-thumb, html.admina-acp .acp-drawer-body::-webkit-scrollbar-thumb,
+html.admina-acp .acp-dialog-body::-webkit-scrollbar-thumb, html.admina-acp .acp-panel-body::-webkit-scrollbar-thumb {
+  background: var(--acp-line); border-radius: 5px;
+}
+
+/* ---------- burger <820px (garde header AppBar W2/W3) ---------- */
+@media (max-width: 819px) {
+  html.admina-acp header.MuiPaper-root { margin-left: 0 !important; width: 100% !important; }
+  html.admina-acp [data-acp-page] { width: 100% !important; margin-left: 0 !important; flex-basis: auto; }
+  html.admina-acp .MuiToolbar-root { padding-left: 10px !important; padding-right: 10px !important; }
+  html.admina-acp .MuiDrawer-docked {
+    display: block !important;
+    position: fixed; top: 0; left: 0; bottom: 0;
+    width: 280px; max-width: 86vw;
+    z-index: 1450;
+    transform: translateX(-106%);
+    transition: transform .25s ease;
+  }
+  html.admina-acp.admina-nav-open .MuiDrawer-docked { transform: translateX(0); }
+  html.admina-acp .MuiDrawer-docked .MuiDrawer-paper {
+    width: 280px; max-width: 86vw; box-sizing: border-box;
+    position: absolute; height: 100%;
+  }
+  html.admina-acp .admina-burger { display: inline-flex !important; }
+  html.admina-acp .admina-nav-backdrop {
+    position: fixed; inset: 0; background: rgba(0, 0, 0, .5);
+    z-index: 1440; opacity: 0; pointer-events: none; transition: opacity .22s ease;
+  }
+  html.admina-acp.admina-nav-open .admina-nav-backdrop { opacity: 1; pointer-events: auto; }
+  html.admina-acp .acp-kpis { grid-template-columns: repeat(3, 1fr); }
+  html.admina-acp .acp-charts { grid-template-columns: 1fr 1fr; }
+}
+
+/* ---------- garde toolbar native (mobile) ---------- */
+@media (max-width: 640px) {
+  html.admina-acp .acp-kpis { grid-template-columns: 1fr 1fr; }
+  html.admina-acp .MuiToolbar-root { flex-wrap: wrap; row-gap: 6px; padding-bottom: 8px; }
+  html.admina-acp .MuiToolbar-root .MuiBox-root { min-width: 0; }
+}
+
+/* ---------- garde-fous 390 px (0 débordement horizontal) ---------- */
+@media (max-width: 460px) {
+  html.admina-acp .acp-hero { padding: 14px 12px; }
+  html.admina-acp .acp-h2 { font-size: 1.06rem; }
+  html.admina-acp .acp-hero-actions .acp-btn { padding: 6px 9px; font-size: .74rem; }
+  html.admina-acp .acp-toolbar { position: static; }
+  html.admina-acp .acp-sel { max-width: 100%; flex: 1 1 45%; }
+  html.admina-acp .acp-views { margin-left: 0; }
+  html.admina-acp .acp-mat-head { display: none; }
+  html.admina-acp .acp-mrow { display: flex; flex-direction: column; align-items: stretch; gap: 7px; }
+  html.admina-acp .acp-mat-bar { width: 100%; }
+  html.admina-acp .acp-mat-num, html.admina-acp .acp-mat-rare { display: inline-flex; gap: 6px; }
+  html.admina-acp .acp-mat-foot { text-align: left; }
+  html.admina-acp .acp-sim-row { grid-template-columns: 1fr; }
+  html.admina-acp .acp-fgrid { grid-template-columns: 1fr; }
+  html.admina-acp .acp-profrow { flex-direction: column; align-items: stretch; }
+  html.admina-acp .acp-ybar { width: 56px; }
+}
+
+/* ---------- garde responsive final (anti-écrasement cascade, leçon M28-V2) ---------- */
+@media (max-width: 760px) {
+  html.admina-acp .acp-charts { grid-template-columns: 1fr !important; }
+  html.admina-acp .acp-charts > * { min-width: 0; max-width: 100%; }
+  html.admina-acp .acp-kpis { grid-template-columns: 1fr 1fr !important; }
+  html.admina-acp .acp-kpis > * { min-width: 0; }
+  html.admina-acp .acp-tblwrap { max-width: 100%; }
+}
+@media (max-width: 480px) {
+  html.admina-acp .acp-kpis { grid-template-columns: 1fr !important; }
+}

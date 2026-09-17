@@ -1,0 +1,554 @@
+/* =========================================================
+   Admina-RH — Plan d'Accueil & Formation — couche admina (W2-c)
+   Scope : html.admina-aac (posé uniquement sur /plan-accueil-formation)
+   Thèmes : [data-theme=light|dark] (détection auto, LS admina-dark partagé)
+   Préfixe : aac- (assets admina-accueil.*)
+   Philosophie : le programme de l'arrivée dans le temps — un
+   agenda de formation (semaines 1-4, formateurs, salles) dont
+   les trous, conflits et comptes-rendus manquants sont des
+   alertes actionnables. Vue planning accueil = signature.
+   ========================================================= */
+/* ---------- variables ---------- */
+html.admina-aac {
+  --aac-accent: #0f766e;
+  --aac-accent2: #059669;
+  --aac-gold: #b45309;
+  --aac-bg: #ffffff;
+  --aac-bg2: #f7faf9;
+  --aac-card: #ffffff;
+  --aac-line: #dbe7e4;
+  --aac-text: #10312e;
+  --aac-text2: #5d7a76;
+  --aac-err: #dc2626;
+  --aac-errbg: #fef2f2;
+  --aac-warn: #b45309;
+  --aac-warnbg: #fef3c7;
+  --aac-ok: #047857;
+  --aac-okbg: #d1fae5;
+  --aac-info: #0e7490;
+  --aac-infobg: #e0f2fe;
+  --aac-neutral: #57534e;
+  --aac-neutralbg: #f1f0ee;
+  --aac-shadow: 0 1px 3px rgba(16, 49, 46, .08), 0 4px 16px rgba(16, 49, 46, .06);
+  --aac-radius: 14px;
+}
+html.admina-aac [data-aac="root"][data-theme="dark"] {
+  --aac-bg: #0c1514;
+  --aac-bg2: #101c1a;
+  --aac-card: #14201e;
+  --aac-line: #243935;
+  --aac-text: #e6f2ef;
+  --aac-text2: #8fb0aa;
+  --aac-err: #f87171;
+  --aac-errbg: #451a1a;
+  --aac-warn: #fbbf24;
+  --aac-warnbg: #3a2b0e;
+  --aac-ok: #34d399;
+  --aac-okbg: #0c2f24;
+  --aac-info: #67e8f9;
+  --aac-infobg: #0c2f36;
+  --aac-neutralbg: #1d2b28;
+  --aac-shadow: 0 1px 3px rgba(0, 0, 0, .5), 0 6px 20px rgba(0, 0, 0, .35);
+}
+
+/* ---------- racine ---------- */
+html.admina-aac [data-aac="root"] {
+  display: block;
+  padding: 4px 4px 28px;
+  color: var(--aac-text);
+  font-family: Inter, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-size: 14px;
+  line-height: 1.45;
+  background: var(--aac-bg);
+  border-radius: 12px;
+}
+html.admina-aac [data-aac="root"] *,
+html.admina-aac [data-aac="root"] *::before,
+html.admina-aac [data-aac="root"] *::after { box-sizing: border-box; }
+html.admina-aac [data-aac-page] { min-width: 0; }
+@media (max-width: 819px) {
+  html.admina-aac [data-aac-page] { width: 100% !important; margin-left: 0 !important; flex-basis: auto; }
+}
+
+/* ---------- héro ---------- */
+html.admina-aac .aac-hero {
+  background: linear-gradient(120deg, #0f766e 0%, #0d9488 55%, #059669 100%);
+  color: #ecfdf9;
+  border-radius: var(--aac-radius);
+  padding: 18px 20px;
+  box-shadow: var(--aac-shadow);
+  margin-bottom: 14px;
+}
+html.admina-aac .aac-hero-main { display: flex; gap: 14px; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; }
+html.admina-aac .aac-hero-title { display: flex; gap: 12px; align-items: center; }
+html.admina-aac .aac-hero-ico {
+  display: grid; place-items: center; width: 46px; height: 46px; border-radius: 12px;
+  background: rgba(255, 255, 255, .16); flex: 0 0 auto;
+}
+html.admina-aac .aac-h2 { margin: 0; font-size: 1.25rem; font-weight: 800; letter-spacing: .2px; }
+html.admina-aac .aac-hero-sub { margin: 3px 0 0; font-size: .88rem; opacity: .93; }
+html.admina-aac .aac-hero-actions { display: flex; gap: 7px; flex-wrap: wrap; }
+html.admina-aac .aac-hero-alerts { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 13px; }
+
+/* Alertes : pastilles SOLIDES à contraste élevé (AAA M23) */
+html.admina-aac .aac-alert {
+  display: inline-flex; gap: 7px; align-items: center; padding: 5px 11px; border-radius: 999px;
+  font-size: .78rem; font-weight: 700; border: 1px solid transparent; cursor: pointer; text-align: left;
+  color: #0f172a; background: rgba(255, 255, 255, .94);
+  box-shadow: 0 1px 3px rgba(2, 44, 34, .35);
+  -webkit-print-color-adjust: exact; print-color-adjust: exact;
+}
+html.admina-aac .aac-alert:hover { filter: brightness(.96); }
+html.admina-aac .aac-alert.err { background: #fee2e2; border-color: #fca5a5; color: #7f1d1d; }
+html.admina-aac .aac-alert.warn { background: #fef3c7; border-color: #fcd34d; color: #78350f; }
+html.admina-aac .aac-alert.ok { background: #d1fae5; border-color: #6ee7b7; color: #064e3b; }
+html.admina-aac .aac-alert.info { background: #cffafe; border-color: #67e8f9; color: #164e63; }
+
+/* ---------- boutons ---------- */
+html.admina-aac .aac-btn {
+  display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; border-radius: 9px;
+  border: 1px solid rgba(236, 253, 250, .45); background: rgba(255, 255, 255, .12);
+  color: inherit; font: inherit; font-size: .8rem; font-weight: 600; cursor: pointer;
+  transition: background .15s, transform .1s; white-space: nowrap;
+}
+html.admina-aac .aac-hero .aac-btn:hover { background: rgba(255, 255, 255, .22); }
+html.admina-aac .aac-btn:active { transform: translateY(1px); }
+html.admina-aac .aac-btn-primary { background: var(--aac-accent); border-color: var(--aac-accent); color: #fff; }
+html.admina-aac .aac-btn-ghost { background: var(--aac-card); border: 1px solid var(--aac-line); color: var(--aac-text); }
+html.admina-aac .aac-btn-ghost:hover { background: var(--aac-bg2); }
+html.admina-aac .aac-btn-danger { background: var(--aac-errbg); border-color: var(--aac-err); color: var(--aac-err); }
+html.admina-aac .aac-btn[disabled] { opacity: .5; cursor: not-allowed; }
+
+/* ---------- KPI ---------- */
+html.admina-aac .aac-kpis { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin-bottom: 14px; }
+@media (max-width: 1279px) { html.admina-aac .aac-kpis { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 640px) { html.admina-aac .aac-kpis { grid-template-columns: repeat(2, 1fr); } }
+html.admina-aac .aac-kpi {
+  background: var(--aac-card); border: 1px solid var(--aac-line); border-radius: 12px;
+  padding: 12px 14px; cursor: pointer; transition: box-shadow .15s, transform .1s, border-color .15s;
+  position: relative; overflow: hidden; text-align: left; font: inherit; width: 100%;
+  display: flex; flex-direction: column; align-items: flex-start; gap: 2px;
+}
+html.admina-aac .aac-kpi::before {
+  content: ''; position: absolute; inset: 0 auto 0 0; width: 4px; background: var(--aac-accent); opacity: .65;
+}
+html.admina-aac .aac-kpi.gold::before { background: #f59e0b; }
+html.admina-aac .aac-kpi:hover { box-shadow: var(--aac-shadow); transform: translateY(-1px); }
+html.admina-aac .aac-kpi.on { border-color: var(--aac-accent); background: var(--aac-bg2); box-shadow: inset 0 0 0 1px var(--aac-accent); }
+html.admina-aac .aac-kpi-t { font-size: .66rem; font-weight: 800; letter-spacing: .8px; color: var(--aac-text2); }
+html.admina-aac .aac-kpi-v { font-size: 1.24rem; font-weight: 800; margin-top: 2px; color: var(--aac-text); white-space: nowrap; }
+html.admina-aac .aac-kpi-v.bad { color: var(--aac-err); }
+html.admina-aac .aac-kpi-s { font-size: .7rem; color: var(--aac-text2); margin-top: 1px; }
+
+/* ---------- graphiques (SVG vanilla) ---------- */
+html.admina-aac .aac-charts { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+html.admina-aac .aac-charts.aac-charts-off { display: none; }
+@media (max-width: 1099px) { html.admina-aac .aac-charts { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 760px) { html.admina-aac .aac-charts { grid-template-columns: 1fr; } }
+html.admina-aac .aac-chart-card {
+  background: var(--aac-card); border: 1px solid var(--aac-line); border-radius: 12px; padding: 12px 14px;
+  min-width: 0;
+}
+html.admina-aac .aac-chart-title { font-size: .74rem; font-weight: 800; letter-spacing: .6px; color: var(--aac-text2); text-transform: uppercase; margin-bottom: 8px; }
+html.admina-aac .aac-donut-wrap { display: flex; gap: 12px; align-items: center; }
+html.admina-aac .aac-donut-legend { display: flex; flex-direction: column; gap: 3px; font-size: .72rem; min-width: 0; flex: 1; }
+html.admina-aac .aac-dl-item { display: flex; gap: 6px; align-items: center; cursor: pointer; border-radius: 6px; padding: 1px 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+html.admina-aac .aac-dl-item:hover { background: var(--aac-bg2); }
+html.admina-aac .aac-dl-item.on { background: var(--aac-okbg); }
+html.admina-aac .aac-dl-dot { width: 9px; height: 9px; border-radius: 3px; flex: 0 0 auto; }
+html.admina-aac .aac-dl-val { color: var(--aac-text2); margin-left: auto; font-variant-numeric: tabular-nums; }
+html.admina-aac .aac-svg-lab { font-size: 10.5px; fill: var(--aac-text2); font-weight: 600; }
+html.admina-aac .aac-svg-val { font-size: 10.5px; fill: var(--aac-text); font-weight: 800; }
+html.admina-aac .aac-svg-track { fill: var(--aac-neutralbg); }
+html.admina-aac .aac-svg-fill { fill: #0d9488; }
+html.admina-aac .aac-barg { cursor: pointer; }
+html.admina-aac .aac-barg:hover .aac-svg-fill { fill: #059669; }
+html.admina-aac .aac-barg:hover .aac-svg-lab { fill: var(--aac-accent); }
+html.admina-aac [data-theme="dark"] .aac-svg-fill { fill: #14b8a6; }
+
+/* ---------- barre d'outils ---------- */
+html.admina-aac .aac-toolbar {
+  display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+  background: var(--aac-card); border: 1px solid var(--aac-line); border-radius: 12px;
+  padding: 9px 12px; margin-bottom: 12px; position: sticky; top: 6px; z-index: 30;
+  box-shadow: var(--aac-shadow);
+}
+html.admina-aac .aac-search {
+  display: flex; align-items: center; gap: 6px; background: var(--aac-bg2); border: 1px solid var(--aac-line);
+  border-radius: 9px; padding: 5px 9px; flex: 1 1 210px; min-width: 170px; color: var(--aac-text2);
+}
+html.admina-aac .aac-in {
+  border: 1px solid var(--aac-line); background: var(--aac-bg2); color: var(--aac-text);
+  border-radius: 8px; padding: 6px 9px; font: inherit; font-size: .82rem; width: 100%;
+}
+html.admina-aac .aac-search .aac-in { border: none; background: transparent; padding: 2px 0; outline: none; }
+html.admina-aac .aac-sel {
+  border: 1px solid var(--aac-line); background: var(--aac-bg2); color: var(--aac-text);
+  border-radius: 8px; padding: 6px 8px; font: inherit; font-size: .8rem; max-width: 172px; cursor: pointer;
+}
+html.admina-aac .aac-chipbtn {
+  border: 1px solid var(--aac-line); background: var(--aac-card); color: var(--aac-text2);
+  border-radius: 999px; padding: 4px 11px; font: inherit; font-size: .74rem; font-weight: 700; cursor: pointer;
+}
+html.admina-aac .aac-chipbtn:hover { border-color: var(--aac-accent); color: var(--aac-accent); }
+html.admina-aac .aac-count { font-size: .74rem; color: var(--aac-text2); white-space: nowrap; font-variant-numeric: tabular-nums; }
+html.admina-aac .aac-views { display: flex; gap: 4px; margin-left: auto; }
+html.admina-aac .aac-vbtn {
+  display: inline-flex; gap: 5px; align-items: center; padding: 5px 10px; font: inherit; font-size: .76rem;
+  font-weight: 700; border-radius: 8px; border: 1px solid var(--aac-line); background: var(--aac-card); color: var(--aac-text2); cursor: pointer;
+}
+html.admina-aac .aac-vbtn.on { background: var(--aac-accent); border-color: var(--aac-accent); color: #fff; }
+
+/* ---------- table ---------- */
+html.admina-aac .aac-tblcard { background: var(--aac-card); border: 1px solid var(--aac-line); border-radius: 12px; overflow: hidden; }
+html.admina-aac .aac-tblwrap { overflow-x: auto; max-width: 100%; }
+html.admina-aac table.aac-tbl { border-collapse: collapse; width: 100%; min-width: 1500px; font-size: .8rem; }
+html.admina-aac .aac-tbl th {
+  position: sticky; top: 0; z-index: 2; text-align: left; font-weight: 800; font-size: .68rem;
+  letter-spacing: .4px; text-transform: uppercase; color: var(--aac-text2);
+  background: var(--aac-bg2); border-bottom: 2px solid var(--aac-line);
+  padding: 9px 10px; white-space: nowrap; user-select: none;
+}
+html.admina-aac .aac-tbl th[data-sort] { cursor: pointer; }
+html.admina-aac .aac-tbl th[data-sort]:hover { color: var(--aac-accent); }
+html.admina-aac .aac-tbl th .aac-arrow { font-size: .62rem; margin-left: 3px; }
+html.admina-aac .aac-tbl td { padding: 8px 10px; border-bottom: 1px solid var(--aac-line); vertical-align: middle; }
+html.admina-aac .aac-tbl tbody tr { transition: background .12s; }
+html.admina-aac .aac-tbl tbody tr:hover { background: var(--aac-bg2); }
+html.admina-aac .aac-tfoot td {
+  position: sticky; bottom: 0; background: var(--aac-bg2); font-weight: 800; font-size: .74rem;
+  border-top: 2px solid var(--aac-line); padding: 8px 10px; white-space: nowrap; font-variant-numeric: tabular-nums;
+}
+html.admina-aac .aac-num { color: var(--aac-text2); font-size: .72rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
+html.admina-aac .aac-cand { font-weight: 700; color: var(--aac-text); cursor: pointer; }
+html.admina-aac .aac-cand:hover { color: var(--aac-accent); text-decoration: underline; }
+html.admina-aac .aac-right { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+html.admina-aac .aac-chip {
+  display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: .68rem; font-weight: 800; white-space: nowrap;
+}
+html.admina-aac .aac-chip.ok { background: var(--aac-okbg); color: var(--aac-ok); }
+html.admina-aac .aac-chip.warn { background: var(--aac-warnbg); color: var(--aac-warn); }
+html.admina-aac .aac-chip.err { background: var(--aac-errbg); color: var(--aac-err); }
+html.admina-aac .aac-chip.info { background: var(--aac-infobg); color: var(--aac-info); }
+html.admina-aac .aac-chip.neutral { background: var(--aac-neutralbg); color: var(--aac-neutral); }
+html.admina-aac .aac-chip.cfl { background: var(--aac-errbg); color: var(--aac-err); border: 1px dashed var(--aac-err); }
+html.admina-aac .aac-actions { display: flex; gap: 3px; justify-content: center; }
+html.admina-aac .aac-ic {
+  display: inline-grid; place-items: center; width: 27px; height: 27px; border-radius: 7px;
+  border: 1px solid var(--aac-line); background: var(--aac-card); color: var(--aac-text2);
+  cursor: pointer; font-size: .78rem; transition: all .12s; padding: 0;
+}
+html.admina-aac .aac-ic:hover { color: var(--aac-accent); border-color: var(--aac-accent); background: var(--aac-bg2); }
+html.admina-aac .aac-ic.danger:hover { color: var(--aac-err); border-color: var(--aac-err); }
+html.admina-aac .aac-chk { width: 15px; height: 15px; accent-color: var(--aac-accent); cursor: pointer; }
+html.admina-aac .aac-pager { display: flex; gap: 8px; align-items: center; justify-content: flex-end; padding: 9px 12px; font-size: .76rem; color: var(--aac-text2); flex-wrap: wrap; }
+html.admina-aac .aac-pgbtn {
+  border: 1px solid var(--aac-line); background: var(--aac-card); color: var(--aac-text);
+  border-radius: 7px; padding: 3px 9px; font: inherit; font-size: .76rem; cursor: pointer;
+}
+html.admina-aac .aac-pgbtn[disabled] { opacity: .45; cursor: not-allowed; }
+
+/* ---------- VUE PLANNING ACCUEIL (signature) ---------- */
+html.admina-aac .aac-weekbar {
+  display: flex; gap: 10px; align-items: center; justify-content: space-between; flex-wrap: wrap;
+  background: var(--aac-card); border: 1px solid var(--aac-line); border-radius: 12px 12px 0 0;
+  border-bottom: none; padding: 10px 14px;
+}
+html.admina-aac .aac-weeknav { display: flex; gap: 7px; align-items: center; flex-wrap: wrap; }
+html.admina-aac .aac-modes { display: inline-flex; gap: 3px; background: var(--aac-bg2); border: 1px solid var(--aac-line); border-radius: 9px; padding: 2px; }
+html.admina-aac .aac-modebtn {
+  display: inline-flex; gap: 5px; align-items: center; padding: 4px 10px; font: inherit; font-size: .74rem;
+  font-weight: 700; border-radius: 7px; border: 1px solid transparent; background: transparent; color: var(--aac-text2); cursor: pointer;
+}
+html.admina-aac .aac-modebtn.on { background: var(--aac-accent); color: #fff; }
+html.admina-aac .aac-week-lbl { font-weight: 800; font-size: .88rem; color: var(--aac-text); }
+html.admina-aac .aac-week-info { font-size: .72rem; color: var(--aac-text2); }
+html.admina-aac .aac-weekwrap { overflow-x: auto; border: 1px solid var(--aac-line); border-radius: 0 0 12px 12px; background: var(--aac-card); }
+html.admina-aac .aac-week { display: grid; grid-template-columns: repeat(7, minmax(150px, 1fr)); gap: 8px; min-width: 1092px; padding: 8px; }
+html.admina-aac .aac-week.s14 { grid-template-columns: repeat(4, minmax(200px, 1fr)); min-width: 832px; }
+html.admina-aac .aac-day, html.admina-aac .aac-s4col {
+  background: var(--aac-bg2); border: 1px solid var(--aac-line); border-radius: 10px;
+  display: flex; flex-direction: column; min-height: 150px; overflow: hidden;
+}
+html.admina-aac .aac-day.today, html.admina-aac .aac-s4col.today { border-color: var(--aac-accent); box-shadow: inset 0 0 0 1px var(--aac-accent); }
+html.admina-aac .aac-day-h {
+  display: flex; gap: 6px; align-items: baseline; padding: 7px 9px; border: none; cursor: pointer;
+  background: transparent; font: inherit; font-size: .72rem; font-weight: 800; letter-spacing: .4px;
+  text-transform: uppercase; color: var(--aac-text2); border-bottom: 1px solid var(--aac-line); text-align: left;
+}
+html.admina-aac .aac-day-h b { font-size: .95rem; color: var(--aac-text); }
+html.admina-aac .aac-day.today .aac-day-h, html.admina-aac .aac-s4col.today .aac-day-h { color: var(--aac-accent); }
+html.admina-aac .aac-day.today .aac-day-h b, html.admina-aac .aac-s4col.today .aac-day-h b { color: var(--aac-accent); }
+html.admina-aac .aac-day-h:hover { background: var(--aac-bg); }
+html.admina-aac .aac-day-n { margin-left: auto; font-size: .66rem; background: var(--aac-neutralbg); border-radius: 999px; padding: 1px 7px; }
+html.admina-aac .aac-day.today .aac-day-n, html.admina-aac .aac-s4col.today .aac-day-n { background: var(--aac-okbg); color: var(--aac-ok); }
+html.admina-aac .aac-day-b { display: flex; flex-direction: column; gap: 6px; padding: 7px; flex: 1; }
+html.admina-aac .aac-day-none { text-align: center; color: var(--aac-text2); opacity: .6; font-size: .74rem; padding: 12px 0; }
+html.admina-aac .aac-slot {
+  background: var(--aac-card); border: 1px solid var(--aac-line); border-left-width: 3px; border-radius: 8px;
+  padding: 6px 8px; cursor: pointer; transition: transform .1s, box-shadow .1s; min-width: 0;
+}
+html.admina-aac .aac-slot:hover { transform: translateY(-1px); box-shadow: var(--aac-shadow); }
+html.admina-aac .aac-slot.off { opacity: .55; }
+html.admina-aac .aac-slot.off .aac-slot-name { text-decoration: line-through; }
+html.admina-aac .aac-slot.late { border-style: dashed; border-left-style: solid; background: var(--aac-warnbg); }
+html.admina-aac .aac-slot-top { display: flex; gap: 6px; align-items: baseline; justify-content: space-between; }
+html.admina-aac .aac-slot-time { font-weight: 800; font-size: .78rem; font-variant-numeric: tabular-nums; color: var(--aac-text); }
+html.admina-aac .aac-slot-dur { font-size: .64rem; color: var(--aac-text2); white-space: nowrap; }
+html.admina-aac .aac-slot-name { font-weight: 700; font-size: .78rem; color: var(--aac-text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+html.admina-aac .aac-slot-meta { font-size: .66rem; color: var(--aac-text2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+html.admina-aac .aac-slot-loc { font-size: .66rem; color: var(--aac-text2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+html.admina-aac .aac-cfl { color: var(--aac-err); }
+
+/* ---------- cartes ---------- */
+html.admina-aac .aac-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 12px; }
+html.admina-aac .aac-cardx {
+  background: var(--aac-card); border: 1px solid var(--aac-line); border-radius: 12px; padding: 13px 14px;
+  box-shadow: var(--aac-shadow); display: flex; flex-direction: column; gap: 8px; position: relative;
+  transition: transform .12s, box-shadow .12s;
+}
+html.admina-aac .aac-cardx:hover { transform: translateY(-2px); }
+html.admina-aac .aac-card-top { display: flex; gap: 9px; align-items: flex-start; justify-content: space-between; }
+html.admina-aac .aac-card-name { font-weight: 800; font-size: .98rem; color: var(--aac-text); cursor: pointer; }
+html.admina-aac .aac-card-name:hover { color: var(--aac-accent); }
+html.admina-aac .aac-card-when { font-size: 1.05rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+html.admina-aac .aac-card-meta { display: flex; gap: 5px; flex-wrap: wrap; }
+html.admina-aac .aac-card-meta .aac-chip { font-size: .64rem; }
+html.admina-aac .aac-card-struct { display: flex; flex-direction: column; gap: 4px; align-items: flex-start; }
+html.admina-aac .aac-card-foot { display: flex; align-items: center; justify-content: space-between; gap: 6px; border-top: 1px dashed var(--aac-line); padding-top: 8px; }
+html.admina-aac .aac-card-act { display: flex; gap: 3px; }
+html.admina-aac .aac-sim-row { display: grid; grid-template-columns: 200px 1fr; gap: 10px; align-items: center; margin: 9px 0; font-size: .8rem; }
+
+/* ---------- barre de sélection ---------- */
+html.admina-aac .aac-selbar {
+  position: sticky; bottom: 8px; z-index: 40; margin-top: 12px;
+  background: var(--aac-card); border: 1px solid var(--aac-accent); border-radius: 12px;
+  padding: 9px 14px; display: flex; gap: 9px; align-items: center; flex-wrap: wrap;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, .18); font-size: .8rem;
+}
+html.admina-aac .aac-selbar-info { font-weight: 700; }
+html.admina-aac .aac-selbar-sub { color: var(--aac-text2); font-size: .72rem; }
+
+/* ---------- drawer ---------- */
+html.admina-aac .aac-backdrop {
+  position: fixed; inset: 0; background: rgba(6, 20, 18, .55); z-index: 1299;
+  backdrop-filter: blur(1.5px); animation: aacFade .18s ease;
+}
+html.admina-aac .aac-drawer {
+  position: fixed; top: 0; right: 0; bottom: 0; width: min(500px, 94vw); z-index: 1300;
+  background: var(--aac-card); color: var(--aac-text); border-left: 1px solid var(--aac-line);
+  box-shadow: -12px 0 40px rgba(0, 0, 0, .25); display: flex; flex-direction: column;
+  animation: aacSlide .2s ease;
+}
+@keyframes aacFade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes aacSlide { from { transform: translateX(30px); opacity: .4; } to { transform: none; opacity: 1; } }
+html.admina-aac .aac-drawer-head { display: flex; gap: 10px; align-items: flex-start; justify-content: space-between; padding: 15px 17px 10px; border-bottom: 1px solid var(--aac-line); }
+html.admina-aac .aac-drawer-title { font-size: 1.02rem; font-weight: 800; }
+html.admina-aac .aac-drawer-sub { font-size: .74rem; color: var(--aac-text2); margin-top: 2px; }
+html.admina-aac .aac-drawer-x {
+  border: 1px solid var(--aac-line); background: var(--aac-card); color: var(--aac-text2);
+  width: 29px; height: 29px; border-radius: 8px; cursor: pointer; font-size: .9rem; flex: 0 0 auto;
+}
+html.admina-aac .aac-drawer-x:hover { color: var(--aac-err); border-color: var(--aac-err); }
+html.admina-aac .aac-drawer-body { overflow-y: auto; padding: 13px 17px 20px; flex: 1; }
+html.admina-aac .aac-fsec { font-size: .68rem; font-weight: 800; letter-spacing: .7px; text-transform: uppercase; color: var(--aac-text2); margin: 14px 0 7px; display: flex; align-items: center; gap: 8px; }
+html.admina-aac .aac-fsec::after { content: ''; flex: 1; height: 1px; background: var(--aac-line); }
+html.admina-aac .aac-kv { display: grid; grid-template-columns: 150px 1fr; gap: 5px 12px; font-size: .8rem; }
+html.admina-aac .aac-kv dt { color: var(--aac-text2); }
+html.admina-aac .aac-kv dd { margin: 0; color: var(--aac-text); font-weight: 600; }
+html.admina-aac .aac-notebox { width: 100%; border: 1px solid var(--aac-line); background: var(--aac-bg2); color: var(--aac-text); border-radius: 9px; padding: 8px 10px; font: inherit; font-size: .8rem; min-height: 56px; resize: vertical; }
+html.admina-aac .aac-drawer-actions { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 14px; }
+html.admina-aac .aac-confwarn {
+  background: var(--aac-errbg); color: var(--aac-err); border: 1px dashed var(--aac-err);
+  border-radius: 9px; padding: 7px 11px; font-size: .76rem; font-weight: 700; margin: 8px 0;
+}
+html.admina-aac .aac-evalrow { display: grid; grid-template-columns: 110px 1fr; gap: 8px; align-items: end; margin: 8px 0; }
+@media (max-width: 560px) { html.admina-aac .aac-evalrow { grid-template-columns: 1fr; } }
+
+/* programme de l'arrivée (timeline dans le drawer) */
+html.admina-aac .aac-prog { display: flex; flex-direction: column; gap: 5px; }
+html.admina-aac .aac-prog-arr {
+  font-size: .76rem; color: var(--aac-ok); background: var(--aac-okbg);
+  border: 1px dashed var(--aac-ok); border-radius: 8px; padding: 5px 10px; margin-bottom: 3px;
+}
+html.admina-aac .aac-prog-row {
+  display: flex; gap: 8px; align-items: baseline; font-size: .76rem; padding: 4px 6px;
+  border-left: 2px solid var(--aac-line); border-radius: 0 6px 6px 0;
+}
+html.admina-aac .aac-prog-row.now { background: var(--aac-bg2); border-left-color: var(--aac-accent); }
+html.admina-aac .aac-prog-row.now .aac-prog-lab { font-weight: 800; color: var(--aac-accent); }
+html.admina-aac .aac-prog-dot { width: 8px; height: 8px; border-radius: 3px; flex: 0 0 auto; transform: translateY(-1px); }
+html.admina-aac .aac-prog-lab { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+html.admina-aac .aac-prog-meta { margin-left: auto; color: var(--aac-text2); font-size: .68rem; white-space: nowrap; }
+
+/* ---------- dialog ---------- */
+html.admina-aac .aac-dialog {
+  position: fixed; z-index: 1300; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: min(700px, 94vw); max-height: 90vh; display: flex; flex-direction: column;
+  background: var(--aac-card); color: var(--aac-text); border: 1px solid var(--aac-line);
+  border-radius: 14px; box-shadow: 0 24px 70px rgba(0, 0, 0, .35); animation: aacPop .16s ease;
+}
+@keyframes aacPop { from { transform: translate(-50%, -48%); opacity: 0; } to { transform: translate(-50%, -50%); opacity: 1; } }
+html.admina-aac .aac-dialog-head { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px 10px; border-bottom: 1px solid var(--aac-line); }
+html.admina-aac .aac-dialog-head h3 { margin: 0; font-size: 1rem; font-weight: 800; }
+html.admina-aac .aac-dialog-body { padding: 12px 18px 16px; overflow-y: auto; }
+html.admina-aac .aac-dialog-foot { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 11px 18px; border-top: 1px solid var(--aac-line); flex-wrap: wrap; }
+html.admina-aac .aac-fgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px 12px; }
+html.admina-aac .aac-fgrid .full { grid-column: 1 / -1; }
+@media (max-width: 560px) { html.admina-aac .aac-fgrid { grid-template-columns: 1fr; } }
+html.admina-aac .aac-lab { display: flex; flex-direction: column; gap: 3px; font-size: .74rem; font-weight: 700; color: var(--aac-text2); }
+html.admina-aac .aac-ta { resize: vertical; min-height: 46px; font: inherit; font-size: .82rem; }
+html.admina-aac .aac-form-err {
+  background: var(--aac-errbg); color: var(--aac-err); border: 1px solid var(--aac-err);
+  border-radius: 9px; padding: 7px 11px; font-size: .78rem; margin-top: 9px;
+}
+html.admina-aac .aac-form-hint { font-size: .7rem; color: var(--aac-text2); }
+html.admina-aac .aac-live { background: var(--aac-bg2); border: 1px dashed var(--aac-line); border-radius: 10px; padding: 8px 12px; font-size: .76rem; display: flex; gap: 14px; flex-wrap: wrap; margin-top: 10px; }
+html.admina-aac .aac-live b { color: var(--aac-accent); }
+html.admina-aac .aac-live .bad { color: var(--aac-err); }
+html.admina-aac .aac-live .good { color: var(--aac-ok); }
+
+/* ---------- confirm ---------- */
+html.admina-aac .aac-confirm {
+  position: fixed; z-index: 1301; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: min(430px, 92vw); background: var(--aac-card); color: var(--aac-text);
+  border: 1px solid var(--aac-line); border-radius: 14px; box-shadow: 0 24px 70px rgba(0, 0, 0, .4); padding: 17px 19px;
+  animation: aacPop .16s ease;
+}
+html.admina-aac .aac-confirm h4 { margin: 0 0 7px; font-size: .95rem; }
+html.admina-aac .aac-confirm p { margin: 0 0 13px; font-size: .8rem; color: var(--aac-text2); }
+html.admina-aac .aac-confirm-row { display: flex; gap: 8px; justify-content: flex-end; }
+
+/* ---------- panneaux (journal, seuils) ---------- */
+html.admina-aac .aac-panel {
+  position: fixed; z-index: 1300; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: min(660px, 94vw); max-height: 84vh; background: var(--aac-card); color: var(--aac-text);
+  border: 1px solid var(--aac-line); border-radius: 14px; box-shadow: 0 24px 70px rgba(0, 0, 0, .35);
+  display: flex; flex-direction: column; animation: aacPop .16s ease;
+}
+html.admina-aac .aac-panel-head { display: flex; justify-content: space-between; align-items: center; padding: 13px 17px 9px; border-bottom: 1px solid var(--aac-line); }
+html.admina-aac .aac-panel-head h3 { margin: 0; font-size: .98rem; font-weight: 800; }
+html.admina-aac .aac-panel-body { padding: 12px 17px 16px; overflow-y: auto; flex: 1; }
+html.admina-aac .aac-cibles-note { font-size: .76rem; color: var(--aac-text2); margin: 0 0 10px; }
+html.admina-aac .aac-jrow { display: flex; gap: 9px; padding: 6px 2px; border-bottom: 1px dashed var(--aac-line); font-size: .76rem; align-items: baseline; }
+html.admina-aac .aac-jtime { color: var(--aac-text2); font-variant-numeric: tabular-nums; white-space: nowrap; font-size: .68rem; }
+html.admina-aac .aac-jact { font-weight: 800; white-space: nowrap; }
+html.admina-aac .aac-jdet { color: var(--aac-text2); }
+html.admina-aac .aac-empty { text-align: center; color: var(--aac-text2); padding: 26px 0; font-size: .82rem; }
+
+/* ---------- score / éval ---------- */
+html.admina-aac .aac-score { display: inline-flex; align-items: center; justify-content: center; min-width: 46px; padding: 3px 9px; border-radius: 999px; font-weight: 800; font-size: .78rem; letter-spacing: .01em; border: 1px solid transparent; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+html.admina-aac .aac-score.hi { background: #d1fae5; border-color: #6ee7b7; color: #064e3b; }
+html.admina-aac .aac-score.mid { background: #e0f2fe; border-color: #7dd3fc; color: #164e63; }
+html.admina-aac .aac-score.zero { background: #f1f0ee; border-color: #e2e0dc; color: #57534e; }
+html.admina-aac [data-theme="dark"] .aac-score.hi { background: #0c2f24; border-color: #196c55; color: #6ee7b7; }
+html.admina-aac [data-theme="dark"] .aac-score.mid { background: #0c2f36; border-color: #155e75; color: #67e8f9; }
+html.admina-aac [data-theme="dark"] .aac-score.zero { background: #1d2b28; border-color: #31403c; color: #a8b5b2; }
+html.admina-aac .aac-scorebar { display: inline-block; width: 54px; height: 5px; border-radius: 4px; background: var(--aac-line); overflow: hidden; vertical-align: middle; }
+html.admina-aac .aac-scorebar i { display: block; height: 100%; border-radius: 4px; background: var(--aac-accent); }
+
+/* ---------- toasts ---------- */
+html.admina-aac .aac-toasts { position: fixed; bottom: 16px; right: 16px; z-index: 1400; display: flex; flex-direction: column; gap: 7px; max-width: 340px; }
+html.admina-aac .aac-toast {
+  background: var(--aac-card); color: var(--aac-text); border: 1px solid var(--aac-line);
+  border-left: 4px solid var(--aac-accent); border-radius: 10px; padding: 9px 13px; font-size: .8rem;
+  box-shadow: 0 8px 26px rgba(0, 0, 0, .22); display: flex; gap: 9px; align-items: flex-start;
+  animation: aacToast .18s ease;
+}
+html.admina-aac .aac-toast.err { border-left-color: var(--aac-err); }
+html.admina-aac .aac-toast.ok { border-left-color: var(--aac-ok); }
+html.admina-aac .aac-toast button { border: none; background: none; color: var(--aac-text2); cursor: pointer; font-size: .95rem; padding: 0; line-height: 1; }
+@keyframes aacToast { from { transform: translateY(9px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+/* ---------- pied ---------- */
+html.admina-aac .aac-foot { margin-top: 14px; font-size: .72rem; color: var(--aac-text2); text-align: center; }
+html.admina-aac .aac-link { border: none; background: none; color: var(--aac-accent); cursor: pointer; font: inherit; font-size: inherit; text-decoration: underline; padding: 0; }
+
+/* ---------- burger mobile ---------- */
+html.admina-aac .admina-burger {
+  display: none; align-items: center; justify-content: center;
+  width: 38px; height: 38px; border-radius: 9px; border: 1px solid rgba(0, 0, 0, .12);
+  background: rgba(255, 255, 255, .85); color: #134e4a; cursor: pointer; margin-right: 6px; padding: 0;
+}
+html.admina-aac .admina-burger:hover { background: rgba(128, 128, 128, .15); }
+html.admina-aac .admina-nav-backdrop { background: transparent; pointer-events: none; }
+@media (max-width: 819px) {
+  html.admina-aac header.MuiPaper-root { margin-left: 0 !important; width: 100% !important; }
+
+  html.admina-aac .MuiToolbar-root { padding-left: 10px !important; padding-right: 10px !important; }
+  html.admina-aac .MuiDrawer-docked {
+    display: block !important;
+    position: fixed; top: 0; left: 0; bottom: 0;
+    width: 280px; max-width: 86vw;
+    z-index: 1450;
+    transform: translateX(-106%);
+    transition: transform .25s ease;
+  }
+  html.admina-aac.admina-nav-open .MuiDrawer-docked { transform: translateX(0); }
+  html.admina-aac .MuiDrawer-docked .MuiDrawer-paper {
+    width: 280px; max-width: 86vw; box-sizing: border-box;
+    position: absolute; height: 100%;
+  }
+  html.admina-aac .admina-burger { display: inline-flex !important; }
+  html.admina-aac .admina-nav-backdrop {
+    position: fixed; inset: 0; background: rgba(0, 0, 0, .5);
+    z-index: 1440; opacity: 0; pointer-events: none; transition: opacity .22s ease;
+  }
+  html.admina-aac.admina-nav-open .admina-nav-backdrop { opacity: 1; pointer-events: auto; }
+}
+
+/* ---------- 390 px : zéro débordement ---------- */
+@media (max-width: 420px) {
+  html.admina-aac .aac-hero { padding: 14px 12px; }
+  html.admina-aac .aac-h2 { font-size: 1.05rem; }
+  html.admina-aac .aac-hero-actions { gap: 5px; }
+  html.admina-aac .aac-hero-actions .aac-btn { padding: 6px 9px; font-size: .72rem; }
+  html.admina-aac .aac-alert { font-size: .7rem; padding: 4px 9px; }
+  html.admina-aac .aac-toolbar { padding: 8px 9px; gap: 6px; }
+  html.admina-aac .aac-sel { max-width: 46vw; }
+  html.admina-aac .aac-views { margin-left: 0; }
+  html.admina-aac .aac-vbtn, html.admina-aac .aac-modebtn { padding: 4px 7px; font-size: .7rem; }
+  html.admina-aac .aac-week-lbl { font-size: .78rem; }
+  html.admina-aac .aac-dialog { width: 96vw; }
+  html.admina-aac .aac-drawer { width: 100vw; border-left: none; }
+  html.admina-aac .aac-kv { grid-template-columns: 118px 1fr; }
+}
+
+/* ---------- impression ---------- */
+@media print {
+  html.admina-aac [data-aac="toolbar"], html.admina-aac .aac-hero-actions, html.admina-aac .aac-actions,
+  html.admina-aac .aac-selbar, html.admina-aac .aac-toasts, html.admina-aac .aac-pager,
+  html.admina-aac .aac-chk, html.admina-aac .aac-foot, html.admina-aac .admina-burger,
+  html.admina-aac .aac-weeknav, html.admina-aac .aac-modes { display: none !important; }
+  html.admina-aac [data-aac="root"] { padding: 0; }
+  html.admina-aac .aac-tblcard { border: none; }
+}
+
+/* ---------- scrollbars ---------- */
+html.admina-aac .aac-tblwrap::-webkit-scrollbar, html.admina-aac .aac-drawer-body::-webkit-scrollbar,
+html.admina-aac .aac-dialog-body::-webkit-scrollbar, html.admina-aac .aac-panel-body::-webkit-scrollbar,
+html.admina-aac .aac-weekwrap::-webkit-scrollbar { height: 9px; width: 9px; }
+html.admina-aac .aac-tblwrap::-webkit-scrollbar-thumb, html.admina-aac .aac-drawer-body::-webkit-scrollbar-thumb,
+html.admina-aac .aac-dialog-body::-webkit-scrollbar-thumb, html.admina-aac .aac-panel-body::-webkit-scrollbar-thumb,
+html.admina-aac .aac-weekwrap::-webkit-scrollbar-thumb {
+  background: var(--aac-line); border-radius: 5px;
+}
+html.admina-aac .aac-tblwrap::-webkit-scrollbar-thumb:hover, html.admina-aac .aac-weekwrap::-webkit-scrollbar-thumb:hover { background: var(--aac-text2); }
+
+/* ---------- garde toolbar native (mobile) ---------- */
+@media (max-width: 480px) {
+  html.admina-aac .MuiToolbar-root { flex-wrap: wrap; row-gap: 6px; padding-bottom: 8px; }
+  html.admina-aac .MuiToolbar-root .MuiBox-root { min-width: 0; }
+}
+
+/* ---------- garde responsive final (anti-écrasement cascade) ---------- */
+@media (max-width: 760px) {
+  html.admina-aac .aac-charts { grid-template-columns: 1fr !important; }
+  html.admina-aac .aac-charts > * { min-width: 0; max-width: 100%; }
+  html.admina-aac .aac-kpis { grid-template-columns: 1fr 1fr !important; }
+  html.admina-aac .aac-kpis > * { min-width: 0; }
+  html.admina-aac .aac-tblwrap { max-width: 100%; }
+}
+@media (max-width: 480px) {
+  html.admina-aac .aac-kpis { grid-template-columns: 1fr !important; }
+}
